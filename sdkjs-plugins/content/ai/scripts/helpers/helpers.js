@@ -1028,6 +1028,70 @@ HELPERS.word.push((function(){
 
 	return func;
 })());
+HELPERS.word.push((function(){
+	let func = new RegisteredFunction({
+		"name": "writeMacro",
+		"description": `Executes a JavaScript macro using the OnlyOffice Document API.
+Call this function ONLY when the user explicitly asks to execute/run a command (e.g. 'execute command', 'run this'). 
+Do NOT call this for regular editing requests or questions — only when the user explicitly requests execution.`,
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": `Valid JavaScript code using the OnlyOffice Document API to execute directly via eval. Rules:
+- Use only the OnlyOffice Document API (Api, Api.GetDocument(), etc.)
+- Do NOT wrap the code in a function or IIFE — output only the statements to execute directly
+- Do NOT include any explanation, comments, or markdown — output raw JavaScript only
+- When changing text formatting (font, size, color, etc.) across paragraphs, you MUST iterate through every paragraph and every run and apply the property directly to each run. Modifying only paragraph-level or default-style properties will NOT work because direct run properties override them.
+- To iterate all paragraphs: use Api.GetDocument().GetElementsCount() and GetElement(i); check GetClassType() === 'paragraph'
+- To apply formatting to runs in a paragraph: use paragraph.GetAllTextPr() to get an array of text properties and call the setter on each item
+- To find and replace text: iterate all paragraphs, then all runs via paragraph.GetElement(i), check GetClassType() === 'run', and use run.GetText() / run.ClearContent() + run.AddText()
+- To select content: use paragraph.Select() to select an entire paragraph, or Api.GetDocument().GetRange(startPos, endPos).Select() to select a text range`
+				}
+			},
+			"required": ["code"]
+		},
+		"examples": [
+			{
+				"prompt": "Execute command: make the first paragraph bold",
+				"arguments": { "code": `\
+let oDoc = Api.GetDocument();
+let oPar = oDoc.GetElement(0);
+for (let i = 0; i < oPar.GetElementsCount(); i++) { 
+	let oRun = oPar.GetElement(i); 
+	if (oRun.GetClassType() === 'run') { 
+		oRun.SetBold(true); 
+	} 
+}`}
+			},
+			{
+				"prompt": "Execute command: replace all 'foo' with 'bar'",
+				"arguments": { "code": `\
+let doc = Api.GetDocument();
+doc.SearchAndReplace({"searchString": "foo", "replaceString": "bar"});`
+}
+			}
+		]
+	});
+
+	func.call = async function(params) {
+		Asc.scope.macroCode = params.code;
+		let returnValue = await Asc.Editor.callCommand(function() {
+			try {
+				eval(Asc.scope.macroCode);
+			} catch(e) {
+				return { onlyoffice_id_error_message : e.name + ": " + e.message };
+			}
+		});
+
+		if (returnValue && returnValue.onlyoffice_id_error_message) {
+			throw new window.AgentState.ToolError(returnValue.onlyoffice_id_error_message);
+		}
+	};
+
+	return func;
+})());
 
 
 HELPERS.slide = [];
@@ -6261,8 +6325,8 @@ HELPERS.cell.push((function(){
 					"description": "Column name/header for filtering (e.g., 'Name', 'Age'). Will automatically find the column number."
 				},
 				"criteria1": {
-					"type": ["string", "array", "object"],
-					"description": "Filter criteria - string for operators (e.g., '>10'), array for multiple values (e.g., [1,2,3]), ApiColor object for color filters, or dynamic filter constant."
+					"type": ["string"],
+					"description": "Filter criteria - string for operators (e.g., '>10'), JSON-encoded array for multiple values (e.g., '[1,2,3]'), JSON-encoded color object ('{\"r\":255,\"g\":0,\"b\":0}') for color filters, or dynamic filter constant."
 				},
 				"operator": {
 					"type": "string",
@@ -6303,7 +6367,7 @@ HELPERS.cell.push((function(){
 			},
 			{
 				"prompt": "Filter column 2 for specific values [2,5,8]",
-				"arguments": { "range": "A1:D10", "field": 2, "criteria1": [2, 5, 8], "operator": "xlFilterValues" }
+				"arguments": { "range": "A1:D10", "field": 2, "criteria1": "[2, 5, 8]", "operator": "xlFilterValues" }
 			},
 			{
 				"prompt": "Filter column 1 for top 10 items",
@@ -6315,11 +6379,11 @@ HELPERS.cell.push((function(){
 			},
 			{
 				"prompt": "Filter by cell background color (yellow)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 255, "b": 0 }, "operator": "xlFilterCellColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 255, \"b\": 0 }", "operator": "xlFilterCellColor" }
 			},
 			{
 				"prompt": "Filter by font color (red)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 0, "b": 0 }, "operator": "xlFilterFontColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 0, \"b\": 0 }", "operator": "xlFilterFontColor" }
 			}
 		]
 	});
@@ -6416,6 +6480,8 @@ HELPERS.cell.push((function(){
 			}
 
 			let criteria1 = Asc.scope.criteria1;
+			if (criteria1 && criteria1.startsWith && criteria1.startsWith("[") || criteria1.startsWith("{"))
+				criteria1 = eval(criteria1);
 			if (Asc.scope.operator === "xlFilterCellColor" || Asc.scope.operator === "xlFilterFontColor") {
 				if (criteria1 && typeof criteria1 === 'object' && criteria1.r !== undefined && criteria1.g !== undefined && criteria1.b !== undefined) {
 					criteria1 = Api.CreateColorFromRGB(criteria1.r, criteria1.g, criteria1.b);
@@ -7095,6 +7161,72 @@ HELPERS.cell.push((function(){
 					_range.SetFontColor(color);
 			}
 		});
+	};
+
+	return func;
+})());
+HELPERS.cell.push((function(){
+	let func = new RegisteredFunction({
+		"name": "writeMacro",
+		"description": `Executes a JavaScript macro using the OnlyOffice Spreadsheet API.
+Call this function ONLY when the user explicitly asks to execute/run a command (e.g. 'execute command', 'run this').
+Do NOT call this for regular editing requests or questions — only when the user explicitly requests execution.`,
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "string",
+					"description": `Valid JavaScript code using the OnlyOffice Spreadsheet API to execute directly via eval. Rules:
+- Use only the OnlyOffice Spreadsheet API (Api, Api.GetActiveSheet(), Api.GetSelection(), etc.)
+- Do NOT wrap the code in a function or IIFE — output only the statements to execute directly
+- Do NOT include any explanation, comments, or markdown — output raw JavaScript only
+- To get the active sheet: let ws = Api.GetActiveSheet()
+- To get a range by address: ws.GetRange("A1:B10")
+- To get the current selection: Api.GetSelection()
+- To read a cell value: ws.GetRange("A1").GetValue()
+- To write a cell value: ws.GetRange("A1").SetValue("text") or .SetValue(42)
+- To set a formula: ws.GetRange("A1").SetValue("=SUM(B1:B10)")
+- To apply fill color: range.SetFillColor(Api.CreateColorFromRGB(r, g, b))
+- To select a range: ws.GetRange("A1:C5").Select()
+- To iterate rows/columns use GetRowsCount() / GetColsCount() and index into the range`
+				}
+			},
+			"required": ["code"]
+		},
+		"examples": [
+			{
+				"prompt": "Execute command: fill column A with months of the year",
+				"arguments": { "code": `\
+let ws = Api.GetActiveSheet();
+let months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+for (let i = 0; i < months.length; i++) {
+	ws.GetRange("A" + (i + 1)).SetValue(months[i]);
+}`
+				}
+			},
+			{
+				"prompt": "Execute command: insert a SUM formula in B11 for the range B1:B10",
+				"arguments": { "code": `\
+let ws = Api.GetActiveSheet();
+ws.GetRange("B11").SetValue("=SUM(B1:B10)");`
+				}
+			}
+		]
+	});
+
+	func.call = async function(params) {
+		Asc.scope.macroCode = params.code;
+		let returnValue = await Asc.Editor.callCommand(function() {
+			try {
+				eval(Asc.scope.macroCode);
+			} catch(e) {
+				return { onlyoffice_id_error_message: e.name + ": " + e.message };
+			}
+		});
+
+		if (returnValue && returnValue.onlyoffice_id_error_message) {
+			throw new window.AgentState.ToolError(returnValue.onlyoffice_id_error_message);
+		}
 	};
 
 	return func;
