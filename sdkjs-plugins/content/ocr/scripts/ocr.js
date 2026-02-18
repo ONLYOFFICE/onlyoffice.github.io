@@ -177,48 +177,41 @@
                 document.getElementById('lang-select').setAttribute('disabled', '');
                 document.getElementById('load-file-button-id').setAttribute('disabled', '');
 				
-                var fTesseractCall = function(){
-					let sLang = $('#lang-select option:selected')[0].value;
-					let worker = null;
-					let result = null;
-					Tesseract.createWorker({
-					  logger: (progress) => {   
-						  if(progress && progress.status === "recognizing text"){
-								var nPercent =  (100*(progress.progress + nStartFilesCount - arrImagesCopy.length - 1)/nStartFilesCount) >> 0;
-								$('#status-label').text('Recognizing: '+ nPercent + '%');
-							}
-						}
-					}).then((oWorker) => {
-						worker = oWorker;
-					}).then(() => {
-						return worker.loadLanguage(sLang);
-					}).then(() => {
-						return worker.initialize(sLang);
-					}).then(() => {
-						return worker.setParameters({
-							tessedit_pageseg_mode: Tesseract.PSM.AUTO,
-						});
-					}).then(() => {
-						return worker.recognize(arrImagesCopy.splice(0, 1)[0]);
-					}).then((oResult) => {
-						result = oResult;
-						document.getElementById('text-container-div').appendChild($(generateHTMLByData(result.data))[0]);
-						arrParsedData.push(result);
-						updateScroll();
-						if(arrImagesCopy.length > 0){
-							fTesseractCall();
-						}
-						else{								
-							$('#status-label').text('');
-							document.getElementById('recognize-button').removeAttribute('disabled');
-							document.getElementById('lang-select').removeAttribute('disabled');
-							document.getElementById('load-file-button-id').removeAttribute('disabled', '');
-						}
-					}).then((oResult) => {
-						worker.terminate();
-					});
+				const fTesseractCall = async function () {
+					const langSelect = document.getElementById('lang-select');
+					const sLang = langSelect.options[langSelect.selectedIndex].value;
 
-                };
+					const statusLabel = document.getElementById('status-label');
+					const showProgress = function (progress) {
+						if (progress && progress.status === "recognizing text") {
+							const percent = (100 * (progress.progress + nStartFilesCount - arrImagesCopy.length - 1) / nStartFilesCount) >> 0;
+							statusLabel.textContent = 'Recognizing: ' + percent + '%';
+						}
+					};
+					const worker = await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, { logger: showProgress });
+
+					const image = arrImagesCopy.splice(0, 1)[0];
+					const recognitionParams = { tessedit_pageseg_mode: Tesseract.PSM.AUTO };
+					const outputFormatParams = { blocks: true };
+					const result = await worker.recognize(image, recognitionParams, outputFormatParams);
+					await worker.terminate();
+
+					const generatedHTML = generateHTMLByData(result.data);
+					const textContainer = document.getElementById('text-container-div');
+					textContainer.insertAdjacentHTML('beforeend', generatedHTML);
+					arrParsedData.push(result);
+
+					updateScroll();
+					if (arrImagesCopy.length > 0) {
+						await fTesseractCall();
+					} else {
+						statusLabel.textContent = '';
+						document.getElementById('recognize-button').removeAttribute('disabled');
+						document.getElementById('lang-select').removeAttribute('disabled');
+						document.getElementById('load-file-button-id').removeAttribute('disabled', '');
+					}
+				};
+
                 $('#status-label').text('Recognizing: 0%');
                 fTesseractCall();
             }
