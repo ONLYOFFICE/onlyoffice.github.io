@@ -37,7 +37,7 @@ function MarkDownStreamer()
 	this.stable = "";
 	this.tail = "";
 
-	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms];
+	this.msPlugins = [Asc.PluginsMD.latex, Asc.PluginsMD.forms, Asc.PluginsMD.hr];
 
 	this.isStreaming = window.EditorHelper.isSupportStreaming;
 }
@@ -291,7 +291,6 @@ async function streamPromptResultToDocument(prompt)
 	await checkEndAction();
 }
 
-window.isEnableDocumentGenerate = true;
 async function getFormGenerationPrompt() {
 
 	return await Asc.Editor.callCommand(function(){
@@ -457,7 +456,7 @@ window.checkGenerationInfo = async function() {
 		Asc.Editor.callMethod("FocusEditor");
 
 	if (Asc.Editor.getType() === "word" && generationValueString !== "") {
-		await streamPromptResultToDocument(generationValue);
+		await streamPromptResultToDocument(generationValueString);
 		return;
 	}
 
