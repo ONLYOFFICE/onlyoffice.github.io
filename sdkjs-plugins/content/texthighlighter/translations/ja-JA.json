@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "テキストハイライター",
+  "PluginInstructions": "<b>検索する単語またはフレーズ</b>を入力または選択し、必要な設定を構成します。",
+  
+  "TextToSearch": "検索するテキスト：",
+  "SearchPlaceholder": "テキストを入力またはドキュメントから選択",
+  "IgnoreCase": "大文字と小文字を区別しない",
+
+  "HighlightColor": "ハイライトの色：",
+  "HighlightYellow": "黄色",
+  "HighlightGreen": "緑",
+  "HighlightBlue": "青",
+  "HighlightRed": "赤",
+  "HighlightNone": "塗りなし",
+  "ArrowDropdown": "▸",
+
+  "TextColorHeader": "テキストの色",
+  "TextColorPicker": "テキストの色を選択",
+
+  "TextFormattingHeader": "テキストの書式",
+  "FormatBold": "太字",
+  "FormatItalic": "斜体",
+  "FormatUnderline": "下線",
+  "FormatStrike": "取り消し線",
+
+  "ApplyButton": "適用",
+
+  "SearchNoResults": "検索完了。<strong>一致するものは見つかりませんでした。</strong>",
+  "HighlightMore": "さらにハイライト",
+  "HighlightMore2": "さらにハイライト",
+
+  "SearchDone": "完了！検索が完了し、スタイルが適用されました。",
+  "MatchesFound": "一致件数：",
+  "RevertToOriginal": "元に戻す",
+
+  "LoadingMessage": "処理中...",
+
+  "AboutTitle": "テキストハイライター",
+  "AboutVersion": "バージョン 1.0.0",
+  "AboutDescription": "このプラグインでは、テキストの検索およびハイライト、色、書式スタイルの適用が可能です。",
+  "AboutCopyright": "© 2025 ONLYOFFICE プラグイン"
+}

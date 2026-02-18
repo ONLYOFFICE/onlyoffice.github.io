@@ -30,11 +30,16 @@
  *
  */
 var Ps;
-var mapParagraphs = [];
-var pro_api_url = 'https://api.deepl.com/v2/translate?auth_key=';
-var free_api_url = 'https://api-free.deepl.com/v2/translate?auth_key=';
-var curr_api_url = free_api_url;
 var sTextBeforeKeyUp = "";
+
+var API_URL_PRO = "https://api.deepl.com/v2";
+var API_URL_FREE = "https://api-free.deepl.com/v2";
+var API_URL_CURRENT = API_URL_FREE;
+
+var API_KEY = "";
+var API_KEY_STORAGE_NAME = "DEEPL_API_INFO";
+
+var PROXY_URL = "https://plugins-services.onlyoffice.com/proxy";
 
 const isIE = checkInternetExplorer();	//check IE
 function checkInternetExplorer(){
@@ -55,9 +60,7 @@ function checkInternetExplorer(){
     }
     return rv !== -1;
 };
-function getMessage(key) {
-    return window.Asc.plugin.tr(key.trim());
-};
+
 (function(window, undefined){
 
     var txt              = "";
@@ -65,14 +68,12 @@ function getMessage(key) {
     var displayNoneClass = "display-none";
     var blurClass        = "no_class";
     var elements         = null;
-    var apikey           = "";
     var isFirstRun       = true;
     var paste_done       = true;
 
     function showLoader(elements, show) {
-
-    switchClass(elements.contentHolder, blurClass, show);
-    switchClass(elements.loader, displayNoneClass, !show);
+        switchClass(elements.contentHolder, blurClass, show);
+        switchClass(elements.loader, displayNoneClass, !show);
     }
 
     function switchClass(el, className, add) {
@@ -95,7 +96,7 @@ function getMessage(key) {
         txt = text;
         updateScroll();
 
-        if ((apikey == '' || apikey == null) && isFirstRun) {
+        if ("" === API_KEY && isFirstRun) {
             isFirstRun = false;
             return;
         }
@@ -123,19 +124,8 @@ function getMessage(key) {
     };
 
     function ExecPlugin() {
-        switch (window.Asc.plugin.info.editorType) {
-            case 'word':
-            case 'slide': {
-                if (txt !== "") {
-                    RunTranslate(txt);
-                }
-                break;
-            }
-            case 'cell': {
-                RunTranslate(txt);
-            }
-            break;
-        }
+        if (txt !== "")
+            RunTranslate(txt);
     };
 
     window.Asc.plugin.onThemeChanged = function(theme)
@@ -154,16 +144,6 @@ function getMessage(key) {
             $('#arrow-svg-path').css('fill', theme["text-normal"]);
         }
     };
-
-    function CreateParams(allParas) {
-        var sRequest = "";
-
-        for (var nPara = 0; nPara < allParas.length; nPara++) {
-            sRequest += '&text=' + allParas[nPara];
-        }
-
-        return sRequest;
-    }
 
     function GetTargetLang() {
         return document.getElementsByClassName("prefs__set-locale")[0].value;
@@ -185,82 +165,159 @@ function getMessage(key) {
         }
     };
 
-    function Translate(apikey, targetLanguage, sParams) {
-        if (!$('#vanish_container').hasClass('display-none'))
-            $('#vanish_container').toggleClass('display-none');
-        showLoader(elements, true);
-        $.ajax({
-            method: 'POST',
-            beforeSend: function(request) {
-                request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-            },
-            data: '?auth_key=' + apikey + sParams + '&target_lang=' + targetLanguage,
-            url: curr_api_url + apikey
+    // save old code. TODO: refactoring
+    function handleSuccess(oResponse) {
+        var container = document.getElementById('txt_shower');
 
-        }).done(function (oResponse) {
-            if ($('#txt_shower').hasClass('error'))
-                $('#txt_shower').toggleClass('error');
+        if ($('#txt_shower').hasClass('error')) $('#txt_shower').toggleClass('error');
+        if ($('#api-value').hasClass('img_error')) $('#api-value').toggleClass('img_error');
+        if ($('#api-value').hasClass('error_api')) $('#api-value').toggleClass('error_api');
 
-            if ($('#api-value').hasClass('img_error'))
-                $('#api-value').toggleClass('img_error');
-            if ($('#api-value').hasClass('error_api'))
-                $('#api-value').toggleClass('error_api');
+        switchClass(elements.api, 'display-none', true);
+        switchClass(elements.re_api, 'display-none', false);
+        switchClass(elements.translator, 'display-none', false);
 
-            localStorage.setItem('deepL_Apikey', apikey);
+        container.innerHTML = "";
 
-            //switching menu
-            switchClass(elements.api, 'display-none', true);
-            switchClass(elements.re_api, 'display-none', false);
-            switchClass(elements.translator, 'display-none', false);
-
-            container = document.getElementById('txt_shower');
-            container.innerHTML = "";
-
+        if (oResponse.translations) {
             for (var nText = 0; nText < oResponse.translations.length; nText++) {
                 translatedText.push(oResponse.translations[nText].text);
                 if (oResponse.translations[nText].text !== "")
                     container.innerHTML += escape(oResponse.translations[nText].text) + '<br>';
             }
+        }
 
-            if (container.innerHTML !== "") {
-                if ($('#vanish_container').hasClass('display-none'))
-                    $('#vanish_container').toggleClass('display-none');
+        if (container.innerHTML !== "" && $('#vanish_container').hasClass('display-none')) {
+            $('#vanish_container').toggleClass('display-none');
+        }
+
+        showLoader(elements, false);
+        updateScroll();
+    }
+
+    function handleError(oResponse) {
+        var container = document.getElementById('txt_shower');
+
+        showLoader(elements, false);
+
+        if (!$('#txt_shower').hasClass('error')) $('#txt_shower').toggleClass('error');
+        if (!$('#api-value').hasClass('error_api')) $('#api-value').toggleClass('error_api');
+
+        if (API_KEY === '') {
+            container.innerHTML = "API key required!";
+        } else {
+            if (oResponse.status === 403) {
+                if (!$('#api-value').hasClass('img_error')) $('#api-value').toggleClass('img_error');
+                container.innerHTML = "API key is not valid!";
+            } else {
+                container.innerHTML = "Connection failed!";
+            }
+        }
+    }
+
+    function checkKey() {
+        let requestUrl = API_URL_CURRENT + "/usage";
+        let requestOptions = {
+            method: "GET",
+            headers: { 
+                "Authorization": "DeepL-Auth-Key " + API_KEY
+            }
+        };
+
+        if (PROXY_URL !== "") {
+            requestOptions = {
+                method: "POST",
+                body: JSON.stringify({
+                    target: requestUrl,
+                    method: requestOptions.method,
+                    headers: requestOptions.headers
+                })
+            };
+            requestUrl = PROXY_URL;
+        }
+
+        fetch(requestUrl, requestOptions)
+        .then(function(response) {
+            if (!response.ok) {
+                handleError(response);
+            }
+            return response.json();
+        })
+        .then(function(response) {
+            if (response.character_limit) {
+
+                localStorage.setItem(API_KEY_STORAGE_NAME, JSON.stringify({
+                    apiKey: API_KEY,
+                    apiUrl: API_URL_CURRENT
+                }));
+
+                handleSuccess(response);
+                return;
             }
 
-            showLoader(elements, false);
-            updateScroll();
+            if (API_URL_CURRENT === API_URL_FREE) {
+                API_URL_CURRENT = API_URL_PRO;
+                checkKey();
+                return;
+            }
+            handleError(response);
+        })
+        .catch(function(response) {
+            if (API_URL_CURRENT === API_URL_FREE) {
+                API_URL_CURRENT = API_URL_PRO;
+                checkKey();
+                return;
+            }
+            handleError(response);
+        });
+    }
 
-        }).fail(function(oResponse) {
-            if (curr_api_url === free_api_url) {
-                curr_api_url = pro_api_url;
-                Translate(apikey, targetLanguage, sParams);
+    function Translate(targetLanguage, sourceText) {
+        if (!$('#vanish_container').hasClass('display-none'))
+            $('#vanish_container').toggleClass('display-none');
+        showLoader(elements, true);
+
+        let requestUrl = API_URL_CURRENT + "/translate";
+        let data = sourceText + "&target_lang=" + targetLanguage;
+
+        let requestOptions = {
+            method: "POST",
+            headers: { 
+                "Authorization": "DeepL-Auth-Key " + API_KEY
+            },
+            body: data
+        };
+
+        if (PROXY_URL !== "") {
+            requestOptions = {
+                method: "POST",
+                body: JSON.stringify({
+                    target: requestUrl,
+                    method: requestOptions.method,
+                    headers: requestOptions.headers,
+                    data: requestOptions.body
+                })
+            };
+            requestUrl = PROXY_URL;
+        }
+
+        fetch(requestUrl, requestOptions)
+        .then(function(response) {
+            if (!response.ok) {
+                handleError(response);
             }
-            else {
-                showLoader(elements, false);
-                container = document.getElementById('txt_shower');
-                if (!$('#txt_shower').hasClass('error'))
-                    $('#txt_shower').toggleClass('error');
-                if (!$('#api-value').hasClass('error_api'))
-                    $('#api-value').toggleClass('error_api');
-                if (apikey == '') {
-                    container.innerHTML = "API key required!";
-                }
-                else {
-                    if (oResponse.status === 403) {
-                        if (!$('#api-value').hasClass('img_error'))
-                            $('#api-value').toggleClass('img_error');
-                        container.innerHTML = "API key is not valid!"
-                    }
-                    else
-                        container.innerHTML = "Connection failed!";
-                }
-            }
+            return response.json();
+        })
+        .then(function(response) {
+            handleSuccess(response);
+        })
+        .catch(function(response) {
+            handleError(response);
         });
     };
 
     function SplitText(sText) {
         var allParsedParas = sText.split(/\n/);
-
         return allParsedParas;
     }
 
@@ -319,20 +376,18 @@ function getMessage(key) {
         })
 
         $('#save').on('click', function() {
-            curr_api_url = free_api_url;
+            API_URL_CURRENT = API_URL_FREE;
             
             $('#select_example').select2({
                 minimumResultsForSearch: Infinity,
                 width: "calc(100% - 24px)"
             });
-            apikey = elements.api_value.value.trim();
-            if (apikey !== '') {
+            API_KEY = elements.api_value.value.trim();
+            if (API_KEY !== '') {
                 document.getElementById('txt_shower').innerHTML = '';
                 var allParsedParas = SplitText(txt);
                 DelInvalidChars(allParsedParas);
-                var sParams = CreateParams(allParsedParas);
-                var target_lang = GetTargetLang();
-                Translate(apikey, target_lang, sParams);
+                checkKey();
             }
             else {
                 if (!$('#txt_shower').hasClass('error'))
@@ -345,10 +400,8 @@ function getMessage(key) {
             }
         })
         $('#reconf').on('click', function() {
-            apikey = '';
-            saved_key = localStorage.getItem('deepL_Apikey');
-            if (saved_key !== null) {
-                elements.api_value.value = saved_key;
+            if (API_KEY !== null) {
+                elements.api_value.value = API_KEY;
             }
             document.getElementById('txt_shower').innerHTML = '';
             switchClass(elements.re_api, 'display-none', true)
@@ -401,14 +454,28 @@ function getMessage(key) {
             });
         });
 
-        apikey = localStorage.getItem('deepL_Apikey');
-        if (apikey != null && apikey != '') {
+        let info = localStorage.getItem(API_KEY_STORAGE_NAME);
+        if (info) {
+            try {
+                info = JSON.parse(info);
+                API_KEY = info.apiKey || "";
+                API_URL_CURRENT = info.apiUrl || API_URL_FREE;
+                if (API_KEY !== "") {
+                    elements.api_value.value = API_KEY;
+                }
+            } catch(e) {
+                API_KEY = "";
+                API_URL_CURRENT = API_URL_FREE;
+            }
+        }
+
+        if ("" !== API_KEY) {
             switchClass(elements.api, 'display-none', true);
             switchClass(elements.re_api, 'display-none', false);
             switchClass(elements.translator, 'display-none', false);
         }
         else
-            apikey = '';
+            API_KEY = "";
 
         $('#show_manually').click(function() {
             $(this).hide();
@@ -446,20 +513,12 @@ function getMessage(key) {
             txt = document.getElementById("enter_container").value;
             if (sTextBeforeKeyUp == txt)
                 return;
-                
-            switch (window.Asc.plugin.info.editorType) {
-                case 'word':
-                case 'slide': {
-                    if (txt !== "") {
-                        RunTranslate(txt);
-                    }
-                    break;
-                }
-                case 'cell': {
-                    RunTranslate(txt);
-                }
-                break;
-            }
+
+            if ("" == txt)
+                return;
+
+            RunTranslate(txt);
+            
         }, 1000));
     });
 
@@ -495,19 +554,24 @@ function getMessage(key) {
     };
 
     function RunTranslate(sText) {
-
         sTextBeforeKeyUp = sText;
         var allParsedParas = processText(sText);
         
         DelInvalidChars(allParsedParas);
         if (IsLastTransate(allParsedParas))
             return false;
-        var sParams = CreateParams(allParsedParas);
-        var target_lang = GetTargetLang();
+
+        let source_text = "";
+        for (var nPara = 0; nPara < allParsedParas.length; nPara++) {
+            if (nPara !== 0)
+                source_text += "&";
+            source_text += "text=" + allParsedParas[nPara];
+        }
+        let target_lang = GetTargetLang();
 
         document.getElementById('txt_shower').innerHTML = '';
         translatedText = [];
-        Translate(apikey, target_lang, sParams);
+        Translate(target_lang, source_text);
     };
 
     window.Asc.plugin.onExternalMouseUp = function()
@@ -524,6 +588,10 @@ function getMessage(key) {
     };
     window.Asc.plugin.onTranslate = function()
     {
+        function getMessage(key) {
+            return window.Asc.plugin.tr(key.trim());
+        };
+
         var elements = document.getElementsByClassName("i18n");
 
         for (var i = 0; i < elements.length; i++) {

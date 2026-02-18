@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Text Highlighter",
+  "PluginInstructions": "Enter or select <b>a word or phrase</b> to search in the document text, and configure the necessary settings.",
+  
+  "TextToSearch": "Text to search:",
+  "SearchPlaceholder": "Enter text or select in document",
+  "IgnoreCase": "Ignore case",
+
+  "HighlightColor": "Highlight color :",
+  "HighlightYellow": "Yellow",
+  "HighlightGreen": "Green",
+  "HighlightBlue": "Blue",
+  "HighlightRed": "Red",
+  "HighlightNone": "No Fill",
+  "ArrowDropdown": "▸",
+
+  "TextColorHeader": "Text color",
+  "TextColorPicker": "Choose text color",
+
+  "TextFormattingHeader": "Text formatting",
+  "FormatBold": "Bold",
+  "FormatItalic": "Italic",
+  "FormatUnderline": "Underline",
+  "FormatStrike": "Strikethrough",
+
+  "ApplyButton": "Apply",
+
+  "SearchNoResults": "Search completed. <strong>No matches found.</strong>",
+  "HighlightMore": "Highlight more",
+  "HighlightMore2": "Highlight more",
+
+  "SearchDone": "Done! The search is complete and styles have been applied.",
+  "MatchesFound": "Matches found:",
+  "RevertToOriginal": "Revert",
+
+  "LoadingMessage": "Processing...",
+
+  "AboutTitle": "Text Highlighter",
+  "AboutVersion": "Version 1.0.0",
+  "AboutDescription": "This plugin allows you to search text and apply highlighting, color, and formatting styles in your document.",
+  "AboutCopyright": "© 2025 ONLYOFFICE Plugin"
+}

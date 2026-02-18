@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Zvýrazňovač textu",
+  "PluginInstructions": "Zadejte nebo vyberte <b>slovo nebo frázi</b> pro hledání v textu dokumentu a nakonfigurujte potřebná nastavení.",
+
+  "TextToSearch": "Text k vyhledání:",
+  "SearchPlaceholder": "Zadejte text nebo vyberte v dokumentu",
+  "IgnoreCase": "Ignorovat velikost písmen",
+
+  "HighlightColor": "Barva zvýraznění:",
+  "HighlightYellow": "Žlutá",
+  "HighlightGreen": "Zelená",
+  "HighlightBlue": "Modrá",
+  "HighlightRed": "Červená",
+  "HighlightNone": "Bez výplně",
+
+  "TextColorHeader": "Barva textu",
+  "ArrowDropdown": "▸",
+  "TextColorPicker": "Vyberte barvu textu",
+
+  "TextFormattingHeader": "Formátování textu",
+  "FormatBold": "Tučné",
+  "FormatItalic": "Kurzíva",
+  "FormatUnderline": "Podtržení",
+  "FormatStrike": "Přeškrtnutí",
+
+  "ApplyButton": "Použít",
+
+  "SearchNoResults": "Hledání dokončeno. <strong>Nebyly nalezeny žádné shody.</strong>",
+  "HighlightMore": "Zvýraznit více",
+  "HighlightMore2": "Zvýraznit více",
+
+  "SearchDone": "Hotovo! Hledání bylo dokončeno a styly byly aplikovány.",
+  "MatchesFound": "Nalezené shody:",
+  "RevertToOriginal": "Vrátit zpět",
+
+  "LoadingMessage": "Zpracovávám...",
+
+  "AboutTitle": "Zvýrazňovač textu",
+  "AboutVersion": "Verze 1.0.0",
+  "AboutDescription": "Tento plugin umožňuje vyhledávat text a aplikovat zvýraznění, barvu a formátování ve vašem dokumentu.",
+  "AboutCopyright": "© 2025 ONLYOFFICE Plugin"
+}
