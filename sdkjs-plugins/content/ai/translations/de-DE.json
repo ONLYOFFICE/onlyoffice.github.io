@@ -173,9 +173,9 @@
 	"Give your tool a short name for the toolbar": "Geben Sie Ihrem Werkzeug einen kurzen Namen für die Symbolleiste",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Sagen Sie der KI, was Sie mit dem ausgewählten Text tun möchten (z. B. \"Faktenfehler finden\" oder \"Riassumen\")",
 	"Create AI assistant": "KI-Assistent erstellen",
-	"Match": "Correspondance",
-	"Proposal for replacement": "Proposition de remplacement",
-	"Hint": "Indice",
-	"Replace": "Remplacer",
-	"Replace + Hint": "Remplacer + Indice"
+	"Match": "Übereinstimmung",
+	"Proposal for replacement": "Vorschlag zum Ersetzen",
+	"Hint": "Hinweis",
+	"Replace": "Ersetzen",
+	"Replace + Hint": "Ersetzen + Hinweis"
 }
