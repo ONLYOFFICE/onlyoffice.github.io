@@ -92,7 +92,14 @@
 			let $details = $('<div class="tool_call_details collapsed"></div>');
 
 			if (funcArgs) {
-				$details.append('<div class="tool_call_section"><strong>' + window.Asc.plugin.tr('Arguments') + ':</strong><pre>' + funcArgs + '</pre></div>');
+				let displayArgs = funcArgs;
+				if (funcName === 'writeMacro') {
+					try {
+						let parsed = JSON.parse(funcArgs);
+						if (parsed.code) displayArgs = parsed.code;
+					} catch(e) {}
+				}
+				$details.append('<div class="tool_call_section"><strong>' + window.Asc.plugin.tr('Arguments') + ':</strong><pre>' + displayArgs + '</pre></div>');
 			}
 
 			if (item.result) {

@@ -100,9 +100,17 @@ async function registerButtons(window, undefined)
 			MAX_LOOP_ITERATIONS : 10,
 			isStopped : false,
 			tools : null,
-			systemToolsPrompt : ""		
+			systemToolsPrompt : ""
 		};
 		window.AgentState = AgentState;
+
+		class ToolError extends Error {
+			constructor(message) {
+				super(message);
+				this.name = "ToolError";
+			}
+		}
+		window.AgentState.ToolError = ToolError;
 
 		chatWindow.attachEvent("onStopAgent", function() {
 			AgentState.isStopped = true;
@@ -212,8 +220,10 @@ async function registerButtons(window, undefined)
 									toolResult = {};
 								toolResult.message = "System function '" + funcName + "' executed successfully";
 							} catch (e) {
-								console.error(e);
 								let errorMsg = "Error executing function: " + funcName;
+								if (e.name === "ToolError") {
+									errorMsg += ("\n" + e.message);
+								}
 								toolResult = {
 									error: errorMsg
 								};
