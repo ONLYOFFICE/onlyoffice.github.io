@@ -907,7 +907,7 @@ function fetchExternal(url, options, isStreaming) {
 						}
 					}
 
-					let chunkContent = processResult(chunk, this.model, false);
+					let chunkContent = processResult(chunk, this.model, true);
 					if (!chunkContent)
 						continue;
 
