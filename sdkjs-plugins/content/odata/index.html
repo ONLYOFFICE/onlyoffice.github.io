@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OData Import</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 12px;
+            background: var(--background-normal, #fff);
+            color: var(--text-normal, #333);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary, #666);
+        }
+
+        .url-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-regular, #ccc);
+            border-radius: 4px;
+            font-size: 13px;
+            background: var(--background-normal, #fff);
+            color: var(--text-normal, #333);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent, #4A90D9);
+            box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent, #4A90D9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3a80c9;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .tables-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 0;
+        }
+
+        .tables-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tables-list {
+            flex: 1;
+            border: 1px solid var(--border-regular, #ccc);
+            border-radius: 4px;
+            overflow-y: auto;
+            background: var(--background-normal, #fff);
+        }
+
+        .table-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-regular, #eee);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.15s;
+        }
+
+        .table-item:last-child {
+            border-bottom: none;
+        }
+
+        .table-item:hover {
+            background: var(--background-toolbar, #f5f5f5);
+        }
+
+        .table-item.selected {
+            background: rgba(74, 144, 217, 0.1);
+        }
+
+        .table-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .table-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .table-count {
+            font-size: 11px;
+            color: var(--text-secondary, #888);
+            margin-left: auto;
+        }
+
+        .status-message {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .status-message.error {
+            display: block;
+            background: #fee;
+            color: #c00;
+            border: 1px solid #fcc;
+        }
+
+        .status-message.success {
+            display: block;
+            background: #efe;
+            color: #060;
+            border: 1px solid #cfc;
+        }
+
+        .status-message.loading {
+            display: block;
+            background: #eef;
+            color: #006;
+            border: 1px solid #ccf;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 280px;
+            flex-shrink: 0;
+        }
+
+        .preview-content {
+            flex: 1;
+            overflow: auto;
+            min-height: 0;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 4px 8px;
+            border: 1px solid var(--border-regular, #ddd);
+            text-align: left;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .preview-table th {
+            background: var(--background-toolbar, #f5f5f5);
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary, #888);
+        }
+
+        .empty-state-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .actions-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            padding-top: 12px;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .insert-status {
+            font-size: 12px;
+        }
+
+        .insert-status.loading {
+            color: #006;
+        }
+
+        .insert-status.success {
+            color: #060;
+        }
+
+        .insert-status.error {
+            color: #c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <label for="odata-url">OData Service URL</label>
+            <div class="url-input-row">
+                <input type="text" id="odata-url" placeholder="https://services.odata.org/V4/Northwind/Northwind.svc" />
+                <button class="btn-primary" id="fetch-btn" onclick="fetchOData()">Fetch</button>
+            </div>
+        </div>
+
+        <div class="tables-section">
+            <div class="tables-header">
+                <label>Available Tables</label>
+                <span id="selected-count" style="font-size: 11px; color: var(--text-secondary, #888);"></span>
+            </div>
+            <div class="tables-list" id="tables-list">
+                <div class="empty-state">
+                    <div class="empty-state-icon">&#128202;</div>
+                    <div>Enter an OData URL and click Fetch to load available tables</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section" id="preview-section" style="display: none;">
+            <label>Data Preview (first 10 rows)</label>
+            <div id="preview-content" class="preview-content"></div>
+        </div>
+
+        <div class="actions-section" id="actions-section" style="display: none;">
+            <span id="insert-status" class="insert-status"></span>
+            <button class="btn-primary" id="insert-btn" onclick="insertData()">Insert Data</button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="scripts/odata.js"></script>
+</body>
+</html>
