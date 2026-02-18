@@ -17,3 +17,7 @@
 ## 2.0.2
 
 * Update jquery version.
+
+## 2.1.0
+
+* Upgrade TesseractJS from v4 to v6.
