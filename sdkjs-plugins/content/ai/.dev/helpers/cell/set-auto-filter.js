@@ -51,8 +51,8 @@
 					"description": "Column name/header for filtering (e.g., 'Name', 'Age'). Will automatically find the column number."
 				},
 				"criteria1": {
-					"type": ["string", "array", "object"],
-					"description": "Filter criteria - string for operators (e.g., '>10'), array for multiple values (e.g., [1,2,3]), ApiColor object for color filters, or dynamic filter constant."
+					"type": ["string"],
+					"description": "Filter criteria - string for operators (e.g., '>10'), JSON-encoded array for multiple values (e.g., '[1,2,3]'), JSON-encoded color object ('{\"r\":255,\"g\":0,\"b\":0}') for color filters, or dynamic filter constant."
 				},
 				"operator": {
 					"type": "string",
@@ -93,7 +93,7 @@
 			},
 			{
 				"prompt": "Filter column 2 for specific values [2,5,8]",
-				"arguments": { "range": "A1:D10", "field": 2, "criteria1": [2, 5, 8], "operator": "xlFilterValues" }
+				"arguments": { "range": "A1:D10", "field": 2, "criteria1": "[2, 5, 8]", "operator": "xlFilterValues" }
 			},
 			{
 				"prompt": "Filter column 1 for top 10 items",
@@ -105,11 +105,11 @@
 			},
 			{
 				"prompt": "Filter by cell background color (yellow)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 255, "b": 0 }, "operator": "xlFilterCellColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 255, \"b\": 0 }", "operator": "xlFilterCellColor" }
 			},
 			{
 				"prompt": "Filter by font color (red)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 0, "b": 0 }, "operator": "xlFilterFontColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 0, \"b\": 0 }", "operator": "xlFilterFontColor" }
 			}
 		]
 	});
@@ -206,6 +206,8 @@
 			}
 
 			let criteria1 = Asc.scope.criteria1;
+			if (criteria1 && criteria1.startsWith && criteria1.startsWith("[") || criteria1.startsWith("{"))
+				criteria1 = eval(criteria1);
 			if (Asc.scope.operator === "xlFilterCellColor" || Asc.scope.operator === "xlFilterFontColor") {
 				if (criteria1 && typeof criteria1 === 'object' && criteria1.r !== undefined && criteria1.g !== undefined && criteria1.b !== undefined) {
 					criteria1 = Api.CreateColorFromRGB(criteria1.r, criteria1.g, criteria1.b);
