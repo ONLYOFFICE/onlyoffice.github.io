@@ -2,6 +2,8 @@ import type { ApiCell } from "./src/generated/cell";
 import type { ApiSlide } from "./src/generated/slide";
 import type { ApiWord } from "./src/generated/word";
 
+import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
+
 export { ApiCell, ApiSlide, ApiWord };
 
 export type ApiForEditor<T extends EditorType> =
@@ -32,8 +34,8 @@ interface AscPlugin {
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
     detachEvent: (eventName: string) => void;
-    executeMethod: (methodName: string, args?: unknown[] | null, callback?: (result: any) => void) => void;
-    executeMethodAsync: (methodName: string, args?: unknown[], callback?: (result: any) => void) => void;
+    executeMethod: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
+    executeMethodAsync: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
