@@ -93,7 +93,7 @@ interface ApiBookmark {
   Delete(): boolean;
   GetName(): string;
   GetRange(): ApiRange;
-  GetText(oPr: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TableCellSeparator?: string, oPr_TableRowSeparator?: string, oPr_ParaSeparator?: string, oPr_TabSymbol?: string): string;
+  GetText(oPr?: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TableCellSeparator?: string, oPr_TableRowSeparator?: string, oPr_ParaSeparator?: string, oPr_TabSymbol?: string): string;
   GoTo(): boolean;
   Select(): boolean;
   SetName(sNewName: string): boolean;
@@ -377,10 +377,13 @@ interface ApiDocument {
   GetCommentsReport(): CommentReport;
   GetContent(bGetCopies: boolean): any[];
   GetContentControlsByTag(sTag: string): ApiBlockLvlSdt[] | ApiInlineLvlSdt[];
+  GetCurrentFootEndnote(): ApiDocumentContent | null;
   GetCurrentPage(): number;
-  GetCurrentSentence(sPart: undefined | "before" | "after"): string;
+  GetCurrentParagraph(): ApiParagraph;
+  GetCurrentRun(): ApiRun;
+  GetCurrentSentence(sPart?: undefined | "before" | "after"): string;
   GetCurrentVisiblePages(): number[];
-  GetCurrentWord(sWordPart: undefined | "before" | "after"): string;
+  GetCurrentWord(sWordPart?: undefined | "before" | "after"): string;
   GetDefaultParaPr(): ApiParaPr;
   GetDefaultStyle(sStyleType: StyleType): ApiStyle;
   GetDefaultTextPr(): ApiTextPr;
@@ -409,6 +412,7 @@ interface ApiDocument {
   InsertWatermark(sText?: string, bIsDiagonal?: boolean): ApiDrawing;
   IsTrackRevisions(): boolean;
   Last(): DocumentElement;
+  MoveCursorToPos(nPos: number): void;
   Push(oElement: DocumentElement): boolean;
   RejectAllRevisionChanges(): void;
   RemoveAllElements(): void;
@@ -456,6 +460,9 @@ interface ApiDocumentContent {
   RemoveAllElements(): void;
   RemoveElement(nPos: number): void;
   ToJSON(isWriteNumberings: boolean, isWriteStyles: boolean): JSON;
+  IsFootnote(): boolean;
+  IsEndnote(): boolean;
+  SelectNoteReference(): boolean;
 }
 
 /** Class representing a graphical object. */
@@ -723,7 +730,7 @@ interface ApiParagraph {
   GetSpacingLineRule(): "auto" | "atLeast" | "exact" | undefined;
   GetSpacingLineValue(): number | line240 | undefined;
   GetStyle(): ApiStyle;
-  GetText(oPr: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TabSymbol?: string): string;
+  GetText(oPr?: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TabSymbol?: string): string;
   GetTextPr(): ApiTextPr;
   InsertInContentControl(nType: number): ApiParagraph | ApiBlockLvlSdt;
   InsertParagraph(paragraph: string | ApiParagraph, sPosition: string, beRNewPara: boolean): ApiParagraph | null;
@@ -840,7 +847,7 @@ interface ApiRange {
   GetRange(Start?: number, End?: number): ApiRange;
   GetStartPage(): number;
   GetStartPos(): number;
-  GetText(oPr: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TableCellSeparator?: string, oPr_TableRowSeparator?: string, oPr_ParaSeparator?: string, oPr_TabSymbol?: string): string;
+  GetText(oPr?: object, oPr_Numbering?: boolean, oPr_Math?: boolean, oPr_NewLineSeparator?: string, oPr_TableCellSeparator?: string, oPr_TableRowSeparator?: string, oPr_ParaSeparator?: string, oPr_TabSymbol?: string): string;
   GetTextPr(): ApiTextPr;
   IntersectWith(oRange: ApiRange): ApiRange | null;
   Select(): void;
@@ -901,7 +908,7 @@ interface ApiRun {
   GetSpacing(): number;
   GetStrikeout(): boolean;
   GetStyle(): ApiStyle;
-  GetText(oPr: object, oPr_NewLineSeparator?: string, oPr_TabSymbol?: string): string;
+  GetText(oPr?: object, oPr_NewLineSeparator?: string, oPr_TabSymbol?: string): string;
   GetTextFill(): ApiFill;
   GetTextPr(): ApiTextPr;
   GetUnderline(): boolean;
