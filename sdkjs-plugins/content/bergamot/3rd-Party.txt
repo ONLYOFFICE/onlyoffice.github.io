@@ -1,0 +1,24 @@
+Bergamot Translator Plugin uses the following third-party components:
+
+1. Bergamot Translator (https://github.com/browsermt/bergamot-translator)
+   License: Mozilla Public License 2.0
+   Copyright: Bergamot Project Contributors
+
+2. Firefox Translations Models (https://github.com/mozilla/firefox-translations-models)
+   License: Creative Commons Attribution-ShareAlike 4.0 International
+   Copyright: Mozilla Foundation
+
+3. jQuery (https://jquery.com/)
+   License: MIT
+   Copyright: OpenJS Foundation and other contributors
+
+4. Select2 (https://select2.org/)
+   License: MIT
+   Copyright: Kevin Brown and other contributors
+
+5. Marian NMT (https://marian-nmt.github.io/)
+   License: MIT
+   Copyright: Microsoft Corporation and contributors
+
+The Bergamot Project has received funding from the European Union's Horizon 2020
+research and innovation programme under grant agreement No 825303.

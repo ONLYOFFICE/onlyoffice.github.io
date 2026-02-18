@@ -863,6 +863,7 @@ async function registerButtons(window, undefined)
 			button2.attachOnClick(on_click_ocr);
 		}
 
+		let lastButton = null;
 		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
 		{
 			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
@@ -881,8 +882,32 @@ async function registerButtons(window, undefined)
 			buttonGS.attachOnClick(async function(){
 				onCheckGrammarSpelling(true);
 			});
-			buttonGS.split = true;
+			lastButton = buttonGS;			
 		}
+
+		if (editorVersion >= 9003000) {
+
+			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") 
+			{
+				let isFillForm = await Asc.Editor.callMethod("IsFillingOFormMode");
+				if (true === isFillForm)
+				{
+					let buttonGenerate = new Asc.ButtonToolbar(buttonMainToolbar);
+					buttonGenerate.text = "Generate Document";
+					buttonGenerate.icons = window.getToolBarButtonIcons("form-to-doc");
+					
+					buttonGenerate.attachOnClick(async function(){
+						let content = await getFormGenerationPrompt();
+						window.AscDesktopEditor.generateNew("docx", "ai", content);
+					});
+
+					lastButton = buttonGenerate;
+				}
+			}
+		}
+
+		if (lastButton)
+			lastButton.split = true;
 
 		let neededVersionForAiAssistant = 9002000;
 		/*if (window.AscDesktopEditor) {

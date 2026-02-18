@@ -179,9 +179,8 @@
 	"Hint": "提示",
 	"Replace": "替换",
 	"Replace + Hint": "替换 + 提示",
-	
-
 	"Function": "Function",
 	"Arguments": "Arguments",
-	"Result": "Result"
+	"Result": "Result",
+	"Generate Document": "生成文档"
 }

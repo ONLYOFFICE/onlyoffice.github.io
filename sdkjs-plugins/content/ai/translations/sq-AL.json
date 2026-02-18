@@ -28,6 +28,7 @@
 	"Name": "Emri",
 	"URL": "URL",
 	"Key": "Çelësi",
+	"e.g. abc123...": "për shembull, abc123...",
 	"Update models list": "Përditësoni listën e modeleve",
 	"Use model for": "Përdorni modelin për",
 	"All": "Të gjitha",
@@ -180,5 +181,6 @@
 	"Replace + Hint": "Zamini + Hint",
 	"Function": "Function",
 	"Arguments": "Arguments",
-	"Result": "Result"
+	"Result": "Result",
+	"Generate Document": "Gjenero dokument"
 }
