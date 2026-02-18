@@ -177,9 +177,10 @@
 	"Match": "Поређај",
 	"Proposal for replacement": "Предлог за замену",
 	"Hint": "Hint",
-	"Replace": "Замени", 
+	"Replace": "Замени",
 	"Replace + Hint": "Замени + Hint",
 	"Function": "Function",
 	"Arguments": "Arguments",
-	"Result": "Result"
+	"Result": "Result",
+	"Generate Document": "Генериши документ"
 }

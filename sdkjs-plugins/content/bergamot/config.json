@@ -1,0 +1,71 @@
+{
+    "name": "Bergamot Translator",
+    "nameLocale": {
+        "cs-CS": "Bergamot Translator",
+        "de-DE": "Bergamot Translator",
+        "es-ES": "Bergamot Translator",
+        "fr-FR": "Bergamot Translator",
+        "it-IT": "Bergamot Translator",
+        "ja-JA": "Bergamot Translator",
+        "nl-NL": "Bergamot Translator",
+        "pt-BR": "Bergamot Translator",
+        "pt-PT": "Bergamot Translator",
+        "ru-RU": "Bergamot Translator",
+        "zh-ZH": "Bergamot Translator"
+    },
+    "guid": "asc.{e3c4f4a2-8b7d-4f6e-9a1c-5d2b8f0c7e3a}",
+    "version": "1.0.0",
+
+    "variations": [
+        {
+            "description": "Offline machine translation powered by Bergamot - privacy-friendly, works without internet",
+            "descriptionLocale": {
+                "cs-CS": "Offline strojový překlad poháněný Bergamot - šetrný k soukromí, funguje bez internetu",
+                "de-DE": "Offline-Maschinenübersetzung mit Bergamot - datenschutzfreundlich, funktioniert ohne Internet",
+                "es-ES": "Traducción automática sin conexión con Bergamot - respetuoso con la privacidad, funciona sin internet",
+                "fr-FR": "Traduction automatique hors ligne par Bergamot - respectueux de la vie privée, fonctionne sans internet",
+                "it-IT": "Traduzione automatica offline con Bergamot - rispettoso della privacy, funziona senza internet",
+                "ja-JA": "Bergamotによるオフライン機械翻訳 - プライバシーに配慮し、インターネットなしで動作",
+                "nl-NL": "Offline machinevertaling met Bergamot - privacyvriendelijk, werkt zonder internet",
+                "pt-BR": "Tradução automática offline com Bergamot - amigável à privacidade, funciona sem internet",
+                "pt-PT": "Tradução automática offline com Bergamot - amigo da privacidade, funciona sem internet",
+                "ru-RU": "Офлайн машинный перевод на основе Bergamot - конфиденциальность, работает без интернета",
+                "zh-ZH": "Bergamot 离线机器翻译 - 隐私友好，无需互联网即可工作"
+            },
+            "url": "index.html",
+
+            "icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",
+            "isViewer": false,
+            "EditorsSupport": [
+                "word",
+                "slide",
+                "cell",
+                "pdf"
+            ],
+
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+
+            "initDataType": "text",
+            "initOnSelectionChanged": true,
+
+            "store": {
+                "background": {
+                    "light" : "#E2E88C",
+                    "dark" : "#E2E88C"
+                },
+                "screenshots" : [
+                    "resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+                ],
+                "icons"       : {
+                    "light" : "resources/store/icons",
+                    "dark"  : "resources/store/icons"
+                },
+                "categories": ["specAbilities", "work"]
+            }
+        }
+    ]
+}

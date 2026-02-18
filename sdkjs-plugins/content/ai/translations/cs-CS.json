@@ -28,6 +28,7 @@
 	"Name" : "Název",
 	"URL" : "URL",
 	"Key" : "Klíč",
+    "e.g. abc123...": "například abc123...",
 	"Update models list" : "Aktualizovat seznam modelů",
 	"Use model for" : "Použít model pro",
 	"All": "Vše",
@@ -173,12 +174,13 @@
 	"Give your tool a short name for the toolbar": "Dalejte svému nástroji krátký název pro panel nástrojů",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Říkejte AI, co s vybraným textem dělat (například \"Najít faktické chyby\" nebo \"Riassumovat\")",
 	"Create AI assistant": "Vytvořit asistenta AI",
-	"Match": "Correspondance",
-	"Proposal for replacement": "Proposition de remplacement",
-	"Hint": "Indice",
-	"Replace": "Remplacer",
-	"Replace + Hint": "Remplacer + Indice",
+	"Match": "Náhoda",
+	"Proposal for replacement": "Návrh na nahrazení",
+	"Hint": "Náznak",
+	"Replace": "Nahradit",
+	"Replace + Hint": "Nahradit + Náznak",
 	"Function": "Function",
 	"Arguments": "Arguments",
-	"Result": "Result"
+	"Result": "Result",
+	"Generate Document": "Generovat dokument"
 }
