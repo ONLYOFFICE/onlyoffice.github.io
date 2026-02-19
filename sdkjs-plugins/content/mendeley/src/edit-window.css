@@ -1,0 +1,22 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+form > div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+form > div:last-child {
+    padding-bottom: 18px;
+}
+
+.selectbox-container .selectbox-dropdown .selectbox-options {
+    max-height: 74px;
+}

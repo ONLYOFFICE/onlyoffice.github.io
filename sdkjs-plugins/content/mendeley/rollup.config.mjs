@@ -4,6 +4,7 @@ import { babel } from "@rollup/plugin-babel";
 import license from "rollup-plugin-license";
 import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
+import { defineConfig } from "rollup";
 import autoprefixer from "autoprefixer";
 import atImport from "postcss-import";
 import cssnano from "cssnano";
@@ -46,18 +47,11 @@ function getBabelConfig() {
     };
 }
 
-export default {
-    input: "src/app/index.js",
-    output: {
-        file: isES5Build ? "dist/bundle.es5.js" : "dist/bundle.modern.js",
-        format: isES5Build ? "umd" : "esm",
-        name: isES5Build ? "Icons" : undefined,
-        sourcemap: true,
-    },
-    plugins: [
+function getPluginsConfig(stylesFileName) {
+    return [
         postcss({
             // for old browsers support
-            extract: "styles.css",
+            extract: stylesFileName,
             minimize: true,
             plugins: [
                 atImport(), // process @import rules
@@ -114,5 +108,46 @@ export default {
                 },
             },
         }),
-    ],
-};
+    ];
+}
+
+export default defineConfig([
+    {
+        input: "src/app/index.js",
+        output: {
+            file: isES5Build ? "dist/bundle.es5.js" : "dist/bundle.modern.js",
+            format: isES5Build ? "umd" : "esm",
+            name: isES5Build ? "Icons" : undefined,
+            sourcemap: true,
+        },
+        watch: {
+            include: ["src/app/**/*", "src/styles.css", "src/components.css"],
+            exclude: ["node_modules/**", "src/app/edit-window.js"],
+        },
+        plugins: [
+            ...getPluginsConfig("styles.css")
+        ],
+    },
+    /*{
+        input: "src/app/edit-window.js",
+        output: {
+            file:
+                isES5Build ?
+                    "dist/edit-window.es5.js"
+                :   "dist/edit-window.modern.js",
+            format: isES5Build ? "umd" : "esm",
+            name: isES5Build ? "Icons" : undefined,
+            sourcemap: true,
+        },
+        watch: {
+            include: [
+                "src/app/edit-window.js",
+                "src/edit-window.css",
+                "src/components.css",
+                "src/app/shared/components/*",
+            ],
+            exclude: ["node_modules/**"],
+        },
+        plugins: getPluginsConfig("edit-window.css"),
+    },*/
+]);
