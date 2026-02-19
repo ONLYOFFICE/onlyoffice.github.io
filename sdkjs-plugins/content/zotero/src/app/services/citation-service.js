@@ -33,6 +33,7 @@
 // @ts-check
 
 /// <reference path="../zotero/types.js" />
+/// <reference path="../../../scripts/citeproc/citeproc_commonjs.js" />
 
 /**
  * @typedef {import('../csl/styles/styles-manager').CslStylesManager} CslStylesManager
