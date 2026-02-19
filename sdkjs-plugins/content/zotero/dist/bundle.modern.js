@@ -3336,6 +3336,9 @@ class CslDocFormatter {
             Asc.plugin.callCommand(function() {
                 var doc = Api.GetDocument();
                 var selRange = doc.GetRangeBySelect();
+                if (!selRange) {
+                    return;
+                }
                 doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
                 var run = doc.GetCurrentRun();
                 for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
@@ -5245,6 +5248,10 @@ class AdditionalWindow {
             window.Asc.plugin.button = function() {
                 var _ref = _asyncToGenerator(function*(buttonId, windowId) {
                     var element = yield new Promise(resolve => {
+                        if (!_classPrivateFieldGet2(_window, _this)) {
+                            resolve(null);
+                            return;
+                        }
                         _classPrivateFieldGet2(_window, _this).attachEvent("onSaveFields", resolve);
                         _classPrivateFieldGet2(_window, _this).command("onClickSave");
                     });
@@ -5300,26 +5307,32 @@ class AdditionalWindow {
 }
 
 function _onShow(variation, content, type) {
+    if (!_classPrivateFieldGet2(_window, this)) return;
     _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
     _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
     _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
     window.Asc.plugin.onThemeChanged = theme => {
-        _classPrivateFieldGet2(_window, this).command("onThemeChanged", theme);
+        var _classPrivateFieldGet2$1;
+        (_classPrivateFieldGet2$1 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet2$1 === void 0 || _classPrivateFieldGet2$1.command("onThemeChanged", theme);
         _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, theme);
     };
     window.Asc.plugin.onTranslate = () => {
-        _classPrivateFieldGet2(_window, this).command("onTranslate");
+        var _classPrivateFieldGet3;
+        (_classPrivateFieldGet3 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.command("onTranslate");
         _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
     };
     _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
         if (type === "warning") {
-            _classPrivateFieldGet2(_window, this).command("onWarning", content);
+            var _classPrivateFieldGet4;
+            (_classPrivateFieldGet4 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet4 === void 0 || _classPrivateFieldGet4.command("onWarning", content);
         } else {
-            _classPrivateFieldGet2(_window, this).command("onAttachedContent", content);
+            var _classPrivateFieldGet5;
+            (_classPrivateFieldGet5 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet5 === void 0 || _classPrivateFieldGet5.command("onAttachedContent", content);
         }
     });
     _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
-        Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, this).id, [ variation.size[0] - 2, height ] ], () => {});
+        var _classPrivateFieldGet6;
+        Asc.plugin.executeMethod("ResizeWindow", [ (_classPrivateFieldGet6 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet6 === void 0 ? void 0 : _classPrivateFieldGet6.id, [ variation.size[0] - 2, height ] ], () => {});
     });
 }
 
@@ -5827,18 +5840,19 @@ class CursorService {
             var isCalc = false;
             var isClose = false;
             Asc.plugin.callCommand(() => {
+                var _doc$GetRangeBySelect, _doc$GetCurrentParagr, _doc$GetCurrentRun;
                 var doc = Api.GetDocument();
-                var canSelectWord = doc.SelectCurrentWord();
-                var endPos = doc.GetRangeBySelect().GetEndPos();
+                var canSelectWord = doc === null || doc === void 0 ? void 0 : doc.SelectCurrentWord();
+                var endPos = (doc === null || doc === void 0 || (_doc$GetRangeBySelect = doc.GetRangeBySelect()) === null || _doc$GetRangeBySelect === void 0 ? void 0 : _doc$GetRangeBySelect.GetEndPos()) || 0;
                 if (canSelectWord) {
                     return endPos;
                 }
-                var currentParagraphText = doc.GetCurrentParagraph().GetText();
-                var runText = doc.GetCurrentRun().GetText();
+                var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
+                var runText = doc === null || doc === void 0 || (_doc$GetCurrentRun = doc.GetCurrentRun()) === null || _doc$GetCurrentRun === void 0 ? void 0 : _doc$GetCurrentRun.GetText();
                 if (runText && currentParagraphText.indexOf(runText) !== -1) {
                     return endPos + currentParagraphText.indexOf(runText);
                 }
-                var sentenceText = doc.GetCurrentSentence();
+                var sentenceText = doc === null || doc === void 0 ? void 0 : doc.GetCurrentSentence();
                 if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
                     return endPos + currentParagraphText.indexOf(sentenceText);
                 }
