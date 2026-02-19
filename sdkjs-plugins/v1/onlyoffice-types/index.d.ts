@@ -4,13 +4,7 @@ import type { ApiWord } from "./src/generated/word";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 
-export { ApiCell, ApiSlide, ApiWord };
 
-export type ApiForEditor<T extends EditorType> =
-    T extends "cell" ? ApiCell :
-    T extends "slide" ? ApiSlide :
-    T extends "word" ? ApiWord :
-    never;
 
 declare global {
     interface Window {
@@ -682,3 +676,9 @@ export type {
     VariationConfig,
     PluginWindow
 };
+
+export type Api<T extends EditorType> =
+    T extends "cell" ? ApiCell :
+    T extends "slide" ? ApiSlide :
+    T extends "word" ? ApiWord :
+    never;

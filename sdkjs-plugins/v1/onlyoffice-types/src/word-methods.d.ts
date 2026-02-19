@@ -19,11 +19,28 @@ interface CommentReply {
     Solved?: boolean;
 }
 
+interface Color {
+    A: number;
+    B: number;
+    G: number;
+    R: number;
+}
+
+type ContentControlLock = 0 | 1 | 2 | 3;
+
 interface ContentControlProperties {
     Id?: number;
     Tag?: string;
     Lock?: number;
     Remove?: number;
+    Alias: string;
+    Appearance?: number;
+    Border?: {Color: Color};
+    Color?: Color;
+    InternalId?: string;
+    Lock?: ContentControlLock;
+    PlaceHolderText: string;
+    Shd?: {Color: Color};
 }
 
 interface ContentControlListItem {
@@ -447,9 +464,9 @@ export type WordMethodArgs = {
     UpdatePlugin: [oConfig: any];
 };
 
-export type WordMethodName = keyof WordMethodArgs;
+type WordMethodName = keyof WordMethodArgs;
 
-export type WordMethodReturn<T extends WordMethodName> = 
+type WordMethodReturn<T extends WordMethodName> = 
     T extends "AddComment" ? string | null :
     T extends "CanRedo" | "CanUndo" | "SearchNext" | "ReplaceTextSmart" ? boolean :
     T extends "GetSelectedText" | "GetCurrentWord" | "GetCurrentSentence" | "GetDocumentLang" | "GetFields" | "GetFileHTML" | "GetFileToDownload" | "ConvertDocument" | "GetSelectedContent" | "GetVBAMacros" | "GetVersion" ? string :
@@ -459,3 +476,14 @@ export type WordMethodReturn<T extends WordMethodName> =
     T extends "RemoveContentControl" ? any :
     T extends "InsertAndReplaceContentControls" ? any[] :
     T extends "GetMacros" ? {current: number, macrosArray: string[]} : any;
+
+
+    export {
+        WordMethodArgs,
+        WordMethodName,
+        WordMethodReturn
+    }
+
+    export {
+        ContentControlProperties
+    }
