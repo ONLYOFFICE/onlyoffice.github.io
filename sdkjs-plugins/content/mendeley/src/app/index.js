@@ -140,7 +140,6 @@ import "../styles.css";
     }
 
     window.Asc.plugin.init = function () {
-        console.warn(window.Asc);
         if (isLocal) {
             const message = "This plugin doesn't work into Desktop Editors.";
             const content = document.getElementById('content');
@@ -182,7 +181,7 @@ import "../styles.css";
 
                 Promise.all([/*loadGroups(), */settings.init()]).then(function () {
                     Loader.hide();
-                    // showCitationsAtTheStartFromMyLibrary();
+                    showCitationsAtTheStartFromMyLibrary();
                 });
             });
 
@@ -254,40 +253,40 @@ import "../styles.css";
             selectCitation.clearLibrary();
             /** @type {Array<Promise<number>>} */
             const promises = [];
+            return new Promise(resolve => {
+            //return sdk
+            //    .getUserGroups()
+            //    .then(function (
+            //        /** @type {Array<UserGroupInfo>} */ userGroups
+            //    ) {
+                /** @type {Array<string|number>} */
+                /*let groups = selectedGroups.filter(function (group) {
+                    return (
+                        group !== "my_library" &&
+                        group !== "group_libraries"
+                    );
+                });*/
 
-            return sdk
-                .getUserGroups()
-                .then(function (
-                    /** @type {Array<UserGroupInfo>} */ userGroups
-                ) {
-                    /** @type {Array<string|number>} */
-                    let groups = selectedGroups.filter(function (group) {
-                        return (
-                            group !== "my_library" &&
-                            group !== "group_libraries"
-                        );
-                    });
+            // if (selectedGroups.indexOf("my_library") !== -1) {
+                    promises.push(
+                        loadLibrary(sdk.getItems(text), false),
+                    );
+            // }
 
-                    if (selectedGroups.indexOf("my_library") !== -1) {
-                        promises.push(
-                            loadLibrary(sdk.getItems(text), false),
-                        );
-                    }
-
-                    for (let i = 0; i < groups.length; i++) {
-                        promises.push(
-                            loadLibrary(
-                                sdk.getGroupItems(text, groups[i]),
-                                true
-                            )
-                        );
-                    }
-                    lastSearch.text = text;
-                    lastSearch.obj = null;
-                    lastSearch.groups = [];
-                    lastSearch.groupsHash = groupsHash;
-                    return promises;
-                });
+                /*for (let i = 0; i < groups.length; i++) {
+                    promises.push(
+                        loadLibrary(
+                            sdk.getGroupItems(text, groups[i]),
+                            true
+                        )
+                    );
+                }*/
+                lastSearch.text = text;
+                lastSearch.obj = null;
+                lastSearch.groups = [];
+                lastSearch.groupsHash = groupsHash;
+                resolve(promises);
+            });
         }
         searchFilter.subscribe(function (text, selectedGroups) {
             text = text.trim();
@@ -296,8 +295,8 @@ import "../styles.css";
                 elements.mainState.classList.contains(displayNoneClass) ||
                 !text ||
                 (text == lastSearch.text &&
-                    groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
+                    groupsHash === lastSearch.groupsHash) /*||
+                selectedGroups.length === 0*/
             )
                 return;
 

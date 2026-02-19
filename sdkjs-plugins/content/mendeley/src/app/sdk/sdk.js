@@ -290,6 +290,21 @@ class Sdk {
         var self = this;
         format = format || self.DEFAULT_FORMAT;
 
+        if (search) {
+            return this._mendeleySdk.documents.search({
+                query: search,
+                limit: 20,
+                view: "bib",
+            });
+        } else if (itemsID) {
+            //
+        } else {
+            return this._mendeleySdk.documents.list({
+                limit: 20,
+                view: "bib"
+            });
+        }
+
         return new Promise(function (resolve, reject) {
             /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
             const queryParams = {
