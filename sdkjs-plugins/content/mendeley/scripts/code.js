@@ -33,7 +33,21 @@
 /// <reference path="../../../v1/onlyoffice-types/index.d.ts" />
 
 (function () {
-	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
+	const isLocal = (function () {
+        if (
+            window.navigator &&
+            window.navigator.userAgent
+                .toLowerCase()
+                .indexOf("ascdesktopeditor") < 0
+        )
+            return false;
+        if (window.location && window.location.protocol == "file:") return true;
+        const src = window.document.currentScript
+            ? window.document.currentScript.getAttribute("src")
+            : "";
+        if (src && 0 == src.indexOf("file:///")) return true;
+        return false;
+    })();
     var displayNoneClass = "display-none";
     var blurClass = "blur";
     var waitForLoad = false;
@@ -978,8 +992,15 @@
 
     function insertInDocument(html) {
         if (html) {
+
+            /*const contentControlProperties = {
+                Id : 7,
+                Tag : html,
+                Lock : 3, // can edit
+                PlaceHolderText: html
+            };*/
             window.Asc.plugin.executeMethod("PasteHtml", [(html.join) ? html.join('') : html]);
-            //window.Asc.plugin.executeMethod ("AddContentControl", [2, {"Id" : 7, "Tag" : html, "Lock" : 0}]);
+            // window.Asc.plugin.executeMethod("AddContentControl", [2, contentControlProperties]);
         } else {
             showError(getMessage("Bibliography cannot be created with selected style"));
         }
