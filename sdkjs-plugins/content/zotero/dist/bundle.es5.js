@@ -294,22 +294,6 @@
             }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
         }, _regeneratorDefine(e, r, n, t);
     }
-    function _regeneratorValues(e) {
-        if (null != e) {
-            var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0;
-            if (t) return t.call(e);
-            if ("function" == typeof e.next) return e;
-            if (!isNaN(e.length)) return {
-                next: function() {
-                    return e && r >= e.length && (e = void 0), {
-                        value: e && e[r++],
-                        done: !e
-                    };
-                }
-            };
-        }
-        throw new TypeError(typeof e + " is not iterable");
-    }
     function _slicedToArray(r, e) {
         return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest();
     }
@@ -12151,6 +12135,9 @@
                     Asc.plugin.callCommand(function() {
                         var doc = Api.GetDocument();
                         var selRange = doc.GetRangeBySelect();
+                        if (!selRange) {
+                            return;
+                        }
                         doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
                         var run = doc.GetCurrentRun();
                         for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
@@ -12527,114 +12514,99 @@
             key: "convertNotesStyle",
             value: function() {
                 var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee5(fields, notesStyle) {
-                    var _this = this;
-                    var formats, _loop, _ret, i;
-                    return _regenerator().w(function(_context6) {
-                        while (1) switch (_context6.n) {
+                    var formats, editedFields, i, field, selectFieldResult, isReferenceSelected, formatting;
+                    return _regenerator().w(function(_context5) {
+                        while (1) switch (_context5.n) {
                           case 0:
                             formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
-                            _loop = _regenerator().m(function _loop() {
-                                var field, selectFieldResult, isReferenceSelected, formatting;
-                                return _regenerator().w(function(_context5) {
-                                    while (1) switch (_context5.n) {
-                                      case 0:
-                                        field = fields[i];
-                                        if (field.FieldId) {
-                                            _context5.n = 1;
-                                            break;
-                                        }
-                                        return _context5.a(2, 0);
-
-                                      case 1:
-                                        if (field.Content) {
-                                            _context5.n = 3;
-                                            break;
-                                        }
-                                        _context5.n = 2;
-                                        return new Promise(function(resolve) {
-                                            window.Asc.plugin.executeMethod("UpdateAddinFields", [ field ], resolve);
-                                        });
-
-                                      case 2:
-                                        return _context5.a(2, 0);
-
-                                      case 3:
-                                        _context5.n = 4;
-                                        return _assertClassBrand(_CitationDocService_brand, _this, _selectField).call(_this, field.FieldId);
-
-                                      case 4:
-                                        selectFieldResult = _context5.v;
-                                        if (selectFieldResult) {
-                                            _context5.n = 5;
-                                            break;
-                                        }
-                                        return _context5.a(2, 0);
-
-                                      case 5:
-                                        _context5.n = 6;
-                                        return _assertClassBrand(_CitationDocService_brand, _this, _selectFieldReference).call(_this);
-
-                                      case 6:
-                                        isReferenceSelected = _context5.v;
-                                        if (isReferenceSelected) {
-                                            _context5.n = 7;
-                                            break;
-                                        }
-                                        return _context5.a(2, 0);
-
-                                      case 7:
-                                        _context5.n = 8;
-                                        return _assertClassBrand(_CitationDocService_brand, _this, _removeSelectedContent).call(_this);
-
-                                      case 8:
-                                        _context5.n = 9;
-                                        return _assertClassBrand(_CitationDocService_brand, _this, _addNote).call(_this, notesStyle);
-
-                                      case 9:
-                                        _context5.n = 10;
-                                        return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field);
-
-                                      case 10:
-                                        formatting = formats.get(field.FieldId);
-                                        if (formatting) {
-                                            _context5.n = 11;
-                                            break;
-                                        }
-                                        return _context5.a(2, 0);
-
-                                      case 11:
-                                        _context5.n = 12;
-                                        return CslDocFormatter.formatAfterInsert(formatting.formatting);
-
-                                      case 12:
-                                        return _context5.a(2);
-                                    }
-                                }, _loop);
-                            });
+                            editedFields = [];
                             i = 0;
 
                           case 1:
                             if (!(i < fields.length)) {
-                                _context6.n = 4;
+                                _context5.n = 13;
                                 break;
                             }
-                            return _context6.d(_regeneratorValues(_loop()), 2);
+                            field = fields[i];
+                            if (field.FieldId) {
+                                _context5.n = 2;
+                                break;
+                            }
+                            return _context5.a(3, 12);
 
                           case 2:
-                            _ret = _context6.v;
-                            if (!(_ret === 0)) {
-                                _context6.n = 3;
+                            if (field.Content) {
+                                _context5.n = 3;
                                 break;
                             }
-                            return _context6.a(3, 3);
+                            editedFields.push(field);
+                            return _context5.a(3, 12);
 
                           case 3:
-                            i++;
-                            _context6.n = 1;
-                            break;
+                            _context5.n = 4;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, field.FieldId);
 
                           case 4:
-                            return _context6.a(2);
+                            selectFieldResult = _context5.v;
+                            if (selectFieldResult) {
+                                _context5.n = 5;
+                                break;
+                            }
+                            return _context5.a(3, 12);
+
+                          case 5:
+                            _context5.n = 6;
+                            return _assertClassBrand(_CitationDocService_brand, this, _selectFieldReference).call(this);
+
+                          case 6:
+                            isReferenceSelected = _context5.v;
+                            if (isReferenceSelected) {
+                                _context5.n = 7;
+                                break;
+                            }
+                            return _context5.a(3, 12);
+
+                          case 7:
+                            _context5.n = 8;
+                            return _assertClassBrand(_CitationDocService_brand, this, _removeSelectedContent).call(this);
+
+                          case 8:
+                            _context5.n = 9;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
+
+                          case 9:
+                            _context5.n = 10;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
+
+                          case 10:
+                            formatting = formats.get(field.FieldId);
+                            if (formatting) {
+                                _context5.n = 11;
+                                break;
+                            }
+                            return _context5.a(3, 12);
+
+                          case 11:
+                            _context5.n = 12;
+                            return CslDocFormatter.formatAfterInsert(formatting.formatting);
+
+                          case 12:
+                            i++;
+                            _context5.n = 1;
+                            break;
+
+                          case 13:
+                            if (!editedFields.length) {
+                                _context5.n = 14;
+                                break;
+                            }
+                            _context5.n = 14;
+                            return new Promise(function(resolve) {
+                                window.Asc.plugin.executeMethod("UpdateAddinFields", [ editedFields ], resolve);
+                            });
+
+                          case 14:
+                            return _context5.a(2);
                         }
                     }, _callee5, this);
                 }));
@@ -14222,6 +14194,10 @@
                                   case 0:
                                     _context.n = 1;
                                     return new Promise(function(resolve) {
+                                        if (!_classPrivateFieldGet2(_window, _this2)) {
+                                            resolve(null);
+                                            return;
+                                        }
                                         _classPrivateFieldGet2(_window, _this2).attachEvent("onSaveFields", resolve);
                                         _classPrivateFieldGet2(_window, _this2).command("onClickSave");
                                     });
@@ -14291,26 +14267,32 @@
     }();
     function _onShow(variation, content, type) {
         var _this4 = this;
+        if (!_classPrivateFieldGet2(_window, this)) return;
         _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
         _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
         _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
         window.Asc.plugin.onThemeChanged = function(theme) {
-            _classPrivateFieldGet2(_window, _this4).command("onThemeChanged", theme);
+            var _classPrivateFieldGet2$1;
+            (_classPrivateFieldGet2$1 = _classPrivateFieldGet2(_window, _this4)) === null || _classPrivateFieldGet2$1 === void 0 || _classPrivateFieldGet2$1.command("onThemeChanged", theme);
             _classPrivateFieldGet2(_defaultThemeChangedFn, _this4).call(_this4, theme);
         };
         window.Asc.plugin.onTranslate = function() {
-            _classPrivateFieldGet2(_window, _this4).command("onTranslate");
+            var _classPrivateFieldGet3;
+            (_classPrivateFieldGet3 = _classPrivateFieldGet2(_window, _this4)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.command("onTranslate");
             _classPrivateFieldGet2(_defaultTranslateFn, _this4).call(_this4);
         };
         _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", function() {
             if (type === "warning") {
-                _classPrivateFieldGet2(_window, _this4).command("onWarning", content);
+                var _classPrivateFieldGet4;
+                (_classPrivateFieldGet4 = _classPrivateFieldGet2(_window, _this4)) === null || _classPrivateFieldGet4 === void 0 || _classPrivateFieldGet4.command("onWarning", content);
             } else {
-                _classPrivateFieldGet2(_window, _this4).command("onAttachedContent", content);
+                var _classPrivateFieldGet5;
+                (_classPrivateFieldGet5 = _classPrivateFieldGet2(_window, _this4)) === null || _classPrivateFieldGet5 === void 0 || _classPrivateFieldGet5.command("onAttachedContent", content);
             }
         });
         _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", function(height) {
-            Asc.plugin.executeMethod("ResizeWindow", [ _classPrivateFieldGet2(_window, _this4).id, [ variation.size[0] - 2, height ] ], function() {});
+            var _classPrivateFieldGet6;
+            Asc.plugin.executeMethod("ResizeWindow", [ (_classPrivateFieldGet6 = _classPrivateFieldGet2(_window, _this4)) === null || _classPrivateFieldGet6 === void 0 ? void 0 : _classPrivateFieldGet6.id, [ variation.size[0] - 2, height ] ], function() {});
         });
     }
     function _hide() {
@@ -15192,18 +15174,19 @@
                     var isCalc = false;
                     var isClose = false;
                     Asc.plugin.callCommand(function() {
+                        var _doc$GetRangeBySelect, _doc$GetCurrentParagr, _doc$GetCurrentRun;
                         var doc = Api.GetDocument();
-                        var canSelectWord = doc.SelectCurrentWord();
-                        var endPos = doc.GetRangeBySelect().GetEndPos();
+                        var canSelectWord = doc === null || doc === void 0 ? void 0 : doc.SelectCurrentWord();
+                        var endPos = (doc === null || doc === void 0 || (_doc$GetRangeBySelect = doc.GetRangeBySelect()) === null || _doc$GetRangeBySelect === void 0 ? void 0 : _doc$GetRangeBySelect.GetEndPos()) || 0;
                         if (canSelectWord) {
                             return endPos;
                         }
-                        var currentParagraphText = doc.GetCurrentParagraph().GetText();
-                        var runText = doc.GetCurrentRun().GetText();
+                        var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
+                        var runText = doc === null || doc === void 0 || (_doc$GetCurrentRun = doc.GetCurrentRun()) === null || _doc$GetCurrentRun === void 0 ? void 0 : _doc$GetCurrentRun.GetText();
                         if (runText && currentParagraphText.indexOf(runText) !== -1) {
                             return endPos + currentParagraphText.indexOf(runText);
                         }
-                        var sentenceText = doc.GetCurrentSentence();
+                        var sentenceText = doc === null || doc === void 0 ? void 0 : doc.GetCurrentSentence();
                         if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
                             return endPos + currentParagraphText.indexOf(sentenceText);
                         }
