@@ -37,7 +37,6 @@
 
 /**
  * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
- * @typedef {import('../sdk/sdk').Sdk} Sdk
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  */
@@ -53,18 +52,12 @@ class CitationService {
     /**
      * @param {LocalesManager} localesManager
      * @param {CslStylesManager} cslStylesManager
-     * @param {Sdk} sdk
      */
-    constructor(localesManager, cslStylesManager, sdk) {
+    constructor(localesManager, cslStylesManager) {
         this._bibPlaceholderIfEmpty =
             "Please insert some citation into the document.";
-        this._citPrefixNew = "ZOTERO_ITEM";
-        this._citSuffixNew = "CSL_CITATION";
-        this._citPrefix = "ZOTERO_CITATION";
-        this._bibPrefixNew = "ZOTERO_BIBL";
-        this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
-        this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-        this._sdk = sdk;
+        this._citPrefixNew = "MENDELEY_CITATION";
+        this._bibPrefixNew = "MENDELEY_BIBLIOGRAPHY";
         this._localesManager = localesManager;
         this._cslStylesManager = cslStylesManager;
         this._storage = new CSLCitationStorage();
@@ -72,9 +65,7 @@ class CitationService {
         this._formatter;
         this.citationDocService = new CitationDocService(
             this._citPrefixNew,
-            this._citSuffixNew,
             this._bibPrefixNew,
-            this._bibSuffixNew,
         );
         this.#additionalWindow = new AdditionalWindow();
     }
@@ -137,69 +128,7 @@ class CitationService {
             });
     }
 
-    /**
-     * @param {Array<any>} items
-     * @returns {Promise<Array<SearchResultItem>>}
-     */
-    #getSelectedInJsonFormat(items) {
-        var arrUsrItems = [];
-        /** @type {Object<string, string[]>} */
-        var arrGroupsItems = {};
-        for (var citationID in items) {
-            var item = items[citationID];
-            var userID = item["userID"];
-            const groupID = item["groupID"];
-            if (userID) {
-                arrUsrItems.push(item.id);
-            } else if (groupID) {
-                if (!arrGroupsItems[groupID]) {
-                    arrGroupsItems[groupID] = [];
-                }
-                arrGroupsItems[groupID].push(item.id);
-            }
-        }
-
-        /** @type {Array<Promise<SearchResultItem[]>>} */
-        var promises = [];
-        if (arrUsrItems.length) {
-            promises.push(
-                this._sdk
-                    .getItems(null, arrUsrItems, "json")
-                    .then(function (res) {
-                        var items = res.items || [];
-                        return items;
-                    }),
-            );
-        }
-
-        for (var groupID in arrGroupsItems) {
-            if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-                promises.push(
-                    this._sdk
-                        .getGroupItems(
-                            null,
-                            groupID,
-                            arrGroupsItems[groupID],
-                            "json",
-                        )
-                        .then(function (res) {
-                            var items = res.items || [];
-                            return items;
-                        }),
-                );
-            }
-        }
-
-        return Promise.all(promises).then(function (res) {
-            /** @type {Array<SearchResultItem>} */
-            var items = [];
-            res.forEach(function (resItems) {
-                items = items.concat(resItems);
-            });
-            return items;
-        });
-    }
-
+    /** @returns {string} */
     #makeBibliography() {
         try {
             const bibItems = new Array(this._storage.size);
@@ -233,37 +162,54 @@ class CitationService {
         }
     }
 
-    /** @param {CustomField} field */
+    /** @param {ContentControlProperties} field */
     #extractField(field) {
         let citationObject;
-        const citationStartIndex = field.Value.indexOf("{");
-        const citationEndIndex = field.Value.lastIndexOf("}");
-        if (citationStartIndex !== -1) {
-            var citationString = field.Value.slice(
+        if (field.Tag.indexOf(this._bibPrefixNew) !== -1) {
+            return {};
+        }
+        const citationStartIndex = field.Tag.indexOf("_", this._citPrefixNew.length + 1) + 1;
+
+        if (citationStartIndex > 0) {
+            const base64String = field.Tag.slice(
                 citationStartIndex,
-                citationEndIndex + 1,
             );
+
+            let binary = atob(base64String);
+            let citationString;
+            if (typeof TextDecoder !== "undefined") {
+                let bytes = Uint8Array.from(binary, function(c) {
+                    return c.charCodeAt(0);
+                });
+                citationString = new TextDecoder("utf-8").decode(bytes);
+            } else { // old browser without TextDecoder
+                var escaped = "";
+                for (var i = 0; i < binary.length; i++) {
+                    escaped += "%" + ("00" + binary.charCodeAt(i).toString(16)).slice(-2);
+                }
+                citationString = decodeURIComponent(escaped);
+            }
+
             citationObject = JSON.parse(citationString);
         }
         return citationObject;
     }
     /**
      * @param {Object} [updatedField]
-     * @returns {Promise<{fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
+     * @returns {Promise<{fieldsWithCitations: {field: ContentControlProperties, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: ContentControlProperties | undefined}>}
      */
     #synchronizeStorageWithDocItems(updatedField) {
         const self = this;
         return this.citationDocService
-            .getAddinZoteroFields()
-            .then(function (/** @type {CustomField[]} */ arrFields) {
+            .getAddinMendeleyControls()
+            .then(function (/** @type {ContentControlProperties[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
-
-                /** @type {CustomField | undefined} */
+console.warn(arrFields);
+                /** @type {ContentControlProperties | undefined} */
                 const bibField = arrFields.find(function (field) {
                     return (
-                        field.Value.indexOf(self._bibPrefixNew) !== -1 ||
-                        field.Value.indexOf(self._bibPrefix) !== -1
+                        field.Tag.indexOf(self._bibPrefixNew) !== -1
                     );
                 });
                 if (bibField) {
@@ -278,19 +224,13 @@ class CitationService {
 
                 const fields = arrFields.filter(function (field) {
                     return (
-                        field.Value.indexOf(self._citPrefixNew) !== -1 ||
-                        field.Value.indexOf(self._citPrefix) !== -1
+                        field.Tag.indexOf(self._citPrefixNew) !== -1
                     );
                 });
                 let fieldsWithCitations = fields.map(function (field) {
                     let citationObject = self.#extractField(field);
 
-                    let citationID = ""; // old format
-                    if (field.Value.indexOf(self._citPrefix) === -1) {
-                        citationID = citationObject.citationID;
-                    }
-
-                    let cslCitation = new CSLCitation(numOfItems, citationID);
+                    let cslCitation = new CSLCitation(numOfItems);
                     if (updatedField) {
                         numOfItems += cslCitation.fillFromObject(updatedField);
                     } else {
@@ -348,31 +288,31 @@ class CitationService {
 
     /**
      * @param {boolean} bNoHaveFields
-     * @param {CustomField} bibField
-     * @returns {CustomField}
+     * @param {ContentControlProperties} bibField
+     * @returns {ContentControlProperties}
      */
     #updateBibliography(bNoHaveFields, bibField) {
         if (bNoHaveFields) {
-            bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
+            bibField.PlaceHolderText = translate(this._bibPlaceholderIfEmpty);
         } else {
             let bibliography = this.#makeBibliography();
-            bibField["Content"] = bibliography;
+            bibField.PlaceHolderText = bibliography;
         }
 
         return bibField;
     }
 
     /**
-     * @param {{field: CustomField, cslCitation: CSLCitation}[]} fieldsWithCitations
+     * @param {{field: ContentControlProperties, cslCitation: CSLCitation}[]} fieldsWithCitations
      * @param {boolean} bHardRefresh
-     * @returns {Promise<CustomField[]>}
+     * @returns {Promise<ContentControlProperties[]>}
      */
     async #getUpdatedFields(fieldsWithCitations, bHardRefresh) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
 
-        /** @type {CustomField[]} */
+        /** @type {ContentControlProperties[]} */
         const updatedFields = [];
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
@@ -381,7 +321,7 @@ class CitationService {
             let htmlCitation = this._formatter.makeCitationCluster(keysL);
             htmlCitation = this.#unEscapeHtml(htmlCitation);
             tempElement.innerHTML = htmlCitation;
-            const oldContent = field["Content"];
+            const oldContent = field.PlaceHolderText;
             const newContent = tempElement.innerText;
 
             if (cslCitation.getDoNotUpdate()) {
@@ -401,7 +341,7 @@ class CitationService {
             }
 
             if (bHardRefresh) {
-                field["Content"] = htmlCitation;
+                field.PlaceHolderText = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
             } else if (oldContent !== newContent) {
                 let text =
@@ -432,18 +372,17 @@ class CitationService {
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
-                    delete field["Content"];
+                    delete field.PlaceHolderText;
                 } else {
-                    field["Content"] = htmlCitation;
+                    field.PlaceHolderText = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
             }
 
             if (cslCitation) {
-                field["Value"] =
+                field.Tag =
                     this._citPrefixNew +
-                    " " +
-                    this._citSuffixNew +
+                    "_v3_" +
                     JSON.stringify(cslCitation.toJSON());
             }
 
@@ -533,12 +472,8 @@ class CitationService {
             cslCitation.fillFromObject(item);
         }
 
-        return this.#getSelectedInJsonFormat(items).then(function (items) {
-            items.forEach(function (item) {
-                cslCitation.fillFromObject(item);
-            });
-            return self.#formatInsertLink(cslCitation);
-        });
+        return self.#formatInsertLink(cslCitation);
+
     }
 
     /** @returns {Promise<void>} */
@@ -579,7 +514,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = [];
 
             if (typeof bHardRefresh === "undefined") {
@@ -632,7 +567,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
@@ -669,7 +604,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -697,7 +632,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -737,7 +672,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -788,7 +723,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {ContentControlProperties[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
@@ -804,21 +739,6 @@ class CitationService {
         }
     }
 
-    /**
-     * @param {CustomField} field
-     * @returns {Promise<CustomField | null>}
-     */
-    async showEditCitationWindow(field) {
-        if (!field) return null;
-
-        const updatedField =
-            await this.#additionalWindow.showEditWindow(field);
-        if (!updatedField) {
-            // Cancel click
-            return null;
-        }
-        return updatedField;
-    }
 }
 
 export { CitationService };

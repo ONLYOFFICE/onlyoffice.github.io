@@ -162,8 +162,7 @@ import "../styles.css";
         settings = new SettingsPage(router, displayNoneClass);
         citationService = new CitationService(
             settings.getLocalesManager(),
-            settings.getStyleManager(),
-            sdk
+            settings.getStyleManager()
         );
         let isInit = false;
 

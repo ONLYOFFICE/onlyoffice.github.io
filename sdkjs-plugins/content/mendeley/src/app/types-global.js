@@ -75,12 +75,7 @@
 
 /** ------------------------------------------------ */
 
-/**
- * @typedef {Object} CustomField
- * @property {string} Value
- * @property {string} [Content]
- * @property {string} [FieldId]
- */
+/** @typedef {import("../../../../v1/onlyoffice-types/src/word-methods").ContentControlProperties} ContentControlProperties */
 
 /** ------------------------------------------------ */
 

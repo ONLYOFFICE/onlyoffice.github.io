@@ -41,27 +41,16 @@ import { CslHtmlParser } from "./csl-html-parser";
 import { CslDocFormatter } from "./csl-doc-formatter";
 
 class CitationDocService {
-    #citPrefixOld;
     #citPrefix;
-    #bibPrefixOld;
-    #citSuffix;
     #bibPrefix;
-    #bibSuffix;
 
     /**
      * @param {string} citPrefix
-     * @param {string} citSuffix
      * @param {string} bibPrefix
-     * @param {string} bibSuffix
      */
-    constructor(citPrefix, citSuffix, bibPrefix, bibSuffix) {
-        this.#citPrefixOld = "ZOTERO_CITATION";
-        this.#bibPrefixOld = "ZOTERO_BIBLIOGRAPHY";
-
+    constructor(citPrefix, bibPrefix) {
         this.#citPrefix = citPrefix;
-        this.#citSuffix = citSuffix;
         this.#bibPrefix = bibPrefix;
-        this.#bibSuffix = bibSuffix;
     }
 
     /**
@@ -72,10 +61,12 @@ class CitationDocService {
     addBibliography(text, value) {
         const self = this;
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        /** @type {CustomField} */
+        /** @type {ContentControlProperties} */
         const field = {
-            Value: this.#bibPrefix + value + this.#bibSuffix,
-            Content: formattingPositions.text,
+            // Id : 7,
+            Tag: this.#bibPrefix,
+            Lock: 3, // can edit
+            PlaceHolderText: formattingPositions.text,
         };
 
         return this.#addContentControl(field).then(function () {
@@ -93,12 +84,13 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async addCitation(text, value, notesStyle) {
-        const self = this;
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        /** @type {CustomField} */
-        const field = {
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
-            Content: formattingPositions.text,
+        /** @type {ContentControlProperties} */
+        const control = {
+            // Id : 7,
+            Tag: this.#citPrefix + "_v3_" + this.#base64Encode(value),
+            Lock: 3, // can edit
+            PlaceHolderText: formattingPositions.text,
         };
         if (
             notesStyle &&
@@ -107,7 +99,7 @@ class CitationDocService {
             await this.#addNote(notesStyle);
         }
 
-        return this.#addContentControl(field).then(function () {
+        return this.#addContentControl(control).then(function () {
             if (!formattingPositions.formatting.length) return;
             return CslDocFormatter.formatAfterInsert(
                 formattingPositions.formatting
@@ -116,21 +108,18 @@ class CitationDocService {
     }
 
     /**
-     * @returns {Promise<Array<CustomField>>}
+     * @returns {Promise<Array<ContentControlProperties>>}
      */
-    getAddinZoteroFields() {
+    getAddinMendeleyControls() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.#getAllAddinFields().then(function (arrFields) {
+            self.#getAllContentControls().then(function (arrFields) {
                 try {
                     if (arrFields.length) {
                         arrFields = arrFields.filter(function (field) {
                             return (
-                                field.Value.indexOf(self.#citPrefix) !== -1 ||
-                                field.Value.indexOf(self.#bibPrefix) !== -1 ||
-                                field.Value.indexOf(self.#citPrefixOld) !==
-                                    -1 ||
-                                field.Value.indexOf(self.#bibPrefixOld) !== -1
+                                field.Tag.indexOf(self.#citPrefix) !== -1 ||
+                                field.Tag.indexOf(self.#bibPrefix) !== -1
                             );
                         });
                     }
@@ -145,7 +134,7 @@ class CitationDocService {
     /** @returns {Promise<boolean>} */
     saveAsText() {
         // TODO потом добавить ещё форматы, пока только как текст
-        return this.getAddinZoteroFields().then(function (arrFields) {
+        return this.getAddinMendeleyControls().then(function (arrFields) {
             let count = arrFields.length;
             if (!count) {
                 window.Asc.plugin.executeCommand("close", "");
@@ -156,7 +145,7 @@ class CitationDocService {
                 arrFields.forEach(function (field) {
                     window.Asc.plugin.executeMethod(
                         "RemoveFieldWrapper",
-                        [field.FieldId],
+                        [field.InternalId],
                         function () {
                             count--;
                             if (!count) {
@@ -171,7 +160,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<ContentControlProperties>} fields
      * @returns {Promise<void>}
      */
     async updateAddinFields(fields) {
@@ -197,7 +186,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<ContentControlProperties>} fields
      * @returns {Promise<void>}
      */
     async convertNotesToText(fields) {
@@ -205,19 +194,19 @@ class CitationDocService {
         
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
-            if (!field.FieldId) {
+            if (!field.InternalId) {
                 console.error("Field id is not defined");
                 continue;
             }
 
-            const selectFieldResult = await this.#selectField(field.FieldId);
+            const selectFieldResult = await this.#selectField(field.InternalId);
             if (!selectFieldResult) continue;
             const isReferenceSelected = await this.#selectFieldReference();
             if (!isReferenceSelected) continue;
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             await this.#addContentControl(field);
-            const formatting = formats.get(field.FieldId);
+            const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
                 formatting.formatting,
@@ -226,7 +215,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<ContentControlProperties>} fields
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
@@ -235,14 +224,14 @@ class CitationDocService {
 
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
-            if (!field.FieldId) continue;
+            if (!field.InternalId) continue;
 
-            const selectFieldResult = await this.#selectField(field.FieldId);
+            const selectFieldResult = await this.#selectField(field.InternalId);
             if (!selectFieldResult) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addContentControl(field);
-            const formatting = formats.get(field.FieldId);
+            const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
                 formatting.formatting,
@@ -251,32 +240,32 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<ContentControlProperties>} fields
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
     async convertNotesStyle(fields, notesStyle) {
         const formats = this.#makeFormattingPositions(fields);
-        /** @type {Array<CustomField>} */
+        /** @type {Array<ContentControlProperties>} */
         const editedFields = [];
 
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
-            if (!field.FieldId) continue;
+            if (!field.InternalId) continue;
 
-            if (!field.Content) { // save user changes
+            if (!field.PlaceHolderText) { // save user changes
                 editedFields.push(field);
                 continue;
             }
 
-            const selectFieldResult = await this.#selectField(field.FieldId);
+            const selectFieldResult = await this.#selectField(field.InternalId);
             if (!selectFieldResult) continue;
             const isReferenceSelected = await this.#selectFieldReference();
             if (!isReferenceSelected) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             await this.#addContentControl(field);
-            const formatting = formats.get(field.FieldId);
+            const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
                 formatting.formatting,
@@ -295,19 +284,13 @@ class CitationDocService {
     }
 
     /**
-     * @param {CustomField} field
+     * @param {ContentControlProperties} field
      * @returns {Promise<void>}
      */
     #addContentControl(field) {
-        const contentControlProperties = {
-                Id : 7,
-                Tag : "test tag",
-                Lock : 3, // can edit
-                PlaceHolderText: "Content Control"
-            };
         return new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
-            window.Asc.plugin.executeMethod("AddContentControl", [2, contentControlProperties]);
+            const type = 2; //1 - block content control, 2 - inline content control, 3 - row content control, 4 - cell content control
+            window.Asc.plugin.executeMethod("AddContentControl", [type, field], resolve);
         });
     }
 
@@ -335,17 +318,17 @@ class CitationDocService {
     }
 
     /**
-     * @returns {Promise<Array<CustomField>>}
+     * @returns {Promise<Array<ContentControlProperties>>}
      */
-    #getAllAddinFields() {
+    #getAllContentControls() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+            window.Asc.plugin.executeMethod("GetAllContentControls", undefined, resolve);
         });
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<ContentControlProperties>} fields
      * @returns {Map<string, {text: string, formatting: Array<FormattingPositions>}>}
      * @modifies {fields}
      */
@@ -353,13 +336,13 @@ class CitationDocService {
         /** @type {Map<string, {text: string, formatting: Array<FormattingPositions>}>} */
         const formats = new Map();
         fields.forEach(function (field) {
-            if (!field.Content) return;
+            if (!field.PlaceHolderText) return;
             const formattingPositions = CslHtmlParser.parseHtmlFormatting(
-                field.Content
+                field.PlaceHolderText
             );
-            field.Content = formattingPositions.text;
-            if (formattingPositions.formatting.length && field.FieldId) {
-                formats.set(field.FieldId, formattingPositions);
+            field.PlaceHolderText = formattingPositions.text;
+            if (formattingPositions.formatting.length && field.InternalId) {
+                formats.set(field.InternalId, formattingPositions);
             }
         });
         return formats;
@@ -370,7 +353,7 @@ class CitationDocService {
         return new Promise((resolve) => {
             window.Asc.plugin.executeMethod(
                 "RemoveSelectedContent",
-                null,
+                undefined,
                 resolve,
             );
         });
@@ -441,6 +424,23 @@ class CitationDocService {
         });
     }
 
+    /** @param {string} str */
+    #base64Encode(str) {
+    if (typeof TextEncoder !== "undefined") {
+      var bytes = new TextEncoder().encode(str);
+      var binary = "";
+      for (var i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    return btoa(
+      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+        return String.fromCharCode(parseInt(p1, 16));
+      })
+    );
+  }
 }
 
 export { CitationDocService };
