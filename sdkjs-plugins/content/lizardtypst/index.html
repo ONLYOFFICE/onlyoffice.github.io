@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Typst Math</title>
+        <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+        <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css"
+        />
+        <script
+            type="module"
+            src="scripts/vendor/all-in-one-lite.bundle.js"
+            id="typst"
+        ></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .panel {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #preview-panel {
+                flex: 2;
+            }
+
+            label {
+                font-weight: bold;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            #input {
+                flex: 1;
+                font-family: monospace;
+                padding: 10px;
+                border: 1px solid #ccc;
+                resize: none;
+            }
+
+            #preview {
+                width: 100%; /* Fill width of parent */
+                height: 300px; /* Constant height */
+                border: 1px solid #ccc;
+                padding: 20px;
+                background: #f9f9f9;
+                overflow: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #preview svg {
+                width: 100%;
+                height: 100%;
+                object-fit: contain; /* Maintain aspect ratio within fixed dimensions */
+            }
+
+            #error {
+                color: red;
+                padding: 10px;
+                visibility: hidden; /* Use visibility instead of display to reserve space */
+            }
+
+            /* Custom Dropdown Styles */
+            #history-container {
+                margin-bottom: 15px;
+                position: relative;
+            }
+
+            .custom-dropdown-list {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 100%;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+                max-height: 200px;
+                overflow-y: auto;
+                border: 1px solid #ddd;
+            }
+
+            .custom-dropdown-list div {
+                color: black;
+                padding: 8px 12px;
+                text-decoration: none;
+                display: block;
+                cursor: pointer;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .custom-dropdown-list div:hover {
+                background-color: #f1f1f1;
+            }
+
+            .custom-dropdown-header {
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                color: black;
+                cursor: pointer;
+            }
+
+            /* Tooltip Styles */
+            #preview-tooltip {
+                display: none;
+                position: fixed;
+                border: 1px solid #ccc;
+                background-color: white;
+                padding: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                max-width: 300px;
+                max-height: 300px;
+                pointer-events: none; /* So it doesn't interfere with mouse events */
+            }
+            #preview-tooltip svg {
+                max-width: 100%;
+                max-height: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="error"></div>
+        <div id="history-container"></div>
+        <div class="panel">
+            <label for="input">Typst Code:</label>
+            <textarea id="input"></textarea>
+        </div>
+        <div class="panel" id="preview-panel">
+            <label>Preview:</label>
+            <div id="preview">Type formula to preview...</div>
+        </div>
+        <div id="preview-tooltip"></div>
+        <script src="scripts/renderer.js"></script>
+        <script src="scripts/slide-inserter.js"></script>
+        <script src="scripts/history.js"></script>
+        <script src="scripts/ui.js"></script>
+        <script src="scripts/script.js"></script>
+    </body>
+</html>
