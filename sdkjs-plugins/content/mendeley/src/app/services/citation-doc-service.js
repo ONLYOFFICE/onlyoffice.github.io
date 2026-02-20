@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
+/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" />
 /// <reference path="../types-global.js" />
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />
@@ -133,29 +133,27 @@ class CitationDocService {
 
     /** @returns {Promise<boolean>} */
     saveAsText() {
-        // TODO потом добавить ещё форматы, пока только как текст
-        return this.getAddinMendeleyControls().then(function (arrFields) {
-            let count = arrFields.length;
-            if (!count) {
-                window.Asc.plugin.executeCommand("close", "");
-                return false;
-            }
-
-            return new Promise(function (resolve) {
-                arrFields.forEach(function (field) {
-                    window.Asc.plugin.executeMethod(
-                        "RemoveFieldWrapper",
-                        [field.InternalId],
-                        function () {
-                            count--;
-                            if (!count) {
-                                resolve(true);
-                                window.Asc.plugin.executeCommand("close", "");
-                            }
+        return new Promise((resolve) => {
+            Asc.scope.citPrefix = this.#citPrefix;
+            Asc.scope.bibPrefix = this.#bibPrefix;
+            window.Asc.plugin.callCommand(
+                function () {
+                    let doc = Api.GetDocument();
+                    const controls = doc.GetAllContentControls();
+                    if (!controls || controls.length === 0) return;
+                    controls.forEach((control) => {
+                        const tag = control.GetTag();
+                        console.log('tag', tag);
+                        if (tag.indexOf(Asc.scope.citPrefix) === 0 || tag.indexOf(Asc.scope.bibPrefix) === 0) {
+                            control.Delete(true);
                         }
-                    );
-                });
-            });
+                        
+                    });
+                },
+                false,
+                false,
+                resolve,
+            );
         });
     }
 
@@ -191,7 +189,7 @@ class CitationDocService {
      */
     async convertNotesToText(fields) {
         const formats = this.#makeFormattingPositions(fields);
-        
+
         for (let i = 0; i < fields.length; i++) {
             const field = fields[i];
             if (!field.InternalId) {
@@ -208,9 +206,7 @@ class CitationDocService {
             await this.#addContentControl(field);
             const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
     }
 
@@ -233,9 +229,7 @@ class CitationDocService {
             await this.#addContentControl(field);
             const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
     }
 
@@ -253,7 +247,8 @@ class CitationDocService {
             const field = fields[i];
             if (!field.InternalId) continue;
 
-            if (!field.PlaceHolderText) { // save user changes
+            if (!field.PlaceHolderText) {
+                // save user changes
                 editedFields.push(field);
                 continue;
             }
@@ -267,9 +262,7 @@ class CitationDocService {
             await this.#addContentControl(field);
             const formatting = formats.get(field.InternalId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
 
         if (editedFields.length) {
@@ -290,7 +283,11 @@ class CitationDocService {
     #addContentControl(field) {
         return new Promise(function (resolve) {
             const type = 2; //1 - block content control, 2 - inline content control, 3 - row content control, 4 - cell content control
-            window.Asc.plugin.executeMethod("AddContentControl", [type, field], resolve);
+            window.Asc.plugin.executeMethod(
+                "AddContentControl",
+                [type, field],
+                resolve,
+            );
         });
     }
 
@@ -323,7 +320,11 @@ class CitationDocService {
     #getAllContentControls() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            window.Asc.plugin.executeMethod("GetAllContentControls", undefined, resolve);
+            window.Asc.plugin.executeMethod(
+                "GetAllContentControls",
+                undefined,
+                resolve,
+            );
         });
     }
 
@@ -370,10 +371,8 @@ class CitationDocService {
                 console.error("Editor version is less than 9.3.0");
                 resolve(false);
             }
-            window.Asc.plugin.executeMethod(
-                "SelectAddinField",
-                [fieldId],
-                () => resolve(true),
+            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
+                resolve(true),
             );
         });
     }
@@ -426,21 +425,24 @@ class CitationDocService {
 
     /** @param {string} str */
     #base64Encode(str) {
-    if (typeof TextEncoder !== "undefined") {
-      var bytes = new TextEncoder().encode(str);
-      var binary = "";
-      for (var i = 0; i < bytes.length; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      return btoa(binary);
-    }
+        if (typeof TextEncoder !== "undefined") {
+            var bytes = new TextEncoder().encode(str);
+            var binary = "";
+            for (var i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
 
-    return btoa(
-      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-        return String.fromCharCode(parseInt(p1, 16));
-      })
-    );
-  }
+        return btoa(
+            encodeURIComponent(str).replace(
+                /%([0-9A-F]{2})/g,
+                function (match, p1) {
+                    return String.fromCharCode(parseInt(p1, 16));
+                },
+            ),
+        );
+    }
 }
 
 export { CitationDocService };

@@ -121,8 +121,7 @@ import "../styles.css";
             shouldLoadMore
         );
         saveAsTextBtn = new Button("saveAsTextBtn", {
-            variant: "secondary",
-            disabled: true
+            variant: "secondary"
         });
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
