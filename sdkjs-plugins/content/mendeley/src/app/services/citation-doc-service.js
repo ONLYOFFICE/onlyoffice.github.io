@@ -78,7 +78,7 @@ class CitationDocService {
             Content: formattingPositions.text,
         };
 
-        return this.#addAddinField(field).then(function () {
+        return this.#addContentControl(field).then(function () {
             if (!formattingPositions.formatting.length) return;
             return CslDocFormatter.formatAfterInsert(
                 formattingPositions.formatting,
@@ -107,7 +107,7 @@ class CitationDocService {
             await this.#addNote(notesStyle);
         }
 
-        return this.#addAddinField(field).then(function () {
+        return this.#addContentControl(field).then(function () {
             if (!formattingPositions.formatting.length) return;
             return CslDocFormatter.formatAfterInsert(
                 formattingPositions.formatting
@@ -216,7 +216,7 @@ class CitationDocService {
             if (!isReferenceSelected) continue;
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
-            await this.#addAddinField(field);
+            await this.#addContentControl(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
@@ -241,7 +241,7 @@ class CitationDocService {
             if (!selectFieldResult) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
-            await this.#addAddinField(field);
+            await this.#addContentControl(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
@@ -275,7 +275,7 @@ class CitationDocService {
             if (!isReferenceSelected) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
-            await this.#addAddinField(field);
+            await this.#addContentControl(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
             await CslDocFormatter.formatAfterInsert(
@@ -298,9 +298,16 @@ class CitationDocService {
      * @param {CustomField} field
      * @returns {Promise<void>}
      */
-    #addAddinField(field) {
+    #addContentControl(field) {
+        const contentControlProperties = {
+                Id : 7,
+                Tag : "test tag",
+                Lock : 3, // can edit
+                PlaceHolderText: "Content Control"
+            };
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("AddAddinField", [field], resolve);
+            window.Asc.plugin.executeMethod("AddContentControl", [2, contentControlProperties]);
         });
     }
 

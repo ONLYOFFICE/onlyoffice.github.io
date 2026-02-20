@@ -1,22 +1,3 @@
-/**
- * @typedef {Object} AvailableApis
- * @property {boolean} desktop
- * @property {boolean} hasPermission
- * @property {boolean} desktopVersion
- * @property {boolean} online
- * @property {boolean} hasKey
- */
-
-/** ------------------------------------------------ */
-
-/**
- * @typedef {Object} ZoteroGroupInfo
- * @property {number} id
- * @property {number} version
- * @property {CslJsonObjectLinks} meta
- * @property {{created: string, lastModified: string, numItems: number}} links
- * @property {{name: string, description: string, id: number, owner: number, type: string}} data
- */
 
 /**
  * @typedef {Object} UserGroupInfo
@@ -29,7 +10,7 @@
 /**
  * @typedef {Object} SearchResult
  * @property {Array<SearchResultItem>} items
- * @property {number|string} id
+ * @property {number|string} [id]
  * @property {function(): Promise<SearchResult>} [next]
  */
 

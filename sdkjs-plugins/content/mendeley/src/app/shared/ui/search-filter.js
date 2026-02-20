@@ -46,6 +46,7 @@ function SearchFilterComponents() {
     this._filterButton = new Button("filterButton", {
         variant: "secondary-icon",
         size: "small",
+        disabled: true
     });
     this._librarySelectList = new SelectBox("librarySelectList", {
         // TODO: add translation
@@ -94,17 +95,16 @@ SearchFilterComponents.prototype.addGroups = function (groups) {
           ) {
               return id.toString();
           })
-        : ["my_library", "group_libraries"];
+        : ["all_collections"];
     let hasSelected = false;
     groups.forEach(function (group) {
         group.id = String(group.id);
     });
 
     const customGroups = [
-        { id: "my_library", name: translate("My Library") },
         {
-            id: "group_libraries",
-            name: translate("Group Libraries"),
+            id: "all_collections",
+            name: translate("All collections"),
         },
     ];
     !hasSelected &&
@@ -120,8 +120,8 @@ SearchFilterComponents.prototype.addGroups = function (groups) {
             }
         });
     if (!hasSelected) {
-        // if local storage data is invalid, select both My Library and Group Libraries
-        selectedItems = ["my_library", "group_libraries"];
+        // if local storage data is invalid, select All collections
+        selectedItems = ["all_collections"];
     }
 
     /**
@@ -147,7 +147,7 @@ SearchFilterComponents.prototype.addGroups = function (groups) {
         return;
     }
     this._librarySelectList.addSeparator();
-    let selected = selectedItems.indexOf("group_libraries") !== -1;
+    let selected = selectedItems.indexOf("all_collections") !== -1;
     for (var i = 0; i < groups.length; i++) {
         const id = groups[i].id;
         const name = groups[i].name;
@@ -161,7 +161,7 @@ SearchFilterComponents.prototype.addGroups = function (groups) {
 };
 
 /**
- * @return {Array<string|"my_library"|"group_libraries">}
+ * @return {Array<string|"all_collections">}
  */
 SearchFilterComponents.prototype._getSelectedGroups = function () {
     const self = this;
@@ -178,7 +178,7 @@ SearchFilterComponents.prototype._getSelectedGroups = function () {
 };
 
 /**
- * @param {function(string, Array<string|"my_library"|"group_libraries">): void} callback
+ * @param {function(string, Array<string|"all_collections">): void} callback
  * @returns {Object}
  */
 SearchFilterComponents.prototype.subscribe = function (callback) {
@@ -227,19 +227,16 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function (
         let bWasCustom = customIds.indexOf(String(current)) !== -1;
 
         if (bWasCustom) {
-            if (current === "group_libraries") {
+            if (current === "all_collections") {
                 if (bEnabled) {
-                    aGroupsToSave.push("group_libraries");
+                    aGroupsToSave.push("all_collections");
                     self._librarySelectList.selectItems(ids, true);
                 } else {
                     self._librarySelectList.unselectItems(ids, true);
                 }
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
             } else {
-                if (values.indexOf("group_libraries") !== -1) {
-                    aGroupsToSave.push("group_libraries");
+                if (values.indexOf("all_collections") !== -1) {
+                    aGroupsToSave.push("all_collections");
                     if (bEnabled) {
                         aGroupsToSave.push(current);
                     }
@@ -252,15 +249,12 @@ SearchFilterComponents.prototype._selectedGroupsWatcher = function (
                 return values.indexOf(id) !== -1;
             });
             if (bAllGroupsSelected) {
-                self._librarySelectList.selectItems("group_libraries", true);
-                aGroupsToSave.push("group_libraries");
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
+                self._librarySelectList.selectItems("all_collections", true);
+                aGroupsToSave.push("all_collections");
             } else {
-                self._librarySelectList.unselectItems("group_libraries", true);
+                self._librarySelectList.unselectItems("all_collections", true);
                 aGroupsToSave = values.filter(function (value) {
-                    return value !== "group_libraries";
+                    return value !== "all_collections";
                 });
             }
         }

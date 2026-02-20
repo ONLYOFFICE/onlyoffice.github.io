@@ -179,24 +179,17 @@ import "../styles.css";
                 isInit = true;
                 Loader.show();
 
-                Promise.all([/*loadGroups(), */settings.init()]).then(function () {
+                Promise.all([loadGroups(), settings.init()]).then(function () {
                     Loader.hide();
                     showCitationsAtTheStartFromMyLibrary();
                 });
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
-        
-        getEditorVersion().then((editorVersion) => {
-            window.Asc.scope.editorVersion = editorVersion;
-            if (editorVersion >= 9003000) {
-                addContextMenuButtons();
-            }
-        });
-        
     };
     
     /** @param {string} error */
+    // @ts-ignore
     window.OAuthError = function (error) {
         loginPage.onAuthCallback(error);
     };
@@ -205,6 +198,7 @@ import "../styles.css";
      * @param {string} token
      * @param {string} state
      */
+    // @ts-ignore
     window.OAuthCallback = function (token, state) {
         loginPage.onAuthCallback(token, state);
     };
@@ -245,7 +239,7 @@ import "../styles.css";
 
         /**
          * @param {string} text
-         * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
+         * @param {Array<string|"all_collections">} selectedGroups
          * @param {string} groupsHash
          * @returns {Promise<Array<Promise<number>>>}
          */
@@ -262,16 +256,13 @@ import "../styles.css";
                 /** @type {Array<string|number>} */
                 /*let groups = selectedGroups.filter(function (group) {
                     return (
-                        group !== "my_library" &&
-                        group !== "group_libraries"
+                        group !== "all_collections"
                     );
                 });*/
 
-            // if (selectedGroups.indexOf("my_library") !== -1) {
-                    promises.push(
-                        loadLibrary(sdk.getItems(text), false),
-                    );
-            // }
+                promises.push(
+                    loadLibrary(sdk.getItems(text), false),
+                );
 
                 /*for (let i = 0; i < groups.length; i++) {
                     promises.push(
@@ -732,6 +723,7 @@ import "../styles.css";
          * @returns
          */
         const fillUrisFromId = function (item) {
+            if (!item.id) return item;
             const slashFirstIndex = item.id.indexOf("/") + 1;
             const slashLastIndex = item.id.lastIndexOf("/") + 1;
             const httpIndex = item.id.indexOf("http");
@@ -802,63 +794,4 @@ import "../styles.css";
 		
 	}
 
-    function addContextMenuButtons() {
-        let buttonMain = new Asc.ButtonContextMenu();
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(async function () {
-            /** @type {CustomField | null} */
-            const field = await new Promise((resolve) => {
-                window.Asc.plugin.executeMethod(
-                    "GetCurrentAddinField",
-                    null,
-                    resolve,
-                );
-            });
-            if (
-                !field ||
-                !field.Value ||
-                field.Value.toLowerCase().indexOf("zotero_item") === -1
-            ) {
-                return;
-            }
-            const updatedField = await citationService.showEditCitationWindow(field);
-            if (!updatedField) {
-                return;
-            }
-            showLoader();
-            /** @type {number} */
-            let cursorPos = await CursorService.getCursorPosition();
-            let updateFn = citationService.updateItem.bind(
-                citationService,
-                updatedField
-            );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItemInNotes.bind(
-                    citationService,
-                    updatedField,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    hideLoader();
-                    CursorService.setCursorPosition(cursorPos);
-                });
-        });
-        Asc.Buttons.registerContextMenu();
-
-    }
 })();

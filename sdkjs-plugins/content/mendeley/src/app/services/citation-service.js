@@ -397,7 +397,6 @@ class CitationService {
             ) {
                 console.error("Unable to update footnotes");
                 // TODO: Modify "GetAllAddinFields" method for footnotes
-                // window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
                 bHardRefresh = true;
             }
 
