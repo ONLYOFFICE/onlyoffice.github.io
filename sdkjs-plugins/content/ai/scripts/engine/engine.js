@@ -202,6 +202,8 @@ function fetchExternal(url, options, isStreaming) {
 				return;
 
 			if (e.type === "error") {
+				if (request.controller)
+					request.controller.close();
 				request.resolve(new Error(e.error));
 				delete window.externalFetchRecords.requests[e.id];
 				return;

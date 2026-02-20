@@ -147,3 +147,6 @@
 
 ## 3.0.7
 * Bug fix.
+
+## 3.0.8
+* Fix bug with external fetch error.
