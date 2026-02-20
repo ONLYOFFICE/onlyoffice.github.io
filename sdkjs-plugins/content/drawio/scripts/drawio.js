@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-(function(window, undefined) {
+(function (window, undefined) {
 
 	var img;
 	var editor;
@@ -23,9 +23,42 @@
 	var loader;
 	var lang = "";
 	var title = "Click on diagram to edit."
+	var STORAGE_KEY = "drawio_export_format";
 
-	window.Asc.plugin.init = function(data)
-	{
+	// Get saved format preference or default to SVG
+	function getExportFormat() {
+		try {
+			return localStorage.getItem(STORAGE_KEY) || 'xmlsvg';
+		} catch (e) {
+			return 'xmlsvg';
+		}
+	}
+
+	// Save format preference
+	function setExportFormat(format) {
+		try {
+			localStorage.setItem(STORAGE_KEY, format);
+		} catch (e) {
+			// localStorage not available
+		}
+	}
+
+	// Initialize format dropdown
+	function initFormatSelector() {
+		var select = document.getElementById('format-select');
+		if (select) {
+			select.value = getExportFormat();
+			select.addEventListener('change', function () {
+				setExportFormat(this.value);
+				// Update editor format if it exists
+				if (editor) {
+					editor.preferredFormat = this.value;
+				}
+			});
+		}
+	}
+
+	window.Asc.plugin.init = function (data) {
 		lang = this.info.lang.split('-')[0];
 		img = document.createElement('img');
 		img.setAttribute('title', title)
@@ -35,54 +68,59 @@
 			data = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII=";
 
 		img.setAttribute('src', data);
-		var config = {css: "button.geBigButton:nth-of-type(1) {background-color:transparent !important; color:"+ (UI == 'dark' ? '#ccc' : '#000') +" !important;} body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }"};
-		img.onclick = function() {
+		var config = { css: "button.geBigButton:nth-of-type(1) {background-color:transparent !important; color:" + (UI == 'dark' ? '#ccc' : '#000') + " !important;} body>a {display: none !important;} body {-khtml-user-select: none; user-select: none; -moz-user-select: none; -webkit-user-select: none;} div>img:not([title]) { pointer-events: none; }" };
+
+		// Initialize format selector
+		initFormatSelector();
+		var preferredFormat = getExportFormat();
+
+		img.onclick = function () {
 			makeLoader();
-			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader);
+			editor = DiagramEditor.editElement([this, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang], closePlugin, hideLoader, getExportFormat());
 			editor.isChanged = true;
+			editor.preferredFormat = getExportFormat();
 		}
-		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader);
+		editor = DiagramEditor.editElement([img, document.getElementById("div_preview")], config, UI, null, ['lang=' + lang + '&gapi=0&embed=1&dev=1&spin=0'], closePlugin, hideLoader, preferredFormat);
+		editor.preferredFormat = preferredFormat;
 		window.Asc.plugin.resizeWindow(1200, 1000, 800, 600, 0, 0);
 	};
 
-	window.Asc.plugin.button = function(id)
-	{
+	window.Asc.plugin.button = function (id) {
 		if (id == 0) {
 			if (editor.frame) {
 				// if editor is opened
 				editor.closePlugin(true);
 			} else {
 				closePlugin(editor.isChanged);
-			}			
+			}
 		} else {
 			this.executeCommand("close", "");
 		}
 	};
 
-	function closePlugin (bPaste) {
-		if (bPaste)
-		{
+	function closePlugin(bPaste) {
+		if (bPaste) {
 			var _info = window.Asc.plugin.info;
 			var _method = (_info.objectId === undefined) ? "AddOleObject" : "EditOleObject";
 			// we should use timeout for image export from diagram editor
-			setTimeout(function() {
+			setTimeout(function () {
 				var _param = {
-					guid : _info.guid,
-					widthPix : (_info.mmToPx * (img.width >> 2) ) >> 0,
-					heightPix : (_info.mmToPx * (img.height >> 2) ) >> 0,
-					width : img.width ? (img.width >> 2) : _info.width ? _info.width : 100,
-					height : img.height ? (img.height >> 2) : _info.height ? _info.height : 70,
-					imgSrc : img.getAttribute('src'),
-					data : img.getAttribute('src'),
-					objectId : _info.objectId,
-					resize : _info.resize
+					guid: _info.guid,
+					widthPix: (_info.mmToPx * (img.width >> 2)) >> 0,
+					heightPix: (_info.mmToPx * (img.height >> 2)) >> 0,
+					width: img.width ? (img.width >> 2) : _info.width ? _info.width : 100,
+					height: img.height ? (img.height >> 2) : _info.height ? _info.height : 70,
+					imgSrc: img.getAttribute('src'),
+					data: img.getAttribute('src'),
+					objectId: _info.objectId,
+					resize: _info.resize
 				};
-	
-				window.Asc.plugin.executeMethod(_method, [_param], function() {
+
+				window.Asc.plugin.executeMethod(_method, [_param], function () {
 					window.Asc.plugin.executeCommand("close", "");
 				});
 			}, 1);
-			
+
 		} else {
 			window.Asc.plugin.executeCommand("close", "");
 		}
@@ -100,24 +138,21 @@
 		loader = undefined;
 	};
 
-	window.Asc.plugin.onTranslate = function()
-	{
+	window.Asc.plugin.onTranslate = function () {
 		title = window.Asc.plugin.tr(title);
 		if (img)
 			img.setAttribute("title", title);
 		makeLoader();
 	};
 
-	window.Asc.plugin.onExternalMouseUp = function()
-	{
+	window.Asc.plugin.onExternalMouseUp = function () {
 		var evt = document.createEvent("MouseEvents");
 		evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0,
 			false, false, false, false, 0, null);
 		document.dispatchEvent(evt);
 	};
 
-	window.Asc.plugin.onThemeChanged = function(theme)
-	{
+	window.Asc.plugin.onThemeChanged = function (theme) {
 		window.Asc.plugin.onThemeChangedBase(theme);
 		UI = (theme.type.indexOf("dark") !== -1) ? "dark" : "kennedy";
 	};
