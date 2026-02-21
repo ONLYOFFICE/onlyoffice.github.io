@@ -529,18 +529,12 @@
                 titleCell.SetBold(true);
                 titleCell.SetFontSize(14);
 
-                // Insert headers (row 1, 0-indexed)
                 var headers = data[0];
-                for (var c = 0; c < headers.length; c++) {
-                    var headerCell = oWorksheet.GetRangeByNumber(1, startCol + c);
-                    headerCell.SetValue(headers[c]);
-                    headerCell.SetBold(true);
-                    headerCell.SetFillColor(Api.CreateColorFromRGB(74, 144, 217));
-                    headerCell.SetFontColor(Api.CreateColorFromRGB(255, 255, 255));
-                }
+                var numRows = data.length;
+                var numCols = headers.length;
 
-                // Insert data rows (starting from row 2)
-                for (var r = 1; r < data.length; r++) {
+                // Insert all data (headers + rows) starting from row 1
+                for (var r = 0; r < numRows; r++) {
                     var row = data[r];
                     for (var c = 0; c < row.length; c++) {
                         var cell = oWorksheet.GetRangeByNumber(r + 1, startCol + c);
@@ -554,16 +548,31 @@
                         } else {
                             cell.SetValue(String(value));
                         }
-
-                        // Alternate row colors for readability
-                        if (r % 2 === 0) {
-                            cell.SetFillColor(Api.CreateColorFromRGB(240, 248, 255));
-                        }
                     }
                 }
 
+                // Convert column number to letter (0 = A, 1 = B, etc.)
+                function colToLetter(col) {
+                    var letter = '';
+                    while (col >= 0) {
+                        letter = String.fromCharCode((col % 26) + 65) + letter;
+                        col = Math.floor(col / 26) - 1;
+                    }
+                    return letter;
+                }
+
+                // Create range string for the table (e.g., "A2:D10")
+                var startLetter = colToLetter(startCol);
+                var endLetter = colToLetter(startCol + numCols - 1);
+                var startRow = 2; // Row 1 is title, data starts at row 2 (1-indexed)
+                var endRow = startRow + numRows - 1;
+                var rangeStr = startLetter + startRow + ':' + endLetter + endRow;
+
+                // Format as table with built-in style
+                oWorksheet.FormatAsTable(rangeStr);
+
                 // Auto-fit columns (approximate)
-                for (var c = 0; c < headers.length; c++) {
+                for (var c = 0; c < numCols; c++) {
                     oWorksheet.SetColumnWidth(startCol + c, 15);
                 }
 
