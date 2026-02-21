@@ -53,8 +53,8 @@
 
 			"store": {
 				"background": {
-					"light": "linear-gradient(90deg, #4A90D9 0%, #67B26F 100%)",
-					"dark": "linear-gradient(90deg, #4A90D9 0%, #67B26F 100%)"
+					"light": "#FEF8F2",
+					"dark": "#FEF8F2"
 				},
 				"screenshots": [],
 				"icons": {
