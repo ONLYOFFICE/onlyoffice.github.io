@@ -80,7 +80,6 @@ class Sdk {
             });
         }
         return promise.then((response) => {
-            console.warn(response.items);
             response.items.forEach(MendeleyToCls.transform.bind(MendeleyToCls));
             return response;
         });
@@ -108,20 +107,14 @@ class Sdk {
     getUserGroups() {
         var self = this;
 
-        this._mendeleySdk.folders.list({
+        return this._mendeleySdk.folders.list({
                 limit: 6
-            }).then((response) => {
-                console.error(response);
+            }).then((/** @type {{items: Array<{id: string, name: string}>}} */response) => {
+                if (response && response.items && response.items.length) {
+                    return response.items;
+                }
+                return [];
             });
-
-        return new Promise(function (resolve, reject) {
-            if (self._userGroups.length > 0) {
-                resolve(self._userGroups);
-                return;
-            }
-
-            resolve(self._userGroups);
-        });
     }
 
 }

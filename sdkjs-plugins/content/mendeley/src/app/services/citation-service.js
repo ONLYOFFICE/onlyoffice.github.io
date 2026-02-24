@@ -32,7 +32,7 @@
 
 // @ts-check
 
-/// <reference path="../zotero/types.js" />
+/// <reference path="../sdk/types.js" />
 /// <reference path="../../../scripts/citeproc/citeproc_commonjs.js" />
 
 /**
@@ -162,35 +162,40 @@ class CitationService {
         }
     }
 
-    /** @param {ContentControlProperties} field */
-    #extractField(field) {
+    /** @param {ContentControlProperties} control */
+    #extractControl(control) {
         let citationObject;
-        if (field.Tag.indexOf(this._bibPrefixNew) !== -1) {
+        if (control.Tag.indexOf(this._bibPrefixNew) !== -1) {
             return {};
         }
-        const citationStartIndex = field.Tag.indexOf("_", this._citPrefixNew.length + 1) + 1;
+        const citationStartIndex = control.Tag.indexOf("_", this._citPrefixNew.length + 1) + 1;
 
         if (citationStartIndex > 0) {
-            const base64String = field.Tag.slice(
+            const base64String = control.Tag.slice(
                 citationStartIndex,
             );
 
-            let binary = atob(base64String);
-            let citationString;
-            if (typeof TextDecoder !== "undefined") {
-                let bytes = Uint8Array.from(binary, function(c) {
-                    return c.charCodeAt(0);
-                });
-                citationString = new TextDecoder("utf-8").decode(bytes);
-            } else { // old browser without TextDecoder
-                var escaped = "";
-                for (var i = 0; i < binary.length; i++) {
-                    escaped += "%" + ("00" + binary.charCodeAt(i).toString(16)).slice(-2);
+            try {
+                let binary = atob(base64String);
+                let citationString;
+                if (typeof TextDecoder !== "undefined") {
+                    let bytes = Uint8Array.from(binary, function(c) {
+                        return c.charCodeAt(0);
+                    });
+                    citationString = new TextDecoder("utf-8").decode(bytes);
+                } else { // old browser without TextDecoder
+                    var escaped = "";
+                    for (var i = 0; i < binary.length; i++) {
+                        escaped += "%" + ("00" + binary.charCodeAt(i).toString(16)).slice(-2);
+                    }
+                    citationString = decodeURIComponent(escaped);
                 }
-                citationString = decodeURIComponent(escaped);
-            }
 
-            citationObject = JSON.parse(citationString);
+                citationObject = JSON.parse(citationString);
+            } catch (e) {
+                console.error("Failed to extract citation", control);
+                console.error(e);
+            }
         }
         return citationObject;
     }
@@ -205,7 +210,7 @@ class CitationService {
             .then(function (/** @type {ContentControlProperties[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
-console.warn(arrFields);
+                
                 /** @type {ContentControlProperties | undefined} */
                 const bibField = arrFields.find(function (field) {
                     return (
@@ -213,7 +218,7 @@ console.warn(arrFields);
                     );
                 });
                 if (bibField) {
-                    let citationObject = self.#extractField(bibField);
+                    let citationObject = self.#extractControl(bibField);
                     if (
                         typeof citationObject === "object" &&
                         Object.keys(citationObject).length > 0
@@ -228,7 +233,7 @@ console.warn(arrFields);
                     );
                 });
                 let fieldsWithCitations = fields.map(function (field) {
-                    let citationObject = self.#extractField(field);
+                    let citationObject = self.#extractControl(field);
 
                     let cslCitation = new CSLCitation(numOfItems);
                     if (updatedField) {
@@ -380,10 +385,7 @@ console.warn(arrFields);
             }
 
             if (cslCitation) {
-                field.Tag =
-                    this._citPrefixNew +
-                    "_v3_" +
-                    JSON.stringify(cslCitation.toJSON());
+                field.Tag = JSON.stringify(cslCitation.toJSON());
             }
 
             updatedFields.push(field);
@@ -455,8 +457,6 @@ console.warn(arrFields);
      * @returns {Promise<Array<string|number>>}
      */
     async insertSelectedCitations(items) {
-        const self = this;
-
         this._storage.clear();
         try {
             await this.#synchronizeStorageWithDocItems();
@@ -464,7 +464,6 @@ console.warn(arrFields);
         } catch (e) {
             throw e;
         }
-
         const cslCitation = new CSLCitation(this._storage.size, "");
         for (var citationID in items) {
             const item = items[citationID];
@@ -472,7 +471,7 @@ console.warn(arrFields);
             cslCitation.fillFromObject(item);
         }
 
-        return self.#formatInsertLink(cslCitation);
+        return this.#formatInsertLink(cslCitation);
 
     }
 

@@ -55,24 +55,22 @@ class CitationDocService {
 
     /**
      * @param {string} text
-     * @param {string} value
      * @returns {Promise<void>}
      */
-    addBibliography(text, value) {
-        const self = this;
-        const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+    async addBibliography(text) {
         /** @type {ContentControlProperties} */
         const field = {
-            // Id : 7,
             Tag: this.#bibPrefix,
             Lock: 3, // can edit
-            PlaceHolderText: formattingPositions.text,
+            PlaceHolderText: "",
         };
 
-        return this.#addContentControl(field).then(function () {
-            if (!formattingPositions.formatting.length) return;
-            return CslDocFormatter.formatAfterInsert(
-                formattingPositions.formatting,
+        await this.#addContentControl(field);
+        await new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "PasteHtml",
+                [text],
+                resolve,
             );
         });
     }
@@ -84,13 +82,11 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async addCitation(text, value, notesStyle) {
-        const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
         /** @type {ContentControlProperties} */
         const control = {
-            // Id : 7,
             Tag: this.#citPrefix + "_v3_" + this.#base64Encode(value),
             Lock: 3, // can edit
-            PlaceHolderText: formattingPositions.text,
+            PlaceHolderText: "",
         };
         if (
             notesStyle &&
@@ -99,10 +95,12 @@ class CitationDocService {
             await this.#addNote(notesStyle);
         }
 
-        return this.#addContentControl(control).then(function () {
-            if (!formattingPositions.formatting.length) return;
-            return CslDocFormatter.formatAfterInsert(
-                formattingPositions.formatting
+        await this.#addContentControl(control);
+        await new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod(
+                "PasteHtml",
+                [text],
+                resolve,
             );
         });
     }
@@ -143,11 +141,9 @@ class CitationDocService {
                     if (!controls || controls.length === 0) return;
                     controls.forEach((control) => {
                         const tag = control.GetTag();
-                        console.log('tag', tag);
                         if (tag.indexOf(Asc.scope.citPrefix) === 0 || tag.indexOf(Asc.scope.bibPrefix) === 0) {
                             control.Delete(true);
                         }
-                        
                     });
                 },
                 false,
@@ -158,28 +154,43 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<ContentControlProperties>} fields
+     * @param {Array<ContentControlProperties>} controls
      * @returns {Promise<void>}
      */
-    async updateAddinFields(fields) {
-        const formats = this.#makeFormattingPositions(fields);
+    async updateAddinFields(controls) {
+        for (let i = 0; i < controls.length; i++) {
+            const id = controls[i].InternalId;
+            if (!id) {
+                continue;
+            }
+            await window.Asc.plugin.executeMethod("SelectContentControl", [id]);
 
-        await new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod(
-                "UpdateAddinFields",
-                [fields],
-                resolve,
-            );
-        });
-
-        if (!formats.size) return;
-        for (const [fieldId, formattingPositions] of formats) {
-            const selectFieldResult = await this.#selectField(fieldId);
-            if (!selectFieldResult) continue;
-            await CslDocFormatter.formatAfterUpdate(
-                fieldId,
-                formattingPositions,
-            );
+            const tag = this.#citPrefix + "_v3_" + this.#base64Encode(controls[i].Tag);
+            await new Promise((resolve) => {
+                Asc.scope.tag = tag;
+                Asc.scope.id = controls[i].InternalId;
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const controls = doc.GetAllContentControls();
+                        const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                        if (control) {
+                            control.SetTag(Asc.scope.tag);
+                            control.SetPlaceholderText("");
+                        }
+                    },
+                    false,
+                    false,
+                    resolve,
+                );
+            });
+            await new Promise(function (resolve) {
+                window.Asc.plugin.executeMethod(
+                    "PasteHtml",
+                    [controls[i].PlaceHolderText],
+                    resolve,
+                );
+            });
         }
     }
 
@@ -282,7 +293,7 @@ class CitationDocService {
      */
     #addContentControl(field) {
         return new Promise(function (resolve) {
-            const type = 2; //1 - block content control, 2 - inline content control, 3 - row content control, 4 - cell content control
+            const type = 2; //2 - inline content control
             window.Asc.plugin.executeMethod(
                 "AddContentControl",
                 [type, field],

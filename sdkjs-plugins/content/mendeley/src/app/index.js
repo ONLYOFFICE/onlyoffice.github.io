@@ -180,6 +180,9 @@ import "../styles.css";
                 Promise.all([loadGroups(), settings.init()]).then(function () {
                     Loader.hide();
                     showCitationsAtTheStartFromMyLibrary();
+                }).catch(function (error) {
+                    console.error(error);
+                    Loader.hide();
                 });
             });
 
