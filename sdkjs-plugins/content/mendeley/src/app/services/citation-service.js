@@ -112,7 +112,7 @@ class CitationService {
                 htmlCitation = self.#unEscapeHtml(htmlCitation);
                 fragment.appendChild(tempElement);
                 tempElement.innerHTML = htmlCitation;
-                cslCitation.setPlainCitation(tempElement.innerText);
+                cslCitation.setManualOverride(tempElement.innerText);
                 let notesStyle = null;
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
@@ -347,7 +347,7 @@ class CitationService {
 
             if (bHardRefresh) {
                 field.PlaceHolderText = htmlCitation;
-                cslCitation.setPlainCitation(newContent);
+                cslCitation.setManualOverride(newContent);
             } else if (oldContent !== newContent) {
                 let text =
                     "<p>" +
@@ -376,11 +376,11 @@ class CitationService {
                         text,
                     );
                 if (bNeedSaveUserInput) {
-                    cslCitation.setDoNotUpdate();
+                    cslCitation.setManualOverride(newContent, oldContent);
                     delete field.PlaceHolderText;
                 } else {
                     field.PlaceHolderText = htmlCitation;
-                    cslCitation.setPlainCitation(newContent);
+                    cslCitation.setManualOverride(newContent);
                 }
             }
 

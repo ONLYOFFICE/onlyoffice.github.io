@@ -108,25 +108,60 @@ class CitationDocService {
     /**
      * @returns {Promise<Array<ContentControlProperties>>}
      */
-    getAddinMendeleyControls() {
+    async getAddinMendeleyControls() {
         const self = this;
-        return new Promise(function (resolve, reject) {
-            self.#getAllContentControls().then(function (arrFields) {
-                try {
-                    if (arrFields.length) {
-                        arrFields = arrFields.filter(function (field) {
-                            return (
-                                field.Tag.indexOf(self.#citPrefix) !== -1 ||
-                                field.Tag.indexOf(self.#bibPrefix) !== -1
-                            );
-                        });
-                    }
-                } catch (e) {
-                    reject(e);
+
+        try {
+            const arrFields = await self.#getAllContentControls();
+            const filteredFields = [];
+            const internalIds = [];
+            for (let i = 0; i < arrFields.length; i++) {
+                const field = arrFields[i];
+                const bHasCitPrefix = field.Tag.indexOf(self.#citPrefix) !== -1;
+                const bHasBibPrefix = field.Tag.indexOf(self.#bibPrefix) !== -1;
+                if (bHasCitPrefix || bHasBibPrefix) {
+                    filteredFields.push(field);
+                    internalIds.push(field.InternalId);
                 }
-                resolve(arrFields);
+            }
+            Asc.scope.internalIds = internalIds;
+            const placeholderTexts = await new Promise((resolve) => Asc.plugin.callCommand(
+                () => {
+                    /** @type {string[]} */
+                    const placeholderTexts = [];
+                    const doc = Api.GetDocument();
+                    doc.GetAllContentControls().forEach((control) => {
+                        const id = control.GetInternalId();
+                        const index = Asc.scope.internalIds.indexOf(id);
+                        if (index !== -1) {
+                            let text = control.GetRange(0, Number.MAX_SAFE_INTEGER).GetText();
+                            while (text.lastIndexOf("\n") === text.length - 1) {
+                                text = text.slice(0, -1);
+                            }
+                            while (text.lastIndexOf("\r") === text.length - 1) {
+                                text = text.slice(0, -1);
+                            }
+                            text = text.trim();
+                            placeholderTexts[index] = text;
+                        }
+                    });
+                    return placeholderTexts;
+                },
+                false,
+                false,
+                resolve,
+            ));
+            filteredFields.forEach((field, index) => {
+                if (placeholderTexts[index]) {
+                    field.PlaceHolderText = placeholderTexts[index];
+                }
             });
-        });
+            return filteredFields;
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
+
     }
 
     /** @returns {Promise<boolean>} */
@@ -165,10 +200,14 @@ class CitationDocService {
             }
             await window.Asc.plugin.executeMethod("SelectContentControl", [id]);
 
-            const tag = this.#citPrefix + "_v3_" + this.#base64Encode(controls[i].Tag);
+            let tag = controls[i].Tag;
+            if (tag.indexOf(this.#bibPrefix) !== 0) {
+                tag = this.#citPrefix + "_v3_" + this.#base64Encode(controls[i].Tag);
+            }
             await new Promise((resolve) => {
                 Asc.scope.tag = tag;
                 Asc.scope.id = controls[i].InternalId;
+                Asc.scope.placeholderText = controls[i].PlaceHolderText;
                 Asc.plugin.callCommand(
                     () => {
                         const doc = Api.GetDocument();
@@ -176,7 +215,9 @@ class CitationDocService {
                         const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
                         if (control) {
                             control.SetTag(Asc.scope.tag);
-                            control.SetPlaceholderText("");
+                            if (Asc.scope.placeholderText) {
+                                control.SetPlaceholderText("");
+                            }
                         }
                     },
                     false,
@@ -184,6 +225,9 @@ class CitationDocService {
                     resolve,
                 );
             });
+            if (!controls[i].PlaceHolderText) {
+                continue;
+            }
             await new Promise(function (resolve) {
                 window.Asc.plugin.executeMethod(
                     "PasteHtml",
