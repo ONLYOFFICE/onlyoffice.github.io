@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Text Cleaner</title>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+  <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+  <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+  
+  <link rel="stylesheet" href="styles/textcleaner.css">
+</head>
+<body class="asc-plugin-body">
+  <div class="app-container">
+    <div class="main-container">
+      <div class="scroll-container">
+        <div class="asc-plugin-container">
+          <div class="instructions" id="PluginInstructions">
+            Select a section of text to clear its formatting, or click <b>Clean</b> to clear formatting in the entire document.
+          </div>
+          
+          <div class="select-all-container">
+            <label class="switch">
+              <input type="checkbox" id="select-all-options">
+              <span class="slider"></span>
+            </label>
+            <label for="select-all-options" class="asc-plugin-text">
+              <strong id="AllParameters">All parameters</strong>
+            </label>
+          </div>
+          
+          <!-- ACCORDION 1: Clear Formatting -->
+          <div class="section asc-plugin-block">
+            <div class="btn-text link acc-head" data-target="#acc-clear" id="ClearFormatting" tabindex="0" role="button">
+            </div>
+            <div id="acc-clear" class="asc-collapse" style="display:none;padding-top:8px;">
+              <div class="option">
+                <input type="checkbox" id="remove-bold">
+                <label for="remove-bold" id="RemoveBold">Remove bold</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="remove-italic">
+                <label for="remove-italic" id="RemoveItalic">Remove italic</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="remove-underline">
+                <label for="remove-underline" id="RemoveUnderline">Remove underline</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="remove-strikeout">
+                <label for="remove-strikeout" id="RemoveStrikeout">Remove strikethrough</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="clear-text-color">
+                <label for="clear-text-color" id="ClearTextColor">Clear text color</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="remove-highlight">
+                <label for="remove-highlight" id="RemoveHighlight">Remove highlight</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="remove-bg-outline">
+                <label for="remove-bg-outline" id="RemoveBgOutline">Remove background &amp; outline</label>
+              </div>
+            </div>
+          </div>
+          <hr class="separator"/>
+          
+          <!-- ACCORDION 2: Font Standardization -->
+          <div class="section asc-plugin-block">
+            <div class="btn-text link acc-head" data-target="#acc-font" id="FontStandardization" tabindex="0" role="button">
+            </div>
+            <div id="acc-font" class="asc-collapse" style="display:none;padding-top:8px;">
+              <div class="option">
+                <input type="checkbox" id="apply-font-standardization">
+                <label for="apply-font-standardization" id="ApplyFontStandardization">Apply font standardization</label>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <select id="font-family-select" class="asc-plugin-select" style="flex:1;">
+                  <option value="Arial">Arial</option>
+                  <option value="Calibri">Calibri</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Courier New">Courier New</option>
+                  <option value="Georgia">Georgia</option>
+                </select>
+                <select id="font-size-select" class="asc-plugin-select" style="width:100px;">
+                  <option value="8">8 pt</option>
+                  <option value="9">9 pt</option>
+                  <option value="10">10 pt</option>
+                  <option value="11">11 pt</option>
+                  <option value="12" selected>12 pt</option>
+                  <option value="14">14 pt</option>
+                  <option value="16">16 pt</option>
+                  <option value="18">18 pt</option>
+                  <option value="20">20 pt</option>
+                  <option value="24">24 pt</option>
+                  <option value="28">28 pt</option>
+                  <option value="32">32 pt</option>
+                  <option value="36">36 pt</option>
+                </select>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="reset-letter-spacing">
+                <label for="reset-letter-spacing" id="ResetLetterSpacing">Reset letter spacing</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="reset-vert-offset">
+                <label for="reset-vert-offset" id="ResetVertOffset">Reset vertical offset</label>
+              </div>
+            </div>
+          </div>
+          
+          <hr class="separator"/>
+
+          <!-- ACCORDION 3: Text Case Conversion -->
+          <div class="section asc-plugin-block">
+            <div class="btn-text link acc-head" data-target="#acc-case" id="TextCaseConversion" tabindex="0" role="button">
+            </div>
+            <div id="acc-case" class="asc-collapse" style="display:none;padding-top:8px;">
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-none" value="none" checked>
+                <label for="case-none" id="CaseNone">Do Not Change</label>
+              </div>
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-sentence" value="sentence">
+                <label for="case-sentence" id="SentenceCase">Sentence case.</label>
+              </div>
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-lower" value="lower">
+                <label for="case-lower" id="LowerCase">lowercase</label>
+              </div>
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-upper" value="upper">
+                <label for="case-upper" id="UpperCase">UPPERCASE</label>
+              </div>
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-capitalize" value="capitalize">
+                <label for="case-capitalize" id="CapitalizeEach">Capitalize Each Word</label>
+              </div>
+              <div class="option">
+                <input type="radio" name="text-case-option" id="case-toggle" value="toggle">
+                <label for="case-toggle" id="ToggleCase">tOGGLE cASE</label>
+              </div>
+            </div>
+          </div>
+          
+          <hr class="separator"/>
+          
+          <!-- ACCORDION 4: Special Formatting -->
+          <div class="section asc-plugin-block">
+            <div class="btn-text link acc-head" data-target="#acc-special" id="SpecialFormatting" tabindex="0" role="button">
+            </div>
+            <div id="acc-special" class="asc-collapse" style="display:none;padding-top:8px;">
+              <div class="option">
+                <input type="checkbox" id="disable-all-caps">
+                <label for="disable-all-caps" id="DisableAllCaps">Disable ALL CAPS</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="disable-small-caps">
+                <label for="disable-small-caps" id="DisableSmallCaps">Disable Small Caps</label>
+              </div>
+              <div class="option">
+                <input type="checkbox" id="reset-baseline">
+                <label for="reset-baseline" id="ResetBaseline">Reset to baseline</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="button-container">
+            <button id="clean-button" class="btn-text-default submit primary" style="width:100%;">Clean</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loading View -->
+    <div id="loading-view" class="loading-view" style="display:none;">
+      <p style="margin-bottom:16px; font-size:13px;"><span id="DoNotClosePanel">Please do not close the plugin panel.</span></p>
+      <div class="loading-row">
+        <div class="loader small"></div>
+        <span style="margin-left:8px;" id="Loading">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Action Buttons View -->
+    <div id="action-buttons-view" class="action-buttons-view" style="display:none;">
+      <p style="margin-bottom:20px; font-size:13px; text-align:center;">
+        <span id="CleaningCompleted">Text cleaning completed successfully!</span><br/>
+        <span id="undo-steps-info" style="color:#666; font-size:11px;"></span>
+      </p>
+      <div class="action-buttons">
+        <button id="revert-button" class="btn-text-default action-btn secondary" style="width:48%; margin-right:4%;">
+          <span id="RevertToOriginal">Revert to Original</span>
+        </button>
+        <button id="new-clean-button" class="btn-text-default action-btn primary" style="width:48%;">
+          <span id="NewClean">New Clean</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+  
+  <script type="text/javascript" src="scripts/textcleaner.js"></script>
+</body>
+</html>

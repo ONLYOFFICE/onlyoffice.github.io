@@ -1,0 +1,31 @@
+@import url("./app/components/button/button.css");
+@import url("./app/components/input/input.css");
+@import url("./app/components/selectbox/selectbox.css");
+@import url("./app/components/categories-picker.css");
+@import url("./app/components/search-filter.css");
+@import url("./app/components/icon-picker.css");
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.content {
+    padding: 3px 12px 11px 12px;
+    overflow-y: auto;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+label {
+    display: block;
+    padding: 14px 0 6px 0;
+}
+.run-button {
+    width: 100%;
+}

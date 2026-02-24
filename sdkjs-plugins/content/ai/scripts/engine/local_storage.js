@@ -36,6 +36,8 @@
 	var AI = exports.AI;
 
 	AI.DEFAULT_SERVER_SETTINGS = null;
+
+	AI.DEFAULT_DESKTOP_MODEL = null;
 	
 	var localStorageKey = "onlyoffice_ai_plugin_storage_key";
 
@@ -45,25 +47,52 @@
 		let result = [];
 		for (let i in AI.Providers) {
 			if (AI.Providers[i].name) {
+
+				let url = AI.Providers[i].url;
+				if (url.endsWith("/"))
+					url = url.substring(0, url.length - 1);
+				if ("" !== AI.Providers[i].addon)
+				{
+					let plus = "/" + AI.Providers[i].addon;
+					let pos = url.lastIndexOf(plus);
+					if (pos === -1 || pos !== (url.length - plus.length))
+						url += plus;
+				}
+
 				result.push({
 					name : AI.Providers[i].name,
-					url : AI.Providers[i].url,
+					url : url,
 					key : AI.Providers[i].key,
 					models : AI.Providers[i].models
 				});
 			}
 		}
+
+		result.sort(function(a, b) {
+			const weightA = AI.providersWeights[a.name] !== undefined ? AI.providersWeights[a.name] : 100000;
+			const weightB = AI.providersWeights[b.name] !== undefined ? AI.providersWeights[b.name] : 100000;
+			return weightA - weightB;
+		});
 		return result;
 	};
 
 	AI.Models = [];
 
 	AI.Storage.save = function() {
+
+		// Don't save external models
+		let ModelsSaved = [];
+		for (let i = 0, len = AI.Models.length; i < len; i++) {
+			if (!AI.Models[i].id.startsWith(AI.externalModelPrefix)) {
+				ModelsSaved.push(AI.Models[i]);
+			}
+		}
+		
 		try {
 			let obj = {
 				version : AI.Storage.Version,
 				providers : {},
-				models : AI.Models,
+				models : ModelsSaved,
 				customProviders : AI.InternalCustomProvidersSources
 			};
 
@@ -87,7 +116,7 @@
 		return false;
 	};
 
-	AI.Storage.load = function() {
+	AI.Storage.load = async function() {
 		let obj = null;
 		try {
 			if (AI.serverSettings) {
@@ -132,13 +161,11 @@
 					oldProviders[pr.name] = pr;
 				}
 
-				for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
-					if (AI.InternalCustomProviders[i].name === name) {
-						AI.InternalCustomProviders.splice(i, 1);
-						break;
-					}				
+				for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
+					let pr = AI.ExternalCustomProviders[i];
+					oldProviders[pr.name] = pr;
 				}
-
+				
 				for (let i in obj.providers) {
 					let pr = obj.providers[i];
 					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
@@ -156,12 +183,29 @@
 						AI.Providers[pr] = oldProviders[pr];
 				}
 
+				// correct old models information
+				for (let pr in AI.Providers)
+				{
+					if (AI.Providers[pr] && AI.Providers[pr].name === "OpenAI")
+					{
+						let models = AI.Providers[pr].models;
+						for (let i = 0, len = models.length; i < len; i++) {
+							if (models[i].name.startsWith("gpt-4")) {
+								if (models[i].options && 
+									undefined !== models[i].options.max_input_tokens &&
+									models[i].options.max_input_tokens < AI.InputMaxTokens["128k"]) {
+									models[i].options.max_input_tokens = AI.InputMaxTokens["128k"];
+								}
+							}
+						}
+					}						
+				}
+
 				AI.Models = obj.models;
 			}
+		}				
 
-			return true;
-		}
-		return false;
+		return obj ? true : false;
 	};
 
 	AI.Storage.addModel = function(model) {
@@ -236,7 +280,7 @@
 					name : AI.Models[i].name,
 					id : AI.Models[i].id,
 					provider : AI.Models[i].provider,
-					capabilities : AI.Models[i].capabilities,
+					capabilities : AI.Models[i].capabilities
 				});
 			}
 		}
@@ -244,6 +288,8 @@
 	};
 
 	AI.Storage.getProvider = function(name) {
+		if (name && name.url)
+			return name; // already provider object (external model case)
 		if (AI.Providers[name])
 			return AI.Providers[name];
 		return null;
@@ -251,7 +297,7 @@
 
 	AI.onLoadInternalProviders = function() {
 		for (let i = 0, len = AI.InternalProviders.length; i < len; i++) {
-			let pr = AI.InternalProviders[i];
+			let pr = AI.InternalProviders[i].createDuplicate();
 			AI.Providers[pr.name] = pr;
 		}
 		AI.Storage.load();

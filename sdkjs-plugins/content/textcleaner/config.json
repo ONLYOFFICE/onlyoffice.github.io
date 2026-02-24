@@ -1,0 +1,156 @@
+{
+  "name": "Text Cleaner",
+  "offered": "Office Extensions Group",
+  "nameLocale": {
+    "en": "Text Cleaner",
+    "tr": "Metin Temizleyici",
+    "de": "Textbereiniger",
+    "es": "Limpiador de Texto",
+    "fr": "Nettoyeur de Texte",
+    "it": "Pulitore di Testo",
+    "nl": "Tekstopschoner",
+    "pt": "Removedor de Texto",
+    "ru": "Очиститель текста",
+    "sq": "Pastrues Teksti",
+    "zh": "文本清理器",
+	  "uk": "Очищувач тексту",
+    "ja": "テキストクリーナー",
+    "cs": "Čistič Textu"
+  },
+  "guid": "asc.{D8653A43-2F43-4CBB-9A9D-C6D3D0EE7B23}",
+  "baseUrl": "",
+  "version": "1.0.0",
+  "variations": [
+    {
+      "description": "Text Cleaner is a smarter version of 'clear formatting.' It keeps italics and bold while removing line breaks, extra spaces, and other clutter, leaving clean text that matches your document’s styles.",
+      "descriptionLocale":{
+        "tr": "Text Cleaner, 'biçimlendirmeyi temizle' komutunun daha akıllı bir sürümüdür. İtalik ve kalın yazıları korurken satır sonlarını, fazla boşlukları ve gereksiz dağınıklıkları kaldırır. Böylece metin, belgenin stillerine uygun hale gelir.",
+        "de": "Text Cleaner ist eine intelligentere Version von 'Formatierung löschen'. Kursiv und Fett bleiben erhalten, während Zeilenumbrüche, überflüssige Leerzeichen und anderer Ballast entfernt werden. Das Ergebnis ist sauberer Text, der den Dokumentstilen entspricht.",
+        "es": "Text Cleaner es una versión más inteligente de 'borrar formato'. Mantiene cursivas y negritas mientras elimina saltos de línea, espacios extra y otros elementos innecesarios, dejando un texto limpio que se ajusta a los estilos del documento.",
+        "fr": "Text Cleaner est une version plus intelligente de 'Effacer la mise en forme'. Il conserve l’italique et le gras tout en supprimant les retours à la ligne, les espaces en trop et autres éléments inutiles, laissant un texte propre adapté aux styles du document.",
+        "it": "Text Cleaner è una versione più intelligente di 'Cancella formattazione'. Mantiene corsivo e grassetto mentre rimuove interruzioni di riga, spazi extra e altri elementi superflui, lasciando un testo pulito che rispetta gli stili del documento.",
+        "nl": "Text Cleaner is een slimmere versie van 'opmaak wissen'. Cursief en vet blijven behouden, terwijl regeleinden, extra spaties en andere rommel worden verwijderd. Het resultaat is schone tekst die aansluit bij de stijlen van het document.",
+        "br": "O Text Cleaner é uma versão mais inteligente de 'limpar formatação'. Mantém itálico e negrito enquanto remove quebras de linha, espaços extras e outras desordens, deixando o texto limpo e em conformidade com os estilos do documento.",
+        "ru": "Text Cleaner — это более умная версия команды 'очистить форматирование'. Он сохраняет курсив и полужирный, удаляя разрывы строк, лишние пробелы и прочий мусор. В итоге остается чистый текст, соответствующий стилям документа.",
+        "sq-AL": "Text Cleaner është një version më i zgjuar i 'hiq formatimin'. Ruajnë italikun dhe të trashin ndërsa heq thyerjet e rreshtave, hapësirat shtesë dhe rrëmujën tjetër, duke lënë tekst të pastër që përputhet me stilet e dokumentit.",
+        "cs": "Text Cleaner je chytřejší verze příkazu 'vymazat formátování'. Zachovává kurzívu a tučné písmo, zatímco odstraňuje zalomení řádků, přebytečné mezery a další nepořádek. Výsledkem je čistý text odpovídající stylům dokumentu",
+        "ja": "Text Cleaner は「書式のクリア」のより賢いバージョンです。斜体や太字を維持しつつ、改行や余分なスペースなど不要な要素を削除し、文書のスタイルに合ったきれいなテキストを残します。",
+        "zh": "Text Cleaner 是“清除格式”的更智能版本。它保留斜体和粗体，同时去除换行、多余空格和其他杂乱内容，留下符合文档样式的干净文本。",
+		"uk-UA": "це більш розумна версія команди “очистити форматування”. Він зберігає курсив і напівжирний шрифт, водночас видаляючи розриви рядків, зайві пробіли та інший непотріб, залишаючи чистий текст, що відповідає стилям вашого документа.",
+    "pt": "O Text Cleaner é uma versão mais inteligente do “limpar formatação”. Ele mantém itálico e negrito enquanto remove quebras de linha, espaços extras e outras bagunças, deixando o texto limpo e compatível com os estilos do seu documento."
+      },
+      "url": "index.html",
+      "icons": ["resources/light/icon.svg","resources/light/icon@2x.svg" ],
+      "icons2": [
+        {
+          "theme": "flat",
+          "style": "light",
+          "100%": { "normal": "resources/light/icon.svg" },
+          "125%": { "normal": "resources/light/icon@1.25x.svg" },
+          "150%": { "normal": "resources/light/icon@1.5x.svg" },
+          "175%": { "normal": "resources/light/icon@1.75x.svg" },
+          "200%": { "normal": "resources/light/icon@2x.svg" },
+          "default": { "normal": "resources/light/icon.svg" }
+        },
+        {
+          "theme": "flatDark",
+          "style": "dark",
+          "100%": { "normal": "resources/dark/icon.svg" },
+          "125%": { "normal": "resources/dark/icon@1.25x.svg" },
+          "150%": { "normal": "resources/dark/icon@1.5x.svg" },
+          "175%": { "normal": "resources/dark/icon@1.75x.svg" },
+          "200%": { "normal": "resources/dark/icon@2x.svg" }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["word"],
+      "type": "panel",
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": false,
+      "size": [300, 450],
+      "events": [
+        "onContextMenuShow",
+        "onContextMenuClick",
+        "onDocumentContentChange",
+        "onParagraphText"
+      ],
+      "store": {
+        "background": {
+					"light" : "#042B48",
+					"dark" : "#042B48"
+				},
+        "categories": ["work", "specAbilities"],
+        "icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+        "screenshots": [
+					"resources/store/screenshots/screenshots1.png",
+					"resources/store/screenshots/screenshots2.png",
+					"resources/store/screenshots/screenshots3.png",
+					"resources/store/screenshots/screenshots4.png"
+				]
+      }
+    },
+    {
+      "description": "About",
+      "descriptionLocale":{
+        "en": "About",
+        "tr": "Hakkında",
+        "de": "Über",
+        "fr": "À propos",
+        "es": "Acerca de",
+        "it": "Informazioni",
+        "pt": "Sobre",
+        "ru": "О программе",
+        "ja": "について",
+        "zh": "关于",
+        "nl": "Over",
+        "cs": "O programu",
+        "sq": "Rreth",
+		    "uk": "Про"
+      },
+      "url": "index_about.html",
+      "icons": [
+        {
+          "theme": "flat",
+          "style": "light",
+          "100%": { "normal": "resources/light/icon.svg" },
+          "125%": { "normal": "resources/light/icon@1.25x.svg" },
+          "150%": { "normal": "resources/light/icon@1.5x.svg" },
+          "175%": { "normal": "resources/light/icon@1.75x.svg" },
+          "200%": { "normal": "resources/light/icon@2x.svg" },
+          "default": { "normal": "resources/light/icon.svg" }
+        },
+        {
+          "theme": "flatDark",
+          "style": "dark",
+          "100%": { "normal": "resources/dark/icon.svg" },
+          "125%": { "normal": "resources/dark/icon@1.25x.svg" },
+          "150%": { "normal": "resources/dark/icon@1.5x.svg" },
+          "175%": { "normal": "resources/dark/icon@1.75x.svg" },
+          "200%": { "normal": "resources/dark/icon@2x.svg" }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["word"],
+      "isVisual": true,
+      "isModal": true,
+      "isInsideMode": false,
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": true,
+      "buttons": [
+        {
+          "text": "OK",
+          "primary": true
+        }
+      ],
+      "size": [380, 200]
+    }
+  ]
+} 

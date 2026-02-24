@@ -30,6 +30,7 @@
  *
  */
 
+var themeType = 'light';
 var type = 'add';
 var aiModel = null;
 var isModelCmbInit = true;
@@ -89,6 +90,10 @@ var modelNameValidator = new ValidatorWrapper({
 });
 $(modelNameCmbEl).select2({width: '100%'});
 
+var providerKeyInput = new MaskedInput({
+	el: providerKeyInputEl
+});
+
 
 $('#custom-providers-button label').click(function(e) {
 	window.Asc.plugin.sendToPlugin("onOpenCustomProvidersModal");
@@ -102,100 +107,111 @@ var updateModelsErrorTip = new Tooltip(updateModelsErrorEl, {
 	width: 233,
 });
 
+const providerKeyTip = new Tooltip(providerKeyInputEl, {
+	align: 'center',
+	width: 250,
+	text: "You can obtain information about the key on the provider's website. This field is not mandatory.",
+});
+
+const useAllBtn = new ToggleButton({
+	id: 'use-all',
+	label: 'All',
+	onToggle: function(value) {
+		for (const capability in capabilitiesElements) {
+			var item = capabilitiesElements[capability];
+			item.btn.setValue(value);
+		}
+	}
+});
+
 var capabilitiesElements = {
 	text: {
 		btn: new ToggleButton({
 			id: 'use-for-text',
-			icon: 'resources/icons/light/ai-texts' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-text'), {
-			text: 'Text',
-			yAnchor: 'top',
-			xAnchor: 'left',
-			align: 'left'
+			label: 'Text',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Chat
 	},
 	image: {
 		btn: new ToggleButton({
 			id: 'use-for-image',
-			icon: 'resources/icons/light/ai-images' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-image'), {
-			text: 'Images',
-			yAnchor: 'top'
+			label: 'Images',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Image
 	},
 	embeddings: {
 		btn: new ToggleButton({
 			id: 'use-for-embeddings',
-			icon: 'resources/icons/light/ai-embeddings' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-embeddings'), {
-			text: 'Embeddings',
-			yAnchor: 'top'
+			label: 'Embeddings',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Embeddings
 	},
 	audio: {
 		btn: new ToggleButton({
 			id: 'use-for-audio',
-			icon: 'resources/icons/light/ai-audio' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-audio'), {
-			text: 'Audio Processing',
-			yAnchor: 'top'
+			label: 'Audio Processing',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Audio
 	},
 	moderations: {
 		btn: new ToggleButton({
 			id: 'use-for-moderations',
-			icon: 'resources/icons/light/ai-moderations' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-moderations'), {
-			text: 'Content Moderation',
-			yAnchor: 'top'
+			label: 'Content Moderation',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Moderations
 	},
 	realtime: {
 		btn: new ToggleButton({
 			id: 'use-for-realtime',
-			icon: 'resources/icons/light/ai-realtime' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-realtime'), {
-			text: 'Realtime Tasks',
-			yAnchor: 'top',
+			label: 'Realtime Tasks',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Realtime
 	},
 	code: {
 		btn: new ToggleButton({
 			id: 'use-for-code',
-			icon: 'resources/icons/light/ai-code' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-code'), {
-			text: 'Coding Help',
-			yAnchor: 'top',
-			xAnchor: 'right',
-			align: 'right'
+			label: 'Coding Help',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Code
 	},
 	vision: {
 		btn: new ToggleButton({
 			id: 'use-for-vision',
-			icon: 'resources/icons/light/ai-visual-analysis' + getZoomSuffixForImage() + '.png'
-		}),
-		tip: new Tooltip(document.getElementById('use-for-vision'), {
-			text: 'Visual Analysis',
-			yAnchor: 'top',
-			xAnchor: 'right',
-			align: 'right'
+			label: 'Visual Analysis',
+			onToggle: onToggleCapability
 		}),
 		capabilities: AI.CapabilitiesUI.Vision
+	}
+};
+
+var heightUpdateConditions = {
+	_init: false,
+	_translate: false,
+	_markReady: function(key) {
+		heightUpdateConditions[key] = true;
+		heightUpdateConditions._checkAllReady();
+	},
+	_checkAllReady: function() {
+		if (
+			heightUpdateConditions._init &&
+			heightUpdateConditions._translate
+		) {
+			updateWindowHeight();
+		}
+	},
+
+	initReady: function() {
+		heightUpdateConditions._markReady('_init');
+	},
+	translateReady: function() {
+		heightUpdateConditions._markReady('_translate');
 	}
 };
 
@@ -209,7 +225,7 @@ window.Asc.plugin.init = function() {
 	window.Asc.plugin.attachEvent("onProvidersUpdate", onProvidersUpdate);
 	window.Asc.plugin.attachEvent("onGetModels", function(data) {
 		if(data.error == 1) {
-			rejectModels && rejectModels(data.message);
+			rejectModels && rejectModels(data);
 		} else {
 			modelsList = data.models;
 			let res = data.models.map(function(model) {
@@ -219,9 +235,13 @@ window.Asc.plugin.init = function() {
 				}
 			});
 			res.sort(function(a,b){ return (a.name < b.name) ? -1 : ((a.name === b.name) ? 0 : 1); });
-			resolveModels && resolveModels(res);
+
+			data.models = res;
+			resolveModels && resolveModels(data);
 		}
 	});
+
+	heightUpdateConditions.initReady();
 }
 window.Asc.plugin.onThemeChanged = onThemeChanged;
 
@@ -233,8 +253,12 @@ window.Asc.plugin.onTranslate = function () {
 
 	for (const capability in capabilitiesElements) {
 		var item = capabilitiesElements[capability];
-		item.tip.setText(window.Asc.plugin.tr(item.tip.getText()));
+		item.btn.setLabel(window.Asc.plugin.tr(item.btn.getLabel()));
 	}
+
+	providerKeyInputEl.setAttribute('placeholder', window.Asc.plugin.tr(providerKeyInputEl.getAttribute('placeholder')));
+
+	heightUpdateConditions.translateReady();
 };
 
 window.addEventListener("resize", onResize);
@@ -243,7 +267,7 @@ onResize();
 function onThemeChanged(theme) {
 	window.Asc.plugin.onThemeChangedBase(theme);
 	
-	var themeType = theme.type || 'light';
+	themeType = theme.type || 'light';
 	updateBodyThemeClasses(theme.type, theme.name);
 	updateThemeVariables(theme);
 	
@@ -261,6 +285,15 @@ function getZoomSuffixForImage() {
 	if(ratio == 1) return ''
 	else {
 		return '@' + ratio + 'x';
+	}
+}
+
+function updateWindowHeight() {
+	const contentHeight = $('body').prop('scrollHeight');
+	const visibleHeight = $('body').innerHeight();
+
+	if(contentHeight > visibleHeight) {
+		window.Asc.plugin.sendToPlugin("onUpdateHeight", contentHeight + 5);
 	}
 }
 
@@ -371,9 +404,21 @@ function onChangeProviderComboBox() {
 
 	providerUrlInputEl.value = provider ? provider.url : '';
 	providerKeyInputEl.value = provider ? provider.key : '';
-	if(providerUrlInputEl.value) {
+
+	if (providerUrlInputEl.value === "[external]") {
+		providerUrlInputEl.setAttribute('disabled', true);
+		providerKeyInputEl.setAttribute('disabled', true);
+	}
+	else {
+		providerUrlInputEl.removeAttribute('disabled');
+		providerKeyInputEl.removeAttribute('disabled');
+	}
+
+	if (providerUrlInputEl.value) {
 		updateModelsList();
 	}
+
+	providerKeyInput.setMasked(!!providerKeyInputEl.value);
 }
 
 function onOpenProviderComboBox() {
@@ -414,19 +459,31 @@ function onChangeProviderKeyInput() {
 }
 
 function onChangeModelComboBox() {
-	var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
-	if(modelObj && !isFirstLoadOfModels) {
-		updateCapabilitiesBtns(modelObj.capabilities);
+	if(type == 'add' || !isFirstLoadOfModels)  {
+		var modelObj = providerModelsList.filter(function(model) { return model.name == modelNameCmbEl.value })[0] || null;
+		updateCapabilitiesBtns(modelObj ? modelObj.capabilities : 0);
+		
+		if (modelObj && modelObj.name) {
+			let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
+			let providerName = providerObj ? providerObj.name : providerNameCmbEl.value;
+			if (providerName)
+				nameInputEl.value = providerName + ' [' + modelObj.name + ']';
+			else
+				nameInputEl.value = modelObj.name;
+		}
 	}
+}
 
-	if (modelObj && modelObj.name) {
-		let providerObj = providersList.filter(function(provider) { return provider.id == providerNameCmbEl.value })[0] || null;
-		let providerName = providerObj ? providerObj.name : providerNameCmbEl.value;
-		if (providerName)
-			nameInputEl.value = providerName + ' [' + modelObj.name + ']';
-		else
-			nameInputEl.value = modelObj.name;
+function onToggleCapability() {
+	let isActiveAll = true;
+	for (const capability in capabilitiesElements) {
+		const isActive = capabilitiesElements[capability].btn.getValue();
+		if(!isActive) {
+			isActiveAll = false;
+			break;
+		} 
 	}
+	useAllBtn.setValue(isActiveAll);
 }
 
 function getCapabilities() {
@@ -445,6 +502,8 @@ function updateCapabilitiesBtns(capabilities) {
 		var itemProps = capabilitiesElements[key];
 		itemProps.btn.setValue((capabilities & itemProps.capabilities) !== 0);
 	}
+
+	onToggleCapability();
 }
 
 function updateModelsList() {
@@ -483,13 +542,17 @@ function updateModelsList() {
 		url : providerUrlInputEl.value, 
 		key: providerKeyInputEl.value
 	}).then(function(data) {
-		providerModelsList = data;
-		updateHtmlElements();
-		endLoader();
+		if (providerNameCmbEl.value == data.provider) {
+			providerModelsList = data.models;
+			updateHtmlElements();
+			endLoader();
+		}
 	}).catch(function(error) {
-		providerModelsList = [];
-		updateHtmlElements();
-		endLoader(error);
+		if (providerNameCmbEl.value == error.provider) {
+			providerModelsList = [];
+			updateHtmlElements();
+			endLoader(error.message);
+		}
 	});
 }
 
@@ -559,6 +622,71 @@ function fetchModelsForProvider(provider) {
 
 	});
 }
+
+function MaskedInput(options) {
+	this._init = function() {
+		// Default parameters
+		var defaults = {
+			el: null,		//HTML field element
+		};
+		// Merge user options with defaults
+		this.options = Object.assign({}, defaults, options);
+
+		// Masked state
+		this.isMasked = true;
+
+		if (this.options.el) {
+			var me = this;
+
+			// Create HTML elements
+			this.containerEl = document.createElement('div');
+			this.containerEl.style.display = 'flex';
+			this.containerEl.style.position = 'relative';
+			this.options.el.parentNode.insertBefore(this.containerEl, this.options.el);
+			this.options.el.style.paddingRight = '20px';
+			this.containerEl.appendChild(this.options.el);
+
+			this.iconEl = document.createElement('img');
+			this.iconEl.className = 'icon';
+			this.iconEl.style.position = 'absolute';
+			this.iconEl.style.width = '20px';
+			this.iconEl.style.height = '20px';
+			this.iconEl.style.top = '1px';
+			this.iconEl.style.right = '0px';
+			this.iconEl.style.display = 'block';
+			this.iconEl.style.cursor = 'pointer';
+			this.updateFieldView();
+			this.iconEl.addEventListener('click', function() {
+				me.setMasked(!me.isMasked);
+			});
+			this.containerEl.appendChild(this.iconEl);
+		} else {
+			console.error("Field not found.");
+		}
+	};
+
+	this.updateFieldView = function() {
+		this.iconEl.src = this.isMasked
+			? 'resources/icons/' + themeType + '/' + 'btn-password' + getZoomSuffixForImage() + '.png'
+			: 'resources/icons/' + themeType + '/' + 'btn-password-hide' + getZoomSuffixForImage() + '.png';
+
+		this.options.el.setAttribute(
+			'type',
+			this.isMasked ? 'password' : 'text'
+		);
+	};
+
+	this.getMasked = function() {
+		return this.isMasked;
+	};
+	this.setMasked = function(value) {
+		this.isMasked = !!value;
+		this.updateFieldView();
+	};
+
+	this._init();
+}
+
 
 function ValidatorWrapper(options) {
 	this._init = function() {
@@ -649,9 +777,11 @@ function ValidatorWrapper(options) {
 		if(this.state.value) {
 			this.errorIconEl.style.display = 'none';
 			borderedEl.style.borderColor = '';
+			this.options.fieldEl.style.paddingRight = '';
 		} else {
 			this.errorIconEl.style.display = 'block';
 			borderedEl.style.cssText += 'border-color: #f62211 !important;';
+			this.options.fieldEl.style.paddingRight = '20px';
 		}
 	};
 
@@ -664,7 +794,7 @@ function ToggleButton(options) {
 		// Default parameters
 		var defaults = {
 			id: '',
-			icon: '',
+			label: '',
 			value: false,
 			disabled: false,
 			onToggle: function (state) {}
@@ -677,29 +807,22 @@ function ToggleButton(options) {
 		this.value = false;
 		this.disabled = false;
 
-		this.buttonEl = document.createElement("button");
-		this.buttonEl.className = "toggle-button";
-
-		this.iconEl = document.createElement("img");
-		this.iconEl.className = "icon";
-		this.iconEl.src = this.options.icon;
-
-		this.buttonEl.appendChild(this.iconEl);
+		this.$button = $('<button class="toggle-button">' + this.options.label + '</button>');
 
 		this.setValue(this.options.value);
 		this.setDisabled(this.options.disabled);
 
 		// Add click event listener
 		var self = this; // To preserve context
-		this.buttonEl.addEventListener("click", function () {
+		this.$button.on('click', function () {
 			self.setValue(!self.value);
 			self.options.onToggle && self.options.onToggle(self.value); // Call the callback
 		});
 
 		// Add button to the container
-		var container = document.getElementById(this.options.id);
-		if (container) {
-			container.appendChild(this.buttonEl);
+		var $container = $('#' + this.options.id);
+		if ($container) {
+			$container.append(this.$button);
 		} else {
 			console.error("Container with ID '" + this.options.id + "' not found.");
 		}
@@ -707,22 +830,26 @@ function ToggleButton(options) {
 
 	this.setValue = function(value) {
 		this.value = value;
-		if(value) {
-			this.buttonEl.classList.add('active');
-		} else {
-			this.buttonEl.classList.remove('active');
-		}
+		this.$button.toggleClass('active', value);
 	};
 	this.getValue = function() {
 		return this.value;
 	};
 
+	this.setLabel = function(label) {
+		this.options.label = label;
+		this.$button.text(label);
+	};
+	this.getLabel = function() {
+		return this.options.label;
+	};
+
 	this.setDisabled = function(value) {
 		this.disabled = value;
 		if(value) {
-			this.buttonEl.setAttribute('disabled', true);
+			this.$button.attr('disabled', true);
 		} else {
-			this.buttonEl.removeAttribute('disabled');
+			this.$button.removeAttr('disabled');
 		}
 	};
 	this.getDisabled = function() {
