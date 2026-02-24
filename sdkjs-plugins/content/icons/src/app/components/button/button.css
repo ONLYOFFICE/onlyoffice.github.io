@@ -1,0 +1,215 @@
+.custom-button-container {
+    display: inline-block;
+    position: relative;
+
+    .custom-button {
+        position: relative;
+        display: inline-flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 11px;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        outline: none;
+        user-select: none;
+        white-space: nowrap;
+        vertical-align: middle;
+        box-sizing: border-box;
+    }
+    .custom-button:focus {
+        outline: none;
+    }
+
+    .custom-button > svg,
+    .custom-button > img {
+        pointer-events: none;
+    }
+
+    .custom-button-secondary-icon {
+        width: 24px;
+    }
+    .custom-button-icon-only {
+        width: 24px;
+        border-color: transparent;
+        background: transparent;
+    }
+
+    .custom-button-small {
+        height: 24px;
+        padding: 0;
+    }
+
+    .custom-button-medium {
+        padding: 3px 16px;
+        line-height: 17px;
+    }
+
+    .custom-button-large {
+        padding: 6px 20px;
+        font-size: 14px;
+        line-height: 20;
+    }
+
+    .custom-button-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+    .custom-button-success:hover:not(.custom-button-disabled) {
+        background-color: #1e7e34;
+        border-color: #1e7e34;
+    }
+
+    .custom-button-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+    .custom-button-danger:hover:not(.custom-button-disabled) {
+        background-color: #c82333;
+        border-color: #c82333;
+    }
+
+    .custom-button-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #212529;
+    }
+
+    .custom-button-warning:hover:not(.custom-button-disabled) {
+        background-color: #e0a800;
+        border-color: #e0a800;
+    }
+
+    .custom-button-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+    }
+
+    .custom-button-info:hover:not(.custom-button-disabled) {
+        background-color: #138496;
+        border-color: #138496;
+    }
+
+    .custom-button-ghost {
+        background-color: transparent;
+        border-color: transparent;
+        color: #007bff;
+    }
+
+    .custom-button-ghost:hover:not(.custom-button-disabled) {
+        background-color: rgba(0, 123, 255, 0.1);
+    }
+
+    /* Disabled state */
+    .custom-button-disabled,
+    .custom-button:disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .custom-button-disabled:hover,
+    .custom-button:disabled:hover {
+        transform: none !important;
+    }
+
+    /* Loading state */
+    .custom-button-loading {
+        cursor: wait;
+    }
+
+    .custom-button-spinner {
+        display: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: button-spin 1s linear infinite;
+    }
+
+    .custom-button-loading .custom-button-spinner {
+        display: inline-block;
+    }
+
+    @keyframes button-spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Icon */
+    .custom-button-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+    }
+
+    .custom-button-icon-left {
+        order: -1;
+    }
+
+    .custom-button-icon-right {
+        order: 1;
+    }
+
+    /* Badge */
+    .custom-button-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 10px;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 1;
+        min-width: 18px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Block button */
+    .custom-button-block {
+        display: flex;
+        width: 100%;
+    }
+
+    /* Group buttons */
+    .custom-button-group {
+        display: inline-flex;
+        gap: 1px;
+    }
+
+    .custom-button-group .custom-button {
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .custom-button-group .custom-button:first-child {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    .custom-button-group .custom-button:last-child {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+}

@@ -12,7 +12,7 @@
 		"zh-ZH": "DeepL"
 	},
 	"guid": "asc.{b78a062b-e349-4634-8a44-99825600d299}",
-	"version": "1.0.3",
+	"version": "1.0.5",
 
 	"variations": [
 		{
@@ -100,5 +100,7 @@
 				"categories": ["specAbilities", "work"]
 			}
 		}
-	]
+	],
+
+	"onlyofficeScheme": true
 }
