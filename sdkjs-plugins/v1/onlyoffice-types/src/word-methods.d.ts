@@ -30,10 +30,10 @@ type ContentControlLock = 0 | 1 | 2 | 3;
 
 interface ContentControlProperties {
     Id?: number;
-    Tag?: string;
+    Tag: string;
     Lock?: number;
     Remove?: number;
-    Alias: string;
+    Alias?: string;
     Appearance?: number;
     Border?: {Color: Color};
     Color?: Color;
