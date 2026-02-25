@@ -58,5 +58,8 @@
     "OK": "確定",
     "Something went wrong": "發生錯誤",
     "Update your editor to use this feature.": "更新您的編輯器以使用此功能。",
-    "You are viewing the most recently edited items, use the search to see others.": "您正在查看最近编辑的项目，使用搜索查看其他项目。"
+    "You are viewing the most recently edited items, use the search to see others.": "您正在查看最近编辑的项目，使用搜索查看其他项目。",
+    "Replace all active Mendeley citations and Bibliography failed": "替换所有活动的 Mendeley 引用和参考文献失败",
+    "Success!": "成功！",
+    "All active Mendeley citations and Bibliography have been replaced.": "所有活动的 Mendeley 引用和参考文献已替换。"
 }

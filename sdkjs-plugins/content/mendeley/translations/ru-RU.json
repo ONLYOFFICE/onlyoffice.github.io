@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Что-то пошло не так",
     "Update your editor to use this feature.": "Обновите ваш редактор, чтобы использовать эту функцию.",
-    "You are viewing the most recently edited items, use the search to see others.": "Вы видите недавно отредактированные элементы, используйте поиск, чтобы увидеть другие записи."
+    "You are viewing the most recently edited items, use the search to see others.": "Вы видите недавно отредактированные элементы, используйте поиск, чтобы увидеть другие записи.",
+    "Replace all active Mendeley citations and Bibliography failed": "Замена всех активных цитат и библиографии завершилась неудачно",
+    "Success!": "Успешно!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Все активные цитаты и библиография заменены."
 }

@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Diçka shkoi keq",
     "Update your editor to use this feature.": "Përditësoni editorin tuaj për të përdorur këtë veçori.",
-    "You are viewing the most recently edited items, use the search to see others.": "Për të parandaluar përditësimet e ardhshme, përdor pretrazim për të vrapur të tjetër."
+    "You are viewing the most recently edited items, use the search to see others.": "Për të parandaluar përditësimet e ardhshme, përdor pretrazim për të vrapur të tjetër.",
+    "Replace all active Mendeley citations and Bibliography failed": "Zamena të gjitha citimeve aktive të Mendeley dhe bibliografije nuk arrit",
+    "Success!": "Mundësuar!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Të gjitha citimeve aktive të Mendeley dhe bibliografije janë zamenjua"
 }

@@ -449,8 +449,23 @@ class CitationService {
     /**
      * @returns {Promise<boolean>}
      */
-    saveAsText() {
-        return this.citationDocService.saveAsText();
+    async saveAsText() {
+        const isOk = await this.citationDocService.saveAsText();
+        if (!isOk) {
+            await this.#additionalWindow.showInfoWindow(
+                "Success!",
+                "All active Mendeley citations and Bibliography have been replaced.",
+                "success",
+            );
+        } else {
+            await this.#additionalWindow.showInfoWindow(
+                "Warning!",
+                "Replace all active Mendeley citations and Bibliography failed",
+                "warning",
+            );
+        }
+        
+        return isOk;
     }
 
     /**
@@ -609,7 +624,7 @@ class CitationService {
     async switchingBetweenNotesAndText(notesStyle) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showWarningWindow(
+            await this.#additionalWindow.showInfoWindow(
                 "Something went wrong",
                 "Update your editor to use this feature.",
             );
@@ -662,7 +677,7 @@ class CitationService {
     async convertNotesStyle(notesStyle) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showWarningWindow(
+            await this.#additionalWindow.showInfoWindow(
                 "Something went wrong",
                 "Update your editor to use this feature.",
             );

@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Algo correu mal",
     "Update your editor to use this feature.": "Atualize o seu editor para utilizar esta funcionalidade.",
-    "You are viewing the most recently edited items, use the search to see others.": "Você está visualizando os itens mais recentemente editados, use a pesquisa para ver outros itens."
+    "You are viewing the most recently edited items, use the search to see others.": "Você está visualizando os itens mais recentemente editados, use a pesquisa para ver outros itens.",
+    "Replace all active Mendeley citations and Bibliography failed": "Substituição de todas as citações ativas do Mendeley e bibliografia falhou",
+    "Success!": "Sucesso!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Todas as citações ativas do Mendeley e bibliografia foram substituídas."
 }

@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Нешта се помере",
     "Update your editor to use this feature.": "Надоградите уређивач да бисте користили овој функцији.",
-    "You are viewing the most recently edited items, use the search to see others.": "Приказујете најновije измене, користите претрагу да видите друге предмете."
+    "You are viewing the most recently edited items, use the search to see others.": "Приказујете најновije измене, користите претрагу да видите друге предмете.",
+    "Replace all active Mendeley citations and Bibliography failed": "Замена свих активних цитата и библиографије неуспешна",
+    "Success!": "Успешно!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Све активне цитате и библиографија су заменење."
 }

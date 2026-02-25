@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "エラーが発生しました",
     "Update your editor to use this feature.": "この機能を使用するにはエディタを更新してください。",
-    "You are viewing the most recently edited items, use the search to see others.": "最も最近編集された項目を表示しています。他の項目を表示するには、検索を使用してください。"
+    "You are viewing the most recently edited items, use the search to see others.": "最も最近編集された項目を表示しています。他の項目を表示するには、検索を使用してください。",
+    "Replace all active Mendeley citations and Bibliography failed": "すべてのアクティブなMendeley引用と参考文献の置き換えに失敗しました",
+    "Success!": "成功しました",
+    "All active Mendeley citations and Bibliography have been replaced.": "すべてのアクティブなMendeley引用と参考文献が置き換えられました。"
 }

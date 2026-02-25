@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Nesto nije u redu",
     "Update your editor to use this feature.": "Ažurirajte uređivač da biste koristili ovu funkciju.",
-    "You are viewing the most recently edited items, use the search to see others.": "Prikazujete najnovije izmenjene predmete, koristite pretraživanje da vidite druge predmete."
+    "You are viewing the most recently edited items, use the search to see others.": "Prikazujete najnovije izmenjene predmete, koristite pretraživanje da vidite druge predmete.",
+    "Replace all active Mendeley citations and Bibliography failed": "Zameni sve aktivne reference i bibliografiju sa tekstom.",
+    "Success!": "Uspešno!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Sve aktivne reference i bibliografija su zamenjene."
 }

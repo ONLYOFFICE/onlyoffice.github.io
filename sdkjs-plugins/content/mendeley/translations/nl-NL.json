@@ -59,5 +59,8 @@
     "OK": "OK",
     "Something went wrong": "Er is iets misgegaan",
     "Update your editor to use this feature.": "Werk uw editor bij om deze functie te gebruiken.",
-    "You are viewing the most recently edited items, use the search to see others.": "U ziet de meest recent bewerkte items, gebruik de zoekopdracht om andere items te zien."
+    "You are viewing the most recently edited items, use the search to see others.": "U ziet de meest recent bewerkte items, gebruik de zoekopdracht om andere items te zien.",
+    "Replace all active Mendeley citations and Bibliography failed": "Deze actieve Mendeley-citaten en bibliografie kunnen niet worden vervangen",
+    "Success!": "Gelukt!",
+    "All active Mendeley citations and Bibliography have been replaced.": "Alle actieve Mendeley-citaten en bibliografie zijn vervangen."
 }
