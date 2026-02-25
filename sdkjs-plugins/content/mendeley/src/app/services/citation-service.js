@@ -201,16 +201,16 @@ class CitationService {
     }
     /**
      * @param {Object} [updatedField]
+     * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<{controlsWithCitations: {field: ContentControlProperties, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: ContentControlProperties | undefined}>}
      */
-    #synchronizeStorageWithDocItems(updatedField) {
+    #synchronizeStorageWithDocItems(updatedField, notesStyle) {
         const self = this;
         return this.citationDocService
-            .getAddinMendeleyControls()
+            .getAddinMendeleyControls(notesStyle)
             .then(function (/** @type {ContentControlProperties[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
-                
                 /** @type {ContentControlProperties | undefined} */
                 const bibField = arrFields.find(function (field) {
                     return (
@@ -672,7 +672,7 @@ class CitationService {
         this._storage.clear();
         try {
             const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems();
+                await this.#synchronizeStorageWithDocItems(false, notesStyle);
 
             this.#updateFormatter();
 

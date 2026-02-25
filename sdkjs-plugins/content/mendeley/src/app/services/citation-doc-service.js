@@ -37,9 +37,6 @@
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />
 
-import { CslHtmlParser } from "./csl-html-parser";
-import { CslDocFormatter } from "./csl-doc-formatter";
-
 class CitationDocService {
     #citPrefix;
     #bibPrefix;
@@ -106,17 +103,18 @@ class CitationDocService {
     }
 
     /**
+     * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<Array<ContentControlProperties>>}
      */
-    async getAddinMendeleyControls() {
+    async getAddinMendeleyControls(notesStyle) {
         const self = this;
 
         try {
-            const arrFields = await self.#getAllContentControls();
+            const arrControls = await self.#getAllContentControls();
             const filteredFields = [];
             const internalIds = [];
-            for (let i = 0; i < arrFields.length; i++) {
-                const field = arrFields[i];
+            for (let i = 0; i < arrControls.length; i++) {
+                const field = arrControls[i];
                 const bHasCitPrefix = field.Tag.indexOf(self.#citPrefix) !== -1;
                 const bHasBibPrefix = field.Tag.indexOf(self.#bibPrefix) !== -1;
                 if (bHasCitPrefix || bHasBibPrefix) {
@@ -125,17 +123,24 @@ class CitationDocService {
                 }
             }
             Asc.scope.internalIds = internalIds;
+            Asc.scope.useParagraph = !!notesStyle;
             const placeholderTexts = await new Promise((resolve) => Asc.plugin.callCommand(
                 () => {
                     /** @type {string[]} */
                     const placeholderTexts = [];
                     const doc = Api.GetDocument();
-                    doc.GetAllContentControls().forEach((control) => {
+                    const controls = doc.GetAllContentControls();
+                    controls.forEach((control) => {
                         const id = control.GetInternalId();
                         const index = Asc.scope.internalIds.indexOf(id);
                         if (index !== -1) {
-                            const range = control.GetRange(0, Number.MAX_SAFE_INTEGER);
-                            let text = range.GetText();
+                            let element;
+                            if (Asc.scope.useParagraph) {
+                                element = control.GetParentParagraph();
+                            } else {
+                                element = control.GetRange(0, Number.MAX_SAFE_INTEGER);
+                            }
+                            let text = element.GetText();
                             if (text.lastIndexOf("\n") === text.length - 1) {
                                 text = text.slice(0, -1);
                             }
@@ -240,52 +245,68 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<ContentControlProperties>} fields
+     * @param {Array<ContentControlProperties>} controls
      * @returns {Promise<void>}
      */
-    async convertNotesToText(fields) {
-        const formats = this.#makeFormattingPositions(fields);
-
-        for (let i = 0; i < fields.length; i++) {
-            const field = fields[i];
-            if (!field.InternalId) {
+    async convertNotesToText(controls) {
+        for (let i = 0; i < controls.length; i++) {
+            const control = controls[i];
+            if (!control.InternalId) {
                 console.error("Field id is not defined");
                 continue;
             }
 
-            const selectFieldResult = await this.#selectControl(field.InternalId);
+            const selectFieldResult = await this.#selectControl(control.InternalId);
             if (!selectFieldResult) continue;
             const isReferenceSelected = await this.#selectFieldReference();
             if (!isReferenceSelected) continue;
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
-            await this.#addContentControl(field);
-            const formatting = formats.get(field.InternalId);
-            if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const text = control.PlaceHolderText;
+            control.PlaceHolderText = "";
+            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
+                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+            }
+            await this.#addContentControl(control);
+            
+            await new Promise(function (resolve) {
+                window.Asc.plugin.executeMethod(
+                    "PasteHtml",
+                    [text],
+                    resolve,
+                );
+            });
         }
     }
 
     /**
-     * @param {Array<ContentControlProperties>} fields
+     * @param {Array<ContentControlProperties>} controls
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
-    async convertTextToNotes(fields, notesStyle) {
-        const formats = this.#makeFormattingPositions(fields);
+    async convertTextToNotes(controls, notesStyle) {
+        for (let i = 0; i < controls.length; i++) {
+            const control = controls[i];
+            if (!control.InternalId) continue;
 
-        for (let i = 0; i < fields.length; i++) {
-            const field = fields[i];
-            if (!field.InternalId) continue;
-
-            const selectFieldResult = await this.#selectControl(field.InternalId);
+            const selectFieldResult = await this.#selectControl(control.InternalId);
             if (!selectFieldResult) continue;
-            await this.#removeSelectedContent();
+            await this.#deleteControl(control.InternalId);
             await this.#addNote(notesStyle);
-            await this.#addContentControl(field);
-            const formatting = formats.get(field.InternalId);
-            if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const text = control.PlaceHolderText;
+            control.PlaceHolderText = "";
+            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
+                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+            }
+            await this.#addContentControl(control);
+            
+            await new Promise(function (resolve) {
+                window.Asc.plugin.executeMethod(
+                    "PasteHtml",
+                    [text],
+                    resolve,
+                );
+            });
         }
     }
 
@@ -295,7 +316,6 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertNotesStyle(controls, notesStyle) {
-        const formats = this.#makeFormattingPositions(controls);
         /** @type {Array<ContentControlProperties>} */
         const editedControls = [];
 
@@ -385,25 +405,29 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<ContentControlProperties>} fields
-     * @returns {Map<string, {text: string, formatting: Array<FormattingPositions>}>}
-     * @modifies {fields}
+     * @param {string} internalId
+     * @returns {Promise<boolean>}
      */
-    #makeFormattingPositions(fields) {
-        /** @type {Map<string, {text: string, formatting: Array<FormattingPositions>}>} */
-        const formats = new Map();
-        fields.forEach(function (field) {
-            if (!field.PlaceHolderText) return;
-            const formattingPositions = CslHtmlParser.parseHtmlFormatting(
-                field.PlaceHolderText
+    #deleteControl(internalId) {
+        return new Promise((resolve) => {
+            Asc.scope.id = internalId;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const controls = doc.GetAllContentControls();
+                    const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                    if (control) {
+                        return control.Delete(false);
+                    }
+                    return false
+                },
+                false,
+                false,
+                resolve,
             );
-            field.PlaceHolderText = formattingPositions.text;
-            if (formattingPositions.formatting.length && field.InternalId) {
-                formats.set(field.InternalId, formattingPositions);
-            }
         });
-        return formats;
     }
+
 
     /** @returns {Promise<void>} */
     #removeSelectedContent() {
