@@ -595,6 +595,7 @@ interface ApiInlineLvlSdt {
   Push(oElement: DocumentElement): boolean;
   RemoveAllElements(): boolean;
   RemoveElement(nPos: number): boolean;
+  Select(): boolean;
   SetAlias(sAlias: string): void;
   SetLabel(sLabel: string): void;
   SetLock(sLockType: "contentLocked" | "sdtContentLocked" | "sdtLocked"): void;
