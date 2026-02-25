@@ -5542,7 +5542,7 @@ class CitationService {
             try {
                 var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8);
                 _assertClassBrand(_CitationService_brand, _this8, _updateFormatter).call(_this8);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this8, _getUpdatedFields).call(_this8, fieldsWithCitations, false);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this8, _getUpdatedFields).call(_this8, fieldsWithCitations, false, true);
                 if (!updatedFields || !updatedFields.length) return;
                 yield _this8.citationDocService.convertNotesStyle(updatedFields, notesStyle);
             } catch (e) {
@@ -5752,12 +5752,12 @@ function _updateBibliography(bNoHaveFields, bibField) {
     return bibField;
 }
 
-function _getUpdatedFields(_x, _x2) {
+function _getUpdatedFields(_x, _x2, _x3) {
     return _getUpdatedFields2.apply(this, arguments);
 }
 
 function _getUpdatedFields2() {
-    _getUpdatedFields2 = _asyncToGenerator(function*(fieldsWithCitations, bHardRefresh) {
+    _getUpdatedFields2 = _asyncToGenerator(function*(fieldsWithCitations, bHardRefresh, bChangePosition) {
         var fragment = document.createDocumentFragment();
         var tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
@@ -5773,7 +5773,7 @@ function _getUpdatedFields2() {
             if (cslCitation.getDoNotUpdate()) {
                 continue;
             }
-            if (oldContent === newContent) {
+            if (oldContent === newContent && !bChangePosition) {
                 continue;
             }
             if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
