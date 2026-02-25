@@ -365,9 +365,10 @@ class CitationService {
     /**
      * @param {{field: CustomField, cslCitation: CSLCitation}[]} fieldsWithCitations
      * @param {boolean} bHardRefresh
+     * @param {boolean} [bChangePosition]
      * @returns {Promise<CustomField[]>}
      */
-    async #getUpdatedFields(fieldsWithCitations, bHardRefresh) {
+    async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
@@ -388,7 +389,7 @@ class CitationService {
                 continue;
             }
 
-            if (oldContent === newContent) {
+            if (oldContent === newContent && !bChangePosition) {
                 continue;
             }
             if (
@@ -793,7 +794,9 @@ class CitationService {
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
+                true,
             );
+
             if (!updatedFields || !updatedFields.length) return;
 
             await this.citationDocService.convertNotesStyle(

@@ -14790,7 +14790,7 @@
                             fieldsWithCitations = _yield$_assertClassBr7.fieldsWithCitations;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
                             _context8.n = 5;
-                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false, true);
 
                           case 5:
                             updatedFields = _context8.v;
@@ -15043,11 +15043,11 @@
         }
         return bibField;
     }
-    function _getUpdatedFields(_x0, _x1) {
+    function _getUpdatedFields(_x0, _x1, _x10) {
         return _getUpdatedFields2.apply(this, arguments);
     }
     function _getUpdatedFields2() {
-        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee0(fieldsWithCitations, bHardRefresh) {
+        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee0(fieldsWithCitations, bHardRefresh, bChangePosition) {
             var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, keysL, htmlCitation, oldContent, newContent, text, bNeedSaveUserInput;
             return _regenerator().w(function(_context0) {
                 while (1) switch (_context0.n) {
@@ -15078,7 +15078,7 @@
                     return _context0.a(3, 7);
 
                   case 2:
-                    if (!(oldContent === newContent)) {
+                    if (!(oldContent === newContent || !bChangePosition)) {
                         _context0.n = 3;
                         break;
                     }
