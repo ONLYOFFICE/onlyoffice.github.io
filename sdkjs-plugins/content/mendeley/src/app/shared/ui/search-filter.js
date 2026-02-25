@@ -76,7 +76,7 @@ SearchFilterComponents.prototype._addEventListeners = function () {
                 if (e.detail.originalEvent) {
                     e.detail.originalEvent.stopPropagation();
                 }
-                self._librarySelectList.openDropdown();
+                // self._librarySelectList.openDropdown();
             }
         }
     });
@@ -168,7 +168,7 @@ SearchFilterComponents.prototype._getSelectedGroups = function () {
     const ids = this._librarySelectList.getSelectedValues();
     if (Array.isArray(ids) === false || ids.length === 0) {
         setTimeout(function () {
-            self._librarySelectList.openDropdown();
+            // self._librarySelectList.openDropdown();
         }, 500);
     }
     if (ids === null || typeof ids === "string") {
