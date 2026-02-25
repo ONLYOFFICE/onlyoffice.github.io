@@ -62,7 +62,7 @@ class CitationDocService {
             PlaceHolderText: "",
         };
 
-        await this.#addContentControl(control);
+        await this.#addContentControl(control, 1);
         await new Promise(function (resolve) {
             window.Asc.plugin.executeMethod(
                 "PasteHtml",
@@ -354,11 +354,14 @@ class CitationDocService {
 
     /**
      * @param {ContentControlProperties} field
+     * @param {1 | 2} [type] - 1 - block, 2 - inline
      * @returns {Promise<void>}
      */
-    #addContentControl(field) {
+    #addContentControl(field, type) {
         return new Promise(function (resolve) {
-            const type = 2; //2 - inline content control
+            if (typeof type !== "number") {
+                type = 2;
+            }
             window.Asc.plugin.executeMethod(
                 "AddContentControl",
                 [type, field],
