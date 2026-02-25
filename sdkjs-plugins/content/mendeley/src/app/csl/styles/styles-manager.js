@@ -48,7 +48,7 @@ function CslStylesManager() {
     this._STYLES_URL = "https://www.zotero.org/styles/";
     this._STYLES_LOCAL = "./resources/csl/styles/";
 
-    this._lastStyleKey = "zoteroStyleId";
+    this._lastStyleKey = "mendStyleId";
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";

@@ -71,18 +71,26 @@
     <div id="content">
         <div id="mainCont" class="flexCol">
             <div id="loginState" class="hidden">
-                <div><span class="i18n">To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span> <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-mendeley/tree/master#configuration" class="link i18n">Learn more here.</a></div>
+                <p class="i18n">This plugin help you search references by author, title or year in your own library</p>
+                <p>
+                    <span class="i18n">To use Mendeley, register this editor as an app. Copy the link and insert it as Redirect URL in the form that will be opened.</span>
+                    <a target="_blank" href="https://github.com/ONLYOFFICE/plugin-mendeley/tree/master#configuration" class="link i18n">Learn more here.</a>
+                </p>
                 <input id="redirectConfig" readonly type="text"  />
                 <button id="redirectUrlCopy" class="i18n" style="margin-top: 12px; width: 100%;">Copy Link and Open Form</button>
-                <div class="i18n">In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</div>
+                <p class="i18n">In the form, enter any application name and description, accept Terms and Conditions and generate a secret. Enter Application ID below and save it.</p>
                 <div class="mrtop label">
                     <span class="i18n">Application ID</span>
                     <input id="appIdField" autocomplete="off" class="i18n" type="text" placeholder="Application ID" />
                 </div>
                 <button id="loginBtn" class="i18n" style="margin-top: 12px; width: 100%;">Login</button>
                 <div id="loginMessage"></div>
-
-                <span class="i18n">This plugin help you search references by author, title or year in your own library</span>
+                <p>
+                    <span class="i18n">Click</span>
+                    <b class="i18n">Unlink citations</b>
+                    <span class="i18n">to replace all active Mendeley citations and Bibliography with plain text.</span>
+                    <span class="i18n"></span>After conversion, citations can no longer be updated.</span>
+                </p>
                 <button id="saveAsTextBtn" class="i18n" style="width: 100%;">Unlink citations</button>
             </div>
             <div id="mainState" class="flexCol flexSize hidden">

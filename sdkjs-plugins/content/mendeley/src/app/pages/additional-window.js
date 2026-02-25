@@ -28,7 +28,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: "Mendeley",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -72,7 +72,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: "Mendeley",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
