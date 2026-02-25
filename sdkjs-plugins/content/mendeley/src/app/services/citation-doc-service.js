@@ -59,13 +59,13 @@ class CitationDocService {
      */
     async addBibliography(text) {
         /** @type {ContentControlProperties} */
-        const field = {
+        const control = {
             Tag: this.#bibPrefix,
             Lock: 3, // can edit
             PlaceHolderText: "",
         };
 
-        await this.#addContentControl(field);
+        await this.#addContentControl(control);
         await new Promise(function (resolve) {
             window.Asc.plugin.executeMethod(
                 "PasteHtml",
@@ -134,11 +134,12 @@ class CitationDocService {
                         const id = control.GetInternalId();
                         const index = Asc.scope.internalIds.indexOf(id);
                         if (index !== -1) {
-                            let text = control.GetRange(0, Number.MAX_SAFE_INTEGER).GetText();
-                            while (text.lastIndexOf("\n") === text.length - 1) {
+                            const range = control.GetRange(0, Number.MAX_SAFE_INTEGER);
+                            let text = range.GetText();
+                            if (text.lastIndexOf("\n") === text.length - 1) {
                                 text = text.slice(0, -1);
                             }
-                            while (text.lastIndexOf("\r") === text.length - 1) {
+                            if (text.lastIndexOf("\r") === text.length - 1) {
                                 text = text.slice(0, -1);
                             }
                             text = text.trim();
@@ -192,7 +193,7 @@ class CitationDocService {
      * @param {Array<ContentControlProperties>} controls
      * @returns {Promise<void>}
      */
-    async updateAddinFields(controls) {
+    async updateContentControls(controls) {
         for (let i = 0; i < controls.length; i++) {
             const id = controls[i].InternalId;
             if (!id) {
@@ -252,7 +253,7 @@ class CitationDocService {
                 continue;
             }
 
-            const selectFieldResult = await this.#selectField(field.InternalId);
+            const selectFieldResult = await this.#selectControl(field.InternalId);
             if (!selectFieldResult) continue;
             const isReferenceSelected = await this.#selectFieldReference();
             if (!isReferenceSelected) continue;
@@ -277,7 +278,7 @@ class CitationDocService {
             const field = fields[i];
             if (!field.InternalId) continue;
 
-            const selectFieldResult = await this.#selectField(field.InternalId);
+            const selectFieldResult = await this.#selectControl(field.InternalId);
             if (!selectFieldResult) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
@@ -289,42 +290,42 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<ContentControlProperties>} fields
+     * @param {Array<ContentControlProperties>} controls
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
-    async convertNotesStyle(fields, notesStyle) {
-        const formats = this.#makeFormattingPositions(fields);
+    async convertNotesStyle(controls, notesStyle) {
+        const formats = this.#makeFormattingPositions(controls);
         /** @type {Array<ContentControlProperties>} */
-        const editedFields = [];
+        const editedControls = [];
 
-        for (let i = 0; i < fields.length; i++) {
-            const field = fields[i];
-            if (!field.InternalId) continue;
+        for (let i = 0; i < controls.length; i++) {
+            const control = controls[i];
+            if (!control.InternalId) continue;
 
-            if (!field.PlaceHolderText) {
+            if (!control.PlaceHolderText) {
                 // save user changes
-                editedFields.push(field);
+                editedControls.push(control);
                 continue;
             }
 
-            const selectFieldResult = await this.#selectField(field.InternalId);
+            const selectFieldResult = await this.#selectControl(control.InternalId);
             if (!selectFieldResult) continue;
             const isReferenceSelected = await this.#selectFieldReference();
             if (!isReferenceSelected) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
-            await this.#addContentControl(field);
-            const formatting = formats.get(field.InternalId);
-            if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
-        }
-
-        if (editedFields.length) {
+            const text = control.PlaceHolderText;
+            control.PlaceHolderText = "";
+            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
+                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+            }
+            await this.#addContentControl(control);
+            
             await new Promise(function (resolve) {
                 window.Asc.plugin.executeMethod(
-                    "UpdateAddinFields",
-                    [editedFields],
+                    "PasteHtml",
+                    [text],
                     resolve,
                 );
             });
@@ -415,19 +416,25 @@ class CitationDocService {
         });
     }
     /**
-     * @param {string} fieldId
+     * @param {string} internalId
      * @returns {Promise<boolean>}
      */
-    #selectField(fieldId) {
-        return new Promise(function (resolve) {
-            const editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003000) {
-                console.error("Cannot select addin field.");
-                console.error("Editor version is less than 9.3.0");
-                resolve(false);
-            }
-            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
-                resolve(true),
+    #selectControl(internalId) {
+        return new Promise((resolve) => {
+            Asc.scope.id = internalId;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const controls = doc.GetAllContentControls();
+                    const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                    if (control) {
+                        return control.Select();
+                    }
+                    return false
+                },
+                false,
+                false,
+                resolve,
             );
         });
     }

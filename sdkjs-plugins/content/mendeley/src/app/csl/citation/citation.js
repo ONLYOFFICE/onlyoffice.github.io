@@ -308,7 +308,7 @@ CSLCitation.prototype.setPlainCitation = function (plainCitation) {
 CSLCitation.prototype.setManualOverride = function (citeprocText, manualOverrideText) {
     let manualOverride = {
         citeprocText: citeprocText,
-        isManuallyOverridden: manualOverrideText ? true : false,
+        isManuallyOverridden: !!manualOverrideText,
         manualOverrideText: manualOverrideText || ""
     };
     this._manualOverride = manualOverride;

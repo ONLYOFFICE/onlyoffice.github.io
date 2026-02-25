@@ -181,8 +181,8 @@ import "../styles.css";
                     Loader.hide();
                     showCitationsAtTheStartFromMyLibrary();
                 }).catch(function (error) {
-                    console.error(error);
                     Loader.hide();
+                    console.error(error.message);
                 });
             });
 
@@ -347,15 +347,6 @@ import "../styles.css";
                 citationService,
                 false
             );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateCslItemsInNotes.bind(
-                    citationService,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
 
             updateFn()
                 .catch(function (error) {

@@ -216,6 +216,8 @@ SettingsPage.prototype.getLastUsedStyleId = function () {
  */
 SettingsPage.prototype.init = function () {
     const self = this;
+    this._cslStylesManager.setRestApiAvailable(true);
+    this._localesManager.setRestApiAvailable(true);
     var lastStyle = this._cslStylesManager.getLastUsedStyleId() || "ieee";
     const savedLang = this._localesManager.getLastUsedLanguage();
     this._addEventListeners();
