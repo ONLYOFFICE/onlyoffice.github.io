@@ -37,7 +37,10 @@
 import { CslStylesStorage } from "./storage";
 import { CslStylesParser } from "./style-parser";
 
-function CslStylesManager() {
+/**
+ * @param {string} lastStyleKey
+ */
+function CslStylesManager(lastStyleKey) {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
 
@@ -48,7 +51,7 @@ function CslStylesManager() {
     this._STYLES_URL = "https://www.zotero.org/styles/";
     this._STYLES_LOCAL = "./resources/csl/styles/";
 
-    this._lastStyleKey = "zoteroStyleId";
+    this._lastStyleKey = lastStyleKey;
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";

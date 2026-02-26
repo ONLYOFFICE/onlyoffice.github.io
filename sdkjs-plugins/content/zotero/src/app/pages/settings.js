@@ -103,7 +103,7 @@ function SettingsPage(router, displayNoneClass) {
         placeholder: "Select language",
     });
 
-    this._cslStylesManager = new CslStylesManager();
+    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
     this._localesManager = new LocalesManager();
 
     /** @type {HTMLElement[]} */
