@@ -75,6 +75,8 @@ function CSLCitation(itemsStartIndex, citationID) {
     this._citationItems = new Array();
     /** @type {Object<string, string|boolean>} */
     this._properties = {};
+    /** @type {Object<string, string|boolean>} */
+    this._manualOverride = {}; // for mendeley
 
     this._schema =
         "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
@@ -87,6 +89,7 @@ function CSLCitation(itemsStartIndex, citationID) {
 CSLCitation.prototype.fillFromObject = function (citationObject) {
     if (
         Object.hasOwnProperty.call(citationObject, "properties") ||
+        Object.hasOwnProperty.call(citationObject, "manualOverride") ||
         Object.hasOwnProperty.call(citationObject, "schema")
     ) {
         return this._fillFromCitationObject(citationObject);
@@ -113,6 +116,9 @@ CSLCitation.prototype._fillFromCitationObject = function (citationObject) {
     }
     if (Object.hasOwnProperty.call(citationObject, "properties")) {
         this._setProperties(citationObject.properties);
+    }
+    if (Object.hasOwnProperty.call(citationObject, "manualOverride")) {
+        this._manualOverride = citationObject.manualOverride;
     }
 
     if (!Object.hasOwnProperty.call(citationObject, "citationItems")) {
@@ -234,6 +240,9 @@ CSLCitation.prototype.getDoNotUpdate = function () {
     if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
         return !!this._properties.dontUpdate;
     }
+    if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
+        return !!this._manualOverride.isManuallyOverridden;
+    }
     return false;
 };
 
@@ -288,6 +297,21 @@ CSLCitation.prototype.setDoNotUpdate = function () {
  */
 CSLCitation.prototype.setPlainCitation = function (plainCitation) {
     this._setProperties({ plainCitation: plainCitation });
+    return this;
+};
+
+/**
+ * @param {string} citeprocText
+ * @param {string} [manualOverrideText]
+ * @returns
+ */
+CSLCitation.prototype.setManualOverride = function (citeprocText, manualOverrideText) {
+    let manualOverride = {
+        citeprocText: citeprocText,
+        isManuallyOverridden: !!manualOverrideText,
+        manualOverrideText: manualOverrideText || ""
+    };
+    this._manualOverride = manualOverride;
     return this;
 };
 
@@ -358,6 +382,9 @@ CSLCitation.prototype.toJSON = function () {
 
     if (this._properties && Object.keys(this._properties).length > 0) {
         result.properties = this._properties;
+    }
+    if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
+        result.manualOverride = this._manualOverride;
     }
 
     if (this._citationItems && this._citationItems.length > 0) {
