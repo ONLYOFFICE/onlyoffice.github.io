@@ -695,6 +695,29 @@ class CitationService {
             !bibField || bibField.FieldId !== field.FieldId
         ).map((field) => {
             let citationObject = this.#extractField(field);
+            if (citationObject && citationObject.citationItems) {
+                citationObject.citationItems.forEach(function (item) {
+                    if (item.uris && item.uris.length) {
+                        let id = item.id;
+                        item.uris.some(/** @param {string} uri */ uri => {
+                            const sign = "?uuid=";
+                            const index = uri.indexOf(sign);
+                            if (index === -1) {
+                                return false;
+                            }
+                            const lastIndex = uri.indexOf("&", index + sign.length);
+                            if (lastIndex === -1) {
+                                id = uri.slice(index + sign.length);
+                                return true;
+                            }
+                            id = uri.slice(index + sign.length, lastIndex);
+                            return true;
+                        });
+                        item.id = id;
+                        item.itemData.id = id;
+                    }
+                });
+            }
             let cslCitation = new CSLCitation(numOfItems);
             numOfItems +=
                 cslCitation.fillFromObject(citationObject);

@@ -33,6 +33,7 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
+/// <reference path="../../../scripts/mendeley-sdk/standalone.min.js" />
 /// <reference path="./types.js" />
 
 import { MendeleyToCls } from "./mendeley-to-csl";
@@ -40,6 +41,7 @@ import { MendeleyToCls } from "./mendeley-to-csl";
 class Sdk {
     /** @param {{authFlow: any}} authFlow */
     constructor(authFlow) {
+        // @ts-ignore
         this._mendeleySdk = MendeleySDK(authFlow);
         this._userId = 0;
         /** @type {Array<UserGroupInfo>}} */
