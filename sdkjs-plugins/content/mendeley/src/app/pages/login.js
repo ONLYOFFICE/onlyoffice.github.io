@@ -109,7 +109,7 @@ class LoginPage {
 
         if (this._mendAppId) {
             this._appIdField.setValue(this._mendAppId);
-            const token = localStorage.getItem("mendToken");
+            const token = this._getToken();
             if (token) {
                 self._hide();
                 Promise.resolve().then(() => {
@@ -132,7 +132,6 @@ class LoginPage {
      * @param {string} [state]
      */
     onAuthCallback(answer, state) {
-        console.log("onAuthCallback");
         if (!state) {
             this._loginMessage.show(translate(answer));
             return false;
@@ -143,7 +142,7 @@ class LoginPage {
             );
             return false;
         }
-        localStorage.setItem("mendToken", answer);
+        this._saveToken(answer);
         this._onAuthorized();
         this._hideLoader();
         this._hide();
@@ -151,13 +150,14 @@ class LoginPage {
     }
 
     getAuthFlow() {
+        const self = this;
         return {
             authenticate: () => {
                 this._show();
                 this._authenticate();
             },
             getToken: function () {
-                return localStorage.getItem("mendToken");
+                return self._getToken();
             },
             refreshToken: function () {
                 return false;
@@ -264,6 +264,21 @@ class LoginPage {
         this._loginBtn.enable();
         this._appIdField.enable();
         //Loader.hide();
+    }
+
+    /** @returns {string | null} */
+    _getToken() {
+        const token =localStorage.getItem("mendToken");
+        const timestamp = localStorage.getItem("mendTokenExpiresAt");
+        if (!token || !timestamp || Date.now() > Number(timestamp)) {
+            return null;
+        }
+        return token;
+    }
+    /** @param {string} token */
+    _saveToken(token) {
+        localStorage.setItem("mendToken", token);
+        localStorage.setItem("mendTokenExpiresAt", String(Date.now() + (60000 * 60))); // 1 hour
     }
 }
 
