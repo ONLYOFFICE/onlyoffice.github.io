@@ -64,11 +64,7 @@ class CitationDocService {
 
         await this.#addContentControl(control, 1);
         await new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod(
-                "PasteHtml",
-                [text],
-                resolve,
-            );
+            window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
         });
     }
 
@@ -81,24 +77,21 @@ class CitationDocService {
     async addCitation(text, value, notesStyle) {
         /** @type {ContentControlProperties} */
         const control = {
-            Tag: this.#citPrefix + "_v3_" + this.#base64Encode(value),
+            Tag: this.#makeContentControlTag(value),
             Lock: 3, // can edit
             PlaceHolderText: "",
         };
+        await this.#addContentControl(control);
         if (
             notesStyle &&
             ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
         ) {
+            await this.#selectCurrentContentControl();
             await this.#addNote(notesStyle);
         }
 
-        await this.#addContentControl(control);
         await new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod(
-                "PasteHtml",
-                [text],
-                resolve,
-            );
+            window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
         });
     }
 
@@ -107,67 +100,98 @@ class CitationDocService {
      * @returns {Promise<Array<ContentControlProperties>>}
      */
     async getAddinMendeleyControls(notesStyle) {
-        const self = this;
-
         try {
-            const arrControls = await self.#getAllContentControls();
-            const filteredFields = [];
+            const arrControls = await this.#getAllContentControls();
+            const filteredControls = [];
             const internalIds = [];
             for (let i = 0; i < arrControls.length; i++) {
-                const field = arrControls[i];
-                const bHasCitPrefix = field.Tag.indexOf(self.#citPrefix) !== -1;
-                const bHasBibPrefix = field.Tag.indexOf(self.#bibPrefix) !== -1;
+                const control = arrControls[i];
+                const bHasCitPrefix =
+                    control.Tag.indexOf(this.#citPrefix) !== -1;
+                const bHasBibPrefix =
+                    control.Tag.indexOf(this.#bibPrefix) !== -1;
                 if (bHasCitPrefix || bHasBibPrefix) {
-                    filteredFields.push(field);
-                    internalIds.push(field.InternalId);
+                    filteredControls.push(control);
+                    internalIds.push(control.InternalId);
                 }
             }
             Asc.scope.internalIds = internalIds;
             Asc.scope.useParagraph = !!notesStyle;
-            const placeholderTexts = await new Promise((resolve) => Asc.plugin.callCommand(
-                () => {
-                    /** @type {string[]} */
-                    const placeholderTexts = [];
-                    const doc = Api.GetDocument();
-                    const controls = doc.GetAllContentControls();
-                    controls.forEach((control) => {
-                        const id = control.GetInternalId();
-                        const index = Asc.scope.internalIds.indexOf(id);
-                        if (index !== -1) {
-                            let element;
-                            if (Asc.scope.useParagraph) {
-                                element = control.GetParentParagraph();
-                            } else {
-                                element = control.GetRange(0, Number.MAX_SAFE_INTEGER);
+            const placeholderTexts = await new Promise((resolve) =>
+                Asc.plugin.callCommand(
+                    () => {
+                        /** @type {string[]} */
+                        const placeholderTexts = [];
+                        const doc = Api.GetDocument();
+                        const controls = doc.GetAllContentControls();
+                        controls.forEach((control) => {
+                            const id = control.GetInternalId();
+                            const index = Asc.scope.internalIds.indexOf(id);
+                            if (index !== -1) {
+                                let element;
+                                if (Asc.scope.useParagraph) {
+                                    element = control.GetParentParagraph();
+                                } else {
+                                    element = control.GetRange(
+                                        0,
+                                        Number.MAX_SAFE_INTEGER,
+                                    );
+                                }
+                                let text = element.GetText();
+                                if (
+                                    text.lastIndexOf("\n") ===
+                                    text.length - 1
+                                ) {
+                                    text = text.slice(0, -1);
+                                }
+                                if (
+                                    text.lastIndexOf("\r") ===
+                                    text.length - 1
+                                ) {
+                                    text = text.slice(0, -1);
+                                }
+                                text = text.trim();
+                                placeholderTexts[index] = text;
                             }
-                            let text = element.GetText();
-                            if (text.lastIndexOf("\n") === text.length - 1) {
-                                text = text.slice(0, -1);
-                            }
-                            if (text.lastIndexOf("\r") === text.length - 1) {
-                                text = text.slice(0, -1);
-                            }
-                            text = text.trim();
-                            placeholderTexts[index] = text;
-                        }
-                    });
-                    return placeholderTexts;
-                },
-                false,
-                false,
-                resolve,
-            ));
-            filteredFields.forEach((field, index) => {
+                        });
+                        return placeholderTexts;
+                    },
+                    false,
+                    false,
+                    resolve,
+                ),
+            );
+            filteredControls.forEach((control, index) => {
                 if (placeholderTexts[index]) {
-                    field.PlaceHolderText = placeholderTexts[index];
+                    control.PlaceHolderText = placeholderTexts[index];
                 }
             });
-            return filteredFields;
+            return filteredControls;
         } catch (e) {
             console.error(e);
             return [];
         }
+    }
 
+    /**
+     * For old version of Mendeley
+     * @returns {Promise<Array<AddinFieldData>>}
+     */
+    async getAddinMendeleyFields() {
+        try {
+            let arrFields = await this.#getAllAddinFields();
+            if (arrFields.length) {
+                arrFields = arrFields.filter(
+                    (control) =>
+                        control.Value.indexOf("CSL_CITATION") === 0 ||
+                        control.Value.indexOf("Mendeley Bibliography") === 0,
+                );
+            }
+            return arrFields;
+        } catch (e) {
+            console.error(e);
+            return [];
+        }
     }
 
     /** @returns {Promise<boolean>} */
@@ -182,7 +206,10 @@ class CitationDocService {
                     if (!controls || controls.length === 0) return;
                     controls.forEach((control) => {
                         const tag = control.GetTag();
-                        if (tag.indexOf(Asc.scope.citPrefix) === 0 || tag.indexOf(Asc.scope.bibPrefix) === 0) {
+                        if (
+                            tag.indexOf(Asc.scope.citPrefix) === 0 ||
+                            tag.indexOf(Asc.scope.bibPrefix) === 0
+                        ) {
                             control.Delete(true);
                         }
                     });
@@ -208,7 +235,7 @@ class CitationDocService {
 
             let tag = controls[i].Tag;
             if (tag.indexOf(this.#bibPrefix) !== 0) {
-                tag = this.#citPrefix + "_v3_" + this.#base64Encode(controls[i].Tag);
+                tag = this.#makeContentControlTag(tag);
             }
             await new Promise((resolve) => {
                 Asc.scope.tag = tag;
@@ -218,7 +245,9 @@ class CitationDocService {
                     () => {
                         const doc = Api.GetDocument();
                         const controls = doc.GetAllContentControls();
-                        const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                        const control = controls.find(
+                            (c) => c.GetInternalId() === Asc.scope.id,
+                        );
                         if (control) {
                             control.SetTag(Asc.scope.tag);
                             if (Asc.scope.placeholderText) {
@@ -245,6 +274,41 @@ class CitationDocService {
     }
 
     /**
+     * When the user upgrades the plugin version, the citations are converted to the new format.
+     * @param {{field: AddinFieldData, newValue: string}[]} fieldsWithCitations
+     * @param {AddinFieldData} [bibField]
+     * @returns {Promise<void>}
+     */
+    async upgradeCslItems(fieldsWithCitations, bibField) {
+        for (let i = 0; i < fieldsWithCitations.length; i++) {
+            const field = fieldsWithCitations[i].field;
+            const newValue = fieldsWithCitations[i].newValue;
+
+            await this.#selectField(field.FieldId);
+            /** @type {ContentControlProperties} */
+            const control = {
+                Tag: this.#makeContentControlTag(newValue),
+                Lock: 3, // can edit
+                PlaceHolderText: "",
+            };
+            await this.#addContentControl(control);
+            await this.#removeFieldWrapper(field.FieldId);
+        }
+        if (bibField) {
+            await this.#selectField(bibField.FieldId);
+            /** @type {ContentControlProperties} */
+            const control = {
+                Tag: this.#bibPrefix,
+                Lock: 3, // can edit
+                PlaceHolderText: "",
+            };
+
+            await this.#addContentControl(control, 1);
+            await this.#removeFieldWrapper(bibField.FieldId);
+        }
+    }
+
+    /**
      * @param {Array<ContentControlProperties>} controls
      * @returns {Promise<void>}
      */
@@ -252,29 +316,27 @@ class CitationDocService {
         for (let i = 0; i < controls.length; i++) {
             const control = controls[i];
             if (!control.InternalId) {
-                console.error("Field id is not defined");
+                console.error("Control id is not defined");
                 continue;
             }
 
-            const selectFieldResult = await this.#selectControl(control.InternalId);
-            if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
+            const selectControlResult = await this.#selectControl(
+                control.InternalId,
+            );
+            if (!selectControlResult) continue;
+            const isReferenceSelected = await this.#selectControlReference();
             if (!isReferenceSelected) continue;
             await this.#removeSuperscript();
             await this.#removeSelectedContent();
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
             if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+                control.Tag = this.#makeContentControlTag(control.Tag);
             }
             await this.#addContentControl(control);
-            
+
             await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "PasteHtml",
-                    [text],
-                    resolve,
-                );
+                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
             });
         }
     }
@@ -289,23 +351,21 @@ class CitationDocService {
             const control = controls[i];
             if (!control.InternalId) continue;
 
-            const selectFieldResult = await this.#selectControl(control.InternalId);
-            if (!selectFieldResult) continue;
+            const selectControlResult = await this.#selectControl(
+                control.InternalId,
+            );
+            if (!selectControlResult) continue;
             await this.#deleteControl(control.InternalId);
             await this.#addNote(notesStyle);
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
             if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+                control.Tag = this.#makeContentControlTag(control.Tag);
             }
             await this.#addContentControl(control);
-            
+
             await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "PasteHtml",
-                    [text],
-                    resolve,
-                );
+                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
             });
         }
     }
@@ -329,42 +389,40 @@ class CitationDocService {
                 continue;
             }
 
-            const selectFieldResult = await this.#selectControl(control.InternalId);
-            if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
+            const selectControlResult = await this.#selectControl(
+                control.InternalId,
+            );
+            if (!selectControlResult) continue;
+            const isReferenceSelected = await this.#selectControlReference();
             if (!isReferenceSelected) continue;
             await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
             if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#citPrefix + "_v3_" + this.#base64Encode(control.Tag);
+                control.Tag = this.#makeContentControlTag(control.Tag);
             }
             await this.#addContentControl(control);
-            
+
             await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "PasteHtml",
-                    [text],
-                    resolve,
-                );
+                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
             });
         }
     }
 
     /**
-     * @param {ContentControlProperties} field
+     * @param {ContentControlProperties} control
      * @param {1 | 2} [type] - 1 - block, 2 - inline
      * @returns {Promise<void>}
      */
-    #addContentControl(field, type) {
+    #addContentControl(control, type) {
         return new Promise(function (resolve) {
             if (typeof type !== "number") {
                 type = 2;
             }
             window.Asc.plugin.executeMethod(
                 "AddContentControl",
-                [type, field],
+                [type, control],
                 resolve,
             );
         });
@@ -388,6 +446,37 @@ class CitationDocService {
                 },
                 false,
                 false,
+                resolve,
+            );
+        });
+    }
+    /**
+     * @returns {Promise<void>}
+     */
+    #selectCurrentContentControl() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const oDocument = Api.GetDocument();
+                    const control = oDocument.GetCurrentContentControl();
+                    control.AddText("");
+                    control.Select();
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+    }
+
+    /**
+     * @returns {Promise<Array<AddinFieldData>>}
+     */
+    #getAllAddinFields() {
+        return new Promise(function (resolve, reject) {
+            window.Asc.plugin.executeMethod(
+                "GetAllAddinFields",
+                undefined,
                 resolve,
             );
         });
@@ -418,11 +507,13 @@ class CitationDocService {
                 () => {
                     const doc = Api.GetDocument();
                     const controls = doc.GetAllContentControls();
-                    const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                    const control = controls.find(
+                        (c) => c.GetInternalId() === Asc.scope.id,
+                    );
                     if (control) {
                         return control.Delete(false);
                     }
-                    return false
+                    return false;
                 },
                 false,
                 false,
@@ -431,6 +522,19 @@ class CitationDocService {
         });
     }
 
+    /**
+     * @param {string} fieldId
+     * @returns {Promise<void>}
+     */
+    #removeFieldWrapper(fieldId) {
+        return new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "RemoveFieldWrapper",
+                [fieldId],
+                resolve,
+            );
+        });
+    }
 
     /** @returns {Promise<void>} */
     #removeSelectedContent() {
@@ -443,6 +547,24 @@ class CitationDocService {
         });
     }
     /**
+     * @param {string} fieldId
+     * @returns {Promise<boolean>}
+     */
+    #selectField(fieldId) {
+        return new Promise(function (resolve) {
+            const editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9003000) {
+                console.error("Cannot select addin field.");
+                console.error("Editor version is less than 9.3.0");
+                resolve(false);
+            }
+            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
+                resolve(true),
+            );
+        });
+    }
+
+    /**
      * @param {string} internalId
      * @returns {Promise<boolean>}
      */
@@ -453,11 +575,13 @@ class CitationDocService {
                 () => {
                     const doc = Api.GetDocument();
                     const controls = doc.GetAllContentControls();
-                    const control = controls.find((c) => c.GetInternalId() === Asc.scope.id);
+                    const control = controls.find(
+                        (c) => c.GetInternalId() === Asc.scope.id,
+                    );
                     if (control) {
                         return control.Select();
                     }
-                    return false
+                    return false;
                 },
                 false,
                 false,
@@ -469,13 +593,13 @@ class CitationDocService {
     /**
      * @returns {Promise<boolean>}
      */
-    #selectFieldReference() {
-        return new Promise(function (resolve) {
+    #selectControlReference() {
+        return new Promise((resolve) => {
             const isCalc = true;
             const isClose = false;
             const editorVersion = window.Asc.scope.editorVersion;
             if (editorVersion && editorVersion < 9003000) {
-                console.error("Cannot select addin field reference.");
+                console.error("Cannot select addin control reference.");
                 console.error("Editor version is less than 9.3.0");
                 resolve(false);
             }
@@ -512,25 +636,28 @@ class CitationDocService {
         });
     }
 
-    /** @param {string} str */
-    #base64Encode(str) {
+    /** @param {string} tagText */
+    #makeContentControlTag(tagText) {
+        let base64String = "";
         if (typeof TextEncoder !== "undefined") {
-            var bytes = new TextEncoder().encode(str);
+            var bytes = new TextEncoder().encode(tagText);
             var binary = "";
             for (var i = 0; i < bytes.length; i++) {
                 binary += String.fromCharCode(bytes[i]);
             }
-            return btoa(binary);
+            base64String = btoa(binary);
+        } else {
+            base64String = btoa(
+                encodeURIComponent(tagText).replace(
+                    /%([0-9A-F]{2})/g,
+                    function (match, p1) {
+                        return String.fromCharCode(parseInt(p1, 16));
+                    },
+                ),
+            );
         }
 
-        return btoa(
-            encodeURIComponent(str).replace(
-                /%([0-9A-F]{2})/g,
-                function (match, p1) {
-                    return String.fromCharCode(parseInt(p1, 16));
-                },
-            ),
-        );
+        return this.#citPrefix + "_v3_" + base64String;
     }
 }
 

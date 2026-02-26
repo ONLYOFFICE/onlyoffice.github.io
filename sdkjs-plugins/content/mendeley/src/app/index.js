@@ -177,12 +177,15 @@ import "../styles.css";
                 isInit = true;
                 Loader.show();
 
-                Promise.all([loadGroups(), settings.init()]).then(function () {
-                    Loader.hide();
-                    showCitationsAtTheStartFromMyLibrary();
-                }).catch(function (error) {
-                    Loader.hide();
+                Promise.all([
+                    loadGroups(), 
+                    settings.init(), 
+                    citationService.checkOldVersion(),
+                    showCitationsAtTheStartFromMyLibrary()
+                ]).catch(function (error) {
                     console.error(error.message);
+                }).finally(function () {
+                    Loader.hide();
                 });
             });
 
@@ -457,6 +460,8 @@ import "../styles.css";
                     await citationService.convertNotesStyle(
                         newState.notesStyle,
                     );
+                } else {
+                    await citationService.updateCslItems(true);
                 }
             } else {
                 await citationService.updateCslItems(true);

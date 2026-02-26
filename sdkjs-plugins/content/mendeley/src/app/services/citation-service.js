@@ -199,45 +199,49 @@ class CitationService {
         }
         return citationObject;
     }
+    /** @param {AddinFieldData} field */
+    #extractField(field) {
+        let citationObject;
+        const citationStartIndex = field.Value.indexOf("{");
+        const citationEndIndex = field.Value.lastIndexOf("}");
+        if (citationStartIndex !== -1) {
+            var citationString = field.Value.slice(
+                citationStartIndex,
+                citationEndIndex + 1,
+            );
+            citationObject = JSON.parse(citationString);
+        }
+        return citationObject;
+    }
     /**
-     * @param {Object} [updatedField]
+     * @param {Object} [updatedControl]
      * @param {"footnotes" | "endnotes"} [notesStyle]
-     * @returns {Promise<{controlsWithCitations: {field: ContentControlProperties, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: ContentControlProperties | undefined}>}
+     * @returns {Promise<{controlsWithCitations: {control: ContentControlProperties, cslCitation: CSLCitation}[], bibControl: ContentControlProperties | undefined}>}
      */
-    #synchronizeStorageWithDocItems(updatedField, notesStyle) {
+    #synchronizeStorageWithDocItems(updatedControl, notesStyle) {
         const self = this;
         return this.citationDocService
             .getAddinMendeleyControls(notesStyle)
-            .then(function (/** @type {ContentControlProperties[]} */ arrFields) {
+            .then(function (/** @type {ContentControlProperties[]} */ arrControls) {
                 let numOfItems = 0;
-                let bibFieldValue = " ";
                 /** @type {ContentControlProperties | undefined} */
-                const bibField = arrFields.find(function (field) {
+                const bibControl = arrControls.find(function (control) {
                     return (
-                        field.Tag.indexOf(self._bibPrefixNew) !== -1
+                        control.Tag.indexOf(self._bibPrefixNew) !== -1
                     );
                 });
-                if (bibField) {
-                    let citationObject = self.#extractControl(bibField);
-                    if (
-                        typeof citationObject === "object" &&
-                        Object.keys(citationObject).length > 0
-                    ) {
-                        bibFieldValue = JSON.stringify(citationObject);
-                    }
-                }
 
-                const fields = arrFields.filter(function (field) {
+                const controls = arrControls.filter(function (control) {
                     return (
-                        field.Tag.indexOf(self._citPrefixNew) !== -1
+                        control.Tag.indexOf(self._citPrefixNew) !== -1
                     );
                 });
-                let controlsWithCitations = fields.map(function (field) {
-                    let citationObject = self.#extractControl(field);
+                let controlsWithCitations = controls.map(function (control) {
+                    let citationObject = self.#extractControl(control);
 
                     let cslCitation = new CSLCitation(numOfItems);
-                    if (updatedField) {
-                        numOfItems += cslCitation.fillFromObject(updatedField);
+                    if (updatedControl) {
+                        numOfItems += cslCitation.fillFromObject(updatedControl);
                     } else {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
@@ -247,14 +251,14 @@ class CitationService {
                         self._storage.set(item.id, item);
                     });
 
-                    return { field: { ...field }, cslCitation: cslCitation };
+                    return { control: { ...control }, cslCitation: cslCitation };
                 });
-                if (updatedField) {
+                if (updatedControl) {
                     controlsWithCitations = controlsWithCitations.filter(
                         function (b) {
                             if (
                                 b.cslCitation.citationID ===
-                                updatedField.citationID
+                                updatedControl.citationID
                             ) {
                                 return true;
                             }
@@ -264,27 +268,24 @@ class CitationService {
                 }
 
                 return {
-                    bibField: bibField,
-                    bibFieldValue: bibFieldValue,
+                    bibControl: bibControl,
                     controlsWithCitations: controlsWithCitations,
                 };
             });
     }
 
     /**
-     * @param {boolean} bNoHaveFields
-     * @param {string} bibFieldValue
+     * @param {boolean} bNoHaveControls
      * @returns
      */
-    #addBibliography(bNoHaveFields, bibFieldValue) {
+    #addBibliography(bNoHaveControls) {
         let bibliography = this.#makeBibliography();
-        if (bNoHaveFields) {
+        if (bNoHaveControls) {
             bibliography = translate(this._bibPlaceholderIfEmpty);
         }
         if (this._cslStylesManager.isLastUsedStyleContainBibliography()) {
             return this.citationDocService.addBibliography(
                 bibliography,
-                bibFieldValue,
             );
         } else {
             throw "The current bibliographic style does not describe the bibliography";
@@ -292,23 +293,23 @@ class CitationService {
     }
 
     /**
-     * @param {boolean} bNoHaveFields
-     * @param {ContentControlProperties} bibField
+     * @param {boolean} bNoHaveControls
+     * @param {ContentControlProperties} bibControl
      * @returns {ContentControlProperties}
      */
-    #updateBibliography(bNoHaveFields, bibField) {
-        if (bNoHaveFields) {
-            bibField.PlaceHolderText = translate(this._bibPlaceholderIfEmpty);
+    #updateBibliography(bNoHaveControls, bibControl) {
+        if (bNoHaveControls) {
+            bibControl.PlaceHolderText = translate(this._bibPlaceholderIfEmpty);
         } else {
             let bibliography = this.#makeBibliography();
-            bibField.PlaceHolderText = bibliography;
+            bibControl.PlaceHolderText = bibliography;
         }
 
-        return bibField;
+        return bibControl;
     }
 
     /**
-     * @param {{field: ContentControlProperties, cslCitation: CSLCitation}[]} controlsWithCitations
+     * @param {{control: ContentControlProperties, cslCitation: CSLCitation}[]} controlsWithCitations
      * @param {boolean} bHardRefresh
      * @param {boolean} [bChangePosition]
      * @returns {Promise<ContentControlProperties[]>}
@@ -322,12 +323,12 @@ class CitationService {
         const updatedControls = [];
 
         for (let i = controlsWithCitations.length - 1; i >= 0; i--) {
-            const { field, cslCitation } = controlsWithCitations[i];
+            const { control, cslCitation } = controlsWithCitations[i];
             let keysL = cslCitation.getInfoForCitationCluster();
             let htmlCitation = this._formatter.makeCitationCluster(keysL);
             htmlCitation = this.#unEscapeHtml(htmlCitation);
             tempElement.innerHTML = htmlCitation;
-            const oldContent = field.PlaceHolderText;
+            const oldContent = control.PlaceHolderText;
             const newContent = tempElement.innerText;
 
             if (cslCitation.getDoNotUpdate()) {
@@ -342,12 +343,11 @@ class CitationService {
                 (oldContent === "null" || oldContent === null)
             ) {
                 console.error("Unable to update footnotes");
-                // TODO: Modify "GetAllAddinFields" method for footnotes
                 bHardRefresh = true;
             }
 
             if (bHardRefresh) {
-                field.PlaceHolderText = htmlCitation;
+                control.PlaceHolderText = htmlCitation;
                 cslCitation.setManualOverride(newContent);
             } else if (oldContent !== newContent) {
                 let text =
@@ -378,18 +378,18 @@ class CitationService {
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setManualOverride(newContent, oldContent);
-                    field.PlaceHolderText = "";
+                    control.PlaceHolderText = "";
                 } else {
-                    field.PlaceHolderText = htmlCitation;
+                    control.PlaceHolderText = htmlCitation;
                     cslCitation.setManualOverride(newContent);
                 }
             }
 
             if (cslCitation) {
-                field.Tag = JSON.stringify(cslCitation.toJSON());
+                control.Tag = JSON.stringify(cslCitation.toJSON());
             }
 
-            updatedControls.push(field);
+            updatedControls.push(control);
         }
 
         return updatedControls;
@@ -496,19 +496,19 @@ class CitationService {
         this._storage.clear();
 
         try {
-            const { controlsWithCitations, bibFieldValue, bibField } =
+            const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems();
-            const bNoHaveFields = controlsWithCitations.length === 0;
+            const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
 
-            if (bibField) {
-                const updatedFields = [
-                    await this.#updateBibliography(bNoHaveFields, bibField),
+            if (bibControl) {
+                const updatedControls = [
+                    await this.#updateBibliography(bNoHaveControls, bibControl),
                 ];
-                return this.citationDocService.updateContentControls(updatedFields);
+                return this.citationDocService.updateContentControls(updatedControls);
             } else {
-                return this.#addBibliography(bNoHaveFields, bibFieldValue);
+                return this.#addBibliography(bNoHaveControls);
             }
         } catch (e) {
             throw e;
@@ -523,14 +523,14 @@ class CitationService {
         this._storage.clear();
 
         try {
-            const { controlsWithCitations, bibField } =
+            const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems();
-            const bNoHaveFields = controlsWithCitations.length === 0;
+            const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
 
             /** @type {ContentControlProperties[]} */
-            let updatedFields = [];
+            let updatedControls = [];
 
             if (typeof bHardRefresh === "undefined") {
                 const format = this._cslStylesManager.getLastUsedFormat();
@@ -539,20 +539,20 @@ class CitationService {
                 }
             }
             if (typeof bHardRefresh === "boolean") {
-                updatedFields = await this.#getUpdatedControls(
+                updatedControls = await this.#getUpdatedControls(
                     controlsWithCitations,
                     bHardRefresh,
                 );
             }
 
-            if (bibField) {
-                updatedFields.push(
-                    await this.#updateBibliography(bNoHaveFields, bibField),
+            if (bibControl) {
+                updatedControls.push(
+                    await this.#updateBibliography(bNoHaveControls, bibControl),
                 );
             }
 
-            if (updatedFields && updatedFields.length) {
-                return this.citationDocService.updateContentControls(updatedFields);
+            if (updatedControls && updatedControls.length) {
+                return this.citationDocService.updateContentControls(updatedControls);
             }
         } catch (e) {
             throw e;
@@ -560,57 +560,26 @@ class CitationService {
     }
     
     /**
-     * @param {Object} updatedField
+     * @param {Object} updatedControl
      * @returns {Promise<void>}
      */
-    async updateItem(updatedField) {
+    async updateItem(updatedControl) {
         this._storage.clear();
 
         try {
             const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(updatedField);
+                await this.#synchronizeStorageWithDocItems(updatedControl);
 
             this.#updateFormatter();
 
             /** @type {ContentControlProperties[]} */
-            let updatedFields = await this.#getUpdatedControls(
+            let updatedControls = await this.#getUpdatedControls(
                 controlsWithCitations,
                 true,
             );
 
-            if (updatedFields && updatedFields.length) {
-                return this.citationDocService.updateContentControls(updatedFields);
-            }
-        } catch (e) {
-            throw e;
-        }
-    }
-    /**
-     * // it is a crutch, because "SelectAddinField" does not work with notes
-     * @param {Object} updatedField
-     * @param {"footnotes" | "endnotes"} notesStyle
-     * @returns {Promise<void>}
-     */
-    async updateItemInNotes(updatedField, notesStyle) {
-        this._storage.clear();
-
-        try {
-            const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(updatedField);
-
-            this.#updateFormatter();
-
-            /** @type {ContentControlProperties[]} */
-            let updatedFields = await this.#getUpdatedControls(
-                controlsWithCitations,
-                true,
-            );
-
-            if (updatedFields && updatedFields.length) {
-                await this.citationDocService.convertNotesStyle(
-                    updatedFields,
-                    notesStyle,
-                );
+            if (updatedControls && updatedControls.length) {
+                return this.citationDocService.updateContentControls(updatedControls);
             }
         } catch (e) {
             throw e;
@@ -634,36 +603,36 @@ class CitationService {
         this._storage.clear();
 
         try {
-            const { controlsWithCitations, bibField } =
+            const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems();
-            const bNoHaveFields = controlsWithCitations.length === 0;
+            const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
 
             /** @type {ContentControlProperties[]} */
-            let updatedFields = await this.#getUpdatedControls(
+            let updatedControls = await this.#getUpdatedControls(
                 controlsWithCitations,
                 true,
             );
 
-            if (updatedFields && updatedFields.length) {
+            if (updatedControls && updatedControls.length) {
                 if (notesStyle) {
                     await this.citationDocService.convertTextToNotes(
-                        updatedFields,
+                        updatedControls,
                         notesStyle,
                     );
                 } else {
                     await this.citationDocService.convertNotesToText(
-                        updatedFields,
+                        updatedControls,
                     );
                 }
             }
 
-            if (bibField) {
-                const bibFields = [
-                    await this.#updateBibliography(bNoHaveFields, bibField),
+            if (bibControl) {
+                const bibControls = [
+                    await this.#updateBibliography(bNoHaveControls, bibControl),
                 ];
-                await this.citationDocService.updateContentControls(bibFields);
+                await this.citationDocService.updateContentControls(bibControls);
             }
         } catch (e) {
             throw e;
@@ -692,20 +661,91 @@ class CitationService {
             this.#updateFormatter();
 
             /** @type {ContentControlProperties[]} */
-            let updatedFields = await this.#getUpdatedControls(
+            let updatedControls = await this.#getUpdatedControls(
                 controlsWithCitations,
                 false,
                 true
             );
-            if (!updatedFields || !updatedFields.length) return;
+            if (!updatedControls || !updatedControls.length) return;
 
             await this.citationDocService.convertNotesStyle(
-                updatedFields,
+                updatedControls,
                 notesStyle,
             );
         } catch (e) {
             throw e;
         }
+    }
+    /**
+     * @param {AddinFieldData[]} arrFields
+     * @returns {Promise<{fieldsWithCitations: {field: AddinFieldData, cslCitation: CSLCitation}[], bibField: AddinFieldData | undefined}>}
+     */
+    async #synchronizeStorageBeforeUpgrade(arrFields) {
+        const self = this;
+        this._storage.clear();
+
+        let numOfItems = 0;
+
+        /** @type {AddinFieldData | undefined} */
+        const bibField = arrFields.find((field) => 
+            field.Value.indexOf("Mendeley Bibliography") === 0
+        );
+
+        let fieldsWithCitations = arrFields.filter((field) => 
+            !bibField || bibField.FieldId !== field.FieldId
+        ).map((field) => {
+            let citationObject = this.#extractField(field);
+            let cslCitation = new CSLCitation(numOfItems);
+            numOfItems +=
+                cslCitation.fillFromObject(citationObject);
+            cslCitation.setManualOverride(field.Content);
+
+            cslCitation.getCitationItems().forEach(function (item) {
+                self._storage.set(item.id, item);
+            });
+
+            return { field: { ...field }, cslCitation: cslCitation };
+        });
+
+        return {
+            bibField: bibField,
+            fieldsWithCitations: fieldsWithCitations,
+        };
+    }
+
+    /**
+     * @returns {Promise<boolean>}
+     */
+    async checkOldVersion() {
+        let isOk = true;
+        let fields = await this.citationDocService.getAddinMendeleyFields();
+        if (fields.length) {
+            isOk = false;
+        }
+        if (isOk) {
+            return false;
+        }
+
+        const isUserAgree = await this.#additionalWindow.show(
+            "Update this document",
+            "<p class='i18n'>" + translate("Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.") + "</p>" +
+            "<p class='i18n'>" + translate("Rest assured nothing has happened to your document or your citations.") + "</p>" +
+            "<p class='i18n'>" + translate("Press continue to be guided through the update process.") + "</p>",
+        );
+
+        if (isUserAgree) {
+            const { fieldsWithCitations, bibField } =await this.#synchronizeStorageBeforeUpgrade(fields);
+            const infoForUpgrade = fieldsWithCitations.map((field) => {
+                return {
+                    field: field.field,
+                    newValue: JSON.stringify(field.cslCitation.toJSON())
+                };
+            })
+            this.citationDocService.upgradeCslItems(infoForUpgrade, bibField);
+        } else {
+            Asc.plugin.executeCommand("close", "");
+        }
+        return isUserAgree;
     }
 
 }
