@@ -117,12 +117,16 @@ class AdditionalWindow {
     /**
      * @param {string} description
      * @param {string} text
+     * @param {"default" | "warning" | "success"} [type]
      */
-    showWarningWindow(description, text) {
+    showInfoWindow(description, text, type) {
+        if (typeof type !== "string") {
+            type = "warning";
+        }
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: "Mendeley",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -141,7 +145,7 @@ class AdditionalWindow {
             isInsideMode: false,
         };
 
-        this.#onShow(variation, window.Asc.plugin.tr(text), "warning");
+        this.#onShow(variation, window.Asc.plugin.tr(text), type);
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
@@ -179,6 +183,8 @@ class AdditionalWindow {
         this.#window.attachEvent("onWindowReady", () => {
             if (type === "warning") {
                 this.#window?.command("onWarning", content);
+            } else if (type === "success") {
+                this.#window?.command("onSuccess", content);
             } else {
                 this.#window?.command("onAttachedContent", content);
             }
