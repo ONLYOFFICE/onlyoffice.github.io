@@ -22,4 +22,4 @@
 
 ## 1.0.5
 
-* Update base URL for the API.
+* Switched LanguageTool API base URL to the new endpoint.
