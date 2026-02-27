@@ -485,5 +485,6 @@ type WordMethodReturn<T extends WordMethodName> =
     }
 
     export {
-        ContentControlProperties
+        ContentControlProperties,
+        AddinFieldData
     }
