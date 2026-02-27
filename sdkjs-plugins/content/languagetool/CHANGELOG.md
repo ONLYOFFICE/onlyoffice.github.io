@@ -19,3 +19,7 @@
 ## 1.0.4
 
 * Update jquery version.
+
+## 1.0.5
+
+* Update base URL for the API.
