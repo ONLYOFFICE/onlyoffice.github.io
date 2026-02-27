@@ -19,3 +19,7 @@
 ## 1.0.4
 
 * Update jquery version.
+
+## 1.0.5
+
+* Switched LanguageTool API base URL to the new endpoint.
