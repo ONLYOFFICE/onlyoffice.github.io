@@ -353,6 +353,16 @@ class CitationDocService {
         return formats;
     }
 
+    /**
+     * @param {string} html
+     * @returns {Promise<void>}
+     */
+    #pasteHtml(html) {
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
+        });
+    }
+
     /** @returns {Promise<void>} */
     #removeSelectedContent() {
         return new Promise((resolve) => {

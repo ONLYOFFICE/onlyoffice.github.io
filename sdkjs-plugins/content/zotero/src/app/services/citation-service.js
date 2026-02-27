@@ -48,6 +48,7 @@ import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
 
 class CitationService {
+    /** @type {AdditionalWindow} */
     #additionalWindow;
 
     /**
@@ -509,8 +510,16 @@ class CitationService {
     /**
      * @returns {Promise<boolean>}
      */
-    saveAsText() {
-        return this.citationDocService.saveAsText();
+    async saveAsText() {
+        const isOk = await this.citationDocService.saveAsText();
+        if (isOk) {
+            this.#additionalWindow.showInfoWindow(
+                "Success!",
+                "All active Mendeley citations and Bibliography have been replaced.",
+                "success",
+            );
+        }
+        return isOk;
     }
 
     /**
@@ -618,9 +627,10 @@ class CitationService {
     async updateCslItemsInNotes(notesStyle) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showWarningWindow(
+            await this.#additionalWindow.showInfoWindow(
                 "Something went wrong",
                 "Update your editor to use this feature.",
+                "warning",
             );
             return;
         }
@@ -723,9 +733,10 @@ class CitationService {
     async switchingBetweenNotesAndText(notesStyle) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showWarningWindow(
+            await this.#additionalWindow.showInfoWindow(
                 "Something went wrong",
                 "Update your editor to use this feature.",
+                "warning",
             );
             return;
         }
@@ -776,9 +787,10 @@ class CitationService {
     async convertNotesStyle(notesStyle) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showWarningWindow(
+            await this.#additionalWindow.showInfoWindow(
                 "Something went wrong",
                 "Update your editor to use this feature.",
+                "warning",
             );
             return;
         }
