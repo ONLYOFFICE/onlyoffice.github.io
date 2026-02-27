@@ -63,10 +63,6 @@ function SettingsPage(router, displayNoneClass) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
 
-    this._openSettingsBtn = new Button("settingsBtn", {
-        variant: "icon-only",
-        size: "small",
-    });
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
     });
@@ -256,12 +252,6 @@ SettingsPage.prototype.setRestApiAvailable = function (isAvailable) {
 SettingsPage.prototype._addEventListeners = function () {
     const self = this;
 
-    this._openSettingsBtn.subscribe(function (event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._show();
-    });
     this._saveBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
@@ -446,7 +436,7 @@ SettingsPage.prototype._hide = function () {
     this._router.openMain();
 };
 
-SettingsPage.prototype._show = function () {
+SettingsPage.prototype.show = function () {
     this._stateSettings = {
         language: this._localesManager.getLastUsedLanguage(),
         style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),

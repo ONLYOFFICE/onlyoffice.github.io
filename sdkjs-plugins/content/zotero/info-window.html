@@ -92,6 +92,22 @@
 					image + '<p class="i18n">' + warningText + '</p></div>'   
 				mainContainer.innerHTML = text;
 				mainContainer.classList.add("warning");
+				
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
+			}
+		);
+		window.Asc.plugin.attachEvent(
+			"onSuccess",
+			(/** @type {string} */ successText) => {
+				const image = '<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">' + 
+					'<circle cx="22" cy="22" r="22" fill="#9EBA3D"/>' +
+					'<path d="M12.9162 23.331L10 26.2472L17.4987 36.2455L34.1625 12.9162L31.2463 10L17.4987 27.497L12.9162 23.331Z" fill="white"/>' +
+					'</svg>';
+				const text =  '<div id="warning_text" class="noselect">' +
+					image + '<p class="i18n">' + successText + '</p></div>'   
+				mainContainer.innerHTML = text;
+				mainContainer.classList.add("warning");
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			}
 		);
 

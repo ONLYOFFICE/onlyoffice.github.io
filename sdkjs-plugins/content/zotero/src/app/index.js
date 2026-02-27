@@ -92,6 +92,8 @@ import "../styles.css";
     /** @type {Button} */
     var insertLinkBtn;
     /** @type {Button} */
+    let openSettingsBtn;
+    /** @type {Button} */ 
     var insertBibBtn;
     /** @type {Button} */
     var refreshBtn;
@@ -120,6 +122,10 @@ import "../styles.css";
         });
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
+        });
+        openSettingsBtn = new Button("settingsBtn", {
+            variant: "icon-only",
+            size: "small",
         });
         insertBibBtn = new Button("insertBibBtn", {
             variant: "secondary",
@@ -418,6 +424,13 @@ import "../styles.css";
                 });
         });
 
+        openSettingsBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            settings.show();
+        });
+
         saveAsTextBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;
@@ -445,6 +458,8 @@ import "../styles.css";
                     await citationService.convertNotesStyle(
                         newState.notesStyle,
                     );
+                } else {
+                    await citationService.updateCslItems(true);
                 }
             } else {
                 await citationService.updateCslItems(true);
