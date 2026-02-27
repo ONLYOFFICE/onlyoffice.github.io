@@ -151,21 +151,21 @@ class CitationDocService {
                 window.Asc.plugin.executeCommand("close", "");
                 return false;
             }
-
-            return new Promise(function (resolve) {
-                arrFields.forEach(function (field) {
+            const promises = arrFields.map(function (field) {
+                return new Promise(function (resolve) {
                     window.Asc.plugin.executeMethod(
                         "RemoveFieldWrapper",
                         [field.FieldId],
-                        function () {
-                            count--;
-                            if (!count) {
-                                resolve(true);
-                                window.Asc.plugin.executeCommand("close", "");
-                            }
-                        }
+                        resolve,
                     );
                 });
+            });
+            return Promise.all(promises).then(() => {
+                window.Asc.plugin.executeCommand("close","");
+                return true;
+            }).catch(e => {
+                console.error(e);
+                return false;
             });
         });
     }
@@ -219,9 +219,7 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
     }
 
@@ -244,9 +242,7 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
     }
 
@@ -264,7 +260,8 @@ class CitationDocService {
             const field = fields[i];
             if (!field.FieldId) continue;
 
-            if (!field.Content) { // save user changes
+            if (!field.Content) {
+                // save user changes
                 editedFields.push(field);
                 continue;
             }
@@ -278,9 +275,7 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(
-                formatting.formatting,
-            );
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
 
         if (editedFields.length) {
@@ -348,7 +343,7 @@ class CitationDocService {
         fields.forEach(function (field) {
             if (!field.Content) return;
             const formattingPositions = CslHtmlParser.parseHtmlFormatting(
-                field.Content
+                field.Content,
             );
             field.Content = formattingPositions.text;
             if (formattingPositions.formatting.length && field.FieldId) {
@@ -380,10 +375,8 @@ class CitationDocService {
                 console.error("Editor version is less than 9.3.0");
                 resolve(false);
             }
-            window.Asc.plugin.executeMethod(
-                "SelectAddinField",
-                [fieldId],
-                () => resolve(true),
+            window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
+                resolve(true),
             );
         });
     }
@@ -433,7 +426,6 @@ class CitationDocService {
             );
         });
     }
-
 }
 
 export { CitationDocService };
