@@ -2,18 +2,15 @@ import type { ApiCell } from "./src/generated/cell";
 import type { ApiSlide } from "./src/generated/slide";
 import type { ApiWord } from "./src/generated/word";
 
-export { ApiCell, ApiSlide, ApiWord };
+import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 
-export type ApiForEditor<T extends EditorType> =
-    T extends "cell" ? ApiCell :
-    T extends "slide" ? ApiSlide :
-    T extends "word" ? ApiWord :
-    never;
+
 
 declare global {
     interface Window {
         Asc: Asc;
     }
+    var Asc: Asc;
     /** Available inside callCommand callback - editor API for current editor type */
     var Api: ApiWord & ApiCell & ApiSlide;
 }
@@ -22,29 +19,38 @@ export {};
 
 interface Asc {
     plugin: AscPlugin;
-    scope: Object;
-    PluginWindow: Function;
+    scope: Object<any>;
+    PluginWindow: new () => PluginWindow;
 }
 
 interface AscPlugin {
     attachEvent: (eventName: string, callback: (event: any) => void) => void;
     button: (id: number, text: string) => void;
-    callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: () => void) => void;
+    callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
     detachEvent: (eventName: string) => void;
-    executeMethod: (methodName: string, args?: unknown[] | null, callback?: (result: unknown) => void) => void;
-    executeMethodAsync: (methodName: string, args?: unknown[], callback?: (result: unknown) => void) => void;
+    executeMethod: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
+    executeMethodAsync: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
-    onThemeChanged: (theme: Theme) => void;
-    onThemeChangedBase: (theme: Theme) => void;
+    onThemeChanged: (theme: AscTheme) => void;
+    onThemeChangedBase: (theme: AscTheme) => void;
     onTranslate(): any;
     resizeWindow: (width: number, height: number) => void;
     sendEvent: (eventName: string, eventData?: unknown) => void;
     sendToPlugin(message: string, payload?: any): void;
-    theme: Theme;
+    theme: AscTheme;
     tr: (key: string) => string;
     trigger: (eventName: string, eventData?: unknown) => void;
+}
+
+interface PluginWindow {
+    id: string;
+    show: (variation: any) => void;
+    close: () => void;
+    attachEvent: (eventName: string, callback: (event: any) => void) => void;
+    // detachEvent: (eventName: string) => void;
+    command: (methodName: string, payload?: any) => void;
 }
 
 interface ExecuteCommandCallback {
@@ -52,7 +58,7 @@ interface ExecuteCommandCallback {
 }
 
 interface ButtonConfig {
-    isviewer?: boolean;
+    isViewer?: boolean;
     primary?: boolean;
     text: string;
     textLocale?: Record<string, string>;
@@ -81,7 +87,7 @@ interface PluginInfo {
     isViewMode: boolean;
     jwt: string;
     lang: string;
-    theme: Theme;
+    theme: AscTheme;
     userId: string;
     userName: string;
 }
@@ -99,7 +105,7 @@ interface StoreConfig {
     screenshots?: string[];
 }
 
-interface Theme {
+interface AscTheme {
     /** Theme name */
     Name: string;
     /** Theme name (duplicate for compatibility) */
@@ -632,33 +638,33 @@ interface Theme {
 
 interface VariationConfig {
     buttons: ButtonConfig[];
-    cryptoDisabledForExternalCloud: string;
-    cryptoDisabledForInternalCloud: string;
-    cryptoDisabledOnStart: string;
-    cryptoMode: string;
+    cryptoDisabledForExternalCloud?: string;
+    cryptoDisabledForInternalCloud?: string;
+    cryptoDisabledOnStart?: string;
+    cryptoMode?: string;
     description: string;
-    descriptionLocale: Record<string, string>;
+    descriptionLocale?: Record<string, string>;
     EditorsSupport: EditorType[];
-    events: string[];
-    icons: string;
+    events?: string[];
+    icons?: string;
     icons2?: IconConfig[];
-    initData: string;
-    initDataType: InitDataType;
-    initOnSelectionChanged: boolean;
-    isCustomWindow: boolean;
-    isDisplayedInViewer: boolean;
-    isInsideMode: boolean;
-    isModal: boolean;
-    isSystem: boolean;
-    isUpdateOleOnResize: boolean;
-    isViewer: boolean;
+    initData?: string;
+    initDataType?: InitDataType;
+    initOnSelectionChanged?: boolean;
+    isCustomWindow?: boolean;
+    isDisplayedInViewer?: boolean;
+    isInsideMode?: boolean;
+    isModal?: boolean;
+    isSystem?: boolean;
+    isUpdateOleOnResize?: boolean;
+    isViewer?: boolean;
     isVisual: boolean;
-    menu: MenuType;
+    menu?: MenuType;
     name: string;
-    nameLocale: Record<string, string>;
+    nameLocale?: Record<string, string>;
     size: [number, number];
-    store: StoreConfig;
-    type: VariationType;
+    store?: StoreConfig;
+    type?: VariationType;
     url: string;
 }
 
@@ -666,6 +672,13 @@ type VariationType = 'window' | 'panel' | 'panelRight' | 'background' | 'system'
 
 export type {
     EditorType,
-    Theme,
+    AscTheme,
     VariationConfig,
+    PluginWindow
 };
+
+export type Api<T extends EditorType> =
+    T extends "cell" ? ApiCell :
+    T extends "slide" ? ApiSlide :
+    T extends "word" ? ApiWord :
+    never;
