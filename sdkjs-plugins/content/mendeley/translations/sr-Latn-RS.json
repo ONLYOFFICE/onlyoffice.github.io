@@ -62,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "Prikazujete najnovije izmenjene predmete, koristite pretraživanje da vidite druge predmete.",
     "Replace all active Mendeley citations and Bibliography failed": "Zameni sve aktivne reference i bibliografiju sa tekstom.",
     "Success!": "Uspešno!",
-    "All active Mendeley citations and Bibliography have been replaced.": "Sve aktivne reference i bibliografija su zamenjene."
+    "All active Mendeley citations and Bibliography have been replaced.": "Sve aktivne reference i bibliografija su zamenjene.",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "Postojeće reference kreirane pomoću dodatka za Mendeley Desktop su izgrađene pomoću starog tehnologija koja nije kompatibilna sa Mendeley Cite. Ove reference moraju biti ažurirane kako bi počeli raditi s Mendeley Cite.",
+    "Rest assured nothing has happened to your document or your citations.": "Molimo vas da se ne bavešte, vaš dokument ili reference nisu promenjeni.",
+    "Press continue to be guided through the update process.": "Pritisnite Nastavi kako biste bili vodjeni kroz proces ažuriranja.",
+    "Your document has been updated to use Mendeley Cite.": "Vaš dokument je ažuriran kako bi koristio Mendeley Cite.",
+    "Please select the citation style and language for future citation formatting.": "Izaberite stil i jezik za buduću formatiranje reference."
 }

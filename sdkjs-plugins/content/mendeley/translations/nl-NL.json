@@ -62,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "U ziet de meest recent bewerkte items, gebruik de zoekopdracht om andere items te zien.",
     "Replace all active Mendeley citations and Bibliography failed": "Deze actieve Mendeley-citaten en bibliografie kunnen niet worden vervangen",
     "Success!": "Gelukt!",
-    "All active Mendeley citations and Bibliography have been replaced.": "Alle actieve Mendeley-citaten en bibliografie zijn vervangen."
+    "All active Mendeley citations and Bibliography have been replaced.": "Alle actieve Mendeley-citaten en bibliografie zijn vervangen.",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "Bestaande citaten die met de Mendeley Desktop-plugin zijn gemaakt, zijn met een oude technologie gemaakt die niet compatibel is met Mendeley Cite. Deze citaten moeten worden bijgewerkt om te werken met Mendeley Cite.",
+    "Rest assured nothing has happened to your document or your citations.": "Uw document of uw citaten zijn niet veranderd.",
+    "Press continue to be guided through the update process.": "Druk op doorgaan om door de updateproces te leiden.",
+    "Your document has been updated to use Mendeley Cite.": "Uw document is bijgewerkt om Mendeley Cite te gebruiken.",
+    "Please select the citation style and language for future citation formatting.": "Selecteer de citaatstijl en taal voor toekomstige citaatformatie."
 }

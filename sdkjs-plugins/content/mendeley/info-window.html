@@ -92,6 +92,8 @@
 					image + '<p class="i18n">' + warningText + '</p></div>'   
 				mainContainer.innerHTML = text;
 				mainContainer.classList.add("warning");
+				
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			}
 		);
 		window.Asc.plugin.attachEvent(
@@ -105,6 +107,7 @@
 					image + '<p class="i18n">' + successText + '</p></div>'   
 				mainContainer.innerHTML = text;
 				mainContainer.classList.add("warning");
+				window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
 			}
 		);
 

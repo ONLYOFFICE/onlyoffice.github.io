@@ -97,6 +97,8 @@ import "../styles.css";
     /** @type {Button} */
     let insertLinkBtn;
     /** @type {Button} */
+    let openSettingsBtn;
+    /** @type {Button} */ 
     let insertBibBtn;
     /** @type {Button} */
     let refreshBtn;
@@ -125,6 +127,10 @@ import "../styles.css";
         });
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
+        });
+        openSettingsBtn = new Button("settingsBtn", {
+            variant: "icon-only",
+            size: "small",
         });
         insertBibBtn = new Button("insertBibBtn", {
             variant: "secondary",
@@ -182,7 +188,11 @@ import "../styles.css";
                     settings.init(), 
                     citationService.checkOldVersion(),
                     showCitationsAtTheStartFromMyLibrary()
-                ]).catch(function (error) {
+                ]).then(function ([g, s, isUpdateOldVersion, c]) {
+                    if (isUpdateOldVersion) {
+                        settings.show();
+                    }
+                }).catch(function (error) {
                     console.error(error.message);
                 }).finally(function () {
                     Loader.hide();
@@ -431,6 +441,13 @@ import "../styles.css";
                     hideLoader();
                     CursorService.setCursorPosition(cursorPos);
                 });
+        });
+        
+        openSettingsBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            settings.show();
         });
 
         saveAsTextBtn.subscribe(function (event) {

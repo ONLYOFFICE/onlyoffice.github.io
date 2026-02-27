@@ -62,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "Për të parandaluar përditësimet e ardhshme, përdor pretrazim për të vrapur të tjetër.",
     "Replace all active Mendeley citations and Bibliography failed": "Zamena të gjitha citimeve aktive të Mendeley dhe bibliografije nuk arrit",
     "Success!": "Mundësuar!",
-    "All active Mendeley citations and Bibliography have been replaced.": "Të gjitha citimeve aktive të Mendeley dhe bibliografije janë zamenjua"
+    "All active Mendeley citations and Bibliography have been replaced.": "Të gjitha citimeve aktive të Mendeley dhe bibliografije janë zamenjua",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "Existem citasionet e vjetruara që janë të vjetruara me një teknologji e vjetruare që nuk është i përputhur me Mendeley Cite. Këto citasionet janë të detyruar për të përdorur Mendeley Cite.",
+    "Rest assured nothing has happened to your document or your citations.": "Ju lutem po vraponi për të parandaluar përditësimet e ardhshme, përdor pretrazim për të vrapur të tjetër.",
+    "Press continue to be guided through the update process.": "Shtypni vazhdoni për të qenë i udhëzuar nëpërmjet procesit të përditësimit.",
+    "Your document has been updated to use Mendeley Cite.": "Dokumenti juaj është përditësuar për të përdorur Mendeley Cite.",
+    "Please select the citation style and language for future citation formatting.": "Ju lutem zgjidhni stilin e citimit dhe gjuhën për formatimin e ardhshëm të citimeve."
 }

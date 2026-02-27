@@ -764,7 +764,13 @@ class CitationService {
                     newValue: JSON.stringify(field.cslCitation.toJSON())
                 };
             })
-            this.citationDocService.upgradeCslItems(infoForUpgrade, bibField);
+            await this.citationDocService.upgradeCslItems(infoForUpgrade, bibField);
+            this.#additionalWindow.showInfoWindow(
+                "Update complete",
+                translate("Your document has been updated to use Mendeley Cite.") + " " +
+                translate("Please select the citation style and language for future citation formatting."),
+                "success"
+            );
         } else {
             Asc.plugin.executeCommand("close", "");
         }

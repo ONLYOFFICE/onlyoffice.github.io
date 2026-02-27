@@ -48,6 +48,7 @@
     "Search in": "搜索",
     "Search in:": "搜索:",
     "Loading...": "載入中...",
+    "Saving custom edits": "保存自定义编辑",
     "Original:": "原始:",
     "Modified:": "修改:",
     "You have modified this citation since Mendeley generated it. Do you want to keep your modifications and prevent future updates?": "您已修改這個引用，因為 Mendeley 產生了它。您想保留您的修改並防止未來更新嗎?",
@@ -61,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "您正在查看最近编辑的项目，使用搜索查看其他项目。",
     "Replace all active Mendeley citations and Bibliography failed": "替换所有活动的 Mendeley 引用和参考文献失败",
     "Success!": "成功！",
-    "All active Mendeley citations and Bibliography have been replaced.": "所有活动的 Mendeley 引用和参考文献已替换。"
+    "All active Mendeley citations and Bibliography have been replaced.": "所有活动的 Mendeley 引用和参考文献已替换。",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "使用 Mendeley 桌面插件创建的引用使用旧技术构建，不与 Mendeley Cite 兼容。这些引用必须更新以开始使用 Mendeley Cite。",
+    "Rest assured nothing has happened to your document or your citations.": "请放心，您的文档或引用没有发生任何变化。",
+    "Press continue to be guided through the update process.": "按继续开始更新过程。",
+    "Your document has been updated to use Mendeley Cite.": "您的文档已更新为使用 Mendeley Cite。",
+    "Please select the citation style and language for future citation formatting.": "请选择引用样式和语言以用于未来的引用格式。"
 }

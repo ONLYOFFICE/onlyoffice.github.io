@@ -62,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "最も最近編集された項目を表示しています。他の項目を表示するには、検索を使用してください。",
     "Replace all active Mendeley citations and Bibliography failed": "すべてのアクティブなMendeley引用と参考文献の置き換えに失敗しました",
     "Success!": "成功しました",
-    "All active Mendeley citations and Bibliography have been replaced.": "すべてのアクティブなMendeley引用と参考文献が置き換えられました。"
+    "All active Mendeley citations and Bibliography have been replaced.": "すべてのアクティブなMendeley引用と参考文献が置き換えられました。",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "既存の引用は、Mendeley Citeを使用するには更新する必要があります。",
+    "Rest assured nothing has happened to your document or your citations.": "あなたの文書や引用は変更されていません。",
+    "Press continue to be guided through the update process.": "更新プロセスをガイドするには、続行してください。",
+    "Your document has been updated to use Mendeley Cite.": "あなたの文書はMendeley Citeを使用するように更新されました。",
+    "Please select the citation style and language for future citation formatting.": "将来的な引用フォーマットを選択してください。"
 }

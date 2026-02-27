@@ -62,5 +62,10 @@
     "You are viewing the most recently edited items, use the search to see others.": "Você está visualizando os itens mais recentemente editados, use a pesquisa para ver outros.",
     "Replace all active Mendeley citations and Bibliography failed": "Substituição de todas as citações ativas do Mendeley e bibliografia falhou",
     "Success!": "Sucesso!",
-    "All active Mendeley citations and Bibliography have been replaced.": "Todas as citações ativas do Mendeley e bibliografia foram substituídas."
+    "All active Mendeley citations and Bibliography have been replaced.": "Todas as citações ativas do Mendeley e bibliografia foram substituídas.",
+    "Existing citations created with the Mendeley Desktop plugin are built using an old technology that is not compatible with Mendeley Cite. These citations have to be updated to start working with Mendeley Cite.": "Existem citações existentes criadas com o plugin Mendeley Desktop que são construídas usando uma tecnologia antiga que não é compatível com Mendeley Cite. Essas citações devem ser atualizadas para começar a funcionar com Mendeley Cite.",
+    "Rest assured nothing has happened to your document or your citations.": "Não se preocupe, nada aconteceu com seu documento ou suas citações.",
+    "Press continue to be guided through the update process.": "Pressione continuar para ser guiado pelo processo de atualização.",
+    "Your document has been updated to use Mendeley Cite.": "Seu documento foi atualizado para usar Mendeley Cite.",
+    "Please select the citation style and language for future citation formatting.": "Por favor, selecione o estilo e o idioma para o formatação de citações futuras."
 }
