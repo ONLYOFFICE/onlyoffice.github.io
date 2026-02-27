@@ -63,9 +63,7 @@ class CitationDocService {
         };
 
         await this.#addContentControl(control, 1);
-        await new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
-        });
+        await this.#pasteHtml(text);
     }
 
     /**
@@ -90,9 +88,7 @@ class CitationDocService {
             await this.#addNote(notesStyle);
         }
 
-        await new Promise(function (resolve) {
-            window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
-        });
+        await this.#pasteHtml(text);
     }
 
     /**
@@ -335,9 +331,7 @@ class CitationDocService {
             }
             await this.#addContentControl(control);
 
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
-            });
+            await this.#pasteHtml(text);
         }
     }
 
@@ -364,9 +358,7 @@ class CitationDocService {
             }
             await this.#addContentControl(control);
 
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
-            });
+            await this.#pasteHtml(text);
         }
     }
 
@@ -404,9 +396,7 @@ class CitationDocService {
             }
             await this.#addContentControl(control);
 
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod("PasteHtml", [text], resolve);
-            });
+            await this.#pasteHtml(text);
         }
     }
 
@@ -519,6 +509,16 @@ class CitationDocService {
                 false,
                 resolve,
             );
+        });
+    }
+
+    /**
+     * @param {string} html
+     * @returns {Promise<void>}
+     */
+    #pasteHtml(html) {
+        return new Promise(function (resolve) {
+            window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
         });
     }
 
