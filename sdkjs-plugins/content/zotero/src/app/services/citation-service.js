@@ -233,7 +233,7 @@ class CitationService {
         }
     }
 
-    /** @param {CustomField} field */
+    /** @param {AddinFieldData} field */
     #extractField(field) {
         let citationObject;
         const citationStartIndex = field.Value.indexOf("{");
@@ -249,17 +249,17 @@ class CitationService {
     }
     /**
      * @param {Object} [updatedField]
-     * @returns {Promise<{fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
+     * @returns {Promise<{fieldsWithCitations: {field: AddinFieldData, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: AddinFieldData | undefined}>}
      */
     #synchronizeStorageWithDocItems(updatedField) {
         const self = this;
         return this.citationDocService
             .getAddinZoteroFields()
-            .then(function (/** @type {CustomField[]} */ arrFields) {
+            .then(function (/** @type {AddinFieldData[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
 
-                /** @type {CustomField | undefined} */
+                /** @type {AddinFieldData | undefined} */
                 const bibField = arrFields.find(function (field) {
                     return (
                         field.Value.indexOf(self._bibPrefixNew) !== -1 ||
@@ -348,8 +348,8 @@ class CitationService {
 
     /**
      * @param {boolean} bNoHaveFields
-     * @param {CustomField} bibField
-     * @returns {CustomField}
+     * @param {AddinFieldData} bibField
+     * @returns {AddinFieldData}
      */
     #updateBibliography(bNoHaveFields, bibField) {
         if (bNoHaveFields) {
@@ -363,17 +363,17 @@ class CitationService {
     }
 
     /**
-     * @param {{field: CustomField, cslCitation: CSLCitation}[]} fieldsWithCitations
+     * @param {{field: AddinFieldData, cslCitation: CSLCitation}[]} fieldsWithCitations
      * @param {boolean} bHardRefresh
      * @param {boolean} [bChangePosition]
-     * @returns {Promise<CustomField[]>}
+     * @returns {Promise<AddinFieldData[]>}
      */
     async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
 
-        /** @type {CustomField[]} */
+        /** @type {AddinFieldData[]} */
         const updatedFields = [];
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
@@ -581,7 +581,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = [];
 
             if (typeof bHardRefresh === "undefined") {
@@ -634,7 +634,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
@@ -671,7 +671,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -699,7 +699,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -739,7 +739,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -790,7 +790,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
@@ -809,8 +809,8 @@ class CitationService {
     }
 
     /**
-     * @param {CustomField} field
-     * @returns {Promise<CustomField | null>}
+     * @param {AddinFieldData} field
+     * @returns {Promise<AddinFieldData | null>}
      */
     async showEditCitationWindow(field) {
         if (!field) return null;

@@ -179,7 +179,7 @@ import "../edit-window.css";
             }
         }
 
-        /** @param {CustomField} field */
+        /** @param {AddinFieldData} field */
         onAttachedContent(field) {
             this._field = field;
 
