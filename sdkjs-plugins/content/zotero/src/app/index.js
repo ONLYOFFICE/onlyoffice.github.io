@@ -793,7 +793,7 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            /** @type {CustomField | null} */
+            /** @type {AddinFieldData | null} */
             const field = await new Promise((resolve) => {
                 window.Asc.plugin.executeMethod(
                     "GetCurrentAddinField",

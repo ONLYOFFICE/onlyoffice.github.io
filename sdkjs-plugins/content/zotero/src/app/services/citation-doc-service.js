@@ -72,7 +72,7 @@ class CitationDocService {
     addBibliography(text, value) {
         const self = this;
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        /** @type {CustomField} */
+        /** @type {AddinFieldData} */
         const field = {
             Value: this.#bibPrefix + value + this.#bibSuffix,
             Content: formattingPositions.text,
@@ -95,7 +95,7 @@ class CitationDocService {
     async addCitation(text, value, notesStyle) {
         const self = this;
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        /** @type {CustomField} */
+        /** @type {AddinFieldData} */
         const field = {
             Value: this.#citPrefix + " " + this.#citSuffix + value,
             Content: formattingPositions.text,
@@ -116,7 +116,7 @@ class CitationDocService {
     }
 
     /**
-     * @returns {Promise<Array<CustomField>>}
+     * @returns {Promise<Array<AddinFieldData>>}
      */
     getAddinZoteroFields() {
         const self = this;
@@ -171,7 +171,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<AddinFieldData>} fields
      * @returns {Promise<void>}
      */
     async updateAddinFields(fields) {
@@ -197,7 +197,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<AddinFieldData>} fields
      * @returns {Promise<void>}
      */
     async convertNotesToText(fields) {
@@ -224,7 +224,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<AddinFieldData>} fields
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
@@ -247,13 +247,13 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<AddinFieldData>} fields
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
     async convertNotesStyle(fields, notesStyle) {
         const formats = this.#makeFormattingPositions(fields);
-        /** @type {Array<CustomField>} */
+        /** @type {Array<AddinFieldData>} */
         const editedFields = [];
 
         for (let i = 0; i < fields.length; i++) {
@@ -290,7 +290,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {CustomField} field
+     * @param {AddinFieldData} field
      * @returns {Promise<void>}
      */
     #addAddinField(field) {
@@ -323,7 +323,7 @@ class CitationDocService {
     }
 
     /**
-     * @returns {Promise<Array<CustomField>>}
+     * @returns {Promise<Array<AddinFieldData>>}
      */
     #getAllAddinFields() {
         const self = this;
@@ -333,7 +333,7 @@ class CitationDocService {
     }
 
     /**
-     * @param {Array<CustomField>} fields
+     * @param {Array<AddinFieldData>} fields
      * @returns {Map<string, {text: string, formatting: Array<FormattingPositions>}>}
      * @modifies {fields}
      */
