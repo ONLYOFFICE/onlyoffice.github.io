@@ -676,16 +676,16 @@ ZoteroSdk.prototype._parseLinkHeader = function(headerValue) {
     return links;
 };
 
-ZoteroSdk.prototype._parseDesktopItemsResponse = function(promise, resolve, reject, id) {
+ZoteroSdk.prototype._parseDesktopItemsResponse = function(promise, id) {
     return promise.then(function(response) {
         return {
             items: JSON.parse(response.responseText),
             id: id
         };
-    }).then(resolve).catch(reject);
+    });
 };
 
-ZoteroSdk.prototype._parseItemsResponse = function(promise, resolve, reject, id) {
+ZoteroSdk.prototype._parseItemsResponse = function(promise, id) {
     var self = this;
     return promise.then(function(response) {
         return Promise.all([ response.json(), response ]);
@@ -702,62 +702,59 @@ ZoteroSdk.prototype._parseItemsResponse = function(promise, resolve, reject, id)
         }
         if (links.next) {
             result.next = function() {
-                return new Promise(function(rs, rj) {
-                    self._parseItemsResponse(self._getOnlineRequest(new URL(links.next)), rs, rj, id);
-                });
+                return self._parseItemsResponse(self._getOnlineRequest(new URL(links.next)), id);
             };
         }
-        resolve(result);
-    }).catch(reject);
+        return result;
+    });
 };
 
-ZoteroSdk.prototype._parseResponse = function(promise, resolve, reject, id) {
+ZoteroSdk.prototype._parseResponse = function(promise, id) {
     if (this._isOnlineAvailable) {
         var fetchPromise = promise;
-        this._parseItemsResponse(fetchPromise, resolve, reject, id);
+        return this._parseItemsResponse(fetchPromise, id);
     } else {
         var ascSimplePromise = promise;
-        this._parseDesktopItemsResponse(ascSimplePromise, resolve, reject, id);
+        return this._parseDesktopItemsResponse(ascSimplePromise, id);
     }
 };
 
 ZoteroSdk.prototype.getItems = function(search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
-    return new Promise(function(resolve, reject) {
-        var queryParams = {
-            format: format,
-            itemType: "-attachment"
-        };
-        if (search) {
-            queryParams.q = search;
-        } else if (itemsID) {
-            queryParams.itemKey = itemsID.join(",");
-        } else {
-            queryParams.limit = 20;
+    var queryParams = {
+        format: format,
+        itemType: "-attachment"
+    };
+    if (search) {
+        queryParams.q = search;
+    } else if (itemsID) {
+        queryParams.itemKey = itemsID.join(",");
+    } else {
+        queryParams.limit = 20;
+        if (!this._isOnlineAvailable) {
+            queryParams.format = "json";
         }
-        var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
-        var request = self._buildGetRequest(path, queryParams);
-        return self._parseResponse(request, resolve, reject, self._userId);
-    });
+    }
+    var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
+    var request = self._buildGetRequest(path, queryParams);
+    return self._parseResponse(request, self._userId);
 };
 
 ZoteroSdk.prototype.getGroupItems = function(search, groupId, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
-    return new Promise(function(resolve, reject) {
-        var queryParams = {
-            format: format
-        };
-        if (search) {
-            queryParams.q = search;
-        } else if (itemsID) {
-            queryParams.itemKey = itemsID.join(",");
-        }
-        var path = self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-        var request = self._buildGetRequest(path, queryParams);
-        return self._parseResponse(request, resolve, reject, groupId);
-    });
+    var queryParams = {
+        format: format
+    };
+    if (search) {
+        queryParams.q = search;
+    } else if (itemsID) {
+        queryParams.itemKey = itemsID.join(",");
+    }
+    var path = self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
+    var request = self._buildGetRequest(path, queryParams);
+    return self._parseResponse(request, groupId);
 };
 
 ZoteroSdk.prototype.getUserGroups = function() {
@@ -3214,7 +3211,12 @@ var _mainLoaderContainer = {
 };
 
 function translate(message) {
-    return window.Asc.plugin.tr(message);
+    try {
+        return window.Asc.plugin.tr(message);
+    } catch (e) {
+        console.error(e);
+        return message;
+    }
 }
 
 class CslHtmlParser {
@@ -5429,6 +5431,9 @@ class CitationService {
         var _this3 = this;
         return _asyncToGenerator(function*() {
             _this3._storage.clear();
+            if (!_assertClassBrand(_CitationService_brand, _this3, _checkEditor).call(_this3)) {
+                return;
+            }
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibFieldValue: bibFieldValue, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this3, _synchronizeStorageWithDocItems).call(_this3);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
@@ -5448,6 +5453,9 @@ class CitationService {
         var _this4 = this;
         return _asyncToGenerator(function*() {
             _this4._storage.clear();
+            if (!_assertClassBrand(_CitationService_brand, _this4, _checkEditor).call(_this4)) {
+                return;
+            }
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this4, _synchronizeStorageWithDocItems).call(_this4);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
@@ -5476,9 +5484,7 @@ class CitationService {
     updateCslItemsInNotes(notesStyle) {
         var _this5 = this;
         return _asyncToGenerator(function*() {
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this5).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
+            if (!_assertClassBrand(_CitationService_brand, _this5, _checkEditor).call(_this5)) {
                 return;
             }
             _this5._storage.clear();
@@ -5503,6 +5509,9 @@ class CitationService {
         var _this6 = this;
         return _asyncToGenerator(function*() {
             _this6._storage.clear();
+            if (!_assertClassBrand(_CitationService_brand, _this6, _checkEditor).call(_this6)) {
+                return;
+            }
             try {
                 var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this6, _synchronizeStorageWithDocItems).call(_this6, updatedField);
                 _assertClassBrand(_CitationService_brand, _this6, _updateFormatter).call(_this6);
@@ -5534,9 +5543,7 @@ class CitationService {
     switchingBetweenNotesAndText(notesStyle) {
         var _this8 = this;
         return _asyncToGenerator(function*() {
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this8).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
+            if (!_assertClassBrand(_CitationService_brand, _this8, _checkEditor).call(_this8)) {
                 return;
             }
             _this8._storage.clear();
@@ -5564,9 +5571,7 @@ class CitationService {
     convertNotesStyle(notesStyle) {
         var _this9 = this;
         return _asyncToGenerator(function*() {
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003e3) {
-                yield _classPrivateFieldGet2(_additionalWindow, _this9).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
+            if (!_assertClassBrand(_CitationService_brand, _this9, _checkEditor).call(_this9)) {
                 return;
             }
             _this9._storage.clear();
@@ -5592,6 +5597,15 @@ class CitationService {
             return updatedField;
         })();
     }
+}
+
+function _checkEditor() {
+    var editorVersion = window.Asc.scope.editorVersion;
+    if (editorVersion && editorVersion < 9003e3) {
+        _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
+        return false;
+    }
+    return true;
 }
 
 function _formatInsertLink(cslCitation) {
@@ -6131,6 +6145,8 @@ CslStylesManager.prototype.getStyle = function(styleName) {
         var url = self._STYLES_LOCAL + styleName + ".csl";
         if (self._isOnlineAvailable) {
             url = self._STYLES_URL + styleName;
+        } else if (self._defaultStyles.indexOf(styleName) === -1) {
+            throw "The style is not available in the local version of the plugin.";
         }
         return fetch(url).then(function(resp) {
             return resp.text();
@@ -6617,6 +6633,7 @@ SettingsPage.prototype._onStyleChange = function(styleName, isClick) {
             self._styleMessage.show(translate(err));
         }
         isClick && self._hideLoader();
+        throw err;
     });
 };
 
@@ -7488,9 +7505,20 @@ SelectCitationsComponent.prototype.count = function() {
             if (isInit) return;
             isInit = true;
             Loader.show();
-            Promise.all([ loadGroups(), settings.init() ]).then(function() {
+            var loadGroupsPromise = loadGroups().catch(e => {
+                console.error(e);
+                showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
+            });
+            var initSettingsPromise = settings.init().catch(e => {
+                console.error(e);
+                showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                settings.show();
+            });
+            Promise.all([ loadGroupsPromise, initSettingsPromise ]).then(function() {
                 Loader.hide();
-                showCitationsAtTheStartFromMyLibrary();
+                return showCitationsAtTheStartFromMyLibrary();
+            }).finally(function() {
+                Loader.hide();
             });
         });
         window.Asc.plugin.onTranslate = applyTranslations;
@@ -7507,12 +7535,14 @@ SelectCitationsComponent.prototype.count = function() {
             delete res.next;
             return res;
         });
-        loadLibrary(promise, false).then(res => {
+        return loadLibrary(promise, false).then(res => {
             if (res > 0) {
                 updateHeaderText("started");
             } else {
                 updateHeaderText("empty");
             }
+        }).catch(e => {
+            console.error(e);
         }).finally(() => {
             libLoader.hide();
         });
@@ -7876,13 +7906,53 @@ SelectCitationsComponent.prototype.count = function() {
             return item;
         };
         if (res && res.items && res.items.length > 0) {
-            for (var index = 0; index < res.items.length; index++) {
-                var item = res.items[index];
+            res.items = res.items.map(item => {
+                item = convertJsonToCsl(item);
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 fillUrisFromId(item);
-            }
+                return item;
+            });
         }
         return selectCitation.displaySearchItems(res, err, lastSearch);
+    }
+    function convertJsonToCsl(item) {
+        if (item.id || !item.key) return item;
+        var res = {
+            id: item.key,
+            title: item.data.title,
+            type: item.data.itemType
+        };
+        if (Object.hasOwnProperty.call(item, "url")) {
+            res.URL = item.data.url;
+        }
+        if (Object.hasOwnProperty.call(item, "volume")) {
+            res.volume = item.data.volume;
+        }
+        if (Object.hasOwnProperty.call(item, "language")) {
+            res.language = item.data.language;
+        }
+        if (Object.hasOwnProperty.call(item, "abstract")) {
+            res.abstract = item.data.abstract;
+        }
+        if (Object.hasOwnProperty.call(item, "note")) {
+            res.note = item.data.note;
+        }
+        if (Object.hasOwnProperty.call(item, "page")) {
+            res.page = item.data.page;
+        }
+        if (Object.hasOwnProperty.call(item, "shortTitle")) {
+            res.shortTitle = item.data.shortTitle;
+        }
+        if (Object.hasOwnProperty.call(item, "links")) {
+            res.uris = [];
+            if (Object.hasOwnProperty.call(item.links, "self")) {
+                res.uris.push(item.links.self.href);
+            }
+            if (Object.hasOwnProperty.call(item.links, "alternate")) {
+                res.uris.push(item.links.alternate.href);
+            }
+        }
+        return res;
     }
     function checkSelected(numOfSelected) {
         if (typeof numOfSelected === "undefined") {

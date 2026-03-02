@@ -80,6 +80,20 @@ class CitationService {
         this.#additionalWindow = new AdditionalWindow();
     }
 
+    /** @returns {boolean} */
+    #checkEditor() {
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003000) {
+            this.#additionalWindow.showInfoWindow(
+                "Something went wrong",
+                "Update your editor to use this feature.",
+                "warning",
+            );
+            return false;
+        }
+        return true;
+    }
+
     /**
      *
      * @param {*} cslCitation
@@ -555,6 +569,9 @@ class CitationService {
     /** @returns {Promise<void>} */
     async insertBibliography() {
         this._storage.clear();
+        if (!this.#checkEditor()) {
+            return;
+        }
 
         try {
             const { fieldsWithCitations, bibFieldValue, bibField } =
@@ -582,6 +599,9 @@ class CitationService {
      */
     async updateCslItems(bHardRefresh) {
         this._storage.clear();
+        if (!this.#checkEditor()) {
+            return;
+        }
 
         try {
             const { fieldsWithCitations, bibField } =
@@ -625,13 +645,7 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItemsInNotes(notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-                "warning",
-            );
+        if (!this.#checkEditor()) {
             return;
         }
         
@@ -674,6 +688,9 @@ class CitationService {
      */
     async updateItem(updatedField) {
         this._storage.clear();
+        if (!this.#checkEditor()) {
+            return;
+        }
 
         try {
             const { fieldsWithCitations } =
@@ -731,13 +748,7 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async switchingBetweenNotesAndText(notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-                "warning",
-            );
+        if (!this.#checkEditor()) {
             return;
         }
 
@@ -785,13 +796,7 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async convertNotesStyle(notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-                "warning",
-            );
+        if (!this.#checkEditor()) {
             return;
         }
         

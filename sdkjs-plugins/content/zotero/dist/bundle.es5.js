@@ -2324,6 +2324,27 @@
         return es_array_join;
     }
     requireEs_array_join();
+    var es_array_map = {};
+    var hasRequiredEs_array_map;
+    function requireEs_array_map() {
+        if (hasRequiredEs_array_map) return es_array_map;
+        hasRequiredEs_array_map = 1;
+        var $ = require_export();
+        var $map = requireArrayIteration().map;
+        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
+        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("map");
+        $({
+            target: "Array",
+            proto: true,
+            forced: !HAS_SPECIES_SUPPORT
+        }, {
+            map: function map(callbackfn) {
+                return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+            }
+        });
+        return es_array_map;
+    }
+    requireEs_array_map();
     var es_function_name = {};
     var defineBuiltInAccessor;
     var hasRequiredDefineBuiltInAccessor;
@@ -4817,27 +4838,6 @@
             return theme;
         }
     };
-    var es_array_map = {};
-    var hasRequiredEs_array_map;
-    function requireEs_array_map() {
-        if (hasRequiredEs_array_map) return es_array_map;
-        hasRequiredEs_array_map = 1;
-        var $ = require_export();
-        var $map = requireArrayIteration().map;
-        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
-        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("map");
-        $({
-            target: "Array",
-            proto: true,
-            forced: !HAS_SPECIES_SUPPORT
-        }, {
-            map: function map(callbackfn) {
-                return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-            }
-        });
-        return es_array_map;
-    }
-    requireEs_array_map();
     function Router() {
         this._states = [ "mainState", "loginState", "settingsState" ];
         this._routes = [ "main", "login", "settings" ];
@@ -7928,15 +7928,15 @@
         }
         return links;
     };
-    ZoteroSdk.prototype._parseDesktopItemsResponse = function(promise, resolve, reject, id) {
+    ZoteroSdk.prototype._parseDesktopItemsResponse = function(promise, id) {
         return promise.then(function(response) {
             return {
                 items: JSON.parse(response.responseText),
                 id: id
             };
-        }).then(resolve).catch(reject);
+        });
     };
-    ZoteroSdk.prototype._parseItemsResponse = function(promise, resolve, reject, id) {
+    ZoteroSdk.prototype._parseItemsResponse = function(promise, id) {
         var self = this;
         return promise.then(function(response) {
             return Promise.all([ response.json(), response ]);
@@ -7953,59 +7953,56 @@
             }
             if (links.next) {
                 result.next = function() {
-                    return new Promise(function(rs, rj) {
-                        self._parseItemsResponse(self._getOnlineRequest(new URL(links.next)), rs, rj, id);
-                    });
+                    return self._parseItemsResponse(self._getOnlineRequest(new URL(links.next)), id);
                 };
             }
-            resolve(result);
-        }).catch(reject);
+            return result;
+        });
     };
-    ZoteroSdk.prototype._parseResponse = function(promise, resolve, reject, id) {
+    ZoteroSdk.prototype._parseResponse = function(promise, id) {
         if (this._isOnlineAvailable) {
             var fetchPromise = promise;
-            this._parseItemsResponse(fetchPromise, resolve, reject, id);
+            return this._parseItemsResponse(fetchPromise, id);
         } else {
             var ascSimplePromise = promise;
-            this._parseDesktopItemsResponse(ascSimplePromise, resolve, reject, id);
+            return this._parseDesktopItemsResponse(ascSimplePromise, id);
         }
     };
     ZoteroSdk.prototype.getItems = function(search, itemsID, format) {
         var self = this;
         format = format || self.DEFAULT_FORMAT;
-        return new Promise(function(resolve, reject) {
-            var queryParams = {
-                format: format,
-                itemType: "-attachment"
-            };
-            if (search) {
-                queryParams.q = search;
-            } else if (itemsID) {
-                queryParams.itemKey = itemsID.join(",");
-            } else {
-                queryParams.limit = 20;
+        var queryParams = {
+            format: format,
+            itemType: "-attachment"
+        };
+        if (search) {
+            queryParams.q = search;
+        } else if (itemsID) {
+            queryParams.itemKey = itemsID.join(",");
+        } else {
+            queryParams.limit = 20;
+            if (!this._isOnlineAvailable) {
+                queryParams.format = "json";
             }
-            var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
-            var request = self._buildGetRequest(path, queryParams);
-            return self._parseResponse(request, resolve, reject, self._userId);
-        });
+        }
+        var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
+        var request = self._buildGetRequest(path, queryParams);
+        return self._parseResponse(request, self._userId);
     };
     ZoteroSdk.prototype.getGroupItems = function(search, groupId, itemsID, format) {
         var self = this;
         format = format || self.DEFAULT_FORMAT;
-        return new Promise(function(resolve, reject) {
-            var queryParams = {
-                format: format
-            };
-            if (search) {
-                queryParams.q = search;
-            } else if (itemsID) {
-                queryParams.itemKey = itemsID.join(",");
-            }
-            var path = self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-            var request = self._buildGetRequest(path, queryParams);
-            return self._parseResponse(request, resolve, reject, groupId);
-        });
+        var queryParams = {
+            format: format
+        };
+        if (search) {
+            queryParams.q = search;
+        } else if (itemsID) {
+            queryParams.itemKey = itemsID.join(",");
+        }
+        var path = self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
+        var request = self._buildGetRequest(path, queryParams);
+        return self._parseResponse(request, groupId);
     };
     ZoteroSdk.prototype.getUserGroups = function() {
         var self = this;
@@ -11869,7 +11866,12 @@
         _: document.getElementById("loader")
     };
     function translate(message) {
-        return window.Asc.plugin.tr(message);
+        try {
+            return window.Asc.plugin.tr(message);
+        } catch (e) {
+            console.error(e);
+            return message;
+        }
     }
     var es_array_sort = {};
     var environmentFfVersion;
@@ -12267,7 +12269,6 @@
                         });
                     });
                     return Promise.all(promises).then(function() {
-                        window.Asc.plugin.executeCommand("close", "");
                         return true;
                     }).catch(function(e) {
                         console.error(e);
@@ -14428,6 +14429,13 @@
                         while (1) switch (_context3.p = _context3.n) {
                           case 0:
                             this._storage.clear();
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context3.n = 1;
+                                break;
+                            }
+                            return _context3.a(2);
+
+                          case 1:
                             _context3.p = 1;
                             _context3.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
@@ -14482,6 +14490,13 @@
                         while (1) switch (_context4.p = _context4.n) {
                           case 0:
                             this._storage.clear();
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context4.n = 1;
+                                break;
+                            }
+                            return _context4.a(2);
+
+                          case 1:
                             _context4.p = 1;
                             _context4.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
@@ -14551,72 +14566,67 @@
             key: "updateCslItemsInNotes",
             value: function() {
                 var _updateCslItemsInNotes = _asyncToGenerator(_regenerator().m(function _callee5(notesStyle) {
-                    var editorVersion, _yield$_assertClassBr3, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t6, _t7;
+                    var _yield$_assertClassBr3, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t6, _t7;
                     return _regenerator().w(function(_context5) {
                         while (1) switch (_context5.p = _context5.n) {
                           case 0:
-                            editorVersion = window.Asc.scope.editorVersion;
-                            if (!(editorVersion && editorVersion < 9003e3)) {
-                                _context5.n = 2;
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context5.n = 1;
                                 break;
                             }
-                            _context5.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
-
-                          case 1:
                             return _context5.a(2);
 
-                          case 2:
+                          case 1:
                             this._storage.clear();
-                            _context5.p = 3;
-                            _context5.n = 4;
+                            _context5.p = 2;
+                            _context5.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 4:
+                          case 3:
                             _yield$_assertClassBr3 = _context5.v;
                             fieldsWithCitations = _yield$_assertClassBr3.fieldsWithCitations;
                             bibField = _yield$_assertClassBr3.bibField;
                             bNoHaveFields = fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context5.n = 5;
+                            _context5.n = 4;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
 
-                          case 5:
+                          case 4:
                             updatedFields = _context5.v;
                             if (!(updatedFields && updatedFields.length)) {
-                                _context5.n = 6;
+                                _context5.n = 5;
+                                break;
+                            }
+                            _context5.n = 5;
+                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+
+                          case 5:
+                            if (!bibField) {
+                                _context5.n = 7;
                                 break;
                             }
                             _context5.n = 6;
-                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-
-                          case 6:
-                            if (!bibField) {
-                                _context5.n = 8;
-                                break;
-                            }
-                            _context5.n = 7;
                             return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
 
-                          case 7:
+                          case 6:
                             _t6 = _context5.v;
                             bibFields = [ _t6 ];
-                            _context5.n = 8;
+                            _context5.n = 7;
                             return this.citationDocService.updateAddinFields(bibFields);
 
-                          case 8:
-                            _context5.n = 10;
+                          case 7:
+                            _context5.n = 9;
                             break;
 
-                          case 9:
-                            _context5.p = 9;
+                          case 8:
+                            _context5.p = 8;
                             _t7 = _context5.v;
                             throw _t7;
 
-                          case 10:
+                          case 9:
                             return _context5.a(2);
                         }
-                    }, _callee5, this, [ [ 3, 9 ] ]);
+                    }, _callee5, this, [ [ 2, 8 ] ]);
                 }));
                 function updateCslItemsInNotes(_x3) {
                     return _updateCslItemsInNotes.apply(this, arguments);
@@ -14632,6 +14642,13 @@
                         while (1) switch (_context6.p = _context6.n) {
                           case 0:
                             this._storage.clear();
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context6.n = 1;
+                                break;
+                            }
+                            return _context6.a(2);
+
+                          case 1:
                             _context6.p = 1;
                             _context6.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this, updatedField);
@@ -14722,84 +14739,79 @@
             key: "switchingBetweenNotesAndText",
             value: function() {
                 var _switchingBetweenNotesAndText = _asyncToGenerator(_regenerator().m(function _callee8(notesStyle) {
-                    var editorVersion, _yield$_assertClassBr6, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t0, _t1;
+                    var _yield$_assertClassBr6, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t0, _t1;
                     return _regenerator().w(function(_context8) {
                         while (1) switch (_context8.p = _context8.n) {
                           case 0:
-                            editorVersion = window.Asc.scope.editorVersion;
-                            if (!(editorVersion && editorVersion < 9003e3)) {
-                                _context8.n = 2;
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context8.n = 1;
                                 break;
                             }
-                            _context8.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
-
-                          case 1:
                             return _context8.a(2);
 
-                          case 2:
+                          case 1:
                             this._storage.clear();
-                            _context8.p = 3;
-                            _context8.n = 4;
+                            _context8.p = 2;
+                            _context8.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 4:
+                          case 3:
                             _yield$_assertClassBr6 = _context8.v;
                             fieldsWithCitations = _yield$_assertClassBr6.fieldsWithCitations;
                             bibField = _yield$_assertClassBr6.bibField;
                             bNoHaveFields = fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context8.n = 5;
+                            _context8.n = 4;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
 
-                          case 5:
+                          case 4:
                             updatedFields = _context8.v;
                             if (!(updatedFields && updatedFields.length)) {
-                                _context8.n = 8;
-                                break;
-                            }
-                            if (!notesStyle) {
                                 _context8.n = 7;
                                 break;
                             }
-                            _context8.n = 6;
-                            return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
-
-                          case 6:
-                            _context8.n = 8;
-                            break;
-
-                          case 7:
-                            _context8.n = 8;
-                            return this.citationDocService.convertNotesToText(updatedFields);
-
-                          case 8:
-                            if (!bibField) {
-                                _context8.n = 10;
+                            if (!notesStyle) {
+                                _context8.n = 6;
                                 break;
                             }
-                            _context8.n = 9;
-                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+                            _context8.n = 5;
+                            return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
 
-                          case 9:
-                            _t0 = _context8.v;
-                            bibFields = [ _t0 ];
-                            _context8.n = 10;
-                            return this.citationDocService.updateAddinFields(bibFields);
-
-                          case 10:
-                            _context8.n = 12;
+                          case 5:
+                            _context8.n = 7;
                             break;
 
-                          case 11:
-                            _context8.p = 11;
+                          case 6:
+                            _context8.n = 7;
+                            return this.citationDocService.convertNotesToText(updatedFields);
+
+                          case 7:
+                            if (!bibField) {
+                                _context8.n = 9;
+                                break;
+                            }
+                            _context8.n = 8;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 8:
+                            _t0 = _context8.v;
+                            bibFields = [ _t0 ];
+                            _context8.n = 9;
+                            return this.citationDocService.updateAddinFields(bibFields);
+
+                          case 9:
+                            _context8.n = 11;
+                            break;
+
+                          case 10:
+                            _context8.p = 10;
                             _t1 = _context8.v;
                             throw _t1;
 
-                          case 12:
+                          case 11:
                             return _context8.a(2);
                         }
-                    }, _callee8, this, [ [ 3, 11 ] ]);
+                    }, _callee8, this, [ [ 2, 10 ] ]);
                 }));
                 function switchingBetweenNotesAndText(_x7) {
                     return _switchingBetweenNotesAndText.apply(this, arguments);
@@ -14810,59 +14822,54 @@
             key: "convertNotesStyle",
             value: function() {
                 var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee9(notesStyle) {
-                    var editorVersion, _yield$_assertClassBr7, fieldsWithCitations, updatedFields, _t10;
+                    var _yield$_assertClassBr7, fieldsWithCitations, updatedFields, _t10;
                     return _regenerator().w(function(_context9) {
                         while (1) switch (_context9.p = _context9.n) {
                           case 0:
-                            editorVersion = window.Asc.scope.editorVersion;
-                            if (!(editorVersion && editorVersion < 9003e3)) {
-                                _context9.n = 2;
+                            if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
+                                _context9.n = 1;
                                 break;
                             }
-                            _context9.n = 1;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
-
-                          case 1:
                             return _context9.a(2);
 
-                          case 2:
+                          case 1:
                             this._storage.clear();
-                            _context9.p = 3;
-                            _context9.n = 4;
+                            _context9.p = 2;
+                            _context9.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 4:
+                          case 3:
                             _yield$_assertClassBr7 = _context9.v;
                             fieldsWithCitations = _yield$_assertClassBr7.fieldsWithCitations;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context9.n = 5;
+                            _context9.n = 4;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false, true);
 
-                          case 5:
+                          case 4:
                             updatedFields = _context9.v;
                             if (!(!updatedFields || !updatedFields.length)) {
-                                _context9.n = 6;
+                                _context9.n = 5;
                                 break;
                             }
                             return _context9.a(2);
 
-                          case 6:
-                            _context9.n = 7;
+                          case 5:
+                            _context9.n = 6;
                             return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
 
-                          case 7:
-                            _context9.n = 9;
+                          case 6:
+                            _context9.n = 8;
                             break;
 
-                          case 8:
-                            _context9.p = 8;
+                          case 7:
+                            _context9.p = 7;
                             _t10 = _context9.v;
                             throw _t10;
 
-                          case 9:
+                          case 8:
                             return _context9.a(2);
                         }
-                    }, _callee9, this, [ [ 3, 8 ] ]);
+                    }, _callee9, this, [ [ 2, 7 ] ]);
                 }));
                 function convertNotesStyle(_x8) {
                     return _convertNotesStyle.apply(this, arguments);
@@ -14907,6 +14914,14 @@
             }()
         } ]);
     }();
+    function _checkEditor() {
+        var editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9003e3) {
+            _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Something went wrong", "Update your editor to use this feature.", "warning");
+            return false;
+        }
+        return true;
+    }
     function _formatInsertLink(cslCitation) {
         var self = this;
         var bUpdateItems = false;
@@ -15468,6 +15483,8 @@
             var url = self._STYLES_LOCAL + styleName + ".csl";
             if (self._isOnlineAvailable) {
                 url = self._STYLES_URL + styleName;
+            } else if (self._defaultStyles.indexOf(styleName) === -1) {
+                throw "The style is not available in the local version of the plugin.";
             }
             return fetch(url).then(function(resp) {
                 return resp.text();
@@ -16753,9 +16770,19 @@
                 if (isInit) return;
                 isInit = true;
                 Loader.show();
-                Promise.all([ loadGroups(), settings.init() ]).then(function() {
+                var loadGroupsPromise = loadGroups().catch(function(e) {
+                    console.error(e);
+                    showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
+                });
+                var initSettingsPromise = settings.init().catch(function(e) {
+                    console.error(e);
+                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                });
+                Promise.all([ loadGroupsPromise, initSettingsPromise ]).then(function() {
                     Loader.hide();
-                    showCitationsAtTheStartFromMyLibrary();
+                    return showCitationsAtTheStartFromMyLibrary();
+                }).finally(function() {
+                    Loader.hide();
                 });
             });
             window.Asc.plugin.onTranslate = applyTranslations;
@@ -16772,12 +16799,14 @@
                 delete res.next;
                 return res;
             });
-            loadLibrary(promise, false).then(function(res) {
+            return loadLibrary(promise, false).then(function(res) {
                 if (res > 0) {
                     updateHeaderText("started");
                 } else {
                     updateHeaderText("empty");
                 }
+            }).catch(function(e) {
+                console.error(e);
             }).finally(function() {
                 libLoader.hide();
             });
@@ -17219,13 +17248,53 @@
                 return item;
             };
             if (res && res.items && res.items.length > 0) {
-                for (var index = 0; index < res.items.length; index++) {
-                    var item = res.items[index];
+                res.items = res.items.map(function(item) {
+                    item = convertJsonToCsl(item);
                     item[isGroup ? "groupID" : "userID"] = res.id;
                     fillUrisFromId(item);
-                }
+                    return item;
+                });
             }
             return selectCitation.displaySearchItems(res, err, lastSearch);
+        }
+        function convertJsonToCsl(item) {
+            if (item.id || !item.key) return item;
+            var res = {
+                id: item.key,
+                title: item.data.title,
+                type: item.data.itemType
+            };
+            if (Object.hasOwnProperty.call(item, "url")) {
+                res.URL = item.data.url;
+            }
+            if (Object.hasOwnProperty.call(item, "volume")) {
+                res.volume = item.data.volume;
+            }
+            if (Object.hasOwnProperty.call(item, "language")) {
+                res.language = item.data.language;
+            }
+            if (Object.hasOwnProperty.call(item, "abstract")) {
+                res.abstract = item.data.abstract;
+            }
+            if (Object.hasOwnProperty.call(item, "note")) {
+                res.note = item.data.note;
+            }
+            if (Object.hasOwnProperty.call(item, "page")) {
+                res.page = item.data.page;
+            }
+            if (Object.hasOwnProperty.call(item, "shortTitle")) {
+                res.shortTitle = item.data.shortTitle;
+            }
+            if (Object.hasOwnProperty.call(item, "links")) {
+                res.uris = [];
+                if (Object.hasOwnProperty.call(item.links, "self")) {
+                    res.uris.push(item.links.self.href);
+                }
+                if (Object.hasOwnProperty.call(item.links, "alternate")) {
+                    res.uris.push(item.links.alternate.href);
+                }
+            }
+            return res;
         }
         function checkSelected(numOfSelected) {
             if (typeof numOfSelected === "undefined") {

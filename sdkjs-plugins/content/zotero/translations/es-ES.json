@@ -64,5 +64,10 @@
     "Edit citation": "Editar cita",
     "OK": "OK",
     "Something went wrong": "Algo salió mal",
-    "Update your editor to use this feature.": "Actualiza tu editor para usar esta funcionalidad."
+    "Update your editor to use this feature.": "Actualiza tu editor para usar esta funcionalidad.",
+    "Success!": "¡Éxito!",
+    "All active Zotero citations and Bibliography have been replaced.": "Todas las citas activas de Zotero y la bibliografía han sido reemplazadas.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Se produjo un error al cargar la configuración. Intente reiniciar el plugin.",
+    "An error occurred while loading library groups. Try restarting the plugin.": "Se produjo un error al cargar los grupos de bibliotecas. Intente reiniciar el plugin.",
+    "The style is not available in the local version of the plugin.": "El estilo no está disponible en la versión local del plugin."
 }
