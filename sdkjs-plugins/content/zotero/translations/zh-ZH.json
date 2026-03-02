@@ -66,5 +66,8 @@
     "Something went wrong": "出錯了",
     "Update your editor to use this feature.": "更新您的編輯器以使用此功能。",
     "Success!": "成功！",
-    "All active Zotero citations and Bibliography have been replaced.": "所有活動的 Zotero 引用和參考文献已被取代。"
+    "All active Zotero citations and Bibliography have been replaced.": "所有活動的 Zotero 引用和參考文献已被取代。",
+    "An error occurred while loading settings. Try restarting the plugin.": "載入設定時發生錯誤。請重新啟動插件。",
+    "An error occurred while loading library groups. Try restarting the plugin.": "載入圖書館群組時發生錯誤。請重新啟動插件。",
+    "The style is not available in the local version of the plugin.": "此樣式在本地版本的插件中不可用。"
 }

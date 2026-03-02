@@ -279,19 +279,20 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    return new Promise(function (resolve, reject) {
-        /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
-        const queryParams = {
-            format: format,
-            itemType: "-attachment", // skip attachments (pdf, docx, etc.)
-        };
+    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+    let queryParams = {
+        format: format,
+        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
+    };
 
-        if (search) {
-            queryParams.q = search;
-        } else if (itemsID) {
-            queryParams.itemKey = itemsID.join(",");
-        } else {
-            queryParams.limit = 20;
+    if (search) {
+        queryParams.q = search;
+    } else if (itemsID) {
+        queryParams.itemKey = itemsID.join(",");
+    } else {
+        queryParams.limit = 20;
+        if (!this._isOnlineAvailable) {
+            queryParams.format = "json";
         }
     }
 

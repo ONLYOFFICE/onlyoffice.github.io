@@ -64,5 +64,10 @@
     "Edit citation": "Upravit citaci",
     "OK": "OK",
     "Something went wrong": "Něco se pokazilo",
-    "Update your editor to use this feature.": "Aktualizujte svůj editor, aby se mohli použít tyto funkce."
+    "Update your editor to use this feature.": "Aktualizujte svůj editor, aby se mohli použít tyto funkce.",
+    "Success!": "Úspěch!",
+    "All active Zotero citations and Bibliography have been replaced.": "Všechny aktivní citace Zotero a bibliografie byly nahrazeny.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Došlo k chybě při načítání nastavení. Zkuste restartovat plugin.",
+    "An error occurred while loading library groups. Try restarting the plugin.": "Došlo k chybě při načítání skupin knihoven. Zkuste restartovat plugin.",
+    "The style is not available in the local version of the plugin.": "Styl není dostupný v lokální verzi pluginu."
 }

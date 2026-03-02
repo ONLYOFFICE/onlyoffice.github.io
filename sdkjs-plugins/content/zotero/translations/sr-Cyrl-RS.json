@@ -64,5 +64,10 @@
     "Edit citation": "Измените цитат",
     "OK": "OK",
     "Something went wrong": "Нешта је пошло по злу",
-    "Update your editor to use this feature.": "Ажурирајте ваш уређивање да користите ову функцију."
+    "Update your editor to use this feature.": "Ажурирајте ваш уређивање да користите ову функцију.",
+    "Success!": "Успешно!",
+    "All active Zotero citations and Bibliography have been replaced.": "Успешно заменили су активне цитате и библиографију Zotero.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Произошло је грешка приликом учитавања поставки. Покрените плагин поново.",
+    "An error occurred while loading library groups. Try restarting the plugin.": "Произошло је грешка приликом учитавања групних библиотека. Покрените плагин поново.",
+    "The style is not available in the local version of the plugin.": "Стил није доступан у локалној верзији плагина."
 }
