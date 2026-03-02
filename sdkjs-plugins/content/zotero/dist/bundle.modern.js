@@ -6071,7 +6071,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
-    this._defaultStyles = [ "american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association", "nature" ];
+    this._defaultStyles = [ "american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature" ];
     this._cache = {};
 }
 
@@ -7768,9 +7768,9 @@ SelectCitationsComponent.prototype.count = function() {
     };
     function applyTranslations() {
         var elements = document.getElementsByClassName("i18n");
-        for (var i = 0; i < elements.length; i++) {
+        var _loop = function _loop() {
             var el = elements[i];
-            if (el instanceof HTMLElement === false) continue;
+            if (el instanceof HTMLElement === false) return 1;
             [ "placeholder", "title" ].forEach(attr => {
                 if (el.hasAttribute(attr)) {
                     el.setAttribute(attr, translate(el.getAttribute(attr) || ""));
@@ -7778,6 +7778,9 @@ SelectCitationsComponent.prototype.count = function() {
             });
             var translated = translate(el.innerText.trim().replace(/\s+/g, " "));
             if (translated) el.innerText = translated;
+        };
+        for (var i = 0; i < elements.length; i++) {
+            if (_loop()) continue;
         }
     }
     function showError(message) {
@@ -7894,6 +7897,7 @@ SelectCitationsComponent.prototype.count = function() {
             if (isGroup && res && res.next) lastSearch.groups.push(res); else lastSearch.obj = res && res.items.length ? res : null;
         }
         var fillUrisFromId = function fillUrisFromId(item) {
+            if (!item.id) return item;
             var slashFirstIndex = item.id.indexOf("/") + 1;
             var slashLastIndex = item.id.lastIndexOf("/") + 1;
             var httpIndex = item.id.indexOf("http");

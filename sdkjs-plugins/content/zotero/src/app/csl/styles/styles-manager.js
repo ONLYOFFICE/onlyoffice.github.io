@@ -64,7 +64,7 @@ function CslStylesManager(lastStyleKey) {
         "apa",
         "chicago-author-date",
         "chicago-notes-bibliography",
-        "harvard-cite-them-right-10th-edition",
+        "harvard-cite-them-right",
         "ieee",
         "modern-language-association",
         "nature",
