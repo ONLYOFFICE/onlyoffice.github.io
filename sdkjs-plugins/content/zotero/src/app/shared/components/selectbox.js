@@ -75,6 +75,7 @@ class SelectBox {
         this._options = Object.assign(options, {
             placeholder: options.placeholder || "Select...",
             searchable: options.searchable || false,
+            sortable: options.sortable || false,
             multiple: options.multiple || false,
             description: options.description || "",
         });
