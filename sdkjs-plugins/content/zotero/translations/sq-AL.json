@@ -64,5 +64,10 @@
     "Edit citation": "Editujte citat",
     "OK": "OK",
     "Something went wrong": "Nesto je pošlo po zlu",
-    "Update your editor to use this feature.": "Ažurirajte svoj uređivač kako bi koristili ovu funkciju."
+    "Update your editor to use this feature.": "Ažurirajte svoj uređivač kako bi koristili ovu funkciju.",
+    "Success!": "Uspesno!",
+    "All active Zotero citations and Bibliography have been replaced.": "Uspesno zamenili su aktivne citate i bibliografiju Zotero.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Pojavio se greska prilikom ucitavanja postavki. Pokrenite plugin ponovo.",
+    "An error occurred while loading library groups. Try restarting the plugin.": "Pojavio se greska prilikom ucitavanja biblioteka. Pokrenite plugin ponovo.",
+    "The style is not available in the local version of the plugin.": "Stili nuk eshte i disponueshem ne versionin lokal te plugin-it."
 }

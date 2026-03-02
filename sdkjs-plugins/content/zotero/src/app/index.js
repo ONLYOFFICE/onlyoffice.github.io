@@ -170,9 +170,21 @@ import "../styles.css";
                 isInit = true;
                 Loader.show();
 
-                Promise.all([loadGroups(), settings.init()]).then(function () {
+                let loadGroupsPromise = loadGroups().catch((e) => {
+                    console.error(e);
+                    showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
+                });
+                let initSettingsPromise = settings.init().catch((e) => {
+                    console.error(e);
+                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                    settings.show();
+                });
+
+                Promise.all([loadGroupsPromise, initSettingsPromise]).then(function () {
                     Loader.hide();
-                    showCitationsAtTheStartFromMyLibrary();
+                    return showCitationsAtTheStartFromMyLibrary();
+                }).finally(function () {
+                    Loader.hide();
                 });
             });
 
@@ -194,13 +206,16 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
-        loadLibrary(promise, false)
+        return loadLibrary(promise, false)
             .then((res) => {
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
                     updateHeaderText("empty");
                 }
+            })
+            .catch((e) => {
+                console.error(e);
             })
             .finally(() => {
                 libLoader.hide();
@@ -732,14 +747,61 @@ import "../styles.css";
             return item;
         };
         if (res && res.items && res.items.length > 0) {
-            for (let index = 0; index < res.items.length; index++) {
-                let item = res.items[index];
+            res.items = res.items.map(item => {
+                item = convertJsonToCsl(item);
                 item[isGroup ? "groupID" : "userID"] = res.id;
                 fillUrisFromId(item);
-            }
+                return item;
+            });
         }
 
         return selectCitation.displaySearchItems(res, err, lastSearch);
+    }
+
+    /**
+     * @param {any} item 
+     * @returns {SearchResultItem}
+     */
+    function convertJsonToCsl(item) {
+        if (item.id || !item.key) return item;
+        /** @type {SearchResultItem} */
+        const res = {
+            id: item.key,
+            title: item.data.title,
+            type: item.data.itemType,
+        };
+        if (Object.hasOwnProperty.call(item, "url")) {
+            res.URL = item.data.url;
+        }
+        if (Object.hasOwnProperty.call(item, "volume")) {
+            res.volume = item.data.volume;
+        }
+        if (Object.hasOwnProperty.call(item, "language")) {
+            res.language = item.data.language;
+        }
+        if (Object.hasOwnProperty.call(item, "abstract")) {
+            res.abstract = item.data.abstract;
+        }
+        if (Object.hasOwnProperty.call(item, "note")) {
+            res.note = item.data.note;
+        }
+        if (Object.hasOwnProperty.call(item, "page")) {
+            res.page = item.data.page;
+        }
+        if (Object.hasOwnProperty.call(item, "shortTitle")) {
+            res.shortTitle = item.data.shortTitle;
+        }
+        if (Object.hasOwnProperty.call(item, "links")) {
+            res.uris = [];
+            if (Object.hasOwnProperty.call(item.links, "self")) {
+                res.uris.push(item.links.self.href)
+            }
+            if (Object.hasOwnProperty.call(item.links, "alternate")) {
+                res.uris.push(item.links.alternate.href)
+            }
+        }
+
+        return res;
     }
 
     /**
