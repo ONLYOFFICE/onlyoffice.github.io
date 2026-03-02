@@ -1,8 +1,16 @@
 (function(window, undefined) {
     'use strict';
 
+    // CORS proxy URL (same as AI plugin uses)
+    var PROXY_URL = 'https://plugins-services.onlyoffice.com/proxy';
+
+    // Check if we're running in desktop mode
+    function isDesktopMode() {
+        return window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
+    }
+
     // Custom fetch using AscSimpleRequest (ONLYOFFICE SDK) to bypass CORS
-    // Falls back to XMLHttpRequest for local desktop mode
+    // Falls back to CORS proxy for web browser mode
     function odataFetch(url, options) {
         options = options || {};
         var method = options.method || 'GET';
@@ -10,7 +18,7 @@
 
         return new Promise(function(resolve, reject) {
             // Try AscSimpleRequest first (available in onlyoffice:// protocol)
-            if (window.AscSimpleRequest && window.AscSimpleRequest.createRequest) {
+            if (isDesktopMode()) {
                 window.AscSimpleRequest.createRequest({
                     url: url,
                     method: method,
@@ -61,28 +69,31 @@
                     }
                 });
             } else {
-                // Fallback to XMLHttpRequest for file:// protocol (local desktop)
-                var xhr = new XMLHttpRequest();
-                xhr.open(method, url, true);
+                // Use CORS proxy for web browser mode
+                var proxyBody = JSON.stringify({
+                    target: url,
+                    method: method,
+                    headers: headers,
+                    data: options.body || ''
+                });
 
-                for (var h in headers) {
-                    if (headers.hasOwnProperty(h)) {
-                        xhr.setRequestHeader(h, headers[h]);
-                    }
-                }
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', PROXY_URL, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
 
                 xhr.onload = function() {
+                    var responseText = xhr.responseText;
                     var response = {
                         ok: xhr.status >= 200 && xhr.status < 300,
                         status: xhr.status,
                         statusText: xhr.statusText,
                         text: function() {
-                            return Promise.resolve(xhr.responseText);
+                            return Promise.resolve(responseText);
                         },
                         json: function() {
                             return new Promise(function(res, rej) {
                                 try {
-                                    res(JSON.parse(xhr.responseText));
+                                    res(JSON.parse(responseText));
                                 } catch (err) {
                                     rej(err);
                                 }
@@ -100,7 +111,7 @@
                     reject(new Error('Request timeout'));
                 };
 
-                xhr.send(options.body || null);
+                xhr.send(proxyBody);
             }
         });
     }
