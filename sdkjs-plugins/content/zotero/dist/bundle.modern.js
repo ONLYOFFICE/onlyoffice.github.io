@@ -6067,7 +6067,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
-    this._defaultStyles = [ "american-medical-association", "american-political-science-association", "apa", "american-sociological-association", "chicago-author-date-17th-edition", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association-8th-edition", "nature" ];
+    this._defaultStyles = [ "american-medical-association", "american-political-science-association", "apa", "american-sociological-association", "chicago-author-date", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association", "nature" ];
     this._cache = {};
 }
 

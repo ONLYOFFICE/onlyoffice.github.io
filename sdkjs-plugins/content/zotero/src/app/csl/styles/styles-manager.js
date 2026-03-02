@@ -61,10 +61,10 @@ function CslStylesManager(lastStyleKey) {
         "american-political-science-association",
         "apa",
         "american-sociological-association",
-        "chicago-author-date-17th-edition",
+        "chicago-author-date",
         "harvard-cite-them-right-10th-edition",
         "ieee",
-        "modern-language-association-8th-edition",
+        "modern-language-association",
         "nature",
     ];
 
