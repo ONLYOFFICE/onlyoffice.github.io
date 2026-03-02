@@ -39,7 +39,13 @@
  * @returns {string}
  */
 function translate(message) {
-    return window.Asc.plugin.tr(message);
+    try {
+        return window.Asc.plugin.tr(message);
+    } catch (e) {
+        console.error(e);
+        return message;
+    }
+    
 }
 
 export { translate };

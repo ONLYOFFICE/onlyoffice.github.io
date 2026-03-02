@@ -530,6 +530,7 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._styleMessage.show(translate(err));
             }
             isClick && self._hideLoader();
+            throw err;
         });
 };
 

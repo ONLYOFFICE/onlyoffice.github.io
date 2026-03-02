@@ -64,5 +64,10 @@
     "Edit citation": "引用を編集",
     "OK": "OK",
     "Something went wrong": "何かがうまくいかなかった",
-    "Update your editor to use this feature.": "この機能を使用するには、エディターを更新してください。"
+    "Update your editor to use this feature.": "この機能を使用するには、エディターを更新してください。",
+    "Success!": "成功!",
+    "All active Zotero citations and Bibliography have been replaced.": "すべてのアクティブなZotero引用と参考文献が置き換えられました。",
+    "An error occurred while loading settings. Try restarting the plugin.": "設定の読み込み中にエラーが発生しました。プラグインを再起動してください。",
+    "An error occurred while loading library groups. Try restarting the plugin.": "ライブラリグループの読み込み中にエラーが発生しました。プラグインを再起動してください。",
+    "The style is not available in the local version of the plugin.": "このスタイルはローカルバージョンのプラグインでは利用できません。"
 }

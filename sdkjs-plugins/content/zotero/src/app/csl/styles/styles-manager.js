@@ -178,6 +178,8 @@ CslStylesManager.prototype.getStyle = function (
             let url = self._STYLES_LOCAL + styleName + ".csl";
             if (self._isOnlineAvailable) {
                 url = self._STYLES_URL + styleName;
+            } else if (self._defaultStyles.indexOf(styleName) === -1) {
+                throw "The style is not available in the local version of the plugin.";
             }
             return fetch(url).then(function (resp) {
                 return resp.text();
