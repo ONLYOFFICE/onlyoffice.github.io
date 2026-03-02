@@ -9,15 +9,20 @@
         return window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
     }
 
+    // Check if we have JWT auth (running within ONLYOFFICE Document Server)
+    function hasServerAuth() {
+        return window.Asc && window.Asc.plugin && window.Asc.plugin.info && window.Asc.plugin.info.jwt;
+    }
+
     // Custom fetch using AscSimpleRequest (ONLYOFFICE SDK) to bypass CORS
-    // Falls back to CORS proxy for web browser mode
+    // Falls back to CORS proxy for Document Server mode
     function odataFetch(url, options) {
         options = options || {};
         var method = options.method || 'GET';
         var headers = options.headers || {};
 
         return new Promise(function(resolve, reject) {
-            // Try AscSimpleRequest first (available in onlyoffice:// protocol)
+            // Try AscSimpleRequest first (available in onlyoffice:// protocol - desktop mode)
             if (isDesktopMode()) {
                 window.AscSimpleRequest.createRequest({
                     url: url,
@@ -68,8 +73,8 @@
                         resolve(response);
                     }
                 });
-            } else {
-                // Use CORS proxy for web browser mode
+            } else if (hasServerAuth()) {
+                // Use CORS proxy with JWT auth (Document Server mode)
                 var proxyBody = JSON.stringify({
                     target: url,
                     method: method,
@@ -80,6 +85,7 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', PROXY_URL, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('Authorization', 'Bearer ' + window.Asc.plugin.info.jwt);
 
                 xhr.onload = function() {
                     var responseText = xhr.responseText;
@@ -112,6 +118,9 @@
                 };
 
                 xhr.send(proxyBody);
+            } else {
+                // No way to bypass CORS in standalone browser mode
+                reject(new Error('CORS restriction: This plugin requires ONLYOFFICE Desktop or Document Server to access external OData services. External services cannot be accessed directly from the browser due to security restrictions.'));
             }
         });
     }
