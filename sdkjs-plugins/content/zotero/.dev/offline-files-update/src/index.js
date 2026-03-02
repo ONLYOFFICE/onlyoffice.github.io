@@ -46,7 +46,7 @@ async function copyLocales() {
         await fs.ensureDir(LOCALES_DEST_FOLDER);
 
         let numOfFiles = 0;
-        for (const filePath of xmlLocalesFiles) {
+        for (const filePath of xmlLocalesFiles.found) {
             const fileName = path.basename(filePath);
             const targetPath = path.join(LOCALES_DEST_FOLDER, fileName);
             await fs.copy(filePath, targetPath);
