@@ -1289,6 +1289,7 @@ class SelectBox {
         this._options = Object.assign(_options, {
             placeholder: _options.placeholder || "Select...",
             searchable: _options.searchable || false,
+            sortable: _options.sortable || false,
             multiple: _options.multiple || false,
             description: _options.description || ""
         });
@@ -1370,6 +1371,9 @@ class SelectBox {
                 text: text,
                 selected: selected
             });
+            if (this._options.sortable) {
+                this._items.sort((a, b) => !!a && !!b ? a.text.localeCompare(b.text) : !!a ? -1 : !!b ? 1 : 0);
+            }
         }
         if (selected) {
             if (this._options.multiple) {

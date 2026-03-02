@@ -12,11 +12,13 @@ const STYLES_JSON_FOLDER = "../../resources/csl/";
 const STYLES_DEST_FOLDER = "../../resources/csl/styles";
 
 const DEFAULT_STYLES = [
+    "american-anthropological-association",
     "american-medical-association",
     "american-political-science-association",
-    "apa",
     "american-sociological-association",
+    "apa",
     "chicago-author-date",
+    "chicago-notes-bibliography",
     "harvard-cite-them-right-10th-edition",
     "ieee",
     "modern-language-association",

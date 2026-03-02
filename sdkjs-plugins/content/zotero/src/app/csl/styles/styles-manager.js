@@ -57,11 +57,13 @@ function CslStylesManager(lastStyleKey) {
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
 
     this._defaultStyles = [
+        "american-anthropological-association",
         "american-medical-association",
         "american-political-science-association",
-        "apa",
         "american-sociological-association",
+        "apa",
         "chicago-author-date",
+        "chicago-notes-bibliography",
         "harvard-cite-them-right-10th-edition",
         "ieee",
         "modern-language-association",
@@ -249,11 +251,7 @@ CslStylesManager.prototype.getStylesInfo = function () {
         }
 
         customStyles.forEach(function (style) {
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
             if (self._defaultStyles.indexOf(style.name) === -1) {
                 self._defaultStyles.push(style.name);
             }
@@ -264,12 +262,9 @@ CslStylesManager.prototype.getStylesInfo = function () {
                 // already added
                 return;
             }
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
         });
+        resultStyles.sort((a, b) => a.name.localeCompare(b.name));
 
         return resultStyles;
     });
