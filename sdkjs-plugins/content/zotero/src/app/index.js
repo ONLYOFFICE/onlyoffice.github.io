@@ -49,34 +49,21 @@ import "../components.css";
 import "../styles.css";
 
 (function () {
-    var displayNoneClass = "hidden";
-
-    // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
-    //     из библиографии автоматически (это делать только при обновлении библиографии
-    //     или refresh), но их точно нужно удалить из formatter!
-    // TODO добавить ещё обработку события (изменения линков), предлать пользователю
-    //     обновить их или сохранить ручное форматирование (при ручном форматировании
-    //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
-    // TODO сейчас всегда делаем полный refresh при каждом действии
-    //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
-    //     что поменялось без событий (потом добавить ещё сравнение контента)
-    // TODO ms меняет линки (если стиль с нумерацией settings._bNumFormat) делает их по порядку
-    //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
-    //     какая цитата сверху и снизу от текущего курсора)
+    const displayNoneClass = "hidden";
 
     /** @type {Router} */
-    var router;
+    let router;
     /** @type {ZoteroSdk} */
-    var sdk;
+    let sdk;
 
     /** @type {SettingsPage} */
-    var settings;
+    let settings;
 
     /** @type {CitationService} */
-    var citationService;
+    let citationService;
 
     /** @type {LastSearch} */
-    var lastSearch = {
+    const lastSearch = {
         text: "",
         obj: null,
         groups: [],
@@ -84,22 +71,22 @@ import "../styles.css";
     };
 
     /** @type {SearchFilterComponents} */
-    var searchFilter;
+    let searchFilter;
     /** @type {SelectCitationsComponent} */
-    var selectCitation;
+    let selectCitation;
     /** @type {Button} */
-    var saveAsTextBtn;
+    let saveAsTextBtn;
     /** @type {Button} */
-    var insertLinkBtn;
+    let insertLinkBtn;
     /** @type {Button} */
     let openSettingsBtn;
-    /** @type {Button} */ 
-    var insertBibBtn;
     /** @type {Button} */
-    var refreshBtn;
+    let insertBibBtn;
+    /** @type {Button} */
+    let refreshBtn;
     const libLoader = new Loader("libLoader", translate("Loading..."));
     /** @type {Object.<string, HTMLElement | HTMLInputElement>} */
-    var elements = {};
+    let elements = {};
     function initElements() {
         const error = document.getElementById("errorWrapper");
         if (!error) {
@@ -491,7 +478,7 @@ import "../styles.css";
         window.Asc.plugin.onThemeChangedBase(theme);
         Theme.fixThemeForIE(theme);
         Theme.addStylesForComponents(theme);
-        var rules = "";
+        let rules = "";
         rules +=
             ".link, .link:visited, .link:hover { color : " +
             window.Asc.plugin.theme["text-normal"] +
@@ -539,10 +526,10 @@ import "../styles.css";
     };
 
     function applyTranslations() {
-        var elements = document.getElementsByClassName("i18n");
+        let elements = document.getElementsByClassName("i18n");
 
-        for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
+        for (let i = 0; i < elements.length; i++) {
+            let el = elements[i];
             if (el instanceof HTMLElement === false) continue;
 
             ["placeholder", "title"].forEach((attr) => {
@@ -645,7 +632,7 @@ import "../styles.css";
         }
 
         for (
-            var i = 0;
+            let i = 0;
             i < lastSearch.groups.length && lastSearch.groups[i].next;
             i++
         ) {
@@ -669,7 +656,7 @@ import "../styles.css";
             return false;
         }
 
-        var flag = true;
+        let flag = true;
         lastSearch.groups.forEach(function (el) {
             if (el.next) flag = false;
         });
@@ -713,7 +700,7 @@ import "../styles.css";
      * @returns {Promise<number>}
      */
     function displaySearchItems(res, err, isGroup) {
-        var first = false;
+        let first = false;
         if (!lastSearch.obj && res && res.items && !res.items.length)
             first = true;
         if (err) {
@@ -733,6 +720,7 @@ import "../styles.css";
          * @returns
          */
         const fillUrisFromId = function (item) {
+            if (!item.id) return item;
             const slashFirstIndex = item.id.indexOf("/") + 1;
             const slashLastIndex = item.id.lastIndexOf("/") + 1;
             const httpIndex = item.id.indexOf("http");
