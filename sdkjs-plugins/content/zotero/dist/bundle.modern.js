@@ -6297,7 +6297,10 @@ LocalesManager.prototype.loadLocale = function(langTag) {
         return Promise.resolve(this._cache[langTag]);
     }
     var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
-    return fetch(url).then(function(response) {
+    return fetch(url).catch(function(err) {
+        console.error("Failed to load locale:", err);
+        return fetch(self._LOCALES_PATH + "locales-" + langTag + ".xml");
+    }).then(function(response) {
         return response.text();
     }).then(function(text) {
         self._cache[langTag] = text;
