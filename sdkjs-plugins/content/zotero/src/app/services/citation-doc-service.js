@@ -169,6 +169,12 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
                     );
                 });
             });
+            return Promise.all(promises).then(() => {
+                return true;
+            }).catch(e => {
+                console.error(e);
+                return false;
+            });
         });
     }
 
