@@ -73,8 +73,8 @@
                         resolve(response);
                     }
                 });
-            } else if (hasServerAuth()) {
-                // Use CORS proxy with JWT auth (Document Server mode)
+            } else {
+                // Use CORS proxy
                 var proxyBody = JSON.stringify({
                     target: url,
                     method: method,
@@ -85,7 +85,11 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', PROXY_URL, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.setRequestHeader('Authorization', 'Bearer ' + window.Asc.plugin.info.jwt);
+
+                // Add JWT auth if available (Document Server mode)
+                if (hasServerAuth()) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + window.Asc.plugin.info.jwt);
+                }
 
                 xhr.onload = function() {
                     var responseText = xhr.responseText;
@@ -110,7 +114,7 @@
                 };
 
                 xhr.onerror = function() {
-                    reject(new Error('Network request failed'));
+                    reject(new Error('Network request failed. The OData service may not be accessible due to CORS restrictions.'));
                 };
 
                 xhr.ontimeout = function() {
@@ -118,9 +122,6 @@
                 };
 
                 xhr.send(proxyBody);
-            } else {
-                // No way to bypass CORS in standalone browser mode
-                reject(new Error('CORS restriction: This plugin requires ONLYOFFICE Desktop or Document Server to access external OData services. External services cannot be accessed directly from the browser due to security restrictions.'));
             }
         });
     }
@@ -215,7 +216,9 @@
 
     // Fetch service document to get available entity sets
     function fetchServiceDocument(baseUrl) {
-        odataFetch(baseUrl, {
+        // Use $format=json query param (OData v3 doesn't respect Accept header)
+        var url = baseUrl + (baseUrl.indexOf('?') === -1 ? '?' : '&') + '$format=json';
+        odataFetch(url, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -374,7 +377,8 @@
 
     // Fetch preview data for a table
     function fetchTablePreview(table) {
-        var url = odataServiceUrl + '/' + table.url + '?$top=10';
+        // Use $format=json for OData v3 compatibility
+        var url = odataServiceUrl + '/' + table.url + '?$top=10&$format=json';
 
         odataFetch(url, {
             headers: {
@@ -457,7 +461,8 @@
             var table = availableTables.find(function(t) { return t.name === tableName; });
             if (!table) return;
 
-            var url = odataServiceUrl + '/' + table.url;
+            // Use $format=json for OData v3 compatibility
+            var url = odataServiceUrl + '/' + table.url + '?$format=json';
 
             odataFetch(url, {
                 headers: {
