@@ -72,6 +72,7 @@ function SettingsPage(router, displayNoneClass) {
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
+        sortable: true
     });
     this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
         placeholder: "Enter style name",

@@ -2388,6 +2388,7 @@ class SelectBox {
         this._options = Object.assign(_options, {
             placeholder: _options.placeholder || "Select...",
             searchable: _options.searchable || false,
+            sortable: _options.sortable || false,
             multiple: _options.multiple || false,
             description: _options.description || ""
         });
@@ -2469,6 +2470,9 @@ class SelectBox {
                 text: text,
                 selected: selected
             });
+            if (this._options.sortable) {
+                this._items.sort((a, b) => !!a && !!b ? a.text.localeCompare(b.text) : !!a ? -1 : !!b ? 1 : 0);
+            }
         }
         if (selected) {
             if (this._options.multiple) {
@@ -6067,7 +6071,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
-    this._defaultStyles = [ "american-medical-association", "american-political-science-association", "apa", "american-sociological-association", "chicago-author-date", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association", "nature" ];
+    this._defaultStyles = [ "american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association", "nature" ];
     this._cache = {};
 }
 
@@ -6188,11 +6192,7 @@ CslStylesManager.prototype.getStylesInfo = function() {
             });
         }
         customStyles.forEach(function(style) {
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
             if (self._defaultStyles.indexOf(style.name) === -1) {
                 self._defaultStyles.push(style.name);
             }
@@ -6201,12 +6201,9 @@ CslStylesManager.prototype.getStylesInfo = function() {
             if (resultStyleNames.indexOf(style.name) !== -1) {
                 return;
             }
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
         });
+        resultStyles.sort((a, b) => a.name.localeCompare(b.name));
         return resultStyles;
     });
 };
@@ -6353,7 +6350,8 @@ function SettingsPage(router, displayNoneClass) {
         variant: "secondary"
     });
     this._styleSelect = new SelectBox("styleSelectList", {
-        placeholder: "Enter style name"
+        placeholder: "Enter style name",
+        sortable: true
     });
     this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
         placeholder: "Enter style name",
