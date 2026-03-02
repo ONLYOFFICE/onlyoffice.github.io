@@ -67,5 +67,6 @@
     "Rest assured nothing has happened to your document or your citations.": "请放心，您的文档或引用没有发生任何变化。",
     "Press continue to be guided through the update process.": "按继续开始更新过程。",
     "Your document has been updated to use Mendeley Cite.": "您的文档已更新为使用 Mendeley Cite。",
-    "Please select the citation style and language for future citation formatting.": "请选择引用样式和语言以用于未来的引用格式。"
+    "Please select the citation style and language for future citation formatting.": "请选择引用样式和语言以用于未来的引用格式。",
+    "An error occurred while loading settings. Try restarting the plugin.": "載入設定時發生錯誤。請重新啟動插件。"
 }

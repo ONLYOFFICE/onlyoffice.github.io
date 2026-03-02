@@ -67,5 +67,6 @@
     "Rest assured nothing has happened to your document or your citations.": "Ju lutem po vraponi për të parandaluar përditësimet e ardhshme, përdor pretrazim për të vrapur të tjetër.",
     "Press continue to be guided through the update process.": "Shtypni vazhdoni për të qenë i udhëzuar nëpërmjet procesit të përditësimit.",
     "Your document has been updated to use Mendeley Cite.": "Dokumenti juaj është përditësuar për të përdorur Mendeley Cite.",
-    "Please select the citation style and language for future citation formatting.": "Ju lutem zgjidhni stilin e citimit dhe gjuhën për formatimin e ardhshëm të citimeve."
+    "Please select the citation style and language for future citation formatting.": "Ju lutem zgjidhni stilin e citimit dhe gjuhën për formatimin e ardhshëm të citimeve.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Ndodhi një gabim gjatë ngarkimit të postavkave. Provoni të restartoni pluginin."
 }

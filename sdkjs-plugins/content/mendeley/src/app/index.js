@@ -98,7 +98,7 @@ import "../styles.css";
     let insertLinkBtn;
     /** @type {Button} */
     let openSettingsBtn;
-    /** @type {Button} */ 
+    /** @type {Button} */
     let insertBibBtn;
     /** @type {Button} */
     let refreshBtn;
@@ -183,9 +183,19 @@ import "../styles.css";
                 isInit = true;
                 Loader.show();
 
+                let loadGroupsPromise = loadGroups().catch((e) => {
+                    console.error(e);
+                    showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
+                });
+                let initSettingsPromise = settings.init().catch((e) => {
+                    console.error(e);
+                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                    settings.show();
+                });
+
                 Promise.all([
-                    loadGroups(), 
-                    settings.init(), 
+                    loadGroupsPromise,
+                    initSettingsPromise,
                     citationService.checkOldVersion(),
                     showCitationsAtTheStartFromMyLibrary()
                 ]).then(function ([g, s, isUpdateOldVersion, c]) {
@@ -217,7 +227,6 @@ import "../styles.css";
         loginPage.onAuthCallback(token, state);
     };
 
-
     function showCitationsAtTheStartFromMyLibrary() {
         libLoader.show();
         const promise = sdk.getItems(null)
@@ -225,13 +234,16 @@ import "../styles.css";
                 delete res.next;
                 return res;
             })
-        loadLibrary(promise, false)
+        return loadLibrary(promise, false)
             .then((res) => {
                 if (res > 0) {
                     updateHeaderText("started"); 
                 } else {
                     updateHeaderText("empty");
                 }
+            })
+            .catch((e) => {
+                console.error(e);
             })
             .finally(() => {
                 libLoader.hide();
@@ -442,7 +454,7 @@ import "../styles.css";
                     CursorService.setCursorPosition(cursorPos);
                 });
         });
-        
+
         openSettingsBtn.subscribe(function (event) {
             if (event.type !== "button:click") {
                 return;

@@ -67,5 +67,6 @@
     "Rest assured nothing has happened to your document or your citations.": "Молимо вас да се не бавите, ваш документ или цитати нису променjenи.",
     "Press continue to be guided through the update process.": "Пријати настави да бисте били водjeni kroz proces ažuriranja.",
     "Your document has been updated to use Mendeley Cite.": "Ваш документ је ажуриран да користи Mendeley Cite.",
-    "Please select the citation style and language for future citation formatting.": "Изаберите стил и језик за будућу форматирање цитата."
+    "Please select the citation style and language for future citation formatting.": "Изаберите стил и језик за будућу форматирање цитата.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Дошло је до грешке при учитавању поставки. Покушайте поново покренути додатак."
 }

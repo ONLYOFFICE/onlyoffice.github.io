@@ -62,7 +62,7 @@ class AdditionalWindow {
                 this.#hide();
             };
         });
-    }    
+    }
     
     /**
      * @param {string} description

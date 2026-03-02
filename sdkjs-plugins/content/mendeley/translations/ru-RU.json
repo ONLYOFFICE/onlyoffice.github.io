@@ -67,5 +67,6 @@
     "Rest assured nothing has happened to your document or your citations.": "Не беспокойтесь, с вашим документом и цитатами ничего не произошло.",
     "Press continue to be guided through the update process.": "Нажмите «Продолжить», чтобы пройти через процесс обновления.",
     "Your document has been updated to use Mendeley Cite.": "Ваш документ был обновлён для использования Mendeley Cite.",
-    "Please select the citation style and language for future citation formatting.": "Пожалуйста, выберите стиль цитирования и язык для будущего форматирования цитат."
+    "Please select the citation style and language for future citation formatting.": "Пожалуйста, выберите стиль цитирования и язык для будущего форматирования цитат.",
+    "An error occurred while loading settings. Try restarting the plugin.": "При загрузке настроек произошла ошибка. Попробуйте перезапустить плагин."
 }

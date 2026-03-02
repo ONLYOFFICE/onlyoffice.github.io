@@ -57,14 +57,16 @@ function CslStylesManager(lastStyleKey) {
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
 
     this._defaultStyles = [
+        "american-anthropological-association",
         "american-medical-association",
         "american-political-science-association",
-        "apa",
         "american-sociological-association",
-        "chicago-author-date-17th-edition",
+        "apa",
+        "chicago-author-date",
+        "chicago-notes-bibliography",
         "harvard-cite-them-right-10th-edition",
         "ieee",
-        "modern-language-association-8th-edition",
+        "modern-language-association",
         "nature",
     ];
 

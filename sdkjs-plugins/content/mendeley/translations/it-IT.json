@@ -67,5 +67,6 @@
     "Rest assured nothing has happened to your document or your citations.": "Niente è successo al tuo documento o alle tue citazioni.",
     "Press continue to be guided through the update process.": "Premi Continua per essere guidato attraverso il processo di aggiornamento.",
     "Your document has been updated to use Mendeley Cite.": "Il tuo documento è stato aggiornato per utilizzare Mendeley Cite.",
-    "Please select the citation style and language for future citation formatting.": "Seleziona lo stile e la lingua per le future formattazioni delle citazioni."
+    "Please select the citation style and language for future citation formatting.": "Seleziona lo stile e la lingua per le future formattazioni delle citazioni.",
+    "An error occurred while loading settings. Try restarting the plugin.": "Si è verificato un errore durante il caricamento delle impostazioni. Prova a riavviare il plugin."
 }

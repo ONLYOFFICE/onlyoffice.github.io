@@ -62,6 +62,11 @@ LocalesManager.prototype.loadLocale = function (langTag) {
     }
     var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
     return fetch(url)
+        .catch(function (err) {
+            console.error("Failed to load locale:", err);
+            // Try to load from local path as fallback
+            return fetch(self._LOCALES_PATH + "locales-" + langTag + ".xml");
+        })
         .then(function (response) {
             return response.text();
         })

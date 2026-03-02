@@ -140,8 +140,9 @@ class CitationService {
                 const citationIndex = this._storage.getIndex(citationId);
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
-                    bibText = bibText.replace(/\n/, "");
+                bibText = bibText.replaceAll(/\n/g, "").trim();
+                if (bibText.slice(0, 4) === "<div" || bibText.slice(-5) === "</div>") {
+                    bibText = "<p" + bibText.slice(4, -5) + "</p>";
                 }
 
                 bibItems.push(bibText);
