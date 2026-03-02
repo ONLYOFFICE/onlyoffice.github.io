@@ -161,7 +161,6 @@ class CitationDocService {
                 });
             });
             return Promise.all(promises).then(() => {
-                window.Asc.plugin.executeCommand("close","");
                 return true;
             }).catch(e => {
                 console.error(e);
