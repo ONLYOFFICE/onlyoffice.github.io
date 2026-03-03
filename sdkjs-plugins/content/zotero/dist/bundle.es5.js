@@ -10956,6 +10956,140 @@
         return es_array_from;
     }
     requireEs_array_from();
+    var es_array_sort = {};
+    var environmentFfVersion;
+    var hasRequiredEnvironmentFfVersion;
+    function requireEnvironmentFfVersion() {
+        if (hasRequiredEnvironmentFfVersion) return environmentFfVersion;
+        hasRequiredEnvironmentFfVersion = 1;
+        var userAgent = requireEnvironmentUserAgent();
+        var firefox = userAgent.match(/firefox\/(\d+)/i);
+        environmentFfVersion = !!firefox && +firefox[1];
+        return environmentFfVersion;
+    }
+    var environmentIsIeOrEdge;
+    var hasRequiredEnvironmentIsIeOrEdge;
+    function requireEnvironmentIsIeOrEdge() {
+        if (hasRequiredEnvironmentIsIeOrEdge) return environmentIsIeOrEdge;
+        hasRequiredEnvironmentIsIeOrEdge = 1;
+        var UA = requireEnvironmentUserAgent();
+        environmentIsIeOrEdge = /MSIE|Trident/.test(UA);
+        return environmentIsIeOrEdge;
+    }
+    var environmentWebkitVersion;
+    var hasRequiredEnvironmentWebkitVersion;
+    function requireEnvironmentWebkitVersion() {
+        if (hasRequiredEnvironmentWebkitVersion) return environmentWebkitVersion;
+        hasRequiredEnvironmentWebkitVersion = 1;
+        var userAgent = requireEnvironmentUserAgent();
+        var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
+        environmentWebkitVersion = !!webkit && +webkit[1];
+        return environmentWebkitVersion;
+    }
+    var hasRequiredEs_array_sort;
+    function requireEs_array_sort() {
+        if (hasRequiredEs_array_sort) return es_array_sort;
+        hasRequiredEs_array_sort = 1;
+        var $ = require_export();
+        var uncurryThis = requireFunctionUncurryThis();
+        var aCallable = requireACallable();
+        var toObject = requireToObject();
+        var lengthOfArrayLike = requireLengthOfArrayLike();
+        var deletePropertyOrThrow = requireDeletePropertyOrThrow();
+        var toString = requireToString();
+        var fails = requireFails();
+        var internalSort = requireArraySort();
+        var arrayMethodIsStrict = requireArrayMethodIsStrict();
+        var FF = requireEnvironmentFfVersion();
+        var IE_OR_EDGE = requireEnvironmentIsIeOrEdge();
+        var V8 = requireEnvironmentV8Version();
+        var WEBKIT = requireEnvironmentWebkitVersion();
+        var test = [];
+        var nativeSort = uncurryThis(test.sort);
+        var push = uncurryThis(test.push);
+        var FAILS_ON_UNDEFINED = fails(function() {
+            test.sort(undefined);
+        });
+        var FAILS_ON_NULL = fails(function() {
+            test.sort(null);
+        });
+        var STRICT_METHOD = arrayMethodIsStrict("sort");
+        var STABLE_SORT = !fails(function() {
+            if (V8) return V8 < 70;
+            if (FF && FF > 3) return;
+            if (IE_OR_EDGE) return true;
+            if (WEBKIT) return WEBKIT < 603;
+            var result = "";
+            var code, chr, value, index;
+            for (code = 65; code < 76; code++) {
+                chr = String.fromCharCode(code);
+                switch (code) {
+                  case 66:
+                  case 69:
+                  case 70:
+                  case 72:
+                    value = 3;
+                    break;
+
+                  case 68:
+                  case 71:
+                    value = 4;
+                    break;
+
+                  default:
+                    value = 2;
+                }
+                for (index = 0; index < 47; index++) {
+                    test.push({
+                        k: chr + index,
+                        v: value
+                    });
+                }
+            }
+            test.sort(function(a, b) {
+                return b.v - a.v;
+            });
+            for (index = 0; index < test.length; index++) {
+                chr = test[index].k.charAt(0);
+                if (result.charAt(result.length - 1) !== chr) result += chr;
+            }
+            return result !== "DGBEFHACIJK";
+        });
+        var FORCED = FAILS_ON_UNDEFINED || !FAILS_ON_NULL || !STRICT_METHOD || !STABLE_SORT;
+        var getSortCompare = function(comparefn) {
+            return function(x, y) {
+                if (y === undefined) return -1;
+                if (x === undefined) return 1;
+                if (comparefn !== undefined) return +comparefn(x, y) || 0;
+                return toString(x) > toString(y) ? 1 : -1;
+            };
+        };
+        $({
+            target: "Array",
+            proto: true,
+            forced: FORCED
+        }, {
+            sort: function sort(comparefn) {
+                if (comparefn !== undefined) aCallable(comparefn);
+                var array = toObject(this);
+                if (STABLE_SORT) return comparefn === undefined ? nativeSort(array) : nativeSort(array, comparefn);
+                var items = [];
+                var arrayLength = lengthOfArrayLike(array);
+                var itemsLength, index;
+                for (index = 0; index < arrayLength; index++) {
+                    if (index in array) push(items, array[index]);
+                }
+                internalSort(items, getSortCompare(comparefn));
+                itemsLength = lengthOfArrayLike(items);
+                index = 0;
+                while (index < itemsLength) array[index] = items[index++];
+                while (index < arrayLength) deletePropertyOrThrow(array, index++);
+                return array;
+            }
+        });
+        return es_array_sort;
+    }
+    requireEs_array_sort();
     var es_set = {};
     var es_set_constructor = {};
     var hasRequiredEs_set_constructor;
@@ -11006,6 +11140,7 @@
             this._options = Object.assign(_options, {
                 placeholder: _options.placeholder || "Select...",
                 searchable: _options.searchable || false,
+                sortable: _options.sortable || false,
                 multiple: _options.multiple || false,
                 description: _options.description || ""
             });
@@ -11097,6 +11232,11 @@
                         text: text,
                         selected: selected
                     });
+                    if (this._options.sortable) {
+                        this._items.sort(function(a, b) {
+                            return !!a && !!b ? a.text.localeCompare(b.text) : !!a ? -1 : !!b ? 1 : 0;
+                        });
+                    }
                 }
                 if (selected) {
                     if (this._options.multiple) {
@@ -11873,140 +12013,6 @@
             return message;
         }
     }
-    var es_array_sort = {};
-    var environmentFfVersion;
-    var hasRequiredEnvironmentFfVersion;
-    function requireEnvironmentFfVersion() {
-        if (hasRequiredEnvironmentFfVersion) return environmentFfVersion;
-        hasRequiredEnvironmentFfVersion = 1;
-        var userAgent = requireEnvironmentUserAgent();
-        var firefox = userAgent.match(/firefox\/(\d+)/i);
-        environmentFfVersion = !!firefox && +firefox[1];
-        return environmentFfVersion;
-    }
-    var environmentIsIeOrEdge;
-    var hasRequiredEnvironmentIsIeOrEdge;
-    function requireEnvironmentIsIeOrEdge() {
-        if (hasRequiredEnvironmentIsIeOrEdge) return environmentIsIeOrEdge;
-        hasRequiredEnvironmentIsIeOrEdge = 1;
-        var UA = requireEnvironmentUserAgent();
-        environmentIsIeOrEdge = /MSIE|Trident/.test(UA);
-        return environmentIsIeOrEdge;
-    }
-    var environmentWebkitVersion;
-    var hasRequiredEnvironmentWebkitVersion;
-    function requireEnvironmentWebkitVersion() {
-        if (hasRequiredEnvironmentWebkitVersion) return environmentWebkitVersion;
-        hasRequiredEnvironmentWebkitVersion = 1;
-        var userAgent = requireEnvironmentUserAgent();
-        var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
-        environmentWebkitVersion = !!webkit && +webkit[1];
-        return environmentWebkitVersion;
-    }
-    var hasRequiredEs_array_sort;
-    function requireEs_array_sort() {
-        if (hasRequiredEs_array_sort) return es_array_sort;
-        hasRequiredEs_array_sort = 1;
-        var $ = require_export();
-        var uncurryThis = requireFunctionUncurryThis();
-        var aCallable = requireACallable();
-        var toObject = requireToObject();
-        var lengthOfArrayLike = requireLengthOfArrayLike();
-        var deletePropertyOrThrow = requireDeletePropertyOrThrow();
-        var toString = requireToString();
-        var fails = requireFails();
-        var internalSort = requireArraySort();
-        var arrayMethodIsStrict = requireArrayMethodIsStrict();
-        var FF = requireEnvironmentFfVersion();
-        var IE_OR_EDGE = requireEnvironmentIsIeOrEdge();
-        var V8 = requireEnvironmentV8Version();
-        var WEBKIT = requireEnvironmentWebkitVersion();
-        var test = [];
-        var nativeSort = uncurryThis(test.sort);
-        var push = uncurryThis(test.push);
-        var FAILS_ON_UNDEFINED = fails(function() {
-            test.sort(undefined);
-        });
-        var FAILS_ON_NULL = fails(function() {
-            test.sort(null);
-        });
-        var STRICT_METHOD = arrayMethodIsStrict("sort");
-        var STABLE_SORT = !fails(function() {
-            if (V8) return V8 < 70;
-            if (FF && FF > 3) return;
-            if (IE_OR_EDGE) return true;
-            if (WEBKIT) return WEBKIT < 603;
-            var result = "";
-            var code, chr, value, index;
-            for (code = 65; code < 76; code++) {
-                chr = String.fromCharCode(code);
-                switch (code) {
-                  case 66:
-                  case 69:
-                  case 70:
-                  case 72:
-                    value = 3;
-                    break;
-
-                  case 68:
-                  case 71:
-                    value = 4;
-                    break;
-
-                  default:
-                    value = 2;
-                }
-                for (index = 0; index < 47; index++) {
-                    test.push({
-                        k: chr + index,
-                        v: value
-                    });
-                }
-            }
-            test.sort(function(a, b) {
-                return b.v - a.v;
-            });
-            for (index = 0; index < test.length; index++) {
-                chr = test[index].k.charAt(0);
-                if (result.charAt(result.length - 1) !== chr) result += chr;
-            }
-            return result !== "DGBEFHACIJK";
-        });
-        var FORCED = FAILS_ON_UNDEFINED || !FAILS_ON_NULL || !STRICT_METHOD || !STABLE_SORT;
-        var getSortCompare = function(comparefn) {
-            return function(x, y) {
-                if (y === undefined) return -1;
-                if (x === undefined) return 1;
-                if (comparefn !== undefined) return +comparefn(x, y) || 0;
-                return toString(x) > toString(y) ? 1 : -1;
-            };
-        };
-        $({
-            target: "Array",
-            proto: true,
-            forced: FORCED
-        }, {
-            sort: function sort(comparefn) {
-                if (comparefn !== undefined) aCallable(comparefn);
-                var array = toObject(this);
-                if (STABLE_SORT) return comparefn === undefined ? nativeSort(array) : nativeSort(array, comparefn);
-                var items = [];
-                var arrayLength = lengthOfArrayLike(array);
-                var itemsLength, index;
-                for (index = 0; index < arrayLength; index++) {
-                    if (index in array) push(items, array[index]);
-                }
-                internalSort(items, getSortCompare(comparefn));
-                itemsLength = lengthOfArrayLike(items);
-                index = 0;
-                while (index < itemsLength) array[index] = items[index++];
-                while (index < arrayLength) deletePropertyOrThrow(array, index++);
-                return array;
-            }
-        });
-        return es_array_sort;
-    }
-    requireEs_array_sort();
     var CslHtmlParser = function() {
         function CslHtmlParser() {
             _classCallCheck(this, CslHtmlParser);
@@ -12705,6 +12711,32 @@
             }, isClose, isCalc, resolve);
         });
     }
+    var es_array_findIndex = {};
+    var hasRequiredEs_array_findIndex;
+    function requireEs_array_findIndex() {
+        if (hasRequiredEs_array_findIndex) return es_array_findIndex;
+        hasRequiredEs_array_findIndex = 1;
+        var $ = require_export();
+        var $findIndex = requireArrayIteration().findIndex;
+        var addToUnscopables = requireAddToUnscopables();
+        var FIND_INDEX = "findIndex";
+        var SKIPS_HOLES = true;
+        if (FIND_INDEX in []) Array(1)[FIND_INDEX](function() {
+            SKIPS_HOLES = false;
+        });
+        $({
+            target: "Array",
+            proto: true,
+            forced: SKIPS_HOLES
+        }, {
+            findIndex: function findIndex(callbackfn) {
+                return $findIndex(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+            }
+        });
+        addToUnscopables(FIND_INDEX);
+        return es_array_findIndex;
+    }
+    requireEs_array_findIndex();
     function CitationItemData(id) {
         if (typeof id !== "string" && typeof id !== "number") {
             throw new Error("CitationItemData: id is required");
@@ -13835,46 +13867,52 @@
         return oldItem;
     };
     var _items = new WeakMap;
-    var _ids = new WeakMap;
+    var _itemIds = new WeakMap;
+    var _citations = new WeakMap;
+    var _CSLCitationStorage_brand = new WeakSet;
     var CSLCitationStorage = function() {
         function CSLCitationStorage() {
             _classCallCheck(this, CSLCitationStorage);
+            _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand);
             _classPrivateFieldInitSpec(this, _items, void 0);
-            _classPrivateFieldInitSpec(this, _ids, void 0);
+            _classPrivateFieldInitSpec(this, _itemIds, void 0);
+            _classPrivateFieldInitSpec(this, _citations, void 0);
             _classPrivateFieldSet2(_items, this, []);
-            _classPrivateFieldSet2(_ids, this, []);
+            _classPrivateFieldSet2(_itemIds, this, []);
+            _classPrivateFieldSet2(_citations, this, []);
             this.size = 0;
         }
         return _createClass(CSLCitationStorage, [ {
-            key: "get",
-            value: function get(id) {
+            key: "getItem",
+            value: function getItem(id) {
                 id = id.toString();
-                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
+                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
                 if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
                 return null;
             }
         }, {
-            key: "getIndex",
-            value: function getIndex(id) {
+            key: "getItemIndex",
+            value: function getItemIndex(id) {
                 id = id.toString();
-                return _classPrivateFieldGet2(_ids, this).indexOf(id);
+                return _classPrivateFieldGet2(_itemIds, this).indexOf(id);
             }
         }, {
             key: "clear",
             value: function clear() {
                 _classPrivateFieldSet2(_items, this, []);
-                _classPrivateFieldSet2(_ids, this, []);
+                _classPrivateFieldSet2(_citations, this, []);
+                _classPrivateFieldSet2(_itemIds, this, []);
                 this.size = 0;
                 return this;
             }
         }, {
-            key: "delete",
-            value: function _delete(id) {
+            key: "deleteItem",
+            value: function deleteItem(id) {
                 id = id.toString();
-                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
+                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
                 if (index >= 0) {
                     _classPrivateFieldGet2(_items, this).splice(index, 1);
-                    _classPrivateFieldGet2(_ids, this).splice(index, 1);
+                    _classPrivateFieldGet2(_itemIds, this).splice(index, 1);
                     this.size--;
                 }
                 return this;
@@ -13883,40 +13921,82 @@
             key: "forEach",
             value: function forEach(callback) {
                 for (var i = 0; i < this.size; i++) {
-                    callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_ids, this)[i], this);
+                    callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_itemIds, this)[i], this);
                 }
             }
         }, {
-            key: "has",
-            value: function has(id) {
+            key: "hasItem",
+            value: function hasItem(id) {
                 id = id.toString();
-                return _classPrivateFieldGet2(_ids, this).indexOf(id) >= 0;
+                return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
             }
         }, {
-            key: "set",
-            value: function set(id, item) {
-                id = id.toString();
-                var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
-                if (index >= 0) {
-                    _classPrivateFieldGet2(_items, this)[index] = item;
-                    return this;
-                }
-                _classPrivateFieldGet2(_items, this).push(item);
-                _classPrivateFieldGet2(_ids, this).push(id);
-                this.size++;
+            key: "addCitation",
+            value: function addCitation(cslCitation) {
+                var _this = this;
+                _classPrivateFieldGet2(_citations, this).push(cslCitation);
+                cslCitation.getCitationItems().forEach(function(item) {
+                    _assertClassBrand(_CSLCitationStorage_brand, _this, _setItem).call(_this, item.id, item);
+                });
                 return this;
+            }
+        }, {
+            key: "getCitation",
+            value: function getCitation(id) {
+                return _classPrivateFieldGet2(_citations, this).find(function(citation) {
+                    return citation.citationID === id;
+                });
+            }
+        }, {
+            key: "getCitationIndex",
+            value: function getCitationIndex(id) {
+                return _classPrivateFieldGet2(_citations, this).findIndex(function(citation) {
+                    return citation.citationID === id;
+                });
+            }
+        }, {
+            key: "getCitationsPre",
+            value: function getCitationsPre(id) {
+                var citationsPre = [];
+                _classPrivateFieldGet2(_citations, this).find(function(citation, index) {
+                    if (citation.citationID === id) {
+                        return true;
+                    }
+                    citationsPre.push([ citation.citationID, index + 1 ]);
+                    return false;
+                });
+                return citationsPre;
+            }
+        }, {
+            key: "getCitationsPost",
+            value: function getCitationsPost(id) {
+                var citationsPost = [];
+                var citationIndex = this.getCitationIndex(id);
+                for (var i = citationIndex + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
+                    var citation = _classPrivateFieldGet2(_citations, this)[i];
+                    citationsPost.push([ citation.citationID, i + 1 ]);
+                }
+                return citationsPost;
             }
         } ]);
     }();
-    function CSLCitation(itemsStartIndex, citationID) {
+    function _setItem(id, item) {
+        id = id.toString();
+        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+        if (index >= 0) {
+            _classPrivateFieldGet2(_items, this)[index] = item;
+            return this;
+        }
+        _classPrivateFieldGet2(_items, this).push(item);
+        _classPrivateFieldGet2(_itemIds, this).push(id);
+        this.size++;
+        return this;
+    }
+    function CSLCitation(citationID) {
         if (!citationID) {
             citationID = this._generateId();
         }
-        if (typeof itemsStartIndex !== "number") {
-            throw new Error("itemsStartIndex is required");
-        }
         this.citationID = citationID;
-        this._itemsStartIndex = itemsStartIndex;
         this._citationItems = new Array;
         this._properties = {};
         this._manualOverride = {};
@@ -13979,7 +14059,6 @@
         return 1;
     };
     CSLCitation.prototype._fillFromCslJson = function(itemObject) {
-        this._itemsStartIndex;
         var id = itemObject.id;
         var citationItem;
         var existingIds = this._citationItems.map(function(item) {
@@ -13995,7 +14074,6 @@
         return 1;
     };
     CSLCitation.prototype._fillFromJson = function(itemObject) {
-        this._itemsStartIndex;
         if (!Object.hasOwnProperty.call(itemObject, "data")) {
             console.error("Invalid citation object");
             return 0;
@@ -14380,12 +14458,12 @@
             key: "insertSelectedCitations",
             value: function() {
                 var _insertSelectedCitations = _asyncToGenerator(_regenerator().m(function _callee2(items) {
+                    var _this = this;
                     var self, cslCitation, citationID, item, _t;
                     return _regenerator().w(function(_context2) {
                         while (1) switch (_context2.p = _context2.n) {
                           case 0:
                             self = this;
-                            this._storage.clear();
                             _context2.p = 1;
                             _context2.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
@@ -14401,7 +14479,7 @@
                             throw _t;
 
                           case 4:
-                            cslCitation = new CSLCitation(this._storage.size, "");
+                            cslCitation = new CSLCitation("");
                             for (citationID in items) {
                                 item = items[citationID];
                                 cslCitation.fillFromObject(item);
@@ -14410,6 +14488,7 @@
                                 items.forEach(function(item) {
                                     cslCitation.fillFromObject(item);
                                 });
+                                _this._storage.addCitation(cslCitation);
                                 return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
                             }));
                         }
@@ -14428,7 +14507,6 @@
                     return _regenerator().w(function(_context3) {
                         while (1) switch (_context3.p = _context3.n) {
                           case 0:
-                            this._storage.clear();
                             if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
                                 _context3.n = 1;
                                 break;
@@ -14489,7 +14567,6 @@
                     return _regenerator().w(function(_context4) {
                         while (1) switch (_context4.p = _context4.n) {
                           case 0:
-                            this._storage.clear();
                             if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
                                 _context4.n = 1;
                                 break;
@@ -14577,56 +14654,55 @@
                             return _context5.a(2);
 
                           case 1:
-                            this._storage.clear();
-                            _context5.p = 2;
-                            _context5.n = 3;
+                            _context5.p = 1;
+                            _context5.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 3:
+                          case 2:
                             _yield$_assertClassBr3 = _context5.v;
                             fieldsWithCitations = _yield$_assertClassBr3.fieldsWithCitations;
                             bibField = _yield$_assertClassBr3.bibField;
                             bNoHaveFields = fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context5.n = 4;
+                            _context5.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
 
-                          case 4:
+                          case 3:
                             updatedFields = _context5.v;
                             if (!(updatedFields && updatedFields.length)) {
-                                _context5.n = 5;
+                                _context5.n = 4;
+                                break;
+                            }
+                            _context5.n = 4;
+                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+
+                          case 4:
+                            if (!bibField) {
+                                _context5.n = 6;
                                 break;
                             }
                             _context5.n = 5;
-                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-
-                          case 5:
-                            if (!bibField) {
-                                _context5.n = 7;
-                                break;
-                            }
-                            _context5.n = 6;
                             return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
 
-                          case 6:
+                          case 5:
                             _t6 = _context5.v;
                             bibFields = [ _t6 ];
-                            _context5.n = 7;
+                            _context5.n = 6;
                             return this.citationDocService.updateAddinFields(bibFields);
 
-                          case 7:
-                            _context5.n = 9;
+                          case 6:
+                            _context5.n = 8;
                             break;
 
-                          case 8:
-                            _context5.p = 8;
+                          case 7:
+                            _context5.p = 7;
                             _t7 = _context5.v;
                             throw _t7;
 
-                          case 9:
+                          case 8:
                             return _context5.a(2);
                         }
-                    }, _callee5, this, [ [ 2, 8 ] ]);
+                    }, _callee5, this, [ [ 1, 7 ] ]);
                 }));
                 function updateCslItemsInNotes(_x3) {
                     return _updateCslItemsInNotes.apply(this, arguments);
@@ -14641,7 +14717,6 @@
                     return _regenerator().w(function(_context6) {
                         while (1) switch (_context6.p = _context6.n) {
                           case 0:
-                            this._storage.clear();
                             if (_assertClassBrand(_CitationService_brand, this, _checkEditor).call(this)) {
                                 _context6.n = 1;
                                 break;
@@ -14695,40 +14770,39 @@
                     return _regenerator().w(function(_context7) {
                         while (1) switch (_context7.p = _context7.n) {
                           case 0:
-                            this._storage.clear();
-                            _context7.p = 1;
-                            _context7.n = 2;
+                            _context7.p = 0;
+                            _context7.n = 1;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this, updatedField);
 
-                          case 2:
+                          case 1:
                             _yield$_assertClassBr5 = _context7.v;
                             fieldsWithCitations = _yield$_assertClassBr5.fieldsWithCitations;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context7.n = 3;
+                            _context7.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
 
-                          case 3:
+                          case 2:
                             updatedFields = _context7.v;
                             if (!(updatedFields && updatedFields.length)) {
-                                _context7.n = 4;
+                                _context7.n = 3;
                                 break;
                             }
-                            _context7.n = 4;
+                            _context7.n = 3;
                             return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
 
-                          case 4:
-                            _context7.n = 6;
+                          case 3:
+                            _context7.n = 5;
                             break;
 
-                          case 5:
-                            _context7.p = 5;
+                          case 4:
+                            _context7.p = 4;
                             _t9 = _context7.v;
                             throw _t9;
 
-                          case 6:
+                          case 5:
                             return _context7.a(2);
                         }
-                    }, _callee7, this, [ [ 1, 5 ] ]);
+                    }, _callee7, this, [ [ 0, 4 ] ]);
                 }));
                 function updateItemInNotes(_x5, _x6) {
                     return _updateItemInNotes.apply(this, arguments);
@@ -14750,68 +14824,67 @@
                             return _context8.a(2);
 
                           case 1:
-                            this._storage.clear();
-                            _context8.p = 2;
-                            _context8.n = 3;
+                            _context8.p = 1;
+                            _context8.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 3:
+                          case 2:
                             _yield$_assertClassBr6 = _context8.v;
                             fieldsWithCitations = _yield$_assertClassBr6.fieldsWithCitations;
                             bibField = _yield$_assertClassBr6.bibField;
                             bNoHaveFields = fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context8.n = 4;
+                            _context8.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
 
-                          case 4:
+                          case 3:
                             updatedFields = _context8.v;
                             if (!(updatedFields && updatedFields.length)) {
-                                _context8.n = 7;
-                                break;
-                            }
-                            if (!notesStyle) {
                                 _context8.n = 6;
                                 break;
                             }
-                            _context8.n = 5;
-                            return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
-
-                          case 5:
-                            _context8.n = 7;
-                            break;
-
-                          case 6:
-                            _context8.n = 7;
-                            return this.citationDocService.convertNotesToText(updatedFields);
-
-                          case 7:
-                            if (!bibField) {
-                                _context8.n = 9;
+                            if (!notesStyle) {
+                                _context8.n = 5;
                                 break;
                             }
-                            _context8.n = 8;
-                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+                            _context8.n = 4;
+                            return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
 
-                          case 8:
-                            _t0 = _context8.v;
-                            bibFields = [ _t0 ];
-                            _context8.n = 9;
-                            return this.citationDocService.updateAddinFields(bibFields);
-
-                          case 9:
-                            _context8.n = 11;
+                          case 4:
+                            _context8.n = 6;
                             break;
 
-                          case 10:
-                            _context8.p = 10;
+                          case 5:
+                            _context8.n = 6;
+                            return this.citationDocService.convertNotesToText(updatedFields);
+
+                          case 6:
+                            if (!bibField) {
+                                _context8.n = 8;
+                                break;
+                            }
+                            _context8.n = 7;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 7:
+                            _t0 = _context8.v;
+                            bibFields = [ _t0 ];
+                            _context8.n = 8;
+                            return this.citationDocService.updateAddinFields(bibFields);
+
+                          case 8:
+                            _context8.n = 10;
+                            break;
+
+                          case 9:
+                            _context8.p = 9;
                             _t1 = _context8.v;
                             throw _t1;
 
-                          case 11:
+                          case 10:
                             return _context8.a(2);
                         }
-                    }, _callee8, this, [ [ 2, 10 ] ]);
+                    }, _callee8, this, [ [ 1, 9 ] ]);
                 }));
                 function switchingBetweenNotesAndText(_x7) {
                     return _switchingBetweenNotesAndText.apply(this, arguments);
@@ -14833,43 +14906,42 @@
                             return _context9.a(2);
 
                           case 1:
-                            this._storage.clear();
-                            _context9.p = 2;
-                            _context9.n = 3;
+                            _context9.p = 1;
+                            _context9.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
-                          case 3:
+                          case 2:
                             _yield$_assertClassBr7 = _context9.v;
                             fieldsWithCitations = _yield$_assertClassBr7.fieldsWithCitations;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context9.n = 4;
+                            _context9.n = 3;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false, true);
 
-                          case 4:
+                          case 3:
                             updatedFields = _context9.v;
                             if (!(!updatedFields || !updatedFields.length)) {
-                                _context9.n = 5;
+                                _context9.n = 4;
                                 break;
                             }
                             return _context9.a(2);
 
-                          case 5:
-                            _context9.n = 6;
+                          case 4:
+                            _context9.n = 5;
                             return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
 
-                          case 6:
-                            _context9.n = 8;
+                          case 5:
+                            _context9.n = 7;
                             break;
 
-                          case 7:
-                            _context9.p = 7;
+                          case 6:
+                            _context9.p = 6;
                             _t10 = _context9.v;
                             throw _t10;
 
-                          case 8:
+                          case 7:
                             return _context9.a(2);
                         }
-                    }, _callee9, this, [ [ 2, 7 ] ]);
+                    }, _callee9, this, [ [ 1, 6 ] ]);
                 }));
                 function convertNotesStyle(_x8) {
                     return _convertNotesStyle.apply(this, arguments);
@@ -14929,10 +15001,9 @@
         var keysL = [];
         return Promise.resolve().then(function() {
             cslCitation.getCitationItems().forEach(function(item) {
-                if (!self._storage.has(item.id)) {
+                if (!self._storage.hasItem(item.id)) {
                     bUpdateItems = true;
                 }
-                self._storage.set(item.id, item);
                 keys.push(item.id);
                 keysL.push(item.getInfoForCitationCluster());
             });
@@ -14941,12 +15012,21 @@
                 self._storage.forEach(function(item, id) {
                     arrIds.push(id);
                 });
+                console.warn("formatter updateItems formatInsertLink");
+                console.log(arrIds);
                 self._formatter.updateItems(arrIds);
             }
         }).then(function() {
             var fragment = document.createDocumentFragment();
             var tempElement = document.createElement("div");
+            console.warn("formatter makeCitationCluster insertLink");
+            console.log(keysL);
             var htmlCitation = self._formatter.makeCitationCluster(keysL);
+            var citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
+            var citationsPost = self._storage.getCitationsPost(cslCitation.citationID);
+            var result = self._formatter.processCitationCluster(cslCitation, citationsPre, citationsPost);
+            console.warn("formatter processCitationCluster insertLink");
+            console.log(result);
             htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, htmlCitation);
             fragment.appendChild(tempElement);
             tempElement.innerHTML = htmlCitation;
@@ -15004,8 +15084,6 @@
             var bibItems = new Array(this._storage.size);
             var bibObject = this._formatter.makeBibliography();
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                var citationId = bibObject[0].entry_ids[i][0];
-                var citationIndex = this._storage.getIndex(citationId);
                 var bibText = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, bibObject[1][i]);
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
@@ -15034,6 +15112,7 @@
     }
     function _synchronizeStorageWithDocItems(updatedField) {
         var self = this;
+        this._storage.clear();
         return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
             var numOfItems = 0;
             var bibFieldValue = " ";
@@ -15055,15 +15134,13 @@
                 if (field.Value.indexOf(self._citPrefix) === -1) {
                     citationID = citationObject.citationID;
                 }
-                var cslCitation = new CSLCitation(numOfItems, citationID);
+                var cslCitation = new CSLCitation(citationID);
                 if (updatedField) {
                     numOfItems += cslCitation.fillFromObject(updatedField);
                 } else {
                     numOfItems += cslCitation.fillFromObject(citationObject);
                 }
-                cslCitation.getCitationItems().forEach(function(item) {
-                    self._storage.set(item.id, item);
-                });
+                self._storage.addCitation(cslCitation);
                 return {
                     field: _objectSpread2({}, field),
                     cslCitation: cslCitation
@@ -15127,6 +15204,8 @@
                     _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
                     cslCitation = _fieldsWithCitations$.cslCitation;
                     keysL = cslCitation.getInfoForCitationCluster();
+                    console.warn("formatter makeCitationCluster getUpdatedFields");
+                    console.log(keysL);
                     htmlCitation = this._formatter.makeCitationCluster(keysL);
                     htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, htmlCitation);
                     tempElement.innerHTML = htmlCitation;
@@ -15210,13 +15289,18 @@
                 return self._localesManager.getLocale();
             },
             retrieveItem: function retrieveItem(id) {
-                var item = self._storage.get(id);
-                var index = self._storage.getIndex(id);
+                var item = self._storage.getItem(id);
+                var index = self._storage.getItemIndex(id);
                 if (!item) return null;
+                console.warn("formatter retrieveItem");
+                console.log(index);
+                console.log(item.toFlatJSON(index));
                 return item.toFlatJSON(index);
             }
         }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true);
         if (arrIds.length) {
+            console.warn("formatter updateItems after create");
+            console.log(arrIds);
             this._formatter.updateItems(arrIds);
         }
         return;
@@ -15411,7 +15495,7 @@
         this._lastNotesStyleKey = "zoteroNotesStyleId";
         this._lastFormatKey = "zoteroFormatId";
         this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
-        this._defaultStyles = [ "american-medical-association", "american-political-science-association", "apa", "american-sociological-association", "chicago-author-date-17th-edition", "harvard-cite-them-right-10th-edition", "ieee", "modern-language-association-8th-edition", "nature" ];
+        this._defaultStyles = [ "american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature" ];
         this._cache = {};
     }
     CslStylesManager.prototype.addCustomStyle = function(file) {
@@ -15525,11 +15609,7 @@
                 });
             }
             customStyles.forEach(function(style) {
-                if (lastStyle === style.name) {
-                    resultStyles.unshift(style);
-                } else {
-                    resultStyles.push(style);
-                }
+                resultStyles.push(style);
                 if (self._defaultStyles.indexOf(style.name) === -1) {
                     self._defaultStyles.push(style.name);
                 }
@@ -15538,11 +15618,10 @@
                 if (resultStyleNames.indexOf(style.name) !== -1) {
                     return;
                 }
-                if (lastStyle === style.name) {
-                    resultStyles.unshift(style);
-                } else {
-                    resultStyles.push(style);
-                }
+                resultStyles.push(style);
+            });
+            resultStyles.sort(function(a, b) {
+                return a.name.localeCompare(b.name);
             });
             return resultStyles;
         });
@@ -15622,7 +15701,10 @@
             return Promise.resolve(this._cache[langTag]);
         }
         var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
-        return fetch(url).then(function(response) {
+        return fetch(url).catch(function(err) {
+            console.error("Failed to load locale:", err);
+            return fetch(self._LOCALES_PATH + "locales-" + langTag + ".xml");
+        }).then(function(response) {
             return response.text();
         }).then(function(text) {
             self._cache[langTag] = text;
@@ -15668,7 +15750,8 @@
             variant: "secondary"
         });
         this._styleSelect = new SelectBox("styleSelectList", {
-            placeholder: "Enter style name"
+            placeholder: "Enter style name",
+            sortable: true
         });
         this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
             placeholder: "Enter style name",
@@ -15935,6 +16018,7 @@
                 self._styleMessage.show(translate(err));
             }
             isClick && self._hideLoader();
+            throw err;
         });
     };
     SettingsPage.prototype._showLoader = function() {
@@ -16777,6 +16861,7 @@
                 var initSettingsPromise = settings.init().catch(function(e) {
                     console.error(e);
                     showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                    settings.show();
                 });
                 Promise.all([ loadGroupsPromise, initSettingsPromise ]).then(function() {
                     Loader.hide();
@@ -17109,9 +17194,9 @@
         };
         function applyTranslations() {
             var elements = document.getElementsByClassName("i18n");
-            for (var i = 0; i < elements.length; i++) {
+            var _loop = function _loop() {
                 var el = elements[i];
-                if (el instanceof HTMLElement === false) continue;
+                if (el instanceof HTMLElement === false) return 1;
                 [ "placeholder", "title" ].forEach(function(attr) {
                     if (el.hasAttribute(attr)) {
                         el.setAttribute(attr, translate(el.getAttribute(attr) || ""));
@@ -17119,6 +17204,9 @@
                 });
                 var translated = translate(el.innerText.trim().replace(/\s+/g, " "));
                 if (translated) el.innerText = translated;
+            };
+            for (var i = 0; i < elements.length; i++) {
+                if (_loop()) continue;
             }
         }
         function showError(message) {
@@ -17235,6 +17323,7 @@
                 if (isGroup && res && res.next) lastSearch.groups.push(res); else lastSearch.obj = res && res.items.length ? res : null;
             }
             var fillUrisFromId = function fillUrisFromId(item) {
+                if (!item.id) return item;
                 var slashFirstIndex = item.id.indexOf("/") + 1;
                 var slashLastIndex = item.id.lastIndexOf("/") + 1;
                 var httpIndex = item.id.indexOf("http");
@@ -17355,7 +17444,7 @@
                       case 0:
                         _context3.n = 1;
                         return new Promise(function(resolve) {
-                            window.Asc.plugin.executeMethod("GetCurrentAddinField", null, resolve);
+                            window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
                         });
 
                       case 1:
