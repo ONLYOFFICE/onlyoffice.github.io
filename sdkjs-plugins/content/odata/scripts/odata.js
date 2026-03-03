@@ -432,7 +432,7 @@
 
         html += '</tbody></table>';
         previewContent.innerHTML = html;
-        previewSection.style.display = 'block';
+        previewSection.style.display = 'flex';
     }
 
     // Insert selected tables into spreadsheet
