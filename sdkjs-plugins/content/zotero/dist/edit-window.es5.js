@@ -6530,6 +6530,177 @@
         return es_array_map;
     }
     requireEs_array_map();
+    var es_array_sort = {};
+    var arraySort;
+    var hasRequiredArraySort;
+    function requireArraySort() {
+        if (hasRequiredArraySort) return arraySort;
+        hasRequiredArraySort = 1;
+        var arraySlice = requireArraySlice();
+        var floor = Math.floor;
+        var sort = function(array, comparefn) {
+            var length = array.length;
+            if (length < 8) {
+                var i = 1;
+                var element, j;
+                while (i < length) {
+                    j = i;
+                    element = array[i];
+                    while (j && comparefn(array[j - 1], element) > 0) {
+                        array[j] = array[--j];
+                    }
+                    if (j !== i++) array[j] = element;
+                }
+            } else {
+                var middle = floor(length / 2);
+                var left = sort(arraySlice(array, 0, middle), comparefn);
+                var right = sort(arraySlice(array, middle), comparefn);
+                var llength = left.length;
+                var rlength = right.length;
+                var lindex = 0;
+                var rindex = 0;
+                while (lindex < llength || rindex < rlength) {
+                    array[lindex + rindex] = lindex < llength && rindex < rlength ? comparefn(left[lindex], right[rindex]) <= 0 ? left[lindex++] : right[rindex++] : lindex < llength ? left[lindex++] : right[rindex++];
+                }
+            }
+            return array;
+        };
+        arraySort = sort;
+        return arraySort;
+    }
+    var environmentFfVersion;
+    var hasRequiredEnvironmentFfVersion;
+    function requireEnvironmentFfVersion() {
+        if (hasRequiredEnvironmentFfVersion) return environmentFfVersion;
+        hasRequiredEnvironmentFfVersion = 1;
+        var userAgent = requireEnvironmentUserAgent();
+        var firefox = userAgent.match(/firefox\/(\d+)/i);
+        environmentFfVersion = !!firefox && +firefox[1];
+        return environmentFfVersion;
+    }
+    var environmentIsIeOrEdge;
+    var hasRequiredEnvironmentIsIeOrEdge;
+    function requireEnvironmentIsIeOrEdge() {
+        if (hasRequiredEnvironmentIsIeOrEdge) return environmentIsIeOrEdge;
+        hasRequiredEnvironmentIsIeOrEdge = 1;
+        var UA = requireEnvironmentUserAgent();
+        environmentIsIeOrEdge = /MSIE|Trident/.test(UA);
+        return environmentIsIeOrEdge;
+    }
+    var environmentWebkitVersion;
+    var hasRequiredEnvironmentWebkitVersion;
+    function requireEnvironmentWebkitVersion() {
+        if (hasRequiredEnvironmentWebkitVersion) return environmentWebkitVersion;
+        hasRequiredEnvironmentWebkitVersion = 1;
+        var userAgent = requireEnvironmentUserAgent();
+        var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
+        environmentWebkitVersion = !!webkit && +webkit[1];
+        return environmentWebkitVersion;
+    }
+    var hasRequiredEs_array_sort;
+    function requireEs_array_sort() {
+        if (hasRequiredEs_array_sort) return es_array_sort;
+        hasRequiredEs_array_sort = 1;
+        var $ = require_export();
+        var uncurryThis = requireFunctionUncurryThis();
+        var aCallable = requireACallable();
+        var toObject = requireToObject();
+        var lengthOfArrayLike = requireLengthOfArrayLike();
+        var deletePropertyOrThrow = requireDeletePropertyOrThrow();
+        var toString = requireToString();
+        var fails = requireFails();
+        var internalSort = requireArraySort();
+        var arrayMethodIsStrict = requireArrayMethodIsStrict();
+        var FF = requireEnvironmentFfVersion();
+        var IE_OR_EDGE = requireEnvironmentIsIeOrEdge();
+        var V8 = requireEnvironmentV8Version();
+        var WEBKIT = requireEnvironmentWebkitVersion();
+        var test = [];
+        var nativeSort = uncurryThis(test.sort);
+        var push = uncurryThis(test.push);
+        var FAILS_ON_UNDEFINED = fails(function() {
+            test.sort(undefined);
+        });
+        var FAILS_ON_NULL = fails(function() {
+            test.sort(null);
+        });
+        var STRICT_METHOD = arrayMethodIsStrict("sort");
+        var STABLE_SORT = !fails(function() {
+            if (V8) return V8 < 70;
+            if (FF && FF > 3) return;
+            if (IE_OR_EDGE) return true;
+            if (WEBKIT) return WEBKIT < 603;
+            var result = "";
+            var code, chr, value, index;
+            for (code = 65; code < 76; code++) {
+                chr = String.fromCharCode(code);
+                switch (code) {
+                  case 66:
+                  case 69:
+                  case 70:
+                  case 72:
+                    value = 3;
+                    break;
+
+                  case 68:
+                  case 71:
+                    value = 4;
+                    break;
+
+                  default:
+                    value = 2;
+                }
+                for (index = 0; index < 47; index++) {
+                    test.push({
+                        k: chr + index,
+                        v: value
+                    });
+                }
+            }
+            test.sort(function(a, b) {
+                return b.v - a.v;
+            });
+            for (index = 0; index < test.length; index++) {
+                chr = test[index].k.charAt(0);
+                if (result.charAt(result.length - 1) !== chr) result += chr;
+            }
+            return result !== "DGBEFHACIJK";
+        });
+        var FORCED = FAILS_ON_UNDEFINED || !FAILS_ON_NULL || !STRICT_METHOD || !STABLE_SORT;
+        var getSortCompare = function(comparefn) {
+            return function(x, y) {
+                if (y === undefined) return -1;
+                if (x === undefined) return 1;
+                if (comparefn !== undefined) return +comparefn(x, y) || 0;
+                return toString(x) > toString(y) ? 1 : -1;
+            };
+        };
+        $({
+            target: "Array",
+            proto: true,
+            forced: FORCED
+        }, {
+            sort: function sort(comparefn) {
+                if (comparefn !== undefined) aCallable(comparefn);
+                var array = toObject(this);
+                if (STABLE_SORT) return comparefn === undefined ? nativeSort(array) : nativeSort(array, comparefn);
+                var items = [];
+                var arrayLength = lengthOfArrayLike(array);
+                var itemsLength, index;
+                for (index = 0; index < arrayLength; index++) {
+                    if (index in array) push(items, array[index]);
+                }
+                internalSort(items, getSortCompare(comparefn));
+                itemsLength = lengthOfArrayLike(items);
+                index = 0;
+                while (index < itemsLength) array[index] = items[index++];
+                while (index < arrayLength) deletePropertyOrThrow(array, index++);
+                return array;
+            }
+        });
+        return es_array_sort;
+    }
+    requireEs_array_sort();
     var es_set = {};
     var es_set_constructor = {};
     var hasRequiredEs_set_constructor;
@@ -6580,6 +6751,7 @@
             this._options = Object.assign(_options, {
                 placeholder: _options.placeholder || "Select...",
                 searchable: _options.searchable || false,
+                sortable: _options.sortable || false,
                 multiple: _options.multiple || false,
                 description: _options.description || ""
             });
@@ -6671,6 +6843,11 @@
                         text: text,
                         selected: selected
                     });
+                    if (this._options.sortable) {
+                        this._items.sort(function(a, b) {
+                            return !!a && !!b ? a.text.localeCompare(b.text) : !!a ? -1 : !!b ? 1 : 0;
+                        });
+                    }
                 }
                 if (selected) {
                     if (this._options.multiple) {

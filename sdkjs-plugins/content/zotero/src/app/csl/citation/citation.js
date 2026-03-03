@@ -57,23 +57,19 @@ import { CitationItem } from "./citation-item";
  */
 
 /**
- * @param {number} [itemsStartIndex]
  * @param {string} [citationID]
  */
-function CSLCitation(itemsStartIndex, citationID) {
+function CSLCitation(citationID) {
     if (!citationID) {
         // if no citationID, create new citation
         citationID = this._generateId();
     }
-    if (typeof itemsStartIndex !== "number") {
-        throw new Error("itemsStartIndex is required");
-    }
+
     /** @type {string} */
     this.citationID = citationID;
-    this._itemsStartIndex = itemsStartIndex;
     /** @type {Array<CitationItem>} */
     this._citationItems = new Array();
-    /** @type {Object<string, string|boolean>} */
+    /** @type {Object<string, string|number|boolean>} */
     this._properties = {};
     /** @type {Object<string, string|boolean>} */
     this._manualOverride = {}; // for mendeley
@@ -182,8 +178,6 @@ CSLCitation.prototype._fillFromFlatCitationObject = function (citationObject) {
  * @returns
  */
 CSLCitation.prototype._fillFromCslJson = function (itemObject) {
-    var index = this._itemsStartIndex;
-
     const id = itemObject.id;
     let citationItem;
 
@@ -207,7 +201,6 @@ CSLCitation.prototype._fillFromCslJson = function (itemObject) {
  * @returns
  */
 CSLCitation.prototype._fillFromJson = function (itemObject) {
-    var index = this._itemsStartIndex;
     if (!Object.hasOwnProperty.call(itemObject, "data")) {
         console.error("Invalid citation object");
         return 0;
@@ -292,6 +285,15 @@ CSLCitation.prototype.setDoNotUpdate = function () {
 };
 
 /**
+ * @param {number} noteIndex
+ * @returns {CSLCitation}
+ */
+CSLCitation.prototype.setNoteIndex = function (noteIndex) {
+    this._setProperties({ noteIndex });
+    return this;
+};
+
+/**
  * @param {string} plainCitation
  * @returns
  */
@@ -316,7 +318,7 @@ CSLCitation.prototype.setManualOverride = function (citeprocText, manualOverride
 };
 
 /**
- * @param {Object<string, string | boolean>} properties
+ * @param {Object<string, string | number | boolean>} properties
  * @returns
  */
 CSLCitation.prototype._setProperties = function (properties) {
