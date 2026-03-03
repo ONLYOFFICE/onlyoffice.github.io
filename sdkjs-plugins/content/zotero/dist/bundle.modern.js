@@ -3641,6 +3641,113 @@ function _removeSuperscript() {
     });
 }
 
+var _items = new WeakMap;
+
+var _itemIds = new WeakMap;
+
+var _citations = new WeakMap;
+
+var _CSLCitationStorage_brand = new WeakSet;
+
+class CSLCitationStorage {
+    constructor() {
+        _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand);
+        _classPrivateFieldInitSpec(this, _items, void 0);
+        _classPrivateFieldInitSpec(this, _itemIds, void 0);
+        _classPrivateFieldInitSpec(this, _citations, void 0);
+        _classPrivateFieldSet2(_items, this, []);
+        _classPrivateFieldSet2(_itemIds, this, []);
+        _classPrivateFieldSet2(_citations, this, []);
+        this.size = 0;
+    }
+    getItem(id) {
+        id = id.toString();
+        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+        if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
+        return null;
+    }
+    getItemIndex(id) {
+        id = id.toString();
+        return _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+    }
+    clear() {
+        _classPrivateFieldSet2(_items, this, []);
+        _classPrivateFieldSet2(_citations, this, []);
+        _classPrivateFieldSet2(_itemIds, this, []);
+        this.size = 0;
+        return this;
+    }
+    deleteItem(id) {
+        id = id.toString();
+        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+        if (index >= 0) {
+            _classPrivateFieldGet2(_items, this).splice(index, 1);
+            _classPrivateFieldGet2(_itemIds, this).splice(index, 1);
+            this.size--;
+        }
+        return this;
+    }
+    forEachItem(callback) {
+        for (var i = 0; i < this.size; i++) {
+            callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_itemIds, this)[i], this);
+        }
+    }
+    hasItem(id) {
+        id = id.toString();
+        return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
+    }
+    addCitation(cslCitation) {
+        _classPrivateFieldGet2(_citations, this).push(cslCitation);
+        cslCitation.setNoteIndex(_classPrivateFieldGet2(_citations, this).length);
+        cslCitation.getCitationItems().forEach(item => {
+            _assertClassBrand(_CSLCitationStorage_brand, this, _setItem).call(this, item.id, item);
+        });
+        return this;
+    }
+    getAllCitationsInJson() {
+        return _classPrivateFieldGet2(_citations, this).map(citation => citation.toJSON());
+    }
+    getCitation(id) {
+        return _classPrivateFieldGet2(_citations, this).find(citation => citation.citationID === id);
+    }
+    getCitationIndex(id) {
+        return _classPrivateFieldGet2(_citations, this).findIndex(citation => citation.citationID === id);
+    }
+    getCitationsPre(id) {
+        var citationsPre = [];
+        _classPrivateFieldGet2(_citations, this).find((citation, index) => {
+            if (citation.citationID === id) {
+                return true;
+            }
+            citationsPre.push([ citation.citationID, index + 1 ]);
+            return false;
+        });
+        return citationsPre;
+    }
+    getCitationsPost(id) {
+        var citationsPost = [];
+        var citationIndex = this.getCitationIndex(id);
+        for (var i = citationIndex + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
+            var citation = _classPrivateFieldGet2(_citations, this)[i];
+            citationsPost.push([ citation.citationID, i + 1 ]);
+        }
+        return citationsPost;
+    }
+}
+
+function _setItem(id, item) {
+    id = id.toString();
+    var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+    if (index >= 0) {
+        _classPrivateFieldGet2(_items, this)[index] = item;
+        return this;
+    }
+    _classPrivateFieldGet2(_items, this).push(item);
+    _classPrivateFieldGet2(_itemIds, this).push(id);
+    this.size++;
+    return this;
+}
+
 function CitationItemData(id) {
     if (typeof id !== "string" && typeof id !== "number") {
         throw new Error("CitationItemData: id is required");
@@ -4890,76 +4997,11 @@ CitationItem.prototype.toFlatJSON = function(index) {
     return oldItem;
 };
 
-var _items = new WeakMap;
-
-var _ids = new WeakMap;
-
-class CSLCitationStorage {
-    constructor() {
-        _classPrivateFieldInitSpec(this, _items, void 0);
-        _classPrivateFieldInitSpec(this, _ids, void 0);
-        _classPrivateFieldSet2(_items, this, []);
-        _classPrivateFieldSet2(_ids, this, []);
-        this.size = 0;
-    }
-    get(id) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
-        if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
-        return null;
-    }
-    getIndex(id) {
-        id = id.toString();
-        return _classPrivateFieldGet2(_ids, this).indexOf(id);
-    }
-    clear() {
-        _classPrivateFieldSet2(_items, this, []);
-        _classPrivateFieldSet2(_ids, this, []);
-        this.size = 0;
-        return this;
-    }
-    delete(id) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
-        if (index >= 0) {
-            _classPrivateFieldGet2(_items, this).splice(index, 1);
-            _classPrivateFieldGet2(_ids, this).splice(index, 1);
-            this.size--;
-        }
-        return this;
-    }
-    forEach(callback) {
-        for (var i = 0; i < this.size; i++) {
-            callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_ids, this)[i], this);
-        }
-    }
-    has(id) {
-        id = id.toString();
-        return _classPrivateFieldGet2(_ids, this).indexOf(id) >= 0;
-    }
-    set(id, item) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_ids, this).indexOf(id);
-        if (index >= 0) {
-            _classPrivateFieldGet2(_items, this)[index] = item;
-            return this;
-        }
-        _classPrivateFieldGet2(_items, this).push(item);
-        _classPrivateFieldGet2(_ids, this).push(id);
-        this.size++;
-        return this;
-    }
-}
-
-function CSLCitation(itemsStartIndex, citationID) {
+function CSLCitation(citationID) {
     if (!citationID) {
         citationID = this._generateId();
     }
-    if (typeof itemsStartIndex !== "number") {
-        throw new Error("itemsStartIndex is required");
-    }
     this.citationID = citationID;
-    this._itemsStartIndex = itemsStartIndex;
     this._citationItems = new Array;
     this._properties = {};
     this._manualOverride = {};
@@ -5026,7 +5068,6 @@ CSLCitation.prototype._fillFromFlatCitationObject = function(citationObject) {
 };
 
 CSLCitation.prototype._fillFromCslJson = function(itemObject) {
-    this._itemsStartIndex;
     var id = itemObject.id;
     var citationItem;
     var existingIds = this._citationItems.map(function(item) {
@@ -5043,7 +5084,6 @@ CSLCitation.prototype._fillFromCslJson = function(itemObject) {
 };
 
 CSLCitation.prototype._fillFromJson = function(itemObject) {
-    this._itemsStartIndex;
     if (!Object.hasOwnProperty.call(itemObject, "data")) {
         console.error("Invalid citation object");
         return 0;
@@ -5105,6 +5145,13 @@ CSLCitation.prototype._addCitationItem = function(item) {
 CSLCitation.prototype.setDoNotUpdate = function() {
     this._setProperties({
         dontUpdate: true
+    });
+    return this;
+};
+
+CSLCitation.prototype.setNoteIndex = function(noteIndex) {
+    this._setProperties({
+        noteIndex: noteIndex
     });
     return this;
 };
@@ -5411,22 +5458,22 @@ class CitationService {
         var _this2 = this;
         return _asyncToGenerator(function*() {
             var self = _this2;
-            _this2._storage.clear();
             try {
                 yield _assertClassBrand(_CitationService_brand, _this2, _synchronizeStorageWithDocItems).call(_this2);
                 _assertClassBrand(_CitationService_brand, _this2, _updateFormatter).call(_this2);
             } catch (e) {
                 throw e;
             }
-            var cslCitation = new CSLCitation(_this2._storage.size, "");
+            var cslCitation = new CSLCitation("");
             for (var citationID in items) {
                 var item = items[citationID];
                 cslCitation.fillFromObject(item);
             }
-            return _assertClassBrand(_CitationService_brand, _this2, _getSelectedInJsonFormat).call(_this2, items).then(function(items) {
+            return _assertClassBrand(_CitationService_brand, _this2, _getSelectedInJsonFormat).call(_this2, items).then(items => {
                 items.forEach(function(item) {
                     cslCitation.fillFromObject(item);
                 });
+                _this2._storage.addCitation(cslCitation);
                 return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
             });
         })();
@@ -5434,7 +5481,6 @@ class CitationService {
     insertBibliography() {
         var _this3 = this;
         return _asyncToGenerator(function*() {
-            _this3._storage.clear();
             if (!_assertClassBrand(_CitationService_brand, _this3, _checkEditor).call(_this3)) {
                 return;
             }
@@ -5456,7 +5502,6 @@ class CitationService {
     updateCslItems(bHardRefresh) {
         var _this4 = this;
         return _asyncToGenerator(function*() {
-            _this4._storage.clear();
             if (!_assertClassBrand(_CitationService_brand, _this4, _checkEditor).call(_this4)) {
                 return;
             }
@@ -5491,7 +5536,6 @@ class CitationService {
             if (!_assertClassBrand(_CitationService_brand, _this5, _checkEditor).call(_this5)) {
                 return;
             }
-            _this5._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this5, _synchronizeStorageWithDocItems).call(_this5);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
@@ -5512,7 +5556,6 @@ class CitationService {
     updateItem(updatedField) {
         var _this6 = this;
         return _asyncToGenerator(function*() {
-            _this6._storage.clear();
             if (!_assertClassBrand(_CitationService_brand, _this6, _checkEditor).call(_this6)) {
                 return;
             }
@@ -5531,7 +5574,6 @@ class CitationService {
     updateItemInNotes(updatedField, notesStyle) {
         var _this7 = this;
         return _asyncToGenerator(function*() {
-            _this7._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this7, _synchronizeStorageWithDocItems).call(_this7, updatedField);
                 _assertClassBrand(_CitationService_brand, _this7, _updateFormatter).call(_this7);
@@ -5550,7 +5592,6 @@ class CitationService {
             if (!_assertClassBrand(_CitationService_brand, _this8, _checkEditor).call(_this8)) {
                 return;
             }
-            _this8._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8);
                 var bNoHaveFields = fieldsWithCitations.length === 0;
@@ -5578,7 +5619,6 @@ class CitationService {
             if (!_assertClassBrand(_CitationService_brand, _this9, _checkEditor).call(_this9)) {
                 return;
             }
-            _this9._storage.clear();
             try {
                 var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this9, _synchronizeStorageWithDocItems).call(_this9);
                 _assertClassBrand(_CitationService_brand, _this9, _updateFormatter).call(_this9);
@@ -5616,19 +5656,16 @@ function _formatInsertLink(cslCitation) {
     var self = this;
     var bUpdateItems = false;
     var keys = [];
-    var keysL = [];
     return Promise.resolve().then(function() {
         cslCitation.getCitationItems().forEach(function(item) {
-            if (!self._storage.has(item.id)) {
+            if (!self._storage.hasItem(item.id)) {
                 bUpdateItems = true;
             }
-            self._storage.set(item.id, item);
             keys.push(item.id);
-            keysL.push(item.getInfoForCitationCluster());
         });
         if (bUpdateItems) {
             var arrIds = [];
-            self._storage.forEach(function(item, id) {
+            self._storage.forEachItem(function(item, id) {
                 arrIds.push(id);
             });
             self._formatter.updateItems(arrIds);
@@ -5636,8 +5673,12 @@ function _formatInsertLink(cslCitation) {
     }).then(function() {
         var fragment = document.createDocumentFragment();
         var tempElement = document.createElement("div");
-        var htmlCitation = self._formatter.makeCitationCluster(keysL);
-        htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, htmlCitation);
+        var citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
+        var citationsPost = self._storage.getCitationsPost(cslCitation.citationID);
+        var citations = self._storage.getAllCitationsInJson();
+        self._formatter.rebuildProcessorState(citations);
+        var formattedCitationObj = self._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
+        var htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, formattedCitationObj[1][0][1]);
         fragment.appendChild(tempElement);
         tempElement.innerHTML = htmlCitation;
         cslCitation.setPlainCitation(tempElement.innerText);
@@ -5696,8 +5737,6 @@ function _makeBibliography() {
         var bibItems = new Array(this._storage.size);
         var bibObject = this._formatter.makeBibliography();
         for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-            var citationId = bibObject[0].entry_ids[i][0];
-            var citationIndex = this._storage.getIndex(citationId);
             var bibText = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, bibObject[1][i]);
             while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                 bibText = bibText.replace(/\n/, "");
@@ -5728,6 +5767,7 @@ function _extractField(field) {
 
 function _synchronizeStorageWithDocItems(updatedField) {
     var self = this;
+    this._storage.clear();
     return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
         var numOfItems = 0;
         var bibFieldValue = " ";
@@ -5749,15 +5789,13 @@ function _synchronizeStorageWithDocItems(updatedField) {
             if (field.Value.indexOf(self._citPrefix) === -1) {
                 citationID = citationObject.citationID;
             }
-            var cslCitation = new CSLCitation(numOfItems, citationID);
+            var cslCitation = new CSLCitation(citationID);
             if (updatedField) {
                 numOfItems += cslCitation.fillFromObject(updatedField);
             } else {
                 numOfItems += cslCitation.fillFromObject(citationObject);
             }
-            cslCitation.getCitationItems().forEach(function(item) {
-                self._storage.set(item.id, item);
-            });
+            self._storage.addCitation(cslCitation);
             return {
                 field: _objectSpread2({}, field),
                 cslCitation: cslCitation
@@ -5813,9 +5851,12 @@ function _getUpdatedFields2() {
         var updatedFields = [];
         for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
             var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
-            var keysL = cslCitation.getInfoForCitationCluster();
-            var htmlCitation = this._formatter.makeCitationCluster(keysL);
-            htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, htmlCitation);
+            var citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+            var citationsPost = this._storage.getCitationsPost(cslCitation.citationID);
+            var citations = this._storage.getAllCitationsInJson();
+            this._formatter.rebuildProcessorState(citations);
+            var formattedCitationObj = this._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
+            var htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
             var oldContent = field["Content"];
             var newContent = tempElement.innerText;
@@ -5856,7 +5897,7 @@ function _getUpdatedFields2() {
 function _updateFormatter() {
     var self = this;
     var arrIds = [];
-    this._storage.forEach(function(item, id) {
+    this._storage.forEachItem(function(item, id) {
         arrIds.push(id);
     });
     this._formatter = new CSL.Engine({
@@ -5867,8 +5908,8 @@ function _updateFormatter() {
             return self._localesManager.getLocale();
         },
         retrieveItem: function retrieveItem(id) {
-            var item = self._storage.get(id);
-            var index = self._storage.getIndex(id);
+            var item = self._storage.getItem(id);
+            var index = self._storage.getItemIndex(id);
             if (!item) return null;
             return item.toFlatJSON(index);
         }
@@ -8001,7 +8042,7 @@ SelectCitationsComponent.prototype.count = function() {
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(_asyncToGenerator(function*() {
             var field = yield new Promise(resolve => {
-                window.Asc.plugin.executeMethod("GetCurrentAddinField", null, resolve);
+                window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
             });
             if (!field || !field.Value || field.Value.toLowerCase().indexOf("zotero_item") === -1) {
                 return;
