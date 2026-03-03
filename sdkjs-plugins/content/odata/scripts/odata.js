@@ -1,21 +1,16 @@
 (function(window, undefined) {
     'use strict';
 
-    // CORS proxy URL (same as AI plugin uses)
-    var PROXY_URL = 'https://plugins-services.onlyoffice.com/proxy';
+    // Public CORS proxy for browser mode
+    var CORS_PROXY_URL = 'https://corsproxy.io/?';
 
     // Check if we're running in desktop mode
     function isDesktopMode() {
         return window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
     }
 
-    // Check if we have JWT auth (running within ONLYOFFICE Document Server)
-    function hasServerAuth() {
-        return window.Asc && window.Asc.plugin && window.Asc.plugin.info && window.Asc.plugin.info.jwt;
-    }
-
     // Custom fetch using AscSimpleRequest (ONLYOFFICE SDK) to bypass CORS
-    // Falls back to CORS proxy for Document Server mode
+    // Falls back to public CORS proxy for browser mode
     function odataFetch(url, options) {
         options = options || {};
         var method = options.method || 'GET';
@@ -74,21 +69,17 @@
                     }
                 });
             } else {
-                // Use CORS proxy
-                var proxyBody = JSON.stringify({
-                    target: url,
-                    method: method,
-                    headers: headers,
-                    data: options.body || ''
-                });
+                // Use public CORS proxy (corsproxy.io)
+                var proxyUrl = CORS_PROXY_URL + encodeURIComponent(url);
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', PROXY_URL, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.open(method, proxyUrl, true);
 
-                // Add JWT auth if available (Document Server mode)
-                if (hasServerAuth()) {
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + window.Asc.plugin.info.jwt);
+                // Set headers (except Host which browsers don't allow)
+                for (var h in headers) {
+                    if (headers.hasOwnProperty(h) && h.toLowerCase() !== 'host') {
+                        xhr.setRequestHeader(h, headers[h]);
+                    }
                 }
 
                 xhr.onload = function() {
@@ -121,7 +112,7 @@
                     reject(new Error('Request timeout'));
                 };
 
-                xhr.send(proxyBody);
+                xhr.send(options.body || null);
             }
         });
     }
