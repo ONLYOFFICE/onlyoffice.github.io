@@ -94,8 +94,7 @@ class CitationService {
     }
 
     /**
-     *
-     * @param {*} cslCitation
+     * @param {CSLCitation} cslCitation
      * @returns {Promise<Array<string|number>>}
      */
     #formatInsertLink(cslCitation) {
@@ -103,26 +102,22 @@ class CitationService {
         let bUpdateItems = false;
         /** @type {Array<string|number>} */
         const keys = [];
-        /** @type {Array<InfoForCitationCluster>} */
-        const keysL = [];
 
         return Promise.resolve()
             .then(function () {
                 cslCitation
                     .getCitationItems()
                     .forEach(function (/** @type {CitationItem} */ item) {
-                        if (!self._storage.has(item.id)) {
+                        if (!self._storage.hasItem(item.id)) {
                             bUpdateItems = true;
                         }
-                        self._storage.set(item.id, item);
                         keys.push(item.id);
-                        keysL.push(item.getInfoForCitationCluster());
                     });
 
                 if (bUpdateItems) {
                     /** @type {string[]} */
                     var arrIds = [];
-                    self._storage.forEach(function (item, id) {
+                    self._storage.forEachItem(function (item, id) {
                         arrIds.push(id);
                     });
                     self._formatter.updateItems(arrIds);
@@ -131,8 +126,20 @@ class CitationService {
             .then(function () {
                 const fragment = document.createDocumentFragment();
                 const tempElement = document.createElement("div");
-                let htmlCitation = self._formatter.makeCitationCluster(keysL);
-                htmlCitation = self.#unEscapeHtml(htmlCitation);
+
+                const citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
+                const citationsPost = self._storage.getCitationsPost(cslCitation.citationID);;
+
+                const citations = self._storage.getAllCitationsInJson();
+                self._formatter.rebuildProcessorState(citations);
+                
+                const formattedCitationObj = self._formatter.processCitationCluster(
+                    cslCitation.toJSON(),
+                    citationsPre,
+                    citationsPost
+                );
+
+                let htmlCitation = self.#unEscapeHtml(formattedCitationObj[1][0][1]);
                 fragment.appendChild(tempElement);
 
                 // TODO: Maybe I should clear the search (think about it)
@@ -224,8 +231,6 @@ class CitationService {
             const bibObject = this._formatter.makeBibliography();
 
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
-                const citationId = bibObject[0].entry_ids[i][0];
-                const citationIndex = this._storage.getIndex(citationId);
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
@@ -265,11 +270,12 @@ class CitationService {
         return citationObject;
     }
     /**
-     * @param {Object} [updatedField]
-     * @returns {Promise<{fieldsWithCitations: {field: CustomField, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: CustomField | undefined}>}
+     * @param {Object & {citationID: string}} [updatedField]
+     * @returns {Promise<{fieldsWithCitations: {field: AddinFieldData, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: AddinFieldData | undefined}>}
      */
     #synchronizeStorageWithDocItems(updatedField) {
         const self = this;
+        this._storage.clear();
         return this.citationDocService
             .getAddinZoteroFields()
             .then(function (/** @type {CustomField[]} */ arrFields) {
@@ -307,17 +313,14 @@ class CitationService {
                         citationID = citationObject.citationID;
                     }
 
-                    let cslCitation = new CSLCitation(numOfItems, citationID);
+                    let cslCitation = new CSLCitation(citationID);
                     if (updatedField) {
                         numOfItems += cslCitation.fillFromObject(updatedField);
                     } else {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
                     }
-
-                    cslCitation.getCitationItems().forEach(function (item) {
-                        self._storage.set(item.id, item);
-                    });
+                    self._storage.addCitation(cslCitation);
 
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
@@ -395,9 +398,20 @@ class CitationService {
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
             const { field, cslCitation } = fieldsWithCitations[i];
-            let keysL = cslCitation.getInfoForCitationCluster();
-            let htmlCitation = this._formatter.makeCitationCluster(keysL);
-            htmlCitation = this.#unEscapeHtml(htmlCitation);
+
+            const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+            const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);;
+
+            const citations = this._storage.getAllCitationsInJson();
+            this._formatter.rebuildProcessorState(citations);
+            
+            const formattedCitationObj = this._formatter.processCitationCluster(
+                cslCitation.toJSON(),
+                citationsPre,
+                citationsPost
+            );
+
+            let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
             const oldContent = field["Content"];
             const newContent = tempElement.innerText;
@@ -448,6 +462,7 @@ class CitationService {
                     );
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
+                    // @ts-ignore
                     delete field["Content"];
                 } else {
                     field["Content"] = htmlCitation;
@@ -474,7 +489,7 @@ class CitationService {
 
         /** @type {string[]} */
         const arrIds = [];
-        this._storage.forEach(function (item, id) {
+        this._storage.forEachItem(function (item, id) {
             arrIds.push(id);
         });
         // @ts-ignore
@@ -489,8 +504,8 @@ class CitationService {
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
-                    const item = self._storage.get(id);
-                    let index = self._storage.getIndex(id);
+                    const item = self._storage.getItem(id);
+                    let index = self._storage.getItemIndex(id);
                     if (!item) return null;
                     return item.toFlatJSON(index);
                 },
@@ -534,7 +549,6 @@ class CitationService {
     async insertSelectedCitations(items) {
         const self = this;
 
-        this._storage.clear();
         try {
             await this.#synchronizeStorageWithDocItems();
             this.#updateFormatter();
@@ -542,24 +556,25 @@ class CitationService {
             throw e;
         }
 
-        const cslCitation = new CSLCitation(this._storage.size, "");
+        const cslCitation = new CSLCitation("");
         for (var citationID in items) {
             const item = items[citationID];
 
             cslCitation.fillFromObject(item);
         }
 
-        return this.#getSelectedInJsonFormat(items).then(function (items) {
+        return this.#getSelectedInJsonFormat(items).then((items) => {
+            // adding information to existing information
             items.forEach(function (item) {
                 cslCitation.fillFromObject(item);
             });
+            this._storage.addCitation(cslCitation);
             return self.#formatInsertLink(cslCitation);
         });
     }
 
     /** @returns {Promise<void>} */
     async insertBibliography() {
-        this._storage.clear();
         if (!this.#checkEditor()) {
             return;
         }
@@ -589,7 +604,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItems(bHardRefresh) {
-        this._storage.clear();
         if (!this.#checkEditor()) {
             return;
         }
@@ -640,8 +654,6 @@ class CitationService {
             return;
         }
         
-        this._storage.clear();
-
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -672,11 +684,10 @@ class CitationService {
     }
 
     /**
-     * @param {Object} updatedField
+     * @param {Object & {citationID: string}} updatedField
      * @returns {Promise<void>}
      */
     async updateItem(updatedField) {
-        this._storage.clear();
         if (!this.#checkEditor()) {
             return;
         }
@@ -702,13 +713,11 @@ class CitationService {
     }
     /**
      * // it is a crutch, because "SelectAddinField" does not work with notes
-     * @param {Object} updatedField
+     * @param {Object & {citationID: string}} updatedField
      * @param {"footnotes" | "endnotes"} notesStyle
      * @returns {Promise<void>}
      */
     async updateItemInNotes(updatedField, notesStyle) {
-        this._storage.clear();
-
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems(updatedField);
@@ -740,8 +749,6 @@ class CitationService {
         if (!this.#checkEditor()) {
             return;
         }
-
-        this._storage.clear();
 
         try {
             const { fieldsWithCitations, bibField } =
@@ -790,7 +797,6 @@ class CitationService {
             return;
         }
         
-        this._storage.clear();
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();

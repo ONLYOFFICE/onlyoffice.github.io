@@ -830,7 +830,7 @@ import "../styles.css";
             const field = await new Promise((resolve) => {
                 window.Asc.plugin.executeMethod(
                     "GetCurrentAddinField",
-                    null,
+                    undefined,
                     resolve,
                 );
             });
