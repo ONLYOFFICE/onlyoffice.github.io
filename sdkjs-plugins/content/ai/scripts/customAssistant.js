@@ -192,23 +192,7 @@
         }
 
         selectType = $('#assistantType');
-        selectType.select2({
-            data : [{
-                id: 0,
-                text: "Hint"
-            },
-            {
-                id: 2,
-                text: "Replace"
-            },
-            {
-                id: 1,
-                text: "Replace + Hint"
-            }],
-            tags: true,
-            minimumResultsForSearch: Infinity,
-            dropdownAutoWidth: true
-        });
+
         selectType.on('select2:select', (e) => {
             
         });

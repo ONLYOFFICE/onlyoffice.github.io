@@ -42,6 +42,21 @@ GrammarChecker.prototype.constructor = GrammarChecker;
 GrammarChecker.prototype.annotateParagraph = async function(paraId, recalcId, text)
 {
 	this.paragraphs[paraId] = {};
+	if (text.length === 0) {
+		return false;
+	}
+
+	let langName = "English";
+	try {
+		const displayNames = new Intl.DisplayNames(["en"], {
+			type: "language"
+		});
+		const isoCode = window.Asc.plugin.info.lang.split(/[-_]/)[0].toLowerCase();
+		langName = displayNames.of(isoCode);
+	}
+	catch (e) {
+		console.error(e);
+	}
 
 	let argPrompt = `You are a grammar correction tool that analyzes text for punctuation and style issues only. You will receive text to analyze and must respond with corrections in a specific JSON format.
 
@@ -71,7 +86,7 @@ Response format - return ONLY this JSON array with no additional text:
     "origin": "relevant snippet of text around the error",
     "suggestion": "the corrected version of that snippet",
     "description": "brief explanation of the punctuation or style issue",
-   "difference":"difference between origin and suggestion"
+    "difference":"difference between origin and suggestion"
     "occurrence": 1,
     "confidence": 0.95
   }
@@ -88,6 +103,12 @@ Guidelines for each field:
 Only include sentences that have punctuation or style errors - skip sentences with no errors.
 
 If no errors are found in the entire text, return an empty array: []
+
+IMPORTANT LANGUAGE RULE FOR "description" FIELD:
+- The text inside "description" MUST be strictly in the ${langName} language. Output in any other language is invalid.
+- Never add translations
+- Never switch language
+- If you are unsure, still respond in the ${langName} language.
 
 Examples:
 
