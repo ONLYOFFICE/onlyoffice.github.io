@@ -526,9 +526,6 @@
             return;
         }
 
-        // Prepare data for insertion
-        var currentCol = 0;
-
         tableNames.forEach(function(tableName) {
             var records = allData[tableName];
 
@@ -563,31 +560,25 @@
 
             // Store data in Asc.scope for access in callCommand
             window.Asc.scope.tableData = dataArray;
-            window.Asc.scope.startCol = currentCol;
             window.Asc.scope.tableName = tableName;
 
             // Call ONLYOFFICE API to insert data
             window.Asc.plugin.callCommand(function() {
-                var oWorksheet = Api.GetActiveSheet();
                 var data = Asc.scope.tableData;
-                var startCol = Asc.scope.startCol;
                 var tableName = Asc.scope.tableName;
 
-                // Insert table name as title
-                var titleCell = oWorksheet.GetRangeByNumber(0, startCol);
-                titleCell.SetValue(tableName);
-                titleCell.SetBold(true);
-                titleCell.SetFontSize(14);
+                // Create a new worksheet with the table name
+                var oWorksheet = Api.AddSheet(tableName);
 
                 var headers = data[0];
                 var numRows = data.length;
                 var numCols = headers.length;
 
-                // Insert all data (headers + rows) starting from row 1
+                // Insert all data (headers + rows) starting from row 0
                 for (var r = 0; r < numRows; r++) {
                     var row = data[r];
                     for (var c = 0; c < row.length; c++) {
-                        var cell = oWorksheet.GetRangeByNumber(r + 1, startCol + c);
+                        var cell = oWorksheet.GetRangeByNumber(r, c);
                         var value = row[c];
 
                         // Try to detect and set appropriate type
@@ -611,11 +602,11 @@
                     return letter;
                 }
 
-                // Create range string for the table (e.g., "A2:D10")
-                var startLetter = colToLetter(startCol);
-                var endLetter = colToLetter(startCol + numCols - 1);
-                var startRow = 2; // Row 1 is title, data starts at row 2 (1-indexed)
-                var endRow = startRow + numRows - 1;
+                // Create range string for the table (e.g., "A1:D10")
+                var startLetter = colToLetter(0);
+                var endLetter = colToLetter(numCols - 1);
+                var startRow = 1; // Data starts at row 1 (1-indexed)
+                var endRow = numRows;
                 var rangeStr = startLetter + startRow + ':' + endLetter + endRow;
 
                 // Format as table with built-in style
@@ -623,14 +614,10 @@
 
                 // Auto-fit columns (approximate)
                 for (var c = 0; c < numCols; c++) {
-                    oWorksheet.SetColumnWidth(startCol + c, 15);
+                    oWorksheet.SetColumnWidth(c, 15);
                 }
 
             }, false);
-
-            // Move to next table position (columns + 1 gap)
-            var colCount = columns.length;
-            currentCol += colCount + 2;
         });
 
         showStatus(tr('Data inserted successfully!'), 'success');
