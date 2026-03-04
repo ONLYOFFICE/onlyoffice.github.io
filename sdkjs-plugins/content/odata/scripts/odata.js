@@ -138,6 +138,11 @@
         this.executeCommand("close", "");
     };
 
+    // Translation helper
+    function tr(text) {
+        return window.Asc && window.Asc.plugin && window.Asc.plugin.tr ? window.Asc.plugin.tr(text) : text;
+    }
+
     // Show status message (near Insert button)
     function showStatus(message, type) {
         var statusEl = document.getElementById('insert-status');
@@ -195,7 +200,7 @@
         var url = urlInput.value.trim();
 
         if (!url) {
-            showFetchStatus('Please enter an OData service URL', 'error');
+            showFetchStatus(tr('Please enter an OData service URL'), 'error');
             return;
         }
 
@@ -203,7 +208,7 @@
         odataServiceUrl = url.replace(/\/$/, '');
 
         hideFetchStatus();
-        showFetchStatus('Fetching OData service metadata...', 'loading');
+        showFetchStatus(tr('Fetching OData service metadata...'), 'loading');
         document.getElementById('fetch-btn').disabled = true;
 
         // Clear previous data
@@ -270,7 +275,7 @@
             }
 
             if (availableTables.length === 0) {
-                showFetchStatus('No tables found in OData service', 'error');
+                showFetchStatus(tr('No tables found in OData service'), 'error');
             } else {
                 hideFetchStatus();
                 renderTablesList();
@@ -299,7 +304,7 @@
             parseMetadataXml(xmlText);
         })
         .catch(function(error) {
-            showFetchStatus('Invalid URL or OData service unavailable', 'error');
+            showFetchStatus(tr('Invalid URL or OData service unavailable'), 'error');
             document.getElementById('fetch-btn').disabled = false;
         });
     }
@@ -325,13 +330,13 @@
             });
 
             if (availableTables.length === 0) {
-                showFetchStatus('No entity sets found in metadata', 'error');
+                showFetchStatus(tr('No entity sets found in metadata'), 'error');
             } else {
                 hideFetchStatus();
                 renderTablesList();
             }
         } catch (e) {
-            showFetchStatus('Failed to parse OData metadata', 'error');
+            showFetchStatus(tr('Failed to parse OData metadata'), 'error');
         }
 
         document.getElementById('fetch-btn').disabled = false;
@@ -409,7 +414,7 @@
                 showActionsSection();
             } else {
                 // Show message and hide preview when no data
-                showFetchStatus('Table is empty', 'error');
+                showFetchStatus(tr('Table is empty'), 'error');
                 var previewSection = document.getElementById('preview-section');
                 if (previewSection) previewSection.style.display = 'none';
                 var actionsSection = document.getElementById('actions-section');
@@ -417,7 +422,7 @@
             }
         })
         .catch(function(error) {
-            showFetchStatus('Failed to load table data', 'error');
+            showFetchStatus(tr('Failed to load table data'), 'error');
             // Hide preview on error
             var previewSection = document.getElementById('preview-section');
             if (previewSection) previewSection.style.display = 'none';
@@ -466,11 +471,11 @@
     // Insert selected tables into spreadsheet
     function insertSelectedTables() {
         if (selectedTables.length === 0) {
-            showStatus('Please select at least one table', 'error');
+            showStatus(tr('Please select at least one table'), 'error');
             return;
         }
 
-        showStatus('Fetching data...', 'loading');
+        showStatus(tr('Fetching data...'), 'loading');
 
         var tablesToFetch = selectedTables.slice();
         var allData = {};
@@ -516,7 +521,7 @@
         var tableNames = Object.keys(allData);
 
         if (tableNames.length === 0) {
-            showStatus('No data to insert', 'error');
+            showStatus(tr('No data to insert'), 'error');
             return;
         }
 
@@ -627,7 +632,7 @@
             currentCol += colCount + 2;
         });
 
-        showStatus('Data inserted successfully!', 'success');
+        showStatus(tr('Data inserted successfully!'), 'success');
     }
 
     // Escape HTML special characters
