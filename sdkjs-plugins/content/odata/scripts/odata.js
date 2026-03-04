@@ -578,7 +578,8 @@
                 }
 
                 // Create a new worksheet with the unique name
-                var oWorksheet = Api.AddSheet(sheetName);
+                Api.AddSheet(sheetName);
+                var oWorksheet = Api.GetSheet(sheetName);
 
                 var headers = data[0];
                 var numRows = data.length;
