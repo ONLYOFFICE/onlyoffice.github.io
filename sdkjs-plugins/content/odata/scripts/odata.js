@@ -408,7 +408,8 @@
                 showPreview(table.name);
                 showActionsSection();
             } else {
-                // Hide preview when no data
+                // Show message and hide preview when no data
+                showFetchStatus('Table is empty', 'error');
                 var previewSection = document.getElementById('preview-section');
                 if (previewSection) previewSection.style.display = 'none';
                 var actionsSection = document.getElementById('actions-section');
