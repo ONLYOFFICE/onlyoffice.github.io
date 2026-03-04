@@ -168,6 +168,8 @@
             statusEl.textContent = '';
             statusEl.className = 'status-message';
         }
+        // Also clear insert status
+        showStatus('', '');
     }
 
     // Update selected display (hide actions - shown after data loads)
@@ -567,8 +569,16 @@
                 var data = Asc.scope.tableData;
                 var tableName = Asc.scope.tableName;
 
-                // Create a new worksheet with the table name
-                var oWorksheet = Api.AddSheet(tableName);
+                // Find unique sheet name (add suffix if name already exists)
+                var sheetName = tableName;
+                var counter = 1;
+                while (Api.GetSheet(sheetName)) {
+                    sheetName = tableName + '_' + counter;
+                    counter++;
+                }
+
+                // Create a new worksheet with the unique name
+                var oWorksheet = Api.AddSheet(sheetName);
 
                 var headers = data[0];
                 var numRows = data.length;
