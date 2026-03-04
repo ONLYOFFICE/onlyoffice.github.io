@@ -68,14 +68,14 @@ class CitationDocService {
 
     /**
      * @param {string} text
-     * @param {string} value
+     * @param {string} tag
      * @param {NoteStyle | null} notesStyle
      * @returns {Promise<void>}
      */
-    async addCitation(text, value, notesStyle) {
+    async addCitation(text, tag, notesStyle) {
         /** @type {ContentControlProperties} */
         const control = {
-            Tag: this.#makeContentControlTag(value),
+            Tag: tag,
             Lock: 3, // can edit
             PlaceHolderText: "",
         };
@@ -230,9 +230,6 @@ class CitationDocService {
             await window.Asc.plugin.executeMethod("SelectContentControl", [id]);
 
             let tag = controls[i].Tag;
-            if (tag.indexOf(this.#bibPrefix) !== 0) {
-                tag = this.#makeContentControlTag(tag);
-            }
             await new Promise((resolve) => {
                 Asc.scope.tag = tag;
                 Asc.scope.id = controls[i].InternalId;
@@ -283,7 +280,7 @@ class CitationDocService {
             await this.#selectField(field.FieldId);
             /** @type {ContentControlProperties} */
             const control = {
-                Tag: this.#makeContentControlTag(newValue),
+                Tag: newValue,
                 Lock: 3, // can edit
                 PlaceHolderText: "",
             };
@@ -326,9 +323,6 @@ class CitationDocService {
             await this.#removeSelectedContent();
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
-            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#makeContentControlTag(control.Tag);
-            }
             await this.#addContentControl(control);
 
             await this.#pasteHtml(text);
@@ -353,9 +347,6 @@ class CitationDocService {
             await this.#addNote(notesStyle);
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
-            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#makeContentControlTag(control.Tag);
-            }
             await this.#addContentControl(control);
 
             await this.#pasteHtml(text);
@@ -391,9 +382,6 @@ class CitationDocService {
             await this.#addNote(notesStyle);
             const text = control.PlaceHolderText;
             control.PlaceHolderText = "";
-            if (control.Tag.indexOf(this.#bibPrefix) !== 0) {
-                control.Tag = this.#makeContentControlTag(control.Tag);
-            }
             await this.#addContentControl(control);
 
             await this.#pasteHtml(text);
@@ -634,30 +622,6 @@ class CitationDocService {
                 resolve,
             );
         });
-    }
-
-    /** @param {string} tagText */
-    #makeContentControlTag(tagText) {
-        let base64String = "";
-        if (typeof TextEncoder !== "undefined") {
-            var bytes = new TextEncoder().encode(tagText);
-            var binary = "";
-            for (var i = 0; i < bytes.length; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            base64String = btoa(binary);
-        } else {
-            base64String = btoa(
-                encodeURIComponent(tagText).replace(
-                    /%([0-9A-F]{2})/g,
-                    function (match, p1) {
-                        return String.fromCharCode(parseInt(p1, 16));
-                    },
-                ),
-            );
-        }
-
-        return this.#citPrefix + "_v3_" + base64String;
     }
 }
 

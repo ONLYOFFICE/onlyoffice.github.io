@@ -124,9 +124,11 @@ class CitationService {
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
+                let tag = JSON.stringify(cslCitation.toJSON());
+                tag = self.#makeContentControlTag(tag);
                 return self.citationDocService.addCitation(
                     htmlCitation,
-                    JSON.stringify(cslCitation.toJSON()),
+                    tag,
                     notesStyle,
                 );
             })
@@ -227,6 +229,7 @@ class CitationService {
     #synchronizeStorageWithDocItems(updatedControl, notesStyle) {
         const self = this;
         this._storage.clear();
+        CSLCitation.resetUsedIDs();
         return this.citationDocService
             .getAddinMendeleyControls(notesStyle)
             .then(function (/** @type {ContentControlProperties[]} */ arrControls) {
@@ -253,7 +256,7 @@ class CitationService {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
                     }
-                    self._storage.addCitation(cslCitation);
+                    self._storage.addCslCitation(cslCitation);
 
                     return { control: { ...control }, cslCitation: cslCitation };
                 });
@@ -296,6 +299,30 @@ class CitationService {
         }
     }
 
+    /** @param {string} tagText */
+    #makeContentControlTag(tagText) {
+        let base64String = "";
+        if (typeof TextEncoder !== "undefined") {
+            var bytes = new TextEncoder().encode(tagText);
+            var binary = "";
+            for (var i = 0; i < bytes.length; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            base64String = btoa(binary);
+        } else {
+            base64String = btoa(
+                encodeURIComponent(tagText).replace(
+                    /%([0-9A-F]{2})/g,
+                    function (match, p1) {
+                        return String.fromCharCode(parseInt(p1, 16));
+                    },
+                ),
+            );
+        }
+
+        return this._citPrefixNew + "_v3_" + base64String;
+    }
+
     /**
      * @param {boolean} bNoHaveControls
      * @param {ContentControlProperties} bibControl
@@ -327,6 +354,7 @@ class CitationService {
         const updatedControls = [];
 
         for (let i = controlsWithCitations.length - 1; i >= 0; i--) {
+            let bHasChanges = !!bChangePosition;
             const { control, cslCitation } = controlsWithCitations[i];
             const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
             const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);;
@@ -392,16 +420,26 @@ class CitationService {
                     control.PlaceHolderText = htmlCitation;
                     cslCitation.setManualOverride(newContent);
                 }
+                bHasChanges = true;
             } else {
+                if (newContent !== oldContentInDoc || oldContentInCit !== oldContentInDoc || oldContentInCit !== newContent) {
+                    bHasChanges = true;
+                }
                 control.PlaceHolderText = htmlCitation;
                 cslCitation.setManualOverride(newContent);
             }
 
             if (cslCitation) {
-                control.Tag = JSON.stringify(cslCitation.toJSON());
+                let newTag = JSON.stringify(cslCitation.toJSON());
+                newTag = this.#makeContentControlTag(newTag);
+                if (control.Tag !== newTag) {
+                    bHasChanges = true;
+                }
+                control.Tag = newTag;
             }
-
-            updatedControls.push(control);
+            if (bHasChanges) {
+                updatedControls.push(control);
+            }
         }
 
         return updatedControls;
@@ -498,7 +536,7 @@ class CitationService {
             cslCitation.fillFromObject(item);
         }
 
-        this._storage.addCitation(cslCitation);
+        this._storage.addCslCitation(cslCitation);
         return this.#formatInsertLink(cslCitation);
 
     }
@@ -686,6 +724,7 @@ class CitationService {
     async #synchronizeStorageBeforeUpgrade(arrFields) {
         const self = this;
         this._storage.clear();
+        CSLCitation.resetUsedIDs();
 
         let numOfItems = 0;
 
@@ -764,7 +803,7 @@ class CitationService {
             const infoForUpgrade = fieldsWithCitations.map((field) => {
                 return {
                     field: field.field,
-                    newValue: JSON.stringify(field.cslCitation.toJSON())
+                    newValue: this.#makeContentControlTag(JSON.stringify(field.cslCitation.toJSON()))
                 };
             })
             await this.citationDocService.upgradeCslItems(infoForUpgrade, bibField);

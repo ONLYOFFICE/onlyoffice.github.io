@@ -84,6 +84,10 @@ class CSLCitation {
             "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
     }
 
+    static resetUsedIDs() {
+        CSLCitation.#usedIDs = new Set();
+    }
+
     /**
      * @param {any} citationObject
      * @returns
@@ -133,27 +137,27 @@ class CSLCitation {
         });
 
         citationObject.citationItems.forEach(function (
-                /** @type {CitationItem} */ item
-            ) {
-                let id = item.id;
-                let citationItem;
-                if (existingIds.indexOf(id) >= 0) {
-                    citationItem = self._citationItems[existingIds.indexOf(id)];
-                } else {
-                    citationItem = new CitationItem(id);
-                    existingIds.push(id);
-                }
+            /** @type {CitationItem} */ item
+        ) {
+            let id = item.id;
+            let citationItem;
+            if (existingIds.indexOf(id) >= 0) {
+                citationItem = self._citationItems[existingIds.indexOf(id)];
+            } else {
+                citationItem = new CitationItem(id);
+                existingIds.push(id);
+            }
 
-                if (typeof id === "number") {
-                    // Word 365 or wps
-                    id = self.#extractIdFromWord365Citation(item);
-                }
+            if (typeof id === "number") {
+                // Word 365 or wps
+                id = self.#extractIdFromWord365Citation(item);
+            }
 
-                citationItem.fillFromObject(item);
+            citationItem.fillFromObject(item);
 
-                self.#addCitationItem(citationItem);
-            },
-            this);
+            self.#addCitationItem(citationItem);
+        },
+        this);
         return existingIds.length;
     }
 
