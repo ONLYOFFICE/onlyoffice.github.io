@@ -71,8 +71,7 @@ class CitationService {
     }
 
     /**
-     *
-     * @param {*} cslCitation
+     * @param {CSLCitation} cslCitation
      * @returns {Promise<Array<string|number>>}
      */
     #formatInsertLink(cslCitation) {
@@ -80,26 +79,22 @@ class CitationService {
         let bUpdateItems = false;
         /** @type {Array<string|number>} */
         const keys = [];
-        /** @type {Array<InfoForCitationCluster>} */
-        const keysL = [];
 
         return Promise.resolve()
             .then(function () {
                 cslCitation
                     .getCitationItems()
                     .forEach(function (/** @type {CitationItem} */ item) {
-                        if (!self._storage.has(item.id)) {
+                        if (!self._storage.hasItem(item.id)) {
                             bUpdateItems = true;
                         }
-                        self._storage.set(item.id, item);
                         keys.push(item.id);
-                        keysL.push(item.getInfoForCitationCluster());
                     });
 
                 if (bUpdateItems) {
                     /** @type {string[]} */
                     var arrIds = [];
-                    self._storage.forEach(function (item, id) {
+                    self._storage.forEachItem(function (item, id) {
                         arrIds.push(id);
                     });
                     self._formatter.updateItems(arrIds);
@@ -108,8 +103,20 @@ class CitationService {
             .then(function () {
                 const fragment = document.createDocumentFragment();
                 const tempElement = document.createElement("div");
-                let htmlCitation = self._formatter.makeCitationCluster(keysL);
-                htmlCitation = self.#unEscapeHtml(htmlCitation);
+
+                const citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
+                const citationsPost = self._storage.getCitationsPost(cslCitation.citationID);;
+
+                const citations = self._storage.getAllCitationsInJson();
+                self._formatter.rebuildProcessorState(citations);
+
+                const formattedCitationObj = self._formatter.processCitationCluster(
+                    cslCitation.toJSON(),
+                    citationsPre,
+                    citationsPost
+                );
+
+                let htmlCitation = self.#unEscapeHtml(formattedCitationObj[1][0][1]);
                 fragment.appendChild(tempElement);
                 tempElement.innerHTML = htmlCitation;
                 cslCitation.setManualOverride(tempElement.innerText);
@@ -136,8 +143,6 @@ class CitationService {
             const bibObject = this._formatter.makeBibliography();
 
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
-                const citationId = bibObject[0].entry_ids[i][0];
-                const citationIndex = this._storage.getIndex(citationId);
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
                 bibText = bibText.replaceAll(/\n/g, "").trim();
@@ -215,12 +220,13 @@ class CitationService {
         return citationObject;
     }
     /**
-     * @param {Object} [updatedControl]
+     * @param {Object & {citationID: string}} [updatedControl]
      * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<{controlsWithCitations: {control: ContentControlProperties, cslCitation: CSLCitation}[], bibControl: ContentControlProperties | undefined}>}
      */
     #synchronizeStorageWithDocItems(updatedControl, notesStyle) {
         const self = this;
+        this._storage.clear();
         return this.citationDocService
             .getAddinMendeleyControls(notesStyle)
             .then(function (/** @type {ContentControlProperties[]} */ arrControls) {
@@ -239,18 +245,15 @@ class CitationService {
                 });
                 let controlsWithCitations = controls.map(function (control) {
                     let citationObject = self.#extractControl(control);
-
-                    let cslCitation = new CSLCitation(numOfItems);
+                    let citationID = citationObject.citationID || "";
+                    let cslCitation = new CSLCitation(citationID);
                     if (updatedControl) {
                         numOfItems += cslCitation.fillFromObject(updatedControl);
                     } else {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
                     }
-
-                    cslCitation.getCitationItems().forEach(function (item) {
-                        self._storage.set(item.id, item);
-                    });
+                    self._storage.addCitation(cslCitation);
 
                     return { control: { ...control }, cslCitation: cslCitation };
                 });
@@ -325,32 +328,37 @@ class CitationService {
 
         for (let i = controlsWithCitations.length - 1; i >= 0; i--) {
             const { control, cslCitation } = controlsWithCitations[i];
-            let keysL = cslCitation.getInfoForCitationCluster();
-            let htmlCitation = this._formatter.makeCitationCluster(keysL);
-            htmlCitation = this.#unEscapeHtml(htmlCitation);
+            const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+            const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);;
+
+            const citations = this._storage.getAllCitationsInJson();
+            this._formatter.rebuildProcessorState(citations);
+
+            const formattedCitationObj = this._formatter.processCitationCluster(
+                cslCitation.toJSON(),
+                citationsPre,
+                citationsPost
+            );
+
+            let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
-            const oldContent = control.PlaceHolderText;
+            let oldContentInCit = cslCitation.getPlainCitation();
+            const oldContentInDoc = control.PlaceHolderText;
+            if (oldContentInCit === "") {
+                oldContentInCit = oldContentInDoc; // for old versions of plugin, where "PlainCitation" was not saved
+            }
             const newContent = tempElement.innerText;
 
             if (cslCitation.getDoNotUpdate()) {
                 continue;
             }
 
-            if (oldContent === newContent && !bChangePosition) {
+            /*if (oldContentInCit === oldContentInDoc && oldContentInCit === newContent && !bChangePosition) {
                 continue;
-            }
-            if (
-                !bHardRefresh &&
-                (oldContent === "null" || oldContent === null)
-            ) {
-                console.error("Unable to update footnotes");
-                bHardRefresh = true;
-            }
+            }*/
 
-            if (bHardRefresh) {
-                control.PlaceHolderText = htmlCitation;
-                cslCitation.setManualOverride(newContent);
-            } else if (oldContent !== newContent) {
+            if (oldContentInCit !== oldContentInDoc && !bHardRefresh) {
+                // content was changed by user, but not saved in citation object
                 let text =
                     "<p>" +
                     translate(
@@ -370,7 +378,7 @@ class CitationService {
                     "<p>" +
                     translate("Modified:") +
                     " " +
-                    oldContent +
+                    oldContentInDoc +
                     "</p>";
                 const bNeedSaveUserInput =
                     await this.#additionalWindow.show(
@@ -378,12 +386,15 @@ class CitationService {
                         text,
                     );
                 if (bNeedSaveUserInput) {
-                    cslCitation.setManualOverride(newContent, oldContent);
+                    cslCitation.setManualOverride(newContent, oldContentInDoc);
                     control.PlaceHolderText = "";
                 } else {
                     control.PlaceHolderText = htmlCitation;
                     cslCitation.setManualOverride(newContent);
                 }
+            } else {
+                control.PlaceHolderText = htmlCitation;
+                cslCitation.setManualOverride(newContent);
             }
 
             if (cslCitation) {
@@ -401,7 +412,7 @@ class CitationService {
 
         /** @type {string[]} */
         const arrIds = [];
-        this._storage.forEach(function (item, id) {
+        this._storage.forEachItem(function (item, id) {
             arrIds.push(id);
         });
         // @ts-ignore
@@ -416,8 +427,8 @@ class CitationService {
                 },
                 /** @param {string} id */
                 retrieveItem: function (id) {
-                    const item = self._storage.get(id);
-                    let index = self._storage.getIndex(id);
+                    const item = self._storage.getItem(id);
+                    let index = self._storage.getItemIndex(id);
                     if (!item) return null;
                     return item.toFlatJSON(index);
                 },
@@ -474,28 +485,26 @@ class CitationService {
      * @returns {Promise<Array<string|number>>}
      */
     async insertSelectedCitations(items) {
-        this._storage.clear();
         try {
             await this.#synchronizeStorageWithDocItems();
             this.#updateFormatter();
         } catch (e) {
             throw e;
         }
-        const cslCitation = new CSLCitation(this._storage.size, "");
+        const cslCitation = new CSLCitation("");
         for (var citationID in items) {
             const item = items[citationID];
 
             cslCitation.fillFromObject(item);
         }
 
+        this._storage.addCitation(cslCitation);
         return this.#formatInsertLink(cslCitation);
 
     }
 
     /** @returns {Promise<void>} */
     async insertBibliography() {
-        this._storage.clear();
-
         try {
             const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems();
@@ -521,8 +530,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItems(bHardRefresh) {
-        this._storage.clear();
-
         try {
             const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems();
@@ -561,12 +568,10 @@ class CitationService {
     }
     
     /**
-     * @param {Object} updatedControl
+     * @param {Object & {citationID: string}} updatedControl
      * @returns {Promise<void>}
      */
     async updateItem(updatedControl) {
-        this._storage.clear();
-
         try {
             const { controlsWithCitations } =
                 await this.#synchronizeStorageWithDocItems(updatedControl);
@@ -600,8 +605,6 @@ class CitationService {
             );
             return;
         }
-
-        this._storage.clear();
 
         try {
             const { controlsWithCitations, bibControl } =
@@ -653,8 +656,7 @@ class CitationService {
             );
             return;
         }
-        
-        this._storage.clear();
+
         try {
             const { controlsWithCitations } =
                 await this.#synchronizeStorageWithDocItems(false, notesStyle);
@@ -719,7 +721,7 @@ class CitationService {
                     }
                 });
             }
-            let cslCitation = new CSLCitation(numOfItems);
+            let cslCitation = new CSLCitation();
             numOfItems +=
                 cslCitation.fillFromObject(citationObject);
             cslCitation.setManualOverride(field.Content);
