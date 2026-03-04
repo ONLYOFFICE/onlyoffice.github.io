@@ -444,6 +444,7 @@ export type WordMethodArgs = {
     // Methods S
     SearchAndReplace: [oProps: { searchString: string; replaceString: string; matchCase?: boolean }];
     SearchNext: [oProps: { searchString: string; matchCase?: boolean }, bSelect?: boolean];
+    SelectAddinField: [sInternalId: string];
     SelectAnnotationRange: [oData: { paragraphId: string; rangeId: string; name: string }];
     SelectContentControl: [sInternalId: string];
     SelectOleObject: [sInternalId: string];
