@@ -40,7 +40,7 @@
         label {
             font-size: 12px;
             font-weight: 500;
-            color: var(--text-secondary, #666);
+            color: var(--text-normal, #333);
         }
 
         .url-input-row {
@@ -163,16 +163,16 @@
 
         .status-message.success {
             display: block;
-            background: #efe;
-            color: #060;
-            border: 1px solid #cfc;
+            background: rgba(0, 180, 0, 0.15);
+            color: #4caf50;
+            border: 1px solid rgba(0, 180, 0, 0.3);
         }
 
         .status-message.loading {
             display: block;
-            background: #eef;
-            color: #006;
-            border: 1px solid #ccf;
+            background: rgba(74, 144, 217, 0.15);
+            color: var(--text-normal, #333);
+            border: 1px solid rgba(74, 144, 217, 0.3);
         }
 
         .preview-section {
@@ -239,11 +239,11 @@
         }
 
         .insert-status.loading {
-            color: #006;
+            color: var(--text-normal, #333);
         }
 
         .insert-status.success {
-            color: #060;
+            color: #4caf50;
         }
 
         .insert-status.error {
