@@ -1,0 +1,20 @@
+{
+	"OData Service URL": "OData-Dienst-URL",
+	"Fetch": "Laden",
+	"Available Tables": "Verfügbare Tabellen",
+	"Enter an OData URL and click Fetch to load available tables": "OData-URL eingeben und auf «Laden» klicken",
+	"Data Preview (first 10 rows)": "Vorschau (erste 10 Zeilen)",
+	"Insert Data": "Daten einfügen",
+	"Please enter an OData service URL": "OData-Dienst-URL eingeben",
+	"Fetching OData service metadata...": "Daten werden geladen...",
+	"No tables found in OData service": "Keine Tabellen gefunden",
+	"Invalid URL or OData service unavailable": "Ungültige URL oder Dienst nicht verfügbar",
+	"No entity sets found in metadata": "Keine Tabellen in der Datenquelle gefunden",
+	"Failed to parse OData metadata": "Daten konnten nicht gelesen werden",
+	"Table is empty": "Tabelle ist leer",
+	"Failed to load table data": "Daten konnten nicht geladen werden",
+	"Please select at least one table": "Tabelle auswählen",
+	"Fetching data...": "Laden...",
+	"No data to insert": "Keine Daten zum Einfügen",
+	"Data inserted successfully!": "Daten erfolgreich eingefügt!"
+}
