@@ -5952,11 +5952,19 @@ class CursorService {
             var isCalc = false;
             var isClose = false;
             Asc.plugin.callCommand(() => {
-                var _doc$GetRangeBySelect, _doc$GetCurrentParagr, _doc$GetCurrentRun;
+                var _doc$GetCurrentParagr, _doc$GetCurrentRun;
                 var doc = Api.GetDocument();
-                var canSelectWord = doc === null || doc === void 0 ? void 0 : doc.SelectCurrentWord();
-                var endPos = (doc === null || doc === void 0 || (_doc$GetRangeBySelect = doc.GetRangeBySelect()) === null || _doc$GetRangeBySelect === void 0 ? void 0 : _doc$GetRangeBySelect.GetEndPos()) || 0;
+                if (!doc) {
+                    return 0;
+                }
+                var canSelectWord = doc.SelectCurrentWord();
+                var selectedRange = doc.GetRangeBySelect();
+                if (!selectedRange) {
+                    return 0;
+                }
+                var endPos = selectedRange.GetEndPos();
                 if (canSelectWord) {
+                    doc.RemoveSelection();
                     return endPos;
                 }
                 var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
