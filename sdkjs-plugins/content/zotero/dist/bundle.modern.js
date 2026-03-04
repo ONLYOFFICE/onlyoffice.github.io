@@ -3345,25 +3345,35 @@ class CslDocFormatter {
                 if (!selRange) {
                     return;
                 }
+                function applyFormatting(range, type) {
+                    if ("sup" === type) {
+                        range.SetVertAlign("superscript");
+                    } else if ("sub" === type) {
+                        range.SetVertAlign("subscript");
+                    } else if ("sc" === type) {
+                        range.SetSmallCaps(true);
+                    } else if ("u" === type) {
+                        range.SetUnderline(true);
+                    } else if ("b" === type) {
+                        range.SetBold(true);
+                    } else if ("i" === type || "em" === type) {
+                        range.SetItalic(true);
+                    }
+                }
+                if (Asc.scope.formatting.length === 1) {
+                    var pos = Asc.scope.formatting[0];
+                    if (pos.start === 0 && pos.end === selRange.GetText().length) {
+                        applyFormatting(selRange, pos.type);
+                        return;
+                    }
+                }
                 doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
                 var run = doc.GetCurrentRun();
                 for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                    var pos = Asc.scope.formatting[i];
-                    var range = run.GetRange(pos.start, pos.end);
+                    var _pos = Asc.scope.formatting[i];
+                    var range = run.GetRange(_pos.start, _pos.end);
                     if (!range) continue;
-                    if ("sup" === pos.type) {
-                        range.SetVertAlign("superscript");
-                    } else if ("sub" === pos.type) {
-                        range.SetVertAlign("subscript");
-                    } else if ("sc" === pos.type) {
-                        range.SetSmallCaps(true);
-                    } else if ("u" === pos.type) {
-                        range.SetUnderline(true);
-                    } else if ("b" === pos.type) {
-                        range.SetBold(true);
-                    } else if ("i" === pos.type || "em" === pos.type) {
-                        range.SetItalic(true);
-                    }
+                    applyFormatting(range, _pos.type);
                 }
             }, isClose, isCalc, resolve);
         });
@@ -3696,7 +3706,7 @@ class CSLCitationStorage {
         id = id.toString();
         return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
     }
-    addCitation(cslCitation) {
+    addCslCitation(cslCitation) {
         _classPrivateFieldGet2(_citations, this).push(cslCitation);
         cslCitation.setNoteIndex(_classPrivateFieldGet2(_citations, this).length);
         cslCitation.getCitationItems().forEach(item => {
@@ -5016,6 +5026,9 @@ class CSLCitation {
         this._manualOverride = {};
         this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
     }
+    static resetUsedIDs() {
+        _usedIDs._ = new Set;
+    }
     fillFromObject(citationObject) {
         if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
             return _assertClassBrand(_CSLCitation_brand, this, _fillFromCitationObject).call(this, citationObject);
@@ -5473,7 +5486,7 @@ class CitationService {
                 items.forEach(function(item) {
                     cslCitation.fillFromObject(item);
                 });
-                _this2._storage.addCitation(cslCitation);
+                _this2._storage.addCslCitation(cslCitation);
                 return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
             });
         })();
@@ -5768,6 +5781,7 @@ function _extractField(field) {
 function _synchronizeStorageWithDocItems(updatedField) {
     var self = this;
     this._storage.clear();
+    CSLCitation.resetUsedIDs();
     return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
         var numOfItems = 0;
         var bibFieldValue = " ";
@@ -5795,7 +5809,7 @@ function _synchronizeStorageWithDocItems(updatedField) {
             } else {
                 numOfItems += cslCitation.fillFromObject(citationObject);
             }
-            self._storage.addCitation(cslCitation);
+            self._storage.addCslCitation(cslCitation);
             return {
                 field: _objectSpread2({}, field),
                 cslCitation: cslCitation
@@ -5850,6 +5864,7 @@ function _getUpdatedFields2() {
         fragment.appendChild(tempElement);
         var updatedFields = [];
         for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
+            var bHasChanges = !!bChangePosition;
             var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
             var citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
             var citationsPost = this._storage.getCitationsPost(cslCitation.citationID);
@@ -5877,14 +5892,24 @@ function _getUpdatedFields2() {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
+                bHasChanges = true;
             } else {
+                if (newContent !== oldContentInDoc || oldContentInCit !== oldContentInDoc || oldContentInCit !== newContent) {
+                    bHasChanges = true;
+                }
                 field["Content"] = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
             }
             if (cslCitation) {
-                field["Value"] = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                var newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                if (field["Value"] !== newValue) {
+                    bHasChanges = true;
+                }
+                field["Value"] = newValue;
             }
-            updatedFields.push(field);
+            if (bHasChanges) {
+                updatedFields.push(field);
+            }
         }
         return updatedFields;
     });
