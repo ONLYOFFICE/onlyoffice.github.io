@@ -410,6 +410,7 @@
                         return !key.startsWith('@') && !key.startsWith('__');
                     })
                 };
+                hideFetchStatus();
                 showPreview(table.name);
                 showActionsSection();
             } else {
