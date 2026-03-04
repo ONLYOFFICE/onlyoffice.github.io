@@ -143,6 +143,17 @@
         return window.Asc && window.Asc.plugin && window.Asc.plugin.tr ? window.Asc.plugin.tr(text) : text;
     }
 
+    // Translate static content (elements with class "i18n")
+    window.Asc.plugin.onTranslate = function() {
+        var elements = document.querySelectorAll('.i18n');
+        elements.forEach(function(el) {
+            var text = el.textContent.trim();
+            if (text) {
+                el.textContent = tr(text);
+            }
+        });
+    };
+
     // Show status message (near Insert button)
     function showStatus(message, type) {
         var statusEl = document.getElementById('insert-status');
