@@ -4,5 +4,17 @@
 	"Available Tables": "Доступные таблицы",
 	"Enter an OData URL and click Fetch to load available tables": "Введите URL-адрес OData и нажмите «Получить» для загрузки доступных таблиц",
 	"Data Preview (first 10 rows)": "Предварительный просмотр данных (первые 10 строк)",
-	"Insert Data": "Вставить данные"
+	"Insert Data": "Вставить данные",
+	"Please enter an OData service URL": "Пожалуйста, введите URL-адрес службы OData",
+	"Fetching OData service metadata...": "Загрузка метаданных службы OData...",
+	"No tables found in OData service": "Таблицы в службе OData не найдены",
+	"Invalid URL or OData service unavailable": "Неверный URL или служба OData недоступна",
+	"No entity sets found in metadata": "Наборы сущностей в метаданных не найдены",
+	"Failed to parse OData metadata": "Не удалось разобрать метаданные OData",
+	"Table is empty": "Таблица пуста",
+	"Failed to load table data": "Не удалось загрузить данные таблицы",
+	"Please select at least one table": "Пожалуйста, выберите хотя бы одну таблицу",
+	"Fetching data...": "Загрузка данных...",
+	"No data to insert": "Нет данных для вставки",
+	"Data inserted successfully!": "Данные успешно вставлены!"
 }
