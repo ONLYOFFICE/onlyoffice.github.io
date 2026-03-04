@@ -28,6 +28,7 @@
 	"Name": "Emri",
 	"URL": "URL",
 	"Key": "Çelësi",
+	"e.g. abc123...": "për shembull, abc123...",
 	"Update models list": "Përditësoni listën e modeleve",
 	"Use model for": "Përdorni modelin për",
 	"All": "Të gjitha",
@@ -173,5 +174,9 @@
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")",
 	"Create AI assistant": "Krijoni asistent AI",
 	"Match": "Përputhje",
-	"Proposal for replacement": "Propozicion për zëvëndësim"
+	"Proposal for replacement": "Propozicion për zëvëndësim",
+	"Hint": "Hint",
+	"Replace": "Zamini",
+	"Replace + Hint": "Zamini + Hint",
+	"Generate Document": "Gjenero dokument"
 }
