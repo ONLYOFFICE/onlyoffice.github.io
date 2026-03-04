@@ -5858,23 +5858,17 @@ function _getUpdatedFields2() {
             var formattedCitationObj = this._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
             var htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
-            var oldContent = field["Content"];
+            var oldContentInCit = cslCitation.getPlainCitation();
+            var oldContentInDoc = field["Content"];
+            if (oldContentInCit === "") {
+                oldContentInCit = oldContentInDoc;
+            }
             var newContent = tempElement.innerText;
             if (cslCitation.getDoNotUpdate()) {
                 continue;
             }
-            if (oldContent === newContent && !bChangePosition) {
-                continue;
-            }
-            if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
-                console.error("Unable to update footnotes");
-                bHardRefresh = true;
-            }
-            if (bHardRefresh) {
-                field["Content"] = htmlCitation;
-                cslCitation.setPlainCitation(newContent);
-            } else if (oldContent !== newContent) {
-                var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
+            if (oldContentInCit !== oldContentInDoc && !bHardRefresh) {
+                var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContentInDoc + "</p>";
                 var bNeedSaveUserInput = yield _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", text);
                 if (bNeedSaveUserInput) {
                     cslCitation.setDoNotUpdate();
@@ -5883,6 +5877,9 @@ function _getUpdatedFields2() {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
+            } else {
+                field["Content"] = htmlCitation;
+                cslCitation.setPlainCitation(newContent);
             }
             if (cslCitation) {
                 field["Value"] = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
