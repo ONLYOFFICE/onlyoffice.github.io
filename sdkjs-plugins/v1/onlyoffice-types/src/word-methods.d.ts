@@ -377,6 +377,7 @@ export type WordMethodArgs = {
     GetAllContentControls: [];
     GetAllForms: [];
     GetAllOleObjects: [sPluginId: string];
+    GetCurrentAddinField: [];
     GetCurrentBookmark: [];
     GetCurrentContentControl: [];
     GetCurrentContentControlPr: [];
