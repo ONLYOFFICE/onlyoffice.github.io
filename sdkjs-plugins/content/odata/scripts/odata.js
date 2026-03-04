@@ -228,6 +228,7 @@
         availableTables = [];
         selectedTables = [];
         tableData = {};
+        clearTablesList();
 
         // Hide previous preview and actions
         var previewSection = document.getElementById('preview-section');
@@ -289,6 +290,7 @@
 
             if (availableTables.length === 0) {
                 showFetchStatus(tr('No tables found in OData service'), 'error');
+                clearTablesList();
             } else {
                 hideFetchStatus();
                 renderTablesList();
@@ -322,6 +324,14 @@
         });
     }
 
+    // Clear tables list and show empty state
+    function clearTablesList() {
+        var itemsEl = document.getElementById('tables-items');
+        var emptyState = document.getElementById('empty-state');
+        if (itemsEl) itemsEl.innerHTML = '';
+        if (emptyState) emptyState.style.display = '';
+    }
+
     // Parse $metadata XML to extract entity sets
     function parseMetadataXml(xmlText) {
         try {
@@ -344,12 +354,14 @@
 
             if (availableTables.length === 0) {
                 showFetchStatus(tr('No entity sets found in metadata'), 'error');
+                clearTablesList();
             } else {
                 hideFetchStatus();
                 renderTablesList();
             }
         } catch (e) {
             showFetchStatus(tr('Failed to parse OData metadata'), 'error');
+            clearTablesList();
         }
 
         document.getElementById('fetch-btn').disabled = false;
@@ -357,12 +369,16 @@
 
     // Render the list of available tables
     function renderTablesList() {
-        var listEl = document.getElementById('tables-list');
+        var itemsEl = document.getElementById('tables-items');
+        var emptyState = document.getElementById('empty-state');
 
         if (availableTables.length === 0) {
-            listEl.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128202;</div><div>No tables found</div></div>';
+            clearTablesList();
             return;
         }
+
+        // Hide empty state when we have tables
+        if (emptyState) emptyState.style.display = 'none';
 
         // Sort tables alphabetically by name
         availableTables.sort(function(a, b) {
@@ -378,7 +394,7 @@
             html += '</div>';
         });
 
-        listEl.innerHTML = html;
+        if (itemsEl) itemsEl.innerHTML = html;
     }
 
     // Select table (single selection with toggle)
