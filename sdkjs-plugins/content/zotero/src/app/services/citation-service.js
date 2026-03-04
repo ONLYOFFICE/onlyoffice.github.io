@@ -276,6 +276,7 @@ class CitationService {
     #synchronizeStorageWithDocItems(updatedField) {
         const self = this;
         this._storage.clear();
+        CSLCitation.resetUsedIDs();
         return this.citationDocService
             .getAddinZoteroFields()
             .then(function (/** @type {CustomField[]} */ arrFields) {
@@ -320,7 +321,7 @@ class CitationService {
                         numOfItems +=
                             cslCitation.fillFromObject(citationObject);
                     }
-                    self._storage.addCitation(cslCitation);
+                    self._storage.addCslCitation(cslCitation);
 
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
@@ -397,6 +398,7 @@ class CitationService {
         const updatedFields = [];
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
+            let bHasChanges = !!bChangePosition;
             const { field, cslCitation } = fieldsWithCitations[i];
 
             const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
@@ -464,20 +466,26 @@ class CitationService {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
+                bHasChanges = true;
             } else {
+                if (newContent !== oldContentInDoc || oldContentInCit !== oldContentInDoc || oldContentInCit !== newContent) {
+                    bHasChanges = true;
+                }
                 field["Content"] = htmlCitation;
                 cslCitation.setPlainCitation(newContent);
             }
 
             if (cslCitation) {
-                field["Value"] =
-                    this._citPrefixNew +
-                    " " +
-                    this._citSuffixNew +
-                    JSON.stringify(cslCitation.toJSON());
+                const newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                if (field["Value"] !== newValue) {
+                    bHasChanges = true;
+                }
+                field["Value"] = newValue;
             }
 
-            updatedFields.push(field);
+            if (bHasChanges) {
+                updatedFields.push(field);
+            }
         }
 
         return updatedFields;
@@ -567,7 +575,7 @@ class CitationService {
             items.forEach(function (item) {
                 cslCitation.fillFromObject(item);
             });
-            this._storage.addCitation(cslCitation);
+            this._storage.addCslCitation(cslCitation);
             return self.#formatInsertLink(cslCitation);
         });
     }

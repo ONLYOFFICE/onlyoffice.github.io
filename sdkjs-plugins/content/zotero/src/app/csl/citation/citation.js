@@ -84,6 +84,10 @@ class CSLCitation {
             "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
     }
 
+    static resetUsedIDs() {
+        CSLCitation.#usedIDs = new Set();
+    }
+
     /**
      * @param {any} citationObject
      * @returns

@@ -128,7 +128,7 @@ class CSLCitationStorage {
      * @param {CSLCitation} cslCitation
      * @returns {CSLCitationStorage}
      */
-    addCitation(cslCitation) {
+    addCslCitation(cslCitation) {
         this.#citations.push(cslCitation);
         cslCitation.setNoteIndex(this.#citations.length);
 
