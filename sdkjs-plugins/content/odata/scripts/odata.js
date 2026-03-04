@@ -211,6 +211,12 @@
         selectedTables = [];
         tableData = {};
 
+        // Hide previous preview and actions
+        var previewSection = document.getElementById('preview-section');
+        if (previewSection) previewSection.style.display = 'none';
+        var actionsSection = document.getElementById('actions-section');
+        if (actionsSection) actionsSection.style.display = 'none';
+
         // First try to get the service document
         fetchServiceDocument(odataServiceUrl);
     };
@@ -401,10 +407,21 @@
                 };
                 showPreview(table.name);
                 showActionsSection();
+            } else {
+                // Hide preview when no data
+                var previewSection = document.getElementById('preview-section');
+                if (previewSection) previewSection.style.display = 'none';
+                var actionsSection = document.getElementById('actions-section');
+                if (actionsSection) actionsSection.style.display = 'none';
             }
         })
         .catch(function(error) {
-            console.log('Failed to fetch preview for ' + table.name);
+            showFetchStatus('Failed to load table data', 'error');
+            // Hide preview on error
+            var previewSection = document.getElementById('preview-section');
+            if (previewSection) previewSection.style.display = 'none';
+            var actionsSection = document.getElementById('actions-section');
+            if (actionsSection) actionsSection.style.display = 'none';
         });
     }
 
