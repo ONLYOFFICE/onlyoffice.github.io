@@ -294,6 +294,12 @@
 
 			md.inline.ruler.before('emphasis', 'field', parseField);
 			md.renderer.rules.field = renderField;
+		},
+
+		hr: function(md) {
+			md.renderer.rules.hr = function() {
+				return '<hr><br>';
+			};
 		}
 	};
 
@@ -375,9 +381,9 @@
 		});
 	};
 
-	Library.prototype.getHTMLFromMD = function(data, plugins)
+	Library.prototype.getHTMLFromMD = function(data, plugins, isStreaming)
 	{
-		return Asc.Library.ConvertMdToHTML(data, plugins);
+		return Asc.Library.ConvertMdToHTML(data, plugins, isStreaming !== false);
 	};
 
 	Library.prototype.InsertAsMD = async function(data, plugins)
@@ -392,14 +398,14 @@
 		return await Asc.Library.InsertAsHTML(htmlContent);
 	};
 
-	Library.prototype.ConvertMdToHTML = function(data, plugins)
+	Library.prototype.ConvertMdToHTML = function(data, plugins, isStreaming)
 	{
 		let c = window.markdownit();
 		if (plugins) {
 			for (let i = 0, len = plugins.length; i < len; i++)
 				c.use(plugins[i]);
 		}
-		return c.render(this.getMarkdownResult(data));
+		return c.render(this.getMarkdownResult(data, isStreaming));
 	};
 
 	Library.prototype.InsertAsHTML = async function(data)
@@ -605,11 +611,14 @@
 		return data;
 	};
 
-	Library.prototype.getMarkdownResult = function(data) {
+	Library.prototype.getMarkdownResult = function(data, isStreaming) {
 		let markdownEscape = data.indexOf("```md");
 		if (-1 !== markdownEscape && markdownEscape < 5)
 			data = data.substring(markdownEscape + 5);
-		return this.trimResult(data);
+		if (data.endsWith("```"))
+			data = data.slice(0, -3);
+		let correctData = data.replace(/\n---#/g, '\n---\n#');
+		return isStreaming ? correctData : this.trimResult(correctData);
 	};
 
 	Library.prototype.getJSONResult = function(data) {
