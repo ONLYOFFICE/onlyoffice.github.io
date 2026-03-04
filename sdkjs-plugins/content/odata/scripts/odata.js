@@ -147,12 +147,21 @@
         }
     }
 
-    // Hide status message
-    function hideStatus() {
-        var statusEl = document.getElementById('insert-status');
+    // Show fetch status/error message (below tables list)
+    function showFetchStatus(message, type) {
+        var statusEl = document.getElementById('fetch-status');
+        if (statusEl) {
+            statusEl.textContent = message;
+            statusEl.className = 'status-message ' + (type || '');
+        }
+    }
+
+    // Hide fetch status message
+    function hideFetchStatus() {
+        var statusEl = document.getElementById('fetch-status');
         if (statusEl) {
             statusEl.textContent = '';
-            statusEl.className = 'insert-status';
+            statusEl.className = 'status-message';
         }
     }
 
@@ -186,14 +195,15 @@
         var url = urlInput.value.trim();
 
         if (!url) {
-            showStatus('Please enter an OData service URL', 'error');
+            showFetchStatus('Please enter an OData service URL', 'error');
             return;
         }
 
         // Normalize URL
         odataServiceUrl = url.replace(/\/$/, '');
 
-        showStatus('Fetching OData service metadata...', 'loading');
+        hideFetchStatus();
+        showFetchStatus('Fetching OData service metadata...', 'loading');
         document.getElementById('fetch-btn').disabled = true;
 
         // Clear previous data
@@ -254,9 +264,9 @@
             }
 
             if (availableTables.length === 0) {
-                showStatus('No tables found in OData service', 'error');
+                showFetchStatus('No tables found in OData service', 'error');
             } else {
-                hideStatus();
+                hideFetchStatus();
                 renderTablesList();
             }
         } catch (e) {
@@ -283,7 +293,7 @@
             parseMetadataXml(xmlText);
         })
         .catch(function(error) {
-            showStatus('Failed to fetch OData service: ' + error.message, 'error');
+            showFetchStatus('Invalid URL or OData service unavailable', 'error');
             document.getElementById('fetch-btn').disabled = false;
         });
     }
@@ -309,13 +319,13 @@
             });
 
             if (availableTables.length === 0) {
-                showStatus('No entity sets found in metadata', 'error');
+                showFetchStatus('No entity sets found in metadata', 'error');
             } else {
-                hideStatus();
+                hideFetchStatus();
                 renderTablesList();
             }
         } catch (e) {
-            showStatus('Failed to parse OData metadata: ' + e.message, 'error');
+            showFetchStatus('Failed to parse OData metadata', 'error');
         }
 
         document.getElementById('fetch-btn').disabled = false;
