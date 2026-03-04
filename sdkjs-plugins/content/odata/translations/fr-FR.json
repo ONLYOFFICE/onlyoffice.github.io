@@ -4,5 +4,17 @@
 	"Available Tables": "Tables disponibles",
 	"Enter an OData URL and click Fetch to load available tables": "Entrez une URL OData et cliquez sur Récupérer pour charger les tables disponibles",
 	"Data Preview (first 10 rows)": "Aperçu des données (10 premières lignes)",
-	"Insert Data": "Insérer les données"
+	"Insert Data": "Insérer les données",
+	"Please enter an OData service URL": "Veuillez entrer une URL de service OData",
+	"Fetching OData service metadata...": "Récupération des métadonnées du service OData...",
+	"No tables found in OData service": "Aucune table trouvée dans le service OData",
+	"Invalid URL or OData service unavailable": "URL invalide ou service OData indisponible",
+	"No entity sets found in metadata": "Aucun ensemble d'entités trouvé dans les métadonnées",
+	"Failed to parse OData metadata": "Échec de l'analyse des métadonnées OData",
+	"Table is empty": "La table est vide",
+	"Failed to load table data": "Échec du chargement des données de la table",
+	"Please select at least one table": "Veuillez sélectionner au moins une table",
+	"Fetching data...": "Récupération des données...",
+	"No data to insert": "Aucune donnée à insérer",
+	"Data inserted successfully!": "Données insérées avec succès !"
 }
