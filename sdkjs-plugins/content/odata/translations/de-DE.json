@@ -1,0 +1,8 @@
+{
+	"OData Service URL": "OData-Dienst-URL",
+	"Fetch": "Abrufen",
+	"Available Tables": "Verfügbare Tabellen",
+	"Enter an OData URL and click Fetch to load available tables": "Geben Sie eine OData-URL ein und klicken Sie auf Abrufen, um verfügbare Tabellen zu laden",
+	"Data Preview (first 10 rows)": "Datenvorschau (erste 10 Zeilen)",
+	"Insert Data": "Daten einfügen"
+}

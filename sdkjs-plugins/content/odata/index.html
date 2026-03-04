@@ -254,34 +254,34 @@
 <body>
     <div class="container">
         <div class="input-group">
-            <label for="odata-url">OData Service URL</label>
+            <label for="odata-url" class="i18n">OData Service URL</label>
             <div class="url-input-row">
                 <input type="text" id="odata-url" placeholder="https://services.odata.org/V4/Northwind/Northwind.svc" />
-                <button class="btn-primary" id="fetch-btn" onclick="fetchOData()">Fetch</button>
+                <button class="btn-primary" id="fetch-btn" onclick="fetchOData()"><span class="i18n">Fetch</span></button>
             </div>
         </div>
 
         <div class="tables-section">
             <div class="tables-header">
-                <label>Available Tables</label>
+                <label class="i18n">Available Tables</label>
                 <span id="selected-count" style="font-size: 11px; color: var(--text-secondary, #888);"></span>
             </div>
             <div class="tables-list" id="tables-list">
                 <div class="empty-state">
                     <div class="empty-state-icon">&#128202;</div>
-                    <div>Enter an OData URL and click Fetch to load available tables</div>
+                    <div class="i18n">Enter an OData URL and click Fetch to load available tables</div>
                 </div>
             </div>
         </div>
 
         <div class="preview-section" id="preview-section" style="display: none;">
-            <label>Data Preview (first 10 rows)</label>
+            <label class="i18n">Data Preview (first 10 rows)</label>
             <div id="preview-content" class="preview-content"></div>
         </div>
 
         <div class="actions-section" id="actions-section" style="display: none;">
             <span id="insert-status" class="insert-status"></span>
-            <button class="btn-primary" id="insert-btn" onclick="insertData()">Insert Data</button>
+            <button class="btn-primary" id="insert-btn" onclick="insertData()"><span class="i18n">Insert Data</span></button>
         </div>
     </div>
 

@@ -1,0 +1,8 @@
+{
+	"OData Service URL": "URL-адрес службы OData",
+	"Fetch": "Получить",
+	"Available Tables": "Доступные таблицы",
+	"Enter an OData URL and click Fetch to load available tables": "Введите URL-адрес OData и нажмите «Получить» для загрузки доступных таблиц",
+	"Data Preview (first 10 rows)": "Предварительный просмотр данных (первые 10 строк)",
+	"Insert Data": "Вставить данные"
+}
