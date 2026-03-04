@@ -4997,33 +4997,125 @@ CitationItem.prototype.toFlatJSON = function(index) {
     return oldItem;
 };
 
-function CSLCitation(citationID) {
-    if (!citationID) {
-        citationID = this._generateId();
+var _CSLCitation_brand = new WeakSet;
+
+class CSLCitation {
+    constructor(citationID) {
+        _classPrivateMethodInitSpec(this, _CSLCitation_brand);
+        if (!citationID) {
+            citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
+        }
+        if (_usedIDs._.has(citationID)) {
+            console.warn("Citation ID must be unique");
+            citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
+        }
+        _usedIDs._.add(citationID);
+        this.citationID = citationID;
+        this._citationItems = new Array;
+        this._properties = {};
+        this._manualOverride = {};
+        this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
     }
-    this.citationID = citationID;
-    this._citationItems = new Array;
-    this._properties = {};
-    this._manualOverride = {};
-    this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
+    fillFromObject(citationObject) {
+        if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
+            return _assertClassBrand(_CSLCitation_brand, this, _fillFromCitationObject).call(this, citationObject);
+        } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
+            return _assertClassBrand(_CSLCitation_brand, this, _fillFromFlatCitationObject).call(this, citationObject);
+        } else if (Object.hasOwnProperty.call(citationObject, "version") && Object.hasOwnProperty.call(citationObject, "library")) {
+            return _assertClassBrand(_CSLCitation_brand, this, _fillFromJson).call(this, citationObject);
+        }
+        return _assertClassBrand(_CSLCitation_brand, this, _fillFromCslJson).call(this, citationObject);
+    }
+    getCitationItems() {
+        return this._citationItems;
+    }
+    getDoNotUpdate() {
+        if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
+            return !!this._properties.dontUpdate;
+        }
+        if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
+            return !!this._manualOverride.isManuallyOverridden;
+        }
+        return false;
+    }
+    getInfoForCitationCluster() {
+        return this._citationItems.map(function(item) {
+            return item.getInfoForCitationCluster();
+        }, this);
+    }
+    getPlainCitation() {
+        if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
+            return String(this._properties.plainCitation);
+        } else if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
+            return String(this._manualOverride.citeprocText);
+        }
+        return "";
+    }
+    setDoNotUpdate() {
+        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+            dontUpdate: true
+        });
+        return this;
+    }
+    setNoteIndex(noteIndex) {
+        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+            noteIndex: noteIndex
+        });
+        return this;
+    }
+    setPlainCitation(plainCitation) {
+        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+            plainCitation: plainCitation
+        });
+        return this;
+    }
+    setManualOverride(citeprocText, manualOverrideText) {
+        var manualOverride = {
+            citeprocText: citeprocText,
+            isManuallyOverridden: !!manualOverrideText,
+            manualOverrideText: manualOverrideText || ""
+        };
+        this._manualOverride = manualOverride;
+        return this;
+    }
+    validate() {
+        var errors = [];
+        if (!this._schema) errors.push("Schema is required");
+        if (!this.citationID) errors.push("citationID is required");
+        if (this._citationItems && Array.isArray(this._citationItems)) {
+            for (var i = 0; i < this._citationItems.length; i++) {
+                if (!this._citationItems[i].id) {
+                    errors.push("Citation item at index " + i + " must have an id");
+                }
+            }
+        }
+        return errors.length === 0 ? true : errors;
+    }
+    toJSON() {
+        var result = {
+            citationID: this.citationID,
+            schema: this._schema
+        };
+        if (this._properties && Object.keys(this._properties).length > 0) {
+            result.properties = this._properties;
+        }
+        if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
+            result.manualOverride = this._manualOverride;
+        }
+        if (this._citationItems && this._citationItems.length > 0) {
+            result.citationItems = this._citationItems.map(function(item) {
+                return item.toJSON();
+            });
+        }
+        return result;
+    }
 }
 
-CSLCitation.prototype.fillFromObject = function(citationObject) {
-    if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
-        return this._fillFromCitationObject(citationObject);
-    } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
-        return this._fillFromFlatCitationObject(citationObject);
-    } else if (Object.hasOwnProperty.call(citationObject, "version") && Object.hasOwnProperty.call(citationObject, "library")) {
-        return this._fillFromJson(citationObject);
-    }
-    return this._fillFromCslJson(citationObject);
-};
-
-CSLCitation.prototype._fillFromCitationObject = function(citationObject) {
+function _fillFromCitationObject(citationObject) {
     var self = this;
     if (Object.hasOwnProperty.call(citationObject, "schema")) ;
     if (Object.hasOwnProperty.call(citationObject, "properties")) {
-        this._setProperties(citationObject.properties);
+        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, citationObject.properties);
     }
     if (Object.hasOwnProperty.call(citationObject, "manualOverride")) {
         this._manualOverride = citationObject.manualOverride;
@@ -5045,15 +5137,15 @@ CSLCitation.prototype._fillFromCitationObject = function(citationObject) {
             existingIds.push(id);
         }
         if (typeof id === "number") {
-            id = self._extractIdFromWord365Citation(item);
+            id = _assertClassBrand(_CSLCitation_brand, self, _extractIdFromWord365Citation).call(self, item);
         }
         citationItem.fillFromObject(item);
-        self._addCitationItem(citationItem);
+        _assertClassBrand(_CSLCitation_brand, self, _addCitationItem).call(self, citationItem);
     }, this);
     return existingIds.length;
-};
+}
 
-CSLCitation.prototype._fillFromFlatCitationObject = function(citationObject) {
+function _fillFromFlatCitationObject(citationObject) {
     var self = this;
     if (citationObject.citationItems.length === 0) {
         console.error("CSLCitation.citationItems: citationItems is empty");
@@ -5062,12 +5154,12 @@ CSLCitation.prototype._fillFromFlatCitationObject = function(citationObject) {
         console.warn("CSLCitation.citationItems: citationItems has more than one item");
     }
     citationObject.citationItems.forEach(function(itemObject) {
-        self._fillFromCslJson(itemObject);
+        _assertClassBrand(_CSLCitation_brand, self, _fillFromCslJson).call(self, itemObject);
     }, this);
     return 1;
-};
+}
 
-CSLCitation.prototype._fillFromCslJson = function(itemObject) {
+function _fillFromCslJson(itemObject) {
     var id = itemObject.id;
     var citationItem;
     var existingIds = this._citationItems.map(function(item) {
@@ -5079,11 +5171,11 @@ CSLCitation.prototype._fillFromCslJson = function(itemObject) {
         citationItem = new CitationItem(id);
     }
     citationItem.fillFromObject(itemObject);
-    this._addCitationItem(citationItem);
+    _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
     return 1;
-};
+}
 
-CSLCitation.prototype._fillFromJson = function(itemObject) {
+function _fillFromJson(itemObject) {
     if (!Object.hasOwnProperty.call(itemObject, "data")) {
         console.error("Invalid citation object");
         return 0;
@@ -5099,38 +5191,11 @@ CSLCitation.prototype._fillFromJson = function(itemObject) {
         citationItem = new CitationItem(id);
     }
     citationItem.fillFromObject(itemObject);
-    this._addCitationItem(citationItem);
+    _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
     return 1;
-};
+}
 
-CSLCitation.prototype.getCitationItems = function() {
-    return this._citationItems;
-};
-
-CSLCitation.prototype.getDoNotUpdate = function() {
-    if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
-        return !!this._properties.dontUpdate;
-    }
-    if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
-        return !!this._manualOverride.isManuallyOverridden;
-    }
-    return false;
-};
-
-CSLCitation.prototype.getInfoForCitationCluster = function() {
-    return this._citationItems.map(function(item) {
-        return item.getInfoForCitationCluster();
-    }, this);
-};
-
-CSLCitation.prototype.getPlainCitation = function() {
-    if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
-        return String(this._properties.plainCitation);
-    }
-    return "";
-};
-
-CSLCitation.prototype._addCitationItem = function(item) {
+function _addCitationItem(item) {
     var existingIds = this._citationItems.map(function(item) {
         return item.id;
     });
@@ -5140,40 +5205,9 @@ CSLCitation.prototype._addCitationItem = function(item) {
     }
     this._citationItems.push(item);
     return this;
-};
+}
 
-CSLCitation.prototype.setDoNotUpdate = function() {
-    this._setProperties({
-        dontUpdate: true
-    });
-    return this;
-};
-
-CSLCitation.prototype.setNoteIndex = function(noteIndex) {
-    this._setProperties({
-        noteIndex: noteIndex
-    });
-    return this;
-};
-
-CSLCitation.prototype.setPlainCitation = function(plainCitation) {
-    this._setProperties({
-        plainCitation: plainCitation
-    });
-    return this;
-};
-
-CSLCitation.prototype.setManualOverride = function(citeprocText, manualOverrideText) {
-    var manualOverride = {
-        citeprocText: citeprocText,
-        isManuallyOverridden: !!manualOverrideText,
-        manualOverrideText: manualOverrideText || ""
-    };
-    this._manualOverride = manualOverride;
-    return this;
-};
-
-CSLCitation.prototype._setProperties = function(properties) {
+function _setProperties(properties) {
     var self = this;
     Object.keys(properties).forEach(function(key) {
         if (Object.hasOwnProperty.call(properties, key)) {
@@ -5181,56 +5215,22 @@ CSLCitation.prototype._setProperties = function(properties) {
         }
     }, this);
     return this;
-};
+}
 
-CSLCitation.prototype._setSchema = function(schema) {
-    this._schema = schema;
-    return this;
-};
-
-CSLCitation.prototype._extractIdFromWord365Citation = function(item) {
+function _extractIdFromWord365Citation(item) {
     if (Object.hasOwnProperty.call(item, "uris") && item.uris.length) {
         var index = item.uris[0].lastIndexOf("/");
         return item.uris[0].slice(index + 1);
     }
     return item.id;
-};
+}
 
-CSLCitation.prototype._generateId = function() {
+function _generateId() {
     return Math.random().toString(36).substring(2, 15);
-};
+}
 
-CSLCitation.prototype.validate = function() {
-    var errors = [];
-    if (!this._schema) errors.push("Schema is required");
-    if (!this.citationID) errors.push("citationID is required");
-    if (this._citationItems && Array.isArray(this._citationItems)) {
-        for (var i = 0; i < this._citationItems.length; i++) {
-            if (!this._citationItems[i].id) {
-                errors.push("Citation item at index " + i + " must have an id");
-            }
-        }
-    }
-    return errors.length === 0 ? true : errors;
-};
-
-CSLCitation.prototype.toJSON = function() {
-    var result = {
-        citationID: this.citationID,
-        schema: this._schema
-    };
-    if (this._properties && Object.keys(this._properties).length > 0) {
-        result.properties = this._properties;
-    }
-    if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
-        result.manualOverride = this._manualOverride;
-    }
-    if (this._citationItems && this._citationItems.length > 0) {
-        result.citationItems = this._citationItems.map(function(item) {
-            return item.toJSON();
-        });
-    }
-    return result;
+var _usedIDs = {
+    _: new Set
 };
 
 var _window = new WeakMap;

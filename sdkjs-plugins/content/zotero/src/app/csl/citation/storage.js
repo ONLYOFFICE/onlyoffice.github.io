@@ -131,7 +131,7 @@ class CSLCitationStorage {
     addCitation(cslCitation) {
         this.#citations.push(cslCitation);
         cslCitation.setNoteIndex(this.#citations.length);
-        
+
         cslCitation.getCitationItems().forEach((item) => {
             this.#setItem(item.id, item);
         });
@@ -141,23 +141,23 @@ class CSLCitationStorage {
         return this.#citations.map(citation => citation.toJSON());
     }
     /**
-     * @param {string} id 
+     * @param {string} id
      * @returns {CSLCitation|undefined}
      */
     getCitation(id) {
-        return this.#citations.find(citation => 
+        return this.#citations.find(citation =>
             citation.citationID === id
         );
     }
     /**
-     * @param {string} id 
+     * @param {string} id
      * @returns {number}
      */
     getCitationIndex(id) {
         return this.#citations.findIndex(citation => citation.citationID === id)
     }
     /**
-     * @param {string} id 
+     * @param {string} id
      * @returns {Array<[string, number]>}
      */
     getCitationsPre(id) {
@@ -173,7 +173,7 @@ class CSLCitationStorage {
         return citationsPre;
     }
     /**
-     * @param {string} id 
+     * @param {string} id
      * @returns {Array<[string, number]>}
      */
     getCitationsPost(id) {
@@ -184,7 +184,7 @@ class CSLCitationStorage {
             const citation = this.#citations[i];
             citationsPost.push([citation.citationID, i + 1]);
         }
-        
+
         return citationsPost;
     }
 
