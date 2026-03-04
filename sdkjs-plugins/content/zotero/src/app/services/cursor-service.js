@@ -12,10 +12,18 @@ class CursorService {
             Asc.plugin.callCommand(
                 () => {
                     const doc = Api.GetDocument();
+                    if (!doc) {
+                        return 0;
+                    }
 
-                    const canSelectWord = doc?.SelectCurrentWord();
-                    const endPos = doc?.GetRangeBySelect()?.GetEndPos() || 0;
+                    const canSelectWord = doc.SelectCurrentWord();
+                    const selectedRange = doc.GetRangeBySelect()
+                    if (!selectedRange) {
+                        return 0;
+                    }
+                    const endPos = selectedRange.GetEndPos();
                     if (canSelectWord) {
+                        doc.RemoveSelection();
                         return endPos;
                     }
                     const currentParagraphText = doc?.GetCurrentParagraph()?.GetText();
