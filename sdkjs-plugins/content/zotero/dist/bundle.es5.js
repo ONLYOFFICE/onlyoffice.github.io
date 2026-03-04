@@ -12737,6 +12737,140 @@
         return es_array_findIndex;
     }
     requireEs_array_findIndex();
+    var _items = new WeakMap;
+    var _itemIds = new WeakMap;
+    var _citations = new WeakMap;
+    var _CSLCitationStorage_brand = new WeakSet;
+    var CSLCitationStorage = function() {
+        function CSLCitationStorage() {
+            _classCallCheck(this, CSLCitationStorage);
+            _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand);
+            _classPrivateFieldInitSpec(this, _items, void 0);
+            _classPrivateFieldInitSpec(this, _itemIds, void 0);
+            _classPrivateFieldInitSpec(this, _citations, void 0);
+            _classPrivateFieldSet2(_items, this, []);
+            _classPrivateFieldSet2(_itemIds, this, []);
+            _classPrivateFieldSet2(_citations, this, []);
+            this.size = 0;
+        }
+        return _createClass(CSLCitationStorage, [ {
+            key: "getItem",
+            value: function getItem(id) {
+                id = id.toString();
+                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+                if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
+                return null;
+            }
+        }, {
+            key: "getItemIndex",
+            value: function getItemIndex(id) {
+                id = id.toString();
+                return _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+            }
+        }, {
+            key: "clear",
+            value: function clear() {
+                _classPrivateFieldSet2(_items, this, []);
+                _classPrivateFieldSet2(_citations, this, []);
+                _classPrivateFieldSet2(_itemIds, this, []);
+                this.size = 0;
+                return this;
+            }
+        }, {
+            key: "deleteItem",
+            value: function deleteItem(id) {
+                id = id.toString();
+                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+                if (index >= 0) {
+                    _classPrivateFieldGet2(_items, this).splice(index, 1);
+                    _classPrivateFieldGet2(_itemIds, this).splice(index, 1);
+                    this.size--;
+                }
+                return this;
+            }
+        }, {
+            key: "forEachItem",
+            value: function forEachItem(callback) {
+                for (var i = 0; i < this.size; i++) {
+                    callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_itemIds, this)[i], this);
+                }
+            }
+        }, {
+            key: "hasItem",
+            value: function hasItem(id) {
+                id = id.toString();
+                return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
+            }
+        }, {
+            key: "addCitation",
+            value: function addCitation(cslCitation) {
+                var _this = this;
+                _classPrivateFieldGet2(_citations, this).push(cslCitation);
+                cslCitation.setNoteIndex(_classPrivateFieldGet2(_citations, this).length);
+                cslCitation.getCitationItems().forEach(function(item) {
+                    _assertClassBrand(_CSLCitationStorage_brand, _this, _setItem).call(_this, item.id, item);
+                });
+                return this;
+            }
+        }, {
+            key: "getAllCitationsInJson",
+            value: function getAllCitationsInJson() {
+                return _classPrivateFieldGet2(_citations, this).map(function(citation) {
+                    return citation.toJSON();
+                });
+            }
+        }, {
+            key: "getCitation",
+            value: function getCitation(id) {
+                return _classPrivateFieldGet2(_citations, this).find(function(citation) {
+                    return citation.citationID === id;
+                });
+            }
+        }, {
+            key: "getCitationIndex",
+            value: function getCitationIndex(id) {
+                return _classPrivateFieldGet2(_citations, this).findIndex(function(citation) {
+                    return citation.citationID === id;
+                });
+            }
+        }, {
+            key: "getCitationsPre",
+            value: function getCitationsPre(id) {
+                var citationsPre = [];
+                _classPrivateFieldGet2(_citations, this).find(function(citation, index) {
+                    if (citation.citationID === id) {
+                        return true;
+                    }
+                    citationsPre.push([ citation.citationID, index + 1 ]);
+                    return false;
+                });
+                return citationsPre;
+            }
+        }, {
+            key: "getCitationsPost",
+            value: function getCitationsPost(id) {
+                var citationsPost = [];
+                var citationIndex = this.getCitationIndex(id);
+                for (var i = citationIndex + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
+                    var citation = _classPrivateFieldGet2(_citations, this)[i];
+                    citationsPost.push([ citation.citationID, i + 1 ]);
+                }
+                return citationsPost;
+            }
+        } ]);
+    }();
+    function _setItem(id, item) {
+        id = id.toString();
+        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
+        if (index >= 0) {
+            _classPrivateFieldGet2(_items, this)[index] = item;
+            return this;
+        }
+        _classPrivateFieldGet2(_items, this).push(item);
+        _classPrivateFieldGet2(_itemIds, this).push(id);
+        this.size++;
+        return this;
+    }
     function CitationItemData(id) {
         if (typeof id !== "string" && typeof id !== "number") {
             throw new Error("CitationItemData: id is required");
@@ -13866,157 +14000,147 @@
         }
         return oldItem;
     };
-    var _items = new WeakMap;
-    var _itemIds = new WeakMap;
-    var _citations = new WeakMap;
-    var _CSLCitationStorage_brand = new WeakSet;
-    var CSLCitationStorage = function() {
-        function CSLCitationStorage() {
-            _classCallCheck(this, CSLCitationStorage);
-            _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand);
-            _classPrivateFieldInitSpec(this, _items, void 0);
-            _classPrivateFieldInitSpec(this, _itemIds, void 0);
-            _classPrivateFieldInitSpec(this, _citations, void 0);
-            _classPrivateFieldSet2(_items, this, []);
-            _classPrivateFieldSet2(_itemIds, this, []);
-            _classPrivateFieldSet2(_citations, this, []);
-            this.size = 0;
+    var _CSLCitation_brand = new WeakSet;
+    var CSLCitation = function() {
+        function CSLCitation(citationID) {
+            _classCallCheck(this, CSLCitation);
+            _classPrivateMethodInitSpec(this, _CSLCitation_brand);
+            if (!citationID) {
+                citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
+            }
+            if (_usedIDs._.has(citationID)) {
+                console.warn("Citation ID must be unique");
+                citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
+            }
+            _usedIDs._.add(citationID);
+            this.citationID = citationID;
+            this._citationItems = new Array;
+            this._properties = {};
+            this._manualOverride = {};
+            this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
         }
-        return _createClass(CSLCitationStorage, [ {
-            key: "getItem",
-            value: function getItem(id) {
-                id = id.toString();
-                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-                if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
-                return null;
-            }
-        }, {
-            key: "getItemIndex",
-            value: function getItemIndex(id) {
-                id = id.toString();
-                return _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-            }
-        }, {
-            key: "clear",
-            value: function clear() {
-                _classPrivateFieldSet2(_items, this, []);
-                _classPrivateFieldSet2(_citations, this, []);
-                _classPrivateFieldSet2(_itemIds, this, []);
-                this.size = 0;
-                return this;
-            }
-        }, {
-            key: "deleteItem",
-            value: function deleteItem(id) {
-                id = id.toString();
-                var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-                if (index >= 0) {
-                    _classPrivateFieldGet2(_items, this).splice(index, 1);
-                    _classPrivateFieldGet2(_itemIds, this).splice(index, 1);
-                    this.size--;
+        return _createClass(CSLCitation, [ {
+            key: "fillFromObject",
+            value: function fillFromObject(citationObject) {
+                if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
+                    return _assertClassBrand(_CSLCitation_brand, this, _fillFromCitationObject).call(this, citationObject);
+                } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
+                    return _assertClassBrand(_CSLCitation_brand, this, _fillFromFlatCitationObject).call(this, citationObject);
+                } else if (Object.hasOwnProperty.call(citationObject, "version") && Object.hasOwnProperty.call(citationObject, "library")) {
+                    return _assertClassBrand(_CSLCitation_brand, this, _fillFromJson).call(this, citationObject);
                 }
-                return this;
+                return _assertClassBrand(_CSLCitation_brand, this, _fillFromCslJson).call(this, citationObject);
             }
         }, {
-            key: "forEach",
-            value: function forEach(callback) {
-                for (var i = 0; i < this.size; i++) {
-                    callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_itemIds, this)[i], this);
+            key: "getCitationItems",
+            value: function getCitationItems() {
+                return this._citationItems;
+            }
+        }, {
+            key: "getDoNotUpdate",
+            value: function getDoNotUpdate() {
+                if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
+                    return !!this._properties.dontUpdate;
                 }
+                if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
+                    return !!this._manualOverride.isManuallyOverridden;
+                }
+                return false;
             }
         }, {
-            key: "hasItem",
-            value: function hasItem(id) {
-                id = id.toString();
-                return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
+            key: "getInfoForCitationCluster",
+            value: function getInfoForCitationCluster() {
+                return this._citationItems.map(function(item) {
+                    return item.getInfoForCitationCluster();
+                }, this);
             }
         }, {
-            key: "addCitation",
-            value: function addCitation(cslCitation) {
-                var _this = this;
-                _classPrivateFieldGet2(_citations, this).push(cslCitation);
-                cslCitation.getCitationItems().forEach(function(item) {
-                    _assertClassBrand(_CSLCitationStorage_brand, _this, _setItem).call(_this, item.id, item);
+            key: "getPlainCitation",
+            value: function getPlainCitation() {
+                if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
+                    return String(this._properties.plainCitation);
+                } else if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
+                    return String(this._manualOverride.citeprocText);
+                }
+                return "";
+            }
+        }, {
+            key: "setDoNotUpdate",
+            value: function setDoNotUpdate() {
+                _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+                    dontUpdate: true
                 });
                 return this;
             }
         }, {
-            key: "getCitation",
-            value: function getCitation(id) {
-                return _classPrivateFieldGet2(_citations, this).find(function(citation) {
-                    return citation.citationID === id;
+            key: "setNoteIndex",
+            value: function setNoteIndex(noteIndex) {
+                _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+                    noteIndex: noteIndex
                 });
+                return this;
             }
         }, {
-            key: "getCitationIndex",
-            value: function getCitationIndex(id) {
-                return _classPrivateFieldGet2(_citations, this).findIndex(function(citation) {
-                    return citation.citationID === id;
+            key: "setPlainCitation",
+            value: function setPlainCitation(plainCitation) {
+                _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
+                    plainCitation: plainCitation
                 });
+                return this;
             }
         }, {
-            key: "getCitationsPre",
-            value: function getCitationsPre(id) {
-                var citationsPre = [];
-                _classPrivateFieldGet2(_citations, this).find(function(citation, index) {
-                    if (citation.citationID === id) {
-                        return true;
+            key: "setManualOverride",
+            value: function setManualOverride(citeprocText, manualOverrideText) {
+                var manualOverride = {
+                    citeprocText: citeprocText,
+                    isManuallyOverridden: !!manualOverrideText,
+                    manualOverrideText: manualOverrideText || ""
+                };
+                this._manualOverride = manualOverride;
+                return this;
+            }
+        }, {
+            key: "validate",
+            value: function validate() {
+                var errors = [];
+                if (!this._schema) errors.push("Schema is required");
+                if (!this.citationID) errors.push("citationID is required");
+                if (this._citationItems && Array.isArray(this._citationItems)) {
+                    for (var i = 0; i < this._citationItems.length; i++) {
+                        if (!this._citationItems[i].id) {
+                            errors.push("Citation item at index " + i + " must have an id");
+                        }
                     }
-                    citationsPre.push([ citation.citationID, index + 1 ]);
-                    return false;
-                });
-                return citationsPre;
+                }
+                return errors.length === 0 ? true : errors;
             }
         }, {
-            key: "getCitationsPost",
-            value: function getCitationsPost(id) {
-                var citationsPost = [];
-                var citationIndex = this.getCitationIndex(id);
-                for (var i = citationIndex + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
-                    var citation = _classPrivateFieldGet2(_citations, this)[i];
-                    citationsPost.push([ citation.citationID, i + 1 ]);
+            key: "toJSON",
+            value: function toJSON() {
+                var result = {
+                    citationID: this.citationID,
+                    schema: this._schema
+                };
+                if (this._properties && Object.keys(this._properties).length > 0) {
+                    result.properties = this._properties;
                 }
-                return citationsPost;
+                if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
+                    result.manualOverride = this._manualOverride;
+                }
+                if (this._citationItems && this._citationItems.length > 0) {
+                    result.citationItems = this._citationItems.map(function(item) {
+                        return item.toJSON();
+                    });
+                }
+                return result;
             }
         } ]);
     }();
-    function _setItem(id, item) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-        if (index >= 0) {
-            _classPrivateFieldGet2(_items, this)[index] = item;
-            return this;
-        }
-        _classPrivateFieldGet2(_items, this).push(item);
-        _classPrivateFieldGet2(_itemIds, this).push(id);
-        this.size++;
-        return this;
-    }
-    function CSLCitation(citationID) {
-        if (!citationID) {
-            citationID = this._generateId();
-        }
-        this.citationID = citationID;
-        this._citationItems = new Array;
-        this._properties = {};
-        this._manualOverride = {};
-        this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
-    }
-    CSLCitation.prototype.fillFromObject = function(citationObject) {
-        if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
-            return this._fillFromCitationObject(citationObject);
-        } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
-            return this._fillFromFlatCitationObject(citationObject);
-        } else if (Object.hasOwnProperty.call(citationObject, "version") && Object.hasOwnProperty.call(citationObject, "library")) {
-            return this._fillFromJson(citationObject);
-        }
-        return this._fillFromCslJson(citationObject);
-    };
-    CSLCitation.prototype._fillFromCitationObject = function(citationObject) {
+    function _fillFromCitationObject(citationObject) {
         var self = this;
         if (Object.hasOwnProperty.call(citationObject, "schema")) ;
         if (Object.hasOwnProperty.call(citationObject, "properties")) {
-            this._setProperties(citationObject.properties);
+            _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, citationObject.properties);
         }
         if (Object.hasOwnProperty.call(citationObject, "manualOverride")) {
             this._manualOverride = citationObject.manualOverride;
@@ -14038,14 +14162,14 @@
                 existingIds.push(id);
             }
             if (typeof id === "number") {
-                id = self._extractIdFromWord365Citation(item);
+                id = _assertClassBrand(_CSLCitation_brand, self, _extractIdFromWord365Citation).call(self, item);
             }
             citationItem.fillFromObject(item);
-            self._addCitationItem(citationItem);
+            _assertClassBrand(_CSLCitation_brand, self, _addCitationItem).call(self, citationItem);
         }, this);
         return existingIds.length;
-    };
-    CSLCitation.prototype._fillFromFlatCitationObject = function(citationObject) {
+    }
+    function _fillFromFlatCitationObject(citationObject) {
         var self = this;
         if (citationObject.citationItems.length === 0) {
             console.error("CSLCitation.citationItems: citationItems is empty");
@@ -14054,11 +14178,11 @@
             console.warn("CSLCitation.citationItems: citationItems has more than one item");
         }
         citationObject.citationItems.forEach(function(itemObject) {
-            self._fillFromCslJson(itemObject);
+            _assertClassBrand(_CSLCitation_brand, self, _fillFromCslJson).call(self, itemObject);
         }, this);
         return 1;
-    };
-    CSLCitation.prototype._fillFromCslJson = function(itemObject) {
+    }
+    function _fillFromCslJson(itemObject) {
         var id = itemObject.id;
         var citationItem;
         var existingIds = this._citationItems.map(function(item) {
@@ -14070,10 +14194,10 @@
             citationItem = new CitationItem(id);
         }
         citationItem.fillFromObject(itemObject);
-        this._addCitationItem(citationItem);
+        _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
         return 1;
-    };
-    CSLCitation.prototype._fillFromJson = function(itemObject) {
+    }
+    function _fillFromJson(itemObject) {
         if (!Object.hasOwnProperty.call(itemObject, "data")) {
             console.error("Invalid citation object");
             return 0;
@@ -14089,33 +14213,10 @@
             citationItem = new CitationItem(id);
         }
         citationItem.fillFromObject(itemObject);
-        this._addCitationItem(citationItem);
+        _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
         return 1;
-    };
-    CSLCitation.prototype.getCitationItems = function() {
-        return this._citationItems;
-    };
-    CSLCitation.prototype.getDoNotUpdate = function() {
-        if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
-            return !!this._properties.dontUpdate;
-        }
-        if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
-            return !!this._manualOverride.isManuallyOverridden;
-        }
-        return false;
-    };
-    CSLCitation.prototype.getInfoForCitationCluster = function() {
-        return this._citationItems.map(function(item) {
-            return item.getInfoForCitationCluster();
-        }, this);
-    };
-    CSLCitation.prototype.getPlainCitation = function() {
-        if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
-            return String(this._properties.plainCitation);
-        }
-        return "";
-    };
-    CSLCitation.prototype._addCitationItem = function(item) {
+    }
+    function _addCitationItem(item) {
         var existingIds = this._citationItems.map(function(item) {
             return item.id;
         });
@@ -14125,29 +14226,8 @@
         }
         this._citationItems.push(item);
         return this;
-    };
-    CSLCitation.prototype.setDoNotUpdate = function() {
-        this._setProperties({
-            dontUpdate: true
-        });
-        return this;
-    };
-    CSLCitation.prototype.setPlainCitation = function(plainCitation) {
-        this._setProperties({
-            plainCitation: plainCitation
-        });
-        return this;
-    };
-    CSLCitation.prototype.setManualOverride = function(citeprocText, manualOverrideText) {
-        var manualOverride = {
-            citeprocText: citeprocText,
-            isManuallyOverridden: !!manualOverrideText,
-            manualOverrideText: manualOverrideText || ""
-        };
-        this._manualOverride = manualOverride;
-        return this;
-    };
-    CSLCitation.prototype._setProperties = function(properties) {
+    }
+    function _setProperties(properties) {
         var self = this;
         Object.keys(properties).forEach(function(key) {
             if (Object.hasOwnProperty.call(properties, key)) {
@@ -14155,51 +14235,19 @@
             }
         }, this);
         return this;
-    };
-    CSLCitation.prototype._setSchema = function(schema) {
-        this._schema = schema;
-        return this;
-    };
-    CSLCitation.prototype._extractIdFromWord365Citation = function(item) {
+    }
+    function _extractIdFromWord365Citation(item) {
         if (Object.hasOwnProperty.call(item, "uris") && item.uris.length) {
             var index = item.uris[0].lastIndexOf("/");
             return item.uris[0].slice(index + 1);
         }
         return item.id;
-    };
-    CSLCitation.prototype._generateId = function() {
+    }
+    function _generateId() {
         return Math.random().toString(36).substring(2, 15);
-    };
-    CSLCitation.prototype.validate = function() {
-        var errors = [];
-        if (!this._schema) errors.push("Schema is required");
-        if (!this.citationID) errors.push("citationID is required");
-        if (this._citationItems && Array.isArray(this._citationItems)) {
-            for (var i = 0; i < this._citationItems.length; i++) {
-                if (!this._citationItems[i].id) {
-                    errors.push("Citation item at index " + i + " must have an id");
-                }
-            }
-        }
-        return errors.length === 0 ? true : errors;
-    };
-    CSLCitation.prototype.toJSON = function() {
-        var result = {
-            citationID: this.citationID,
-            schema: this._schema
-        };
-        if (this._properties && Object.keys(this._properties).length > 0) {
-            result.properties = this._properties;
-        }
-        if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
-            result.manualOverride = this._manualOverride;
-        }
-        if (this._citationItems && this._citationItems.length > 0) {
-            result.citationItems = this._citationItems.map(function(item) {
-                return item.toJSON();
-            });
-        }
-        return result;
+    }
+    var _usedIDs = {
+        _: new Set
     };
     var _window = new WeakMap;
     var _defaultButtonFn = new WeakMap;
@@ -14998,36 +15046,29 @@
         var self = this;
         var bUpdateItems = false;
         var keys = [];
-        var keysL = [];
         return Promise.resolve().then(function() {
             cslCitation.getCitationItems().forEach(function(item) {
                 if (!self._storage.hasItem(item.id)) {
                     bUpdateItems = true;
                 }
                 keys.push(item.id);
-                keysL.push(item.getInfoForCitationCluster());
             });
             if (bUpdateItems) {
                 var arrIds = [];
-                self._storage.forEach(function(item, id) {
+                self._storage.forEachItem(function(item, id) {
                     arrIds.push(id);
                 });
-                console.warn("formatter updateItems formatInsertLink");
-                console.log(arrIds);
                 self._formatter.updateItems(arrIds);
             }
         }).then(function() {
             var fragment = document.createDocumentFragment();
             var tempElement = document.createElement("div");
-            console.warn("formatter makeCitationCluster insertLink");
-            console.log(keysL);
-            var htmlCitation = self._formatter.makeCitationCluster(keysL);
             var citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
             var citationsPost = self._storage.getCitationsPost(cslCitation.citationID);
-            var result = self._formatter.processCitationCluster(cslCitation, citationsPre, citationsPost);
-            console.warn("formatter processCitationCluster insertLink");
-            console.log(result);
-            htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, htmlCitation);
+            var citations = self._storage.getAllCitationsInJson();
+            self._formatter.rebuildProcessorState(citations);
+            var formattedCitationObj = self._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
+            var htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, formattedCitationObj[1][0][1]);
             fragment.appendChild(tempElement);
             tempElement.innerHTML = htmlCitation;
             cslCitation.setPlainCitation(tempElement.innerText);
@@ -15186,7 +15227,7 @@
     }
     function _getUpdatedFields2() {
         _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee1(fieldsWithCitations, bHardRefresh, bChangePosition) {
-            var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, keysL, htmlCitation, oldContent, newContent, text, bNeedSaveUserInput;
+            var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, citationsPre, citationsPost, citations, formattedCitationObj, htmlCitation, oldContentInCit, oldContentInDoc, newContent, text, bNeedSaveUserInput;
             return _regenerator().w(function(_context1) {
                 while (1) switch (_context1.n) {
                   case 0:
@@ -15198,56 +15239,40 @@
 
                   case 1:
                     if (!(i >= 0)) {
-                        _context1.n = 8;
+                        _context1.n = 7;
                         break;
                     }
                     _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
                     cslCitation = _fieldsWithCitations$.cslCitation;
-                    keysL = cslCitation.getInfoForCitationCluster();
-                    console.warn("formatter makeCitationCluster getUpdatedFields");
-                    console.log(keysL);
-                    htmlCitation = this._formatter.makeCitationCluster(keysL);
-                    htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, htmlCitation);
+                    citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+                    citationsPost = this._storage.getCitationsPost(cslCitation.citationID);
+                    citations = this._storage.getAllCitationsInJson();
+                    this._formatter.rebuildProcessorState(citations);
+                    formattedCitationObj = this._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
+                    htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, formattedCitationObj[1][0][1]);
                     tempElement.innerHTML = htmlCitation;
-                    oldContent = field["Content"];
+                    oldContentInCit = cslCitation.getPlainCitation();
+                    oldContentInDoc = field["Content"];
+                    if (oldContentInCit === "") {
+                        oldContentInCit = oldContentInDoc;
+                    }
                     newContent = tempElement.innerText;
                     if (!cslCitation.getDoNotUpdate()) {
                         _context1.n = 2;
                         break;
                     }
-                    return _context1.a(3, 7);
+                    return _context1.a(3, 6);
 
                   case 2:
-                    if (!(oldContent === newContent && !bChangePosition)) {
-                        _context1.n = 3;
-                        break;
-                    }
-                    return _context1.a(3, 7);
-
-                  case 3:
-                    if (!bHardRefresh && (oldContent === "null" || oldContent === null)) {
-                        console.error("Unable to update footnotes");
-                        bHardRefresh = true;
-                    }
-                    if (!bHardRefresh) {
+                    if (!(oldContentInCit !== oldContentInDoc && !bHardRefresh)) {
                         _context1.n = 4;
                         break;
                     }
-                    field["Content"] = htmlCitation;
-                    cslCitation.setPlainCitation(newContent);
-                    _context1.n = 6;
-                    break;
-
-                  case 4:
-                    if (!(oldContent !== newContent)) {
-                        _context1.n = 6;
-                        break;
-                    }
-                    text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContent + "</p>";
-                    _context1.n = 5;
+                    text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContentInDoc + "</p>";
+                    _context1.n = 3;
                     return _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", text);
 
-                  case 5:
+                  case 3:
                     bNeedSaveUserInput = _context1.v;
                     if (bNeedSaveUserInput) {
                         cslCitation.setDoNotUpdate();
@@ -15256,19 +15281,25 @@
                         field["Content"] = htmlCitation;
                         cslCitation.setPlainCitation(newContent);
                     }
+                    _context1.n = 5;
+                    break;
 
-                  case 6:
+                  case 4:
+                    field["Content"] = htmlCitation;
+                    cslCitation.setPlainCitation(newContent);
+
+                  case 5:
                     if (cslCitation) {
                         field["Value"] = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
                     }
                     updatedFields.push(field);
 
-                  case 7:
+                  case 6:
                     i--;
                     _context1.n = 1;
                     break;
 
-                  case 8:
+                  case 7:
                     return _context1.a(2, updatedFields);
                 }
             }, _callee1, this);
@@ -15278,7 +15309,7 @@
     function _updateFormatter() {
         var self = this;
         var arrIds = [];
-        this._storage.forEach(function(item, id) {
+        this._storage.forEachItem(function(item, id) {
             arrIds.push(id);
         });
         this._formatter = new CSL.Engine({
@@ -15292,15 +15323,10 @@
                 var item = self._storage.getItem(id);
                 var index = self._storage.getItemIndex(id);
                 if (!item) return null;
-                console.warn("formatter retrieveItem");
-                console.log(index);
-                console.log(item.toFlatJSON(index));
                 return item.toFlatJSON(index);
             }
         }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true);
         if (arrIds.length) {
-            console.warn("formatter updateItems after create");
-            console.log(arrIds);
             this._formatter.updateItems(arrIds);
         }
         return;
