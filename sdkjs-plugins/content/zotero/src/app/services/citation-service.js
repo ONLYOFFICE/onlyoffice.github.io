@@ -411,30 +411,23 @@ class CitationService {
 
             let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
-            const oldContent = field["Content"];
+            let oldContentInCit = cslCitation.getPlainCitation();
+            const oldContentInDoc = field["Content"];
+            if (oldContentInCit === "") {
+                oldContentInCit = oldContentInDoc; // for old versions of plugin, where "PlainCitation" was not saved
+            }
             const newContent = tempElement.innerText;
 
             if (cslCitation.getDoNotUpdate()) {
                 continue;
             }
 
-            if (oldContent === newContent && !bChangePosition) {
+            /*if (oldContentInCit === oldContentInDoc && oldContentInCit === newContent && !bChangePosition) {
                 continue;
-            }
-            if (
-                !bHardRefresh &&
-                (oldContent === "null" || oldContent === null)
-            ) {
-                console.error("Unable to update footnotes");
-                // TODO: Modify "GetAllAddinFields" method for footnotes
-                // window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
-                bHardRefresh = true;
-            }
+            }*/
 
-            if (bHardRefresh) {
-                field["Content"] = htmlCitation;
-                cslCitation.setPlainCitation(newContent);
-            } else if (oldContent !== newContent) {
+            if (oldContentInCit !== oldContentInDoc && !bHardRefresh) {
+                // content was changed by user, but not saved in citation object
                 let text =
                     "<p>" +
                     translate(
@@ -454,7 +447,7 @@ class CitationService {
                     "<p>" +
                     translate("Modified:") +
                     " " +
-                    oldContent +
+                    oldContentInDoc +
                     "</p>";
                 const bNeedSaveUserInput =
                     await this.#additionalWindow.show(
@@ -469,6 +462,9 @@ class CitationService {
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
                 }
+            } else {
+                field["Content"] = htmlCitation;
+                cslCitation.setPlainCitation(newContent);
             }
 
             if (cslCitation) {
