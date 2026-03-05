@@ -147,7 +147,7 @@ class CitationService {
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                bibText = bibText.replaceAll(/\n/g, "").trim();
+                bibText = bibText.trim();
                 if (bibText.slice(0, 4) === "<div" || bibText.slice(-5) === "</div>") {
                     bibText = "<p" + bibText.slice(4, -5) + "</p>";
                 }
@@ -161,7 +161,7 @@ class CitationService {
                 false ===
                 this._cslStylesManager.isLastUsedStyleContainBibliography()
             ) {
-                // style does not describe the bibliography
+                this.#additionalWindow.showInfoWindow("Warning!", "Style does not describe the bibliography");
             } else {
                 console.error(e);
                 throw "Failed to apply this style.";
@@ -497,6 +497,27 @@ class CitationService {
     }
 
     /**
+     * @param {{control: ContentControlProperties, cslCitation: CSLCitation}[]} controlsWithCitations 
+     * @param {string} notesStyle 
+     * @returns {Promise<{control: ContentControlProperties, cslCitation: CSLCitation}[]>}
+     */
+    async #addFootnotesTextToControls(controlsWithCitations, notesStyle) {
+        const controlInternalIds = controlsWithCitations
+            .map((control) => control.control.InternalId)
+            .filter((internalId) => typeof internalId === "string");
+        const controlsNotesText = await this.citationDocService.getFootnotesControls(
+            controlInternalIds,
+            notesStyle,
+        );
+
+        controlsNotesText.forEach((noteText, index) => {
+            if (!noteText) return;
+            controlsWithCitations[index].control.PlaceHolderText = noteText;
+        });
+        return controlsWithCitations;
+    }
+
+    /**
      * @returns {Promise<boolean>}
      */
     async saveAsText() {
@@ -604,8 +625,45 @@ class CitationService {
             throw e;
         }
     }
-    
     /**
+     * @param {"footnotes" | "endnotes"} notesStyle
+     * @returns {Promise<void>}
+     */
+    async updateCslItemsInNotes(notesStyle) {
+        try {
+            const { controlsWithCitations, bibControl } =
+                await this.#synchronizeStorageWithDocItems();
+            const bNoHaveControls = controlsWithCitations.length === 0;
+
+            this.#updateFormatter();
+
+            await this.#addFootnotesTextToControls(controlsWithCitations, notesStyle);
+
+            /** @type {ContentControlProperties[]} */
+            let updatedControls = await this.#getUpdatedControls(
+                controlsWithCitations,
+                false,
+            );
+            if (updatedControls && updatedControls.length) {
+                await this.citationDocService.convertNotesStyle(
+                    updatedControls,
+                    notesStyle,
+                );
+            }
+
+            if (bibControl) {
+                const bibControls = [
+                    await this.#updateBibliography(bNoHaveControls, bibControl),
+                ];
+                await this.citationDocService.updateContentControls(bibControls);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Context menu "Edit citation"
      * @param {Object & {citationID: string}} updatedControl
      * @returns {Promise<void>}
      */
@@ -697,7 +755,7 @@ class CitationService {
 
         try {
             const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(false, notesStyle);
+                await this.#synchronizeStorageWithDocItems(undefined, notesStyle);
 
             this.#updateFormatter();
 

@@ -373,6 +373,14 @@ import "../styles.css";
                 false
             );
 
+            const styleManager = settings.getStyleManager();
+            if (styleManager.getLastUsedFormat() === "note") {
+                updateFn = citationService.updateCslItemsInNotes.bind(
+                    citationService,
+                    styleManager.getLastUsedNotesStyle()
+                );
+            }
+
             updateFn()
                 .catch(function (error) {
                     console.error(error);
@@ -490,6 +498,7 @@ import "../styles.css";
                         newState.notesStyle,
                     );
                 } else {
+                    // TODO: check it
                     await citationService.updateCslItems(true);
                 }
             } else {

@@ -190,6 +190,52 @@ class CitationDocService {
         }
     }
 
+    /**
+     * @param {Array<string>} controlInternalIds
+     * @param {string} notesStyle
+     * @returns {Promise<Array<any>>}
+     */
+    async getFootnotesControls(controlInternalIds, notesStyle) {
+        return new Promise((resolve) => {
+            Asc.scope.notesStyle = notesStyle;
+            Asc.scope.controlInternalIds = controlInternalIds;
+            window.Asc.plugin.callCommand(
+                function () {
+                    const controlsNotesText = new Array(Asc.scope.controlInternalIds.length);
+                    let doc = Api.GetDocument();
+                    let paragraphs = [];
+                    if (Asc.scope.notesStyle === "footnotes") {
+                        paragraphs = doc.GetFootnotesFirstParagraphs();
+                    } else {
+                        paragraphs = doc.GetEndNotesFirstParagraphs();
+                    }
+
+                    for (let i = 0; i < paragraphs.length; i++) {
+                        const paragraph = paragraphs[i];
+                        paragraph.Select();
+                        const note = doc.GetCurrentFootEndnote();
+                        if (!note) {
+                            continue;
+                        }
+                        const reference = note.SelectNoteReference();
+                        if (!reference) continue;
+                        const control = doc.GetCurrentContentControl();
+                        if (!control) continue;
+                        const controlInternalId = control.GetInternalId();
+                        const index = Asc.scope.controlInternalIds.indexOf(controlInternalId);
+                        if (index !== -1) {
+                            controlsNotesText[index] = note.GetText().trim();
+                        }
+                    }
+                    return controlsNotesText;
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+    }
+
     /** @returns {Promise<boolean>} */
     saveAsText() {
         return new Promise((resolve) => {
@@ -359,32 +405,40 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertNotesStyle(controls, notesStyle) {
-        /** @type {Array<ContentControlProperties>} */
-        const editedControls = [];
-
         for (let i = 0; i < controls.length; i++) {
             const control = controls[i];
             if (!control.InternalId) continue;
 
-            if (!control.PlaceHolderText) {
-                // save user changes
-                editedControls.push(control);
-                continue;
-            }
-
             const selectControlResult = await this.#selectControl(
                 control.InternalId,
             );
-            if (!selectControlResult) continue;
-            const isReferenceSelected = await this.#selectControlReference();
-            if (!isReferenceSelected) continue;
-            await this.#removeSelectedContent();
-            await this.#addNote(notesStyle);
-            const text = control.PlaceHolderText;
-            control.PlaceHolderText = "";
-            await this.#addContentControl(control);
-
-            await this.#pasteHtml(text);
+            if (!selectControlResult) {
+                console.error("Can not select content control with id: " + control.InternalId);
+                continue;
+            }
+            await new Promise((resolve) => {
+                Asc.scope.tag = control.Tag;
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const control = doc.GetCurrentContentControl();
+                        if (control) {
+                            control.SetTag(Asc.scope.tag);
+                        } else {
+                            console.error("Can not find content control");
+                        }
+                    },
+                    false,
+                    false,
+                    resolve,
+                );
+            });
+            if (control.PlaceHolderText) {
+                await this.#removeSelectedContent();
+                await this.#addNote(notesStyle);
+                await this.#pasteHtml(control.PlaceHolderText);
+            }
+            
         }
     }
 
@@ -437,7 +491,7 @@ class CitationDocService {
                 () => {
                     const oDocument = Api.GetDocument();
                     const control = oDocument.GetCurrentContentControl();
-                    control.AddText("");
+                    control.AddText(""); // required to select an empty control
                     control.Select();
                 },
                 false,
