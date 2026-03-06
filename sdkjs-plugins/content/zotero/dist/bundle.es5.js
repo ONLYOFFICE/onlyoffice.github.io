@@ -12146,25 +12146,35 @@
                         if (!selRange) {
                             return;
                         }
+                        function applyFormatting(range, type) {
+                            if ("sup" === type) {
+                                range.SetVertAlign("superscript");
+                            } else if ("sub" === type) {
+                                range.SetVertAlign("subscript");
+                            } else if ("sc" === type) {
+                                range.SetSmallCaps(true);
+                            } else if ("u" === type) {
+                                range.SetUnderline(true);
+                            } else if ("b" === type) {
+                                range.SetBold(true);
+                            } else if ("i" === type || "em" === type) {
+                                range.SetItalic(true);
+                            }
+                        }
+                        if (Asc.scope.formatting.length === 1) {
+                            var pos = Asc.scope.formatting[0];
+                            if (pos.start === 0 && pos.end === selRange.GetText().length) {
+                                applyFormatting(selRange, pos.type);
+                                return;
+                            }
+                        }
                         doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
                         var run = doc.GetCurrentRun();
                         for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                            var pos = Asc.scope.formatting[i];
-                            var range = run.GetRange(pos.start, pos.end);
+                            var _pos = Asc.scope.formatting[i];
+                            var range = run.GetRange(_pos.start, _pos.end);
                             if (!range) continue;
-                            if ("sup" === pos.type) {
-                                range.SetVertAlign("superscript");
-                            } else if ("sub" === pos.type) {
-                                range.SetVertAlign("subscript");
-                            } else if ("sc" === pos.type) {
-                                range.SetSmallCaps(true);
-                            } else if ("u" === pos.type) {
-                                range.SetUnderline(true);
-                            } else if ("b" === pos.type) {
-                                range.SetBold(true);
-                            } else if ("i" === pos.type || "em" === pos.type) {
-                                range.SetItalic(true);
-                            }
+                            applyFormatting(range, _pos.type);
                         }
                     }, isClose, isCalc, resolve);
                 });
@@ -12802,8 +12812,8 @@
                 return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
             }
         }, {
-            key: "addCitation",
-            value: function addCitation(cslCitation) {
+            key: "addCslCitation",
+            value: function addCslCitation(cslCitation) {
                 var _this = this;
                 _classPrivateFieldGet2(_citations, this).push(cslCitation);
                 cslCitation.setNoteIndex(_classPrivateFieldGet2(_citations, this).length);
@@ -14134,6 +14144,11 @@
                 }
                 return result;
             }
+        } ], [ {
+            key: "resetUsedIDs",
+            value: function resetUsedIDs() {
+                _usedIDs._ = new Set;
+            }
         } ]);
     }();
     function _fillFromCitationObject(citationObject) {
@@ -14536,7 +14551,7 @@
                                 items.forEach(function(item) {
                                     cslCitation.fillFromObject(item);
                                 });
-                                _this._storage.addCitation(cslCitation);
+                                _this._storage.addCslCitation(cslCitation);
                                 return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
                             }));
                         }
@@ -15154,6 +15169,7 @@
     function _synchronizeStorageWithDocItems(updatedField) {
         var self = this;
         this._storage.clear();
+        CSLCitation.resetUsedIDs();
         return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
             var numOfItems = 0;
             var bibFieldValue = " ";
@@ -15181,7 +15197,7 @@
                 } else {
                     numOfItems += cslCitation.fillFromObject(citationObject);
                 }
-                self._storage.addCitation(cslCitation);
+                self._storage.addCslCitation(cslCitation);
                 return {
                     field: _objectSpread2({}, field),
                     cslCitation: cslCitation
@@ -15227,7 +15243,7 @@
     }
     function _getUpdatedFields2() {
         _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee1(fieldsWithCitations, bHardRefresh, bChangePosition) {
-            var fragment, tempElement, updatedFields, i, _fieldsWithCitations$, field, cslCitation, citationsPre, citationsPost, citations, formattedCitationObj, htmlCitation, oldContentInCit, oldContentInDoc, newContent, text, bNeedSaveUserInput;
+            var fragment, tempElement, updatedFields, i, bHasChanges, _fieldsWithCitations$, field, cslCitation, citationsPre, citationsPost, citations, formattedCitationObj, htmlCitation, oldContentInCit, oldContentInDoc, newContent, text, bNeedSaveUserInput, newValue;
             return _regenerator().w(function(_context1) {
                 while (1) switch (_context1.n) {
                   case 0:
@@ -15242,6 +15258,7 @@
                         _context1.n = 7;
                         break;
                     }
+                    bHasChanges = !!bChangePosition;
                     _fieldsWithCitations$ = fieldsWithCitations[i], field = _fieldsWithCitations$.field, 
                     cslCitation = _fieldsWithCitations$.cslCitation;
                     citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
@@ -15281,18 +15298,28 @@
                         field["Content"] = htmlCitation;
                         cslCitation.setPlainCitation(newContent);
                     }
+                    bHasChanges = true;
                     _context1.n = 5;
                     break;
 
                   case 4:
+                    if (newContent !== oldContentInDoc || oldContentInCit !== oldContentInDoc || oldContentInCit !== newContent) {
+                        bHasChanges = true;
+                    }
                     field["Content"] = htmlCitation;
                     cslCitation.setPlainCitation(newContent);
 
                   case 5:
                     if (cslCitation) {
-                        field["Value"] = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                        newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                        if (field["Value"] !== newValue) {
+                            bHasChanges = true;
+                        }
+                        field["Value"] = newValue;
                     }
-                    updatedFields.push(field);
+                    if (bHasChanges) {
+                        updatedFields.push(field);
+                    }
 
                   case 6:
                     i--;
@@ -15345,11 +15372,19 @@
                     var isCalc = false;
                     var isClose = false;
                     Asc.plugin.callCommand(function() {
-                        var _doc$GetRangeBySelect, _doc$GetCurrentParagr, _doc$GetCurrentRun;
+                        var _doc$GetCurrentParagr, _doc$GetCurrentRun;
                         var doc = Api.GetDocument();
-                        var canSelectWord = doc === null || doc === void 0 ? void 0 : doc.SelectCurrentWord();
-                        var endPos = (doc === null || doc === void 0 || (_doc$GetRangeBySelect = doc.GetRangeBySelect()) === null || _doc$GetRangeBySelect === void 0 ? void 0 : _doc$GetRangeBySelect.GetEndPos()) || 0;
+                        if (!doc) {
+                            return 0;
+                        }
+                        var canSelectWord = doc.SelectCurrentWord();
+                        var selectedRange = doc.GetRangeBySelect();
+                        if (!selectedRange) {
+                            return 0;
+                        }
+                        var endPos = selectedRange.GetEndPos();
                         if (canSelectWord) {
+                            doc.RemoveSelection();
                             return endPos;
                         }
                         var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
@@ -16864,6 +16899,7 @@
         window.Asc.plugin.init = function() {
             Loader.show();
             initElements();
+            Asc.plugin.executeMethod("PasteHtml", [ "<p>Paragraph 1</p><p>Paragraph 2</p>" ], function() {});
             router = new Router;
             sdk = new ZoteroSdk;
             var loginPage = new LoginPage(router, sdk);
