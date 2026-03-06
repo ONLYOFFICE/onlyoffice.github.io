@@ -233,13 +233,28 @@ class CitationService {
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                bibText = bibText.trim();
-                if (bibText.slice(0, 4) === "<div" && bibText.slice(-6) === "</div>") {
-                    bibText = "<p" + bibText.slice(4, -4) + "p>";
+                bibText = bibText
+                    .replaceAll('\n', '')
+                    .replaceAll('\r', '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                const paragraphStart = '<div class="csl-entry">';
+                const paragraphEnd = '</div>';
+                if (!bibObject[0]['second-field-align']) {
+                    bibText = bibText.replace(/<\/?div[^>]*>/g, '');
+                    bibText = "<p>" + bibText + "</p>";
+                } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
+                    bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
+                }
+                if (window.Asc.scope.editorVersion < 9004000) {
+                    bibText += '\n';
                 }
                 bibItems.push(bibText);
             }
-            const htmlBibliography = bibItems.join("");
+            const htmlBibliography = bibItems.join("").trim();
+
+            Asc.scope.bibStyle = bibObject[0];
             return htmlBibliography;
         } catch (e) {
             if (
@@ -582,10 +597,6 @@ class CitationService {
 
     /** @returns {Promise<void>} */
     async insertBibliography() {
-        if (!this.#checkEditor()) {
-            return;
-        }
-
         try {
             const { fieldsWithCitations, bibFieldValue, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -611,10 +622,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItems(bHardRefresh) {
-        if (!this.#checkEditor()) {
-            return;
-        }
-
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -657,10 +664,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateCslItemsInNotes(notesStyle) {
-        if (!this.#checkEditor()) {
-            return;
-        }
-        
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -695,10 +698,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async updateItem(updatedField) {
-        if (!this.#checkEditor()) {
-            return;
-        }
-
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems(updatedField);
@@ -753,10 +752,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async switchingBetweenNotesAndText(notesStyle) {
-        if (!this.#checkEditor()) {
-            return;
-        }
-
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -800,10 +795,6 @@ class CitationService {
      * @returns {Promise<void>}
      */
     async convertNotesStyle(notesStyle) {
-        if (!this.#checkEditor()) {
-            return;
-        }
-        
         try {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();
