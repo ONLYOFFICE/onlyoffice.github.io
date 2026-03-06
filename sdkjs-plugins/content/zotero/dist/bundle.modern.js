@@ -3411,31 +3411,63 @@ class CitationDocService {
         _classPrivateFieldSet2(_bibSuffix, this, bibSuffix);
     }
     addBibliography(text, value) {
-        var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-        var field = {
-            Value: _classPrivateFieldGet2(_bibPrefix, this) + value + _classPrivateFieldGet2(_bibSuffix, this),
-            Content: formattingPositions.text
-        };
-        return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
-            if (!formattingPositions.formatting.length) return;
-            return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-        });
-    }
-    addCitation(text, value, notesStyle) {
         var _this = this;
         return _asyncToGenerator(function*() {
-            var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-            var field = {
-                Value: _classPrivateFieldGet2(_citPrefix, _this) + " " + _classPrivateFieldGet2(_citSuffix, _this) + value,
-                Content: formattingPositions.text
-            };
-            if (notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1) {
-                yield _assertClassBrand(_CitationDocService_brand, _this, _addNote).call(_this, notesStyle);
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+                var field = {
+                    FieldId: "",
+                    Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
+                    Content: formattingPositions.text
+                };
+                return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(function() {
+                    if (!formattingPositions.formatting.length) return;
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                });
+            } else {
+                var _field = {
+                    FieldId: "",
+                    Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
+                    Content: " "
+                };
+                yield _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, _field);
+                yield _assertClassBrand(_CitationDocService_brand, _this, _moveCursorLeft).call(_this);
+                yield _assertClassBrand(_CitationDocService_brand, _this, _pasteHtml).call(_this, text);
             }
-            return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(function() {
-                if (!formattingPositions.formatting.length) return;
-                return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-            });
+        })();
+    }
+    addCitation(text, value, notesStyle) {
+        var _this2 = this;
+        return _asyncToGenerator(function*() {
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+                var field = {
+                    FieldId: "",
+                    Value: _classPrivateFieldGet2(_citPrefix, _this2) + " " + _classPrivateFieldGet2(_citSuffix, _this2) + value,
+                    Content: formattingPositions.text
+                };
+                if (notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1) {
+                    yield _assertClassBrand(_CitationDocService_brand, _this2, _addNote).call(_this2, notesStyle);
+                }
+                return _assertClassBrand(_CitationDocService_brand, _this2, _addAddinField).call(_this2, field).then(function() {
+                    if (!formattingPositions.formatting.length) return;
+                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                });
+            } else {
+                var _field2 = {
+                    FieldId: "",
+                    Value: _classPrivateFieldGet2(_citPrefix, _this2) + " " + _classPrivateFieldGet2(_citSuffix, _this2) + value,
+                    Content: " "
+                };
+                if (notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1) {
+                    yield _assertClassBrand(_CitationDocService_brand, _this2, _addNote).call(_this2, notesStyle);
+                }
+                yield _assertClassBrand(_CitationDocService_brand, _this2, _addAddinField).call(_this2, _field2);
+                yield _assertClassBrand(_CitationDocService_brand, _this2, _moveCursorLeft).call(_this2);
+                yield _assertClassBrand(_CitationDocService_brand, _this2, _pasteHtml).call(_this2, text);
+            }
         })();
     }
     getAddinZoteroFields() {
@@ -3474,83 +3506,166 @@ class CitationDocService {
         });
     }
     updateAddinFields(fields) {
-        var _this2 = this;
+        var _this3 = this;
         return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this2, _makeFormattingPositions).call(_this2, fields);
-            yield new Promise(function(resolve) {
-                window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
-            });
-            if (!formats.size) return;
-            for (var [fieldId, formattingPositions] of formats) {
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this2, _selectField).call(_this2, fieldId);
-                if (!selectFieldResult) continue;
-                yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formats = _assertClassBrand(_CitationDocService_brand, _this3, _makeFormattingPositions).call(_this3, fields);
+                yield new Promise(resolve => {
+                    window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
+                });
+                if (!formats.size) return;
+                for (var [fieldId, formattingPositions] of formats) {
+                    var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, fieldId);
+                    if (!selectFieldResult) continue;
+                    yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
+                }
+            } else {
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (!field.FieldId) {
+                        console.error("Field id is not defined");
+                        continue;
+                    }
+                    var _selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
+                    if (!_selectFieldResult) continue;
+                    var text = field.Content || "";
+                    field.Content = " ";
+                    yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
+                    yield _assertClassBrand(_CitationDocService_brand, _this3, _addAddinField).call(_this3, field);
+                    yield _assertClassBrand(_CitationDocService_brand, _this3, _moveCursorLeft).call(_this3);
+                    yield _assertClassBrand(_CitationDocService_brand, _this3, _pasteHtml).call(_this3, text);
+                }
             }
         })();
     }
     convertNotesToText(fields) {
-        var _this3 = this;
+        var _this4 = this;
         return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this3, _makeFormattingPositions).call(_this3, fields);
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) {
-                    console.error("Field id is not defined");
-                    continue;
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formats = _assertClassBrand(_CitationDocService_brand, _this4, _makeFormattingPositions).call(_this4, fields);
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (!field.FieldId) {
+                        console.error("Field id is not defined");
+                        continue;
+                    }
+                    var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
+                    if (!selectFieldResult) continue;
+                    var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectFieldReference).call(_this4);
+                    if (!isReferenceSelected) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSuperscript).call(_this4);
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, field);
+                    var formatting = formats.get(field.FieldId);
+                    if (!formatting) continue;
+                    yield CslDocFormatter.formatAfterInsert(formatting.formatting);
                 }
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
-                if (!selectFieldResult) continue;
-                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectFieldReference).call(_this3);
-                if (!isReferenceSelected) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSuperscript).call(_this3);
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _addAddinField).call(_this3, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            } else {
+                for (var _i = 0; _i < fields.length; _i++) {
+                    var _field3 = fields[_i];
+                    if (!_field3.FieldId) {
+                        console.error("Field id is not defined");
+                        continue;
+                    }
+                    var _selectFieldResult2 = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, _field3.FieldId);
+                    if (!_selectFieldResult2) continue;
+                    var _isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectFieldReference).call(_this4);
+                    if (!_isReferenceSelected) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSuperscript).call(_this4);
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
+                    var text = _field3.Content || "";
+                    _field3.Content = " ";
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, _field3);
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _moveCursorLeft).call(_this4);
+                    yield _assertClassBrand(_CitationDocService_brand, _this4, _pasteHtml).call(_this4, text);
+                }
             }
         })();
     }
     convertTextToNotes(fields, notesStyle) {
-        var _this4 = this;
+        var _this5 = this;
         return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this4, _makeFormattingPositions).call(_this4, fields);
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) continue;
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
-                if (!selectFieldResult) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _addNote).call(_this4, notesStyle);
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formats = _assertClassBrand(_CitationDocService_brand, _this5, _makeFormattingPositions).call(_this5, fields);
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (!field.FieldId) continue;
+                    var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
+                    if (!selectFieldResult) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, field);
+                    var formatting = formats.get(field.FieldId);
+                    if (!formatting) continue;
+                    yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+                }
+            } else {
+                for (var _i2 = 0; _i2 < fields.length; _i2++) {
+                    var _field4 = fields[_i2];
+                    if (!_field4.FieldId) continue;
+                    var _selectFieldResult3 = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, _field4.FieldId);
+                    if (!_selectFieldResult3) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
+                    var text = _field4.Content || "";
+                    _field4.Content = " ";
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, _field4);
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _moveCursorLeft).call(_this5);
+                    yield _assertClassBrand(_CitationDocService_brand, _this5, _pasteHtml).call(_this5, text);
+                }
             }
         })();
     }
     convertNotesStyle(fields, notesStyle) {
-        var _this5 = this;
+        var _this6 = this;
         return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this5, _makeFormattingPositions).call(_this5, fields);
             var editedFields = [];
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) continue;
-                if (!field.Content) {
-                    editedFields.push(field);
-                    continue;
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                var formats = _assertClassBrand(_CitationDocService_brand, _this6, _makeFormattingPositions).call(_this6, fields);
+                for (var i = 0; i < fields.length; i++) {
+                    var field = fields[i];
+                    if (!field.FieldId) continue;
+                    if (!field.Content) {
+                        editedFields.push(field);
+                        continue;
+                    }
+                    var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectField).call(_this6, field.FieldId);
+                    if (!selectFieldResult) continue;
+                    var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectFieldReference).call(_this6);
+                    if (!isReferenceSelected) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSuperscript).call(_this6);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSelectedContent).call(_this6);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _addNote).call(_this6, notesStyle);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _addAddinField).call(_this6, field);
+                    var formatting = formats.get(field.FieldId);
+                    if (!formatting) continue;
+                    yield CslDocFormatter.formatAfterInsert(formatting.formatting);
                 }
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
-                if (!selectFieldResult) continue;
-                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectFieldReference).call(_this5);
-                if (!isReferenceSelected) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
+            } else {
+                for (var _i3 = 0; _i3 < fields.length; _i3++) {
+                    var _field5 = fields[_i3];
+                    if (!_field5.FieldId) continue;
+                    if (!_field5.Content) {
+                        editedFields.push(_field5);
+                        continue;
+                    }
+                    var _selectFieldResult4 = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectField).call(_this6, _field5.FieldId);
+                    if (!_selectFieldResult4) continue;
+                    var _isReferenceSelected2 = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectFieldReference).call(_this6);
+                    if (!_isReferenceSelected2) continue;
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSuperscript).call(_this6);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSelectedContent).call(_this6);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _addNote).call(_this6, notesStyle);
+                    var text = _field5.Content || "";
+                    _field5.Content = " ";
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _addAddinField).call(_this6, _field5);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _moveCursorLeft).call(_this6);
+                    yield _assertClassBrand(_CitationDocService_brand, _this6, _pasteHtml).call(_this6, text);
+                }
             }
             if (editedFields.length) {
                 yield new Promise(function(resolve) {
@@ -3583,7 +3698,7 @@ function _addNote(notesStyle) {
 
 function _getAllAddinFields() {
     return new Promise(function(resolve, reject) {
-        window.Asc.plugin.executeMethod("GetAllAddinFields", null, resolve);
+        window.Asc.plugin.executeMethod("GetAllAddinFields", undefined, resolve);
     });
 }
 
@@ -3600,9 +3715,15 @@ function _makeFormattingPositions(fields) {
     return formats;
 }
 
+function _pasteHtml(html) {
+    return new Promise(function(resolve) {
+        window.Asc.plugin.executeMethod("PasteHtml", [ html ], resolve);
+    });
+}
+
 function _removeSelectedContent() {
     return new Promise(resolve => {
-        window.Asc.plugin.executeMethod("RemoveSelectedContent", null, resolve);
+        window.Asc.plugin.executeMethod("RemoveSelectedContent", undefined, resolve);
     });
 }
 
@@ -3649,6 +3770,24 @@ function _removeSuperscript() {
             selRange.SetVertAlign("baseline");
         }, isClose, isCalc, resolve);
     });
+}
+
+function _moveCursorLeft() {
+    return _moveCursorLeft2.apply(this, arguments);
+}
+
+function _moveCursorLeft2() {
+    _moveCursorLeft2 = _asyncToGenerator(function*() {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.plugin.callCommand(() => {
+                var doc = Api.GetDocument();
+                doc.MoveCursorLeft(1, true);
+            }, isClose, isCalc, resolve);
+        });
+    });
+    return _moveCursorLeft2.apply(this, arguments);
 }
 
 var _items = new WeakMap;
@@ -5751,8 +5890,9 @@ function _makeBibliography() {
         var bibObject = this._formatter.makeBibliography();
         for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
             var bibText = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, bibObject[1][i]);
-            while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
-                bibText = bibText.replace(/\n/, "");
+            bibText = bibText.trim();
+            if (bibText.slice(0, 4) === "<div" && bibText.slice(-6) === "</div>") {
+                bibText = "<p" + bibText.slice(4, -4) + "p>";
             }
             bibItems.push(bibText);
         }
