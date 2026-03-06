@@ -110,6 +110,15 @@ var AscSimpleRequest = window.AscSimpleRequest;
 /** ------------------------------------------------ */
 
 /**
+ * @typedef {Object} BibliographyStyles
+ * @property {number} entryspacing
+ * @property {number} linespacing
+ * @property {number} maxoffset
+ * @property {boolean} [hangingindent]
+ * @property {"margin"|'flush'|false} `second-field-align`
+ */
+
+/**
  * @typedef {'i'|'u'|'b'|'sc'|'sup'|'sub'|string} AllowedTags
  */
 
