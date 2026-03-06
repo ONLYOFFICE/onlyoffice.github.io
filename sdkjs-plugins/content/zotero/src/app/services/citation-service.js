@@ -231,10 +231,10 @@ class CitationService {
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
-                    bibText = bibText.replace(/\n/, "");
+                bibText = bibText.trim();
+                if (bibText.slice(0, 4) === "<div" && bibText.slice(-6) === "</div>") {
+                    bibText = "<p" + bibText.slice(4, -4) + "p>";
                 }
-
                 bibItems.push(bibText);
             }
             const htmlBibliography = bibItems.join("");
