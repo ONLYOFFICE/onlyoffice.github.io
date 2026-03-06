@@ -94,9 +94,7 @@ class CitationDocService {
                 Content: " ",
             };
 
-            await this.#addAddinField(field);
-            await this.#moveCursorLeft();
-            await this.#pasteHtml(text);
+            await this.#pasteAddinFieldWithHtml(field, text);
         }
     }
 
@@ -143,9 +141,7 @@ class CitationDocService {
                 await this.#addNote(notesStyle);
             }
 
-            await this.#addAddinField(field);
-            await this.#moveCursorLeft();
-            await this.#pasteHtml(text);
+            await this.#pasteAddinFieldWithHtml(field, text);
         }
     }
 
@@ -239,9 +235,7 @@ class CitationDocService {
                 const text = field.Content || '';
                 field.Content = " ";
                 await this.#removeSelectedContent();
-                await this.#addAddinField(field);
-                await this.#moveCursorLeft();
-                await this.#pasteHtml(text);
+                await this.#pasteAddinFieldWithHtml(field, text);
             }
         }
     }
@@ -290,9 +284,7 @@ class CitationDocService {
                 
                 const text = field.Content || '';
                 field.Content = " ";
-                await this.#addAddinField(field);
-                await this.#moveCursorLeft();
-                await this.#pasteHtml(text);
+                await this.#pasteAddinFieldWithHtml(field, text);
             }
         }
         
@@ -333,9 +325,7 @@ class CitationDocService {
                 
                 const text = field.Content || '';
                 field.Content = " ";
-                await this.#addAddinField(field);
-                await this.#moveCursorLeft();
-                await this.#pasteHtml(text);
+                await this.#pasteAddinFieldWithHtml(field, text);
             }
         }
     }
@@ -395,9 +385,7 @@ class CitationDocService {
 
                 const text = field.Content || '';
                 field.Content = " ";
-                await this.#addAddinField(field);
-                await this.#moveCursorLeft();
-                await this.#pasteHtml(text);
+                await this.#pasteAddinFieldWithHtml(field, text);
             }
         }
 
@@ -508,12 +496,6 @@ class CitationDocService {
      */
     #selectField(fieldId) {
         return new Promise(function (resolve) {
-            const editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003000) {
-                console.error("Cannot select addin field.");
-                console.error("Editor version is less than 9.3.0");
-                resolve(false);
-            }
             window.Asc.plugin.executeMethod("SelectAddinField", [fieldId], () =>
                 resolve(true),
             );
@@ -527,12 +509,6 @@ class CitationDocService {
         return new Promise(function (resolve) {
             const isCalc = true;
             const isClose = false;
-            const editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003000) {
-                console.error("Cannot select addin field reference.");
-                console.error("Editor version is less than 9.3.0");
-                resolve(false);
-            }
             Asc.plugin.callCommand(
                 () => {
                     const doc = Api.GetDocument();
@@ -566,9 +542,15 @@ class CitationDocService {
         });
     }
 
-    async #moveCursorLeft() {
-        return new Promise(function (resolve) {
-            const isCalc = false;
+    /**
+     * @param {AddinFieldData} field 
+     * @param {string} html 
+     * @returns {Promise<void>}
+     */
+    async #pasteAddinFieldWithHtml(field, html) {
+        await this.#addAddinField(field);
+        await new Promise((resolve) => {
+            const isCalc = true;
             const isClose = false;
             Asc.plugin.callCommand(
                 () => {
@@ -580,6 +562,76 @@ class CitationDocService {
                 resolve,
             );
         });
+
+        // Only apply bibliography style if this is a bibliography field (starts with bibPrefix)
+        if (field.Value.indexOf(this.#bibPrefix) === 0 && Asc.scope.bibStyle) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const paragraphs = doc.querySelectorAll(".csl-entry");
+            const numbers = new Array(paragraphs.length);
+            paragraphs.forEach((p, index) => {
+                const margin = p.querySelector(".csl-left-margin");
+                const right = p.querySelector(".csl-right-inline");
+                right?.replaceWith(...right.childNodes);
+                if (margin) {
+                    numbers[index] = margin.textContent.trim();
+                    margin.remove();
+                }
+            });
+            
+            html = doc.body.innerHTML;
+            await this.#pasteHtml(html);
+
+            const field = await this.#getCurrentField();
+            if (!field) return;
+            await this.#selectField(field.FieldId);
+            await new Promise((resolve) => {
+                const isCalc = false;
+                const isClose = false;
+                Asc.scope.numbers = numbers;
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const range = doc.GetRangeBySelect();
+                        if (!range) return;
+                        /** @type {BibliographyStyles} */
+                        const style = Asc.scope.bibStyle;
+                        const paragraphs = range.GetAllParagraphs();
+
+                        paragraphs.forEach((paragraph, index) => {
+                            const text = paragraph.GetText().trim();
+                            if (text === '') {
+                                return;
+                            }
+                            if (typeof style.linespacing === "number") {
+                                paragraph.SetSpacingLine(240 * style.linespacing, "exact");
+                            }
+                            if (typeof style.entryspacing === "number") {
+                                paragraph.SetSpacingAfter(240 * style.entryspacing);
+                            }
+                            if (style['second-field-align']) { 
+                                let margin = Api.CreateRun();
+                                margin.AddText(Asc.scope.numbers[index]);
+                                margin.AddTabStop();
+                                let elementIndex = index === 0 ? 4 : 0; // 4 - magic number, need to find out why
+                                paragraph.AddElement(margin, elementIndex);
+                                paragraph.SetIndLeft(style.maxoffset * 120);
+                                paragraph.SetIndFirstLine(-(style.maxoffset * 120));
+                            } else if (style.hangingindent) {
+                                paragraph.SetIndLeft(720);
+                                paragraph.SetIndFirstLine(-720);
+                            }
+                        });
+                    },
+                    isClose,
+                    isCalc,
+                    resolve,
+                );
+            });
+            Asc.scope.bibStyle = null;
+        } else {
+            await this.#pasteHtml(html);
+        }
     }
 }
 

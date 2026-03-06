@@ -179,9 +179,7 @@ import "../styles.css";
         
         getEditorVersion().then((editorVersion) => {
             window.Asc.scope.editorVersion = editorVersion;
-            if (editorVersion >= 9003000) {
-                addContextMenuButtons();
-            }
+            addContextMenuButtons();
         });
         
     };
