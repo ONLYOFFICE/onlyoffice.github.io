@@ -21,6 +21,10 @@ Plugins structure and installation https://api.onlyoffice.com/docs/plugin-and-ma
 
 Plugins code and methods https://api.onlyoffice.com/docs/document-builder/get-started/overview/.
 
+## Third-party
+
+- [english-words](https://github.com/dwyl/english-words) - A text file containing 370k+ English words (Unlicense)
+
 ## User feedback and support
 
 To ask questions and share feedback, use Issues in this repository.

@@ -17,6 +17,14 @@
  */
 (function(window, undefined){
 
+	var g_dictionary = null;
+
+	fetch('./scripts/words_alpha.txt')
+	  .then(response => response.text())
+	  .then(text => {
+	    g_dictionary = text.split('\n');
+	  });
+
 	window.isInit = false;
 
 	window.Asc.plugin.init = function(text)
