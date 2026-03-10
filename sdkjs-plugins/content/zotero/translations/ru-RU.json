@@ -69,5 +69,8 @@
     "All active Zotero citations and Bibliography have been replaced.": "Все активные цитаты Zotero и библиография были заменены.",
     "An error occurred while loading settings. Try restarting the plugin.": "Произошла ошибка при загрузке настроек. Попробуйте перезапустить плагин.",
     "An error occurred while loading library groups. Try restarting the plugin.": "Произошла ошибка при загрузке групп библиотек. Попробуйте перезапустить плагин.",
-    "The style is not available in the local version of the plugin.": "Стиль недоступен в локальной версии плагина."
+    "The style is not available in the local version of the plugin.": "Стиль недоступен в локальной версии плагина.",
+    "Updating citations": "Обновление цитат",
+    "Inserting bibliography": "Вставка библиографии",
+    "Inserting citation": "Вставка цитаты"
 }

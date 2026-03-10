@@ -69,5 +69,8 @@
     "All active Zotero citations and Bibliography have been replaced.": "Todas as citações ativas do Zotero e a bibliografia foram substituídas.",
     "An error occurred while loading settings. Try restarting the plugin.": "Ocorreu um erro ao carregar as definições. Tente reiniciar o plugin.",
     "An error occurred while loading library groups. Try restarting the plugin.": "Ocorreu um erro ao carregar os grupos de bibliotecas. Tente reiniciar o plugin.",
-    "The style is not available in the local version of the plugin.": "O estilo não está disponível na versão local do plugin."
+    "The style is not available in the local version of the plugin.": "O estilo não está disponível na versão local do plugin.",
+    "Updating citations": "Atualizando citações",
+    "Inserting bibliography": "Inserir bibliografia",
+    "Inserting citation": "Inserir citação"
 }
