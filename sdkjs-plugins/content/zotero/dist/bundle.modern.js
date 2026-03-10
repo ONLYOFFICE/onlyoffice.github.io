@@ -7766,7 +7766,7 @@ SelectCitationsComponent.prototype.count = function() {
                     showError(translate("Language is not selected"));
                     return;
                 }
-                showLoader();
+                yield startAction("Zotero (" + translate("Updating citations") + ")");
                 var cursorPos = yield CursorService.getCursorPosition();
                 var updateFn = citationService.updateCslItems.bind(citationService, false);
                 var styleManager = settings.getStyleManager();
@@ -7781,7 +7781,7 @@ SelectCitationsComponent.prototype.count = function() {
                     }
                     showError(message);
                 }).finally(function() {
-                    hideLoader();
+                    endAction("Zotero (" + translate("Updating citations") + ")");
                     CursorService.setCursorPosition(cursorPos);
                 });
             });
@@ -7789,92 +7789,95 @@ SelectCitationsComponent.prototype.count = function() {
                 return _ref.apply(this, arguments);
             };
         }());
-        insertBibBtn.subscribe(function(event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            if (!settings.getLastUsedStyleId()) {
-                showError(translate("Style is not selected"));
-                return;
-            }
-            if (!settings.getLocale()) {
-                showError(translate("Language is not selected"));
-                return;
-            }
-            showLoader();
-            Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                lockScroll: true
-            } ]);
-            citationService.insertBibliography().catch(function(error) {
-                console.error(error);
-                var message = translate("Failed to insert bibliography");
-                if (typeof error === "string") {
-                    message += ". " + translate(error);
+        insertBibBtn.subscribe(function() {
+            var _ref2 = _asyncToGenerator(function*(event) {
+                if (event.type !== "button:click") {
+                    return;
                 }
-                showError(message);
-            }).finally(function() {
-                hideLoader();
-                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                    scrollToTarget: true
-                } ]);
-            });
-        });
-        insertLinkBtn.subscribe(function(event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            if (!settings.getLastUsedStyleId()) {
-                showError(translate("Style is not selected"));
-                return;
-            }
-            if (!settings.getLocale()) {
-                showError(translate("Language is not selected"));
-                return;
-            }
-            showLoader();
-            var items = selectCitation.getSelectedItems();
-            var cursorPos;
-            CursorService.getCursorPosition().then(function(pos) {
-                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                    lockScroll: true
-                } ]);
-                cursorPos = pos;
-                return citationService.insertSelectedCitations(items);
-            }).then(function(keys) {
-                selectCitation.removeItems(keys);
-                return citationService.updateCslItems();
-            }).catch(function(error) {
-                console.error(error);
-                var message = translate("Failed to insert citation");
-                if (typeof error === "string") {
-                    message += ". " + translate(error);
+                if (!settings.getLastUsedStyleId()) {
+                    showError(translate("Style is not selected"));
+                    return;
                 }
-                showError(message);
-            }).finally(function() {
-                hideLoader();
-                CursorService.setCursorPosition(cursorPos);
-                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                    scrollToTarget: true
-                } ]);
+                if (!settings.getLocale()) {
+                    showError(translate("Language is not selected"));
+                    return;
+                }
+                yield startAction("Zotero (" + translate("Inserting bibliography") + ")");
+                citationService.insertBibliography().catch(function(error) {
+                    console.error(error);
+                    var message = translate("Failed to insert bibliography");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                }).finally(function() {
+                    endAction("Zotero (" + translate("Inserting bibliography") + ")");
+                });
             });
-        });
+            return function(_x2) {
+                return _ref2.apply(this, arguments);
+            };
+        }());
+        insertLinkBtn.subscribe(function() {
+            var _ref3 = _asyncToGenerator(function*(event) {
+                if (event.type !== "button:click") {
+                    return;
+                }
+                if (!settings.getLastUsedStyleId()) {
+                    showError(translate("Style is not selected"));
+                    return;
+                }
+                if (!settings.getLocale()) {
+                    showError(translate("Language is not selected"));
+                    return;
+                }
+                yield startAction("Zotero (" + translate("Inserting citation") + ")");
+                var items = selectCitation.getSelectedItems();
+                var cursorPos;
+                CursorService.getCursorPosition().then(function(pos) {
+                    cursorPos = pos;
+                    return citationService.insertSelectedCitations(items);
+                }).then(function(keys) {
+                    selectCitation.removeItems(keys);
+                    return citationService.updateCslItems();
+                }).catch(function(error) {
+                    console.error(error);
+                    var message = translate("Failed to insert citation");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                }).finally(function() {
+                    endAction("Zotero (" + translate("Inserting citation") + ")");
+                    CursorService.setCursorPosition(cursorPos);
+                });
+            });
+            return function(_x3) {
+                return _ref3.apply(this, arguments);
+            };
+        }());
         openSettingsBtn.subscribe(function(event) {
             if (event.type !== "button:click") {
                 return;
             }
             settings.show();
         });
-        saveAsTextBtn.subscribe(function(event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            showLoader();
-            citationService.saveAsText().then(function() {
-                hideLoader();
+        saveAsTextBtn.subscribe(function() {
+            var _ref4 = _asyncToGenerator(function*(event) {
+                if (event.type !== "button:click") {
+                    return;
+                }
+                yield startAction("Zotero (" + translate("Saving as text") + ")");
+                citationService.saveAsText().then(function() {
+                    endAction("Zotero (" + translate("Saving as text") + ")");
+                });
             });
-        });
+            return function(_x4) {
+                return _ref4.apply(this, arguments);
+            };
+        }());
         settings.onChangeState(function() {
-            var _ref2 = _asyncToGenerator(function*(newState, oldState) {
+            var _ref5 = _asyncToGenerator(function*(newState, oldState) {
                 var cursorPos = yield CursorService.getCursorPosition();
                 if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
                     if (newState.styleFormat !== oldState.styleFormat) {
@@ -7893,8 +7896,8 @@ SelectCitationsComponent.prototype.count = function() {
                 }
                 yield CursorService.setCursorPosition(cursorPos);
             });
-            return function(_x2, _x3) {
-                return _ref2.apply(this, arguments);
+            return function(_x5, _x6) {
+                return _ref5.apply(this, arguments);
             };
         }());
     }
@@ -7959,15 +7962,33 @@ SelectCitationsComponent.prototype.count = function() {
             window.onclick = null;
         }
     }
-    function showLoader() {
-        insertBibBtn.disable();
-        refreshBtn.disable();
-        insertLinkBtn.disable();
+    function startAction(_x7) {
+        return _startAction.apply(this, arguments);
     }
-    function hideLoader() {
-        insertBibBtn.enable();
-        refreshBtn.enable();
-        checkSelected();
+    function _startAction() {
+        _startAction = _asyncToGenerator(function*(preloaderMessage) {
+            insertBibBtn.disable();
+            refreshBtn.disable();
+            insertLinkBtn.disable();
+            Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                lockScroll: true
+            } ]);
+        });
+        return _startAction.apply(this, arguments);
+    }
+    function endAction(_x8) {
+        return _endAction.apply(this, arguments);
+    }
+    function _endAction() {
+        _endAction = _asyncToGenerator(function*(preloaderMessage) {
+            insertBibBtn.enable();
+            refreshBtn.enable();
+            checkSelected();
+            Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                scrollToTarget: true
+            } ]);
+        });
+        return _endAction.apply(this, arguments);
     }
     function switchClass(el, className, add) {
         if (add) {
@@ -8170,7 +8191,7 @@ SelectCitationsComponent.prototype.count = function() {
             if (!updatedField) {
                 return;
             }
-            showLoader();
+            yield startAction("Zotero (" + translate("Updating citations") + ")");
             var cursorPos = yield CursorService.getCursorPosition();
             var updateFn = citationService.updateItem.bind(citationService, updatedField);
             var styleManager = settings.getStyleManager();
@@ -8185,7 +8206,7 @@ SelectCitationsComponent.prototype.count = function() {
                 }
                 showError(message);
             }).finally(function() {
-                hideLoader();
+                endAction("Zotero (" + translate("Updating citations") + ")");
                 CursorService.setCursorPosition(cursorPos);
             });
         }));

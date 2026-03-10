@@ -15409,7 +15409,9 @@
             Asc.scope.bibStyle = bibObject[0];
             return htmlBibliography;
         } catch (e) {
-            if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) ; else {
+            if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) {
+                _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Warning!", "Style does not describe the bibliography");
+            } else {
                 console.error(e);
                 throw "Failed to apply this style.";
             }
@@ -15632,31 +15634,20 @@
                     var isCalc = false;
                     var isClose = false;
                     Asc.plugin.callCommand(function() {
-                        var _doc$GetCurrentParagr, _doc$GetCurrentRun;
                         var doc = Api.GetDocument();
+                        var pos = 0;
                         if (!doc) {
-                            return 0;
+                            return pos;
                         }
-                        var canSelectWord = doc.SelectCurrentWord();
-                        var selectedRange = doc.GetRangeBySelect();
-                        if (!selectedRange) {
-                            return 0;
+                        var currentRun = doc.GetCurrentRun();
+                        if (!currentRun) {
+                            return pos;
                         }
-                        var endPos = selectedRange.GetEndPos();
-                        if (canSelectWord) {
-                            doc.RemoveSelection();
-                            return endPos;
+                        var range = currentRun.GetRange(0, 0);
+                        if (range) {
+                            return range.GetEndPos();
                         }
-                        var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
-                        var runText = doc === null || doc === void 0 || (_doc$GetCurrentRun = doc.GetCurrentRun()) === null || _doc$GetCurrentRun === void 0 ? void 0 : _doc$GetCurrentRun.GetText();
-                        if (runText && currentParagraphText.indexOf(runText) !== -1) {
-                            return endPos + currentParagraphText.indexOf(runText);
-                        }
-                        var sentenceText = doc === null || doc === void 0 ? void 0 : doc.GetCurrentSentence();
-                        if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
-                            return endPos + currentParagraphText.indexOf(sentenceText);
-                        }
-                        return endPos;
+                        return pos;
                     }, isClose, isCalc, resolve);
                 });
             }
@@ -17303,11 +17294,14 @@
                             return _context.a(2);
 
                           case 3:
-                            showLoader();
                             _context.n = 4;
-                            return CursorService.getCursorPosition();
+                            return startAction("Zotero (" + translate("Updating citations") + ")");
 
                           case 4:
+                            _context.n = 5;
+                            return CursorService.getCursorPosition();
+
+                          case 5:
                             cursorPos = _context.v;
                             updateFn = citationService.updateCslItems.bind(citationService, false);
                             styleManager = settings.getStyleManager();
@@ -17322,11 +17316,11 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                hideLoader();
+                                endAction("Zotero (" + translate("Updating citations") + ")");
                                 CursorService.setCursorPosition(cursorPos);
                             });
 
-                          case 5:
+                          case 6:
                             return _context.a(2);
                         }
                     }, _callee);
@@ -17335,151 +17329,227 @@
                     return _ref.apply(this, arguments);
                 };
             }());
-            insertBibBtn.subscribe(function(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                showLoader();
-                citationService.insertBibliography().catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to insert bibliography");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    hideLoader();
-                });
-            });
-            insertLinkBtn.subscribe(function(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                showLoader();
-                var items = selectCitation.getSelectedItems();
-                var cursorPos;
-                CursorService.getCursorPosition().then(function(pos) {
-                    cursorPos = pos;
-                    return citationService.insertSelectedCitations(items);
-                }).then(function(keys) {
-                    selectCitation.removeItems(keys);
-                    return citationService.updateCslItems();
-                }).catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    hideLoader();
-                    CursorService.setCursorPosition(cursorPos);
-                });
-            });
+            insertBibBtn.subscribe(function() {
+                var _ref2 = _asyncToGenerator(_regenerator().m(function _callee2(event) {
+                    return _regenerator().w(function(_context2) {
+                        while (1) switch (_context2.n) {
+                          case 0:
+                            if (!(event.type !== "button:click")) {
+                                _context2.n = 1;
+                                break;
+                            }
+                            return _context2.a(2);
+
+                          case 1:
+                            if (settings.getLastUsedStyleId()) {
+                                _context2.n = 2;
+                                break;
+                            }
+                            showError(translate("Style is not selected"));
+                            return _context2.a(2);
+
+                          case 2:
+                            if (settings.getLocale()) {
+                                _context2.n = 3;
+                                break;
+                            }
+                            showError(translate("Language is not selected"));
+                            return _context2.a(2);
+
+                          case 3:
+                            _context2.n = 4;
+                            return startAction("Zotero (" + translate("Inserting bibliography") + ")");
+
+                          case 4:
+                            citationService.insertBibliography().catch(function(error) {
+                                console.error(error);
+                                var message = translate("Failed to insert bibliography");
+                                if (typeof error === "string") {
+                                    message += ". " + translate(error);
+                                }
+                                showError(message);
+                            }).finally(function() {
+                                endAction("Zotero (" + translate("Inserting bibliography") + ")");
+                            });
+
+                          case 5:
+                            return _context2.a(2);
+                        }
+                    }, _callee2);
+                }));
+                return function(_x2) {
+                    return _ref2.apply(this, arguments);
+                };
+            }());
+            insertLinkBtn.subscribe(function() {
+                var _ref3 = _asyncToGenerator(_regenerator().m(function _callee3(event) {
+                    var items, cursorPos;
+                    return _regenerator().w(function(_context3) {
+                        while (1) switch (_context3.n) {
+                          case 0:
+                            if (!(event.type !== "button:click")) {
+                                _context3.n = 1;
+                                break;
+                            }
+                            return _context3.a(2);
+
+                          case 1:
+                            if (settings.getLastUsedStyleId()) {
+                                _context3.n = 2;
+                                break;
+                            }
+                            showError(translate("Style is not selected"));
+                            return _context3.a(2);
+
+                          case 2:
+                            if (settings.getLocale()) {
+                                _context3.n = 3;
+                                break;
+                            }
+                            showError(translate("Language is not selected"));
+                            return _context3.a(2);
+
+                          case 3:
+                            _context3.n = 4;
+                            return startAction("Zotero (" + translate("Inserting citation") + ")");
+
+                          case 4:
+                            items = selectCitation.getSelectedItems();
+                            CursorService.getCursorPosition().then(function(pos) {
+                                cursorPos = pos;
+                                return citationService.insertSelectedCitations(items);
+                            }).then(function(keys) {
+                                selectCitation.removeItems(keys);
+                                return citationService.updateCslItems();
+                            }).catch(function(error) {
+                                console.error(error);
+                                var message = translate("Failed to insert citation");
+                                if (typeof error === "string") {
+                                    message += ". " + translate(error);
+                                }
+                                showError(message);
+                            }).finally(function() {
+                                endAction("Zotero (" + translate("Inserting citation") + ")");
+                                CursorService.setCursorPosition(cursorPos);
+                            });
+
+                          case 5:
+                            return _context3.a(2);
+                        }
+                    }, _callee3);
+                }));
+                return function(_x3) {
+                    return _ref3.apply(this, arguments);
+                };
+            }());
             openSettingsBtn.subscribe(function(event) {
                 if (event.type !== "button:click") {
                     return;
                 }
                 settings.show();
             });
-            saveAsTextBtn.subscribe(function(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                showLoader();
-                citationService.saveAsText().then(function() {
-                    hideLoader();
-                });
-            });
-            settings.onChangeState(function() {
-                var _ref2 = _asyncToGenerator(_regenerator().m(function _callee2(newState, oldState) {
-                    var cursorPos;
-                    return _regenerator().w(function(_context2) {
-                        while (1) switch (_context2.n) {
+            saveAsTextBtn.subscribe(function() {
+                var _ref4 = _asyncToGenerator(_regenerator().m(function _callee4(event) {
+                    return _regenerator().w(function(_context4) {
+                        while (1) switch (_context4.n) {
                           case 0:
-                            _context2.n = 1;
+                            if (!(event.type !== "button:click")) {
+                                _context4.n = 1;
+                                break;
+                            }
+                            return _context4.a(2);
+
+                          case 1:
+                            _context4.n = 2;
+                            return startAction("Zotero (" + translate("Saving as text") + ")");
+
+                          case 2:
+                            citationService.saveAsText().then(function() {
+                                endAction("Zotero (" + translate("Saving as text") + ")");
+                            });
+
+                          case 3:
+                            return _context4.a(2);
+                        }
+                    }, _callee4);
+                }));
+                return function(_x4) {
+                    return _ref4.apply(this, arguments);
+                };
+            }());
+            settings.onChangeState(function() {
+                var _ref5 = _asyncToGenerator(_regenerator().m(function _callee5(newState, oldState) {
+                    var cursorPos;
+                    return _regenerator().w(function(_context5) {
+                        while (1) switch (_context5.n) {
+                          case 0:
+                            _context5.n = 1;
                             return CursorService.getCursorPosition();
 
                           case 1:
-                            cursorPos = _context2.v;
+                            cursorPos = _context5.v;
                             if (![ newState.styleFormat, oldState.styleFormat ].includes("note")) {
-                                _context2.n = 9;
+                                _context5.n = 9;
                                 break;
                             }
                             if (!(newState.styleFormat !== oldState.styleFormat)) {
-                                _context2.n = 5;
+                                _context5.n = 5;
                                 break;
                             }
                             if (!(newState.styleFormat === "note")) {
-                                _context2.n = 3;
+                                _context5.n = 3;
                                 break;
                             }
-                            _context2.n = 2;
+                            _context5.n = 2;
                             return citationService.switchingBetweenNotesAndText(newState.notesStyle);
 
                           case 2:
-                            _context2.n = 4;
+                            _context5.n = 4;
                             break;
 
                           case 3:
-                            _context2.n = 4;
+                            _context5.n = 4;
                             return citationService.switchingBetweenNotesAndText();
 
                           case 4:
-                            _context2.n = 8;
+                            _context5.n = 8;
                             break;
 
                           case 5:
                             if (!(newState.notesStyle !== oldState.notesStyle)) {
-                                _context2.n = 7;
+                                _context5.n = 7;
                                 break;
                             }
-                            _context2.n = 6;
+                            _context5.n = 6;
                             return citationService.convertNotesStyle(newState.notesStyle);
 
                           case 6:
-                            _context2.n = 8;
+                            _context5.n = 8;
                             break;
 
                           case 7:
-                            _context2.n = 8;
+                            _context5.n = 8;
                             return citationService.updateCslItems(true);
 
                           case 8:
-                            _context2.n = 10;
+                            _context5.n = 10;
                             break;
 
                           case 9:
-                            _context2.n = 10;
+                            _context5.n = 10;
                             return citationService.updateCslItems(true);
 
                           case 10:
-                            _context2.n = 11;
+                            _context5.n = 11;
                             return CursorService.setCursorPosition(cursorPos);
 
                           case 11:
-                            return _context2.a(2);
+                            return _context5.a(2);
                         }
-                    }, _callee2);
+                    }, _callee5);
                 }));
-                return function(_x2, _x3) {
-                    return _ref2.apply(this, arguments);
+                return function(_x5, _x6) {
+                    return _ref5.apply(this, arguments);
                 };
             }());
         }
@@ -17544,15 +17614,73 @@
                 window.onclick = null;
             }
         }
-        function showLoader() {
-            insertBibBtn.disable();
-            refreshBtn.disable();
-            insertLinkBtn.disable();
+        function startAction(_x7) {
+            return _startAction.apply(this, arguments);
         }
-        function hideLoader() {
-            insertBibBtn.enable();
-            refreshBtn.enable();
-            checkSelected();
+        function _startAction() {
+            _startAction = _asyncToGenerator(_regenerator().m(function _callee7(preloaderMessage) {
+                return _regenerator().w(function(_context7) {
+                    while (1) switch (_context7.n) {
+                      case 0:
+                        insertBibBtn.disable();
+                        refreshBtn.disable();
+                        insertLinkBtn.disable();
+                        Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                            lockScroll: true
+                        } ]);
+                        if (!preloaderMessage) {
+                            _context7.n = 1;
+                            break;
+                        }
+                        _context7.n = 1;
+                        return new Promise(function(resolve) {
+                            return function() {
+                                Asc.plugin.executeMethod("StartAction", [ "Info", preloaderMessage ], function(returnValue) {
+                                    resolve(returnValue);
+                                });
+                            }();
+                        });
+
+                      case 1:
+                        return _context7.a(2);
+                    }
+                }, _callee7);
+            }));
+            return _startAction.apply(this, arguments);
+        }
+        function endAction(_x8) {
+            return _endAction.apply(this, arguments);
+        }
+        function _endAction() {
+            _endAction = _asyncToGenerator(_regenerator().m(function _callee8(preloaderMessage) {
+                return _regenerator().w(function(_context8) {
+                    while (1) switch (_context8.n) {
+                      case 0:
+                        insertBibBtn.enable();
+                        refreshBtn.enable();
+                        checkSelected();
+                        Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                            scrollToTarget: true
+                        } ]);
+                        if (!preloaderMessage) {
+                            _context8.n = 1;
+                            break;
+                        }
+                        _context8.n = 1;
+                        return new Promise(function(resolve) {
+                            return function() {
+                                Asc.plugin.executeMethod("EndAction", [ "Info", preloaderMessage ], function(returnValue) {
+                                    resolve(returnValue);
+                                });
+                            }();
+                        });
+
+                      case 1:
+                        return _context8.a(2);
+                    }
+                }, _callee8);
+            }));
+            return _endAction.apply(this, arguments);
         }
         function switchClass(el, className, add) {
             if (add) {
@@ -17724,31 +17852,31 @@
             return _getEditorVersion.apply(this, arguments);
         }
         function _getEditorVersion() {
-            _getEditorVersion = _asyncToGenerator(_regenerator().m(function _callee4() {
+            _getEditorVersion = _asyncToGenerator(_regenerator().m(function _callee9() {
                 var version, arrVer, _t;
-                return _regenerator().w(function(_context4) {
-                    while (1) switch (_context4.p = _context4.n) {
+                return _regenerator().w(function(_context9) {
+                    while (1) switch (_context9.p = _context9.n) {
                       case 0:
-                        _context4.p = 0;
-                        _context4.n = 1;
+                        _context9.p = 0;
+                        _context9.n = 1;
                         return new Promise(function(resolve) {
                             Asc.plugin.executeMethod("GetVersion", [], resolve);
                         });
 
                       case 1:
-                        version = _context4.v;
+                        version = _context9.v;
                         if ("develop" == version) version = "99.99.99";
                         arrVer = version.split(".");
                         while (3 > arrVer.length) arrVer.push("0");
-                        return _context4.a(2, 1e6 * parseInt(arrVer[0]) + 1e3 * parseInt(arrVer[1]) + parseInt(arrVer[2]));
+                        return _context9.a(2, 1e6 * parseInt(arrVer[0]) + 1e3 * parseInt(arrVer[1]) + parseInt(arrVer[2]));
 
                       case 2:
-                        _context4.p = 2;
-                        _t = _context4.v;
+                        _context9.p = 2;
+                        _t = _context9.v;
                         console.error(_t);
-                        return _context4.a(2, 99999999);
+                        return _context9.a(2, 99999999);
                     }
-                }, _callee4, null, [ [ 0, 2 ] ]);
+                }, _callee9, null, [ [ 0, 2 ] ]);
             }));
             return _getEditorVersion.apply(this, arguments);
         }
@@ -17756,43 +17884,46 @@
             var buttonMain = new Asc.ButtonContextMenu;
             buttonMain.text = "Edit citation";
             buttonMain.addCheckers("Target", "Selection");
-            buttonMain.attachOnClick(_asyncToGenerator(_regenerator().m(function _callee3() {
+            buttonMain.attachOnClick(_asyncToGenerator(_regenerator().m(function _callee6() {
                 var field, updatedField, cursorPos, updateFn, styleManager;
-                return _regenerator().w(function(_context3) {
-                    while (1) switch (_context3.n) {
+                return _regenerator().w(function(_context6) {
+                    while (1) switch (_context6.n) {
                       case 0:
-                        _context3.n = 1;
+                        _context6.n = 1;
                         return new Promise(function(resolve) {
                             window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
                         });
 
                       case 1:
-                        field = _context3.v;
+                        field = _context6.v;
                         if (!(!field || !field.Value || field.Value.toLowerCase().indexOf("zotero_item") === -1)) {
-                            _context3.n = 2;
+                            _context6.n = 2;
                             break;
                         }
-                        return _context3.a(2);
+                        return _context6.a(2);
 
                       case 2:
-                        _context3.n = 3;
+                        _context6.n = 3;
                         return citationService.showEditCitationWindow(field);
 
                       case 3:
-                        updatedField = _context3.v;
+                        updatedField = _context6.v;
                         if (updatedField) {
-                            _context3.n = 4;
+                            _context6.n = 4;
                             break;
                         }
-                        return _context3.a(2);
+                        return _context6.a(2);
 
                       case 4:
-                        showLoader();
-                        _context3.n = 5;
-                        return CursorService.getCursorPosition();
+                        _context6.n = 5;
+                        return startAction("Zotero (" + translate("Updating citations") + ")");
 
                       case 5:
-                        cursorPos = _context3.v;
+                        _context6.n = 6;
+                        return CursorService.getCursorPosition();
+
+                      case 6:
+                        cursorPos = _context6.v;
                         updateFn = citationService.updateItem.bind(citationService, updatedField);
                         styleManager = settings.getStyleManager();
                         if (styleManager.getLastUsedFormat() === "note") {
@@ -17806,14 +17937,14 @@
                             }
                             showError(message);
                         }).finally(function() {
-                            hideLoader();
+                            endAction("Zotero (" + translate("Updating citations") + ")");
                             CursorService.setCursorPosition(cursorPos);
                         });
 
-                      case 6:
-                        return _context3.a(2);
+                      case 7:
+                        return _context6.a(2);
                     }
-                }, _callee3);
+                }, _callee6);
             })));
             Asc.Buttons.registerContextMenu();
         }
