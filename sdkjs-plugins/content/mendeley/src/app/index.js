@@ -489,17 +489,21 @@ import "../styles.css";
                     if (newState.styleFormat === "note") {
                         await citationService.switchingBetweenNotesAndText(
                             newState.notesStyle,
+                            null
                         );
                     } else {
-                        await citationService.switchingBetweenNotesAndText();
+                        await citationService.switchingBetweenNotesAndText(
+                            null,
+                            oldState.notesStyle
+                        );
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
                     await citationService.convertNotesStyle(
                         newState.notesStyle,
+                        oldState.notesStyle,
                     );
                 } else {
-                    // TODO: check it
-                    await citationService.updateCslItems(true);
+                    await citationService.updateCslItemsInNotes(newState.notesStyle);
                 }
             } else {
                 await citationService.updateCslItems(true);

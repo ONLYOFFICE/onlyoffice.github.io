@@ -362,14 +362,31 @@ class CitationDocService {
             const selectControlResult = await this.#selectControl(
                 control.InternalId,
             );
-            if (!selectControlResult) continue;
-            const isReferenceSelected = await this.#selectControlReference();
-            if (!isReferenceSelected) continue;
+            if (!selectControlResult) {
+                console.error("Can not select content control with id: " + control.InternalId);
+                continue;
+            }
             await this.#removeSuperscript();
+            await new Promise((resolve) => {
+                Asc.scope.tag = control.Tag;
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const control = doc.GetCurrentContentControl();
+                        if (control) {
+                            control.SetTag(Asc.scope.tag);
+                        } else {
+                            console.error("Can not find content control");
+                        }
+                    },
+                    false,
+                    false,
+                    resolve,
+                );
+            });
+
             await this.#removeSelectedContent();
             const text = control.PlaceHolderText;
-            control.PlaceHolderText = "";
-            await this.#addContentControl(control);
 
             await this.#pasteHtml(text);
         }
@@ -389,11 +406,26 @@ class CitationDocService {
                 control.InternalId,
             );
             if (!selectControlResult) continue;
-            await this.#deleteControl(control.InternalId);
+            await new Promise((resolve) => {
+                Asc.scope.tag = control.Tag;
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const control = doc.GetCurrentContentControl();
+                        if (control) {
+                            control.SetTag(Asc.scope.tag);
+                        } else {
+                            console.error("Can not find content control");
+                        }
+                    },
+                    false,
+                    false,
+                    resolve,
+                );
+            });
+            await this.#removeSelectedContent();
             await this.#addNote(notesStyle);
             const text = control.PlaceHolderText;
-            control.PlaceHolderText = "";
-            await this.#addContentControl(control);
 
             await this.#pasteHtml(text);
         }
@@ -407,7 +439,10 @@ class CitationDocService {
     async convertNotesStyle(controls, notesStyle) {
         for (let i = 0; i < controls.length; i++) {
             const control = controls[i];
-            if (!control.InternalId) continue;
+            if (!control.InternalId) {
+                console.error("Control id is not defined");
+                continue;
+            }
 
             const selectControlResult = await this.#selectControl(
                 control.InternalId,
@@ -628,34 +663,6 @@ class CitationDocService {
                 false,
                 false,
                 resolve,
-            );
-        });
-    }
-
-    /**
-     * @returns {Promise<boolean>}
-     */
-    #selectControlReference() {
-        return new Promise((resolve) => {
-            const isCalc = true;
-            const isClose = false;
-            const editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9003000) {
-                console.error("Cannot select addin control reference.");
-                console.error("Editor version is less than 9.3.0");
-                resolve(false);
-            }
-            Asc.plugin.callCommand(
-                () => {
-                    const doc = Api.GetDocument();
-                    const note = doc.GetCurrentFootEndnote();
-                    if (!note) return;
-                    const reference = note.SelectNoteReference();
-                    if (!reference) return;
-                },
-                isClose,
-                isCalc,
-                () => resolve(true),
             );
         });
     }

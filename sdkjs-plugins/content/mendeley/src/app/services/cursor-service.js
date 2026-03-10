@@ -1,5 +1,6 @@
 // @ts-check
 
+/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" />
 /// <reference path="../types-global.js" />
 
 class CursorService {

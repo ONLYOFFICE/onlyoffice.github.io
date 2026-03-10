@@ -701,18 +701,11 @@ class CitationService {
     }
 
     /**
-     * @param {"footnotes" | "endnotes"} [notesStyle]
+     * @param {"footnotes" | "endnotes" | null} [newNotesStyle]
+     * @param {"footnotes" | "endnotes" | null} [oldNotesStyle]
      * @returns {Promise<void>}
      */
-    async switchingBetweenNotesAndText(notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-            );
-            return;
-        }
+    async switchingBetweenNotesAndText(newNotesStyle, oldNotesStyle) {
 
         try {
             const { controlsWithCitations, bibControl } =
@@ -720,6 +713,10 @@ class CitationService {
             const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
+            
+            if (oldNotesStyle) {
+                await this.#addFootnotesTextToControls(controlsWithCitations, oldNotesStyle);
+            }
 
             /** @type {ContentControlProperties[]} */
             let updatedControls = await this.#getUpdatedControls(
@@ -728,12 +725,12 @@ class CitationService {
             );
 
             if (updatedControls && updatedControls.length) {
-                if (notesStyle) {
+                if (newNotesStyle) {
                     await this.citationDocService.convertTextToNotes(
                         updatedControls,
-                        notesStyle,
+                        newNotesStyle,
                     );
-                } else {
+                } else if (oldNotesStyle) {
                     await this.citationDocService.convertNotesToText(
                         updatedControls,
                     );
@@ -752,24 +749,18 @@ class CitationService {
     }
 
     /**
-     * @param {"footnotes" | "endnotes"} notesStyle
+     * @param {"footnotes" | "endnotes"} newNotesStyle
+     * @param {"footnotes" | "endnotes"} oldNotesStyle
      * @returns {Promise<void>}
      */
-    async convertNotesStyle(notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            await this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-            );
-            return;
-        }
-
+    async convertNotesStyle(newNotesStyle, oldNotesStyle) {
         try {
             const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(undefined, notesStyle);
+                await this.#synchronizeStorageWithDocItems(undefined, newNotesStyle);
 
             this.#updateFormatter();
+
+            await this.#addFootnotesTextToControls(controlsWithCitations, oldNotesStyle);
 
             /** @type {ContentControlProperties[]} */
             let updatedControls = await this.#getUpdatedControls(
@@ -781,7 +772,7 @@ class CitationService {
 
             await this.citationDocService.convertNotesStyle(
                 updatedControls,
-                notesStyle,
+                newNotesStyle,
             );
         } catch (e) {
             throw e;
