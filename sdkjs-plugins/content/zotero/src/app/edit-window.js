@@ -107,11 +107,13 @@ import "../edit-window.css";
                 type: "text",
                 placeholder: "Prefix",
                 value: citationItem.prefix,
+                showClear: false,
             });
             const suffixInput = new InputField(suffix, {
                 type: "text",
                 placeholder: "Suffix",
                 value: citationItem.suffix,
+                showClear: false,
             });
             const locatorSelectbox = new SelectBox(locatorSelect, {
                 placeholder: "Locator",
@@ -128,6 +130,7 @@ import "../edit-window.css";
                 type: "text",
                 placeholder: locatorPlaceholder,
                 value: citationItem.locator,
+                showClear: false,
             });
             const omitAuthorInput = new Checkbox(omitAuthor, {
                 label: "Omit author",
