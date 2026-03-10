@@ -69,5 +69,8 @@
     "All active Zotero citations and Bibliography have been replaced.": "すべてのアクティブなZotero引用と参考文献が置き換えられました。",
     "An error occurred while loading settings. Try restarting the plugin.": "設定の読み込み中にエラーが発生しました。プラグインを再起動してください。",
     "An error occurred while loading library groups. Try restarting the plugin.": "ライブラリグループの読み込み中にエラーが発生しました。プラグインを再起動してください。",
-    "The style is not available in the local version of the plugin.": "このスタイルはローカルバージョンのプラグインでは利用できません。"
+    "The style is not available in the local version of the plugin.": "このスタイルはローカルバージョンのプラグインでは利用できません。",
+    "Updating citations": "引用を更新中",
+    "Inserting bibliography": "参考文献を挿入中",
+    "Inserting citation": "引用を挿入中"
 }
