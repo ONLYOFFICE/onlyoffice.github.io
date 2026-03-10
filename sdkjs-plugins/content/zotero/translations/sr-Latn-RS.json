@@ -69,5 +69,8 @@
     "All active Zotero citations and Bibliography have been replaced.": "Uspešno su zamenjeni aktivni citati i bibliografija Zotero.",
     "An error occurred while loading settings. Try restarting the plugin.": "Došlo je do greške prilikom učitavanja podešavanja. Ponovo pokrenite plugin.",
     "An error occurred while loading library groups. Try restarting the plugin.": "Došlo je do greške prilikom učitavanja grupa biblioteka. Ponovo pokrenite plugin.",
-    "The style is not available in the local version of the plugin.": "Stil nije dostupan u lokalnoj verziji plugina."
+    "The style is not available in the local version of the plugin.": "Stil nije dostupan u lokalnoj verziji plugina.",
+    "Updating citations": "Ažuriranje citata",
+    "Inserting bibliography": "Ubacivanje bibliografije",
+    "Inserting citation": "Ubacivanje citata"
 }
