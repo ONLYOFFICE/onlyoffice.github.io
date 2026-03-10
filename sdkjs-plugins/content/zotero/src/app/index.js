@@ -427,7 +427,7 @@ import "../styles.css";
                 .finally(function () {
                     endAction("Zotero (" + translate("Inserting citation") + ")");
                     if (addedField) {
-                        citationService.moveCursorToField(addedField.FieldId);
+                        citationService.moveCursorOutsideField(addedField.FieldId);
                     } else {
                         CursorService.setCursorPosition(cursorPos);
                     }
