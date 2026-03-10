@@ -6042,31 +6042,20 @@ class CursorService {
             var isCalc = false;
             var isClose = false;
             Asc.plugin.callCommand(() => {
-                var _doc$GetCurrentParagr, _doc$GetCurrentRun;
                 var doc = Api.GetDocument();
+                var pos = 0;
                 if (!doc) {
-                    return 0;
+                    return pos;
                 }
-                var canSelectWord = doc.SelectCurrentWord();
-                var selectedRange = doc.GetRangeBySelect();
-                if (!selectedRange) {
-                    return 0;
+                var currentRun = doc.GetCurrentRun();
+                if (!currentRun) {
+                    return pos;
                 }
-                var endPos = selectedRange.GetEndPos();
-                if (canSelectWord) {
-                    doc.RemoveSelection();
-                    return endPos;
+                var range = currentRun.GetRange(0, 0);
+                if (range) {
+                    return range.GetEndPos();
                 }
-                var currentParagraphText = doc === null || doc === void 0 || (_doc$GetCurrentParagr = doc.GetCurrentParagraph()) === null || _doc$GetCurrentParagr === void 0 ? void 0 : _doc$GetCurrentParagr.GetText();
-                var runText = doc === null || doc === void 0 || (_doc$GetCurrentRun = doc.GetCurrentRun()) === null || _doc$GetCurrentRun === void 0 ? void 0 : _doc$GetCurrentRun.GetText();
-                if (runText && currentParagraphText.indexOf(runText) !== -1) {
-                    return endPos + currentParagraphText.indexOf(runText);
-                }
-                var sentenceText = doc === null || doc === void 0 ? void 0 : doc.GetCurrentSentence();
-                if (sentenceText && currentParagraphText.indexOf(sentenceText) !== -1) {
-                    return endPos + currentParagraphText.indexOf(sentenceText);
-                }
-                return endPos;
+                return pos;
             }, isClose, isCalc, resolve);
         });
     }
