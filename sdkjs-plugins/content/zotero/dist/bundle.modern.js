@@ -5847,7 +5847,9 @@ function _makeBibliography() {
         Asc.scope.bibStyle = bibObject[0];
         return htmlBibliography;
     } catch (e) {
-        if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) ; else {
+        if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) {
+            _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Warning!", "Style does not describe the bibliography");
+        } else {
             console.error(e);
             throw "Failed to apply this style.";
         }
