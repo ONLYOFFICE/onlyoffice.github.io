@@ -7802,6 +7802,9 @@ SelectCitationsComponent.prototype.count = function() {
                 return;
             }
             showLoader();
+            Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                lockScroll: true
+            } ]);
             citationService.insertBibliography().catch(function(error) {
                 console.error(error);
                 var message = translate("Failed to insert bibliography");
@@ -7811,6 +7814,9 @@ SelectCitationsComponent.prototype.count = function() {
                 showError(message);
             }).finally(function() {
                 hideLoader();
+                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                    scrollToTarget: true
+                } ]);
             });
         });
         insertLinkBtn.subscribe(function(event) {
@@ -7829,6 +7835,9 @@ SelectCitationsComponent.prototype.count = function() {
             var items = selectCitation.getSelectedItems();
             var cursorPos;
             CursorService.getCursorPosition().then(function(pos) {
+                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                    lockScroll: true
+                } ]);
                 cursorPos = pos;
                 return citationService.insertSelectedCitations(items);
             }).then(function(keys) {
@@ -7844,6 +7853,9 @@ SelectCitationsComponent.prototype.count = function() {
             }).finally(function() {
                 hideLoader();
                 CursorService.setCursorPosition(cursorPos);
+                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                    scrollToTarget: true
+                } ]);
             });
         });
         openSettingsBtn.subscribe(function(event) {
