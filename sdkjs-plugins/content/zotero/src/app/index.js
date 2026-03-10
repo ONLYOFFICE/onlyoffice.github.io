@@ -370,6 +370,7 @@ import "../styles.css";
                 return;
             }
             showLoader();
+            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
             citationService
                 .insertBibliography()
                 .catch(function (error) {
@@ -382,6 +383,7 @@ import "../styles.css";
                 })
                 .finally(function () {
                     hideLoader();
+                    Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
                 });
         });
 
@@ -403,6 +405,7 @@ import "../styles.css";
             let cursorPos;
             CursorService.getCursorPosition()
                 .then(function (pos) {
+                    Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
                     cursorPos = pos;
                     return citationService.insertSelectedCitations(items);
                 })
@@ -421,6 +424,7 @@ import "../styles.css";
                 .finally(function () {
                     hideLoader();
                     CursorService.setCursorPosition(cursorPos);
+                    Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
                 });
         });
 
