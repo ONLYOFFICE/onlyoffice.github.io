@@ -147,14 +147,26 @@ class CitationService {
             for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                bibText = bibText.trim();
-                if (bibText.slice(0, 4) === "<div" || bibText.slice(-5) === "</div>") {
-                    bibText = "<p" + bibText.slice(4, -5) + "</p>";
+                bibText = bibText
+                    .replaceAll('\n', '')
+                    .replaceAll('\r', '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                const paragraphStart = '<div class="csl-entry">';
+                const paragraphEnd = '</div>';
+                if (!bibObject[0]['second-field-align']) {
+                    bibText = bibText.replace(/<\/?div[^>]*>/g, '');
+                    bibText = "<p>" + bibText + "</p>";
+                } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
+                    bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
                 }
 
                 bibItems.push(bibText);
             }
-            const htmlBibliography = bibItems.join("");
+            const htmlBibliography = bibItems.join("").trim();
+
+            Asc.scope.bibStyle = bibObject[0];
             return htmlBibliography;
         } catch (e) {
             if (
