@@ -399,6 +399,8 @@ import "../styles.css";
             }
             await startAction("Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
+            /** @type {AddinFieldData | null} */
+            let addedField = null;
             /** @type {number} */
             let cursorPos;
             CursorService.getCursorPosition()
@@ -408,6 +410,10 @@ import "../styles.css";
                 })
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
+                    return citationService.getCurrentField();
+                })
+                .then(function (field) {
+                    addedField = field;
                     return citationService.updateCslItems();
                 })
                 .catch(function (error) {
@@ -420,7 +426,11 @@ import "../styles.css";
                 })
                 .finally(function () {
                     endAction("Zotero (" + translate("Inserting citation") + ")");
-                    CursorService.setCursorPosition(cursorPos);
+                    if (addedField) {
+                        citationService.moveCursorToField(addedField.FieldId);
+                    } else {
+                        CursorService.setCursorPosition(cursorPos);
+                    }
                 });
         });
 
@@ -572,7 +582,7 @@ import "../styles.css";
         refreshBtn.disable();
         insertLinkBtn.disable();
 
-        Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+        //Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
         /*if (preloaderMessage) {
             await new Promise(resolve => (function(){
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
@@ -588,7 +598,7 @@ import "../styles.css";
         refreshBtn.enable();
         checkSelected();
 
-        Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+        // Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
         /*if (preloaderMessage) {
             await new Promise(resolve => (function(){
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
