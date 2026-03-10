@@ -104,7 +104,7 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
      * @param {string} text
      * @param {string} value
      * @param {NoteStyle | null} notesStyle
-     * @returns
+     * @returns {Promise<boolean>}
      */
     async addCitation(text, value, notesStyle) {
         const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
@@ -114,18 +114,27 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             Value: this.#citPrefix + " " + this.#citSuffix + value,
             Content: formattingPositions.text,
         };
-        if (
-            notesStyle &&
-            ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
-        ) {
+        const bHasNotes = notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
+        if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
 
-        return this.#addAddinField(field).then(function () {
-            if (!formattingPositions.formatting.length) return;
-            return CslDocFormatter.formatAfterInsert(
-                formattingPositions.formatting
-            );
+        await this.#addAddinField(field);
+
+        if (!formattingPositions.formatting.length) return false;
+        await CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+        
+        if (bHasNotes) {
+            return this.#selectFieldReference();
+        }
+        return false;
+        
+    }
+
+    /** @returns {Promise<AddinFieldData | null>} */
+    getCurrentField() {
+        return new Promise(function (resolve, reject) {
+            window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
         });
     }
 
@@ -319,6 +328,14 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
         }
     }
 
+    /** @param {string} fieldId */
+    async moveCursorToField(fieldId) {
+        return new Promise((resolve) => {
+            const isBeforeField = false;
+            window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], resolve);
+        });
+    }
+
     /**
      * @param {CustomField} field
      * @returns {Promise<void>}
@@ -358,13 +375,6 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
     #getAllAddinFields() {
         return new Promise(function (resolve, reject) {
             window.Asc.plugin.executeMethod("GetAllAddinFields", undefined, resolve);
-        });
-    }
-
-    /** @returns {Promise<AddinFieldData | null>} */
-    #getCurrentField() {
-        return new Promise(function (resolve, reject) {
-            window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
         });
     }
 
@@ -491,7 +501,7 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             html = doc.body.innerHTML;
             await this.#pasteHtml(html);
 
-            const field = await this.#getCurrentField();
+            const field = await this.getCurrentField();
             if (!field) return;
             await this.#selectField(field.FieldId);
             await new Promise((resolve) => {

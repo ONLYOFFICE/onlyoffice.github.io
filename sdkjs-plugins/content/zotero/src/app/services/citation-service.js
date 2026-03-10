@@ -557,6 +557,11 @@ class CitationService {
             .replace(/&#38;/g, "&");
     }
 
+    /** @returns {Promise<AddinFieldData | null>} */
+    async getCurrentField() {
+        return this.citationDocService.getCurrentField();
+    }
+
     /**
      * @returns {Promise<boolean>}
      */
@@ -615,6 +620,14 @@ class CitationService {
         } catch (e) {
             throw e;
         }
+    }
+
+    /**
+     * @param {string} fieldId
+     * @returns {Promise<void>}
+     */
+    async moveCursorToField(fieldId) {
+        return this.citationDocService.moveCursorToField(fieldId);
     }
 
     /**
