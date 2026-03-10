@@ -105,44 +105,26 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async addCitation(text, value, notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-            /** @type {AddinFieldData} */
-            const field = {
-                FieldId: "",
-                Value: this.#citPrefix + " " + this.#citSuffix + value,
-                Content: formattingPositions.text,
-            };
-            if (
-                notesStyle &&
-                ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
-            ) {
-                await this.#addNote(notesStyle);
-            }
-
-            return this.#addAddinField(field).then(function () {
-                if (!formattingPositions.formatting.length) return;
-                return CslDocFormatter.formatAfterInsert(
-                    formattingPositions.formatting
-                );
-            });
-        } else {
-            /** @type {AddinFieldData} */
-            const field = {
-                FieldId: "",
-                Value: this.#citPrefix + " " + this.#citSuffix + value,
-                Content: " ",
-            };
-            if (
-                notesStyle &&
-                ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
-            ) {
-                await this.#addNote(notesStyle);
-            }
-
-            await this.#pasteAddinFieldWithHtml(field, text);
+        const formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+        /** @type {AddinFieldData} */
+        const field = {
+            FieldId: "",
+            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Content: formattingPositions.text,
+        };
+        if (
+            notesStyle &&
+            ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
+        ) {
+            await this.#addNote(notesStyle);
         }
+
+        return this.#addAddinField(field).then(function () {
+            if (!formattingPositions.formatting.length) return;
+            return CslDocFormatter.formatAfterInsert(
+                formattingPositions.formatting
+            );
+        });
     }
 
     /** @returns {Promise<Array<AddinFieldData>>} */
@@ -203,40 +185,35 @@ class CitationDocService {
      */
     async updateAddinFields(fields) {
         const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            const formats = this.#makeFormattingPositions(fields);
-            await new Promise((resolve) => {
-                window.Asc.plugin.executeMethod(
-                    "UpdateAddinFields",
-                    [fields],
-                    resolve,
-                );
-            });
+        const bibFields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) === 0);
 
-            if (!formats.size) return;
-            for (const [fieldId, formattingPositions] of formats) {
-                const selectFieldResult = await this.#selectField(fieldId);
-                if (!selectFieldResult) continue;
-                await CslDocFormatter.formatAfterUpdate(
-                    fieldId,
-                    formattingPositions,
-                );
-            }
-        } else {
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) {
-                    console.error("Field id is not defined");
-                    continue;
-                }
+        if (bibFields.length && editorVersion && editorVersion >= 9004000) {
+            fields = fields.filter(field => field.Value.indexOf(this.#bibPrefix) !== 0);
+            const field = bibFields[0];
+            await this.#selectField(field.FieldId);
+            const text = field.Content || '';
+            field.Content = " ";
+            await this.#removeSelectedContent();
+            await this.#pasteAddinFieldWithHtml(field, text);
+        }
 
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                const text = field.Content || '';
-                field.Content = " ";
-                await this.#removeSelectedContent();
-                await this.#pasteAddinFieldWithHtml(field, text);
-            }
+        const formats = this.#makeFormattingPositions(fields);
+        await new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+
+        if (!formats.size) return;
+        for (const [fieldId, formattingPositions] of formats) {
+            const selectFieldResult = await this.#selectField(fieldId);
+            if (!selectFieldResult) continue;
+            await CslDocFormatter.formatAfterUpdate(
+                fieldId,
+                formattingPositions,
+            );
         }
     }
 
@@ -245,49 +222,26 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertNotesToText(fields) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            const formats = this.#makeFormattingPositions(fields);
-        
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) {
-                    console.error("Field id is not defined");
-                    continue;
-                }
-
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                const isReferenceSelected = await this.#selectFieldReference();
-                if (!isReferenceSelected) continue;
-                await this.#removeSuperscript();
-                await this.#removeSelectedContent();
-                await this.#addAddinField(field);
-                const formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                await CslDocFormatter.formatAfterInsert(formatting.formatting);
+        const formats = this.#makeFormattingPositions(fields);
+    
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) {
+                console.error("Field id is not defined");
+                continue;
             }
-        } else {
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) {
-                    console.error("Field id is not defined");
-                    continue;
-                }
 
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                const isReferenceSelected = await this.#selectFieldReference();
-                if (!isReferenceSelected) continue;
-                await this.#removeSuperscript();
-                await this.#removeSelectedContent();
-                
-                const text = field.Content || '';
-                field.Content = " ";
-                await this.#pasteAddinFieldWithHtml(field, text);
-            }
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            const isReferenceSelected = await this.#selectFieldReference();
+            if (!isReferenceSelected) continue;
+            await this.#removeSuperscript();
+            await this.#removeSelectedContent();
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
-        
     }
 
     /**
@@ -296,37 +250,20 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async convertTextToNotes(fields, notesStyle) {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            const formats = this.#makeFormattingPositions(fields);
+        const formats = this.#makeFormattingPositions(fields);
 
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) continue;
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) continue;
 
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                await this.#removeSelectedContent();
-                await this.#addNote(notesStyle);
-                await this.#addAddinField(field);
-                const formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                await CslDocFormatter.formatAfterInsert(formatting.formatting);
-            }
-        } else {
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) continue;
-
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                await this.#removeSelectedContent();
-                await this.#addNote(notesStyle);
-                
-                const text = field.Content || '';
-                field.Content = " ";
-                await this.#pasteAddinFieldWithHtml(field, text);
-            }
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            await this.#removeSelectedContent();
+            await this.#addNote(notesStyle);
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
     }
 
@@ -338,57 +275,30 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            const formats = this.#makeFormattingPositions(fields);
+        const formats = this.#makeFormattingPositions(fields);
 
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) continue;
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (!field.FieldId) continue;
 
-                if (!field.Content) {
-                    // save user changes
-                    editedFields.push(field);
-                    continue;
-                }
-
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                const isReferenceSelected = await this.#selectFieldReference();
-                if (!isReferenceSelected) continue;
-                await this.#removeSuperscript();
-                await this.#removeSelectedContent();
-                await this.#addNote(notesStyle);
-                await this.#addAddinField(field);
-                const formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            if (!field.Content) {
+                // save user changes
+                editedFields.push(field);
+                continue;
             }
-        } else {
-            for (let i = 0; i < fields.length; i++) {
-                const field = fields[i];
-                if (!field.FieldId) continue;
 
-                if (!field.Content) {
-                    // save user changes
-                    editedFields.push(field);
-                    continue;
-                }
-
-                const selectFieldResult = await this.#selectField(field.FieldId);
-                if (!selectFieldResult) continue;
-                const isReferenceSelected = await this.#selectFieldReference();
-                if (!isReferenceSelected) continue;
-                await this.#removeSuperscript();
-                await this.#removeSelectedContent();
-                await this.#addNote(notesStyle);
-
-                const text = field.Content || '';
-                field.Content = " ";
-                await this.#pasteAddinFieldWithHtml(field, text);
-            }
+            const selectFieldResult = await this.#selectField(field.FieldId);
+            if (!selectFieldResult) continue;
+            const isReferenceSelected = await this.#selectFieldReference();
+            if (!isReferenceSelected) continue;
+            await this.#removeSuperscript();
+            await this.#removeSelectedContent();
+            await this.#addNote(notesStyle);
+            await this.#addAddinField(field);
+            const formatting = formats.get(field.FieldId);
+            if (!formatting) continue;
+            await CslDocFormatter.formatAfterInsert(formatting.formatting);
         }
-
         if (editedFields.length) {
             await new Promise(function (resolve) {
                 window.Asc.plugin.executeMethod(
