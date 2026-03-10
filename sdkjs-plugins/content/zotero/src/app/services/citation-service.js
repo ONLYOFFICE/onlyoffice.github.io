@@ -259,7 +259,7 @@ class CitationService {
                 false ===
                 this._cslStylesManager.isLastUsedStyleContainBibliography()
             ) {
-                // style does not describe the bibliography
+                this.#additionalWindow.showInfoWindow("Warning!", "Style does not describe the bibliography");
             } else {
                 console.error(e);
                 throw "Failed to apply this style.";
