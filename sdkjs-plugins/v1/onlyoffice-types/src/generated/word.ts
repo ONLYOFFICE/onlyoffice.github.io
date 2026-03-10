@@ -412,7 +412,13 @@ interface ApiDocument {
   InsertWatermark(sText?: string, bIsDiagonal?: boolean): ApiDrawing;
   IsTrackRevisions(): boolean;
   Last(): DocumentElement;
+  MoveCursorDown(count?: number, addToSelect?: boolean): void;
+  MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): void;
+  MoveCursorRight(count?: number, addToSelect?: boolean, byWords?: boolean): void;
+  MoveCursorToEnd(): void;
   MoveCursorToPos(nPos: number): void;
+  MoveCursorToStart(): void;
+  MoveCursorUp(count?: number, addToSelect?: boolean): void;
   Push(oElement: DocumentElement): boolean;
   RejectAllRevisionChanges(): void;
   RemoveAllElements(): void;
