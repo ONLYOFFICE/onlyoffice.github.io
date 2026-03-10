@@ -2236,12 +2236,14 @@ var Theme = {
             var prefixInput = new InputField(prefix, {
                 type: "text",
                 placeholder: "Prefix",
-                value: citationItem.prefix
+                value: citationItem.prefix,
+                showClear: false
             });
             var suffixInput = new InputField(suffix, {
                 type: "text",
                 placeholder: "Suffix",
-                value: citationItem.suffix
+                value: citationItem.suffix,
+                showClear: false
             });
             var locatorSelectbox = new SelectBox(locatorSelect, {
                 placeholder: "Locator"
@@ -2257,7 +2259,8 @@ var Theme = {
             var locatorInput = new InputField(locator, {
                 type: "text",
                 placeholder: locatorPlaceholder,
-                value: citationItem.locator
+                value: citationItem.locator,
+                showClear: false
             });
             var omitAuthorInput = new Checkbox(omitAuthor, {
                 label: "Omit author",
