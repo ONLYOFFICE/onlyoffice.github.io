@@ -329,7 +329,7 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
     }
 
     /** @param {string} fieldId */
-    async moveCursorToField(fieldId) {
+    async moveCursorOutsideField(fieldId) {
         return new Promise((resolve) => {
             const isBeforeField = false;
             window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], resolve);

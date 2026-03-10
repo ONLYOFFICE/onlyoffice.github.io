@@ -626,8 +626,8 @@ class CitationService {
      * @param {string} fieldId
      * @returns {Promise<void>}
      */
-    async moveCursorToField(fieldId) {
-        return this.citationDocService.moveCursorToField(fieldId);
+    async moveCursorOutsideField(fieldId) {
+        return this.citationDocService.moveCursorOutsideField(fieldId);
     }
 
     /**
