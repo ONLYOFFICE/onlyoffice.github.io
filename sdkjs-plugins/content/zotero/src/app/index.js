@@ -325,7 +325,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader();
+            await startAction("Zotero (" + translate("Updating citations") + ")");
             /** @type {number} */
             let cursorPos = await CursorService.getCursorPosition();
             let updateFn = citationService.updateCslItems.bind(
@@ -352,12 +352,12 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    hideLoader();
+                    endAction("Zotero (" + translate("Updating citations") + ")");
                     CursorService.setCursorPosition(cursorPos);
                 });
         });
 
-        insertBibBtn.subscribe(function (event) {
+        insertBibBtn.subscribe(async (event) => {
             if (event.type !== "button:click") {
                 return;
             }
@@ -369,8 +369,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader();
-            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+            await startAction("Zotero (" + translate("Inserting bibliography") + ")");
             citationService
                 .insertBibliography()
                 .catch(function (error) {
@@ -382,12 +381,11 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    hideLoader();
-                    Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+                    endAction("Zotero (" + translate("Inserting bibliography") + ")");
                 });
         });
 
-        insertLinkBtn.subscribe(function (event) {
+        insertLinkBtn.subscribe(async (event) => {
             if (event.type !== "button:click") {
                 return;
             }
@@ -399,13 +397,12 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            showLoader();
+            await startAction("Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             /** @type {number} */
             let cursorPos;
             CursorService.getCursorPosition()
                 .then(function (pos) {
-                    Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
                     cursorPos = pos;
                     return citationService.insertSelectedCitations(items);
                 })
@@ -422,9 +419,8 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    hideLoader();
+                    endAction("Zotero (" + translate("Inserting citation") + ")");
                     CursorService.setCursorPosition(cursorPos);
-                    Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
                 });
         });
 
@@ -435,13 +431,13 @@ import "../styles.css";
             settings.show();
         });
 
-        saveAsTextBtn.subscribe(function (event) {
+        saveAsTextBtn.subscribe(async (event) => {
             if (event.type !== "button:click") {
                 return;
             }
-            showLoader();
+            await startAction("Zotero (" + translate("Saving as text") + ")");
             citationService.saveAsText().then(function () {
-                hideLoader();
+                endAction("Zotero (" + translate("Saving as text") + ")");
             });
         });
 
@@ -570,15 +566,36 @@ import "../styles.css";
         }
     }
 
-    function showLoader() {
+    /** @param {string} [preloaderMessage] */
+    async function startAction(preloaderMessage) {
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
+
+        Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+        /*if (preloaderMessage) {
+            await new Promise(resolve => (function(){
+                Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
+                    resolve(returnValue);
+                });
+            })());
+        }*/
     }
-    function hideLoader() {
+
+    /** @param {string} [preloaderMessage] */
+    async function endAction(preloaderMessage) {
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
+
+        Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+        /*if (preloaderMessage) {
+            await new Promise(resolve => (function(){
+                Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
+                    resolve(returnValue);
+                });
+            })());
+        }*/
     }
 
     /**
@@ -864,7 +881,7 @@ import "../styles.css";
             if (!updatedField) {
                 return;
             }
-            showLoader();
+            await startAction("Zotero (" + translate("Updating citations") + ")");
             /** @type {number} */
             let cursorPos = await CursorService.getCursorPosition();
             let updateFn = citationService.updateItem.bind(
@@ -892,7 +909,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    hideLoader();
+                    endAction("Zotero (" + translate("Updating citations") + ")");
                     CursorService.setCursorPosition(cursorPos);
                 });
         });
