@@ -3595,7 +3595,7 @@ class CitationDocService {
             }
         })();
     }
-    moveCursorToField(fieldId) {
+    moveCursorOutsideField(fieldId) {
         return _asyncToGenerator(function*() {
             return new Promise(resolve => {
                 var isBeforeField = false;
@@ -5631,10 +5631,10 @@ class CitationService {
             }
         })();
     }
-    moveCursorToField(fieldId) {
+    moveCursorOutsideField(fieldId) {
         var _this5 = this;
         return _asyncToGenerator(function*() {
-            return _this5.citationDocService.moveCursorToField(fieldId);
+            return _this5.citationDocService.moveCursorOutsideField(fieldId);
         })();
     }
     updateCslItems(bHardRefresh) {
@@ -7877,7 +7877,7 @@ SelectCitationsComponent.prototype.count = function() {
                 }).finally(function() {
                     endAction("Zotero (" + translate("Inserting citation") + ")");
                     if (addedField) {
-                        citationService.moveCursorToField(addedField.FieldId);
+                        citationService.moveCursorOutsideField(addedField.FieldId);
                     } else {
                         CursorService.setCursorPosition(cursorPos);
                     }
