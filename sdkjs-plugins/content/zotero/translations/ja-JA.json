@@ -72,5 +72,6 @@
     "The style is not available in the local version of the plugin.": "このスタイルはローカルバージョンのプラグインでは利用できません。",
     "Updating citations": "引用を更新中",
     "Inserting bibliography": "参考文献を挿入中",
-    "Inserting citation": "引用を挿入中"
+    "Inserting citation": "引用を挿入中",
+    "Saving as text": "テキストとして保存"
 }
