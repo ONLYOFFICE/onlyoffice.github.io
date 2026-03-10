@@ -409,8 +409,10 @@ export type WordMethodArgs = {
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
     MouseUpWindow: [sGuid: string, X: number, Y: number];
+    MoveCursorOutsideField: [fieldId: string, isBegin?: boolean];
     MoveCursorToContentControl: [sInternalId: string, bMoveToContentControl?: boolean];
     MoveCursorToEnd: [bMoveToEnd?: boolean];
+    MoveCursorToField: [fieldId: string, isBegin?: boolean];
     MoveCursorToStart: [bMoveToStart?: boolean];
     MoveToComment: [sId: string];
     MoveToNextReviewChange: [bAccept?: boolean];
