@@ -68,5 +68,9 @@
     "Press continue to be guided through the update process.": "Druk op doorgaan om door de updateproces te leiden.",
     "Your document has been updated to use Mendeley Cite.": "Uw document is bijgewerkt om Mendeley Cite te gebruiken.",
     "Please select the citation style and language for future citation formatting.": "Selecteer de citaatstijl en taal voor toekomstige citaatformatie.",
-    "An error occurred while loading settings. Try restarting the plugin.": "Er is een fout opgetreden bij het laden van de instellingen. Probeer de plugin opnieuw te starten."
+    "An error occurred while loading settings. Try restarting the plugin.": "Er is een fout opgetreden bij het laden van de instellingen. Probeer de plugin opnieuw te starten.",
+	"Updating citations": "Citaten bijwerken",
+	"Inserting bibliography": "Bibliografie invoegen",
+	"Inserting citation": "Citatie invoegen",
+	"Saving as text": "Opslaan als tekst"
 }

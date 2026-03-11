@@ -69,5 +69,8 @@
     "Your document has been updated to use Mendeley Cite.": "Ваш документ был обновлён для использования Mendeley Cite.",
     "Please select the citation style and language for future citation formatting.": "Пожалуйста, выберите стиль цитирования и язык для будущего форматирования цитат.",
     "An error occurred while loading settings. Try restarting the plugin.": "При загрузке настроек произошла ошибка. Попробуйте перезапустить плагин.",
-    "Style does not describe the bibliography": "Стиль не описывает библиографию"
+	"Updating citations": "Обновление цитат",
+	"Inserting bibliography": "Вставка библиографии",
+	"Inserting citation": "Вставка цитаты",
+	"Saving as text": "Сохранить как текст"
 }

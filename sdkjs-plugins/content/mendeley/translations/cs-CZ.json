@@ -68,5 +68,9 @@
     "Press continue to be guided through the update process.": "Stiskněte Pokračovat, aby jste vedeni přes aktualizační proces.",
     "Your document has been updated to use Mendeley Cite.": "Váš dokument byl aktualizován, aby používal Mendeley Cite.",
     "Please select the citation style and language for future citation formatting.": "Prosím, vyberte styl a jazyk pro budoucí formátování citací.",
-    "An error occurred while loading settings. Try restarting the plugin.": "Při načítání nastavení došlo k chybě. Zkuste restartovat plugin."
+    "An error occurred while loading settings. Try restarting the plugin.": "Při načítání nastavení došlo k chybě. Zkuste restartovat plugin.",
+	"Updating citations": "Aktualizace citací",
+	"Inserting bibliography": "Vkládání bibliografie",
+	"Inserting citation": "Vkládání citace",
+	"Saving as text": "Uložit jako text"
 }

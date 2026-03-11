@@ -62,8 +62,7 @@ class CitationDocService {
             PlaceHolderText: "",
         };
 
-        await this.#addContentControl(control, 1);
-        await this.#pasteHtml(text);
+        await this.#pasteContentControlWithHtml(control, text);
     }
 
     /**
@@ -683,6 +682,85 @@ class CitationDocService {
                 resolve,
             );
         });
+    }
+    
+    /**
+     * @param {ContentControlProperties} control 
+     * @param {string} html 
+     * @returns {Promise<void>}
+     */
+    async #pasteContentControlWithHtml(control, html) {
+        await this.#addContentControl(control, 1);
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const paragraphs = doc.querySelectorAll(".csl-entry");
+        const numbers = new Array(paragraphs.length);
+        paragraphs.forEach((p, index) => {
+            const margin = p.querySelector(".csl-left-margin");
+            const right = p.querySelector(".csl-right-inline");
+            right?.replaceWith(...right.childNodes);
+            if (margin) {
+                numbers[index] = margin.textContent.trim();
+                margin.remove();
+            }
+        });
+        
+        html = doc.body.innerHTML;
+        await this.#pasteHtml(html);
+
+        return new Promise((resolve) => {
+            const isCalc = false;
+            const isClose = false;
+            Asc.scope.numbers = numbers;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const control = doc.GetCurrentContentControl();
+                    const range = control.GetRange(0, Number.MAX_SAFE_INTEGER);
+                    if (!range) return;
+                    /** @type {BibliographyStyles} */
+                    const style = Asc.scope.bibStyle;
+                    if (!style) {
+                        return;
+                    }
+
+                    const paragraphs = range.GetAllParagraphs();
+
+                    paragraphs.forEach((paragraph, index) => {
+                        const text = paragraph.GetText().trim();
+                        if (text === '') {
+                            return;
+                        }
+                        if (typeof style.linespacing === "number") {
+                            paragraph.SetSpacingLine(240 * style.linespacing, "exact");
+                        }
+                        if (typeof style.entryspacing === "number") {
+                            paragraph.SetSpacingAfter(240 * style.entryspacing);
+                        }
+                        if (style['second-field-align']) { 
+                            let margin = Api.CreateRun();
+                            margin.AddText(Asc.scope.numbers[index]);
+                            margin.AddTabStop();
+                            let elementIndex = 0;
+                            paragraph.AddElement(margin, elementIndex);
+                            paragraph.SetIndLeft(style.maxoffset * 120);
+                            paragraph.SetIndFirstLine(-(style.maxoffset * 120));
+                        } else if (style.hangingindent) {
+                            paragraph.SetIndLeft(720);
+                            paragraph.SetIndFirstLine(-720);
+                        }
+                    });
+                },
+                isClose,
+                isCalc,
+                resolve,
+            );
+        }).then(() => {
+            Asc.scope.bibStyle = null;
+        });
+        
+
     }
 }
 

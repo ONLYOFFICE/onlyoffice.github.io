@@ -68,5 +68,9 @@
     "Press continue to be guided through the update process.": "Pressione continuar para ser guiado pelo processo de atualização.",
     "Your document has been updated to use Mendeley Cite.": "Seu documento foi atualizado para usar Mendeley Cite.",
     "Please select the citation style and language for future citation formatting.": "Por favor, selecione o estilo e o idioma para o formatação de citações futuras.",
-    "An error occurred while loading settings. Try restarting the plugin.": "Ocorreu um erro ao carregar as configurações. Tente reiniciar o plugin."
+    "An error occurred while loading settings. Try restarting the plugin.": "Ocorreu um erro ao carregar as configurações. Tente reiniciar o plugin.",
+	"Updating citations": "Atualizando citações",
+	"Inserting bibliography": "Inserindo bibliografia",
+	"Inserting citation": "Inserindo citação",
+	"Saving as text": "Salvar como texto"
 }

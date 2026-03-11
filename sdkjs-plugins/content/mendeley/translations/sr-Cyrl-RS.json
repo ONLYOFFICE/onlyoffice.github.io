@@ -68,5 +68,9 @@
     "Press continue to be guided through the update process.": "Пријати настави да бисте били водjeni kroz proces ažuriranja.",
     "Your document has been updated to use Mendeley Cite.": "Ваш документ је ажуриран да користи Mendeley Cite.",
     "Please select the citation style and language for future citation formatting.": "Изаберите стил и језик за будућу форматирање цитата.",
-    "An error occurred while loading settings. Try restarting the plugin.": "Дошло је до грешке при учитавању поставки. Покушайте поново покренути додатак."
+    "An error occurred while loading settings. Try restarting the plugin.": "Дошло је до грешке при учитавању поставки. Покушайте поново покренути додатак.",
+	"Updating citations": "Ажурирање цитата",
+	"Inserting bibliography": "Убацивање библиографије",
+	"Inserting citation": "Убацивање цитата",
+	"Saving as text": "Сачувај као текст"
 }
