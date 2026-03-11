@@ -19,11 +19,25 @@
 
 	var g_dictionary = null;
 
-	fetch('./scripts/words_alpha.txt')
-	  .then(response => response.text())
-	  .then(text => {
-	    g_dictionary = text.split('\n');
-	  });
+	function loadDictionary(url) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", url, true);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200 || xhr.status === 0) {
+					g_dictionary = xhr.responseText.split(/\r?\n/);
+				} else {	
+					g_dictionary = [];
+				}
+			}
+		};
+		xhr.onerror = function() {			
+			g_dictionary = [];
+		};
+		xhr.send();
+	}
+
+	loadDictionary("./dictionaries/en.txt");
 
 	window.isInit = false;
 
@@ -46,7 +60,7 @@
 	
 	window.Asc.plugin.inputHelper_onSelectItem = function(item)
 	{
-		if (!item)
+		if (!item || !window.Asc.plugin.ih.isVisible)
 			return;
 
 		window.Asc.plugin.executeMethod("InputText", [item.text, window.Asc.plugin.currentText]);
