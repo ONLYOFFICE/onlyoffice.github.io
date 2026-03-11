@@ -210,6 +210,11 @@ import "../styles.css";
             });
 
         window.Asc.plugin.onTranslate = applyTranslations;
+        
+        getEditorVersion().then((editorVersion) => {
+            window.Asc.scope.editorVersion = editorVersion;
+            addContextMenuButtons(); 
+        });
     };
     
     /** @param {string} error */
@@ -458,7 +463,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction("Zotero (" + translate("Inserting citation") + ")");
+                    endAction("Mendeley (" + translate("Inserting citation") + ")");
                     CursorService.setCursorPosition(cursorPos);
                 });
         });
@@ -854,4 +859,71 @@ import "../styles.css";
 		
 	}
 
+    function addContextMenuButtons() {
+        let buttonMain = new Asc.ButtonContextMenu();
+        buttonMain.text = "Edit citation";
+        buttonMain.addCheckers("Target", "Selection");
+        buttonMain.attachOnClick(async function () {
+            /** @type {string | null} */
+            const controlTag = await new Promise((resolve) => {
+                Asc.plugin.callCommand(
+                    () => {
+                        const doc = Api.GetDocument();
+                        const control = doc.GetCurrentContentControl();
+                        if (control) {
+                            control.GetTag();
+                        } else {
+                            return null;
+                        }
+                    },
+                    false,
+                    false,
+                    resolve,
+                );
+            });
+            if (
+                !controlTag ||
+                controlTag.indexOf("MENDELEY_CITATION") === -1
+            ) {
+                return;
+            }
+            const updatedControl = await citationService.showEditCitationWindow(controlTag);
+            if (!updatedControl) {
+                return;
+            }
+            await startAction("Mendeley (" + translate("Updating citations") + ")");
+            /** @type {number} */
+            let cursorPos = await CursorService.getCursorPosition();
+            let updateFn = citationService.updateItem.bind(
+                citationService,
+                updatedControl
+            );
+
+            const styleManager = settings.getStyleManager();
+            if (styleManager.getLastUsedFormat() === "note") {
+                // this way, because "SelectAddinField" does not work with notes
+                updateFn = citationService.updateItemInNotes.bind(
+                    citationService,
+                    updatedControl,
+                    styleManager.getLastUsedNotesStyle()
+                );
+            }
+
+            updateFn()
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to insert citation");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    endAction("Mendeley (" + translate("Updating citations") + ")");
+                    CursorService.setCursorPosition(cursorPos);
+                });
+        });
+        Asc.Buttons.registerContextMenu();
+
+    }
 })();

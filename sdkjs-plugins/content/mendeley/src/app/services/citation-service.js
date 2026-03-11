@@ -182,16 +182,16 @@ class CitationService {
         }
     }
 
-    /** @param {ContentControlProperties} control */
-    #extractControl(control) {
+    /** @param {string} controlTag */
+    #extractControlTag(controlTag) {
         let citationObject;
-        if (control.Tag.indexOf(this._bibPrefixNew) !== -1) {
+        if (controlTag.indexOf(this._bibPrefixNew) !== -1) {
             return {};
         }
-        const citationStartIndex = control.Tag.indexOf("_", this._citPrefixNew.length + 1) + 1;
+        const citationStartIndex = controlTag.indexOf("_", this._citPrefixNew.length + 1) + 1;
 
         if (citationStartIndex > 0) {
-            const base64String = control.Tag.slice(
+            const base64String = controlTag.slice(
                 citationStartIndex,
             );
 
@@ -213,7 +213,7 @@ class CitationService {
 
                 citationObject = JSON.parse(citationString);
             } catch (e) {
-                console.error("Failed to extract citation", control);
+                console.error("Failed to extract citation", controlTag);
                 console.error(e);
             }
         }
@@ -259,7 +259,7 @@ class CitationService {
                     );
                 });
                 let controlsWithCitations = controls.map(function (control) {
-                    let citationObject = self.#extractControl(control);
+                    let citationObject = self.#extractControlTag(control.Tag);
                     let citationID = citationObject.citationID || "";
                     let cslCitation = new CSLCitation(citationID);
                     if (updatedControl) {
@@ -878,6 +878,23 @@ class CitationService {
             Asc.plugin.executeCommand("close", "");
         }
         return isUserAgree;
+    }
+    
+    /**
+     * @param {string} controlTag
+     * @returns {Promise<AddinFieldData | null>}
+     */
+    async showEditCitationWindow(controlTag) {
+        if (!controlTag) return null;
+
+        const citationObject = this.#extractControlTag(controlTag);
+        const updatedField =
+            await this.#additionalWindow.showEditWindow(citationObject);
+        if (!updatedField) {
+            // Cancel click
+            return null;
+        }
+        return updatedField;
     }
 
 }

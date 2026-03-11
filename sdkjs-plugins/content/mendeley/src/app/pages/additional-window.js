@@ -63,6 +63,56 @@ class AdditionalWindow {
             };
         });
     }
+    /**
+     * @param {any} content
+     */
+    showEditWindow(content) {
+        this.#window = new window.Asc.PluginWindow();
+        /** @type {VariationConfig} */
+        const variation = {
+            name: "Mendeley",
+            url: "edit-window.html",
+            description: window.Asc.plugin.tr("Edit citation"),
+            isVisual: true,
+            buttons: [
+                {
+                    text: window.Asc.plugin.tr("Save"),
+                    primary: true,
+                    isViewer: false,
+                },
+                { text: window.Asc.plugin.tr("Cancel"), primary: false },
+            ],
+            isModal: false,
+            EditorsSupport: ["word"],
+            size: [380, 150],
+            isViewer: true,
+            isDisplayedInViewer: false,
+            isInsideMode: false,
+        };
+
+        this.#onShow(variation, content, "default");
+        this.#window.show(variation);
+
+        return new Promise((resolve, reject) => {
+            window.Asc.plugin.button = async (buttonId, windowId) => {
+                const element = await new Promise(resolve => {
+                    if (!this.#window) {
+                        resolve(null);
+                        return;
+                    }
+                    this.#window.attachEvent("onSaveFields", resolve);
+                    this.#window.command('onClickSave');
+                });
+                if (buttonId === 0) {
+                    resolve(element);
+                } else {
+                    resolve(null);
+                }
+
+                this.#hide();
+            };
+        });
+    }
     
     /**
      * @param {string} description

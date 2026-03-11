@@ -128,5 +128,27 @@ export default defineConfig([
             ...getPluginsConfig("styles.css")
         ],
     },
+    {
+        input: "src/app/edit-window.js",
+        output: {
+            file:
+                isES5Build ?
+                    "dist/edit-window.es5.js"
+                :   "dist/edit-window.modern.js",
+            format: isES5Build ? "umd" : "esm",
+            name: isES5Build ? "Icons" : undefined,
+            sourcemap: true,
+        },
+        watch: {
+            include: [
+                "src/app/edit-window.js",
+                "src/edit-window.css",
+                "src/components.css",
+                "src/app/shared/components/*",
+            ],
+            exclude: ["node_modules/**"],
+        },
+        plugins: getPluginsConfig("edit-window.css"),
+    },
 
 ]);
