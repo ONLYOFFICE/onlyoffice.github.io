@@ -40,7 +40,8 @@
 			
 			"events" : [
 				"onInputHelperClear",
-				"onInputHelperInput"
+				"onInputHelperInput",
+				"onKeyDown"
 			],
 			"store": {
 				"background": {
