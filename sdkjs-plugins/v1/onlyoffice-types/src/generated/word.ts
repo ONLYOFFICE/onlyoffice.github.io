@@ -376,6 +376,7 @@ interface ApiDocument {
   GetCommentById(sId: string): ApiComment;
   GetCommentsReport(): CommentReport;
   GetContent(bGetCopies: boolean): any[];
+  GetCurrentContentControl(): ApiBlockLvlSdt | ApiInlineLvlSdt;
   GetContentControlsByTag(sTag: string): ApiBlockLvlSdt[] | ApiInlineLvlSdt[];
   GetCurrentFootEndnote(): ApiDocumentContent | null;
   GetCurrentPage(): number;
