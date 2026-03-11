@@ -61,8 +61,9 @@ class CitationDocService {
             Lock: 3, // can edit
             PlaceHolderText: "",
         };
-
-        await this.#pasteContentControlWithHtml(control, text);
+        
+        await this.#addContentControl(control, 1);
+        await this.#pasteContentControlHtml(text);
     }
 
     /**
@@ -133,18 +134,6 @@ class CitationDocService {
                                     );
                                 }
                                 let text = element.GetText();
-                                if (
-                                    text.lastIndexOf("\n") ===
-                                    text.length - 1
-                                ) {
-                                    text = text.slice(0, -1);
-                                }
-                                if (
-                                    text.lastIndexOf("\r") ===
-                                    text.length - 1
-                                ) {
-                                    text = text.slice(0, -1);
-                                }
                                 text = text.trim();
                                 placeholderTexts[index] = text;
                             }
@@ -267,12 +256,29 @@ class CitationDocService {
      * @returns {Promise<void>}
      */
     async updateContentControls(controls) {
+        const bibControls = controls.filter(control => control.Tag && control.Tag.indexOf(this.#bibPrefix) === 0);
+        if (bibControls.length) {
+            controls = controls.filter(control => control.Tag && control.Tag.indexOf(this.#bibPrefix) !== 0);
+            const control = bibControls[0];
+            const id = control.InternalId;
+            if (id) {
+                await new Promise(function (resolve) {
+                    window.Asc.plugin.executeMethod("SelectContentControl", [id], resolve);
+                });
+            }
+            const text = control.PlaceHolderText || '';
+            await this.#pasteContentControlHtml(text);
+        }
+
         for (let i = 0; i < controls.length; i++) {
             const id = controls[i].InternalId;
             if (!id) {
+                console.error("Content control without ID found");
                 continue;
             }
-            await window.Asc.plugin.executeMethod("SelectContentControl", [id]);
+            await new Promise(function (resolve) {
+                window.Asc.plugin.executeMethod("SelectContentControl", [id], resolve);
+            });
 
             let tag = controls[i].Tag;
             await new Promise((resolve) => {
@@ -282,15 +288,14 @@ class CitationDocService {
                 Asc.plugin.callCommand(
                     () => {
                         const doc = Api.GetDocument();
-                        const controls = doc.GetAllContentControls();
-                        const control = controls.find(
-                            (c) => c.GetInternalId() === Asc.scope.id,
-                        );
+                        const control = doc.GetCurrentContentControl();
                         if (control) {
                             control.SetTag(Asc.scope.tag);
                             if (Asc.scope.placeholderText) {
                                 control.SetPlaceholderText("");
                             }
+                        } else {
+                            console.error("Content control not found for ID:", Asc.scope.id);
                         }
                     },
                     false,
@@ -301,13 +306,7 @@ class CitationDocService {
             if (!controls[i].PlaceHolderText) {
                 continue;
             }
-            await new Promise(function (resolve) {
-                window.Asc.plugin.executeMethod(
-                    "PasteHtml",
-                    [controls[i].PlaceHolderText],
-                    resolve,
-                );
-            });
+            await this.#pasteHtml(controls[i].PlaceHolderText);
         }
     }
 
@@ -563,32 +562,6 @@ class CitationDocService {
     }
 
     /**
-     * @param {string} internalId
-     * @returns {Promise<boolean>}
-     */
-    #deleteControl(internalId) {
-        return new Promise((resolve) => {
-            Asc.scope.id = internalId;
-            Asc.plugin.callCommand(
-                () => {
-                    const doc = Api.GetDocument();
-                    const controls = doc.GetAllContentControls();
-                    const control = controls.find(
-                        (c) => c.GetInternalId() === Asc.scope.id,
-                    );
-                    if (control) {
-                        return control.Delete(false);
-                    }
-                    return false;
-                },
-                false,
-                false,
-                resolve,
-            );
-        });
-    }
-
-    /**
      * @param {string} html
      * @returns {Promise<void>}
      */
@@ -685,12 +658,10 @@ class CitationDocService {
     }
     
     /**
-     * @param {ContentControlProperties} control 
      * @param {string} html 
      * @returns {Promise<void>}
      */
-    async #pasteContentControlWithHtml(control, html) {
-        await this.#addContentControl(control, 1);
+    async #pasteContentControlHtml(html) {
 
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
@@ -704,13 +675,18 @@ class CitationDocService {
                 numbers[index] = margin.textContent.trim();
                 margin.remove();
             }
+            if (p.parentNode) {
+                const newP = document.createElement('p');
+                newP.innerHTML = p.innerHTML;
+                p.parentNode.replaceChild(newP, p);
+            }
         });
         
         html = doc.body.innerHTML;
         await this.#pasteHtml(html);
 
         return new Promise((resolve) => {
-            const isCalc = false;
+            const isCalc = true;
             const isClose = false;
             Asc.scope.numbers = numbers;
             Asc.plugin.callCommand(
