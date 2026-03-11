@@ -14,18 +14,18 @@ Clone the fork to your folder (e.g. *work*).
 
 **2. Add the plugin folder** to the *work/sdkjs-plugins/content* folder.
 
-**3. Create your plugin** as described in the [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/get-started/getting-started/).
+**3. Create your plugin** as described in the [API documentation](https://api.onlyoffice.com/docs/plugin-and-macros/structure/getting-started/).
 
-Your plugin folder must contain four main files: [config.json](https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/), [index.html](https://api.onlyoffice.com/docs/plugin-and-macros/structure/entry-point/), [pluginCode.js](https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/overview/), and [CHANGELOG.md](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/CHANGELOG.md) for your plugin. The CHANGELOG.md file is needed for updates and version history. You also need to adjust its style, localize it, and add descriptions and icons.
+Your plugin folder must contain four main files: [config.json](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/), [index.html](https://api.onlyoffice.com/docs/plugin-and-macros/structure/entry-point/), [pluginCode.js](https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/overview/), and [CHANGELOG.md](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/CHANGELOG.md) for your plugin. The CHANGELOG.md file is needed for updates and version history. You also need to adjust its style, localize it, and add descriptions and icons.
 
-**Please note**: To publish your own plugin in the Plugin Manager, you need to add the necessary fields into the [plugin config.json file](https://api.onlyoffice.com/docs/plugin-and-macros/structure/manifest/):
-* "[version](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L10)" – necessary for our update system to work correctly. It consists of three sections: `x.x.x`.
-* "offered" – your name or your organization name. By default, this field has the "Ascensio System SIA" value. It can be added after the "version" field.
-* "[store](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L81C8-L81C8)" – a field for the Plugin Manager which specifies how the plugin should look. We have default settings, but we recommend adjusting this field:
-   * "[background](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L82)" – specifies the background for the plugin card head (for the Light and Dark themes).
-   * "[screenshots](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L86)" – a field for screenshots. If your plugin is non-interface, you can skip this field.
-   * "[icons](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L87C8-L87C8)" – specifies the icons for the plugin card (for the Light and Dark themes).
-   * "[categories](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L91)" – specifies the categories of your plugin.
+**Please note**: To publish your own plugin in the Plugin Manager, you need to add the necessary fields into the [plugin config.json file](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/):
+* "[version](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#version)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L16)) – necessary for our update system to work correctly. It consists of three sections: `x.x.x`.
+* "[offered](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#offered)" – your name or your organization name. By default, this field has the "Ascensio System SIA" value. It can be added after the "version" field.
+* "[store](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#variationsstore)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L94)) – a field for the Plugin Manager which specifies how the plugin should look. We have default settings, but we recommend adjusting this field:
+   * "[background](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#variationsstorebackground)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L95)) – specifies the background for the plugin card head (for the Light and Dark themes).
+   * "[screenshots](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#variationsstorescreenshots)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L99)) – a field for screenshots. If your plugin is non-interface, you can skip this field.
+   * "[icons](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#variationsstoreicons)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L103)) – specifies the icons for the plugin card (for the Light and Dark themes).
+   * "[categories](https://api.onlyoffice.com/docs/plugin-and-macros/structure/configuration/#variationsstorecategories)" ([example](https://github.com/ONLYOFFICE/onlyoffice.github.io/blob/master/sdkjs-plugins/content/chess/config.json#L107)) – specifies the categories of your plugin.
 
 **4. Test your plugin in the desktop app.**
 
@@ -45,7 +45,7 @@ Launch the Chrome browser and switch to the *chrome://extensions/* page. Click *
 
 Once done, run your ONLYOFFICE Document Server and find the plugin in the Plugin Manager.
 
-Please note: When you are working on your plugin, it's important to open the Plugin Manager to check and, if necessary, improve how your plugin looks there. You also need to take into consideration how the plugin looks when switching to the Dark theme. Check the [icons requirements](https://api.onlyoffice.com/docs/plugin-and-macros/structure/icons/).
+Please note: When you are working on your plugin, it's important to open the Plugin Manager to check and, if necessary, improve how your plugin looks there. You also need to take into consideration how the plugin looks when switching to the Dark theme. Check the [icons requirements](https://api.onlyoffice.com/docs/plugin-and-macros/customization/icons/).
 
 **6. Test your plugin in the plugin manager.**
 
