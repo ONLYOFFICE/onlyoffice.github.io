@@ -366,7 +366,7 @@ export type WordMethodArgs = {
     
     // Methods E
     EditOleObject: [data: OLEProperties];
-    EndAction: [sType: string, sDescription: string, sCustomMessage?: string];
+    EndAction: [sType: string, description: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
     
     // Methods F
     FocusEditor: [];
@@ -459,7 +459,7 @@ export type WordMethodArgs = {
     ShowButton: [sBtn: string, bVisible: boolean, sAlign?: string];
     ShowError: [sType: string, sDescription: string, sMethod?: string];
     ShowInputHelper: [sGuid: string, w: number, h: number, isKeyboardTake: boolean];
-    StartAction: [sType: string, sDescription: string];
+    StartAction: [sType: string, description: string | { lockScroll?: boolean }];
     
     // Methods U
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
