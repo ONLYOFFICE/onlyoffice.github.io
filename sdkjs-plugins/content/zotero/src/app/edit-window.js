@@ -65,7 +65,6 @@ import "../edit-window.css";
             }
             /** @type {HTMLElement} */
             this._container = container;
-            this._field = null;
             
             /** @type {{citationItems: CitationItem[]} | null} */
             this.citationObject = null;
@@ -79,8 +78,17 @@ import "../edit-window.css";
         createForm(citationItem) {
             const form = document.createElement("form");
             form.classList.add("form");
+            form.classList.add("message-container");
             this._container.appendChild(form);
 
+            var deleteBtn = document.createElement("button");
+            deleteBtn.className = "message-close i18n";
+            deleteBtn.textContent = "×";
+            deleteBtn.setAttribute("aria-label", "Close");
+            deleteBtn.setAttribute("title", "Remove");
+
+            deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
+            form.appendChild(deleteBtn);
             const title = document.createElement("div");
             title.classList.add("title");
             title.textContent = citationItem.itemData.title;
@@ -160,6 +168,35 @@ import "../edit-window.css";
             form.appendChild(params);
         }
 
+        updateRemoveButtonsVisibility() {
+            if (!this.citationObject) {
+                return;
+            }
+            const numOfCitations = this.citationObject.citationItems.length;
+            if (numOfCitations > 1) {
+                this._container.classList.remove('hide-remove-button');
+            } else {
+                this._container.classList.add('hide-remove-button');
+            }
+            const formHeight = document.querySelector('form')?.offsetHeight || 0;
+            const winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight;
+            window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
+        }
+
+        /**
+         * @param {HTMLFormElement} form
+         * @param {string} id
+         */
+        removeItem(form, id) {
+            if (!this.citationObject) {
+                return;
+            }
+            this.citationObject.citationItems = this.citationObject.citationItems.filter(item => item.id !== id);
+            this._container.removeChild(form);
+
+            this.updateRemoveButtonsVisibility();
+        }
+
         /** @param {AscTheme} theme */
         onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
@@ -182,20 +219,9 @@ import "../edit-window.css";
             }
         }
 
-        /** @param {AddinFieldData} field */
-        onAttachedContent(field) {
-            this._field = field;
-
-            const citationStartIndex = field.Value.indexOf("{");
-            const citationEndIndex = field.Value.lastIndexOf("}");
-            if (citationStartIndex === -1) {
-                return;
-            }
-            const citationString = field.Value.slice(
-                citationStartIndex,
-                citationEndIndex + 1,
-            );
-            this.citationObject = JSON.parse(citationString);
+        /** @param {{citationItems: CitationItem[]}} citationObject */
+        onAttachedContent(citationObject) {
+            this.citationObject = citationObject;
 
             if (!this.citationObject) {
                 return;
@@ -205,11 +231,7 @@ import "../edit-window.css";
                     this.createForm(item);
                 },
             );
-
-            window.Asc.plugin.sendToPlugin(
-                "onUpdateHeight",
-                document.body.scrollHeight,
-            );
+            this.updateRemoveButtonsVisibility();
         }
 
         onClickSave() {

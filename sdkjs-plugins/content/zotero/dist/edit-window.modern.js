@@ -2203,14 +2203,21 @@ var Theme = {
                 throw new Error("container is not initialized");
             }
             this._container = container;
-            this._field = null;
             this.citationObject = null;
             this.forms = [];
         }
         createForm(citationItem) {
             var form = document.createElement("form");
             form.classList.add("form");
+            form.classList.add("message-container");
             this._container.appendChild(form);
+            var deleteBtn = document.createElement("button");
+            deleteBtn.className = "message-close i18n";
+            deleteBtn.textContent = "×";
+            deleteBtn.setAttribute("aria-label", "Close");
+            deleteBtn.setAttribute("title", "Remove");
+            deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
+            form.appendChild(deleteBtn);
             var title = document.createElement("div");
             title.classList.add("title");
             title.textContent = citationItem.itemData.title;
@@ -2282,6 +2289,29 @@ var Theme = {
             });
             form.appendChild(params);
         }
+        updateRemoveButtonsVisibility() {
+            var _document$querySelect;
+            if (!this.citationObject) {
+                return;
+            }
+            var numOfCitations = this.citationObject.citationItems.length;
+            if (numOfCitations > 1) {
+                this._container.classList.remove("hide-remove-button");
+            } else {
+                this._container.classList.add("hide-remove-button");
+            }
+            var formHeight = ((_document$querySelect = document.querySelector("form")) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.offsetHeight) || 0;
+            var winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight;
+            window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
+        }
+        removeItem(form, id) {
+            if (!this.citationObject) {
+                return;
+            }
+            this.citationObject.citationItems = this.citationObject.citationItems.filter(item => item.id !== id);
+            this._container.removeChild(form);
+            this.updateRemoveButtonsVisibility();
+        }
         onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
             Theme.fixThemeForIE(theme);
@@ -2298,22 +2328,15 @@ var Theme = {
                 styleTheme.innerHTML = rules;
             }
         }
-        onAttachedContent(field) {
-            this._field = field;
-            var citationStartIndex = field.Value.indexOf("{");
-            var citationEndIndex = field.Value.lastIndexOf("}");
-            if (citationStartIndex === -1) {
-                return;
-            }
-            var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-            this.citationObject = JSON.parse(citationString);
+        onAttachedContent(citationObject) {
+            this.citationObject = citationObject;
             if (!this.citationObject) {
                 return;
             }
             this.citationObject.citationItems.forEach(item => {
                 this.createForm(item);
             });
-            window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
+            this.updateRemoveButtonsVisibility();
         }
         onClickSave() {
             var bHasChanges = false;
