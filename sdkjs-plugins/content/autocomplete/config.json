@@ -13,7 +13,7 @@
 		"zh-ZH": "Autocomplete"
 	},
 	"guid" : "asc.{A103601F-FDA0-418A-BC37-A514031894C0}",
-	"version" : "1.0.0",
+	"version" : "1.1.0",
 
 	"variations" : [
 		{
@@ -35,16 +35,13 @@
 			"screens"             : ["resources/store/screen_1.png"],
 			"isViewer"            : false,
 			"EditorsSupport"      : ["word", "slide", "cell"],
-			"isVisual"            : false,
-			"isModal"             : false,
-			"isInsideMode"        : false,
-			"isSystem"            : true,
+			"type"                : "background",
 			"initDataType"        : "none",
-			"isUpdateOleOnResize" : false,
 			
 			"events" : [
 				"onInputHelperClear",
-				"onInputHelperInput"
+				"onInputHelperInput",
+				"onKeyDown"
 			],
 			"store": {
 				"background": {
