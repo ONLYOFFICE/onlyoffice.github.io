@@ -622,7 +622,7 @@ import "../styles.css";
         refreshBtn.disable();
         insertLinkBtn.disable();
 
-        //Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+        Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
         /*if (preloaderMessage) {
             await new Promise(resolve => (function(){
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
@@ -638,7 +638,7 @@ import "../styles.css";
         refreshBtn.enable();
         checkSelected();
 
-        //Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+        Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
         /*if (preloaderMessage) {
             await new Promise(resolve => (function(){
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
