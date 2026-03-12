@@ -212,7 +212,7 @@ class CitationService {
         fragment.appendChild(tempElement);
 
         try {
-            var bibItems = new Array(self._storage.size);
+            var bibItems = [];
             /** @type {false | any} */
             var bibObject = self._formatter.makeBibliography();
             // Sort bibliography items
@@ -233,7 +233,7 @@ class CitationService {
                         .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
                         .replace(/<\/sub>/gi, "&lt;/sub&gt;"); 
                 }*/
-                bibItems[citationIndex] = bibText;
+                bibItems.push(bibText);
             }
             tempElement.innerHTML = bibItems.join("");
         } catch (e) {
