@@ -902,7 +902,7 @@ import "../styles.css";
             const styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
                 // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItemInNotes.bind(
+                updateFn = citationService.updateItem.bind(
                     citationService,
                     updatedField,
                     styleManager.getLastUsedNotesStyle()

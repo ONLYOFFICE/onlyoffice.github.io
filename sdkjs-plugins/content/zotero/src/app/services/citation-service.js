@@ -716,12 +716,14 @@ class CitationService {
 
     /**
      * @param {Object & {citationID: string}} updatedField
+     * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<void>}
      */
-    async updateItem(updatedField) {
+    async updateItem(updatedField, notesStyle) {
         try {
-            const { fieldsWithCitations } =
+            const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems(updatedField);
+            const bNoHaveFields = fieldsWithCitations.length === 0;
 
             this.#updateFormatter();
 
@@ -731,37 +733,22 @@ class CitationService {
                 true,
             );
 
-            if (updatedFields && updatedFields.length) {
-                return this.citationDocService.updateAddinFields(updatedFields);
-            }
-        } catch (e) {
-            throw e;
-        }
-    }
-    /**
-     * // it is a crutch, because "SelectAddinField" does not work with notes
-     * @param {Object & {citationID: string}} updatedField
-     * @param {"footnotes" | "endnotes"} notesStyle
-     * @returns {Promise<void>}
-     */
-    async updateItemInNotes(updatedField, notesStyle) {
-        try {
-            const { fieldsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(updatedField);
-
-            this.#updateFormatter();
-
-            /** @type {AddinFieldData[]} */
-            let updatedFields = await this.#getUpdatedFields(
-                fieldsWithCitations,
-                true,
-            );
-
-            if (updatedFields && updatedFields.length) {
+            if (notesStyle && updatedFields && updatedFields.length) {
                 await this.citationDocService.convertNotesStyle(
                     updatedFields,
                     notesStyle,
                 );
+                updatedFields = [];
+            }
+
+            /*if (bibField) {
+                updatedFields.push(
+                    await this.#updateBibliography(bNoHaveFields, bibField),
+                );
+            }*/
+
+            if (updatedFields && updatedFields.length) {
+                return this.citationDocService.updateAddinFields(updatedFields);
             }
         } catch (e) {
             throw e;
@@ -841,13 +828,14 @@ class CitationService {
 
     /**
      * @param {AddinFieldData} field
-     * @returns {Promise<AddinFieldData | null>}
+     * @returns {Promise<Object & {citationID: string} | null>}
      */
     async showEditCitationWindow(field) {
         if (!field) return null;
 
+        const citationObject = this.#extractField(field);
         const updatedField =
-            await this.#additionalWindow.showEditWindow(field);
+            await this.#additionalWindow.showEditWindow(citationObject);
         if (!updatedField) {
             // Cancel click
             return null;
