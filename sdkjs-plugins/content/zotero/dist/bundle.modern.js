@@ -7783,6 +7783,10 @@ SelectCitationsComponent.prototype.count = function() {
                 yield startAction("Zotero (" + translate("Updating citations") + ")");
                 var cursorPos = yield CursorService.getCursorPosition();
                 var updateFn = citationService.updateCslItems.bind(citationService, false);
+                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                    lockScroll: true,
+                    keepSelection: true
+                } ]);
                 var styleManager = settings.getStyleManager();
                 if (styleManager.getLastUsedFormat() === "note") {
                     updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
@@ -7797,6 +7801,9 @@ SelectCitationsComponent.prototype.count = function() {
                 }).finally(function() {
                     endAction("Zotero (" + translate("Updating citations") + ")");
                     CursorService.setCursorPosition(cursorPos);
+                    Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                        scrollToTarget: false
+                    } ]);
                 });
             });
             return function(_x) {
