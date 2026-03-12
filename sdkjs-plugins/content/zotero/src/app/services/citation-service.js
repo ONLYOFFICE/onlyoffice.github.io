@@ -218,7 +218,6 @@ class CitationService {
             // Sort bibliography items
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
                 var citationId = bibObject[0].entry_ids[i][0];
-                var citationIndex = self._storage.getIndex(citationId);
                 /** @type {string} */
                 var bibText = bibObject[1][i];
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
