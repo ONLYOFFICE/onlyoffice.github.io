@@ -7992,6 +7992,11 @@ SelectCitationsComponent.prototype.count = function() {
             insertBibBtn.disable();
             refreshBtn.disable();
             insertLinkBtn.disable();
+            yield new Promise(resolve => {
+                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                    lockScroll: true
+                } ], resolve);
+            });
         });
         return _startAction.apply(this, arguments);
     }
@@ -8003,6 +8008,11 @@ SelectCitationsComponent.prototype.count = function() {
             insertBibBtn.enable();
             refreshBtn.enable();
             checkSelected();
+            yield new Promise(resolve => {
+                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                    scrollToTarget: true
+                } ], resolve);
+            });
         });
         return _endAction.apply(this, arguments);
     }
