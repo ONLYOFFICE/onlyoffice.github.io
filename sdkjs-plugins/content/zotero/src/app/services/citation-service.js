@@ -308,7 +308,7 @@ class CitationService {
 
                     let citationID = ""; // old format
                     if (field.Value.indexOf(self._citPrefix) === -1) {
-                         citationID = citationObject.citationID;
+                        citationID = citationObject.citationID;
                     }
 
                     let cslCitation = new CSLCitation(numOfItems, citationID);
