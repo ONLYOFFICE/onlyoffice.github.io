@@ -65,7 +65,6 @@ import "../edit-window.css";
             }
             /** @type {HTMLElement} */
             this._container = container;
-            this._field = null;
             
             /** @type {{citationItems: CitationItem[]} | null} */
             this.citationObject = null;
@@ -180,13 +179,13 @@ import "../edit-window.css";
                 this._container.classList.add('hide-remove-button');
             }
             const formHeight = document.querySelector('form')?.offsetHeight || 0;
-            const winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight; 
+            const winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight;
             window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
         }
 
         /**
-         * @param {HTMLFormElement} form 
-         * @param {string} id 
+         * @param {HTMLFormElement} form
+         * @param {string} id
          */
         removeItem(form, id) {
             if (!this.citationObject) {
@@ -223,7 +222,6 @@ import "../edit-window.css";
         /** @param {{citationItems: CitationItem[]}} citationObject */
         onAttachedContent(citationObject) {
             this.citationObject = citationObject;
-            console.warn(citationObject);
 
             if (!this.citationObject) {
                 return;
