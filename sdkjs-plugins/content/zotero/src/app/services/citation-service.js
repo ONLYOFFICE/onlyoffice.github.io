@@ -306,9 +306,9 @@ class CitationService {
                 const fieldsWithCitations = fields.map(function (field) {
                     let citationObject = self.#extractField(field);
 
-                    let  = ""; // old format
+                    let citationID = ""; // old format
                     if (field.Value.indexOf(self._citPrefix) === -1) {
-                         = citationObject.citationID;
+                         citationID = citationObject.citationID;
                     }
 
                     let cslCitation = new CSLCitation(numOfItems, citationID);
