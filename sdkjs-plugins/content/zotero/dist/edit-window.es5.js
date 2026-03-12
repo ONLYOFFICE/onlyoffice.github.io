@@ -130,7 +130,7 @@
         }
     }
     var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-    var es_array_slice = {};
+    var es_array_filter = {};
     var globalThis_1;
     var hasRequiredGlobalThis;
     function requireGlobalThis() {
@@ -1287,6 +1287,35 @@
         };
         return _export;
     }
+    var functionUncurryThisClause;
+    var hasRequiredFunctionUncurryThisClause;
+    function requireFunctionUncurryThisClause() {
+        if (hasRequiredFunctionUncurryThisClause) return functionUncurryThisClause;
+        hasRequiredFunctionUncurryThisClause = 1;
+        var classofRaw = requireClassofRaw();
+        var uncurryThis = requireFunctionUncurryThis();
+        functionUncurryThisClause = function(fn) {
+            if (classofRaw(fn) === "Function") return uncurryThis(fn);
+        };
+        return functionUncurryThisClause;
+    }
+    var functionBindContext;
+    var hasRequiredFunctionBindContext;
+    function requireFunctionBindContext() {
+        if (hasRequiredFunctionBindContext) return functionBindContext;
+        hasRequiredFunctionBindContext = 1;
+        var uncurryThis = requireFunctionUncurryThisClause();
+        var aCallable = requireACallable();
+        var NATIVE_BIND = requireFunctionBindNative();
+        var bind = uncurryThis(uncurryThis.bind);
+        functionBindContext = function(fn, that) {
+            aCallable(fn);
+            return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function() {
+                return fn.apply(that, arguments);
+            };
+        };
+        return functionBindContext;
+    }
     var isArray;
     var hasRequiredIsArray;
     function requireIsArray() {
@@ -1382,247 +1411,6 @@
             }) || called;
         }) ? isConstructorLegacy : isConstructorModern;
         return isConstructor;
-    }
-    var createProperty;
-    var hasRequiredCreateProperty;
-    function requireCreateProperty() {
-        if (hasRequiredCreateProperty) return createProperty;
-        hasRequiredCreateProperty = 1;
-        var DESCRIPTORS = requireDescriptors();
-        var definePropertyModule = requireObjectDefineProperty();
-        var createPropertyDescriptor = requireCreatePropertyDescriptor();
-        createProperty = function(object, key, value) {
-            if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value)); else object[key] = value;
-        };
-        return createProperty;
-    }
-    var arrayMethodHasSpeciesSupport;
-    var hasRequiredArrayMethodHasSpeciesSupport;
-    function requireArrayMethodHasSpeciesSupport() {
-        if (hasRequiredArrayMethodHasSpeciesSupport) return arrayMethodHasSpeciesSupport;
-        hasRequiredArrayMethodHasSpeciesSupport = 1;
-        var fails = requireFails();
-        var wellKnownSymbol = requireWellKnownSymbol();
-        var V8_VERSION = requireEnvironmentV8Version();
-        var SPECIES = wellKnownSymbol("species");
-        arrayMethodHasSpeciesSupport = function(METHOD_NAME) {
-            return V8_VERSION >= 51 || !fails(function() {
-                var array = [];
-                var constructor = array.constructor = {};
-                constructor[SPECIES] = function() {
-                    return {
-                        foo: 1
-                    };
-                };
-                return array[METHOD_NAME](Boolean).foo !== 1;
-            });
-        };
-        return arrayMethodHasSpeciesSupport;
-    }
-    var arraySlice;
-    var hasRequiredArraySlice;
-    function requireArraySlice() {
-        if (hasRequiredArraySlice) return arraySlice;
-        hasRequiredArraySlice = 1;
-        var uncurryThis = requireFunctionUncurryThis();
-        arraySlice = uncurryThis([].slice);
-        return arraySlice;
-    }
-    var hasRequiredEs_array_slice;
-    function requireEs_array_slice() {
-        if (hasRequiredEs_array_slice) return es_array_slice;
-        hasRequiredEs_array_slice = 1;
-        var $ = require_export();
-        var isArray = requireIsArray();
-        var isConstructor = requireIsConstructor();
-        var isObject = requireIsObject();
-        var toAbsoluteIndex = requireToAbsoluteIndex();
-        var lengthOfArrayLike = requireLengthOfArrayLike();
-        var toIndexedObject = requireToIndexedObject();
-        var createProperty = requireCreateProperty();
-        var wellKnownSymbol = requireWellKnownSymbol();
-        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
-        var nativeSlice = requireArraySlice();
-        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
-        var SPECIES = wellKnownSymbol("species");
-        var $Array = Array;
-        var max = Math.max;
-        $({
-            target: "Array",
-            proto: true,
-            forced: !HAS_SPECIES_SUPPORT
-        }, {
-            slice: function slice(start, end) {
-                var O = toIndexedObject(this);
-                var length = lengthOfArrayLike(O);
-                var k = toAbsoluteIndex(start, length);
-                var fin = toAbsoluteIndex(end === undefined ? length : end, length);
-                var Constructor, result, n;
-                if (isArray(O)) {
-                    Constructor = O.constructor;
-                    if (isConstructor(Constructor) && (Constructor === $Array || isArray(Constructor.prototype))) {
-                        Constructor = undefined;
-                    } else if (isObject(Constructor)) {
-                        Constructor = Constructor[SPECIES];
-                        if (Constructor === null) Constructor = undefined;
-                    }
-                    if (Constructor === $Array || Constructor === undefined) {
-                        return nativeSlice(O, k, fin);
-                    }
-                }
-                result = new (Constructor === undefined ? $Array : Constructor)(max(fin - k, 0));
-                for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
-                result.length = n;
-                return result;
-            }
-        });
-        return es_array_slice;
-    }
-    requireEs_array_slice();
-    var es_object_keys = {};
-    var objectKeys;
-    var hasRequiredObjectKeys;
-    function requireObjectKeys() {
-        if (hasRequiredObjectKeys) return objectKeys;
-        hasRequiredObjectKeys = 1;
-        var internalObjectKeys = requireObjectKeysInternal();
-        var enumBugKeys = requireEnumBugKeys();
-        objectKeys = Object.keys || function keys(O) {
-            return internalObjectKeys(O, enumBugKeys);
-        };
-        return objectKeys;
-    }
-    var hasRequiredEs_object_keys;
-    function requireEs_object_keys() {
-        if (hasRequiredEs_object_keys) return es_object_keys;
-        hasRequiredEs_object_keys = 1;
-        var $ = require_export();
-        var toObject = requireToObject();
-        var nativeKeys = requireObjectKeys();
-        var fails = requireFails();
-        var FAILS_ON_PRIMITIVES = fails(function() {
-            nativeKeys(1);
-        });
-        $({
-            target: "Object",
-            stat: true,
-            forced: FAILS_ON_PRIMITIVES
-        }, {
-            keys: function keys(it) {
-                return nativeKeys(toObject(it));
-            }
-        });
-        return es_object_keys;
-    }
-    requireEs_object_keys();
-    var es_object_toString = {};
-    var objectToString;
-    var hasRequiredObjectToString;
-    function requireObjectToString() {
-        if (hasRequiredObjectToString) return objectToString;
-        hasRequiredObjectToString = 1;
-        var TO_STRING_TAG_SUPPORT = requireToStringTagSupport();
-        var classof = requireClassof();
-        objectToString = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
-            return "[object " + classof(this) + "]";
-        };
-        return objectToString;
-    }
-    var hasRequiredEs_object_toString;
-    function requireEs_object_toString() {
-        if (hasRequiredEs_object_toString) return es_object_toString;
-        hasRequiredEs_object_toString = 1;
-        var TO_STRING_TAG_SUPPORT = requireToStringTagSupport();
-        var defineBuiltIn = requireDefineBuiltIn();
-        var toString = requireObjectToString();
-        if (!TO_STRING_TAG_SUPPORT) {
-            defineBuiltIn(Object.prototype, "toString", toString, {
-                unsafe: true
-            });
-        }
-        return es_object_toString;
-    }
-    requireEs_object_toString();
-    var web_domCollections_forEach = {};
-    var domIterables;
-    var hasRequiredDomIterables;
-    function requireDomIterables() {
-        if (hasRequiredDomIterables) return domIterables;
-        hasRequiredDomIterables = 1;
-        domIterables = {
-            CSSRuleList: 0,
-            CSSStyleDeclaration: 0,
-            CSSValueList: 0,
-            ClientRectList: 0,
-            DOMRectList: 0,
-            DOMStringList: 0,
-            DOMTokenList: 1,
-            DataTransferItemList: 0,
-            FileList: 0,
-            HTMLAllCollection: 0,
-            HTMLCollection: 0,
-            HTMLFormElement: 0,
-            HTMLSelectElement: 0,
-            MediaList: 0,
-            MimeTypeArray: 0,
-            NamedNodeMap: 0,
-            NodeList: 1,
-            PaintRequestList: 0,
-            Plugin: 0,
-            PluginArray: 0,
-            SVGLengthList: 0,
-            SVGNumberList: 0,
-            SVGPathSegList: 0,
-            SVGPointList: 0,
-            SVGStringList: 0,
-            SVGTransformList: 0,
-            SourceBufferList: 0,
-            StyleSheetList: 0,
-            TextTrackCueList: 0,
-            TextTrackList: 0,
-            TouchList: 0
-        };
-        return domIterables;
-    }
-    var domTokenListPrototype;
-    var hasRequiredDomTokenListPrototype;
-    function requireDomTokenListPrototype() {
-        if (hasRequiredDomTokenListPrototype) return domTokenListPrototype;
-        hasRequiredDomTokenListPrototype = 1;
-        var documentCreateElement = requireDocumentCreateElement();
-        var classList = documentCreateElement("span").classList;
-        var DOMTokenListPrototype = classList && classList.constructor && classList.constructor.prototype;
-        domTokenListPrototype = DOMTokenListPrototype === Object.prototype ? undefined : DOMTokenListPrototype;
-        return domTokenListPrototype;
-    }
-    var functionUncurryThisClause;
-    var hasRequiredFunctionUncurryThisClause;
-    function requireFunctionUncurryThisClause() {
-        if (hasRequiredFunctionUncurryThisClause) return functionUncurryThisClause;
-        hasRequiredFunctionUncurryThisClause = 1;
-        var classofRaw = requireClassofRaw();
-        var uncurryThis = requireFunctionUncurryThis();
-        functionUncurryThisClause = function(fn) {
-            if (classofRaw(fn) === "Function") return uncurryThis(fn);
-        };
-        return functionUncurryThisClause;
-    }
-    var functionBindContext;
-    var hasRequiredFunctionBindContext;
-    function requireFunctionBindContext() {
-        if (hasRequiredFunctionBindContext) return functionBindContext;
-        hasRequiredFunctionBindContext = 1;
-        var uncurryThis = requireFunctionUncurryThisClause();
-        var aCallable = requireACallable();
-        var NATIVE_BIND = requireFunctionBindNative();
-        var bind = uncurryThis(uncurryThis.bind);
-        functionBindContext = function(fn, that) {
-            aCallable(fn);
-            return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function() {
-                return fn.apply(that, arguments);
-            };
-        };
-        return functionBindContext;
     }
     var arraySpeciesConstructor;
     var hasRequiredArraySpeciesConstructor;
@@ -1728,6 +1516,129 @@
         };
         return arrayIteration;
     }
+    var arrayMethodHasSpeciesSupport;
+    var hasRequiredArrayMethodHasSpeciesSupport;
+    function requireArrayMethodHasSpeciesSupport() {
+        if (hasRequiredArrayMethodHasSpeciesSupport) return arrayMethodHasSpeciesSupport;
+        hasRequiredArrayMethodHasSpeciesSupport = 1;
+        var fails = requireFails();
+        var wellKnownSymbol = requireWellKnownSymbol();
+        var V8_VERSION = requireEnvironmentV8Version();
+        var SPECIES = wellKnownSymbol("species");
+        arrayMethodHasSpeciesSupport = function(METHOD_NAME) {
+            return V8_VERSION >= 51 || !fails(function() {
+                var array = [];
+                var constructor = array.constructor = {};
+                constructor[SPECIES] = function() {
+                    return {
+                        foo: 1
+                    };
+                };
+                return array[METHOD_NAME](Boolean).foo !== 1;
+            });
+        };
+        return arrayMethodHasSpeciesSupport;
+    }
+    var hasRequiredEs_array_filter;
+    function requireEs_array_filter() {
+        if (hasRequiredEs_array_filter) return es_array_filter;
+        hasRequiredEs_array_filter = 1;
+        var $ = require_export();
+        var $filter = requireArrayIteration().filter;
+        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
+        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("filter");
+        $({
+            target: "Array",
+            proto: true,
+            forced: !HAS_SPECIES_SUPPORT
+        }, {
+            filter: function filter(callbackfn) {
+                return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+            }
+        });
+        return es_array_filter;
+    }
+    requireEs_array_filter();
+    var es_object_toString = {};
+    var objectToString;
+    var hasRequiredObjectToString;
+    function requireObjectToString() {
+        if (hasRequiredObjectToString) return objectToString;
+        hasRequiredObjectToString = 1;
+        var TO_STRING_TAG_SUPPORT = requireToStringTagSupport();
+        var classof = requireClassof();
+        objectToString = TO_STRING_TAG_SUPPORT ? {}.toString : function toString() {
+            return "[object " + classof(this) + "]";
+        };
+        return objectToString;
+    }
+    var hasRequiredEs_object_toString;
+    function requireEs_object_toString() {
+        if (hasRequiredEs_object_toString) return es_object_toString;
+        hasRequiredEs_object_toString = 1;
+        var TO_STRING_TAG_SUPPORT = requireToStringTagSupport();
+        var defineBuiltIn = requireDefineBuiltIn();
+        var toString = requireObjectToString();
+        if (!TO_STRING_TAG_SUPPORT) {
+            defineBuiltIn(Object.prototype, "toString", toString, {
+                unsafe: true
+            });
+        }
+        return es_object_toString;
+    }
+    requireEs_object_toString();
+    var web_domCollections_forEach = {};
+    var domIterables;
+    var hasRequiredDomIterables;
+    function requireDomIterables() {
+        if (hasRequiredDomIterables) return domIterables;
+        hasRequiredDomIterables = 1;
+        domIterables = {
+            CSSRuleList: 0,
+            CSSStyleDeclaration: 0,
+            CSSValueList: 0,
+            ClientRectList: 0,
+            DOMRectList: 0,
+            DOMStringList: 0,
+            DOMTokenList: 1,
+            DataTransferItemList: 0,
+            FileList: 0,
+            HTMLAllCollection: 0,
+            HTMLCollection: 0,
+            HTMLFormElement: 0,
+            HTMLSelectElement: 0,
+            MediaList: 0,
+            MimeTypeArray: 0,
+            NamedNodeMap: 0,
+            NodeList: 1,
+            PaintRequestList: 0,
+            Plugin: 0,
+            PluginArray: 0,
+            SVGLengthList: 0,
+            SVGNumberList: 0,
+            SVGPathSegList: 0,
+            SVGPointList: 0,
+            SVGStringList: 0,
+            SVGTransformList: 0,
+            SourceBufferList: 0,
+            StyleSheetList: 0,
+            TextTrackCueList: 0,
+            TextTrackList: 0,
+            TouchList: 0
+        };
+        return domIterables;
+    }
+    var domTokenListPrototype;
+    var hasRequiredDomTokenListPrototype;
+    function requireDomTokenListPrototype() {
+        if (hasRequiredDomTokenListPrototype) return domTokenListPrototype;
+        hasRequiredDomTokenListPrototype = 1;
+        var documentCreateElement = requireDocumentCreateElement();
+        var classList = documentCreateElement("span").classList;
+        var DOMTokenListPrototype = classList && classList.constructor && classList.constructor.prototype;
+        domTokenListPrototype = DOMTokenListPrototype === Object.prototype ? undefined : DOMTokenListPrototype;
+        return domTokenListPrototype;
+    }
     var arrayMethodIsStrict;
     var hasRequiredArrayMethodIsStrict;
     function requireArrayMethodIsStrict() {
@@ -1782,27 +1693,6 @@
         return web_domCollections_forEach;
     }
     requireWeb_domCollections_forEach();
-    var es_array_filter = {};
-    var hasRequiredEs_array_filter;
-    function requireEs_array_filter() {
-        if (hasRequiredEs_array_filter) return es_array_filter;
-        hasRequiredEs_array_filter = 1;
-        var $ = require_export();
-        var $filter = requireArrayIteration().filter;
-        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
-        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("filter");
-        $({
-            target: "Array",
-            proto: true,
-            forced: !HAS_SPECIES_SUPPORT
-        }, {
-            filter: function filter(callbackfn) {
-                return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-            }
-        });
-        return es_array_filter;
-    }
-    requireEs_array_filter();
     var es_array_join = {};
     var hasRequiredEs_array_join;
     function requireEs_array_join() {
@@ -1828,6 +1718,80 @@
         return es_array_join;
     }
     requireEs_array_join();
+    var es_array_slice = {};
+    var createProperty;
+    var hasRequiredCreateProperty;
+    function requireCreateProperty() {
+        if (hasRequiredCreateProperty) return createProperty;
+        hasRequiredCreateProperty = 1;
+        var DESCRIPTORS = requireDescriptors();
+        var definePropertyModule = requireObjectDefineProperty();
+        var createPropertyDescriptor = requireCreatePropertyDescriptor();
+        createProperty = function(object, key, value) {
+            if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value)); else object[key] = value;
+        };
+        return createProperty;
+    }
+    var arraySlice;
+    var hasRequiredArraySlice;
+    function requireArraySlice() {
+        if (hasRequiredArraySlice) return arraySlice;
+        hasRequiredArraySlice = 1;
+        var uncurryThis = requireFunctionUncurryThis();
+        arraySlice = uncurryThis([].slice);
+        return arraySlice;
+    }
+    var hasRequiredEs_array_slice;
+    function requireEs_array_slice() {
+        if (hasRequiredEs_array_slice) return es_array_slice;
+        hasRequiredEs_array_slice = 1;
+        var $ = require_export();
+        var isArray = requireIsArray();
+        var isConstructor = requireIsConstructor();
+        var isObject = requireIsObject();
+        var toAbsoluteIndex = requireToAbsoluteIndex();
+        var lengthOfArrayLike = requireLengthOfArrayLike();
+        var toIndexedObject = requireToIndexedObject();
+        var createProperty = requireCreateProperty();
+        var wellKnownSymbol = requireWellKnownSymbol();
+        var arrayMethodHasSpeciesSupport = requireArrayMethodHasSpeciesSupport();
+        var nativeSlice = requireArraySlice();
+        var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport("slice");
+        var SPECIES = wellKnownSymbol("species");
+        var $Array = Array;
+        var max = Math.max;
+        $({
+            target: "Array",
+            proto: true,
+            forced: !HAS_SPECIES_SUPPORT
+        }, {
+            slice: function slice(start, end) {
+                var O = toIndexedObject(this);
+                var length = lengthOfArrayLike(O);
+                var k = toAbsoluteIndex(start, length);
+                var fin = toAbsoluteIndex(end === undefined ? length : end, length);
+                var Constructor, result, n;
+                if (isArray(O)) {
+                    Constructor = O.constructor;
+                    if (isConstructor(Constructor) && (Constructor === $Array || isArray(Constructor.prototype))) {
+                        Constructor = undefined;
+                    } else if (isObject(Constructor)) {
+                        Constructor = Constructor[SPECIES];
+                        if (Constructor === null) Constructor = undefined;
+                    }
+                    if (Constructor === $Array || Constructor === undefined) {
+                        return nativeSlice(O, k, fin);
+                    }
+                }
+                result = new (Constructor === undefined ? $Array : Constructor)(max(fin - k, 0));
+                for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
+                result.length = n;
+                return result;
+            }
+        });
+        return es_array_slice;
+    }
+    requireEs_array_slice();
     var es_regexp_constructor = {};
     var functionUncurryThisAccessor;
     var hasRequiredFunctionUncurryThisAccessor;
@@ -1912,6 +1876,18 @@
         return inheritIfRequired;
     }
     var objectDefineProperties = {};
+    var objectKeys;
+    var hasRequiredObjectKeys;
+    function requireObjectKeys() {
+        if (hasRequiredObjectKeys) return objectKeys;
+        hasRequiredObjectKeys = 1;
+        var internalObjectKeys = requireObjectKeysInternal();
+        var enumBugKeys = requireEnumBugKeys();
+        objectKeys = Object.keys || function keys(O) {
+            return internalObjectKeys(O, enumBugKeys);
+        };
+        return objectKeys;
+    }
     var hasRequiredObjectDefineProperties;
     function requireObjectDefineProperties() {
         if (hasRequiredObjectDefineProperties) return objectDefineProperties;
@@ -7697,7 +7673,6 @@
                     throw new Error("container is not initialized");
                 }
                 this._container = container;
-                this._field = null;
                 this.citationObject = null;
                 this.forms = [];
             }
@@ -7706,7 +7681,15 @@
                 value: function createForm(citationItem) {
                     var form = document.createElement("form");
                     form.classList.add("form");
+                    form.classList.add("message-container");
                     this._container.appendChild(form);
+                    var deleteBtn = document.createElement("button");
+                    deleteBtn.className = "message-close i18n";
+                    deleteBtn.textContent = "×";
+                    deleteBtn.setAttribute("aria-label", "Close");
+                    deleteBtn.setAttribute("title", "Remove");
+                    deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
+                    form.appendChild(deleteBtn);
                     var title = document.createElement("div");
                     title.classList.add("title");
                     title.textContent = citationItem.itemData.title;
@@ -7779,6 +7762,35 @@
                     form.appendChild(params);
                 }
             }, {
+                key: "updateRemoveButtonsVisibility",
+                value: function updateRemoveButtonsVisibility() {
+                    var _document$querySelect;
+                    if (!this.citationObject) {
+                        return;
+                    }
+                    var numOfCitations = this.citationObject.citationItems.length;
+                    if (numOfCitations > 1) {
+                        this._container.classList.remove("hide-remove-button");
+                    } else {
+                        this._container.classList.add("hide-remove-button");
+                    }
+                    var formHeight = ((_document$querySelect = document.querySelector("form")) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.offsetHeight) || 0;
+                    var winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight;
+                    window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
+                }
+            }, {
+                key: "removeItem",
+                value: function removeItem(form, id) {
+                    if (!this.citationObject) {
+                        return;
+                    }
+                    this.citationObject.citationItems = this.citationObject.citationItems.filter(function(item) {
+                        return item.id !== id;
+                    });
+                    this._container.removeChild(form);
+                    this.updateRemoveButtonsVisibility();
+                }
+            }, {
                 key: "onThemeChanged",
                 value: function onThemeChanged(theme) {
                     window.Asc.plugin.onThemeChangedBase(theme);
@@ -7798,23 +7810,16 @@
                 }
             }, {
                 key: "onAttachedContent",
-                value: function onAttachedContent(field) {
+                value: function onAttachedContent(citationObject) {
                     var _this = this;
-                    this._field = field;
-                    var citationStartIndex = field.Value.indexOf("{");
-                    var citationEndIndex = field.Value.lastIndexOf("}");
-                    if (citationStartIndex === -1) {
-                        return;
-                    }
-                    var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-                    this.citationObject = JSON.parse(citationString);
+                    this.citationObject = citationObject;
                     if (!this.citationObject) {
                         return;
                     }
                     this.citationObject.citationItems.forEach(function(item) {
                         _this.createForm(item);
                     });
-                    window.Asc.plugin.sendToPlugin("onUpdateHeight", document.body.scrollHeight);
+                    this.updateRemoveButtonsVisibility();
                 }
             }, {
                 key: "onClickSave",
