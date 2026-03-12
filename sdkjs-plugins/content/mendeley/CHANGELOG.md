@@ -30,3 +30,5 @@
 * Preserve formatting and editing of manual citations.
 * Support for styles with footnotes and endnotes
 * Improved handling of repeated citations (e.g., automatic `Ibid.` support).
+* Ability to edit citations via the context menu
+* Added bibliography formatting feature.
