@@ -217,7 +217,6 @@ class CitationService {
             var bibObject = self._formatter.makeBibliography();
             // Sort bibliography items
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                var citationId = bibObject[0].entry_ids[i][0];
                 /** @type {string} */
                 var bibText = bibObject[1][i];
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
@@ -307,9 +306,9 @@ class CitationService {
                 const fieldsWithCitations = fields.map(function (field) {
                     let citationObject = self.#extractField(field);
 
-                    let citationID = ""; // old format
+                    let  = ""; // old format
                     if (field.Value.indexOf(self._citPrefix) === -1) {
-                        citationID = citationObject.citationID;
+                         = citationObject.citationID;
                     }
 
                     let cslCitation = new CSLCitation(numOfItems, citationID);
