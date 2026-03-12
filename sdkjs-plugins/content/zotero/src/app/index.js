@@ -332,7 +332,9 @@ import "../styles.css";
                 citationService,
                 false
             );
-
+            
+            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : true }]);
+            
             const styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
                 // this way, because "SelectAddinField" does not work with notes
@@ -354,6 +356,7 @@ import "../styles.css";
                 .finally(function () {
                     endAction("Zotero (" + translate("Updating citations") + ")");
                     CursorService.setCursorPosition(cursorPos);
+                    Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : false }]);
                 });
         });
 
