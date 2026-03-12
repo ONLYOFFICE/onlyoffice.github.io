@@ -677,20 +677,40 @@ class CitationService {
     /**
      * Context menu "Edit citation"
      * @param {Object & {citationID: string}} updatedControl
+     * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<void>}
      */
-    async updateItem(updatedControl) {
+    async updateItem(updatedControl, notesStyle) {
         try {
-            const { controlsWithCitations } =
+            const { controlsWithCitations, bibControl } =
                 await this.#synchronizeStorageWithDocItems(updatedControl);
+            const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
+
+            if (notesStyle) {
+                await this.#addFootnotesTextToControls(controlsWithCitations, notesStyle);
+            }
 
             /** @type {ContentControlProperties[]} */
             let updatedControls = await this.#getUpdatedControls(
                 controlsWithCitations,
                 true,
             );
+
+            if (notesStyle && updatedControls && updatedControls.length) {
+                await this.citationDocService.convertNotesStyle(
+                    updatedControls,
+                    notesStyle,
+                );
+                updatedControls = [];
+            }
+
+            if (bibControl) {
+                updatedControls.push(
+                    await this.#updateBibliography(bNoHaveControls, bibControl),
+                );
+            }
 
             if (updatedControls && updatedControls.length) {
                 return this.citationDocService.updateContentControls(updatedControls);
@@ -882,19 +902,19 @@ class CitationService {
     
     /**
      * @param {string} controlTag
-     * @returns {Promise<AddinFieldData | null>}
+     * @returns {Promise<Object & {citationID: string} | null>}
      */
     async showEditCitationWindow(controlTag) {
         if (!controlTag) return null;
 
         const citationObject = this.#extractControlTag(controlTag);
-        const updatedField =
+        const updatedObject =
             await this.#additionalWindow.showEditWindow(citationObject);
-        if (!updatedField) {
+        if (!updatedObject) {
             // Cancel click
             return null;
         }
-        return updatedField;
+        return updatedObject;
     }
 
 }

@@ -358,7 +358,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
         placeholder: locatorPlaceholder,
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
-        label: "Omit author",
+        label: translate("Omit author"),
     });
 
     prefixInput.subscribe(function (event) {

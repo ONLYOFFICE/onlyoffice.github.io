@@ -201,6 +201,8 @@ import "../styles.css";
                 ]).then(function ([g, s, isUpdateOldVersion, c]) {
                     if (isUpdateOldVersion) {
                         settings.show();
+                    } else {
+                        addContextMenuButtons();
                     }
                 }).catch(function (error) {
                     console.error(error.message);
@@ -213,7 +215,6 @@ import "../styles.css";
         
         getEditorVersion().then((editorVersion) => {
             window.Asc.scope.editorVersion = editorVersion;
-            addContextMenuButtons(); 
         });
     };
     
@@ -871,7 +872,7 @@ import "../styles.css";
                         const doc = Api.GetDocument();
                         const control = doc.GetCurrentContentControl();
                         if (control) {
-                            control.GetTag();
+                            return control.GetTag();
                         } else {
                             return null;
                         }
@@ -887,8 +888,8 @@ import "../styles.css";
             ) {
                 return;
             }
-            const updatedControl = await citationService.showEditCitationWindow(controlTag);
-            if (!updatedControl) {
+            const updatedObject = await citationService.showEditCitationWindow(controlTag);
+            if (!updatedObject) {
                 return;
             }
             await startAction("Mendeley (" + translate("Updating citations") + ")");
@@ -896,15 +897,15 @@ import "../styles.css";
             let cursorPos = await CursorService.getCursorPosition();
             let updateFn = citationService.updateItem.bind(
                 citationService,
-                updatedControl
+                updatedObject
             );
 
             const styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
                 // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItemInNotes.bind(
+                updateFn = citationService.updateItem.bind(
                     citationService,
-                    updatedControl,
+                    updatedObject,
                     styleManager.getLastUsedNotesStyle()
                 );
             }
