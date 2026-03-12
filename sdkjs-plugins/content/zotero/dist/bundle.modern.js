@@ -5685,13 +5685,18 @@ class CitationService {
             }
         })();
     }
-    updateItem(updatedField) {
+    updateItem(updatedField, notesStyle) {
         var _this8 = this;
         return _asyncToGenerator(function*() {
             try {
-                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8, updatedField);
+                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8, updatedField);
+                var bNoHaveFields = fieldsWithCitations.length === 0;
                 _assertClassBrand(_CitationService_brand, _this8, _updateFormatter).call(_this8);
                 var updatedFields = yield _assertClassBrand(_CitationService_brand, _this8, _getUpdatedFields).call(_this8, fieldsWithCitations, true);
+                if (notesStyle && updatedFields && updatedFields.length) {
+                    yield _this8.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+                    updatedFields = [];
+                }
                 if (updatedFields && updatedFields.length) {
                     return _this8.citationDocService.updateAddinFields(updatedFields);
                 }
@@ -5700,39 +5705,24 @@ class CitationService {
             }
         })();
     }
-    updateItemInNotes(updatedField, notesStyle) {
+    switchingBetweenNotesAndText(notesStyle) {
         var _this9 = this;
         return _asyncToGenerator(function*() {
             try {
-                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this9, _synchronizeStorageWithDocItems).call(_this9, updatedField);
+                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this9, _synchronizeStorageWithDocItems).call(_this9);
+                var bNoHaveFields = fieldsWithCitations.length === 0;
                 _assertClassBrand(_CitationService_brand, _this9, _updateFormatter).call(_this9);
                 var updatedFields = yield _assertClassBrand(_CitationService_brand, _this9, _getUpdatedFields).call(_this9, fieldsWithCitations, true);
                 if (updatedFields && updatedFields.length) {
-                    yield _this9.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    switchingBetweenNotesAndText(notesStyle) {
-        var _this0 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this0, _synchronizeStorageWithDocItems).call(_this0);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this0, _updateFormatter).call(_this0);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this0, _getUpdatedFields).call(_this0, fieldsWithCitations, true);
-                if (updatedFields && updatedFields.length) {
                     if (notesStyle) {
-                        yield _this0.citationDocService.convertTextToNotes(updatedFields, notesStyle);
+                        yield _this9.citationDocService.convertTextToNotes(updatedFields, notesStyle);
                     } else {
-                        yield _this0.citationDocService.convertNotesToText(updatedFields);
+                        yield _this9.citationDocService.convertNotesToText(updatedFields);
                     }
                 }
                 if (bibField) {
-                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this0, _updateBibliography).call(_this0, bNoHaveFields, bibField) ];
-                    yield _this0.citationDocService.updateAddinFields(bibFields);
+                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this9, _updateBibliography).call(_this9, bNoHaveFields, bibField) ];
+                    yield _this9.citationDocService.updateAddinFields(bibFields);
                 }
             } catch (e) {
                 throw e;
@@ -5740,24 +5730,25 @@ class CitationService {
         })();
     }
     convertNotesStyle(notesStyle) {
-        var _this1 = this;
+        var _this0 = this;
         return _asyncToGenerator(function*() {
             try {
-                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this1, _synchronizeStorageWithDocItems).call(_this1);
-                _assertClassBrand(_CitationService_brand, _this1, _updateFormatter).call(_this1);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this1, _getUpdatedFields).call(_this1, fieldsWithCitations, false, true);
+                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this0, _synchronizeStorageWithDocItems).call(_this0);
+                _assertClassBrand(_CitationService_brand, _this0, _updateFormatter).call(_this0);
+                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this0, _getUpdatedFields).call(_this0, fieldsWithCitations, false, true);
                 if (!updatedFields || !updatedFields.length) return;
-                yield _this1.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+                yield _this0.citationDocService.convertNotesStyle(updatedFields, notesStyle);
             } catch (e) {
                 throw e;
             }
         })();
     }
     showEditCitationWindow(field) {
-        var _this10 = this;
+        var _this1 = this;
         return _asyncToGenerator(function*() {
             if (!field) return null;
-            var updatedField = yield _classPrivateFieldGet2(_additionalWindow, _this10).showEditWindow(field);
+            var citationObject = _assertClassBrand(_CitationService_brand, _this1, _extractField).call(_this1, field);
+            var updatedField = yield _classPrivateFieldGet2(_additionalWindow, _this1).showEditWindow(citationObject);
             if (!updatedField) {
                 return null;
             }
@@ -7423,7 +7414,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function(item) {
         placeholder: locatorPlaceholder
     });
     var omitAuthorInput = new Checkbox(omitAuthor, {
-        label: "Omit author"
+        label: translate("Omit author")
     });
     prefixInput.subscribe(function(event) {
         if (event.type !== "inputfield:input") {
@@ -8221,7 +8212,7 @@ SelectCitationsComponent.prototype.count = function() {
             var updateFn = citationService.updateItem.bind(citationService, updatedField);
             var styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
-                updateFn = citationService.updateItemInNotes.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
+                updateFn = citationService.updateItem.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
             }
             updateFn().catch(function(error) {
                 console.error(error);

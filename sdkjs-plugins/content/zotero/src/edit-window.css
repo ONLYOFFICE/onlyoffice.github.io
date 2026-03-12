@@ -3,18 +3,44 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
+}
+
+body {
+    padding: 0 8px;
+    height: auto;
+    max-height: 100%;
+}
+
+.container {
+    overflow-y: auto;
+    height: 100vh;
+}
+
+form {
+    padding: 0 8px;
+    &:first-child {
+        margin-top: 8px;
+    }
 }
 
 form > div {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    padding-top: 10px;
     gap: 10px;
 }
 
 form > div:last-child {
     padding-bottom: 18px;
+}
+
+.title {
+    padding-right: 12px;
+}
+.hide-remove-button .message-close {
+    display: none;
 }
 
 .selectbox-container .selectbox-dropdown .selectbox-options {
