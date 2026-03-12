@@ -12376,7 +12376,7 @@
             key: "addCitation",
             value: function() {
                 var _addCitation = _asyncToGenerator(_regenerator().m(function _callee2(text, value, notesStyle) {
-                    var formattingPositions, field;
+                    var formattingPositions, field, bHasNotes;
                     return _regenerator().w(function(_context2) {
                         while (1) switch (_context2.n) {
                           case 0:
@@ -12386,7 +12386,8 @@
                                 Value: _classPrivateFieldGet2(_citPrefix, this) + " " + _classPrivateFieldGet2(_citSuffix, this) + value,
                                 Content: formattingPositions.text
                             };
-                            if (!(notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1)) {
+                            bHasNotes = notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1;
+                            if (!bHasNotes) {
                                 _context2.n = 1;
                                 break;
                             }
@@ -12394,10 +12395,29 @@
                             return _assertClassBrand(_CitationDocService_brand, this, _addNote).call(this, notesStyle);
 
                           case 1:
-                            return _context2.a(2, _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
-                                if (!formattingPositions.formatting.length) return;
-                                return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-                            }));
+                            _context2.n = 2;
+                            return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
+
+                          case 2:
+                            if (formattingPositions.formatting.length) {
+                                _context2.n = 3;
+                                break;
+                            }
+                            return _context2.a(2, false);
+
+                          case 3:
+                            _context2.n = 4;
+                            return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+
+                          case 4:
+                            if (!bHasNotes) {
+                                _context2.n = 5;
+                                break;
+                            }
+                            return _context2.a(2, _assertClassBrand(_CitationDocService_brand, this, _selectFieldReference).call(this));
+
+                          case 5:
+                            return _context2.a(2, false);
                         }
                     }, _callee2, this);
                 }));
@@ -12406,6 +12426,13 @@
                 }
                 return addCitation;
             }()
+        }, {
+            key: "getCurrentField",
+            value: function getCurrentField() {
+                return new Promise(function(resolve, reject) {
+                    window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
+                });
+            }
         }, {
             key: "getAddinZoteroFields",
             value: function getAddinZoteroFields() {
@@ -12819,6 +12846,25 @@
                 }
                 return convertNotesStyle;
             }()
+        }, {
+            key: "moveCursorOutsideField",
+            value: function() {
+                var _moveCursorOutsideField = _asyncToGenerator(_regenerator().m(function _callee7(fieldId) {
+                    return _regenerator().w(function(_context7) {
+                        while (1) switch (_context7.n) {
+                          case 0:
+                            return _context7.a(2, new Promise(function(resolve) {
+                                var isBeforeField = false;
+                                window.Asc.plugin.executeMethod("MoveCursorOutsideField", [ fieldId, isBeforeField ], resolve);
+                            }));
+                        }
+                    }, _callee7);
+                }));
+                function moveCursorOutsideField(_x10) {
+                    return _moveCursorOutsideField.apply(this, arguments);
+                }
+                return moveCursorOutsideField;
+            }()
         } ]);
     }();
     function _addAddinField(field) {
@@ -12842,11 +12888,6 @@
     function _getAllAddinFields() {
         return new Promise(function(resolve, reject) {
             window.Asc.plugin.executeMethod("GetAllAddinFields", undefined, resolve);
-        });
-    }
-    function _getCurrentField() {
-        return new Promise(function(resolve, reject) {
-            window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
         });
     }
     function _makeFormattingPositions(fields) {
@@ -12905,20 +12946,20 @@
             }, isClose, isCalc, resolve);
         });
     }
-    function _pasteAddinFieldWithHtml(_x10, _x11) {
+    function _pasteAddinFieldWithHtml(_x11, _x12) {
         return _pasteAddinFieldWithHtml2.apply(this, arguments);
     }
     function _pasteAddinFieldWithHtml2() {
-        _pasteAddinFieldWithHtml2 = _asyncToGenerator(_regenerator().m(function _callee7(field, html) {
+        _pasteAddinFieldWithHtml2 = _asyncToGenerator(_regenerator().m(function _callee8(field, html) {
             var parser, doc, paragraphs, numbers, _field2;
-            return _regenerator().w(function(_context7) {
-                while (1) switch (_context7.n) {
+            return _regenerator().w(function(_context8) {
+                while (1) switch (_context8.n) {
                   case 0:
-                    _context7.n = 1;
+                    _context8.n = 1;
                     return _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
 
                   case 1:
-                    _context7.n = 2;
+                    _context8.n = 2;
                     return new Promise(function(resolve) {
                         var isCalc = true;
                         var isClose = false;
@@ -12930,7 +12971,7 @@
 
                   case 2:
                     if (!(field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, this)) === 0 && Asc.scope.bibStyle)) {
-                        _context7.n = 8;
+                        _context8.n = 8;
                         break;
                     }
                     parser = new DOMParser;
@@ -12947,27 +12988,27 @@
                         }
                     });
                     html = doc.body.innerHTML;
-                    _context7.n = 3;
+                    _context8.n = 3;
                     return _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
 
                   case 3:
-                    _context7.n = 4;
-                    return _assertClassBrand(_CitationDocService_brand, this, _getCurrentField).call(this);
+                    _context8.n = 4;
+                    return this.getCurrentField();
 
                   case 4:
-                    _field2 = _context7.v;
+                    _field2 = _context8.v;
                     if (_field2) {
-                        _context7.n = 5;
+                        _context8.n = 5;
                         break;
                     }
-                    return _context7.a(2);
+                    return _context8.a(2);
 
                   case 5:
-                    _context7.n = 6;
+                    _context8.n = 6;
                     return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, _field2.FieldId);
 
                   case 6:
-                    _context7.n = 7;
+                    _context8.n = 7;
                     return new Promise(function(resolve) {
                         var isCalc = false;
                         var isClose = false;
@@ -13007,17 +13048,17 @@
 
                   case 7:
                     Asc.scope.bibStyle = null;
-                    _context7.n = 9;
+                    _context8.n = 9;
                     break;
 
                   case 8:
-                    _context7.n = 9;
+                    _context8.n = 9;
                     return _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
 
                   case 9:
-                    return _context7.a(2);
+                    return _context8.a(2);
                 }
-            }, _callee7, this);
+            }, _callee8, this);
         }));
         return _pasteAddinFieldWithHtml2.apply(this, arguments);
     }
@@ -14793,24 +14834,40 @@
             _classPrivateFieldSet2(_additionalWindow, this, new AdditionalWindow);
         }
         return _createClass(CitationService, [ {
-            key: "saveAsText",
+            key: "getCurrentField",
             value: function() {
-                var _saveAsText = _asyncToGenerator(_regenerator().m(function _callee() {
-                    var isOk;
+                var _getCurrentField = _asyncToGenerator(_regenerator().m(function _callee() {
                     return _regenerator().w(function(_context) {
                         while (1) switch (_context.n) {
                           case 0:
-                            _context.n = 1;
+                            return _context.a(2, this.citationDocService.getCurrentField());
+                        }
+                    }, _callee, this);
+                }));
+                function getCurrentField() {
+                    return _getCurrentField.apply(this, arguments);
+                }
+                return getCurrentField;
+            }()
+        }, {
+            key: "saveAsText",
+            value: function() {
+                var _saveAsText = _asyncToGenerator(_regenerator().m(function _callee2() {
+                    var isOk;
+                    return _regenerator().w(function(_context2) {
+                        while (1) switch (_context2.n) {
+                          case 0:
+                            _context2.n = 1;
                             return this.citationDocService.saveAsText();
 
                           case 1:
-                            isOk = _context.v;
+                            isOk = _context2.v;
                             if (isOk) {
                                 _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Success!", "All active Mendeley citations and Bibliography have been replaced.", "success");
                             }
-                            return _context.a(2, isOk);
+                            return _context2.a(2, isOk);
                         }
-                    }, _callee, this);
+                    }, _callee2, this);
                 }));
                 function saveAsText() {
                     return _saveAsText.apply(this, arguments);
@@ -14820,25 +14877,25 @@
         }, {
             key: "insertSelectedCitations",
             value: function() {
-                var _insertSelectedCitations = _asyncToGenerator(_regenerator().m(function _callee2(items) {
+                var _insertSelectedCitations = _asyncToGenerator(_regenerator().m(function _callee3(items) {
                     var _this = this;
                     var self, cslCitation, citationID, item, _t;
-                    return _regenerator().w(function(_context2) {
-                        while (1) switch (_context2.p = _context2.n) {
+                    return _regenerator().w(function(_context3) {
+                        while (1) switch (_context3.p = _context3.n) {
                           case 0:
                             self = this;
-                            _context2.p = 1;
-                            _context2.n = 2;
+                            _context3.p = 1;
+                            _context3.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
                           case 2:
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context2.n = 4;
+                            _context3.n = 4;
                             break;
 
                           case 3:
-                            _context2.p = 3;
-                            _t = _context2.v;
+                            _context3.p = 3;
+                            _t = _context3.v;
                             throw _t;
 
                           case 4:
@@ -14847,7 +14904,7 @@
                                 item = items[citationID];
                                 cslCitation.fillFromObject(item);
                             }
-                            return _context2.a(2, _assertClassBrand(_CitationService_brand, this, _getSelectedInJsonFormat).call(this, items).then(function(items) {
+                            return _context3.a(2, _assertClassBrand(_CitationService_brand, this, _getSelectedInJsonFormat).call(this, items).then(function(items) {
                                 items.forEach(function(item) {
                                     cslCitation.fillFromObject(item);
                                 });
@@ -14855,7 +14912,7 @@
                                 return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
                             }));
                         }
-                    }, _callee2, this, [ [ 1, 3 ] ]);
+                    }, _callee3, this, [ [ 1, 3 ] ]);
                 }));
                 function insertSelectedCitations(_x) {
                     return _insertSelectedCitations.apply(this, arguments);
@@ -14865,61 +14922,8 @@
         }, {
             key: "insertBibliography",
             value: function() {
-                var _insertBibliography = _asyncToGenerator(_regenerator().m(function _callee3() {
+                var _insertBibliography = _asyncToGenerator(_regenerator().m(function _callee4() {
                     var _yield$_assertClassBr, fieldsWithCitations, bibFieldValue, bibField, bNoHaveFields, updatedFields, _t2, _t3;
-                    return _regenerator().w(function(_context3) {
-                        while (1) switch (_context3.p = _context3.n) {
-                          case 0:
-                            _context3.p = 0;
-                            _context3.n = 1;
-                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
-
-                          case 1:
-                            _yield$_assertClassBr = _context3.v;
-                            fieldsWithCitations = _yield$_assertClassBr.fieldsWithCitations;
-                            bibFieldValue = _yield$_assertClassBr.bibFieldValue;
-                            bibField = _yield$_assertClassBr.bibField;
-                            bNoHaveFields = fieldsWithCitations.length === 0;
-                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            if (!bibField) {
-                                _context3.n = 3;
-                                break;
-                            }
-                            _context3.n = 2;
-                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
-
-                          case 2:
-                            _t2 = _context3.v;
-                            updatedFields = [ _t2 ];
-                            return _context3.a(2, this.citationDocService.updateAddinFields(updatedFields));
-
-                          case 3:
-                            return _context3.a(2, _assertClassBrand(_CitationService_brand, this, _addBibliography).call(this, bNoHaveFields, bibFieldValue));
-
-                          case 4:
-                            _context3.n = 6;
-                            break;
-
-                          case 5:
-                            _context3.p = 5;
-                            _t3 = _context3.v;
-                            throw _t3;
-
-                          case 6:
-                            return _context3.a(2);
-                        }
-                    }, _callee3, this, [ [ 0, 5 ] ]);
-                }));
-                function insertBibliography() {
-                    return _insertBibliography.apply(this, arguments);
-                }
-                return insertBibliography;
-            }()
-        }, {
-            key: "updateCslItems",
-            value: function() {
-                var _updateCslItems = _asyncToGenerator(_regenerator().m(function _callee4(bHardRefresh) {
-                    var _yield$_assertClassBr2, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, format, _t4, _t5;
                     return _regenerator().w(function(_context4) {
                         while (1) switch (_context4.p = _context4.n) {
                           case 0:
@@ -14928,7 +14932,76 @@
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
                           case 1:
-                            _yield$_assertClassBr2 = _context4.v;
+                            _yield$_assertClassBr = _context4.v;
+                            fieldsWithCitations = _yield$_assertClassBr.fieldsWithCitations;
+                            bibFieldValue = _yield$_assertClassBr.bibFieldValue;
+                            bibField = _yield$_assertClassBr.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            if (!bibField) {
+                                _context4.n = 3;
+                                break;
+                            }
+                            _context4.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
+
+                          case 2:
+                            _t2 = _context4.v;
+                            updatedFields = [ _t2 ];
+                            return _context4.a(2, this.citationDocService.updateAddinFields(updatedFields));
+
+                          case 3:
+                            return _context4.a(2, _assertClassBrand(_CitationService_brand, this, _addBibliography).call(this, bNoHaveFields, bibFieldValue));
+
+                          case 4:
+                            _context4.n = 6;
+                            break;
+
+                          case 5:
+                            _context4.p = 5;
+                            _t3 = _context4.v;
+                            throw _t3;
+
+                          case 6:
+                            return _context4.a(2);
+                        }
+                    }, _callee4, this, [ [ 0, 5 ] ]);
+                }));
+                function insertBibliography() {
+                    return _insertBibliography.apply(this, arguments);
+                }
+                return insertBibliography;
+            }()
+        }, {
+            key: "moveCursorOutsideField",
+            value: function() {
+                var _moveCursorOutsideField = _asyncToGenerator(_regenerator().m(function _callee5(fieldId) {
+                    return _regenerator().w(function(_context5) {
+                        while (1) switch (_context5.n) {
+                          case 0:
+                            return _context5.a(2, this.citationDocService.moveCursorOutsideField(fieldId));
+                        }
+                    }, _callee5, this);
+                }));
+                function moveCursorOutsideField(_x2) {
+                    return _moveCursorOutsideField.apply(this, arguments);
+                }
+                return moveCursorOutsideField;
+            }()
+        }, {
+            key: "updateCslItems",
+            value: function() {
+                var _updateCslItems = _asyncToGenerator(_regenerator().m(function _callee6(bHardRefresh) {
+                    var _yield$_assertClassBr2, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, format, _t4, _t5;
+                    return _regenerator().w(function(_context6) {
+                        while (1) switch (_context6.p = _context6.n) {
+                          case 0:
+                            _context6.p = 0;
+                            _context6.n = 1;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 1:
+                            _yield$_assertClassBr2 = _context6.v;
                             fieldsWithCitations = _yield$_assertClassBr2.fieldsWithCitations;
                             bibField = _yield$_assertClassBr2.bibField;
                             bNoHaveFields = fieldsWithCitations.length === 0;
@@ -14941,49 +15014,49 @@
                                 }
                             }
                             if (!(typeof bHardRefresh === "boolean")) {
-                                _context4.n = 3;
+                                _context6.n = 3;
                                 break;
                             }
-                            _context4.n = 2;
+                            _context6.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, bHardRefresh);
 
                           case 2:
-                            updatedFields = _context4.v;
+                            updatedFields = _context6.v;
 
                           case 3:
                             if (!bibField) {
-                                _context4.n = 5;
+                                _context6.n = 5;
                                 break;
                             }
                             _t4 = updatedFields;
-                            _context4.n = 4;
+                            _context6.n = 4;
                             return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
 
                           case 4:
-                            _t4.push.call(_t4, _context4.v);
+                            _t4.push.call(_t4, _context6.v);
 
                           case 5:
                             if (!(updatedFields && updatedFields.length)) {
-                                _context4.n = 6;
+                                _context6.n = 6;
                                 break;
                             }
-                            return _context4.a(2, this.citationDocService.updateAddinFields(updatedFields));
+                            return _context6.a(2, this.citationDocService.updateAddinFields(updatedFields));
 
                           case 6:
-                            _context4.n = 8;
+                            _context6.n = 8;
                             break;
 
                           case 7:
-                            _context4.p = 7;
-                            _t5 = _context4.v;
+                            _context6.p = 7;
+                            _t5 = _context6.v;
                             throw _t5;
 
                           case 8:
-                            return _context4.a(2);
+                            return _context6.a(2);
                         }
-                    }, _callee4, this, [ [ 0, 7 ] ]);
+                    }, _callee6, this, [ [ 0, 7 ] ]);
                 }));
-                function updateCslItems(_x2) {
+                function updateCslItems(_x3) {
                     return _updateCslItems.apply(this, arguments);
                 }
                 return updateCslItems;
@@ -14991,130 +15064,23 @@
         }, {
             key: "updateCslItemsInNotes",
             value: function() {
-                var _updateCslItemsInNotes = _asyncToGenerator(_regenerator().m(function _callee5(notesStyle) {
+                var _updateCslItemsInNotes = _asyncToGenerator(_regenerator().m(function _callee7(notesStyle) {
                     var _yield$_assertClassBr3, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t6, _t7;
-                    return _regenerator().w(function(_context5) {
-                        while (1) switch (_context5.p = _context5.n) {
-                          case 0:
-                            _context5.p = 0;
-                            _context5.n = 1;
-                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
-
-                          case 1:
-                            _yield$_assertClassBr3 = _context5.v;
-                            fieldsWithCitations = _yield$_assertClassBr3.fieldsWithCitations;
-                            bibField = _yield$_assertClassBr3.bibField;
-                            bNoHaveFields = fieldsWithCitations.length === 0;
-                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context5.n = 2;
-                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
-
-                          case 2:
-                            updatedFields = _context5.v;
-                            if (!(updatedFields && updatedFields.length)) {
-                                _context5.n = 3;
-                                break;
-                            }
-                            _context5.n = 3;
-                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-
-                          case 3:
-                            if (!bibField) {
-                                _context5.n = 5;
-                                break;
-                            }
-                            _context5.n = 4;
-                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
-
-                          case 4:
-                            _t6 = _context5.v;
-                            bibFields = [ _t6 ];
-                            _context5.n = 5;
-                            return this.citationDocService.updateAddinFields(bibFields);
-
-                          case 5:
-                            _context5.n = 7;
-                            break;
-
-                          case 6:
-                            _context5.p = 6;
-                            _t7 = _context5.v;
-                            throw _t7;
-
-                          case 7:
-                            return _context5.a(2);
-                        }
-                    }, _callee5, this, [ [ 0, 6 ] ]);
-                }));
-                function updateCslItemsInNotes(_x3) {
-                    return _updateCslItemsInNotes.apply(this, arguments);
-                }
-                return updateCslItemsInNotes;
-            }()
-        }, {
-            key: "updateItem",
-            value: function() {
-                var _updateItem = _asyncToGenerator(_regenerator().m(function _callee6(updatedField) {
-                    var _yield$_assertClassBr4, fieldsWithCitations, updatedFields, _t8;
-                    return _regenerator().w(function(_context6) {
-                        while (1) switch (_context6.p = _context6.n) {
-                          case 0:
-                            _context6.p = 0;
-                            _context6.n = 1;
-                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this, updatedField);
-
-                          case 1:
-                            _yield$_assertClassBr4 = _context6.v;
-                            fieldsWithCitations = _yield$_assertClassBr4.fieldsWithCitations;
-                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context6.n = 2;
-                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
-
-                          case 2:
-                            updatedFields = _context6.v;
-                            if (!(updatedFields && updatedFields.length)) {
-                                _context6.n = 3;
-                                break;
-                            }
-                            return _context6.a(2, this.citationDocService.updateAddinFields(updatedFields));
-
-                          case 3:
-                            _context6.n = 5;
-                            break;
-
-                          case 4:
-                            _context6.p = 4;
-                            _t8 = _context6.v;
-                            throw _t8;
-
-                          case 5:
-                            return _context6.a(2);
-                        }
-                    }, _callee6, this, [ [ 0, 4 ] ]);
-                }));
-                function updateItem(_x4) {
-                    return _updateItem.apply(this, arguments);
-                }
-                return updateItem;
-            }()
-        }, {
-            key: "updateItemInNotes",
-            value: function() {
-                var _updateItemInNotes = _asyncToGenerator(_regenerator().m(function _callee7(updatedField, notesStyle) {
-                    var _yield$_assertClassBr5, fieldsWithCitations, updatedFields, _t9;
                     return _regenerator().w(function(_context7) {
                         while (1) switch (_context7.p = _context7.n) {
                           case 0:
                             _context7.p = 0;
                             _context7.n = 1;
-                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this, updatedField);
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
                           case 1:
-                            _yield$_assertClassBr5 = _context7.v;
-                            fieldsWithCitations = _yield$_assertClassBr5.fieldsWithCitations;
+                            _yield$_assertClassBr3 = _context7.v;
+                            fieldsWithCitations = _yield$_assertClassBr3.fieldsWithCitations;
+                            bibField = _yield$_assertClassBr3.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
                             _context7.n = 2;
-                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false);
 
                           case 2:
                             updatedFields = _context7.v;
@@ -15126,93 +15092,166 @@
                             return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
 
                           case 3:
-                            _context7.n = 5;
-                            break;
+                            if (!bibField) {
+                                _context7.n = 5;
+                                break;
+                            }
+                            _context7.n = 4;
+                            return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
 
                           case 4:
-                            _context7.p = 4;
-                            _t9 = _context7.v;
-                            throw _t9;
+                            _t6 = _context7.v;
+                            bibFields = [ _t6 ];
+                            _context7.n = 5;
+                            return this.citationDocService.updateAddinFields(bibFields);
 
                           case 5:
+                            _context7.n = 7;
+                            break;
+
+                          case 6:
+                            _context7.p = 6;
+                            _t7 = _context7.v;
+                            throw _t7;
+
+                          case 7:
                             return _context7.a(2);
                         }
-                    }, _callee7, this, [ [ 0, 4 ] ]);
+                    }, _callee7, this, [ [ 0, 6 ] ]);
                 }));
-                function updateItemInNotes(_x5, _x6) {
-                    return _updateItemInNotes.apply(this, arguments);
+                function updateCslItemsInNotes(_x4) {
+                    return _updateCslItemsInNotes.apply(this, arguments);
                 }
-                return updateItemInNotes;
+                return updateCslItemsInNotes;
             }()
         }, {
-            key: "switchingBetweenNotesAndText",
+            key: "updateItem",
             value: function() {
-                var _switchingBetweenNotesAndText = _asyncToGenerator(_regenerator().m(function _callee8(notesStyle) {
-                    var _yield$_assertClassBr6, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t0, _t1;
+                var _updateItem = _asyncToGenerator(_regenerator().m(function _callee8(updatedField, notesStyle) {
+                    var _yield$_assertClassBr4, fieldsWithCitations, updatedFields, _t8;
                     return _regenerator().w(function(_context8) {
                         while (1) switch (_context8.p = _context8.n) {
                           case 0:
                             _context8.p = 0;
                             _context8.n = 1;
-                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this, updatedField);
 
                           case 1:
-                            _yield$_assertClassBr6 = _context8.v;
-                            fieldsWithCitations = _yield$_assertClassBr6.fieldsWithCitations;
-                            bibField = _yield$_assertClassBr6.bibField;
-                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _yield$_assertClassBr4 = _context8.v;
+                            fieldsWithCitations = _yield$_assertClassBr4.fieldsWithCitations;
+                            _yield$_assertClassBr4.bibField;
+                            fieldsWithCitations.length === 0;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
                             _context8.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
 
                           case 2:
                             updatedFields = _context8.v;
-                            if (!(updatedFields && updatedFields.length)) {
-                                _context8.n = 5;
-                                break;
-                            }
-                            if (!notesStyle) {
+                            if (!(notesStyle && updatedFields && updatedFields.length)) {
                                 _context8.n = 4;
                                 break;
                             }
                             _context8.n = 3;
+                            return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
+
+                          case 3:
+                            updatedFields = [];
+
+                          case 4:
+                            if (!(updatedFields && updatedFields.length)) {
+                                _context8.n = 5;
+                                break;
+                            }
+                            return _context8.a(2, this.citationDocService.updateAddinFields(updatedFields));
+
+                          case 5:
+                            _context8.n = 7;
+                            break;
+
+                          case 6:
+                            _context8.p = 6;
+                            _t8 = _context8.v;
+                            throw _t8;
+
+                          case 7:
+                            return _context8.a(2);
+                        }
+                    }, _callee8, this, [ [ 0, 6 ] ]);
+                }));
+                function updateItem(_x5, _x6) {
+                    return _updateItem.apply(this, arguments);
+                }
+                return updateItem;
+            }()
+        }, {
+            key: "switchingBetweenNotesAndText",
+            value: function() {
+                var _switchingBetweenNotesAndText = _asyncToGenerator(_regenerator().m(function _callee9(notesStyle) {
+                    var _yield$_assertClassBr5, fieldsWithCitations, bibField, bNoHaveFields, updatedFields, bibFields, _t9, _t0;
+                    return _regenerator().w(function(_context9) {
+                        while (1) switch (_context9.p = _context9.n) {
+                          case 0:
+                            _context9.p = 0;
+                            _context9.n = 1;
+                            return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
+
+                          case 1:
+                            _yield$_assertClassBr5 = _context9.v;
+                            fieldsWithCitations = _yield$_assertClassBr5.fieldsWithCitations;
+                            bibField = _yield$_assertClassBr5.bibField;
+                            bNoHaveFields = fieldsWithCitations.length === 0;
+                            _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
+                            _context9.n = 2;
+                            return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, true);
+
+                          case 2:
+                            updatedFields = _context9.v;
+                            if (!(updatedFields && updatedFields.length)) {
+                                _context9.n = 5;
+                                break;
+                            }
+                            if (!notesStyle) {
+                                _context9.n = 4;
+                                break;
+                            }
+                            _context9.n = 3;
                             return this.citationDocService.convertTextToNotes(updatedFields, notesStyle);
 
                           case 3:
-                            _context8.n = 5;
+                            _context9.n = 5;
                             break;
 
                           case 4:
-                            _context8.n = 5;
+                            _context9.n = 5;
                             return this.citationDocService.convertNotesToText(updatedFields);
 
                           case 5:
                             if (!bibField) {
-                                _context8.n = 7;
+                                _context9.n = 7;
                                 break;
                             }
-                            _context8.n = 6;
+                            _context9.n = 6;
                             return _assertClassBrand(_CitationService_brand, this, _updateBibliography).call(this, bNoHaveFields, bibField);
 
                           case 6:
-                            _t0 = _context8.v;
-                            bibFields = [ _t0 ];
-                            _context8.n = 7;
+                            _t9 = _context9.v;
+                            bibFields = [ _t9 ];
+                            _context9.n = 7;
                             return this.citationDocService.updateAddinFields(bibFields);
 
                           case 7:
-                            _context8.n = 9;
+                            _context9.n = 9;
                             break;
 
                           case 8:
-                            _context8.p = 8;
-                            _t1 = _context8.v;
-                            throw _t1;
+                            _context9.p = 8;
+                            _t0 = _context9.v;
+                            throw _t0;
 
                           case 9:
-                            return _context8.a(2);
+                            return _context9.a(2);
                         }
-                    }, _callee8, this, [ [ 0, 8 ] ]);
+                    }, _callee9, this, [ [ 0, 8 ] ]);
                 }));
                 function switchingBetweenNotesAndText(_x7) {
                     return _switchingBetweenNotesAndText.apply(this, arguments);
@@ -15222,47 +15261,47 @@
         }, {
             key: "convertNotesStyle",
             value: function() {
-                var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee9(notesStyle) {
-                    var _yield$_assertClassBr7, fieldsWithCitations, updatedFields, _t10;
-                    return _regenerator().w(function(_context9) {
-                        while (1) switch (_context9.p = _context9.n) {
+                var _convertNotesStyle = _asyncToGenerator(_regenerator().m(function _callee0(notesStyle) {
+                    var _yield$_assertClassBr6, fieldsWithCitations, updatedFields, _t1;
+                    return _regenerator().w(function(_context0) {
+                        while (1) switch (_context0.p = _context0.n) {
                           case 0:
-                            _context9.p = 0;
-                            _context9.n = 1;
+                            _context0.p = 0;
+                            _context0.n = 1;
                             return _assertClassBrand(_CitationService_brand, this, _synchronizeStorageWithDocItems).call(this);
 
                           case 1:
-                            _yield$_assertClassBr7 = _context9.v;
-                            fieldsWithCitations = _yield$_assertClassBr7.fieldsWithCitations;
+                            _yield$_assertClassBr6 = _context0.v;
+                            fieldsWithCitations = _yield$_assertClassBr6.fieldsWithCitations;
                             _assertClassBrand(_CitationService_brand, this, _updateFormatter).call(this);
-                            _context9.n = 2;
+                            _context0.n = 2;
                             return _assertClassBrand(_CitationService_brand, this, _getUpdatedFields).call(this, fieldsWithCitations, false, true);
 
                           case 2:
-                            updatedFields = _context9.v;
+                            updatedFields = _context0.v;
                             if (!(!updatedFields || !updatedFields.length)) {
-                                _context9.n = 3;
+                                _context0.n = 3;
                                 break;
                             }
-                            return _context9.a(2);
+                            return _context0.a(2);
 
                           case 3:
-                            _context9.n = 4;
+                            _context0.n = 4;
                             return this.citationDocService.convertNotesStyle(updatedFields, notesStyle);
 
                           case 4:
-                            _context9.n = 6;
+                            _context0.n = 6;
                             break;
 
                           case 5:
-                            _context9.p = 5;
-                            _t10 = _context9.v;
-                            throw _t10;
+                            _context0.p = 5;
+                            _t1 = _context0.v;
+                            throw _t1;
 
                           case 6:
-                            return _context9.a(2);
+                            return _context0.a(2);
                         }
-                    }, _callee9, this, [ [ 0, 5 ] ]);
+                    }, _callee0, this, [ [ 0, 5 ] ]);
                 }));
                 function convertNotesStyle(_x8) {
                     return _convertNotesStyle.apply(this, arguments);
@@ -15272,33 +15311,34 @@
         }, {
             key: "showEditCitationWindow",
             value: function() {
-                var _showEditCitationWindow = _asyncToGenerator(_regenerator().m(function _callee0(field) {
-                    var updatedField;
-                    return _regenerator().w(function(_context0) {
-                        while (1) switch (_context0.n) {
+                var _showEditCitationWindow = _asyncToGenerator(_regenerator().m(function _callee1(field) {
+                    var citationObject, updatedField;
+                    return _regenerator().w(function(_context1) {
+                        while (1) switch (_context1.n) {
                           case 0:
                             if (field) {
-                                _context0.n = 1;
+                                _context1.n = 1;
                                 break;
                             }
-                            return _context0.a(2, null);
+                            return _context1.a(2, null);
 
                           case 1:
-                            _context0.n = 2;
-                            return _classPrivateFieldGet2(_additionalWindow, this).showEditWindow(field);
+                            citationObject = _assertClassBrand(_CitationService_brand, this, _extractField).call(this, field);
+                            _context1.n = 2;
+                            return _classPrivateFieldGet2(_additionalWindow, this).showEditWindow(citationObject);
 
                           case 2:
-                            updatedField = _context0.v;
+                            updatedField = _context1.v;
                             if (updatedField) {
-                                _context0.n = 3;
+                                _context1.n = 3;
                                 break;
                             }
-                            return _context0.a(2, null);
+                            return _context1.a(2, null);
 
                           case 3:
-                            return _context0.a(2, updatedField);
+                            return _context1.a(2, updatedField);
                         }
-                    }, _callee0, this);
+                    }, _callee1, this);
                 }));
                 function showEditCitationWindow(_x9) {
                     return _showEditCitationWindow.apply(this, arguments);
@@ -15504,10 +15544,10 @@
         return _getUpdatedFields2.apply(this, arguments);
     }
     function _getUpdatedFields2() {
-        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee1(fieldsWithCitations, bHardRefresh, bChangePosition) {
+        _getUpdatedFields2 = _asyncToGenerator(_regenerator().m(function _callee10(fieldsWithCitations, bHardRefresh, bChangePosition) {
             var fragment, tempElement, updatedFields, i, bHasChanges, _fieldsWithCitations$, field, cslCitation, citationsPre, citationsPost, citations, formattedCitationObj, htmlCitation, oldContentInCit, oldContentInDoc, newContent, text, bNeedSaveUserInput, newValue;
-            return _regenerator().w(function(_context1) {
-                while (1) switch (_context1.n) {
+            return _regenerator().w(function(_context10) {
+                while (1) switch (_context10.n) {
                   case 0:
                     fragment = document.createDocumentFragment();
                     tempElement = document.createElement("div");
@@ -15517,7 +15557,7 @@
 
                   case 1:
                     if (!(i >= 0)) {
-                        _context1.n = 7;
+                        _context10.n = 7;
                         break;
                     }
                     bHasChanges = !!bChangePosition;
@@ -15537,22 +15577,22 @@
                     }
                     newContent = tempElement.innerText;
                     if (!cslCitation.getDoNotUpdate()) {
-                        _context1.n = 2;
+                        _context10.n = 2;
                         break;
                     }
-                    return _context1.a(3, 6);
+                    return _context10.a(3, 6);
 
                   case 2:
                     if (!(oldContentInCit !== oldContentInDoc && !bHardRefresh)) {
-                        _context1.n = 4;
+                        _context10.n = 4;
                         break;
                     }
                     text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContentInDoc + "</p>";
-                    _context1.n = 3;
+                    _context10.n = 3;
                     return _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", text);
 
                   case 3:
-                    bNeedSaveUserInput = _context1.v;
+                    bNeedSaveUserInput = _context10.v;
                     if (bNeedSaveUserInput) {
                         cslCitation.setDoNotUpdate();
                         delete field["Content"];
@@ -15561,7 +15601,7 @@
                         cslCitation.setPlainCitation(newContent);
                     }
                     bHasChanges = true;
-                    _context1.n = 5;
+                    _context10.n = 5;
                     break;
 
                   case 4:
@@ -15585,13 +15625,13 @@
 
                   case 6:
                     i--;
-                    _context1.n = 1;
+                    _context10.n = 1;
                     break;
 
                   case 7:
-                    return _context1.a(2, updatedFields);
+                    return _context10.a(2, updatedFields);
                 }
-            }, _callee1, this);
+            }, _callee10, this);
         }));
         return _getUpdatedFields2.apply(this, arguments);
     }
@@ -16919,7 +16959,7 @@
             placeholder: locatorPlaceholder
         });
         var omitAuthorInput = new Checkbox(omitAuthor, {
-            label: "Omit author"
+            label: translate("Omit author")
         });
         prefixInput.subscribe(function(event) {
             if (event.type !== "inputfield:input") {
@@ -17383,7 +17423,7 @@
             }());
             insertLinkBtn.subscribe(function() {
                 var _ref3 = _asyncToGenerator(_regenerator().m(function _callee3(event) {
-                    var items, cursorPos;
+                    var items, addedField, cursorPos;
                     return _regenerator().w(function(_context3) {
                         while (1) switch (_context3.n) {
                           case 0:
@@ -17415,11 +17455,15 @@
 
                           case 4:
                             items = selectCitation.getSelectedItems();
+                            addedField = null;
                             CursorService.getCursorPosition().then(function(pos) {
                                 cursorPos = pos;
                                 return citationService.insertSelectedCitations(items);
                             }).then(function(keys) {
                                 selectCitation.removeItems(keys);
+                                return citationService.getCurrentField();
+                            }).then(function(field) {
+                                addedField = field;
                                 return citationService.updateCslItems();
                             }).catch(function(error) {
                                 console.error(error);
@@ -17430,7 +17474,11 @@
                                 showError(message);
                             }).finally(function() {
                                 endAction("Zotero (" + translate("Inserting citation") + ")");
-                                CursorService.setCursorPosition(cursorPos);
+                                if (addedField) {
+                                    citationService.moveCursorOutsideField(addedField.FieldId);
+                                } else {
+                                    CursorService.setCursorPosition(cursorPos);
+                                }
                             });
 
                           case 5:
@@ -17625,20 +17673,11 @@
                         insertBibBtn.disable();
                         refreshBtn.disable();
                         insertLinkBtn.disable();
-                        Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                            lockScroll: true
-                        } ]);
-                        if (!preloaderMessage) {
-                            _context7.n = 1;
-                            break;
-                        }
                         _context7.n = 1;
                         return new Promise(function(resolve) {
-                            return function() {
-                                Asc.plugin.executeMethod("StartAction", [ "Info", preloaderMessage ], function(returnValue) {
-                                    resolve(returnValue);
-                                });
-                            }();
+                            Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                                lockScroll: true
+                            } ], resolve);
                         });
 
                       case 1:
@@ -17659,20 +17698,11 @@
                         insertBibBtn.enable();
                         refreshBtn.enable();
                         checkSelected();
-                        Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                            scrollToTarget: true
-                        } ]);
-                        if (!preloaderMessage) {
-                            _context8.n = 1;
-                            break;
-                        }
                         _context8.n = 1;
                         return new Promise(function(resolve) {
-                            return function() {
-                                Asc.plugin.executeMethod("EndAction", [ "Info", preloaderMessage ], function(returnValue) {
-                                    resolve(returnValue);
-                                });
-                            }();
+                            Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                                scrollToTarget: true
+                            } ], resolve);
                         });
 
                       case 1:
@@ -17927,7 +17957,7 @@
                         updateFn = citationService.updateItem.bind(citationService, updatedField);
                         styleManager = settings.getStyleManager();
                         if (styleManager.getLastUsedFormat() === "note") {
-                            updateFn = citationService.updateItemInNotes.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
+                            updateFn = citationService.updateItem.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
                         }
                         updateFn().catch(function(error) {
                             console.error(error);
