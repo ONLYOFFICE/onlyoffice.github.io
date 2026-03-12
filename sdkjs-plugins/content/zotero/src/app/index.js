@@ -582,13 +582,15 @@ import "../styles.css";
         refreshBtn.disable();
         insertLinkBtn.disable();
 
-        //Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+        await new Promise(resolve => {
+            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }], resolve);
+        });
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
@@ -597,14 +599,16 @@ import "../styles.css";
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
-
-        // Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+        
+        await new Promise(resolve => {
+            Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }], resolve);
+        });
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
