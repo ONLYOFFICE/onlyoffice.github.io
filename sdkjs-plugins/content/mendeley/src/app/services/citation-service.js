@@ -706,11 +706,11 @@ class CitationService {
                 updatedControls = [];
             }
 
-            if (bibControl) {
+            /*if (bibControl) {
                 updatedControls.push(
                     await this.#updateBibliography(bNoHaveControls, bibControl),
                 );
-            }
+            }*/
 
             if (updatedControls && updatedControls.length) {
                 return this.citationDocService.updateContentControls(updatedControls);
