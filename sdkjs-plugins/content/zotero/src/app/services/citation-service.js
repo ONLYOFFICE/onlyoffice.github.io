@@ -80,29 +80,13 @@ class CitationService {
         this.#additionalWindow = new AdditionalWindow();
     }
 
-    /** @returns {boolean} */
-    #checkEditor() {
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9003000) {
-            this.#additionalWindow.showInfoWindow(
-                "Something went wrong",
-                "Update your editor to use this feature.",
-                "warning",
-            );
-            return false;
-        }
-        return true;
-    }
-
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<Array<string|number>>}
+     * @returns {Promise<boolean>}
      */
     #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
-        /** @type {Array<string|number>} */
-        const keys = [];
 
         return Promise.resolve()
             .then(function () {
@@ -112,7 +96,6 @@ class CitationService {
                         if (!self._storage.hasItem(item.id)) {
                             bUpdateItems = true;
                         }
-                        keys.push(item.id);
                     });
 
                 if (bUpdateItems) {
@@ -153,9 +136,6 @@ class CitationService {
                     JSON.stringify(cslCitation.toJSON()),
                     notesStyle,
                 );
-            })
-            .then(function () {
-                return keys;
             });
     }
 
@@ -188,8 +168,7 @@ class CitationService {
                 this._sdk
                     .getItems(null, arrUsrItems, "json")
                     .then(function (res) {
-                        var items = res.items || [];
-                        return items;
+                        return res.items || [];
                     }),
             );
         }
@@ -205,20 +184,14 @@ class CitationService {
                             "json",
                         )
                         .then(function (res) {
-                            var items = res.items || [];
-                            return items;
+                            return res.items || [];
                         }),
                 );
             }
         }
 
         return Promise.all(promises).then(function (res) {
-            /** @type {Array<SearchResultItem>} */
-            var items = [];
-            res.forEach(function (resItems) {
-                items = items.concat(resItems);
-            });
-            return items;
+            return res.reduce((acc, resItems) => acc.concat(resItems), []);
         });
     }
 
@@ -228,7 +201,7 @@ class CitationService {
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
 
-            for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
+            for (let i = 0; i < bibObject[1].length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
                 bibText = bibText
@@ -577,7 +550,7 @@ class CitationService {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @returns {Promise<Array<string|number>>}
+     * @returns {Promise<boolean>}
      */
     async insertSelectedCitations(items) {
         const self = this;
@@ -631,10 +604,27 @@ class CitationService {
 
     /**
      * @param {string} fieldId
+     * @param {boolean} [isBegin]
      * @returns {Promise<void>}
      */
-    async moveCursorOutsideField(fieldId) {
-        return this.citationDocService.moveCursorOutsideField(fieldId);
+    async moveCursorToField(fieldId, isBegin) {
+        return this.citationDocService.moveCursorToField(fieldId, isBegin);
+    }
+
+    /**
+     * @param {string} fieldId
+     * @param {boolean} [isBeforeField]
+     * @returns {Promise<void>}
+     */
+    async moveCursorOutsideField(fieldId, isBeforeField) {
+        return this.citationDocService.moveCursorOutsideField(fieldId, isBeforeField);
+    }
+
+    /**
+     * @returns {Promise<void>}
+     */
+    async moveCursorRight() {
+        return this.citationDocService.moveCursorRight();
     }
 
     /**
