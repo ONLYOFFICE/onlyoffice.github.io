@@ -606,7 +606,7 @@ class CitationService {
         });
     }
 
-    /** @returns {Promise<void>} */
+    /** @returns {Promise<string>} */
     async insertBibliography() {
         try {
             const { fieldsWithCitations, bibFieldValue, bibField } =
@@ -619,7 +619,8 @@ class CitationService {
                 const updatedFields = [
                     await this.#updateBibliography(bNoHaveFields, bibField),
                 ];
-                return this.citationDocService.updateAddinFields(updatedFields);
+                return this.citationDocService.updateAddinFields(updatedFields)
+                    .then((fieldIds) => fieldIds ? fieldIds[0] : "");
             } else {
                 return this.#addBibliography(bNoHaveFields, bibFieldValue);
             }

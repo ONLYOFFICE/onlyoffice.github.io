@@ -12333,7 +12333,8 @@
             key: "addBibliography",
             value: function() {
                 var _addBibliography = _asyncToGenerator(_regenerator().m(function _callee(text, value) {
-                    var editorVersion, formattingPositions, field, _field;
+                    var _this = this;
+                    var editorVersion, formattingPositions, fieldId, field, _field;
                     return _regenerator().w(function(_context) {
                         while (1) switch (_context.n) {
                           case 0:
@@ -12343,14 +12344,20 @@
                                 break;
                             }
                             formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+                            fieldId = "";
                             field = {
-                                FieldId: "",
+                                FieldId: fieldId,
                                 Value: _classPrivateFieldGet2(_bibPrefix, this) + value + _classPrivateFieldGet2(_bibSuffix, this),
                                 Content: formattingPositions.text
                             };
                             return _context.a(2, _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field).then(function() {
+                                return _this.getCurrentField();
+                            }).then(function(addedField) {
+                                fieldId = (addedField === null || addedField === void 0 ? void 0 : addedField.FieldId) || "";
                                 if (!formattingPositions.formatting.length) return;
                                 return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
+                            }).then(function() {
+                                return fieldId;
                             }));
 
                           case 1:
@@ -12360,9 +12367,12 @@
                                 Content: " "
                             };
                             _context.n = 2;
-                            return _assertClassBrand(_CitationDocService_brand, this, _pasteAddinFieldWithHtml).call(this, _field, text);
+                            return _assertClassBrand(_CitationDocService_brand, this, _pasteBibliographyWithHtml).call(this, _field, text);
 
                           case 2:
+                            return _context.a(2, _context.v);
+
+                          case 3:
                             return _context.a(2);
                         }
                     }, _callee, this);
@@ -12478,21 +12488,24 @@
             key: "updateAddinFields",
             value: function() {
                 var _updateAddinFields = _asyncToGenerator(_regenerator().m(function _callee3(fields) {
-                    var _this = this;
-                    var editorVersion, bibFields, field, text, formats, _iterator, _step, _step$value, fieldId, formattingPositions, selectFieldResult, _t;
+                    var _this2 = this;
+                    var fieldIds, editorVersion, bibFields, field, text, formats, _iterator, _step, _step$value, fieldId, formattingPositions, selectFieldResult, _t;
                     return _regenerator().w(function(_context3) {
                         while (1) switch (_context3.p = _context3.n) {
                           case 0:
+                            fieldIds = fields.map(function(field) {
+                                return field.FieldId;
+                            });
                             editorVersion = window.Asc.scope.editorVersion;
                             bibFields = fields.filter(function(field) {
-                                return field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this)) === 0;
+                                return field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this2)) === 0;
                             });
                             if (!(bibFields.length && editorVersion && editorVersion >= 9004e3)) {
                                 _context3.n = 3;
                                 break;
                             }
                             fields = fields.filter(function(field) {
-                                return field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this)) !== 0;
+                                return field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this2)) !== 0;
                             });
                             field = bibFields[0];
                             _context3.n = 1;
@@ -12506,7 +12519,7 @@
 
                           case 2:
                             _context3.n = 3;
-                            return _assertClassBrand(_CitationDocService_brand, this, _pasteAddinFieldWithHtml).call(this, field, text);
+                            return _assertClassBrand(_CitationDocService_brand, this, _pasteBibliographyWithHtml).call(this, field, text);
 
                           case 3:
                             formats = _assertClassBrand(_CitationDocService_brand, this, _makeFormattingPositions).call(this, fields);
@@ -12520,7 +12533,7 @@
                                 _context3.n = 5;
                                 break;
                             }
-                            return _context3.a(2);
+                            return _context3.a(2, fieldIds);
 
                           case 5:
                             _iterator = _createForOfIteratorHelper(formats);
@@ -12567,7 +12580,7 @@
                             return _context3.f(13);
 
                           case 14:
-                            return _context3.a(2);
+                            return _context3.a(2, fieldIds);
                         }
                     }, _callee3, this, [ [ 6, 12, 13, 14 ] ]);
                 }));
@@ -12946,12 +12959,12 @@
             }, isClose, isCalc, resolve);
         });
     }
-    function _pasteAddinFieldWithHtml(_x11, _x12) {
-        return _pasteAddinFieldWithHtml2.apply(this, arguments);
+    function _pasteBibliographyWithHtml(_x11, _x12) {
+        return _pasteBibliographyWithHtml2.apply(this, arguments);
     }
-    function _pasteAddinFieldWithHtml2() {
-        _pasteAddinFieldWithHtml2 = _asyncToGenerator(_regenerator().m(function _callee8(field, html) {
-            var parser, doc, paragraphs, numbers, _field2;
+    function _pasteBibliographyWithHtml2() {
+        _pasteBibliographyWithHtml2 = _asyncToGenerator(_regenerator().m(function _callee8(field, html) {
+            var parser, doc, paragraphs, numbers, addedField;
             return _regenerator().w(function(_context8) {
                 while (1) switch (_context8.n) {
                   case 0:
@@ -12970,10 +12983,13 @@
                     });
 
                   case 2:
-                    if (!(field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, this)) === 0 && Asc.scope.bibStyle)) {
-                        _context8.n = 8;
+                    if (Asc.scope.bibStyle) {
+                        _context8.n = 3;
                         break;
                     }
+                    throw "Bibliography style is not defined";
+
+                  case 3:
                     parser = new DOMParser;
                     doc = parser.parseFromString(html, "text/html");
                     paragraphs = doc.querySelectorAll(".csl-entry");
@@ -12988,27 +13004,27 @@
                         }
                     });
                     html = doc.body.innerHTML;
-                    _context8.n = 3;
+                    _context8.n = 4;
                     return _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
 
-                  case 3:
-                    _context8.n = 4;
+                  case 4:
+                    _context8.n = 5;
                     return this.getCurrentField();
 
-                  case 4:
-                    _field2 = _context8.v;
-                    if (_field2) {
-                        _context8.n = 5;
+                  case 5:
+                    addedField = _context8.v;
+                    if (addedField) {
+                        _context8.n = 6;
                         break;
                     }
-                    return _context8.a(2);
-
-                  case 5:
-                    _context8.n = 6;
-                    return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, _field2.FieldId);
+                    return _context8.a(2, "");
 
                   case 6:
                     _context8.n = 7;
+                    return _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, addedField.FieldId);
+
+                  case 7:
+                    _context8.n = 8;
                     return new Promise(function(resolve) {
                         var isCalc = false;
                         var isClose = false;
@@ -13046,21 +13062,13 @@
                         }, isClose, isCalc, resolve);
                     });
 
-                  case 7:
-                    Asc.scope.bibStyle = null;
-                    _context8.n = 9;
-                    break;
-
                   case 8:
-                    _context8.n = 9;
-                    return _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
-
-                  case 9:
-                    return _context8.a(2);
+                    Asc.scope.bibStyle = null;
+                    return _context8.a(2, addedField.FieldId);
                 }
             }, _callee8, this);
         }));
-        return _pasteAddinFieldWithHtml2.apply(this, arguments);
+        return _pasteBibliographyWithHtml2.apply(this, arguments);
     }
     var es_array_findIndex = {};
     var hasRequiredEs_array_findIndex;
@@ -14948,7 +14956,9 @@
                           case 2:
                             _t2 = _context4.v;
                             updatedFields = [ _t2 ];
-                            return _context4.a(2, this.citationDocService.updateAddinFields(updatedFields));
+                            return _context4.a(2, this.citationDocService.updateAddinFields(updatedFields).then(function(fieldIds) {
+                                return fieldIds ? fieldIds[0] : "";
+                            }));
 
                           case 3:
                             return _context4.a(2, _assertClassBrand(_CitationService_brand, this, _addBibliography).call(this, bNoHaveFields, bibFieldValue));
@@ -15663,49 +15673,6 @@
     function _unEscapeHtml(htmlString) {
         return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
     }
-    var CursorService = function() {
-        function CursorService() {
-            _classCallCheck(this, CursorService);
-        }
-        return _createClass(CursorService, null, [ {
-            key: "getCursorPosition",
-            value: function getCursorPosition() {
-                return new Promise(function(resolve) {
-                    var isCalc = false;
-                    var isClose = false;
-                    Asc.plugin.callCommand(function() {
-                        var doc = Api.GetDocument();
-                        var pos = 0;
-                        if (!doc) {
-                            return pos;
-                        }
-                        var currentRun = doc.GetCurrentRun();
-                        if (!currentRun) {
-                            return pos;
-                        }
-                        var range = currentRun.GetRange(0, 0);
-                        if (range) {
-                            return range.GetEndPos();
-                        }
-                        return pos;
-                    }, isClose, isCalc, resolve);
-                });
-            }
-        }, {
-            key: "setCursorPosition",
-            value: function setCursorPosition(pos) {
-                return new Promise(function(resolve) {
-                    var isCalc = false;
-                    var isClose = false;
-                    Asc.scope.pos = pos;
-                    Asc.plugin.callCommand(function() {
-                        var doc = Api.GetDocument();
-                        doc.MoveCursorToPos(Asc.scope.pos);
-                    }, isClose, isCalc, resolve);
-                });
-            }
-        } ]);
-    }();
     var CslStylesParser = {
         getStyleInfo: function getStyleInfo(name, style) {
             var parser = new DOMParser;
@@ -17307,7 +17274,7 @@
             });
             refreshBtn.subscribe(function() {
                 var _ref = _asyncToGenerator(_regenerator().m(function _callee(event) {
-                    var cursorPos, updateFn, styleManager;
+                    var updateFn, styleManager;
                     return _regenerator().w(function(_context) {
                         while (1) switch (_context.n) {
                           case 0:
@@ -17335,14 +17302,9 @@
 
                           case 3:
                             _context.n = 4;
-                            return startAction("Zotero (" + translate("Updating citations") + ")");
+                            return startAction(true, "Zotero (" + translate("Updating citations") + ")");
 
                           case 4:
-                            _context.n = 5;
-                            return CursorService.getCursorPosition();
-
-                          case 5:
-                            cursorPos = _context.v;
                             updateFn = citationService.updateCslItems.bind(citationService, false);
                             styleManager = settings.getStyleManager();
                             if (styleManager.getLastUsedFormat() === "note") {
@@ -17356,11 +17318,10 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction("Zotero (" + translate("Updating citations") + ")");
-                                CursorService.setCursorPosition(cursorPos);
+                                endAction(false, "Zotero (" + translate("Updating citations") + ")");
                             });
 
-                          case 6:
+                          case 5:
                             return _context.a(2);
                         }
                     }, _callee);
@@ -17371,6 +17332,7 @@
             }());
             insertBibBtn.subscribe(function() {
                 var _ref2 = _asyncToGenerator(_regenerator().m(function _callee2(event) {
+                    var addedFieldId;
                     return _regenerator().w(function(_context2) {
                         while (1) switch (_context2.n) {
                           case 0:
@@ -17398,10 +17360,13 @@
 
                           case 3:
                             _context2.n = 4;
-                            return startAction("Zotero (" + translate("Inserting bibliography") + ")");
+                            return startAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
 
                           case 4:
-                            citationService.insertBibliography().catch(function(error) {
+                            addedFieldId = "";
+                            citationService.insertBibliography().then(function(fieldId) {
+                                addedFieldId = fieldId;
+                            }).catch(function(error) {
                                 console.error(error);
                                 var message = translate("Failed to insert bibliography");
                                 if (typeof error === "string") {
@@ -17409,7 +17374,12 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction("Zotero (" + translate("Inserting bibliography") + ")");
+                                endAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                                if (addedFieldId) {
+                                    citationService.moveCursorOutsideField(addedFieldId);
+                                } else {
+                                    console.error("Can not move cursor");
+                                }
                             });
 
                           case 5:
@@ -17423,7 +17393,7 @@
             }());
             insertLinkBtn.subscribe(function() {
                 var _ref3 = _asyncToGenerator(_regenerator().m(function _callee3(event) {
-                    var items, addedField, cursorPos;
+                    var items, addedField;
                     return _regenerator().w(function(_context3) {
                         while (1) switch (_context3.n) {
                           case 0:
@@ -17451,15 +17421,12 @@
 
                           case 3:
                             _context3.n = 4;
-                            return startAction("Zotero (" + translate("Inserting citation") + ")");
+                            return startAction(false, "Zotero (" + translate("Inserting citation") + ")");
 
                           case 4:
                             items = selectCitation.getSelectedItems();
                             addedField = null;
-                            CursorService.getCursorPosition().then(function(pos) {
-                                cursorPos = pos;
-                                return citationService.insertSelectedCitations(items);
-                            }).then(function(keys) {
+                            return _context3.a(2, citationService.insertSelectedCitations(items).then(function(keys) {
                                 selectCitation.removeItems(keys);
                                 return citationService.getCurrentField();
                             }).then(function(field) {
@@ -17473,16 +17440,11 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction("Zotero (" + translate("Inserting citation") + ")");
+                                endAction(false, "Zotero (" + translate("Inserting citation") + ")");
                                 if (addedField) {
                                     citationService.moveCursorOutsideField(addedField.FieldId);
-                                } else {
-                                    CursorService.setCursorPosition(cursorPos);
                                 }
-                            });
-
-                          case 5:
-                            return _context3.a(2);
+                            }));
                         }
                     }, _callee3);
                 }));
@@ -17509,11 +17471,11 @@
 
                           case 1:
                             _context4.n = 2;
-                            return startAction("Zotero (" + translate("Saving as text") + ")");
+                            return startAction(false, "Zotero (" + translate("Saving as text") + ")");
 
                           case 2:
                             citationService.saveAsText().then(function() {
-                                endAction("Zotero (" + translate("Saving as text") + ")");
+                                endAction(false, "Zotero (" + translate("Saving as text") + ")");
                             });
 
                           case 3:
@@ -17527,71 +17489,40 @@
             }());
             settings.onChangeState(function() {
                 var _ref5 = _asyncToGenerator(_regenerator().m(function _callee5(newState, oldState) {
-                    var cursorPos;
+                    var updateFn;
                     return _regenerator().w(function(_context5) {
                         while (1) switch (_context5.n) {
                           case 0:
                             _context5.n = 1;
-                            return CursorService.getCursorPosition();
+                            return startAction(true, "Zotero (" + translate("Updating citations") + ")");
 
                           case 1:
-                            cursorPos = _context5.v;
-                            if (![ newState.styleFormat, oldState.styleFormat ].includes("note")) {
-                                _context5.n = 9;
-                                break;
+                            updateFn = citationService.updateCslItems.bind(citationService, true);
+                            if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
+                                if (newState.styleFormat !== oldState.styleFormat) {
+                                    if (newState.styleFormat === "note") {
+                                        updateFn = citationService.switchingBetweenNotesAndText.bind(citationService, newState.notesStyle);
+                                    } else {
+                                        updateFn = citationService.switchingBetweenNotesAndText.bind(citationService);
+                                    }
+                                } else if (newState.notesStyle !== oldState.notesStyle) {
+                                    updateFn = citationService.convertNotesStyle.bind(citationService, newState.notesStyle);
+                                } else {
+                                    updateFn = citationService.updateCslItems.bind(citationService, true);
+                                }
                             }
-                            if (!(newState.styleFormat !== oldState.styleFormat)) {
-                                _context5.n = 5;
-                                break;
-                            }
-                            if (!(newState.styleFormat === "note")) {
-                                _context5.n = 3;
-                                break;
-                            }
-                            _context5.n = 2;
-                            return citationService.switchingBetweenNotesAndText(newState.notesStyle);
+                            updateFn().catch(function(error) {
+                                console.error(error);
+                                var message = translate("Failed to refresh");
+                                if (typeof error === "string") {
+                                    message += ". " + translate(error);
+                                }
+                                showError(message);
+                            }).finally(function() {
+                                endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                            });
 
                           case 2:
-                            _context5.n = 4;
-                            break;
-
-                          case 3:
-                            _context5.n = 4;
-                            return citationService.switchingBetweenNotesAndText();
-
-                          case 4:
-                            _context5.n = 8;
-                            break;
-
-                          case 5:
-                            if (!(newState.notesStyle !== oldState.notesStyle)) {
-                                _context5.n = 7;
-                                break;
-                            }
-                            _context5.n = 6;
-                            return citationService.convertNotesStyle(newState.notesStyle);
-
-                          case 6:
-                            _context5.n = 8;
-                            break;
-
-                          case 7:
-                            _context5.n = 8;
-                            return citationService.updateCslItems(true);
-
-                          case 8:
-                            _context5.n = 10;
-                            break;
-
-                          case 9:
-                            _context5.n = 10;
-                            return citationService.updateCslItems(true);
-
-                          case 10:
-                            _context5.n = 11;
-                            return CursorService.setCursorPosition(cursorPos);
-
-                          case 11:
                             return _context5.a(2);
                         }
                     }, _callee5);
@@ -17662,11 +17593,11 @@
                 window.onclick = null;
             }
         }
-        function startAction(_x7) {
+        function startAction(_x7, _x8) {
             return _startAction.apply(this, arguments);
         }
         function _startAction() {
-            _startAction = _asyncToGenerator(_regenerator().m(function _callee7(preloaderMessage) {
+            _startAction = _asyncToGenerator(_regenerator().m(function _callee7(keepSelection, preloaderMessage) {
                 return _regenerator().w(function(_context7) {
                     while (1) switch (_context7.n) {
                       case 0:
@@ -17676,7 +17607,8 @@
                         _context7.n = 1;
                         return new Promise(function(resolve) {
                             Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                                lockScroll: true
+                                lockScroll: true,
+                                keepSelection: keepSelection
                             } ], resolve);
                         });
 
@@ -17687,11 +17619,11 @@
             }));
             return _startAction.apply(this, arguments);
         }
-        function endAction(_x8) {
+        function endAction(_x9, _x0) {
             return _endAction.apply(this, arguments);
         }
         function _endAction() {
-            _endAction = _asyncToGenerator(_regenerator().m(function _callee8(preloaderMessage) {
+            _endAction = _asyncToGenerator(_regenerator().m(function _callee8(scrollToTarget, preloaderMessage) {
                 return _regenerator().w(function(_context8) {
                     while (1) switch (_context8.n) {
                       case 0:
@@ -17701,7 +17633,7 @@
                         _context8.n = 1;
                         return new Promise(function(resolve) {
                             Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                                scrollToTarget: true
+                                scrollToTarget: scrollToTarget
                             } ], resolve);
                         });
 
@@ -17915,7 +17847,7 @@
             buttonMain.text = "Edit citation";
             buttonMain.addCheckers("Target", "Selection");
             buttonMain.attachOnClick(_asyncToGenerator(_regenerator().m(function _callee6() {
-                var field, updatedField, cursorPos, updateFn, styleManager;
+                var field, updatedField, updateFn, styleManager;
                 return _regenerator().w(function(_context6) {
                     while (1) switch (_context6.n) {
                       case 0:
@@ -17946,14 +17878,9 @@
 
                       case 4:
                         _context6.n = 5;
-                        return startAction("Zotero (" + translate("Updating citations") + ")");
+                        return startAction(false, "Zotero (" + translate("Updating citations") + ")");
 
                       case 5:
-                        _context6.n = 6;
-                        return CursorService.getCursorPosition();
-
-                      case 6:
-                        cursorPos = _context6.v;
                         updateFn = citationService.updateItem.bind(citationService, updatedField);
                         styleManager = settings.getStyleManager();
                         if (styleManager.getLastUsedFormat() === "note") {
@@ -17967,11 +17894,10 @@
                             }
                             showError(message);
                         }).finally(function() {
-                            endAction("Zotero (" + translate("Updating citations") + ")");
-                            CursorService.setCursorPosition(cursorPos);
+                            endAction(false, "Zotero (" + translate("Updating citations") + ")");
                         });
 
-                      case 7:
+                      case 6:
                         return _context6.a(2);
                     }
                 }, _callee6);
