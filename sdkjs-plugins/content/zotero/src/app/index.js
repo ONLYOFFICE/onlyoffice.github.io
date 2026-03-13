@@ -180,6 +180,8 @@ import "../styles.css";
         getEditorVersion().then((editorVersion) => {
             window.Asc.scope.editorVersion = editorVersion;
             addContextMenuButtons();
+        }).catch((e) => {
+            console.error(e);
         });
         
     };
@@ -325,7 +327,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction(true, "Zotero (" + translate("Updating citations") + ")");
+            await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
 
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
@@ -351,7 +353,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
                 });
         });
 
@@ -367,7 +369,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+            await onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
             /** @type {string} */
             let addedFieldId = "";
 
@@ -385,11 +387,9 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                    onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                     if (addedFieldId) {
                         citationService.moveCursorOutsideField(addedFieldId);
-                    } else {
-                        console.error("Can not move cursor");
                     }
                 });
         });
@@ -406,7 +406,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction(false, "Zotero (" + translate("Inserting citation") + ")");
+            await onStartAction(false, "Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             /** @type {AddinFieldData | null} */
             let addedField = null;
@@ -429,7 +429,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
                     if (addedField) {
                         citationService.moveCursorOutsideField(addedField.FieldId);
                     }
@@ -447,14 +447,14 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
-            await startAction(false, "Zotero (" + translate("Saving as text") + ")");
+            await onStartAction(false, "Zotero (" + translate("Saving as text") + ")");
             citationService.saveAsText().then(function () {
-                endAction(false, "Zotero (" + translate("Saving as text") + ")");
+                onEndAction(false, "Zotero (" + translate("Saving as text") + ")");
             });
         });
 
         settings.onChangeState(async function (newState, oldState) {
-            await startAction(
+            await onStartAction(
                 true,
                 "Zotero (" + translate("Updating citations") + ")",
             );
@@ -501,7 +501,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction(
+                    onEndAction(
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
@@ -592,7 +592,7 @@ import "../styles.css";
     function showError(message) {
         if (message && typeof message === "string") {
             let m = translate("");
-            switchClass(elements.error, displayNoneClass, false);
+            elements.error.classList.remove(displayNoneClass);
             elements.error.textContent = message;
             setTimeout(function () {
                 window.onclick = function () {
@@ -600,7 +600,7 @@ import "../styles.css";
                 };
             }, 100);
         } else {
-            switchClass(elements.error, displayNoneClass, true);
+            elements.error.classList.add(displayNoneClass);
             elements.error.textContent = "";
             window.onclick = null;
         }
@@ -610,7 +610,7 @@ import "../styles.css";
      * @param {boolean} keepSelection
      * @param {string} [preloaderMessage]
      */
-    async function startAction(keepSelection, preloaderMessage) {
+    async function onStartAction(keepSelection, preloaderMessage) {
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
@@ -631,7 +631,7 @@ import "../styles.css";
      * @param {boolean} scrollToTarget
      * @param {string} [preloaderMessage]
      */
-    async function endAction(scrollToTarget, preloaderMessage) {
+    async function onEndAction(scrollToTarget, preloaderMessage) {
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -646,19 +646,6 @@ import "../styles.css";
                 });
             });
         }*/
-    }
-
-    /**
-     * @param {HTMLElement} el
-     * @param {string} className
-     * @param {boolean} add
-     */
-    function switchClass(el, className, add) {
-        if (add) {
-            el.classList.add(className);
-        } else {
-            el.classList.remove(className);
-        }
     }
 
     /**
@@ -931,7 +918,7 @@ import "../styles.css";
             if (!updatedField) {
                 return;
             }
-            await startAction(false, "Zotero (" + translate("Updating citations") + ")");
+            await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
 
             let updateFn = citationService.updateItem.bind(
                 citationService,
@@ -958,7 +945,10 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    if (field) {
+                        citationService.moveCursorOutsideField(field.FieldId);
+                    }
                 });
         });
         Asc.Buttons.registerContextMenu();

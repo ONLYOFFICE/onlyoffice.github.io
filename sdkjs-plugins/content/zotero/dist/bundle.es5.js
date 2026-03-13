@@ -17193,6 +17193,8 @@
             getEditorVersion().then(function(editorVersion) {
                 window.Asc.scope.editorVersion = editorVersion;
                 addContextMenuButtons();
+            }).catch(function(e) {
+                console.error(e);
             });
         };
         function showCitationsAtTheStartFromMyLibrary() {
@@ -17302,7 +17304,7 @@
 
                           case 3:
                             _context.n = 4;
-                            return startAction(true, "Zotero (" + translate("Updating citations") + ")");
+                            return onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
 
                           case 4:
                             updateFn = citationService.updateCslItems.bind(citationService, false);
@@ -17318,7 +17320,7 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                                onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
                             });
 
                           case 5:
@@ -17360,7 +17362,7 @@
 
                           case 3:
                             _context2.n = 4;
-                            return startAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                            return onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
 
                           case 4:
                             addedFieldId = "";
@@ -17374,11 +17376,9 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                                onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
                                 if (addedFieldId) {
                                     citationService.moveCursorOutsideField(addedFieldId);
-                                } else {
-                                    console.error("Can not move cursor");
                                 }
                             });
 
@@ -17421,7 +17421,7 @@
 
                           case 3:
                             _context3.n = 4;
-                            return startAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                            return onStartAction(false, "Zotero (" + translate("Inserting citation") + ")");
 
                           case 4:
                             items = selectCitation.getSelectedItems();
@@ -17440,7 +17440,7 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                                onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
                                 if (addedField) {
                                     citationService.moveCursorOutsideField(addedField.FieldId);
                                 }
@@ -17471,11 +17471,11 @@
 
                           case 1:
                             _context4.n = 2;
-                            return startAction(false, "Zotero (" + translate("Saving as text") + ")");
+                            return onStartAction(false, "Zotero (" + translate("Saving as text") + ")");
 
                           case 2:
                             citationService.saveAsText().then(function() {
-                                endAction(false, "Zotero (" + translate("Saving as text") + ")");
+                                onEndAction(false, "Zotero (" + translate("Saving as text") + ")");
                             });
 
                           case 3:
@@ -17494,7 +17494,7 @@
                         while (1) switch (_context5.n) {
                           case 0:
                             _context5.n = 1;
-                            return startAction(true, "Zotero (" + translate("Updating citations") + ")");
+                            return onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
 
                           case 1:
                             updateFn = citationService.updateCslItems.bind(citationService, true);
@@ -17519,7 +17519,7 @@
                                 }
                                 showError(message);
                             }).finally(function() {
-                                endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                                onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
                             });
 
                           case 2:
@@ -17580,7 +17580,7 @@
         function showError(message) {
             if (message && typeof message === "string") {
                 translate("");
-                switchClass(elements.error, displayNoneClass, false);
+                elements.error.classList.remove(displayNoneClass);
                 elements.error.textContent = message;
                 setTimeout(function() {
                     window.onclick = function() {
@@ -17588,16 +17588,16 @@
                     };
                 }, 100);
             } else {
-                switchClass(elements.error, displayNoneClass, true);
+                elements.error.classList.add(displayNoneClass);
                 elements.error.textContent = "";
                 window.onclick = null;
             }
         }
-        function startAction(_x7, _x8) {
-            return _startAction.apply(this, arguments);
+        function onStartAction(_x7, _x8) {
+            return _onStartAction.apply(this, arguments);
         }
-        function _startAction() {
-            _startAction = _asyncToGenerator(_regenerator().m(function _callee7(keepSelection, preloaderMessage) {
+        function _onStartAction() {
+            _onStartAction = _asyncToGenerator(_regenerator().m(function _callee7(keepSelection, preloaderMessage) {
                 return _regenerator().w(function(_context7) {
                     while (1) switch (_context7.n) {
                       case 0:
@@ -17617,13 +17617,13 @@
                     }
                 }, _callee7);
             }));
-            return _startAction.apply(this, arguments);
+            return _onStartAction.apply(this, arguments);
         }
-        function endAction(_x9, _x0) {
-            return _endAction.apply(this, arguments);
+        function onEndAction(_x9, _x0) {
+            return _onEndAction.apply(this, arguments);
         }
-        function _endAction() {
-            _endAction = _asyncToGenerator(_regenerator().m(function _callee8(scrollToTarget, preloaderMessage) {
+        function _onEndAction() {
+            _onEndAction = _asyncToGenerator(_regenerator().m(function _callee8(scrollToTarget, preloaderMessage) {
                 return _regenerator().w(function(_context8) {
                     while (1) switch (_context8.n) {
                       case 0:
@@ -17642,14 +17642,7 @@
                     }
                 }, _callee8);
             }));
-            return _endAction.apply(this, arguments);
-        }
-        function switchClass(el, className, add) {
-            if (add) {
-                el.classList.add(className);
-            } else {
-                el.classList.remove(className);
-            }
+            return _onEndAction.apply(this, arguments);
         }
         function updateHeaderText(whatToShow) {
             var searchLabel = document.getElementById("searchLabel");
@@ -17878,7 +17871,7 @@
 
                       case 4:
                         _context6.n = 5;
-                        return startAction(false, "Zotero (" + translate("Updating citations") + ")");
+                        return onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
 
                       case 5:
                         updateFn = citationService.updateItem.bind(citationService, updatedField);
@@ -17894,7 +17887,10 @@
                             }
                             showError(message);
                         }).finally(function() {
-                            endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                            onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                            if (field) {
+                                citationService.moveCursorOutsideField(field.FieldId);
+                            }
                         });
 
                       case 6:
