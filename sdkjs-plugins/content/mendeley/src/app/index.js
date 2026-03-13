@@ -42,7 +42,7 @@ import { Router } from "./router";
 import { Sdk } from "./sdk";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService, CursorService } from "./services";
+import { translate, CitationService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
 
@@ -371,9 +371,8 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction("Mendeley (" + translate("Updating citations") + ")");
-            /** @type {number} */
-            let cursorPos = await CursorService.getCursorPosition();
+
+            await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
             let updateFn = citationService.updateCslItems.bind(
                 citationService,
                 false
@@ -397,8 +396,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction("Mendeley (" + translate("Updating citations") + ")");
-                    CursorService.setCursorPosition(cursorPos);
+                    onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
                 });
         });
 
@@ -414,7 +412,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction("Mendeley (" + translate("Inserting bibliography") + ")");
+            await onStartAction(false, "Mendeley (" + translate("Inserting bibliography") + ")");
             citationService
                 .insertBibliography()
                 .catch(function (error) {
@@ -426,7 +424,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction("Mendeley (" + translate("Inserting bibliography") + ")");
+                    onEndAction(false, "Mendeley (" + translate("Inserting bibliography") + ")");
                 });
         });
 
@@ -442,7 +440,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await startAction("Mendeley (" + translate("Inserting citation") + ")");
+            await onStartAction(false, "Mendeley (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             /** @type {number} */
             let cursorPos;
@@ -464,7 +462,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction("Mendeley (" + translate("Inserting citation") + ")");
+                    onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
                     CursorService.setCursorPosition(cursorPos);
                 });
         });
@@ -480,42 +478,64 @@ import "../styles.css";
             if (event.type !== "button:click") {
                 return;
             }
-            await startAction("Mendeley (" + translate("Saving as text") + ")");
+            await onStartAction(false, "Mendeley (" + translate("Saving as text") + ")");
             citationService.saveAsText().then(function () {
-                endAction("Mendeley (" + translate("Saving as text") + ")");
+                onEndAction(false, "Mendeley (" + translate("Saving as text") + ")");
             });
         });
 
         settings.onChangeState(async function (newState, oldState) {
-            /** @type {number} */
-            const cursorPos = await CursorService.getCursorPosition();
+            await onStartAction(
+                true,
+                "Mendeley (" + translate("Updating citations") + ")",
+            );
+            
+            let updateFn = citationService.updateCslItems.bind(citationService, true);
 
             if ([newState.styleFormat, oldState.styleFormat].includes("note")) {
                 if (newState.styleFormat !== oldState.styleFormat) {
                     if (newState.styleFormat === "note") {
-                        await citationService.switchingBetweenNotesAndText(
+                        updateFn = citationService.switchingBetweenNotesAndText.bind(
+                            citationService,
                             newState.notesStyle,
                             null
                         );
                     } else {
-                        await citationService.switchingBetweenNotesAndText(
+                        updateFn = citationService.switchingBetweenNotesAndText.bind(
+                            citationService,
                             null,
                             oldState.notesStyle
                         );
                     }
                 } else if (newState.notesStyle !== oldState.notesStyle) {
-                    await citationService.convertNotesStyle(
+                    updateFn = citationService.convertNotesStyle.bind(
+                        citationService,
                         newState.notesStyle,
                         oldState.notesStyle,
                     );
                 } else {
-                    await citationService.updateCslItemsInNotes(newState.notesStyle);
+                    updateFn = citationService.updateCslItemsInNotes.bind(
+                        citationService,
+                        newState.notesStyle
+                    );
                 }
-            } else {
-                await citationService.updateCslItems(true);
             }
 
-            await CursorService.setCursorPosition(cursorPos);
+            updateFn()
+                .catch(function (error) {
+                    console.error(error);
+                    let message = translate("Failed to refresh");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                })
+                .finally(function () {
+                    onEndAction(
+                        false,
+                        "Mendeley (" + translate("Updating citations") + ")",
+                    );
+                });
         });
     }
 
@@ -616,35 +636,45 @@ import "../styles.css";
         }
     }
 
-    /** @param {string} [preloaderMessage] */
-    async function startAction(preloaderMessage) {
+    /**
+     * @param {boolean} keepSelection
+     * @param {string} [preloaderMessage]
+     */
+    async function onStartAction(keepSelection, preloaderMessage) {
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
 
-        Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true }]);
+        await new Promise(resolve => {
+            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : keepSelection }], resolve);
+        });
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
-    /** @param {string} [preloaderMessage] */
-    async function endAction(preloaderMessage) {
+    /**
+     * @param {boolean} scrollToTarget
+     * @param {string} [preloaderMessage]
+     */
+    async function onEndAction(scrollToTarget, preloaderMessage) {
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
-
-        Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : true }]);
+        
+        await new Promise(resolve => {
+            Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
+        });
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
@@ -892,9 +922,7 @@ import "../styles.css";
             if (!updatedObject) {
                 return;
             }
-            await startAction("Mendeley (" + translate("Updating citations") + ")");
-            /** @type {number} */
-            let cursorPos = await CursorService.getCursorPosition();
+            await onStartAction(false, "Mendeley (" + translate("Updating citations") + ")");
             let updateFn = citationService.updateItem.bind(
                 citationService,
                 updatedObject
@@ -920,8 +948,7 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(function () {
-                    endAction("Mendeley (" + translate("Updating citations") + ")");
-                    CursorService.setCursorPosition(cursorPos);
+                    onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
                 });
         });
         Asc.Buttons.registerContextMenu();
