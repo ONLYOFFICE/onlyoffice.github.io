@@ -459,7 +459,7 @@ export type WordMethodArgs = {
     ShowButton: [sBtn: string, bVisible: boolean, sAlign?: string];
     ShowError: [sType: string, sDescription: string, sMethod?: string];
     ShowInputHelper: [sGuid: string, w: number, h: number, isKeyboardTake: boolean];
-    StartAction: [sType: string, description: string | { lockScroll?: boolean }];
+    StartAction: [sType: string, description: string | { lockScroll?: boolean, keepSelection?: boolean }];
     
     // Methods U
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
