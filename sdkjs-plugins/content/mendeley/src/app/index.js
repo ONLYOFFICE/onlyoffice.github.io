@@ -440,15 +440,10 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+            await onStartAction(true, "Mendeley (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
-            /** @type {number} */
-            let cursorPos;
-            CursorService.getCursorPosition()
-                .then(function (pos) {
-                    cursorPos = pos;
-                    return citationService.insertSelectedCitations(items);
-                })
+
+            return citationService.insertSelectedCitations(items)
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
                     return citationService.updateCslItems();
@@ -463,7 +458,6 @@ import "../styles.css";
                 })
                 .finally(function () {
                     onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
-                    CursorService.setCursorPosition(cursorPos);
                 });
         });
 

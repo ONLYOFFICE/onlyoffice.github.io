@@ -144,7 +144,7 @@ class CitationService {
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
 
-            for (let i = 0; i < bibObject[0].entry_ids.length; i++) {
+            for (let i = 0; i < bibObject[1].length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
                 bibText = bibText
