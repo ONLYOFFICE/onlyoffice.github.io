@@ -22,6 +22,7 @@ interface Asc {
     scope: Object<any>;
     PluginWindow: new () => PluginWindow;
     ButtonContextMenu: new () => ButtonContextMenu;
+    Buttons: Buttons;
 }
 
 interface AscPlugin {
@@ -52,6 +53,10 @@ interface PluginWindow {
     attachEvent: (eventName: string, callback: (event: any) => void) => void;
     // detachEvent: (eventName: string) => void;
     command: (methodName: string, payload?: any) => void;
+}
+
+interface Buttons {
+    registerContextMenu: () => void;
 }
 
 interface ButtonContextMenu {
