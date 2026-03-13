@@ -119,20 +119,20 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
             Value: this.#citPrefix + " " + this.#citSuffix + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
+        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
 
         await this.#addAddinField(field);
 
-        if (!formattingPositions.formatting.length) return false;
+        if (!formattingPositions.formatting.length) return bHasNotes;
         await CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
         
         if (bHasNotes) {
-            return this.#selectFieldReference();
+            await this.#selectFieldReference();
         }
-        return false;
+        return bHasNotes;
         
     }
 
@@ -335,16 +335,51 @@ function CitationDocService(citPrefix, citSuffix, bibPrefix, bibSuffix) {
         }
     }
 
-    /** @param {string} fieldId */
-    async moveCursorOutsideField(fieldId) {
+    /**
+     * @param {string} fieldId
+     * @param {boolean} [isBegin]
+     * @returns {Promise<void>}
+    */
+    async moveCursorToField(fieldId, isBegin) {
         return new Promise((resolve) => {
-            const isBeforeField = false;
+            isBegin = isBegin ?? true;
+            window.Asc.plugin.executeMethod("MoveCursorToField", [fieldId, isBegin], resolve);
+        });
+    }
+
+    /**
+     * @param {string} fieldId
+     * @param {boolean} [isBeforeField]
+     * @returns {Promise<void>}
+    */
+    async moveCursorOutsideField(fieldId, isBeforeField) {
+        return new Promise((resolve) => {
+            isBeforeField = isBeforeField ?? false;
             window.Asc.plugin.executeMethod("MoveCursorOutsideField", [fieldId, isBeforeField], resolve);
         });
     }
 
     /**
-     * @param {CustomField} field
+     * @returns {Promise<void>}
+    */
+    async moveCursorRight() {
+        return new Promise((resolve) => {
+            const isCalc = true;
+            const isClose = false;
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    doc.MoveCursorRight(1, false);
+                },
+                isClose,
+                isCalc,
+                resolve,
+            );
+        });
+    }
+
+    /**
+     * @param {AddinFieldData} field
      * @returns {Promise<void>}
      */
     #addAddinField(field) {
