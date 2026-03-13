@@ -406,14 +406,16 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(false, "Zotero (" + translate("Inserting citation") + ")");
+            await onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             /** @type {AddinFieldData | null} */
             let addedField = null;
+            let bHasNotes = false;
 
             return citationService.insertSelectedCitations(items)
-                .then(function (keys) {
-                    selectCitation.removeItems(keys);
+                .then(function (hasNotes) {
+                    bHasNotes = hasNotes;
+                    selectCitation.removeItems(Object.keys(items));
                     return citationService.getCurrentField();
                 })
                 .then(function (field) {
@@ -428,10 +430,12 @@ import "../styles.css";
                     }
                     showError(message);
                 })
-                .finally(function () {
+                .finally(async () => {
                     onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    if (addedField) {
-                        citationService.moveCursorOutsideField(addedField.FieldId);
+                    if (bHasNotes) {
+                        await citationService.moveCursorRight();
+                    } else if (addedField) {
+                        await citationService.moveCursorOutsideField(addedField.FieldId);
                     }
                 });
         });
