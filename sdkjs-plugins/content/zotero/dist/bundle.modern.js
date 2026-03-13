@@ -6076,6 +6076,42 @@ function _unEscapeHtml(htmlString) {
     return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
 }
 
+class CursorService {
+    static getCursorPosition() {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.plugin.callCommand(() => {
+                var doc = Api.GetDocument();
+                var pos = 0;
+                if (!doc) {
+                    return pos;
+                }
+                var currentRun = doc.GetCurrentRun();
+                if (!currentRun) {
+                    return pos;
+                }
+                var range = currentRun.GetRange(0, 0);
+                if (range) {
+                    return range.GetEndPos();
+                }
+                return pos;
+            }, isClose, isCalc, resolve);
+        });
+    }
+    static setCursorPosition(pos) {
+        return new Promise(function(resolve) {
+            var isCalc = false;
+            var isClose = false;
+            Asc.scope.pos = pos;
+            Asc.plugin.callCommand(function() {
+                var doc = Api.GetDocument();
+                doc.MoveCursorToPos(Asc.scope.pos);
+            }, isClose, isCalc, resolve);
+        });
+    }
+}
+
 var CslStylesParser = {
     getStyleInfo: function getStyleInfo(name, style) {
         var parser = new DOMParser;
@@ -7994,12 +8030,17 @@ SelectCitationsComponent.prototype.count = function() {
             insertBibBtn.disable();
             refreshBtn.disable();
             insertLinkBtn.disable();
-            yield new Promise(resolve => {
-                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                    lockScroll: true,
-                    keepSelection: keepSelection
-                } ], resolve);
-            });
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                window._cursorPosition = yield CursorService.getCursorPosition();
+            } else {
+                yield new Promise(resolve => {
+                    Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
+                        lockScroll: true,
+                        keepSelection: keepSelection
+                    } ], resolve);
+                });
+            }
         });
         return _onStartAction.apply(this, arguments);
     }
@@ -8011,11 +8052,16 @@ SelectCitationsComponent.prototype.count = function() {
             insertBibBtn.enable();
             refreshBtn.enable();
             checkSelected();
-            yield new Promise(resolve => {
-                Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                    scrollToTarget: scrollToTarget
-                } ], resolve);
-            });
+            var editorVersion = window.Asc.scope.editorVersion;
+            if (editorVersion && editorVersion < 9004e3) {
+                CursorService.setCursorPosition(window._cursorPosition || 0);
+            } else {
+                yield new Promise(resolve => {
+                    Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
+                        scrollToTarget: scrollToTarget
+                    } ], resolve);
+                });
+            }
         });
         return _onEndAction.apply(this, arguments);
     }
