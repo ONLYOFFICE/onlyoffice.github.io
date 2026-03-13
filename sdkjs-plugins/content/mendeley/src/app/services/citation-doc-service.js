@@ -52,7 +52,7 @@ class CitationDocService {
 
     /**
      * @param {string} text
-     * @returns {Promise<void>}
+     * @returns {Promise<string>}
      */
     async addBibliography(text) {
         /** @type {ContentControlProperties} */
@@ -63,14 +63,14 @@ class CitationDocService {
         };
         
         await this.#addContentControl(control, 1);
-        await this.#pasteContentControlHtml(text);
+        return this.#pasteContentControlHtml(text);
     }
 
     /**
      * @param {string} text
      * @param {string} tag
      * @param {NoteStyle | null} notesStyle
-     * @returns {Promise<void>}
+     * @returns {Promise<string>}
      */
     async addCitation(text, tag, notesStyle) {
         /** @type {ContentControlProperties} */
@@ -80,15 +80,32 @@ class CitationDocService {
             PlaceHolderText: "",
         };
         await this.#addContentControl(control);
-        if (
-            notesStyle &&
-            ["footnotes", "endnotes"].indexOf(notesStyle) !== -1
-        ) {
-            await this.#selectCurrentContentControl();
+        const bAddNote = notesStyle &&
+            ["footnotes", "endnotes"].indexOf(notesStyle) !== -1;
+
+        const internalId = await new Promise((resolve) => {
+            Asc.scope.bAddNote = bAddNote;
+            Asc.plugin.callCommand(
+                () => {
+                    const oDocument = Api.GetDocument();
+                    const control = oDocument.GetCurrentContentControl();
+                    if (Asc.scope.bAddNote) {
+                        control.AddText(""); // required to select an empty control
+                        control.Select();
+                    }
+                    return control.GetInternalId();
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+        if (bAddNote) {
             await this.#addNote(notesStyle);
         }
 
         await this.#pasteHtml(text);
+        return internalId;
     }
 
     /**
@@ -253,9 +270,10 @@ class CitationDocService {
 
     /**
      * @param {Array<ContentControlProperties>} controls
-     * @returns {Promise<void>}
+     * @returns {Promise<Array<string>>}
      */
     async updateContentControls(controls) {
+        let internalIds = controls.map(control => control.InternalId || "");
         const bibControls = controls.filter(control => control.Tag && control.Tag.indexOf(this.#bibPrefix) === 0);
         if (bibControls.length) {
             controls = controls.filter(control => control.Tag && control.Tag.indexOf(this.#bibPrefix) !== 0);
@@ -308,6 +326,7 @@ class CitationDocService {
             }
             await this.#pasteHtml(controls[i].PlaceHolderText);
         }
+        return internalIds;
     }
 
     /**
@@ -476,6 +495,29 @@ class CitationDocService {
     }
 
     /**
+     * @param {string} internalId
+     * @returns {Promise<void>}
+    */
+    async moveCursorOutsideControl(internalId) {
+        await new Promise((resolve) => {
+            Asc.scope.internalId = internalId;
+            Asc.plugin.callCommand(
+                () => {
+                    const isAfter = true;
+                    const doc = Api.GetDocument();
+                    const control = doc.GetAllContentControls().find(
+                        (c) => c.GetInternalId() === Asc.scope.internalId);
+
+                    control && control.MoveCursorOutside(isAfter);
+                },
+                false,
+                false,
+                resolve,
+            );
+        });
+    }
+
+    /**
      * @param {ContentControlProperties} control
      * @param {1 | 2} [type] - 1 - block, 2 - inline
      * @returns {Promise<void>}
@@ -508,24 +550,6 @@ class CitationDocService {
                     } else if ("endnotes" === Asc.scope.notesStyle) {
                         oDocument.AddEndnote();
                     }
-                },
-                false,
-                false,
-                resolve,
-            );
-        });
-    }
-    /**
-     * @returns {Promise<void>}
-     */
-    #selectCurrentContentControl() {
-        return new Promise((resolve) => {
-            Asc.plugin.callCommand(
-                () => {
-                    const oDocument = Api.GetDocument();
-                    const control = oDocument.GetCurrentContentControl();
-                    control.AddText(""); // required to select an empty control
-                    control.Select();
                 },
                 false,
                 false,
@@ -659,7 +683,7 @@ class CitationDocService {
     
     /**
      * @param {string} html 
-     * @returns {Promise<void>}
+     * @returns {Promise<string>}
      */
     async #pasteContentControlHtml(html) {
 
@@ -727,13 +751,15 @@ class CitationDocService {
                             paragraph.SetIndFirstLine(-720);
                         }
                     });
+                    return control.GetInternalId();
                 },
                 isClose,
                 isCalc,
                 resolve,
             );
-        }).then(() => {
+        }).then((internalId) => {
             Asc.scope.bibStyle = null;
+            return internalId;
         });
         
 

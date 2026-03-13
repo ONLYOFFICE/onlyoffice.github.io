@@ -72,13 +72,11 @@ class CitationService {
 
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<Array<string|number>>}
+     * @returns {Promise<string>}
      */
     #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
-        /** @type {Array<string|number>} */
-        const keys = [];
 
         return Promise.resolve()
             .then(function () {
@@ -88,7 +86,6 @@ class CitationService {
                         if (!self._storage.hasItem(item.id)) {
                             bUpdateItems = true;
                         }
-                        keys.push(item.id);
                     });
 
                 if (bUpdateItems) {
@@ -131,9 +128,6 @@ class CitationService {
                     tag,
                     notesStyle,
                 );
-            })
-            .then(function () {
-                return keys;
             });
     }
 
@@ -245,7 +239,6 @@ class CitationService {
         return this.citationDocService
             .getAddinMendeleyControls(notesStyle)
             .then(function (/** @type {ContentControlProperties[]} */ arrControls) {
-                let numOfItems = 0;
                 /** @type {ContentControlProperties | undefined} */
                 const bibControl = arrControls.find(function (control) {
                     return (
@@ -263,10 +256,9 @@ class CitationService {
                     let citationID = citationObject.citationID || "";
                     let cslCitation = new CSLCitation(citationID);
                     if (updatedControl) {
-                        numOfItems += cslCitation.fillFromObject(updatedControl);
+                        cslCitation.fillFromObject(updatedControl);
                     } else {
-                        numOfItems +=
-                            cslCitation.fillFromObject(citationObject);
+                        cslCitation.fillFromObject(citationObject);
                     }
                     self._storage.addCslCitation(cslCitation);
 
@@ -295,7 +287,7 @@ class CitationService {
 
     /**
      * @param {boolean} bNoHaveControls
-     * @returns
+     * @returns {Promise<string>}
      */
     #addBibliography(bNoHaveControls) {
         let bibliography = this.#makeBibliography();
@@ -553,7 +545,7 @@ class CitationService {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @returns {Promise<Array<string|number>>}
+     * @returns {Promise<string>}
      */
     async insertSelectedCitations(items) {
         try {
@@ -574,7 +566,7 @@ class CitationService {
 
     }
 
-    /** @returns {Promise<void>} */
+    /** @returns {Promise<string>} */
     async insertBibliography() {
         try {
             const { controlsWithCitations, bibControl } =
@@ -587,13 +579,22 @@ class CitationService {
                 const updatedControls = [
                     await this.#updateBibliography(bNoHaveControls, bibControl),
                 ];
-                return this.citationDocService.updateContentControls(updatedControls);
+                const internalIds = await this.citationDocService.updateContentControls(updatedControls);
+                return internalIds[0] ?? "";
             } else {
                 return this.#addBibliography(bNoHaveControls);
             }
         } catch (e) {
             throw e;
         }
+    }
+
+    /**
+     * @param {string} internalId
+     * @returns {Promise<void>}
+     */
+    async moveCursorOutsideControl(internalId) {
+        return this.citationDocService.moveCursorOutsideControl(internalId);
     }
 
     /**
@@ -807,8 +808,6 @@ class CitationService {
         this._storage.clear();
         CSLCitation.resetUsedIDs();
 
-        let numOfItems = 0;
-
         /** @type {AddinFieldData | undefined} */
         const bibField = arrFields.find((field) => 
             field.Value.indexOf("Mendeley Bibliography") === 0
@@ -842,14 +841,11 @@ class CitationService {
                 });
             }
             let cslCitation = new CSLCitation();
-            numOfItems +=
-                cslCitation.fillFromObject(citationObject);
+            cslCitation.fillFromObject(citationObject);
             cslCitation.setManualOverride(field.Content);
 
-            cslCitation.getCitationItems().forEach(function (item) {
-                self._storage.set(item.id, item);
-            });
-
+            self._storage.addCslCitation(cslCitation);
+            
             return { field: { ...field }, cslCitation: cslCitation };
         });
 

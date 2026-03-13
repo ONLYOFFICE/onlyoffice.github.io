@@ -412,7 +412,7 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(false, "Mendeley (" + translate("Inserting bibliography") + ")");
+            await onStartAction(true, "Mendeley (" + translate("Inserting bibliography") + ")");
             citationService
                 .insertBibliography()
                 .catch(function (error) {
@@ -442,10 +442,12 @@ import "../styles.css";
             }
             await onStartAction(true, "Mendeley (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
+            let internalId = "";
 
             return citationService.insertSelectedCitations(items)
-                .then(function (keys) {
-                    selectCitation.removeItems(keys);
+                .then(function (id) {
+                    internalId = id;
+                    selectCitation.removeItems(Object.keys(items));
                     return citationService.updateCslItems();
                 })
                 .catch(function (error) {
@@ -456,8 +458,11 @@ import "../styles.css";
                     }
                     showError(message);
                 })
-                .finally(function () {
-                    onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                .finally(async () => {
+                    await onEndAction(true, "Mendeley (" + translate("Inserting citation") + ")");
+                    if (internalId) {
+                        await citationService.moveCursorOutsideControl(internalId);
+                    }
                 });
         });
 
@@ -928,7 +933,7 @@ import "../styles.css";
             if (!updatedObject) {
                 return;
             }
-            await onStartAction(false, "Mendeley (" + translate("Updating citations") + ")");
+            await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
             let updateFn = citationService.updateItem.bind(
                 citationService,
                 updatedObject
