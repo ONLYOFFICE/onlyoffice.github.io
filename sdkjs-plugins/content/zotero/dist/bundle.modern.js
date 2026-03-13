@@ -3416,22 +3416,24 @@ class CitationDocService {
             var editorVersion = window.Asc.scope.editorVersion;
             if (editorVersion && editorVersion < 9004e3) {
                 var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
+                var fieldId = "";
                 var field = {
-                    FieldId: "",
+                    FieldId: fieldId,
                     Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
                     Content: formattingPositions.text
                 };
-                return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(function() {
+                return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(() => _this.getCurrentField()).then(addedField => {
+                    fieldId = (addedField === null || addedField === void 0 ? void 0 : addedField.FieldId) || "";
                     if (!formattingPositions.formatting.length) return;
                     return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-                });
+                }).then(() => fieldId);
             } else {
                 var _field = {
                     FieldId: "",
                     Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
                     Content: " "
                 };
-                yield _assertClassBrand(_CitationDocService_brand, _this, _pasteAddinFieldWithHtml).call(_this, _field, text);
+                return yield _assertClassBrand(_CitationDocService_brand, _this, _pasteBibliographyWithHtml).call(_this, _field, text);
             }
         })();
     }
@@ -3500,6 +3502,7 @@ class CitationDocService {
     updateAddinFields(fields) {
         var _this3 = this;
         return _asyncToGenerator(function*() {
+            var fieldIds = fields.map(field => field.FieldId);
             var editorVersion = window.Asc.scope.editorVersion;
             var bibFields = fields.filter(field => field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this3)) === 0);
             if (bibFields.length && editorVersion && editorVersion >= 9004e3) {
@@ -3509,18 +3512,19 @@ class CitationDocService {
                 var text = field.Content || "";
                 field.Content = " ";
                 yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _pasteAddinFieldWithHtml).call(_this3, field, text);
+                yield _assertClassBrand(_CitationDocService_brand, _this3, _pasteBibliographyWithHtml).call(_this3, field, text);
             }
             var formats = _assertClassBrand(_CitationDocService_brand, _this3, _makeFormattingPositions).call(_this3, fields);
             yield new Promise(resolve => {
                 window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
             });
-            if (!formats.size) return;
+            if (!formats.size) return fieldIds;
             for (var [fieldId, formattingPositions] of formats) {
                 var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, fieldId);
                 if (!selectFieldResult) continue;
                 yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
             }
+            return fieldIds;
         })();
     }
     convertNotesToText(fields) {
@@ -3689,12 +3693,12 @@ function _removeSuperscript() {
     });
 }
 
-function _pasteAddinFieldWithHtml(_x, _x2) {
-    return _pasteAddinFieldWithHtml2.apply(this, arguments);
+function _pasteBibliographyWithHtml(_x, _x2) {
+    return _pasteBibliographyWithHtml2.apply(this, arguments);
 }
 
-function _pasteAddinFieldWithHtml2() {
-    _pasteAddinFieldWithHtml2 = _asyncToGenerator(function*(field, html) {
+function _pasteBibliographyWithHtml2() {
+    _pasteBibliographyWithHtml2 = _asyncToGenerator(function*(field, html) {
         yield _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
         yield new Promise(resolve => {
             var isCalc = true;
@@ -3704,67 +3708,67 @@ function _pasteAddinFieldWithHtml2() {
                 doc.MoveCursorLeft(1, true);
             }, isClose, isCalc, resolve);
         });
-        if (field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, this)) === 0 && Asc.scope.bibStyle) {
-            var parser = new DOMParser;
-            var doc = parser.parseFromString(html, "text/html");
-            var paragraphs = doc.querySelectorAll(".csl-entry");
-            var numbers = new Array(paragraphs.length);
-            paragraphs.forEach((p, index) => {
-                var margin = p.querySelector(".csl-left-margin");
-                var right = p.querySelector(".csl-right-inline");
-                right === null || right === void 0 || right.replaceWith(...right.childNodes);
-                if (margin) {
-                    numbers[index] = margin.textContent.trim();
-                    margin.remove();
-                }
-            });
-            html = doc.body.innerHTML;
-            yield _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
-            var _field2 = yield this.getCurrentField();
-            if (!_field2) return;
-            yield _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, _field2.FieldId);
-            yield new Promise(resolve => {
-                var isCalc = false;
-                var isClose = false;
-                Asc.scope.numbers = numbers;
-                Asc.plugin.callCommand(() => {
-                    var doc = Api.GetDocument();
-                    var range = doc.GetRangeBySelect();
-                    if (!range) return;
-                    var style = Asc.scope.bibStyle;
-                    var paragraphs = range.GetAllParagraphs();
-                    paragraphs.forEach((paragraph, index) => {
-                        var text = paragraph.GetText().trim();
-                        if (text === "") {
-                            return;
-                        }
-                        if (typeof style.linespacing === "number") {
-                            paragraph.SetSpacingLine(240 * style.linespacing, "exact");
-                        }
-                        if (typeof style.entryspacing === "number") {
-                            paragraph.SetSpacingAfter(240 * style.entryspacing);
-                        }
-                        if (style["second-field-align"]) {
-                            var margin = Api.CreateRun();
-                            margin.AddText(Asc.scope.numbers[index]);
-                            margin.AddTabStop();
-                            var elementIndex = index === 0 ? 4 : 0;
-                            paragraph.AddElement(margin, elementIndex);
-                            paragraph.SetIndLeft(style.maxoffset * 120);
-                            paragraph.SetIndFirstLine(-(style.maxoffset * 120));
-                        } else if (style.hangingindent) {
-                            paragraph.SetIndLeft(720);
-                            paragraph.SetIndFirstLine(-720);
-                        }
-                    });
-                }, isClose, isCalc, resolve);
-            });
-            Asc.scope.bibStyle = null;
-        } else {
-            yield _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
+        if (!Asc.scope.bibStyle) {
+            throw "Bibliography style is not defined";
         }
+        var parser = new DOMParser;
+        var doc = parser.parseFromString(html, "text/html");
+        var paragraphs = doc.querySelectorAll(".csl-entry");
+        var numbers = new Array(paragraphs.length);
+        paragraphs.forEach((p, index) => {
+            var margin = p.querySelector(".csl-left-margin");
+            var right = p.querySelector(".csl-right-inline");
+            right === null || right === void 0 || right.replaceWith(...right.childNodes);
+            if (margin) {
+                numbers[index] = margin.textContent.trim();
+                margin.remove();
+            }
+        });
+        html = doc.body.innerHTML;
+        yield _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
+        var addedField = yield this.getCurrentField();
+        if (!addedField) return "";
+        yield _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, addedField.FieldId);
+        yield new Promise(resolve => {
+            var isCalc = false;
+            var isClose = false;
+            Asc.scope.numbers = numbers;
+            Asc.plugin.callCommand(() => {
+                var doc = Api.GetDocument();
+                var range = doc.GetRangeBySelect();
+                if (!range) return;
+                var style = Asc.scope.bibStyle;
+                var paragraphs = range.GetAllParagraphs();
+                paragraphs.forEach((paragraph, index) => {
+                    var text = paragraph.GetText().trim();
+                    if (text === "") {
+                        return;
+                    }
+                    if (typeof style.linespacing === "number") {
+                        paragraph.SetSpacingLine(240 * style.linespacing, "exact");
+                    }
+                    if (typeof style.entryspacing === "number") {
+                        paragraph.SetSpacingAfter(240 * style.entryspacing);
+                    }
+                    if (style["second-field-align"]) {
+                        var margin = Api.CreateRun();
+                        margin.AddText(Asc.scope.numbers[index]);
+                        margin.AddTabStop();
+                        var elementIndex = index === 0 ? 4 : 0;
+                        paragraph.AddElement(margin, elementIndex);
+                        paragraph.SetIndLeft(style.maxoffset * 120);
+                        paragraph.SetIndFirstLine(-(style.maxoffset * 120));
+                    } else if (style.hangingindent) {
+                        paragraph.SetIndLeft(720);
+                        paragraph.SetIndFirstLine(-720);
+                    }
+                });
+            }, isClose, isCalc, resolve);
+        });
+        Asc.scope.bibStyle = null;
+        return addedField.FieldId;
     });
-    return _pasteAddinFieldWithHtml2.apply(this, arguments);
+    return _pasteBibliographyWithHtml2.apply(this, arguments);
 }
 
 var _items = new WeakMap;
@@ -5622,7 +5626,7 @@ class CitationService {
                 _assertClassBrand(_CitationService_brand, _this4, _updateFormatter).call(_this4);
                 if (bibField) {
                     var updatedFields = [ yield _assertClassBrand(_CitationService_brand, _this4, _updateBibliography).call(_this4, bNoHaveFields, bibField) ];
-                    return _this4.citationDocService.updateAddinFields(updatedFields);
+                    return _this4.citationDocService.updateAddinFields(updatedFields).then(fieldIds => fieldIds ? fieldIds[0] : "");
                 } else {
                     return _assertClassBrand(_CitationService_brand, _this4, _addBibliography).call(_this4, bNoHaveFields, bibFieldValue);
                 }
@@ -6048,42 +6052,6 @@ function _updateFormatter() {
 
 function _unEscapeHtml(htmlString) {
     return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
-}
-
-class CursorService {
-    static getCursorPosition() {
-        return new Promise(function(resolve) {
-            var isCalc = false;
-            var isClose = false;
-            Asc.plugin.callCommand(() => {
-                var doc = Api.GetDocument();
-                var pos = 0;
-                if (!doc) {
-                    return pos;
-                }
-                var currentRun = doc.GetCurrentRun();
-                if (!currentRun) {
-                    return pos;
-                }
-                var range = currentRun.GetRange(0, 0);
-                if (range) {
-                    return range.GetEndPos();
-                }
-                return pos;
-            }, isClose, isCalc, resolve);
-        });
-    }
-    static setCursorPosition(pos) {
-        return new Promise(function(resolve) {
-            var isCalc = false;
-            var isClose = false;
-            Asc.scope.pos = pos;
-            Asc.plugin.callCommand(function() {
-                var doc = Api.GetDocument();
-                doc.MoveCursorToPos(Asc.scope.pos);
-            }, isClose, isCalc, resolve);
-        });
-    }
 }
 
 var CslStylesParser = {
@@ -7780,13 +7748,8 @@ SelectCitationsComponent.prototype.count = function() {
                     showError(translate("Language is not selected"));
                     return;
                 }
-                yield startAction("Zotero (" + translate("Updating citations") + ")");
-                var cursorPos = yield CursorService.getCursorPosition();
+                yield startAction(true, "Zotero (" + translate("Updating citations") + ")");
                 var updateFn = citationService.updateCslItems.bind(citationService, false);
-                Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                    lockScroll: true,
-                    keepSelection: true
-                } ]);
                 var styleManager = settings.getStyleManager();
                 if (styleManager.getLastUsedFormat() === "note") {
                     updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
@@ -7799,11 +7762,7 @@ SelectCitationsComponent.prototype.count = function() {
                     }
                     showError(message);
                 }).finally(function() {
-                    endAction("Zotero (" + translate("Updating citations") + ")");
-                    CursorService.setCursorPosition(cursorPos);
-                    Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                        scrollToTarget: false
-                    } ]);
+                    endAction(false, "Zotero (" + translate("Updating citations") + ")");
                 });
             });
             return function(_x) {
@@ -7823,8 +7782,11 @@ SelectCitationsComponent.prototype.count = function() {
                     showError(translate("Language is not selected"));
                     return;
                 }
-                yield startAction("Zotero (" + translate("Inserting bibliography") + ")");
-                citationService.insertBibliography().catch(function(error) {
+                yield startAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                var addedFieldId = "";
+                citationService.insertBibliography().then(function(fieldId) {
+                    addedFieldId = fieldId;
+                }).catch(function(error) {
                     console.error(error);
                     var message = translate("Failed to insert bibliography");
                     if (typeof error === "string") {
@@ -7832,7 +7794,12 @@ SelectCitationsComponent.prototype.count = function() {
                     }
                     showError(message);
                 }).finally(function() {
-                    endAction("Zotero (" + translate("Inserting bibliography") + ")");
+                    endAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
+                    if (addedFieldId) {
+                        citationService.moveCursorOutsideField(addedFieldId);
+                    } else {
+                        console.error("Can not move cursor");
+                    }
                 });
             });
             return function(_x2) {
@@ -7852,14 +7819,10 @@ SelectCitationsComponent.prototype.count = function() {
                     showError(translate("Language is not selected"));
                     return;
                 }
-                yield startAction("Zotero (" + translate("Inserting citation") + ")");
+                yield startAction(false, "Zotero (" + translate("Inserting citation") + ")");
                 var items = selectCitation.getSelectedItems();
                 var addedField = null;
-                var cursorPos;
-                CursorService.getCursorPosition().then(function(pos) {
-                    cursorPos = pos;
-                    return citationService.insertSelectedCitations(items);
-                }).then(function(keys) {
+                return citationService.insertSelectedCitations(items).then(function(keys) {
                     selectCitation.removeItems(keys);
                     return citationService.getCurrentField();
                 }).then(function(field) {
@@ -7873,11 +7836,9 @@ SelectCitationsComponent.prototype.count = function() {
                     }
                     showError(message);
                 }).finally(function() {
-                    endAction("Zotero (" + translate("Inserting citation") + ")");
+                    endAction(false, "Zotero (" + translate("Inserting citation") + ")");
                     if (addedField) {
                         citationService.moveCursorOutsideField(addedField.FieldId);
-                    } else {
-                        CursorService.setCursorPosition(cursorPos);
                     }
                 });
             });
@@ -7896,9 +7857,9 @@ SelectCitationsComponent.prototype.count = function() {
                 if (event.type !== "button:click") {
                     return;
                 }
-                yield startAction("Zotero (" + translate("Saving as text") + ")");
+                yield startAction(false, "Zotero (" + translate("Saving as text") + ")");
                 citationService.saveAsText().then(function() {
-                    endAction("Zotero (" + translate("Saving as text") + ")");
+                    endAction(false, "Zotero (" + translate("Saving as text") + ")");
                 });
             });
             return function(_x4) {
@@ -7907,23 +7868,31 @@ SelectCitationsComponent.prototype.count = function() {
         }());
         settings.onChangeState(function() {
             var _ref5 = _asyncToGenerator(function*(newState, oldState) {
-                var cursorPos = yield CursorService.getCursorPosition();
+                yield startAction(true, "Zotero (" + translate("Updating citations") + ")");
+                var updateFn = citationService.updateCslItems.bind(citationService, true);
                 if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
                     if (newState.styleFormat !== oldState.styleFormat) {
                         if (newState.styleFormat === "note") {
-                            yield citationService.switchingBetweenNotesAndText(newState.notesStyle);
+                            updateFn = citationService.switchingBetweenNotesAndText.bind(citationService, newState.notesStyle);
                         } else {
-                            yield citationService.switchingBetweenNotesAndText();
+                            updateFn = citationService.switchingBetweenNotesAndText.bind(citationService);
                         }
                     } else if (newState.notesStyle !== oldState.notesStyle) {
-                        yield citationService.convertNotesStyle(newState.notesStyle);
+                        updateFn = citationService.convertNotesStyle.bind(citationService, newState.notesStyle);
                     } else {
-                        yield citationService.updateCslItems(true);
+                        updateFn = citationService.updateCslItems.bind(citationService, true);
                     }
-                } else {
-                    yield citationService.updateCslItems(true);
                 }
-                yield CursorService.setCursorPosition(cursorPos);
+                updateFn().catch(function(error) {
+                    console.error(error);
+                    var message = translate("Failed to refresh");
+                    if (typeof error === "string") {
+                        message += ". " + translate(error);
+                    }
+                    showError(message);
+                }).finally(function() {
+                    endAction(false, "Zotero (" + translate("Updating citations") + ")");
+                });
             });
             return function(_x5, _x6) {
                 return _ref5.apply(this, arguments);
@@ -7991,33 +7960,34 @@ SelectCitationsComponent.prototype.count = function() {
             window.onclick = null;
         }
     }
-    function startAction(_x7) {
+    function startAction(_x7, _x8) {
         return _startAction.apply(this, arguments);
     }
     function _startAction() {
-        _startAction = _asyncToGenerator(function*(preloaderMessage) {
+        _startAction = _asyncToGenerator(function*(keepSelection, preloaderMessage) {
             insertBibBtn.disable();
             refreshBtn.disable();
             insertLinkBtn.disable();
             yield new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                    lockScroll: true
+                    lockScroll: true,
+                    keepSelection: keepSelection
                 } ], resolve);
             });
         });
         return _startAction.apply(this, arguments);
     }
-    function endAction(_x8) {
+    function endAction(_x9, _x0) {
         return _endAction.apply(this, arguments);
     }
     function _endAction() {
-        _endAction = _asyncToGenerator(function*(preloaderMessage) {
+        _endAction = _asyncToGenerator(function*(scrollToTarget, preloaderMessage) {
             insertBibBtn.enable();
             refreshBtn.enable();
             checkSelected();
             yield new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                    scrollToTarget: true
+                    scrollToTarget: scrollToTarget
                 } ], resolve);
             });
         });
@@ -8224,8 +8194,7 @@ SelectCitationsComponent.prototype.count = function() {
             if (!updatedField) {
                 return;
             }
-            yield startAction("Zotero (" + translate("Updating citations") + ")");
-            var cursorPos = yield CursorService.getCursorPosition();
+            yield startAction(false, "Zotero (" + translate("Updating citations") + ")");
             var updateFn = citationService.updateItem.bind(citationService, updatedField);
             var styleManager = settings.getStyleManager();
             if (styleManager.getLastUsedFormat() === "note") {
@@ -8239,8 +8208,7 @@ SelectCitationsComponent.prototype.count = function() {
                 }
                 showError(message);
             }).finally(function() {
-                endAction("Zotero (" + translate("Updating citations") + ")");
-                CursorService.setCursorPosition(cursorPos);
+                endAction(false, "Zotero (" + translate("Updating citations") + ")");
             });
         }));
         Asc.Buttons.registerContextMenu();
