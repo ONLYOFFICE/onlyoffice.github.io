@@ -41,7 +41,7 @@ import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
 import { SettingsPage } from "./pages/settings";
 import { LoginPage } from "./pages/login";
-import { translate, CitationService} from "./services";
+import { translate, CitationService, CursorService } from "./services";
 import { SearchFilterComponents, SelectCitationsComponent } from "./shared/ui";
 import { Button, Loader } from "./shared/components";
 
@@ -619,9 +619,15 @@ import "../styles.css";
         refreshBtn.disable();
         insertLinkBtn.disable();
 
-        await new Promise(resolve => {
-            Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : keepSelection }], resolve);
-        });
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9004000) {
+            // @ts-ignore
+            window._cursorPosition = await CursorService.getCursorPosition();
+        } else {
+            await new Promise(resolve => {
+                Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : keepSelection }], resolve);
+            });
+        }
         /*if (preloaderMessage) {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
@@ -640,9 +646,15 @@ import "../styles.css";
         refreshBtn.enable();
         checkSelected();
         
-        await new Promise(resolve => {
-            Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
-        });
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9004000) {
+            // @ts-ignore
+            CursorService.setCursorPosition(window._cursorPosition || 0);
+        } else {
+            await new Promise(resolve => {
+                Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
+            });
+        }
         /*if (preloaderMessage) {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
