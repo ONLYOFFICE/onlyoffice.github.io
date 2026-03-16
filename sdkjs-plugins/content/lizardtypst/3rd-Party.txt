@@ -1,0 +1,8 @@
+This plugin uses the following third-party libraries, which are included in the plugin's vendor directory:
+
+- **@myriaddreamin/typst.ts**: https://github.com/Myriad-Dreamin/typst.ts
+  - License: MIT
+- **@myriaddreamin/typst-ts-web-compiler**: https://github.com/Myriad-Dreamin/typst.ts
+  - License: MIT
+- **@myriaddreamin/typst-ts-renderer**: https://github.com/Myriad-Dreamin/typst.ts
+  - License: MIT
