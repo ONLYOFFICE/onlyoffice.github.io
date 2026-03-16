@@ -14,7 +14,7 @@
   "devDependencies": {
     "@storybook/addon-docs": "^9.1.17",
     "@storybook/html-vite": "^9.1.17",
-    "storybook": "^9.1.17"
+    "storybook": "^9.1.19"
   },
   "overrides": {
     "storybook": "$storybook"
