@@ -228,7 +228,7 @@ window.addEventListener('message', function(message) {
 				// sortPlugins(false, true, 'name');
 			} else if (installed) {
 				if (installed.obj.backup) {
-					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
+					// need to update the list of installed plugins so that resource links are correct
 					sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 				}
 				else
@@ -290,7 +290,7 @@ window.addEventListener('message', function(message) {
 				} else {
 					installed.removed = true;
 
-					// нужно обновить список установленных плагинов, чтобы ссылки на ресурсы были правильными
+					// need to update the list of installed plugins so that resource links are correct
 					if (isLocal)
 						sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 				}
@@ -708,7 +708,7 @@ function showListofPlugins(bAll, sortedArr) {
 	$('.div_item').remove();
 	let arr = (sortedArr ? sortedArr : (bAll ? allPlugins : installedPlugins));
 
-	// получаем список backup плагинов
+	// get list of backup plugins
 	if (!bAll && isLocal) {
 		var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
 
@@ -975,9 +975,9 @@ function onClickRemove(target, event) {
 };
 
 function needBackupPlugin(guid) {
-	// проверяем установленный плагин:
-	// если плагин есть в стор ( и его версия <= ? ), то можем удалить, пользователь сможет поставить актуальную версию
-	// если плагина нет в стор, нужно его хранить у пользователя с возможностью восстановления
+	// check installed plugin:
+	// if the plugin exists in the store (and its version <= ?), we can delete it, user will be able to install the current version
+	// if the plugin is not in the store, we need to keep it for the user with the ability to restore
 
 	return isLocal ? findPlugin(true, guid) == undefined : false;
 }
@@ -1629,7 +1629,7 @@ function installPluginManually() {
 
 		let result = window["AscDesktopEditor"]["PluginInstall"](file);
 		if (result) {
-			// нужно обновить список установленных плагинов
+			// need to update the list of installed plugins
 			sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
 		} else {
 			createError(new Error('Problem with plugin installation.'), false);
