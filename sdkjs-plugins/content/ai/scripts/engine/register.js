@@ -216,12 +216,14 @@ async function registerButtons(window, undefined)
 
 							let toolResult = {};
 							try {
-								toolResult = await window.EditorHelper.names2funcs[funcName].call(argsObj);
-								if (!toolResult)
-									toolResult = {};
-								toolResult.message = "System function '" + funcName + "' executed successfully";
+								let toolResultMessage = await window.EditorHelper.names2funcs[funcName].call(argsObj);
+								if (toolResultMessage)
+									toolResultMessage = Asc.plugin.tr("Function executed successfully") + "\n" + JSON.stringify(toolResultMessage);
+								else
+									toolResultMessage = Asc.plugin.tr("Function executed successfully");
+								toolResult.message = toolResultMessage;
 							} catch (e) {
-								let errorMsg = "Error executing function: " + funcName;
+								let errorMsg = Asc.plugin.tr("Error:") + "\n";
 								if (e.name === "ToolError") {
 									errorMsg += ("\n" + e.message);
 								}

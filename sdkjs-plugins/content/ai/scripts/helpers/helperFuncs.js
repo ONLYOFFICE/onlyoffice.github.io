@@ -241,15 +241,16 @@ EditorHelperImpl.prototype.callFunc = async function(data) {
 			};
 		}
 
-		let result = await func.call(eval("(" + paramsStr.replaceAll("\n", "\\n") + ")"));
-		if (!result)
-			result = {};
+		let toolResultMessage = await func.call(eval("(" + paramsStr.replaceAll("\n", "\\n") + ")"));
+		if (toolResultMessage)
+			toolResultMessage = Asc.plugin.tr("Function executed successfully") + "\n" + JSON.stringify(toolResultMessage);
+		else
+			toolResultMessage = Asc.plugin.tr("Function executed successfully");
 
-		result.message = "System function '" + funcName + "' executed successfully";
-		return result;
+		return { message : toolResultMessage };
 	} catch (e) {
 		return {
-			error: e.message
+			error: Asc.plugin.tr("Error:") + "\n" + e.message
 		};
 	}
 	

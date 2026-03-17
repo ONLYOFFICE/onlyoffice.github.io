@@ -169,7 +169,8 @@
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Није могуће извршити ову акцију. Молимо користите промпте повезане са анализом текста, уређивањем или форматирањем.",
 	"Processing selection...": "Процесирање избора...",
 	"Processing document...": "Процесирање документа...",
-	"Action": "Акција",
+	"Action": "Радња",
+	"Function executed successfully": "Функција успешно извршена",
 	"Prompt": "Пометка",
 	"Give your tool a short name for the toolbar": "Дајте вашем alatu kratko ime za alatnu traku",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Рекајте AI шта да ради са одабраним текстом (нпр., \"Пронађи грешке у факту\" или \"Сажми\")",
@@ -179,7 +180,6 @@
 	"Hint": "Hint",
 	"Replace": "Замени",
 	"Replace + Hint": "Замени + Hint",
-	"Function": "Function",
 	"Arguments": "Arguments",
 	"Result": "Result",
 	"Generate Document": "Генериши документ"

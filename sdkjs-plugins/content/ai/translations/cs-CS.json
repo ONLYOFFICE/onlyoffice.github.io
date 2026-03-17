@@ -170,6 +170,7 @@
 	"Processing selection...": "Procesování výběru...",
 	"Processing document...": "Procesování dokumentu...",
 	"Action": "Akce",
+	"Function executed successfully": "Funkce provedena úspěšně",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dalejte svému nástroji krátký název pro panel nástrojů",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Říkejte AI, co s vybraným textem dělat (například \"Najít faktické chyby\" nebo \"Riassumovat\")",
@@ -179,7 +180,6 @@
 	"Hint": "Náznak",
 	"Replace": "Nahradit",
 	"Replace + Hint": "Nahradit + Náznak",
-	"Function": "Function",
 	"Arguments": "Arguments",
 	"Result": "Result",
 	"Generate Document": "Generovat dokument"
