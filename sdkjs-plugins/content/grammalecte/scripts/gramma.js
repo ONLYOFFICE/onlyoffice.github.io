@@ -364,8 +364,8 @@ function checkInternetExplorer(){
 		sTextForDisplay = temp;
 	};
 
-    // tempMatches используются для выделения ошибок внутри textarea,
-    // функция нужна для того, чтобы с одинаковым началом или концом не выделялись дважды
+    // tempMatches are used to highlight errors inside textarea,
+    // this function is needed to prevent highlighting twice for matches with the same start or end
     function delExternalMatches(aMatches) {
         for (var nItem1 = 0; nItem1 < aMatches.length - 1; nItem1++) {
             var bSkipped = false;
