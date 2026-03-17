@@ -1,0 +1,146 @@
+{
+  "name": "TextCure",
+  "guid": "asc.{D788954F-C5E5-4395-9905-B4D639FE952E}",
+  "variations": [
+    {
+      "description": "Improve the spelling and grammar in your texts. An unofficial plugin to Druide Antidote.",
+      "descriptionLocale": {
+        "fr": "Améliorez l'orthographe et la grammaire dans vos textes. Un plugin non-officiel à Druide Antidote."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/light/icon.png",
+        "resources/light/icon@2x.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/light/icon.png"
+          },
+          "125%": {
+            "normal": "resources/light/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/light/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/light/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/light/icon@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/dark/icon.png"
+          },
+          "125%": {
+            "normal": "resources/dark/icon@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/dark/icon@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/dark/icon@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/dark/icon@2x.png"
+          }
+        }
+      ],
+      "initOnSelectionChanged": true,
+      "isViewer": false,
+      "EditorsSupport": [
+        "word",
+        "slide",
+        "cell"
+      ],
+      "isVisual": false,
+      "initDataType": "text",
+      "initData": "",
+      "buttons": [],
+      "store": {
+        "background": {
+          "light": "#f5f5f5",
+          "dark": "#555555"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": [
+          "specAbilities",
+          "work"
+        ]
+      }
+    },
+    {
+      "description": "Settings",
+      "descriptionLocale": {
+        "fr": "Paramètres"
+      },
+      "url": "settings.html",
+      "icons": [
+        "resources/images/icon.png",
+        "resources/images/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": [
+        "word",
+        "slide",
+        "cell"
+      ],
+      "isVisual": true,
+      "isModal": true,
+      "isInsideMode": false,
+      "initDataType": "none",
+      "initData": "",
+      "buttons": [
+        {
+          "text": "Ok",
+          "primary": true
+        }
+      ],
+      "size": [
+        360,
+        60
+      ]
+    },
+    {
+      "description": "About",
+      "url": "about.html",
+      "icons": [
+        "resources/light/icon.png",
+        "resources/light/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": [
+        "word",
+        "slide",
+        "cell"
+      ],
+      "isVisual": true,
+      "isModal": true,
+      "isInsideMode": false,
+      "initDataType": "none",
+      "initData": "",
+      "buttons": [
+        {
+          "text": "Ok",
+          "primary": true
+        }
+      ],
+      "size": [
+        392,
+        147
+      ]
+    }
+  ],
+  "version": "0.4.3",
+  "offered": "Yiran LU"
+}
