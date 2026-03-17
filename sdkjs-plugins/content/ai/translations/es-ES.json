@@ -169,6 +169,7 @@
 	"Processing selection...": "Procesamiento de la selección...",
 	"Processing document...": "Procesamiento del documento...",
 	"Action": "Acción",
+	"Function executed successfully": "Función ejecutada correctamente",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dale un nombre corto a tu herramienta para la barra de herramientas",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dile a la IA qué hacer con el texto seleccionado (por ejemplo, \"Encontrar errores factuales\" o \"Resumir\")",
@@ -178,7 +179,6 @@
 	"Hint": "Indice",
 	"Replace": "Remplazar",
 	"Replace + Hint": "Remplazar + Indice",
-	"Function": "Function",
 	"Arguments": "Arguments",
 	"Result": "Result",
 	"Generate Document": "Generar documento"

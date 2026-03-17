@@ -170,6 +170,7 @@
 	"Processing selection...": "Обработка выделенного фрагмента...",
 	"Processing document...": "Обработка документа...",
 	"Action": "Действие",
+	"Function executed successfully": "Функция выполнена успешно",
 	"Prompt": "Пометка",
 	"Give your tool a short name for the toolbar": "Дайте вашему инструменту короткое имя для панели инструментов",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Попросите ИИ выполнить действие над выбранным текстом (например, \"Найти фактические ошибки\" или \"Сжать\")",
@@ -179,7 +180,6 @@
 	"Hint": "Подсказка",
 	"Replace": "Заменa",
 	"Replace + Hint": "Замена + Подсказка",
-	"Function": "Функция",
 	"Arguments": "Параметры",
 	"Result": "Результат",
 	"Generate Document": "Создать документ"

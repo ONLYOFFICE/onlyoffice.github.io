@@ -45,6 +45,10 @@
 	let isAgentRunning = false;
 	let isAgentStopped = false;
 
+	// 'action' — show translated "Action" in header
+	// 'name'   — show human function name (truncated to 50 chars) in header
+	const TOOL_CALL_HEADER_MODE = 'name';
+
 	const ErrorCodes = {
 		UNKNOWN: 1
 	};
@@ -80,17 +84,30 @@
 			let funcName = item.functionName || 'Unknown';
 			let funcArgs = item.arguments || '';
 			let displayName = item.humanName || funcName;
+			let isLoading = !item.result;
 
-			// Header with collapse/expand functionality
+			// Header text: either translated "Action" or human function name (max 50 chars)
 			let $header = $('<div class="tool_call_header"></div>');
-			let $collapseIcon = $('<span class="tool_call_collapse_icon">▶</span>');
-			let $title = $('<span class="tool_call_title">' + window.Asc.plugin.tr('Function') + ': <strong>' + displayName + '</strong></span>');
+			let headerText;
+			if (TOOL_CALL_HEADER_MODE === 'name') {
+				let name = displayName;
+				if (name.length > 50)
+					name = name.substring(0, 47) + '...';
+				headerText = name;
+			} else {
+				headerText = window.Asc.plugin.tr('Action');
+			}
+			let $title = $('<span class="tool_call_title">' + headerText + (isLoading ? '<span class="tool_call_dots">...</span>' : '') + '</span>');
+			let $arrow = $('<img class="tool_call_arrow icon" draggable="false" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/>');
 
-			$header.append($collapseIcon);
 			$header.append($title);
+			$header.append($arrow);
 
 			// Details section (collapsed by default)
 			let $details = $('<div class="tool_call_details collapsed"></div>');
+
+			// Function name inside details
+			$details.append('<div class="tool_call_func_name"><strong>' + displayName + '</strong></div>');
 
 			if (funcArgs) {
 				let displayArgs = funcArgs;
@@ -100,22 +117,18 @@
 						if (parsed.code) displayArgs = parsed.code;
 					} catch(e) {}
 				}
-				$details.append('<div class="tool_call_section"><strong>' + window.Asc.plugin.tr('Arguments') + ':</strong><pre>' + displayArgs + '</pre></div>');
+				$details.append('<div class="tool_call_section"><pre>' + displayArgs + '</pre></div>');
 			}
 
 			if (item.result) {
 				let resultText = typeof item.result === 'string' ? item.result : JSON.stringify(item.result, null, 2);
-				$details.append('<div class="tool_call_result"><strong>' + window.Asc.plugin.tr('Result') + ':</strong><pre>' + resultText + '</pre></div>');
+				$details.append('<div class="tool_call_section"><pre>' + resultText + '</pre></div>');
 			}
 
 			// Toggle collapse/expand
 			$header.on('click', function() {
 				$details.toggleClass('collapsed');
-				if ($details.hasClass('collapsed')) {
-					$collapseIcon.text('▶');
-				} else {
-					$collapseIcon.text('▼');
-				}
+				$arrow.toggleClass('expanded');
 				scrollbarList && scrollbarList.update();
 			});
 

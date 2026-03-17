@@ -170,6 +170,7 @@
 	"Processing selection...": "معالجة التحديد...",
 	"Processing document...": "معالجة المستند...",
 	"Action": "إجراء",
+	"Function executed successfully": "تم تنفيذ الوظيفة بنجاح",
 	"Prompt": "إدخال",
 	"Give your tool a short name for the toolbar": "أعطِ أداةك اسماً قصيراً للشريط الأدائي",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "قول للذكاء الاصطناعي ما يجب عليه فعله مع النص المحدد (مثل \"إيجاد أخطاء حقيقة\" أو \"إعادة صياغة\")",
@@ -179,7 +180,6 @@
 	"Hint": "الإرشاد",
 	"Replace": "الإضافة",
 	"Replace + Hint": "إضافة + إرشاد",
-	"Function": "Function",
 	"Arguments": "Arguments",
 	"Result": "Result",
 	"Generate Document": "إنشاء مستند"
