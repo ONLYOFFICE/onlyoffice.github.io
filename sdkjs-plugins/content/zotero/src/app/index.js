@@ -50,18 +50,18 @@ import "../styles.css";
     var displayNoneClass = "hidden";
     var blurClass = "blur";
 
-    // TODO добавить ещё обработку событий (удаление линков) их не нужно удалять
-    //     из библиографии автоматически (это делать только при обновлении библиографии
-    //     или refresh), но их точно нужно удалить из formatter!
-    // TODO добавить ещё обработку события (изменения линков), предлать пользователю
-    //     обновить их или сохранить ручное форматирование (при ручном форматировании
-    //     не меняем внешний вид цитаты при refresh (да и вообще не меняем))
-    // TODO сейчас всегда делаем полный refresh при каждом действии
-    //     (обновлении, вставке линков, вставке библиографии), потому что мы не знаем
-    //     что поменялось без событий (потом добавить ещё сравнение контента)
-    // TODO ms меняет линки (если стиль с нумерацией settings._bNumFormat) делает их по порядку
-    //     как документе (для этого нужно знать где именно в документе мы вставляем цитату,
-    //     какая цитата сверху и снизу от текущего курсора)
+    // TODO add event handling for link deletion - they should not be removed
+    //     from bibliography automatically (do this only when updating bibliography
+    //     or refresh), but they definitely need to be removed from formatter!
+    // TODO add event handling for link changes, offer the user
+    //     to update them or keep manual formatting (with manual formatting
+    //     we don't change citation appearance on refresh (and don't change at all))
+    // TODO currently we always do full refresh on every action
+    //     (update, link insertion, bibliography insertion), because we don't know
+    //     what changed without events (add content comparison later)
+    // TODO ms changes links (if style with numbering settings._bNumFormat) makes them in order
+    //     as in document (for this we need to know where exactly in the document we insert citation,
+    //     which citation is above and below the current cursor)
 
     /** @type {Router} */
     var router;
@@ -349,9 +349,9 @@ import "../styles.css";
                 })
                 .then(function (keys) {
                     selectCitation.removeItems(keys);
-                    // TODO есть проблема, что в плагине мы индексы обновили, а вот в документе нет (по идее надо обновить и индексы в документе перед вставкой)
-                    // но тогда у нас уедет селект и новое поле вставится не там, поэтому пока обновлять приходится в конце
-                    // такая же проблем с вставкой библиографии (при обнолении индексов в плагине надо бы их обновлять и в документе тоже)
+                    // TODO there's a problem that we updated indexes in the plugin, but not in the document (ideally we should update indexes in document before insertion)
+                    // but then our selection will shift and new field will be inserted in wrong place, so for now we have to update at the end
+                    // same problem with bibliography insertion (when updating indexes in plugin we should also update them in document)
                     return citationService.updateCslItems(true, false);
                 })
                 .catch(function (error) {

@@ -154,12 +154,12 @@
 					});
 
 					let oMatchOption = undefined;
-					// ищем по полному совпадению
+					// search for exact match
 					oMatchOption = aOptions.find(function(item) {
 						if (item.value == documentLang)
 							return true;
 					});
-					// ищем на совпадению по осносному языку
+					// search for match by base language
 					if (!oMatchOption) {
 						oMatchOption = aOptions.find(function(item) {
 							if (item.value.search(documentLang.split('-')[0]) != -1)
