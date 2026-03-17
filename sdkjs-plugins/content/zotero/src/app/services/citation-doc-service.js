@@ -168,7 +168,6 @@ class CitationDocService {
 
     /** @returns {Promise<boolean>} */
     saveAsText() {
-        // TODO потом добавить ещё форматы, пока только как текст
         return this.getAddinZoteroFields().then(function (arrFields) {
             let count = arrFields.length;
             if (!count) {
