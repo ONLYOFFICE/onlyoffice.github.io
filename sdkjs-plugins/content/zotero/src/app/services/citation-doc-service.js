@@ -244,7 +244,7 @@ CitationDocService.prototype._removeSuperSubTagsWithPositions = function (
  * @returns {Promise<boolean>}
  */
 CitationDocService.prototype.saveAsText = function () {
-    // TODO потом добавить ещё форматы, пока только как текст
+    // TODO add more formats later, for now only as text
     return this.getAddinZoteroFields().then(function (arrFields) {
         let count = arrFields.length;
         if (!count) {

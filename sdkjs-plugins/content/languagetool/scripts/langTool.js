@@ -376,8 +376,8 @@ function checkInternetExplorer(){
             canAddText = false;
             changeLangInSelect(oResponse.language.name);
 
-			// чтобы сервис различал параграфы необходимо разделять их двумя "\n" во время отправки,
-			// поэтому после получения ответа нужно поправить позиции, чтобы в исходном тексте верно делать исправления
+			// for the service to distinguish paragraphs, they need to be separated by two "\n" when sending,
+			// so after receiving the response we need to correct positions to make corrections in the source text correctly
             correctMistakesPosition(matches);
             
             sTextForDisplay = txt;
