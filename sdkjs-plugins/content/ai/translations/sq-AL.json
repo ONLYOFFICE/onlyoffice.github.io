@@ -170,6 +170,7 @@
 	"Processing selection...": "Procesimi i përsëritjes së seleksionit...",
 	"Processing document...": "Procesimi i dokumentit...",
 	"Action": "Veprim",
+	"Function executed successfully": "Funksioni u ekzekutua me sukses",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dajte vashem alatu kratko ime za alatnu traku",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")",
@@ -179,7 +180,6 @@
 	"Hint": "Hint",
 	"Replace": "Zamini",
 	"Replace + Hint": "Zamini + Hint",
-	"Function": "Function",
 	"Arguments": "Arguments",
 	"Result": "Result",
 	"Generate Document": "Gjenero dokument"
