@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "highlightDuplicates",
+		"text": "Highlight Duplicate Values",
 		"description": "Identifies and highlights duplicate values within a specified range. Compares all cells in the range and highlights cells that contain values appearing more than once. Uses AI to accurately detect duplicates while handling various data types (numbers, text, dates). Highlights all instances of duplicate values with customizable color. Useful for data validation, cleanup tasks, and identifying repeated entries in datasets.",
 		"parameters": {
 			"type": "object",

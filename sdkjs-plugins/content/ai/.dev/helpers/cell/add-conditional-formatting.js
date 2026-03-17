@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addConditionalFormatting",
+		"text": "Add Conditional Formatting",
 		"description": "Use this function when user asks for conditional formatting without specifying the exact type. This applies the most commonly used conditional formatting rule - highlighting cells based on values greater than a threshold with color background. Perfect for general requests like 'add conditional formatting', 'highlight important data', or 'format cells conditionally'.",
 		"parameters": {
 			"type": "object",

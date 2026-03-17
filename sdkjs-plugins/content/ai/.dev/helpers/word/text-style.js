@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeTextStyle",
+		"text": "Format Text",
 		"description": "Changes the style of the selected text, including bold, italic, underline, strikethrough, and font size.",
 		"parameters": {
 			"type": "object",

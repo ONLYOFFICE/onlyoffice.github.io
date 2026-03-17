@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "changeTextStyle",
+		"text": "Format Cell Text",
 		"description": "Applies text formatting styles to cells in the specified range or current selection. Supports comprehensive text styling options including bold, italic, underline (multiple types), strikeout, font family, font size, and font color. Colors can be specified using hex codes (#FF0000) or preset color names (red, blue, etc.). All formatting parameters are optional - only specified properties will be changed, leaving others unchanged.",
 		"parameters": {
 			"type": "object",

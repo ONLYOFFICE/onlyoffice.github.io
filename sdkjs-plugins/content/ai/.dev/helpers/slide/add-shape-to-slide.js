@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addShapeToSlide",
+		"text": "Insert Shape",
 		"description": "Adds a shape to the slide with optional text (139x42mm, centered, blue fill with dark border)",
 		"parameters": {
 			"type": "object",

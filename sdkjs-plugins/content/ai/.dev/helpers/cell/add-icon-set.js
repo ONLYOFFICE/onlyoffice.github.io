@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addIconSet",
+		"text": "Add Icon Indicators",
 		"description": "Applies icon set conditional formatting to display icons (arrows, traffic lights, symbols) based on value ranges. Icons provide visual indicators for data trends and performance levels. Each icon represents a different value range, making it easy to identify patterns and outliers in your data.",
 		"parameters": {
 			"type": "object",

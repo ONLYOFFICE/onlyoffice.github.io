@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeParagraphStyle",
+		"text": "Change Paragraph Style",
 		"description": "Changes the style of a specified paragraph in the document. If no paragraph number is provided, affects the current paragraph.",
 		"parameters": {
 			"type": "object",

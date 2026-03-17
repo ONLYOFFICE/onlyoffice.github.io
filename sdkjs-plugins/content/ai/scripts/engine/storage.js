@@ -108,6 +108,25 @@
 				resolve("");
 			}
 		})());
-	};	
+	};
+
+	AI.helperTranslations = {};
+
+	AI.loadHelperTranslations = async function() {
+		let lang = window.Asc.plugin.info.lang || "en";
+		if (lang.startsWith("en"))
+			return;
+
+		if (lang.length === 2)
+			lang = lang.toLowerCase() + "-" + lang.toUpperCase();
+
+		let text = await AI.loadResourceAsText("./translations/helpers/" + lang + ".json");
+		if (text) {
+			try {
+				AI.helperTranslations = JSON.parse(text);
+				return;
+			} catch (e) {}
+		}
+	};
 
 })(window);

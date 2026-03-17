@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addImage",
+		"text": "Insert Image from Description",
 		"description": "Generate an image from text and insert it at the current cursor position. Width and height are in millimeters.",
 		"parameters": {
 			"type": "object",

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addChartToSlide",
+		"text": "Insert Chart",
 		"description": "Adds a chart to the slide (152x89mm, centered)",
 		"parameters": {
 			"type": "object",

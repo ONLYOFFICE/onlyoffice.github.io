@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "formatTable",
+		"text": "Format as Table",
 		"description": "Applies professional table formatting to a data range with consistent styling, colors, and alignment. Features include: automatic or manual color scheme selection (blue, green, orange, gray, red), alternating row colors for readability, optional header row formatting (bold, centered, colored background), table borders, and automatic column width adjustment. Can auto-detect existing formatting to avoid overriding intentional styles. Supports smart content-based text alignment (right-align numbers, left-align text).",
 		"parameters": {
 			"type": "object",

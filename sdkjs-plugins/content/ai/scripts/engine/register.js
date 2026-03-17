@@ -210,6 +210,7 @@ async function registerButtons(window, undefined)
 								type: 'native',
 								id: toolCall.id,
 								functionName: funcName,
+								humanName: window.EditorHelper.getHumanName(funcName),
 								arguments: JSON.stringify(argsObj, null, 2)
 							});
 
@@ -269,10 +270,14 @@ async function registerButtons(window, undefined)
 					try {
 						let toolCallId = 'system_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
+						let sysNameMatch = result.match(/\(([^)]+)\)/);
+						let sysFuncName = sysNameMatch ? sysNameMatch[1].trim() : '';
+
 						chatWindow.command("onToolCallStart", {
 							type: 'system_prompt',
 							id: toolCallId,
-							call: result
+							call: result,
+							humanName: sysFuncName ? window.EditorHelper.getHumanName(sysFuncName) : ''
 						});
 
 						let toolResult = await window.EditorHelper.callFunc(result);

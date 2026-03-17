@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addDataBars",
+		"text": "Add Data Bars",
 		"description": "Adds data bar conditional formatting to display values as horizontal bars within cells. The length of each bar represents the value relative to other values in the range. Useful for creating in-cell bar charts and comparing values at a glance without additional charts.",
 		"parameters": {
 			"type": "object",

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "generateDocx",
+		"text": "Generate Document",
 		"description": "Use this function if you are asked to generate a textual document (report, article, letter, etc.) based on a description. Input: Short description of what needs to be generated.",
 		"parameters": {
 			"type": "object",
