@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addTableToSlide",
+		"text": "Insert Table",
 		"description": "Adds a table to the slide (194x97mm, centered)",
 		"parameters": {
 			"type": "object",

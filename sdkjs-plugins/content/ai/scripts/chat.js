@@ -79,11 +79,12 @@
 			// Parse function name and args
 			let funcName = item.functionName || 'Unknown';
 			let funcArgs = item.arguments || '';
+			let displayName = item.humanName || funcName;
 
 			// Header with collapse/expand functionality
 			let $header = $('<div class="tool_call_header"></div>');
 			let $collapseIcon = $('<span class="tool_call_collapse_icon">▶</span>');
-			let $title = $('<span class="tool_call_title">' + window.Asc.plugin.tr('Function') + ': <strong>' + funcName + '</strong></span>');
+			let $title = $('<span class="tool_call_title">' + window.Asc.plugin.tr('Function') + ': <strong>' + displayName + '</strong></span>');
 
 			$header.append($collapseIcon);
 			$header.append($title);
@@ -260,6 +261,7 @@
 				role: 'tool',
 				isToolCall: true,
 				functionName: toolCallData.functionName,
+				humanName: toolCallData.humanName || toolCallData.functionName,
 				arguments: toolCallData.arguments,
 				result: toolCallData.result || null
 			};
@@ -1022,6 +1024,7 @@
 		// Add tool call immediately without result
 		const index = messagesList.addToolCall({
 			functionName: funcName,
+			humanName: toolCallData.humanName || funcName,
 			arguments: funcArgs,
 			result: null
 		});
@@ -1085,6 +1088,7 @@
 
 		messagesList.addToolCall({
 			functionName: funcName,
+			humanName: toolCallData.humanName || funcName,
 			arguments: funcArgs,
 			result: result
 		});

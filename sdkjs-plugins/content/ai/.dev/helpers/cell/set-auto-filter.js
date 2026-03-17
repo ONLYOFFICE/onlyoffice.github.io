@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "setAutoFilter",
+		"text": "Apply Data Filter",
 		"description": "Applies autofilter to a data range, enabling dropdown filters on column headers. Supports filtering by column number or column name (with fuzzy matching). Offers multiple filter types: value comparison operators (greater than, less than, equals), multiple value selection, top/bottom N items or percentage, color-based filtering (cell background or font color), and dynamic filters. Can be used to filter active selection or specific ranges.",
 		"parameters": {
 			"type": "object",

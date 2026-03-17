@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addAboveAverage",
+		"text": "Highlight Above-Average Values",
 		"description": "Highlights cells that contain values above or below the average of all values in the range. This is useful for identifying data points that deviate significantly from the typical values in your dataset.",
 		"parameters": {
 			"type": "object",

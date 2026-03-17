@@ -45,6 +45,7 @@ function EditorHelperImpl() {
 
 	this.funcs = [];
 	this.names2funcs = {};
+	this.names2text = {};
 	this.isSupportStreaming = false;
 
 	let editorType = Asc.Editor.getType();
@@ -84,6 +85,12 @@ function EditorHelperImpl() {
 	for (let i = 0; i < this.funcs.length; i++) {
 		let func = this.funcs[i];
 		this.names2funcs[func.name] = func;
+	}
+
+	if (HELPERS.names && HELPERS.names[editorType]) {
+		for (let name in HELPERS.names[editorType]) {
+			this.names2text[name] = HELPERS.names[editorType][name];
+		}
 	}
 }
 
@@ -201,6 +208,18 @@ EditorHelperImpl.prototype.getTools = function() {
 	}
 
 	return JSON.parse(JSON.stringify(tools));
+};
+
+EditorHelperImpl.prototype.getHumanName = function(funcName) {
+	let englishName = this.names2text[funcName];
+	if (!englishName)
+		return funcName;
+
+	// Look up translation from loaded helper translations
+	if (AI.helperTranslations && AI.helperTranslations[englishName])
+		return AI.helperTranslations[englishName];
+
+	return englishName;
 };
 
 EditorHelperImpl.prototype.callFunc = async function(data) {

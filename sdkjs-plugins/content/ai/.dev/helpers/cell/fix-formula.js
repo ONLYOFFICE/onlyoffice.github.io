@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "fixFormula",
+		"text": "Fix Formula Errors",
 		"description": "Scans cells for formulas containing errors and attempts to fix them automatically. Detects common formula errors including #DIV/0! (division by zero), #REF! (invalid cell references), #NAME? (unrecognized function names), #VALUE! (wrong value types), and #N/A (value not available). Applies appropriate fixes: wraps division operations in IF statements, corrects cell references, fixes function name typos, and adds IFERROR wrappers. Preserves formulas that have no errors. Can scan entire sheet or specific range.",
 		"parameters": {
 			"type": "object",

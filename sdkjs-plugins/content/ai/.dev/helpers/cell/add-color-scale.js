@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addColorScale",
+		"text": "Apply Color Scale",
 		"description": "Applies color scale conditional formatting to visualize data with gradient colors. Creates a heat map effect where values are represented by colors ranging from one color (minimum values) to another color (maximum values). Use 2-color scale for simple comparisons or 3-color scale for more detailed data visualization.",
 		"parameters": {
 			"type": "object",

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "deleteSlide",
+		"text": "Delete Slide",
 		"description": "Deletes slide with the specific index or current",
 		"parameters": {
 			"type": "object",

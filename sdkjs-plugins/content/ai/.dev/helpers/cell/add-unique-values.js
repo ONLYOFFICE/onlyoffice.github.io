@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addUniqueValues",
+		"text": "Highlight Unique or Duplicate Values",
 		"description": "Highlights unique values or duplicate values in a range. Use this to identify data that appears only once (unique) or multiple times (duplicates) within the specified range. Perfect for data validation and cleanup tasks.",
 		"parameters": {
 			"type": "object",
