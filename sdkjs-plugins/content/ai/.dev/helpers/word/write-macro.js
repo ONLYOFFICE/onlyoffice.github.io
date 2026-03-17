@@ -32,6 +32,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "writeMacro",
+		"text": "Run Macro",
 		"description": `Executes a JavaScript macro using the OnlyOffice Document API.
 Call this function ONLY when the user explicitly asks to execute/run a command (e.g. 'execute command', 'run this'). 
 Do NOT call this for regular editing requests or questions — only when the user explicitly requests execution.`,

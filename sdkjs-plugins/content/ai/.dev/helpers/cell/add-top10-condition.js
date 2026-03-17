@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addTop10Condition",
+		"text": "Highlight Top or Bottom Values",
 		"description": "Highlights the top or bottom ranked values in a range. You can choose to highlight by item count (e.g., top 10 values) or by percentage (e.g., top 20% of values). Perfect for identifying highest performers, outliers, or values that need attention in your dataset.",
 		"parameters": {
 			"type": "object",

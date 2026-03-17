@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "highlightAnomalies",
+		"text": "Highlight Data Anomalies",
 		"description": "Detects and highlights statistical outliers (anomalies) in numeric data using the IQR (Interquartile Range) method or Z-score analysis. Applies conservative outlier detection to avoid false positives - only marks clear statistical anomalies. Automatically extracts numeric values from the range, calculates quartiles, and identifies values that fall outside Q1-1.5*IQR or Q3+1.5*IQR. Highlights detected anomalies with customizable colors. Requires at least 4 numeric values for analysis.",
 		"parameters": {
 			"type": "object",

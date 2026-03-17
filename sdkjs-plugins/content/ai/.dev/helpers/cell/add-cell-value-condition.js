@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addCellValueCondition",
+		"text": "Highlight Cells by Condition",
 		"description": "Creates conditional formatting rules based on cell values using comparison operators (greater than, less than, equal to, between, etc.). This is the most flexible conditional formatting option, allowing you to highlight cells that meet specific criteria with custom colors for background and text.",
 		"parameters": {
 			"type": "object",

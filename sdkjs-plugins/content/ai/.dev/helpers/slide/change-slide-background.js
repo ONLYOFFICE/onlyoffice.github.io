@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeSlideBackground",
+		"text": "Change Slide Background",
 		"description": "Changes the color of the slide in the presentation.",
 		"parameters": {
 			"type": "object",

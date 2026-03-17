@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addChart",
+		"text": "Create Chart",
 		"description": "Creates charts from data ranges to visualize data. Supports multiple chart types including bar charts, line charts, pie charts, scatter plots, and area charts. Each chart type has variants like stacked, 3D, and percentage views. Charts are automatically positioned below the source data range with configurable dimensions. Optional chart titles can be added for better context.",
 		"parameters": {
 			"type": "object",

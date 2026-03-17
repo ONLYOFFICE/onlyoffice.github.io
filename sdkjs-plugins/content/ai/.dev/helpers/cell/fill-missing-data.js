@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "fillMissingData",
+		"text": "Fill Missing Data",
 		"description": "Intelligently fills missing or empty cells in a data range using appropriate statistical methods. For numeric columns, fills with median values. For categorical columns, uses the most frequent value. For time series data, applies forward fill (uses the previous non-empty value). Automatically detects column types and highlights filled cells with light blue color for easy identification.",
 		"parameters": {
 			"type": "object",

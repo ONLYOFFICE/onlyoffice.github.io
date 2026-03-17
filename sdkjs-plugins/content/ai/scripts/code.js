@@ -535,6 +535,7 @@ async function initWithTranslate(counter) {
 	if (3 === initCounter) {
 		initCounter = 5;
 		await AI.loadInternalProviders();
+		await AI.loadHelperTranslations();
 		await registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();

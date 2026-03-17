@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "setSort",
+		"text": "Sort Data",
 		"description": "Sorts data in a range by a single column in ascending or descending order.",
 		"parameters": {
 			"type": "object",

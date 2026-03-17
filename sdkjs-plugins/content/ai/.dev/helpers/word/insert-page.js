@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "insertPage",
+		"text": "Insert Blank Page",
 		"description": "Inserts a blank page at the specified location in the document.",
 		"parameters": {
 			"type": "object",

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addImageByDescription",
+		"text": "Insert Image from Description",
 		"description": "Adds an image on the slide in the presentation",
 		"parameters": {
 			"type": "object",

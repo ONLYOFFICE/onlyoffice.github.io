@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "clearConditionalFormatting",
+		"text": "Clear Conditional Formatting",
 		"description": "Removes all conditional formatting rules from the specified range or current selection. This function cleans up all existing conditional formatting including color scales, data bars, icon sets, and highlight cell rules, returning cells to their default appearance.",
 		"parameters": {
 			"type": "object",
