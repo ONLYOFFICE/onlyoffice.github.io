@@ -402,6 +402,7 @@ input {
 	border: 1px solid #e1e1e1;
 	border: 1px solid var(--border-regular-control);
 	position: relative;
+	margin-right: 8px;
 }
 
 #input_message_wrapper.focused {
