@@ -530,7 +530,7 @@ body.theme-type-dark #input_voice_button .icon {
 }
 
 .tool_call_content {
-	padding: 6px 8px !important;
+	padding: 6px 8px 6px 4px !important;
 }
 
 /* Header with collapse/expand */
@@ -564,27 +564,28 @@ body.theme-type-dark #input_voice_button .icon {
 	80%, 100% { opacity: 1; }
 }
 
-.tool_call_arrow {
-	width: 20px;
-	height: 20px;
-	transform: rotate(0deg);
+.tool_call_chevron {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-right: 1.5px solid currentColor;
+	border-bottom: 1.5px solid currentColor;
+	transform: rotate(-45deg);
 	transition: transform 0.2s;
 	flex-shrink: 0;
-	margin-left: 12px;
+	margin-right: 6px;
+	margin-top: 1px;
+	opacity: 0.5;
 }
 
-.tool_call_arrow.expanded {
-	transform: rotate(-180deg);
+.tool_call_header.is-expanded .tool_call_chevron {
+	transform: rotate(45deg);
+	margin-top: -2px;
+	margin-left: 4px;
 }
 
-.tool_call_func_name {
-	padding: 4px 0 2px;
-	font-size: 11px;
-	color: inherit;
-}
-
-.tool_call_func_name strong {
-	font-weight: 600;
+.tool_call_call + .tool_call_call {
+	margin-top: 4px;
 }
 
 /* Details section - collapsible */
@@ -629,18 +630,5 @@ body.theme-type-dark .tool_call_section strong {
 }
 
 body.theme-type-dark .tool_call_section pre {
-	color: #ddd;
-}
-
-body.theme-type-dark .tool_call_result {
-	background-color: #1a3a1a;
-	border-left-color: #5cb85c;
-}
-
-body.theme-type-dark .tool_call_result strong {
-	color: #6cc76c;
-}
-
-body.theme-type-dark .tool_call_result pre {
 	color: #ddd;
 }

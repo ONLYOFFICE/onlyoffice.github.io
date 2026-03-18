@@ -40,14 +40,14 @@
 	let loader = null;
 	let bCreateLoader = true;
 	let themeType = 'light';
-	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
-	
 	let isAgentRunning = false;
 	let isAgentStopped = false;
 
-	// 'action' — show translated "Action" in header
-	// 'name'   — show human function name (truncated to 50 chars) in header
+	// 'action' — show translated "Action" in collapsed header
+	// 'name'   — show human function name in collapsed header (truncated to TOOL_CALL_NAME_MAX_LENGTH)
+	// In both modes, expanded header always shows the full function name
 	const TOOL_CALL_HEADER_MODE = 'name';
+	const TOOL_CALL_NAME_MAX_LENGTH = 40;
 
 	const ErrorCodes = {
 		UNKNOWN: 1
@@ -70,65 +70,98 @@
 			let $chat = $('#chat');
 			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
 			$chat.prepend(item.$el);
-			this._renderItem(item);
+			if (item.isToolCall) {
+				this._renderToolCall(item);
+			} else {
+				this._renderItem(item);
+			}
 			$chat.scrollTop($chat[0].scrollHeight);
 		},
 
 		_renderToolCall: function(item) {
+			// Migrate old serialized format (arguments/result directly on item → calls[])
+			if (!item.calls) {
+				item.calls = [{
+					arguments: item.arguments || '',
+					result: item.result !== undefined ? item.result : null
+				}];
+			}
+
+			// Preserve expanded state across re-renders (result update)
+			let wasExpanded = item.$el.find('.tool_call_header').hasClass('is-expanded');
+
 			item.$el.empty();
 			item.$el.addClass('tool_call_message');
 
 			let $toolCallContent = $('<div class="form-control message_content tool_call_content"></div>');
 
-			// Parse function name and args
 			let funcName = item.functionName || 'Unknown';
-			let funcArgs = item.arguments || '';
 			let displayName = item.humanName || funcName;
-			let isLoading = !item.result;
+			let calls = item.calls || [];
+			let isLoading = calls.length === 0 || calls[calls.length - 1].result === null;
 
-			// Header text: either translated "Action" or human function name (max 50 chars)
-			let $header = $('<div class="tool_call_header"></div>');
-			let headerText;
+			// Collapsed header text: "Action" or truncated name
+			let collapsedText;
 			if (TOOL_CALL_HEADER_MODE === 'name') {
-				let name = displayName;
-				if (name.length > 50)
-					name = name.substring(0, 47) + '...';
-				headerText = name;
+				collapsedText = displayName.length > TOOL_CALL_NAME_MAX_LENGTH
+					? displayName.substring(0, TOOL_CALL_NAME_MAX_LENGTH - 3) + '...'
+					: displayName;
 			} else {
-				headerText = window.Asc.plugin.tr('Action');
+				collapsedText = window.Asc.plugin.tr('Action');
 			}
-			let $title = $('<span class="tool_call_title">' + headerText + (isLoading ? '<span class="tool_call_dots">...</span>' : '') + '</span>');
-			let $arrow = $('<img class="tool_call_arrow icon" draggable="false" src="' + getFormattedPathForIcon('resources/icons/light/chevron-down.png') + '"/>');
 
+			let $header = $('<div class="tool_call_header"></div>');
+			let $chevron = $('<span class="tool_call_chevron"></span>');
+			let $title = $('<span class="tool_call_title"></span>');
+
+			$header.append($chevron);
 			$header.append($title);
-			$header.append($arrow);
 
-			// Details section (collapsed by default)
+			// Details — render each individual call's args + result
 			let $details = $('<div class="tool_call_details collapsed"></div>');
 
-			// Function name inside details
-			$details.append('<div class="tool_call_func_name"><strong>' + displayName + '</strong></div>');
+			for (let i = 0; i < calls.length; i++) {
+				let call = calls[i];
+				let $callBlock = $('<div class="tool_call_call"></div>');
 
-			if (funcArgs) {
-				let displayArgs = funcArgs;
-				if (funcName === 'writeMacro') {
-					try {
-						let parsed = JSON.parse(funcArgs);
-						if (parsed.code) displayArgs = parsed.code;
-					} catch(e) {}
+				if (call.arguments) {
+					let displayArgs = call.arguments;
+					if (funcName === 'writeMacro') {
+						try {
+							let parsed = JSON.parse(call.arguments);
+							if (parsed.code) displayArgs = parsed.code;
+						} catch(e) {}
+					}
+					$callBlock.append('<div class="tool_call_section"><pre>' + displayArgs + '</pre></div>');
 				}
-				$details.append('<div class="tool_call_section"><pre>' + displayArgs + '</pre></div>');
+
+				if (call.result !== null) {
+					let resultText = typeof call.result === 'string' ? call.result : JSON.stringify(call.result, null, 2);
+					$callBlock.append('<div class="tool_call_section"><pre>' + resultText + '</pre></div>');
+				}
+
+				$details.append($callBlock);
 			}
 
-			if (item.result) {
-				let resultText = typeof item.result === 'string' ? item.result : JSON.stringify(item.result, null, 2);
-				$details.append('<div class="tool_call_section"><pre>' + resultText + '</pre></div>');
+			// Restore expanded/collapsed state
+			if (wasExpanded) {
+				$header.addClass('is-expanded');
+				$details.removeClass('collapsed');
+				$title.html(displayName);
+			} else {
+				$title.html(collapsedText + (isLoading ? '<span class="tool_call_dots">...</span>' : ''));
 			}
 
 			// Toggle collapse/expand
 			$header.on('click', function() {
+				let isExpanding = $details.hasClass('collapsed');
 				$details.toggleClass('collapsed');
-				$arrow.toggleClass('expanded');
+				$header.toggleClass('is-expanded');
+				if (isExpanding) {
+					$title.html(displayName);
+				} else {
+					$title.html(collapsedText + (isLoading ? '<span class="tool_call_dots">...</span>' : ''));
+				}
 				scrollbarList && scrollbarList.update();
 			});
 
@@ -270,29 +303,52 @@
 			this._renderItem(message);
 		},
 		addToolCall: function(toolCallData) {
+			let $chat = $('#chat');
+			let newCall = {
+				arguments: toolCallData.arguments || '',
+				result: toolCallData.result !== undefined ? toolCallData.result : null
+			};
+
+			// Merge with previous item if same function name and no non-tool item in between
+			let lastItem = this._list.length > 0 ? this._list[this._list.length - 1] : null;
+			if (lastItem && lastItem.isToolCall && lastItem.functionName === toolCallData.functionName) {
+				let callIndex = lastItem.calls.length;
+				lastItem.calls.push(newCall);
+				this._renderToolCall(lastItem);
+				$chat.scrollTop($chat[0].scrollHeight);
+				return { listIndex: this._list.length - 1, callIndex: callIndex };
+			}
+
+			// New tool call item
 			const toolCall = {
 				role: 'tool',
 				isToolCall: true,
 				functionName: toolCallData.functionName,
 				humanName: toolCallData.humanName || toolCallData.functionName,
-				arguments: toolCallData.arguments,
-				result: toolCallData.result || null
+				calls: [newCall]
 			};
 
 			this._list.push(toolCall);
-			let $chat = $('#chat');
 			toolCall.$el = $('<div class="message" style="order: ' + (this._list.length - 1) + ';"></div>');
 			$chat.prepend(toolCall.$el);
 			this._renderToolCall(toolCall);
 			$chat.scrollTop($chat[0].scrollHeight);
-			return this._list.length - 1; // Return index for updating later
+			return { listIndex: this._list.length - 1, callIndex: 0 };
 		},
 		updateToolCallResult: function(index, result) {
-			if (index < 0 || index >= this._list.length) return;
-			const toolCall = this._list[index];
-			if (toolCall && toolCall.isToolCall) {
-				toolCall.result = result;
-				this._renderToolCall(toolCall);
+			let listIndex, callIndex;
+			if (index && typeof index === 'object') {
+				listIndex = index.listIndex;
+				callIndex = index.callIndex;
+			} else {
+				listIndex = index;
+				callIndex = 0;
+			}
+			if (listIndex < 0 || listIndex >= this._list.length) return;
+			const item = this._list[listIndex];
+			if (item && item.isToolCall && item.calls && item.calls[callIndex] !== undefined) {
+				item.calls[callIndex].result = result;
+				this._renderToolCall(item);
 			}
 		},
 		get: function() {
@@ -318,17 +374,20 @@
 	};
 
 	let actionButtons = [
-		{ 
-			icon: 'resources/icons/light/btn-update.png', 
+		{
+			icon: 'resources/icons/light/btn-update.png',
 			tipOptions: {
-				text: 'Generate new',
+				text: 'Update',
 				align: 'left'
 			},
-			handler: function(message) { 
-				const messageIndex = messagesList.get().findIndex(function(item) { return item == message});
-				if(messageIndex > 0) {
-					regenerationMessageIndex = messageIndex;
-					sendMessage(messagesList.get()[messageIndex - 1].content);
+			handler: function() {
+				if (isAgentRunning) return;
+				let list = messagesList.get();
+				for (let i = list.length - 1; i >= 0; i--) {
+					if (list[i].role === 'user') {
+						sendMessage(list[i].content);
+						return;
+					}
 				}
 			}
 		},
@@ -678,25 +737,20 @@
 	};
 
 	function sendMessage(text) {
-		const isRegenerating = regenerationMessageIndex !== null;
 		const message = { role: 'user', content: text };
 
 		if (attachedText.hasShow()) {
 			message.attachedText = attachedText.get();
 			attachedText.clear();
 		}
-		if (!isRegenerating) {
-			messagesList.add(message);
-			createTyping();
-		}
+		messagesList.add(message);
+		createTyping();
 
 		isAgentRunning = true;
 		isAgentStopped = false;
 		updateControlButtonsState();
 
-		let list = isRegenerating
-			? messagesList.get().slice(0, regenerationMessageIndex)
-			: messagesList.get();
+		let list = messagesList.get();
 
 		//Remove the errors, tool calls, and user messages that caused the error
 		list = list.filter(function(item, index) {
@@ -897,14 +951,7 @@
 			errorCode = ErrorCodes.UNKNOWN;
 		}
 
-		if(regenerationMessageIndex) {
-			if(!errorCode) {
-				messagesList.pushContentForAssistant(regenerationMessageIndex, reply);
-			}
-		} else {
-			messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
-		}
-		regenerationMessageIndex = null;
+		messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
 
 		removeTyping();
 		finishAgentExecution();
@@ -918,13 +965,8 @@
 	window.Asc.plugin.attachEvent("onChatStreamStart", function() {
 		removeTyping();
 		streamingContent = '';
-
-		if (regenerationMessageIndex !== null) {
-			streamingMessageIndex = regenerationMessageIndex;
-		} else {
-			messagesList.add({ role: 'assistant', content: [''] });
-			streamingMessageIndex = messagesList.get().length - 1;
-		}
+		messagesList.add({ role: 'assistant', content: [''] });
+		streamingMessageIndex = messagesList.get().length - 1;
 	});
 
 	window.Asc.plugin.attachEvent("onChatStreamChunk", function(chunk) {
@@ -937,20 +979,7 @@
 
 		const message = messagesList.get()[streamingMessageIndex];
 		if (message) {
-			if (regenerationMessageIndex !== null) {
-				if (message.content[message.content.length - 1] !== streamingContent) {
-					if (message.content.length === message.activeContentIndex + 1) {
-						message.content[message.activeContentIndex] = streamingContent;
-					} else {
-						message.content.push(streamingContent);
-						message.activeContentIndex = message.content.length - 1;
-					}
-				} else {
-					message.content[message.activeContentIndex] = streamingContent;
-				}
-			} else {
-				message.content[0] = streamingContent;
-			}
+			message.content[0] = streamingContent;
 
 			// no update buttons
 			if (message.$el) {
@@ -969,9 +998,15 @@
 	});
 
 	window.Asc.plugin.attachEvent("onChatStreamEnd", function() {
+		// Re-render the finished message so action button handlers capture the final content
+		if (streamingMessageIndex !== null) {
+			const message = messagesList.get()[streamingMessageIndex];
+			if (message) {
+				messagesList._renderItem(message);
+			}
+		}
 		streamingMessageIndex = null;
 		streamingContent = '';
-		regenerationMessageIndex = null;
 		removeTyping();
 		finishAgentExecution();
 		document.getElementById('input_message').focus();
