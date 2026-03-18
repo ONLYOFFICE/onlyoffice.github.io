@@ -49,6 +49,25 @@
 	const TOOL_CALL_HEADER_MODE = 'name';
 	const TOOL_CALL_NAME_MAX_LENGTH = 40;
 
+	// ── Design flags ────────────────────────────────────────────────────────
+	// true  → show border + default padding around user / AI message bubbles
+	// false → no border, background highlight instead (same color as tool sections)
+	const CHAT_MESSAGES_BORDER = false;
+
+	// true  → show border around the entire chat messages area (#chat_wrapper)
+	// false → no border on the messages container
+	const CHAT_ALL_MESSAGES_BORDER = false;
+
+	// Only has effect when CHAT_MESSAGES_BORDER = false
+	// true  → draw background highlight on AI response bubbles
+	// false → AI responses have no background (transparent)
+	const CHAT_AI_MESSAGE_BACKGROUND = false;
+	// ────────────────────────────────────────────────────────────────────────
+
+	if (!CHAT_MESSAGES_BORDER)        document.documentElement.classList.add('no-message-border');
+	if (!CHAT_ALL_MESSAGES_BORDER)    document.documentElement.classList.add('no-all-messages-border');
+	if (!CHAT_AI_MESSAGE_BACKGROUND)  document.documentElement.classList.add('no-ai-message-background');
+
 	const ErrorCodes = {
 		UNKNOWN: 1
 	};
@@ -59,13 +78,14 @@
 		}
 	};
 
-	let scrollbarList; 
+	let scrollbarList;
 
 	let messagesList = {
 		_list: [],
 
 		_renderItemToList: function(item, index) {
-			$('#chat_wrapper').removeClass('empty');
+			let $chatWrapper = $('#chat_wrapper');
+			$chatWrapper.removeClass('empty');
 
 			let $chat = $('#chat');
 			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
@@ -111,7 +131,7 @@
 			}
 
 			let $header = $('<div class="tool_call_header"></div>');
-			let $chevron = $('<span class="tool_call_chevron"></span>');
+			let $chevron = $('<span class="tool_call_chevron"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="2,0.5 6,4 2,7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
 			let $title = $('<span class="tool_call_title"></span>');
 
 			$header.append($chevron);
@@ -162,7 +182,7 @@
 				} else {
 					$title.html(collapsedText + (isLoading ? '<span class="tool_call_dots">...</span>' : ''));
 				}
-				scrollbarList && scrollbarList.update();
+					scrollbarList && scrollbarList.update();
 			});
 
 			$toolCallContent.append($header);
@@ -304,6 +324,7 @@
 		},
 		addToolCall: function(toolCallData) {
 			let $chat = $('#chat');
+			let $chatWrapper = $('#chat_wrapper');
 			let newCall = {
 				arguments: toolCallData.arguments || '',
 				result: toolCallData.result !== undefined ? toolCallData.result : null
