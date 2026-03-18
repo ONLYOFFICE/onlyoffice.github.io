@@ -80,6 +80,19 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		if (params.highlightColor !== undefined && params.highlightColor !== null) {
+			if (typeof params.highlightColor !== 'string' || params.highlightColor.trim() === '')
+				throw new window.AgentState.ToolError("Invalid highlightColor: must be a non-empty string. Use a hex color like '#FF0000' or a color name like 'red', 'blue', 'orange'.");
+			if (params.highlightColor.startsWith('#') && !/^#[0-9A-Fa-f]{6}$/.test(params.highlightColor))
+				throw new window.AgentState.ToolError("Invalid highlightColor \"" + params.highlightColor + "\": hex color must be in '#RRGGBB' format (e.g., '#FF0000' for red).");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.highlightColor = params.highlightColor || "orange";
 
