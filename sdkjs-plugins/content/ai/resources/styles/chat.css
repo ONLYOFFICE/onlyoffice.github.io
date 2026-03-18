@@ -585,6 +585,11 @@ html.no-all-messages-border #chat_wrapper {
 	box-shadow: none !important;
 }
 
+html.no-all-messages-border .message:not(.user_message):not(.tool_call_message) .message_content {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
 /* Tool Call Styles - Minimalistic gray design */
 .tool_call_message {
 	background-color: transparent !important;
