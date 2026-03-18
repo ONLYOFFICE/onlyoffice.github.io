@@ -29,8257 +29,3312 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-function _assertClassBrand(e, t, n) {
-    if ("function" == typeof e ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
-    throw new TypeError("Private element is not present on this object");
+function _assertClassBrand(t, e, i) {
+  if ("function" == typeof t ? t === e : t.has(e)) return arguments.length < 3 ? e : i;
+  throw new TypeError("Private element is not present on this object");
 }
-
-function asyncGeneratorStep(n, t, e, r, o, a, c) {
-    try {
-        var i = n[a](c), u = i.value;
-    } catch (n) {
-        return void e(n);
-    }
-    i.done ? t(u) : Promise.resolve(u).then(r, o);
+function asyncGeneratorStep(t, e, i, s, n, a, r) {
+  try {
+    var o = t[a](r), l = o.value;
+  } catch (t2) {
+    return void i(t2);
+  }
+  o.done ? e(l) : Promise.resolve(l).then(s, n);
 }
-
-function _asyncToGenerator(n) {
-    return function() {
-        var t = this, e = arguments;
-        return new Promise(function(r, o) {
-            var a = n.apply(t, e);
-            function _next(n) {
-                asyncGeneratorStep(a, r, o, _next, _throw, "next", n);
-            }
-            function _throw(n) {
-                asyncGeneratorStep(a, r, o, _next, _throw, "throw", n);
-            }
-            _next(void 0);
-        });
-    };
+function _asyncToGenerator(t) {
+  return function() {
+    var e = this, i = arguments;
+    return new Promise(function(s, n) {
+      var a = t.apply(e, i);
+      function r(t2) {
+        asyncGeneratorStep(a, s, n, r, o, "next", t2);
+      }
+      function o(t2) {
+        asyncGeneratorStep(a, s, n, r, o, "throw", t2);
+      }
+      r(void 0);
+    });
+  };
 }
-
-function _checkPrivateRedeclaration(e, t) {
-    if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object");
+function _checkPrivateRedeclaration(t, e) {
+  if (e.has(t)) throw new TypeError("Cannot initialize the same private elements twice on an object");
 }
-
-function _classPrivateFieldGet2(s, a) {
-    return s.get(_assertClassBrand(s, a));
+function _classPrivateFieldGet2(t, e) {
+  return t.get(_assertClassBrand(t, e));
 }
-
-function _classPrivateFieldInitSpec(e, t, a) {
-    _checkPrivateRedeclaration(e, t), t.set(e, a);
+function _classPrivateFieldInitSpec(t, e, i) {
+  _checkPrivateRedeclaration(t, e), e.set(t, i);
 }
-
-function _classPrivateFieldSet2(s, a, r) {
-    return s.set(_assertClassBrand(s, a), r), r;
+function _classPrivateFieldSet2(t, e, i) {
+  return t.set(_assertClassBrand(t, e), i), i;
 }
-
-function _classPrivateMethodInitSpec(e, a) {
-    _checkPrivateRedeclaration(e, a), a.add(e);
+function _classPrivateMethodInitSpec(t, e) {
+  _checkPrivateRedeclaration(t, e), e.add(t);
 }
-
-function _defineProperty(e, r, t) {
-    return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-        value: t,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    }) : e[r] = t, e;
+function _defineProperty(t, e, i) {
+  return (e = _toPropertyKey(e)) in t ? Object.defineProperty(t, e, { value: i, enumerable: true, configurable: true, writable: true }) : t[e] = i, t;
 }
-
-function ownKeys(e, r) {
-    var t = Object.keys(e);
-    if (Object.getOwnPropertySymbols) {
-        var o = Object.getOwnPropertySymbols(e);
-        r && (o = o.filter(function(r) {
-            return Object.getOwnPropertyDescriptor(e, r).enumerable;
-        })), t.push.apply(t, o);
-    }
-    return t;
+function ownKeys(t, e) {
+  var i = Object.keys(t);
+  if (Object.getOwnPropertySymbols) {
+    var s = Object.getOwnPropertySymbols(t);
+    e && (s = s.filter(function(e2) {
+      return Object.getOwnPropertyDescriptor(t, e2).enumerable;
+    })), i.push.apply(i, s);
+  }
+  return i;
 }
-
-function _objectSpread2(e) {
-    for (var r = 1; r < arguments.length; r++) {
-        var t = null != arguments[r] ? arguments[r] : {};
-        r % 2 ? ownKeys(Object(t), true).forEach(function(r) {
-            _defineProperty(e, r, t[r]);
-        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
-            Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-        });
-    }
-    return e;
+function _objectSpread2(t) {
+  for (var e = 1; e < arguments.length; e++) {
+    var i = null != arguments[e] ? arguments[e] : {};
+    e % 2 ? ownKeys(Object(i), true).forEach(function(e2) {
+      _defineProperty(t, e2, i[e2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(i)) : ownKeys(Object(i)).forEach(function(e2) {
+      Object.defineProperty(t, e2, Object.getOwnPropertyDescriptor(i, e2));
+    });
+  }
+  return t;
 }
-
-function _toPrimitive(t, r) {
-    if ("object" != typeof t || !t) return t;
-    var e = t[Symbol.toPrimitive];
-    if (void 0 !== e) {
-        var i = e.call(t, r);
-        if ("object" != typeof i) return i;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return ("string" === r ? String : Number)(t);
+function _toPrimitive(t, e) {
+  if ("object" != typeof t || !t) return t;
+  var i = t[Symbol.toPrimitive];
+  if (void 0 !== i) {
+    var s = i.call(t, e);
+    if ("object" != typeof s) return s;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === e ? String : Number)(t);
 }
-
 function _toPropertyKey(t) {
-    var i = _toPrimitive(t, "string");
-    return "symbol" == typeof i ? i : i + "";
+  var e = _toPrimitive(t, "string");
+  return "symbol" == typeof e ? e : e + "";
 }
-
-var Theme = {
-    addStylesForComponents: function addStylesForComponents(theme) {
-        var styles = "";
-        if (theme["background-toolbar"]) {
-            styles += ".loader-body,\n" + ".loader-bg { background-color: " + theme["background-toolbar"] + "; }\n";
-            styles += ".loader-body {     box-shadow: 0 0 99px 99px " + theme["background-toolbar"] + "; }\n";
-        }
-        if (theme["background-loader"]) {
-            styles += ".loader-image { color: " + theme["background-loader"] + "; }\n";
-        }
-        if (theme["background-normal"]) {
-            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".input-field-element,\n" + ".selectbox-search-input,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".radio-visual, \n" + ".checkbox-visual, \n" + ".message { background-color: " + theme["background-normal"] + "; }\n";
-        }
-        if (theme["text-inverse"]) {
-            styles += ".custom-button-primary { color: " + theme["text-inverse"] + "; }\n";
-        }
-        if (theme["border-regular-control"]) {
-            styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".input-field-element,\n" + ".checkbox-visual,\n" + ".radio-visual,\n" + ".selectbox-header,\n" + ".selectbox-dropdown,\n" + ".selectbox-search-input:focus,\n" + ".message { border-color: " + theme["border-regular-control"] + "; }\n";
-            styles += ".selectbox-search,\n" + ".selectbox-option-divider { border-color: " + theme["border-regular-control"] + " !important; }\n";
-        }
-        if (theme["border-error"]) {
-            styles += ".input-field-invalid .input-field-element { border-color: " + theme["border-error"] + "; }\n";
-        }
-        if (theme["border-control-focus"]) {
-            styles += ".custom-button-icon-only:focus:not(:active):not(:hover),\n" + ".custom-button-secondary-icon:focus:not(:active):not(:hover),\n" + ".custom-button-secondary:focus:not(:active):not(:hover),\n" + ".input-field-element:focus,\n" + ".input-field-focused .input-field-element,\n" + ".selectbox-header:active,\n" + ".selectbox-header:focus,\n" + ".selectbox-header-open { border-color: " + theme["border-control-focus"] + "; }\n";
-        }
-        if (theme["highlight-button-hover"]) {
-            styles += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:hover:not(.custom-button-disabled),\n" + ".custom-button-secondary:hover:not(.custom-button-disabled),\n" + ".selectbox-custom-option:hover,\n" + ".selectbox-option:hover { background-color: " + theme["highlight-button-hover"] + "; }\n";
-        }
-        if (theme["highlight-button-pressed"]) {
-            styles += ".custom-button-icon-only:active:not(.custom-button-disabled),\n" + ".custom-button-secondary-icon:active:not(.custom-button-disabled),\n" + ".custom-button-secondary:active:not(.custom-button-disabled),\n" + ".selectbox-option-selected:hover,\n" + ".selectbox-option-selected { background-color: " + theme["highlight-button-pressed"] + "; }\n";
-            styles += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + theme["highlight-button-pressed"] + "; }\n";
-        }
-        if (theme["highlight-primary-dialog-button-hover"]) {
-            styles += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + theme["highlight-primary-dialog-button-hover"] + "; border-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
-        }
-        if (theme["background-primary-dialog-button"]) {
-            styles += ".checkbox-indeterminate,\n" + ".custom-button-primary { background-color: " + theme["background-primary-dialog-button"] + "; border-color: " + theme["background-primary-dialog-button"] + "; }\n";
-        }
-        if (theme["background-toolbar-additional"]) {
-            styles += ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled { background-color: " + theme["background-toolbar-additional"] + "; border-color: " + theme["background-toolbar-additional"] + "; }\n";
-        }
-        if (theme["text-normal"]) {
-            styles += ".custom-button-secondary-icon,\n" + ".custom-button-secondary,\n" + ".custom-button-secondary-icon,\n" + ".custom-button-icon-only,\n" + ".selectbox-search-input,\n" + ".loader-image,\n" + ".input-field-element { color: " + theme["text-normal"] + "; }\n";
-            styles += ".input-field-search-icon svg { fill: " + theme["text-normal"] + "; }\n";
-            styles += ".selectbox-arrow b { border-color: " + theme["text-normal"] + "; }\n";
-        }
-        if (theme["text-secondary"]) {
-            styles += ".message-close:hover,\n" + ".input-field-clear:hover { color: " + theme["text-secondary"] + "; }\n";
-        }
-        if (theme["text-tertiary"]) {
-            styles += ".input-field-clear,\n" + ".message-container:hover .message-close,\n" + ".custom-button-secondary-icon:disabled,\n" + ".custom-button-secondary-icon.custom-button-disabled,\n" + ".custom-button-secondary:disabled,\n" + ".custom-button-secondary.custom-button-disabled,\n" + ".input-field-element::placeholder,\n" + ".selectbox-search-input::placeholder { color: " + theme["text-tertiary"] + "; }\n";
-        }
-        var fontSize = "11px";
-        if ([ "theme-white", "theme-night" ].indexOf(theme.name) !== -1 || [ "theme-white", "theme-night" ].indexOf(theme.Name) !== -1) {
-            fontSize = "12px";
-            styles += ".message,\n" + ".custom-button,\n" + ".selectbox-header,\n" + ".input-field-element { border-radius: 4px; }\n";
-            styles += ".radio--checked .radio-visual { border-width: 4px; }\n";
-            styles += ".checkbox-checkmark { color: " + theme["text-inverse"] + "; }\n";
-            styles += ".checkbox--checked .checkbox-visual { background-color: " + theme["background-primary-dialog-button"] + "; }\n";
-            styles += ".radio--checked .radio-visual,\n" + ".checkbox--checked .checkbox-visual { border-color: " + theme["background-primary-dialog-button"] + "; }\n";
-            styles += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + theme["highlight-button-hover"] + "; }\n";
-            styles += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; background-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
-            styles += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + theme["highlight-primary-dialog-button-hover"] + "; }\n";
-            styles += "body { font-size: 12px; }\n";
-        } else {
-            styles += ".checkbox-checkmark { color: " + theme["text-normal"] + "; }\n";
-            styles += ".radio--checked .radio-visual { background-color: " + theme["text-normal"] + ";\n box-shadow: 0 0 0 2px" + theme["background-normal"] + " inset; }\n";
-            styles += ".radio-button-container:hover .radio-visual,\n" + ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + theme["border-control-focus"] + "; }\n";
-        }
-        styles += "body, input, textarea, select, button { font-size: " + fontSize + "; }\n";
-        var styleTheme = document.getElementById("componentsStyles");
-        if (!styleTheme) {
-            styleTheme = document.createElement("style");
-            styleTheme.id = "componentsStyles";
-            styleTheme.innerHTML = styles;
-            document.getElementsByTagName("head")[0].appendChild(styleTheme);
-            return styles;
-        }
-        styleTheme.innerHTML = styles;
-        return styles;
-    },
-    fixThemeForIE: function fixThemeForIE(theme) {
-        if (!theme["background-toolbar"]) {
-            theme["background-toolbar"] = "#f7f7f7";
-        }
-        if (!theme["text-normal"]) {
-            theme["text-normal"] = "rgb(51, 51, 51)";
-        }
-        if (!theme["text-secondary"]) {
-            theme["text-secondary"] = "#848484";
-        }
-        if (!theme["highlight-button-hover"]) {
-            theme["highlight-button-hover"] = "#e0e0e0";
-        }
-        if (!theme["background-normal"]) {
-            theme["background-normal"] = "white";
-        }
-        if (!theme["background-loader"]) {
-            theme["background-loader"] = "rgba(24, 24, 24, 0.9)";
-        }
-        if (!theme["highlight-button-pressed"]) {
-            theme["highlight-button-pressed"] = "#cbcbcb";
-        }
-        if (!theme["text-inverse"]) {
-            theme["text-inverse"] = "white";
-        }
-        if (!theme["border-regular-control"]) {
-            theme["border-regular-control"] = "#c0c0c0";
-        }
-        if (!theme["border-error"]) {
-            theme["border-error"] = "#f62211";
-        }
-        if (!theme["border-control-focus"]) {
-            theme["border-control-focus"] = "#848484";
-        }
-        if (!theme["highlight-primary-dialog-button-hover"]) {
-            theme["highlight-primary-dialog-button-hover"] = "#1c1c1c";
-        }
-        if (!theme["background-primary-dialog-button"]) {
-            theme["background-primary-dialog-button"] = "#444444";
-        }
-        if (!theme["background-toolbar-additional"]) {
-            theme["background-toolbar-additional"] = "#efefef";
-        }
-        if (!theme["text-tertiary"]) {
-            theme["text-tertiary"] = "#bdbdbd";
-        }
-        return theme;
-    }
-};
-
+var Theme = { addStylesForComponents: function(t) {
+  var e = "";
+  t["background-toolbar"] && (e += ".loader-body,\n.loader-bg { background-color: " + t["background-toolbar"] + "; }\n", e += ".loader-body {     box-shadow: 0 0 99px 99px " + t["background-toolbar"] + "; }\n"), t["background-loader"] && (e += ".loader-image { color: " + t["background-loader"] + "; }\n"), t["background-normal"] && (e += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n.message { background-color: " + t["background-normal"] + "; }\n"), t["text-inverse"] && (e += ".custom-button-primary { color: " + t["text-inverse"] + "; }\n"), t["border-regular-control"] && (e += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n.message { border-color: " + t["border-regular-control"] + "; }\n", e += ".selectbox-search,\n.selectbox-option-divider { border-color: " + t["border-regular-control"] + " !important; }\n"), t["border-error"] && (e += ".input-field-invalid .input-field-element { border-color: " + t["border-error"] + "; }\n"), t["border-control-focus"] && (e += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + t["border-control-focus"] + "; }\n"), t["highlight-button-hover"] && (e += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + t["highlight-button-hover"] + "; }\n"), t["highlight-button-pressed"] && (e += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + t["highlight-button-pressed"] + "; }\n", e += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + t["highlight-button-pressed"] + "; }\n"), t["highlight-primary-dialog-button-hover"] && (e += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + t["highlight-primary-dialog-button-hover"] + "; border-color: " + t["highlight-primary-dialog-button-hover"] + "; }\n"), t["background-primary-dialog-button"] && (e += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + t["background-primary-dialog-button"] + "; border-color: " + t["background-primary-dialog-button"] + "; }\n"), t["background-toolbar-additional"] && (e += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + t["background-toolbar-additional"] + "; border-color: " + t["background-toolbar-additional"] + "; }\n"), t["text-normal"] && (e += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + t["text-normal"] + "; }\n", e += ".input-field-search-icon svg { fill: " + t["text-normal"] + "; }\n", e += ".selectbox-arrow b { border-color: " + t["text-normal"] + "; }\n"), t["text-secondary"] && (e += ".message-close:hover,\n.input-field-clear:hover { color: " + t["text-secondary"] + "; }\n"), t["text-tertiary"] && (e += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + t["text-tertiary"] + "; }\n");
+  var i = "11px";
+  -1 !== ["theme-white", "theme-night"].indexOf(t.name) || -1 !== ["theme-white", "theme-night"].indexOf(t.Name) ? (i = "12px", e += ".message,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", e += ".radio--checked .radio-visual { border-width: 4px; }\n", e += ".checkbox-checkmark { color: " + t["text-inverse"] + "; }\n", e += ".checkbox--checked .checkbox-visual { background-color: " + t["background-primary-dialog-button"] + "; }\n", e += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + t["background-primary-dialog-button"] + "; }\n", e += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + t["highlight-button-hover"] + "; }\n", e += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + t["highlight-primary-dialog-button-hover"] + "; background-color: " + t["highlight-primary-dialog-button-hover"] + "; }\n", e += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + t["highlight-primary-dialog-button-hover"] + "; }\n", e += "body { font-size: 12px; }\n") : (e += ".checkbox-checkmark { color: " + t["text-normal"] + "; }\n", e += ".radio--checked .radio-visual { background-color: " + t["text-normal"] + ";\n box-shadow: 0 0 0 2px" + t["background-normal"] + " inset; }\n", e += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + t["border-control-focus"] + "; }\n"), e += "body, input, textarea, select, button { font-size: " + i + "; }\n";
+  var s = document.getElementById("componentsStyles");
+  return s ? (s.innerHTML = e, e) : ((s = document.createElement("style")).id = "componentsStyles", s.innerHTML = e, document.getElementsByTagName("head")[0].appendChild(s), e);
+}, fixThemeForIE: function(t) {
+  return t["background-toolbar"] || (t["background-toolbar"] = "#f7f7f7"), t["text-normal"] || (t["text-normal"] = "rgb(51, 51, 51)"), t["text-secondary"] || (t["text-secondary"] = "#848484"), t["highlight-button-hover"] || (t["highlight-button-hover"] = "#e0e0e0"), t["background-normal"] || (t["background-normal"] = "white"), t["background-loader"] || (t["background-loader"] = "rgba(24, 24, 24, 0.9)"), t["highlight-button-pressed"] || (t["highlight-button-pressed"] = "#cbcbcb"), t["text-inverse"] || (t["text-inverse"] = "white"), t["border-regular-control"] || (t["border-regular-control"] = "#c0c0c0"), t["border-error"] || (t["border-error"] = "#f62211"), t["border-control-focus"] || (t["border-control-focus"] = "#848484"), t["highlight-primary-dialog-button-hover"] || (t["highlight-primary-dialog-button-hover"] = "#1c1c1c"), t["background-primary-dialog-button"] || (t["background-primary-dialog-button"] = "#444444"), t["background-toolbar-additional"] || (t["background-toolbar-additional"] = "#efefef"), t["text-tertiary"] || (t["text-tertiary"] = "#bdbdbd"), t;
+} };
 function Router() {
-    this._states = [ "mainState", "loginState", "settingsState" ];
-    this._routes = [ "main", "login", "settings" ];
-    this._currentRoute = "login";
-    this._currentRouteIndex = 1;
-    this._containers = this._states.map(function(route) {
-        var container = document.getElementById(route);
-        if (!container) throw new Error("container ".concat(route, " not found"));
-        return container;
-    });
+  this._states = ["mainState", "loginState", "settingsState"], this._routes = ["main", "login", "settings"], this._currentRoute = "login", this._currentRouteIndex = 1, this._containers = this._states.map(function(t) {
+    var e = document.getElementById(t);
+    if (!e) throw new Error("container ".concat(t, " not found"));
+    return e;
+  });
 }
-
 Router.prototype.getRoute = function() {
-    return this._currentRoute;
+  return this._currentRoute;
+}, Router.prototype._setCurrentRoute = function(t) {
+  this._containers[this._currentRouteIndex].classList.add("hidden"), this._currentRoute = t, this._currentRouteIndex = this._routes.indexOf(t), this._containers[this._currentRouteIndex].classList.remove("hidden");
+}, Router.prototype.openMain = function() {
+  this._setCurrentRoute("main");
+}, Router.prototype.openLogin = function() {
+  this._setCurrentRoute("login");
+}, Router.prototype.openSettings = function() {
+  this._setCurrentRoute("settings");
 };
-
-Router.prototype._setCurrentRoute = function(route) {
-    this._containers[this._currentRouteIndex].classList.add("hidden");
-    this._currentRoute = route;
-    this._currentRouteIndex = this._routes.indexOf(route);
-    this._containers[this._currentRouteIndex].classList.remove("hidden");
-};
-
-Router.prototype.openMain = function() {
-    this._setCurrentRoute("main");
-};
-
-Router.prototype.openLogin = function() {
-    this._setCurrentRoute("login");
-};
-
-Router.prototype.openSettings = function() {
-    this._setCurrentRoute("settings");
-};
-
-var zoteroEnvironment = {
-    restApiUrl: "https://api.zotero.org/",
-    desktopApiUrl: "http://127.0.0.1:23119/api/"
-};
-
-var ZoteroApiChecker = {
-    _done: false,
-    _desktop: false,
-    _hasPermission: true,
-    _online: false,
-    _hasKey: false,
-    _timeout: 1e3,
-    _callback: function _callback(e) {},
-    _desktopVersion: function() {
-        if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0) return false;
-        if (window.location && window.location.protocol == "file:") return true;
-        var src = window.document.currentScript ? window.document.currentScript.getAttribute("src") : "";
-        if (src && 0 == src.indexOf("file:///")) return true;
-        return false;
-    }(),
-    runApisChecker: function runApisChecker(sdk) {
-        var self = this;
-        self._done = false;
-        function attemptCheck() {
-            if (self._done) return;
-            self._checkApiAvailable(sdk).then(function(res) {
-                if (self._done) return;
-                if (res.online && res.hasKey) {
-                    self._done = true;
-                } else if (res.desktop && res.hasPermission) {
-                    self._done = true;
-                }
-                self._callback(res);
-                setTimeout(attemptCheck, self._timeout);
-            });
-        }
-        attemptCheck();
-        return {
-            subscribe: function subscribe(callbackFn) {
-                self._callback = callbackFn;
-            },
-            unsubscribe: function unsubscribe() {
-                self._done = true;
-                self._callback = function() {};
-            }
-        };
-    },
-    checkStatus: function checkStatus(sdk) {
-        return this._checkApiAvailable(sdk);
-    },
-    successfullyLoggedInUsingApiKey: function successfullyLoggedInUsingApiKey() {
-        this._done = true;
-        this._callback({
-            online: true,
-            hasKey: true,
-            desktop: this._desktop,
-            hasPermission: this._hasPermission,
-            desktopVersion: this._desktopVersion
-        });
-    },
-    _checkApiAvailable: function _checkApiAvailable(sdk) {
-        var self = this;
-        return Promise.all([ fetch(zoteroEnvironment.restApiUrl, {
-            method: "GET",
-            cache: "no-cache"
-        }).then(function(res) {
-            return res.status === 200;
-        }).catch(function() {
-            return false;
-        }), self._sendDesktopRequest(zoteroEnvironment.desktopApiUrl).then(function(res) {
-            self._hasPermission = res.hasPermission;
-            return res.isZoteroRunning;
-        }).catch(function() {
-            return false;
-        }) ]).then(function(apisAvailable) {
-            self._online = apisAvailable[0];
-            self._desktop = apisAvailable[1];
-            self._hasKey = sdk.hasSettings();
-            return {
-                online: self._online,
-                hasKey: self._hasKey,
-                desktop: self._desktop,
-                hasPermission: self._hasPermission,
-                desktopVersion: self._desktopVersion
-            };
-        });
-    },
-    _sendDesktopRequest: function _sendDesktopRequest(url) {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            if (!self._desktopVersion) {
-                resolve({
-                    hasPermission: false,
-                    isZoteroRunning: false
-                });
-                return;
-            }
-            window.AscSimpleRequest.createRequest({
-                url: url,
-                method: "GET",
-                headers: {
-                    "Zotero-API-Version": "3",
-                    "User-Agent": "AscDesktopEditor"
-                },
-                complete: function complete(e) {
-                    var hasPermission = false;
-                    var isZoteroRunning = false;
-                    if (e.responseStatus == 403) {
-                        hasPermission = false;
-                        isZoteroRunning = true;
-                    } else if (e.responseStatus === 200) {
-                        isZoteroRunning = true;
-                        hasPermission = true;
-                    }
-                    resolve({
-                        hasPermission: hasPermission,
-                        isZoteroRunning: isZoteroRunning
-                    });
-                },
-                error: function error(e) {
-                    if (e.statusCode == -102) e.statusCode = 404;
-                    reject(e);
-                }
-            });
-        });
-    }
-};
-
-var _maxRetries = new WeakMap;
-
-var _initialDelay = new WeakMap;
-
-var _maxDelay = new WeakMap;
-
-var _backoffFactor = new WeakMap;
-
-var _retryOn = new WeakMap;
-
-var _requestLimit = new WeakMap;
-
-var _requestWindow = new WeakMap;
-
-var _requestTimestamps = new WeakMap;
-
-var _requestCount = new WeakMap;
-
-var _lastRequestTime = new WeakMap;
-
-var _RateLimitedFetcher_brand = new WeakSet;
-
-class RateLimitedFetcher {
-    constructor() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        _classPrivateMethodInitSpec(this, _RateLimitedFetcher_brand);
-        _classPrivateFieldInitSpec(this, _maxRetries, void 0);
-        _classPrivateFieldInitSpec(this, _initialDelay, void 0);
-        _classPrivateFieldInitSpec(this, _maxDelay, void 0);
-        _classPrivateFieldInitSpec(this, _backoffFactor, void 0);
-        _classPrivateFieldInitSpec(this, _retryOn, void 0);
-        _classPrivateFieldInitSpec(this, _requestLimit, void 0);
-        _classPrivateFieldInitSpec(this, _requestWindow, void 0);
-        _classPrivateFieldInitSpec(this, _requestTimestamps, void 0);
-        _classPrivateFieldInitSpec(this, _requestCount, void 0);
-        _classPrivateFieldInitSpec(this, _lastRequestTime, void 0);
-        _classPrivateFieldSet2(_maxRetries, this, options.maxRetries || 5);
-        _classPrivateFieldSet2(_initialDelay, this, options.initialDelay || 1e3);
-        _classPrivateFieldSet2(_maxDelay, this, options.maxDelay || 5e3);
-        _classPrivateFieldSet2(_backoffFactor, this, options.backoffFactor || 2);
-        _classPrivateFieldSet2(_retryOn, this, options.retryOn || [ 429, 502, 503, 504 ]);
-        _classPrivateFieldSet2(_requestLimit, this, 10);
-        _classPrivateFieldSet2(_requestWindow, this, 5e3);
-        _classPrivateFieldSet2(_requestTimestamps, this, []);
-        _classPrivateFieldSet2(_requestCount, this, 0);
-        _classPrivateFieldSet2(_lastRequestTime, this, 0);
-    }
-    fetchWithRetry(url, headers, attempt) {
-        var _this = this;
-        return _asyncToGenerator(function*() {
-            try {
-                yield _assertClassBrand(_RateLimitedFetcher_brand, _this, _checkAndApplyRateLimit).call(_this);
-                var response = yield fetch(url, {
-                    headers: headers
-                });
-                if (response.ok) {
-                    return response;
-                }
-                if (_classPrivateFieldGet2(_retryOn, _this).includes(response.status) && attempt < _classPrivateFieldGet2(_maxRetries, _this)) {
-                    var delay = _assertClassBrand(_RateLimitedFetcher_brand, _this, _calculateDelay).call(_this, attempt, response);
-                    console.log("Attempt ".concat(attempt + 1, "/").concat(_classPrivateFieldGet2(_maxRetries, _this), " failed with ").concat(response.status, ". Retrying in ").concat(delay, "ms"));
-                    yield _assertClassBrand(_RateLimitedFetcher_brand, _this, _delay).call(_this, delay);
-                    return _this.fetchWithRetry(url, headers, attempt + 1);
-                }
-                throw new Error("".concat(response.status, " ").concat(response.statusText));
-            } catch (error) {
-                if (attempt >= _classPrivateFieldGet2(_maxRetries, _this)) {
-                    var message = "";
-                    if (error instanceof Error) {
-                        message = error.message;
-                    }
-                    throw new Error("Request failed after ".concat(_classPrivateFieldGet2(_maxRetries, _this), " attempts: ").concat(message));
-                }
-                if (attempt < _classPrivateFieldGet2(_maxRetries, _this)) {
-                    var _delay2 = _assertClassBrand(_RateLimitedFetcher_brand, _this, _calculateDelay).call(_this, attempt);
-                    console.log("Network error on attempt ".concat(attempt + 1, ". Retrying in ").concat(_delay2, "ms"));
-                    yield _assertClassBrand(_RateLimitedFetcher_brand, _this, _delay).call(_this, _delay2);
-                    return _this.fetchWithRetry(url, headers, attempt + 1);
-                }
-                throw error;
-            }
-        })();
-    }
-    resetCounter() {
-        _classPrivateFieldSet2(_requestTimestamps, this, []);
-        _classPrivateFieldSet2(_requestCount, this, 0);
-        _classPrivateFieldSet2(_lastRequestTime, this, 0);
-    }
-}
-
-function _cleanupOldRequests() {
-    var now = Date.now();
-    _classPrivateFieldSet2(_requestTimestamps, this, _classPrivateFieldGet2(_requestTimestamps, this).filter(timestamp => now - timestamp < _classPrivateFieldGet2(_requestWindow, this)));
-}
-
-function _checkAndApplyRateLimit() {
-    return _checkAndApplyRateLimit2.apply(this, arguments);
-}
-
-function _checkAndApplyRateLimit2() {
-    _checkAndApplyRateLimit2 = _asyncToGenerator(function*() {
-        var _this$requestCount;
-        _assertClassBrand(_RateLimitedFetcher_brand, this, _cleanupOldRequests).call(this);
-        if (_classPrivateFieldGet2(_requestTimestamps, this).length >= _classPrivateFieldGet2(_requestLimit, this)) {
-            var oldestRequest = _classPrivateFieldGet2(_requestTimestamps, this)[0];
-            var timeSinceOldest = Date.now() - oldestRequest;
-            if (timeSinceOldest < _classPrivateFieldGet2(_requestWindow, this)) {
-                var waitTime = 500 * _classPrivateFieldGet2(_requestTimestamps, this).length - _classPrivateFieldGet2(_requestLimit, this);
-                if (waitTime < 0) {
-                    waitTime = 0;
-                    console.warn("Wait time is less than 0");
-                }
-                console.log("Rate limit prevention: ".concat(_classPrivateFieldGet2(_requestTimestamps, this).length, " requests in last ").concat(_classPrivateFieldGet2(_requestWindow, this), "ms. Waiting ").concat(waitTime, "ms..."));
-                yield _assertClassBrand(_RateLimitedFetcher_brand, this, _delay).call(this, waitTime);
-                _assertClassBrand(_RateLimitedFetcher_brand, this, _cleanupOldRequests).call(this);
-            }
-        }
-        _classPrivateFieldGet2(_requestTimestamps, this).push(Date.now());
-        _classPrivateFieldSet2(_requestCount, this, (_this$requestCount = _classPrivateFieldGet2(_requestCount, this), 
-        _this$requestCount++, _this$requestCount));
-        var now = Date.now();
-        var timeSinceLastRequest = now - _classPrivateFieldGet2(_lastRequestTime, this);
-        var minDelay = 100;
-        if (timeSinceLastRequest < minDelay && _classPrivateFieldGet2(_lastRequestTime, this) > 0) {
-            yield _assertClassBrand(_RateLimitedFetcher_brand, this, _delay).call(this, minDelay - timeSinceLastRequest);
-        }
-        _classPrivateFieldSet2(_lastRequestTime, this, Date.now());
+var zoteroEnvironment = { restApiUrl: "https://api.zotero.org/", desktopApiUrl: "http://127.0.0.1:23119/api/" }, ZoteroApiChecker = { _done: false, _desktop: false, _hasPermission: true, _online: false, _hasKey: false, _timeout: 1e3, _callback: function(t) {
+}, _desktopVersion: (function() {
+  if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0) return false;
+  if (window.location && "file:" == window.location.protocol) return true;
+  var t = window.document.currentScript ? window.document.currentScript.getAttribute("src") : "";
+  return !(!t || 0 != t.indexOf("file:///"));
+})(), runApisChecker: function(t) {
+  var e = this;
+  return e._done = false, (function i() {
+    e._done || e._checkApiAvailable(t).then(function(t2) {
+      e._done || ((t2.online && t2.hasKey || t2.desktop && t2.hasPermission) && (e._done = true), e._callback(t2), setTimeout(i, e._timeout));
     });
-    return _checkAndApplyRateLimit2.apply(this, arguments);
-}
-
-function _calculateDelay(attempt) {
-    var response = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var retryAfterHeader = response === null || response === void 0 ? void 0 : response.headers.get("Retry-After");
-    if (retryAfterHeader) {
-        var seconds = parseInt(retryAfterHeader);
-        if (seconds > 86400) {
-            var timestamp = parseInt(retryAfterHeader) * 1e3;
-            return Math.max(0, timestamp - Date.now());
-        }
-        return seconds * 1e3;
-    }
-    var exponentialDelay = _classPrivateFieldGet2(_initialDelay, this) * Math.pow(_classPrivateFieldGet2(_backoffFactor, this), attempt);
-    var jitter = Math.random() * 1e3;
-    return Math.min(exponentialDelay + jitter, _classPrivateFieldGet2(_maxDelay, this));
-}
-
-function _delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-var ZoteroSdk = function ZoteroSdk() {
-    this._apiKey = null;
-    this._userId = 0;
-    this._userGroups = [];
-    this._isOnlineAvailable = true;
-    this._fetcher = new RateLimitedFetcher({
-        maxRetries: 5,
-        initialDelay: 5e3
-    });
-};
-
-ZoteroSdk.prototype.ZOTERO_API_VERSION = "3";
-
-ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor";
-
-ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson";
-
-ZoteroSdk.prototype.STORAGE_KEYS = {
-    USER_ID: "zoteroUserId",
-    API_KEY: "zoteroApiKey"
-};
-
-ZoteroSdk.prototype.API_PATHS = {
-    USERS: "users",
-    GROUPS: "groups",
-    ITEMS: "items",
-    KEYS: "keys"
-};
-
-ZoteroSdk.prototype._getBaseUrl = function() {
-    return this._isOnlineAvailable ? zoteroEnvironment.restApiUrl : zoteroEnvironment.desktopApiUrl;
-};
-
-ZoteroSdk.prototype._getDesktopRequest = function(url) {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-        window.AscSimpleRequest.createRequest({
-            url: url,
-            method: "GET",
-            headers: {
-                "Zotero-API-Version": self.ZOTERO_API_VERSION,
-                "User-Agent": self.USER_AGENT
-            },
-            complete: resolve,
-            error: function error(_error) {
-                if (_error.statusCode === -102) {
-                    _error.statusCode = 404;
-                    _error.message = "Connection to Zotero failed. Make sure Zotero is running";
-                }
-                reject(_error);
-            }
-        });
-    });
-};
-
-ZoteroSdk.prototype._getOnlineRequest = function(url) {
-    var headers = {
-        "Zotero-API-Version": this.ZOTERO_API_VERSION,
-        "Zotero-API-Key": this._apiKey || ""
+  })(), { subscribe: function(t2) {
+    e._callback = t2;
+  }, unsubscribe: function() {
+    e._done = true, e._callback = function() {
     };
-    return fetch(url, {
-        headers: headers
-    }).then(function(response) {
-        if (!response.ok) {
-            var message = response.status + " " + response.statusText;
-            console.error(message);
-            throw new Error(message);
-        }
-        return response;
-    }).catch(function(error) {
-        if (typeof error === "object") {
-            error.message = "Connection to Zotero failed";
-        }
-        throw error;
-    });
-};
-
-ZoteroSdk.prototype._getRequestWithOfflineSupport = function(url) {
-    return this._isOnlineAvailable ? this._getOnlineRequest(url) : this._getDesktopRequest(url.href);
-};
-
-ZoteroSdk.prototype._buildGetRequest = function(path, queryParams) {
-    queryParams = queryParams || {};
-    var url = new URL(path, this._getBaseUrl());
-    Object.keys(queryParams).forEach(function(key) {
-        if (queryParams[key] !== undefined && queryParams[key] !== null) {
-            url.searchParams.append(key, queryParams[key]);
-        }
-    });
-    return this._getRequestWithOfflineSupport(url);
-};
-
-ZoteroSdk.prototype._parseLinkHeader = function(headerValue) {
-    var links = {};
-    var linkHeaderRegex = /<(.*?)>; rel="(.*?)"/g;
-    if (!headerValue) return links;
-    var match;
-    while ((match = linkHeaderRegex.exec(headerValue.trim())) !== null) {
-        links[match[2]] = match[1];
-    }
-    return links;
-};
-
-ZoteroSdk.prototype._parseDesktopItemsResponse = function(promise, id) {
-    return promise.then(function(response) {
-        return {
-            items: JSON.parse(response.responseText),
-            id: id
-        };
-    });
-};
-
-ZoteroSdk.prototype._parseItemsResponse = function(promise, id) {
-    var self = this;
-    return promise.then(function(response) {
-        return Promise.all([ response.json(), response ]);
-    }).then(function(results) {
-        var json = results[0];
-        var response = results[1];
-        var links = self._parseLinkHeader(response.headers.get("Link") || "");
-        var result = {
-            items: json,
-            id: id
-        };
-        if (typeof json === "object" && json.items) {
-            result.items = json.items;
-        }
-        if (links.next) {
-            result.next = function() {
-                return self._parseItemsResponse(self._getOnlineRequest(new URL(links.next)), id);
-            };
-        }
-        return result;
-    });
-};
-
-ZoteroSdk.prototype._parseResponse = function(promise, id) {
-    if (this._isOnlineAvailable) {
-        var fetchPromise = promise;
-        return this._parseItemsResponse(fetchPromise, id);
-    } else {
-        var ascSimplePromise = promise;
-        return this._parseDesktopItemsResponse(ascSimplePromise, id);
-    }
-};
-
-ZoteroSdk.prototype.getItems = function(search, itemsID, format) {
-    var self = this;
-    format = format || self.DEFAULT_FORMAT;
-    var queryParams = {
-        format: format,
-        itemType: "-attachment"
-    };
-    if (search) {
-        queryParams.q = search;
-    } else if (itemsID) {
-        queryParams.itemKey = itemsID.join(",");
-    } else {
-        queryParams.limit = 20;
-        if (!this._isOnlineAvailable) {
-            queryParams.format = "json";
-        }
-    }
-    var path = self.API_PATHS.USERS + "/" + self._userId + "/" + self.API_PATHS.ITEMS;
-    var request = self._buildGetRequest(path, queryParams);
-    return self._parseResponse(request, self._userId);
-};
-
-ZoteroSdk.prototype.getGroupItems = function(search, groupId, itemsID, format) {
-    var self = this;
-    format = format || self.DEFAULT_FORMAT;
-    var queryParams = {
-        format: format
-    };
-    if (search) {
-        queryParams.q = search;
-    } else if (itemsID) {
-        queryParams.itemKey = itemsID.join(",");
-    }
-    var path = self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-    var request = self._buildGetRequest(path, queryParams);
-    return self._parseResponse(request, groupId);
-};
-
-ZoteroSdk.prototype.getUserGroups = function() {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-        if (self._userGroups.length > 0) {
-            resolve(self._userGroups);
-            return;
-        }
-        var path = self.API_PATHS.USERS + "/" + self._userId + "/groups";
-        self._buildGetRequest(path).then(function(response) {
-            if (self._isOnlineAvailable) {
-                var fetchResponse = response;
-                if (!fetchResponse.ok) {
-                    throw new Error(fetchResponse.status + " " + fetchResponse.statusText);
-                }
-                return fetchResponse.json();
-            }
-            var ascSimpleResponse = response;
-            return JSON.parse(ascSimpleResponse.responseText);
-        }).then(function(groups) {
-            self._userGroups = groups.map(function(group) {
-                return {
-                    id: group.id,
-                    name: group.data.name
-                };
-            });
-            resolve(self._userGroups);
-        }).catch(reject);
-    });
-};
-
-ZoteroSdk.prototype.setApiKey = function(key) {
-    var self = this;
-    var path = this.API_PATHS.KEYS + "/" + key;
-    return this._buildGetRequest(path).then(function(response) {
-        var fetchResponse = response;
-        if (!fetchResponse.ok) {
-            throw new Error(fetchResponse.status + " " + fetchResponse.statusText);
-        }
-        return fetchResponse.json();
-    }).then(function(keyData) {
-        self._saveSettings(keyData.userID, key);
-        return true;
-    });
-};
-
-ZoteroSdk.prototype._applySettings = function(userId, apiKey) {
-    this._userId = userId;
-    this._apiKey = apiKey;
-};
-
-ZoteroSdk.prototype._saveSettings = function(userId, apiKey) {
-    this._applySettings(userId, apiKey);
-    localStorage.setItem(this.STORAGE_KEYS.USER_ID, String(userId));
-    localStorage.setItem(this.STORAGE_KEYS.API_KEY, apiKey);
-};
-
-ZoteroSdk.prototype.hasSettings = function() {
-    var userId = localStorage.getItem(this.STORAGE_KEYS.USER_ID);
-    var apiKey = localStorage.getItem(this.STORAGE_KEYS.API_KEY);
-    if (userId && apiKey) {
-        this._applySettings(Number(userId), apiKey);
-        return true;
-    }
+  } };
+}, checkStatus: function(t) {
+  return this._checkApiAvailable(t);
+}, successfullyLoggedInUsingApiKey: function() {
+  this._done = true, this._callback({ online: true, hasKey: true, desktop: this._desktop, hasPermission: this._hasPermission, desktopVersion: this._desktopVersion });
+}, _checkApiAvailable: function(t) {
+  var e = this;
+  return Promise.all([fetch(zoteroEnvironment.restApiUrl, { method: "GET", cache: "no-cache" }).then(function(t2) {
+    return 200 === t2.status;
+  }).catch(function() {
     return false;
-};
-
-ZoteroSdk.prototype.clearSettings = function() {
-    localStorage.removeItem(this.STORAGE_KEYS.USER_ID);
-    localStorage.removeItem(this.STORAGE_KEYS.API_KEY);
-    this._userGroups = [];
-    this._userId = 0;
-    this._apiKey = null;
-};
-
-ZoteroSdk.prototype.getUserId = function() {
-    return this._userId;
-};
-
-ZoteroSdk.prototype.setIsOnlineAvailable = function(isOnline) {
-    this._isOnlineAvailable = isOnline;
-};
-
-function InputField(input, options) {
-    var self = this;
-    options = options || {};
-    if (typeof input === "string") {
-        var temp = document.getElementById(input);
-        if (temp instanceof HTMLInputElement) {
-            input = temp;
+  }), e._sendDesktopRequest(zoteroEnvironment.desktopApiUrl).then(function(t2) {
+    return e._hasPermission = t2.hasPermission, t2.isZoteroRunning;
+  }).catch(function() {
+    return false;
+  })]).then(function(i) {
+    return e._online = i[0], e._desktop = i[1], e._hasKey = t.hasSettings(), { online: e._online, hasKey: e._hasKey, desktop: e._desktop, hasPermission: e._hasPermission, desktopVersion: e._desktopVersion };
+  });
+}, _sendDesktopRequest: function(t) {
+  var e = this;
+  return new Promise(function(i, s) {
+    e._desktopVersion ? window.AscSimpleRequest.createRequest({ url: t, method: "GET", headers: { "Zotero-API-Version": "3", "User-Agent": "AscDesktopEditor" }, complete: function(t2) {
+      var e2 = false, s2 = false;
+      403 == t2.responseStatus ? (e2 = false, s2 = true) : 200 === t2.responseStatus && (s2 = true, e2 = true), i({ hasPermission: e2, isZoteroRunning: s2 });
+    }, error: function(t2) {
+      -102 == t2.statusCode && (t2.statusCode = 404), s(t2);
+    } }) : i({ hasPermission: false, isZoteroRunning: false });
+  });
+} }, _maxRetries = /* @__PURE__ */ new WeakMap(), _initialDelay = /* @__PURE__ */ new WeakMap(), _maxDelay = /* @__PURE__ */ new WeakMap(), _backoffFactor = /* @__PURE__ */ new WeakMap(), _retryOn = /* @__PURE__ */ new WeakMap(), _requestLimit = /* @__PURE__ */ new WeakMap(), _requestWindow = /* @__PURE__ */ new WeakMap(), _requestTimestamps = /* @__PURE__ */ new WeakMap(), _requestCount = /* @__PURE__ */ new WeakMap(), _lastRequestTime = /* @__PURE__ */ new WeakMap(), _RateLimitedFetcher_brand = /* @__PURE__ */ new WeakSet();
+class RateLimitedFetcher {
+  constructor() {
+    var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+    _classPrivateMethodInitSpec(this, _RateLimitedFetcher_brand), _classPrivateFieldInitSpec(this, _maxRetries, void 0), _classPrivateFieldInitSpec(this, _initialDelay, void 0), _classPrivateFieldInitSpec(this, _maxDelay, void 0), _classPrivateFieldInitSpec(this, _backoffFactor, void 0), _classPrivateFieldInitSpec(this, _retryOn, void 0), _classPrivateFieldInitSpec(this, _requestLimit, void 0), _classPrivateFieldInitSpec(this, _requestWindow, void 0), _classPrivateFieldInitSpec(this, _requestTimestamps, void 0), _classPrivateFieldInitSpec(this, _requestCount, void 0), _classPrivateFieldInitSpec(this, _lastRequestTime, void 0), _classPrivateFieldSet2(_maxRetries, this, t.maxRetries || 5), _classPrivateFieldSet2(_initialDelay, this, t.initialDelay || 1e3), _classPrivateFieldSet2(_maxDelay, this, t.maxDelay || 5e3), _classPrivateFieldSet2(_backoffFactor, this, t.backoffFactor || 2), _classPrivateFieldSet2(_retryOn, this, t.retryOn || [429, 502, 503, 504]), _classPrivateFieldSet2(_requestLimit, this, 10), _classPrivateFieldSet2(_requestWindow, this, 5e3), _classPrivateFieldSet2(_requestTimestamps, this, []), _classPrivateFieldSet2(_requestCount, this, 0), _classPrivateFieldSet2(_lastRequestTime, this, 0);
+  }
+  fetchWithRetry(t, e, i) {
+    var s = this;
+    return _asyncToGenerator(function* () {
+      try {
+        yield _assertClassBrand(_RateLimitedFetcher_brand, s, _checkAndApplyRateLimit).call(s);
+        var n = yield fetch(t, { headers: e });
+        if (n.ok) return n;
+        if (_classPrivateFieldGet2(_retryOn, s).includes(n.status) && i < _classPrivateFieldGet2(_maxRetries, s)) {
+          var a = _assertClassBrand(_RateLimitedFetcher_brand, s, _calculateDelay).call(s, i, n);
+          return console.log("Attempt ".concat(i + 1, "/").concat(_classPrivateFieldGet2(_maxRetries, s), " failed with ").concat(n.status, ". Retrying in ").concat(a, "ms")), yield _assertClassBrand(_RateLimitedFetcher_brand, s, _delay).call(s, a), s.fetchWithRetry(t, e, i + 1);
         }
-    }
-    if (input instanceof HTMLInputElement) {
-        this.input = input;
-    } else {
-        throw new Error("Invalid input element");
-    }
-    this._container = document.createElement("div");
-    this._options = {
-        type: options.type || input.type || "text",
-        placeholder: options.placeholder || input.placeholder || "",
-        value: options.value || input.value || "",
-        autofocus: options.autofocus || false,
-        disabled: options.disabled || false,
-        readonly: options.readonly || false,
-        required: options.required || false,
-        showCounter: options.showCounter || false,
-        showClear: options.showClear !== undefined ? options.showClear : true,
-        autocomplete: options.autocomplete || "off"
-    };
-    for (var key in options) {
-        if (!this._options.hasOwnProperty(key)) {
-            this._options[key] = options[key];
+        throw new Error("".concat(n.status, " ").concat(n.statusText));
+      } catch (n2) {
+        if (i >= _classPrivateFieldGet2(_maxRetries, s)) {
+          var r = "";
+          throw n2 instanceof Error && (r = n2.message), new Error("Request failed after ".concat(_classPrivateFieldGet2(_maxRetries, s), " attempts: ").concat(r));
         }
-    }
-    this._id = input.id || "input_" + Math.random().toString(36).slice(2, 9);
-    this.isFocused = false;
-    this.isValid = true;
-    this._validationMessage = "";
-    this._subscribers = [];
-    this._boundHandles = {
-        focus: function focus(e) {
-            self._handleFocus(e);
-        },
-        blur: function blur(e) {
-            self._handleBlur(e);
-        },
-        input: function input(e) {
-            self._handleInput(e);
-        },
-        keydown: function keydown(e) {
-            self._handleKeydown(e);
-        },
-        clear: function clear() {
-            self.clear();
-        },
-        validate: function validate() {
-            self.validate();
+        if (i < _classPrivateFieldGet2(_maxRetries, s)) {
+          var o = _assertClassBrand(_RateLimitedFetcher_brand, s, _calculateDelay).call(s, i);
+          return console.log("Network error on attempt ".concat(i + 1, ". Retrying in ").concat(o, "ms")), yield _assertClassBrand(_RateLimitedFetcher_brand, s, _delay).call(s, o), s.fetchWithRetry(t, e, i + 1);
         }
-    };
-    this._clearButton = null;
-    this._counter = null;
-    this._counterCurrent = null;
-    this._counterMax = null;
-    this._validationElement = document.createElement("div");
-    if (this._options.type === "search") {
-        this._searchIcon = document.createElement("span");
-        this._boundHandles.search = this._triggerSubmit.bind(this);
-        this._container.classList.add("input-field-search");
-    }
-    this._createDOM();
-    this._bindEvents();
-    this._updateState();
-    if (this._options.autofocus) {
-        setTimeout(function(self) {
-            return function() {
-                self.focus();
-            };
-        }(this), 100);
-    }
+        throw n2;
+      }
+    })();
+  }
+  resetCounter() {
+    _classPrivateFieldSet2(_requestTimestamps, this, []), _classPrivateFieldSet2(_requestCount, this, 0), _classPrivateFieldSet2(_lastRequestTime, this, 0);
+  }
 }
-
-InputField.prototype = {
-    constructor: InputField,
-    input: null,
-    _container: null,
-    _options: {},
-    _id: "",
-    isFocused: false,
-    isValid: true,
-    _validationMessage: "",
-    _subscribers: [],
-    _boundHandles: null,
-    _clearButton: null,
-    _counter: null,
-    _counterCurrent: null,
-    _counterMax: null,
-    _validationElement: null,
-    _createDOM: function _createDOM() {
-        var parent = this.input.parentNode;
-        var fragment = document.createDocumentFragment();
-        fragment.appendChild(this._container);
-        this._container.className += " input-field-container  input-field-container-" + this._id;
-        var inputField = document.createElement("div");
-        this._container.appendChild(inputField);
-        inputField.className += " input-field";
-        if (this._options.disabled) {
-            inputField.className += " input-field-disabled";
-        }
-        var inputFieldMain = document.createElement("div");
-        inputField.appendChild(inputFieldMain);
-        inputFieldMain.className += " input-field-main";
-        this.input.className += " input-field-element";
-        this.input.type = this._options.type || "text";
-        this.input.placeholder = this._options.placeholder || "";
-        this.input.value = String(this._options.value) || "";
-        if (this._options.disabled) {
-            this.input.disabled = true;
-        }
-        if (this._options.readonly) {
-            this.input.readOnly = true;
-        }
-        if (this._options.required) {
-            this.input.required = true;
-        }
-        if (this._options.maxLength) {
-            this.input.maxLength = this._options.maxLength;
-        }
-        if (this._options.pattern) {
-            this.input.pattern = this._options.pattern;
-        }
-        if (this._options.autocomplete) {
-            this.input.autocomplete = this._options.autocomplete;
-        }
-        if (this._options.showCounter) {
-            this._counter = document.createElement("div");
-            inputField.appendChild(this._counter);
-            this._counter.className += " input-field-counter";
-            this._counterCurrent = document.createElement("span");
-            this._counterCurrent.className += " input-field-counter-current";
-            this._counterCurrent.textContent = "0";
-            this._counter.appendChild(this._counterCurrent);
-            var span = document.createElement("span");
-            span.textContent = "/";
-            this._counter.appendChild(span);
-            this._counterMax = document.createElement("span");
-            this._counterMax.className += " input-field-counter-max";
-            this._counterMax.textContent = String(this._options.maxLength) || "∞";
-            this._counter.appendChild(this._counterMax);
-        }
-        inputField.appendChild(this._validationElement);
-        this._validationElement.className += " input-field-validation";
-        this._validationElement.style.display = "none";
-        if (this._options.showClear) {
-            this.input.className += " input-field-clearable";
-            this._clearButton = document.createElement("button");
-            inputField.appendChild(this._clearButton);
-            this._clearButton.className += " input-field-clear";
-            this._clearButton.style.display = "none";
-            this._clearButton.textContent = "×";
-        }
-        if (this._options.showSearchIcon) {
-            this._searchIcon.classList.add("input-field-search-icon");
-            this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" ' + 'fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path fill-rule="evenodd" clip-rule="evenodd" ' + 'd="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" ' + 'fill="currentColor"/>' + "</svg>";
-            inputFieldMain.appendChild(this._searchIcon);
-        }
-        if (parent) {
-            parent.insertBefore(fragment, this.input);
-        }
-        inputFieldMain.appendChild(this.input);
-    },
-    _bindEvents: function _bindEvents() {
-        this.input.addEventListener("focus", this._boundHandles.focus);
-        this.input.addEventListener("blur", this._boundHandles.blur);
-        this.input.addEventListener("input", this._boundHandles.input);
-        this.input.addEventListener("keydown", this._boundHandles.keydown);
-        if (this._clearButton) {
-            this._clearButton.addEventListener("click", this._boundHandles.clear);
-        }
-        if (this._options.showSearchIcon && this._boundHandles.search) {
-            this._searchIcon.addEventListener("click", this._boundHandles.search);
-        }
-        this.input.addEventListener("change", this._boundHandles.validate);
-    },
-    _handleFocus: function _handleFocus(e) {
-        this.isFocused = true;
-        this._container.className += " input-field-focused";
-        this._updateClearButton();
-        this._triggerFocusEvent(e);
-    },
-    _handleBlur: function _handleBlur(e) {
-        this.isFocused = false;
-        var classes = this._container.className.split(" ");
-        var newClasses = [];
-        for (var i = 0; i < classes.length; i++) {
-            if (classes[i] !== "input-field-focused") {
-                newClasses.push(classes[i]);
-            }
-        }
-        this._container.className = newClasses.join(" ");
-        this.validate();
-        this._triggerBlurEvent(e);
-    },
-    _handleInput: function _handleInput(e) {
-        this._updateClearButton();
-        this._updateCounter();
-        this._triggerInputEvent(e);
-    },
-    _handleKeydown: function _handleKeydown(e) {
-        var key = e.key || e.keyCode;
-        if ((key === "Escape" || key === 27) && this._options.showClear) {
-            this.clear();
-            e.preventDefault();
-        }
-        if (key === "Enter" || key === 13) {
-            this._triggerSubmit();
-        }
-    },
-    _updateClearButton: function _updateClearButton() {
-        if (this._clearButton) {
-            var hasValue = this.input.value.length > 0;
-            this._clearButton.style.display = hasValue ? "block" : "none";
-        }
-    },
-    _updateCounter: function _updateCounter() {
-        if (this._counter && this._options.maxLength) {
-            var current = this.input.value.length;
-            var max = this._options.maxLength;
-            if (this._counterCurrent) {
-                this._counterCurrent.textContent = String(current);
-            }
-            if (this._counterMax) {
-                this._counterMax.textContent = String(max);
-            }
-            if (current > max * .9) {
-                var counterClasses = this._counter.className.split(" ");
-                if (counterClasses.indexOf("input-field-counter-warning") === -1) {
-                    this._counter.className += " input-field-counter-warning";
-                }
-            } else {
-                this._counter.className = this._counter.className.split(" ").filter(function(cls) {
-                    return cls !== "input-field-counter-warning";
-                }).join(" ");
-            }
-            if (current > max) {
-                var counterClasses = this._counter.className.split(" ");
-                if (counterClasses.indexOf("input-field-counter-error") === -1) {
-                    this._counter.className += " input-field-counter-error";
-                }
-            } else {
-                this._counter.className = this._counter.className.split(" ").filter(function(cls) {
-                    return cls !== "input-field-counter-error";
-                }).join(" ");
-            }
-        }
-    },
-    validate: function validate() {
-        if (!this._options.validation) {
-            this.isValid = true;
-            return true;
-        }
-        var value = this.input.value;
-        var isValid = true;
-        var message = "";
-        if (this._options.required && !value.trim()) {
-            isValid = false;
-            message = "This field is required";
-        } else if (this._options.minLength && value.length < this._options.minLength) {
-            isValid = false;
-            message = "Minimum length is " + this._options.minLength + " characters";
-        } else if (this._options.maxLength && value.length > this._options.maxLength) {
-            isValid = false;
-            message = "Maximum length is " + this._options.maxLength + " characters";
-        } else if (this._options.pattern && !new RegExp(this._options.pattern).test(value)) {
-            isValid = false;
-            message = "Invalid format";
-        }
-        if (isValid && typeof this._options.validation === "function") {
-            var customValidation = this._options.validation(value);
-            if (customValidation && !customValidation.isValid) {
-                isValid = false;
-                message = customValidation.message || "Invalid value";
-            }
-        }
-        this.isValid = isValid;
-        this._validationMessage = message;
-        this.updateValidationState();
-        return isValid;
-    },
-    updateValidationState: function updateValidationState() {
-        if (!this.isValid) {
-            this._validationElement.textContent = this._validationMessage;
-            this._validationElement.style.display = "block";
-            var containerClasses = this._container.className.split(" ");
-            if (containerClasses.indexOf("input-field-invalid") === -1) {
-                this._container.className += " input-field-invalid";
-            }
-            this._container.className = this._container.className.split(" ").filter(function(cls) {
-                return cls !== "input-field-valid";
-            }).join(" ");
-        } else if (this.input.value.length > 0) {
-            this._validationElement.style.display = "none";
-            var containerClasses = this._container.className.split(" ");
-            if (containerClasses.indexOf("input-field-valid") === -1) {
-                this._container.className += " input-field-valid";
-            }
-            this._container.className = this._container.className.split(" ").filter(function(cls) {
-                return cls !== "input-field-invalid";
-            }).join(" ");
-        } else {
-            this._validationElement.style.display = "none";
-            this._container.className = this._container.className.split(" ").filter(function(cls) {
-                return cls !== "input-field-valid" && cls !== "input-field-invalid";
-            }).join(" ");
-        }
-    },
-    _updateState: function _updateState() {
-        this._updateClearButton();
-        this._updateCounter();
-        this.validate();
-    },
-    getValue: function getValue() {
-        return this.input.value.trim();
-    },
-    setValue: function setValue(value) {
-        this.input.value = value;
-        this._updateState();
-        this._triggerChange();
-    },
-    setPlaceholder: function setPlaceholder(value) {
-        this.input.placeholder = value;
-        this._options.placeholder = value;
-    },
-    clear: function clear(bFocus) {
-        bFocus = bFocus !== undefined ? bFocus : true;
-        this.setValue("");
-        if (bFocus) {
-            this.input.focus();
-        }
-    },
-    focus: function focus() {
-        this.input.focus();
-    },
-    blur: function blur() {
-        this.input.blur();
-    },
-    enable: function enable() {
-        this.input.disabled = false;
-        this._options.disabled = false;
-        this._container.className = this._container.className.split(" ").filter(function(cls) {
-            return cls !== "input-field-disabled";
-        }).join(" ");
-    },
-    disable: function disable() {
-        this.input.disabled = true;
-        this._options.disabled = true;
-        var containerClasses = this._container.className.split(" ");
-        if (containerClasses.indexOf("input-field-disabled") === -1) {
-            this._container.className += " input-field-disabled";
-        }
-    },
-    subscribe: function subscribe(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    },
-    _triggerInputEvent: function _triggerInputEvent(e) {
-        var detail = {
-            value: this.input.value,
-            originalEvent: e
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "inputfield:input",
-                detail: detail
-            });
-        });
-    },
-    _triggerFocusEvent: function _triggerFocusEvent(e) {
-        var detail = {
-            value: this.input.value,
-            originalEvent: e
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "inputfield:focus",
-                detail: detail
-            });
-        });
-    },
-    _triggerBlurEvent: function _triggerBlurEvent(e) {
-        var detail = {
-            value: this.input.value,
-            originalEvent: e
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "inputfield:blur",
-                detail: detail
-            });
-        });
-    },
-    _triggerChange: function _triggerChange() {
-        var detail = {
-            value: this.input.value,
-            isValid: this.isValid
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "inputfield:change",
-                detail: detail
-            });
-        });
-    },
-    _triggerSubmit: function _triggerSubmit() {
-        var detail = {
-            value: this.input.value,
-            isValid: this.isValid
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "inputfield:submit",
-                detail: detail
-            });
-        });
-    },
-    destroy: function destroy() {
-        this._subscribers = [];
-        if (this._boundHandles) {
-            try {
-                this.input.removeEventListener("focus", this._boundHandles.focus);
-                this.input.removeEventListener("blur", this._boundHandles.blur);
-                this.input.removeEventListener("input", this._boundHandles.input);
-                this.input.removeEventListener("keydown", this._boundHandles.keydown);
-                if (this._clearButton) {
-                    this._clearButton.removeEventListener("click", this._boundHandles.clear);
-                }
-                if (this._options.showSearchIcon && this._boundHandles.search) {
-                    this._searchIcon.removeEventListener("click", this._boundHandles.search);
-                }
-                this.input.removeEventListener("change", this._boundHandles.validate);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        this._container.innerHTML = "";
-        this._container.className = this._container.className.split(" ").filter(function(cls) {
-            return cls !== "input-field-container";
-        }).join(" ");
-    }
-};
-
-function Message(container, options) {
-    if (typeof container === "string") {
-        var temp = document.getElementById(container);
-        if (temp instanceof HTMLElement) {
-            container = temp;
-        }
-    }
-    if (container instanceof HTMLElement) {
-        this.container = container;
-    } else {
-        throw new Error("Invalid container element");
-    }
-    this._options = Object.assign(this._options, options);
-    this._isShow = false;
+function _cleanupOldRequests() {
+  var t = Date.now();
+  _classPrivateFieldSet2(_requestTimestamps, this, _classPrivateFieldGet2(_requestTimestamps, this).filter((e) => t - e < _classPrivateFieldGet2(_requestWindow, this)));
 }
-
-Message.prototype = {
-    constructor: Message,
-    _options: {
-        type: "info",
-        text: "",
-        title: "",
-        duration: 0,
-        closeButton: true,
-        autoClose: false,
-        closeOnClickOutside: true
-    },
-    _outsideClickListener: null,
-    _element: null,
-    _timeoutId: null,
-    _create: function _create() {
-        var messageEl = document.createElement("div");
-        messageEl.className = "message message-" + this._options.type;
-        messageEl.setAttribute("role", "alert");
-        var title = this._options.title;
-        if (!title) {
-            title = "Error";
-            switch (this._options.type) {
-              case "success":
-                title = "Success";
-                break;
-
-              case "warning":
-                title = "Warning";
-                break;
-
-              case "info":
-                title = "Information";
-                break;
-            }
-        }
-        var text = this._options.text;
-        if (!text) {
-            text = "";
-            switch (this._options.type) {
-              case "success":
-                text = "Operation completed successfully.";
-                break;
-
-              case "warning":
-                text = "Please be cautious.";
-                break;
-
-              case "error":
-                text = "Something went wrong.";
-                break;
-            }
-        }
-        messageEl.innerHTML = '<div class="message-content">' + '<span class="message-title">' + title + "</span>" + '<span class="message-text">' + text + "</span>" + "</div>";
-        if (this._options.closeButton) {
-            var closeBtn = document.createElement("button");
-            closeBtn.className = "message-close";
-            closeBtn.textContent = "×";
-            closeBtn.setAttribute("aria-label", "Close");
-            closeBtn.onclick = this.close.bind(this);
-            messageEl.appendChild(closeBtn);
-        }
-        return messageEl;
-    },
-    addOutsideClickListener: function addOutsideClickListener() {
-        if (this._outsideClickListener) {
-            document.removeEventListener("click", this._outsideClickListener);
-        }
-        var self = this;
-        this._outsideClickListener = function(e) {
-            if (e.target instanceof HTMLElement === false) {
-                return;
-            }
-            if (self._element && !self._element.contains(e.target)) {
-                self.close();
-            }
-        };
-        setTimeout(function() {
-            if (!self._outsideClickListener) {
-                return;
-            }
-            document.addEventListener("click", self._outsideClickListener);
-        }, 10);
-    },
-    removeOutsideClickListener: function removeOutsideClickListener() {
-        if (this._outsideClickListener) {
-            document.removeEventListener("click", this._outsideClickListener);
-            this._outsideClickListener = null;
-        }
-    },
-    show: function show(text, title) {
-        if (this._isShow) {
-            return this;
-        }
-        this._isShow = true;
-        if (!this.container.classList.contains("message-container")) {
-            this.container.classList.add("message-container");
-        }
-        if (title) {
-            this._options.title = title;
-        }
-        if (text) {
-            this._options.text = text;
-        }
-        var messageEl = this._create();
-        this._element = messageEl;
-        this.container.appendChild(messageEl);
-        setTimeout(function() {
-            messageEl.style.opacity = "1";
-            messageEl.style.transform = "translateY(0)";
-        }, 10);
-        if (this._options.autoClose && Number(this._options.duration) > 0) {
-            this._timeoutId = setTimeout(this.close.bind(this), this._options.duration);
-        }
-        if (this._options.closeOnClickOutside) {
-            this.addOutsideClickListener();
-        }
-        return this;
-    },
-    close: function close() {
-        this._isShow = false;
-        if (!this._element || !this._element.parentNode) {
-            return;
-        }
-        if (this._timeoutId) {
-            clearTimeout(this._timeoutId);
-            this._timeoutId = null;
-        }
-        this.removeOutsideClickListener();
-        var _element = this._element;
-        _element.style.opacity = "0";
-        _element.style.transform = "translateY(-20px)";
-        setTimeout(function() {
-            if (_element.parentNode) {
-                _element.parentNode.removeChild(_element);
-            }
-        }, 300);
+function _checkAndApplyRateLimit() {
+  return _checkAndApplyRateLimit2.apply(this, arguments);
+}
+function _checkAndApplyRateLimit2() {
+  return (_checkAndApplyRateLimit2 = _asyncToGenerator(function* () {
+    var t;
+    if (_assertClassBrand(_RateLimitedFetcher_brand, this, _cleanupOldRequests).call(this), _classPrivateFieldGet2(_requestTimestamps, this).length >= _classPrivateFieldGet2(_requestLimit, this)) {
+      var e = _classPrivateFieldGet2(_requestTimestamps, this)[0];
+      if (Date.now() - e < _classPrivateFieldGet2(_requestWindow, this)) {
+        var i = 500 * _classPrivateFieldGet2(_requestTimestamps, this).length - _classPrivateFieldGet2(_requestLimit, this);
+        i < 0 && (i = 0, console.warn("Wait time is less than 0")), console.log("Rate limit prevention: ".concat(_classPrivateFieldGet2(_requestTimestamps, this).length, " requests in last ").concat(_classPrivateFieldGet2(_requestWindow, this), "ms. Waiting ").concat(i, "ms...")), yield _assertClassBrand(_RateLimitedFetcher_brand, this, _delay).call(this, i), _assertClassBrand(_RateLimitedFetcher_brand, this, _cleanupOldRequests).call(this);
+      }
     }
+    _classPrivateFieldGet2(_requestTimestamps, this).push(Date.now()), _classPrivateFieldSet2(_requestCount, this, (t = _classPrivateFieldGet2(_requestCount, this), ++t));
+    var s = Date.now() - _classPrivateFieldGet2(_lastRequestTime, this);
+    s < 100 && _classPrivateFieldGet2(_lastRequestTime, this) > 0 && (yield _assertClassBrand(_RateLimitedFetcher_brand, this, _delay).call(this, 100 - s)), _classPrivateFieldSet2(_lastRequestTime, this, Date.now());
+  })).apply(this, arguments);
+}
+function _calculateDelay(t) {
+  var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : null, i = null == e ? void 0 : e.headers.get("Retry-After");
+  if (i) {
+    var s = parseInt(i);
+    if (s > 86400) {
+      var n = 1e3 * parseInt(i);
+      return Math.max(0, n - Date.now());
+    }
+    return 1e3 * s;
+  }
+  var a = _classPrivateFieldGet2(_initialDelay, this) * Math.pow(_classPrivateFieldGet2(_backoffFactor, this), t), r = 1e3 * Math.random();
+  return Math.min(a + r, _classPrivateFieldGet2(_maxDelay, this));
+}
+function _delay(t) {
+  return new Promise((e) => setTimeout(e, t));
+}
+var ZoteroSdk = function() {
+  this._apiKey = null, this._userId = 0, this._userGroups = [], this._isOnlineAvailable = true, this._fetcher = new RateLimitedFetcher({ maxRetries: 5, initialDelay: 5e3 });
 };
-
-function Button(button, options) {
-    var self = this;
-    if (typeof button === "string") {
-        var temp = document.getElementById(button);
-        if (temp instanceof HTMLButtonElement) {
-            button = temp;
-        }
-    }
-    if (button instanceof HTMLButtonElement) {
-        this._button = button;
-    } else {
-        throw new Error("Invalid button");
-    }
-    this._container = document.createElement("div");
-    this._options = options || {};
-    this._options.text = this._options.text || button.textContent.trim();
-    this._options.type = this._options.type || "button";
-    this._options.variant = this._options.variant || "primary";
-    this._options.size = this._options.size || "medium";
-    this._options.iconPosition = this._options.iconPosition || "left";
-    this.isLoading = false;
-    this._originalText = this._options.text;
-    this._subscribers = [];
-    this._boundHandles = {
-        click: function click(e) {
-            self._handleClick(e);
-        },
-        mouseenter: function mouseenter() {
-            self._handleMouseEnter();
-        },
-        mouseleave: function mouseleave() {
-            self._handleMouseLeave();
-        },
-        focus: function focus() {
-            self._handleFocus();
-        },
-        blur: function blur() {
-            self._handleBlur();
-        },
-        keydown: function keydown(e) {
-            self._handleKeydown(e);
-        }
+function InputField(t, e) {
+  var i = this;
+  if (e = e || {}, "string" == typeof t) {
+    var s = document.getElementById(t);
+    s instanceof HTMLInputElement && (t = s);
+  }
+  if (!(t instanceof HTMLInputElement)) throw new Error("Invalid input element");
+  for (var n in this.input = t, this._container = document.createElement("div"), this._options = { type: e.type || t.type || "text", placeholder: e.placeholder || t.placeholder || "", value: e.value || t.value || "", autofocus: e.autofocus || false, disabled: e.disabled || false, readonly: e.readonly || false, required: e.required || false, showCounter: e.showCounter || false, showClear: void 0 === e.showClear || e.showClear, autocomplete: e.autocomplete || "off" }, e) this._options.hasOwnProperty(n) || (this._options[n] = e[n]);
+  this._id = t.id || "input_" + Math.random().toString(36).slice(2, 9), this.isFocused = false, this.isValid = true, this._validationMessage = "", this._subscribers = [], this._boundHandles = { focus: function(t2) {
+    i._handleFocus(t2);
+  }, blur: function(t2) {
+    i._handleBlur(t2);
+  }, input: function(t2) {
+    i._handleInput(t2);
+  }, keydown: function(t2) {
+    i._handleKeydown(t2);
+  }, clear: function() {
+    i.clear();
+  }, validate: function() {
+    i.validate();
+  } }, this._clearButton = null, this._counter = null, this._counterCurrent = null, this._counterMax = null, this._validationElement = document.createElement("div"), "search" === this._options.type && (this._searchIcon = document.createElement("span"), this._boundHandles.search = this._triggerSubmit.bind(this), this._container.classList.add("input-field-search")), this._createDOM(), this._bindEvents(), this._updateState(), this._options.autofocus && setTimeout(/* @__PURE__ */ (function(t2) {
+    return function() {
+      t2.focus();
     };
-    this._createDOM();
-    this._bindEvents();
-    this.updateState();
+  })(this), 100);
 }
-
-Button.prototype = {
-    constructor: Button,
-    _button: null,
-    _buttonText: null,
-    _spinner: null,
-    _badgeElement: null,
-    _createDOM: function _createDOM() {
-        var parent = this._button.parentNode;
-        var fragment = document.createDocumentFragment();
-        fragment.appendChild(this._container);
-        this._container.className += " custom-button-container";
-        this._button.className += " custom-button";
-        this._button.className += " custom-button-" + this._options.variant;
-        this._button.className += " custom-button-" + this._options.size;
-        if (this._options.disabled) {
-            this._button.className += " custom-button-disabled";
-        }
-        if (this._options.loading) {
-            this._container.className += " custom-button-loading";
-        }
-        if (this._options.type) {
-            this._button.type = this._options.type;
-        }
-        if (this._options.tooltip) {
-            this._button.title = this._options.tooltip;
-        }
-        if (this._options.disabled) {
-            this._button.disabled = true;
-        }
-        if (this._options.text) {
-            this._button.textContent = "";
-            this._buttonText = document.createElement("span");
-            this._buttonText.className = "custom-button-text";
-            this._buttonText.textContent = this._options.text || "";
-            if (this._options.icon) {
-                var iconSpan = document.createElement("span");
-                iconSpan.className = "custom-button-icon";
-                if (this._options.iconPosition === "left") {
-                    iconSpan.className += " custom-button-icon-left";
-                    this._button.appendChild(iconSpan);
-                    this._button.appendChild(this._buttonText);
-                } else {
-                    iconSpan.className += " custom-button-icon-right";
-                    this._button.appendChild(this._buttonText);
-                    this._button.appendChild(iconSpan);
-                }
-                iconSpan.innerHTML = this._options.icon;
-            } else {
-                this._button.appendChild(this._buttonText);
-            }
-        }
-        if (this._options.loading) {
-            this._spinner = document.createElement("span");
-            this._spinner.className = "custom-button-spinner";
-            this._button.appendChild(this._spinner);
-        }
-        if (this._options.badge) {
-            this._badgeElement = document.createElement("span");
-            this._badgeElement.className = "custom-button-badge";
-            this._badgeElement.textContent = this._options.badge;
-            this._button.appendChild(this._badgeElement);
-        }
-        if (parent) {
-            parent.insertBefore(fragment, this._button);
-        }
-        this._container.appendChild(this._button);
-    },
-    _bindEvents: function _bindEvents() {
-        this._button.addEventListener("click", this._boundHandles.click);
-        this._button.addEventListener("mouseenter", this._boundHandles.mouseenter);
-        this._button.addEventListener("mouseleave", this._boundHandles.mouseleave);
-        this._button.addEventListener("focus", this._boundHandles.focus);
-        this._button.addEventListener("blur", this._boundHandles.blur);
-        this._button.addEventListener("keydown", this._boundHandles.keydown);
-    },
-    _handleClick: function _handleClick(e) {
-        if (this._options.disabled || this.isLoading) {
-            e.preventDefault();
-            e.stopPropagation();
-            return;
-        }
-        this.triggerClickEvent(e);
-    },
-    _handleMouseEnter: function _handleMouseEnter() {
-        var classes = this._button.className.split(" ");
-        if (classes.indexOf("custom-button-hover") === -1) {
-            this._button.className += " custom-button-hover";
-        }
-        this.triggerEvent("mouseenter");
-    },
-    _handleMouseLeave: function _handleMouseLeave() {
-        this._button.className = this._button.className.split(" ").filter(function(cls) {
-            return cls !== "custom-button-hover";
-        }).join(" ");
-        this.triggerEvent("mouseleave");
-    },
-    _handleFocus: function _handleFocus() {
-        var classes = this._button.className.split(" ");
-        if (classes.indexOf("custom-button-focused") === -1) {
-            this._button.className += " custom-button-focused";
-        }
-        this.triggerEvent("focus");
-    },
-    _handleBlur: function _handleBlur() {
-        this._button.className = this._button.className.split(" ").filter(function(cls) {
-            return cls !== "custom-button-focused";
-        }).join(" ");
-        this.triggerEvent("blur");
-    },
-    _handleKeydown: function _handleKeydown(e) {
-        var key = e.key || e.keyCode;
-        if (key === " " || key === "Enter" || key === 32 || key === 13) {
-            if (this._button.tagName === "BUTTON") ; else {
-                e.preventDefault();
-                this._button.click();
-            }
-        } else if (key === "Escape" || key === 27) {
-            this._button.blur();
-        }
-        this.triggerEvent("keydown", {
-            key: key
-        });
-    },
-    subscribe: function subscribe(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    },
-    setText: function setText(text) {
-        if (typeof text === "undefined") return;
-        this._options.text = text;
-        if (!this._buttonText) {
-            this._buttonText = document.createElement("span");
-            this._buttonText.className = "custom-button-text";
-            this._buttonText.textContent = "";
-            this._button.appendChild(this._buttonText);
-        }
-        this._buttonText.textContent = text;
-    },
-    setIcon: function setIcon(icon, position) {
-        this._options.icon = icon;
-        this._options.iconPosition = position || "left";
-    },
-    setBadge: function setBadge(badge) {
-        if (typeof badge === "undefined") return;
-        this._options.badge = badge;
-        if (this._badgeElement) {
-            this._badgeElement.textContent = badge;
-            this._badgeElement.style.display = badge ? "flex" : "none";
-        }
-    },
-    setVariant: function setVariant(variant) {
-        if (typeof variant === "undefined") return;
-        var oldClass = "custom-button-" + this._options.variant;
-        var newClass = "custom-button-" + variant;
-        this._button.className = this._button.className.split(" ").filter(function(cls) {
-            return cls !== oldClass;
-        }).join(" ") + " " + newClass;
-        this._options.variant = variant;
-    },
-    setSize: function setSize(size) {
-        if (typeof size === "undefined") return;
-        var oldClass = "custom-button-" + this._options.size;
-        var newClass = "custom-button-" + size;
-        this._button.className = this._button.className.split(" ").filter(function(cls) {
-            return cls !== oldClass;
-        }).join(" ") + " " + newClass;
-        this._options.size = size;
-    },
-    enable: function enable() {
-        this._options.disabled = false;
-        this._button.disabled = false;
-        this._button.className = this._button.className.split(" ").filter(function(cls) {
-            return cls !== "custom-button-disabled";
-        }).join(" ");
-    },
-    disable: function disable() {
-        this._options.disabled = true;
-        this._button.disabled = true;
-        var classes = this._button.className.split(" ");
-        if (classes.indexOf("custom-button-disabled") === -1) {
-            this._button.className += " custom-button-disabled";
-        }
-    },
-    startLoading: function startLoading() {
-        this.isLoading = true;
-        if (typeof this._options.text !== "undefined") this._originalText = this._options.text;
-        var containerClasses = this._container.className.split(" ");
-        if (containerClasses.indexOf("custom-button-loading") === -1) {
-            this._container.className += " custom-button-loading";
-        }
-        if (this._spinner) {
-            this._spinner.style.display = "inline-block";
-        }
-        if (this._buttonText) {
-            this._buttonText.textContent = "Loading...";
-        }
-        this._button.disabled = true;
-    },
-    stopLoading: function stopLoading() {
-        this.isLoading = false;
-        this._container.className = this._container.className.split(" ").filter(function(cls) {
-            return cls !== "custom-button-loading";
-        }).join(" ");
-        if (this._spinner) {
-            this._spinner.style.display = "none";
-        }
-        if (this._buttonText) {
-            this._buttonText.textContent = this._originalText;
-        }
-        this._button.disabled = !!this._options.disabled;
-    },
-    setTooltip: function setTooltip(tooltip) {
-        if (typeof tooltip === "undefined") return;
-        this._options.tooltip = tooltip;
-        this._button.title = tooltip || "";
-    },
-    triggerClickEvent: function triggerClickEvent(e) {
-        var detail = {
-            originalEvent: e,
-            button: this
-        };
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "button:click",
-                detail: detail
-            });
-        });
-    },
-    triggerEvent: function triggerEvent(eventName, detail) {
-        detail = detail || {};
-        detail.button = this;
-        this._subscribers.forEach(function(cb) {
-            cb({
-                type: "button:" + eventName,
-                detail: detail
-            });
-        });
-    },
-    updateState: function updateState() {
-        if (this._options.disabled) {
-            this.disable();
-        } else {
-            this.enable();
-        }
-        if (this._options.loading) {
-            this.startLoading();
-        }
-    },
-    destroy: function destroy() {
-        this._subscribers = [];
-        if (this._boundHandles) {
-            try {
-                this._button.removeEventListener("click", this._boundHandles.click);
-                this._button.removeEventListener("mouseenter", this._boundHandles.mouseenter);
-                this._button.removeEventListener("mouseleave", this._boundHandles.mouseleave);
-                this._button.removeEventListener("focus", this._boundHandles.focus);
-                this._button.removeEventListener("blur", this._boundHandles.blur);
-                this._button.removeEventListener("keydown", this._boundHandles.keydown);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        this._container.innerHTML = "";
-        var containerClasses = this._container.className.split(" ").filter(function(cls) {
-            return cls !== "custom-button-container";
-        }).join(" ");
-        this._container.className = containerClasses;
+function Message(t, e) {
+  if ("string" == typeof t) {
+    var i = document.getElementById(t);
+    i instanceof HTMLElement && (t = i);
+  }
+  if (!(t instanceof HTMLElement)) throw new Error("Invalid container element");
+  this.container = t, this._options = Object.assign(this._options, e), this._isShow = false;
+}
+function Button(t, e) {
+  var i = this;
+  if ("string" == typeof t) {
+    var s = document.getElementById(t);
+    s instanceof HTMLButtonElement && (t = s);
+  }
+  if (!(t instanceof HTMLButtonElement)) throw new Error("Invalid button");
+  this._button = t, this._container = document.createElement("div"), this._options = e || {}, this._options.text = this._options.text || t.textContent.trim(), this._options.type = this._options.type || "button", this._options.variant = this._options.variant || "primary", this._options.size = this._options.size || "medium", this._options.iconPosition = this._options.iconPosition || "left", this.isLoading = false, this._originalText = this._options.text, this._subscribers = [], this._boundHandles = { click: function(t2) {
+    i._handleClick(t2);
+  }, mouseenter: function() {
+    i._handleMouseEnter();
+  }, mouseleave: function() {
+    i._handleMouseLeave();
+  }, focus: function() {
+    i._handleFocus();
+  }, blur: function() {
+    i._handleBlur();
+  }, keydown: function(t2) {
+    i._handleKeydown(t2);
+  } }, this._createDOM(), this._bindEvents(), this.updateState();
+}
+ZoteroSdk.prototype.ZOTERO_API_VERSION = "3", ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor", ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson", ZoteroSdk.prototype.STORAGE_KEYS = { USER_ID: "zoteroUserId", API_KEY: "zoteroApiKey" }, ZoteroSdk.prototype.API_PATHS = { USERS: "users", GROUPS: "groups", ITEMS: "items", KEYS: "keys" }, ZoteroSdk.prototype._getBaseUrl = function() {
+  return this._isOnlineAvailable ? zoteroEnvironment.restApiUrl : zoteroEnvironment.desktopApiUrl;
+}, ZoteroSdk.prototype._getDesktopRequest = function(t) {
+  var e = this;
+  return new Promise(function(i, s) {
+    window.AscSimpleRequest.createRequest({ url: t, method: "GET", headers: { "Zotero-API-Version": e.ZOTERO_API_VERSION, "User-Agent": e.USER_AGENT }, complete: i, error: function(t2) {
+      -102 === t2.statusCode && (t2.statusCode = 404, t2.message = "Connection to Zotero failed. Make sure Zotero is running"), s(t2);
+    } });
+  });
+}, ZoteroSdk.prototype._getOnlineRequest = function(t) {
+  var e = { "Zotero-API-Version": this.ZOTERO_API_VERSION, "Zotero-API-Key": this._apiKey || "" };
+  return fetch(t, { headers: e }).then(function(t2) {
+    if (!t2.ok) {
+      var e2 = t2.status + " " + t2.statusText;
+      throw console.error(e2), new Error(e2);
     }
-};
-
-var _container$1 = new WeakMap;
-
-var _input = new WeakMap;
-
-var _visualRadio = new WeakMap;
-
-var _labelElement = new WeakMap;
-
-var _options = new WeakMap;
-
-var _handlers = new WeakMap;
-
-var _subscribers = new WeakMap;
-
-var _Radio_brand = new WeakSet;
-
+    return t2;
+  }).catch(function(t2) {
+    throw "object" == typeof t2 && (t2.message = "Connection to Zotero failed"), t2;
+  });
+}, ZoteroSdk.prototype._getRequestWithOfflineSupport = function(t) {
+  return this._isOnlineAvailable ? this._getOnlineRequest(t) : this._getDesktopRequest(t.href);
+}, ZoteroSdk.prototype._buildGetRequest = function(t, e) {
+  e = e || {};
+  var i = new URL(t, this._getBaseUrl());
+  return Object.keys(e).forEach(function(t2) {
+    void 0 !== e[t2] && null !== e[t2] && i.searchParams.append(t2, e[t2]);
+  }), this._getRequestWithOfflineSupport(i);
+}, ZoteroSdk.prototype._parseLinkHeader = function(t) {
+  var e, i = {}, s = /<(.*?)>; rel="(.*?)"/g;
+  if (!t) return i;
+  for (; null !== (e = s.exec(t.trim())); ) i[e[2]] = e[1];
+  return i;
+}, ZoteroSdk.prototype._parseDesktopItemsResponse = function(t, e) {
+  return t.then(function(t2) {
+    return { items: JSON.parse(t2.responseText), id: e };
+  });
+}, ZoteroSdk.prototype._parseItemsResponse = function(t, e) {
+  var i = this;
+  return t.then(function(t2) {
+    return Promise.all([t2.json(), t2]);
+  }).then(function(t2) {
+    var s = t2[0], n = t2[1], a = i._parseLinkHeader(n.headers.get("Link") || ""), r = { items: s, id: e };
+    return "object" == typeof s && s.items && (r.items = s.items), a.next && (r.next = function() {
+      return i._parseItemsResponse(i._getOnlineRequest(new URL(a.next)), e);
+    }), r;
+  });
+}, ZoteroSdk.prototype._parseResponse = function(t, e) {
+  if (this._isOnlineAvailable) {
+    var i = t;
+    return this._parseItemsResponse(i, e);
+  }
+  var s = t;
+  return this._parseDesktopItemsResponse(s, e);
+}, ZoteroSdk.prototype.getItems = function(t, e, i) {
+  var s = this, n = { format: i = i || s.DEFAULT_FORMAT, itemType: "-attachment" };
+  t ? n.q = t : e ? n.itemKey = e.join(",") : (n.limit = 20, this._isOnlineAvailable || (n.format = "json"));
+  var a = s.API_PATHS.USERS + "/" + s._userId + "/" + s.API_PATHS.ITEMS, r = s._buildGetRequest(a, n);
+  return s._parseResponse(r, s._userId);
+}, ZoteroSdk.prototype.getGroupItems = function(t, e, i, s) {
+  var n = this, a = { format: s = s || n.DEFAULT_FORMAT };
+  t ? a.q = t : i && (a.itemKey = i.join(","));
+  var r = n.API_PATHS.GROUPS + "/" + e + "/" + n.API_PATHS.ITEMS, o = n._buildGetRequest(r, a);
+  return n._parseResponse(o, e);
+}, ZoteroSdk.prototype.getUserGroups = function() {
+  var t = this;
+  return new Promise(function(e, i) {
+    if (t._userGroups.length > 0) e(t._userGroups);
+    else {
+      var s = t.API_PATHS.USERS + "/" + t._userId + "/groups";
+      t._buildGetRequest(s).then(function(e2) {
+        if (t._isOnlineAvailable) {
+          var i2 = e2;
+          if (!i2.ok) throw new Error(i2.status + " " + i2.statusText);
+          return i2.json();
+        }
+        var s2 = e2;
+        return JSON.parse(s2.responseText);
+      }).then(function(i2) {
+        t._userGroups = i2.map(function(t2) {
+          return { id: t2.id, name: t2.data.name };
+        }), e(t._userGroups);
+      }).catch(i);
+    }
+  });
+}, ZoteroSdk.prototype.setApiKey = function(t) {
+  var e = this, i = this.API_PATHS.KEYS + "/" + t;
+  return this._buildGetRequest(i).then(function(t2) {
+    var e2 = t2;
+    if (!e2.ok) throw new Error(e2.status + " " + e2.statusText);
+    return e2.json();
+  }).then(function(i2) {
+    return e._saveSettings(i2.userID, t), true;
+  });
+}, ZoteroSdk.prototype._applySettings = function(t, e) {
+  this._userId = t, this._apiKey = e;
+}, ZoteroSdk.prototype._saveSettings = function(t, e) {
+  this._applySettings(t, e), localStorage.setItem(this.STORAGE_KEYS.USER_ID, String(t)), localStorage.setItem(this.STORAGE_KEYS.API_KEY, e);
+}, ZoteroSdk.prototype.hasSettings = function() {
+  var t = localStorage.getItem(this.STORAGE_KEYS.USER_ID), e = localStorage.getItem(this.STORAGE_KEYS.API_KEY);
+  return !(!t || !e) && (this._applySettings(Number(t), e), true);
+}, ZoteroSdk.prototype.clearSettings = function() {
+  localStorage.removeItem(this.STORAGE_KEYS.USER_ID), localStorage.removeItem(this.STORAGE_KEYS.API_KEY), this._userGroups = [], this._userId = 0, this._apiKey = null;
+}, ZoteroSdk.prototype.getUserId = function() {
+  return this._userId;
+}, ZoteroSdk.prototype.setIsOnlineAvailable = function(t) {
+  this._isOnlineAvailable = t;
+}, InputField.prototype = { constructor: InputField, input: null, _container: null, _options: {}, _id: "", isFocused: false, isValid: true, _validationMessage: "", _subscribers: [], _boundHandles: null, _clearButton: null, _counter: null, _counterCurrent: null, _counterMax: null, _validationElement: null, _createDOM: function() {
+  var t = this.input.parentNode, e = document.createDocumentFragment();
+  e.appendChild(this._container), this._container.className += " input-field-container  input-field-container-" + this._id;
+  var i = document.createElement("div");
+  this._container.appendChild(i), i.className += " input-field", this._options.disabled && (i.className += " input-field-disabled");
+  var s = document.createElement("div");
+  if (i.appendChild(s), s.className += " input-field-main", this.input.className += " input-field-element", this.input.type = this._options.type || "text", this.input.placeholder = this._options.placeholder || "", this.input.value = String(this._options.value) || "", this._options.disabled && (this.input.disabled = true), this._options.readonly && (this.input.readOnly = true), this._options.required && (this.input.required = true), this._options.maxLength && (this.input.maxLength = this._options.maxLength), this._options.pattern && (this.input.pattern = this._options.pattern), this._options.autocomplete && (this.input.autocomplete = this._options.autocomplete), this._options.showCounter) {
+    this._counter = document.createElement("div"), i.appendChild(this._counter), this._counter.className += " input-field-counter", this._counterCurrent = document.createElement("span"), this._counterCurrent.className += " input-field-counter-current", this._counterCurrent.textContent = "0", this._counter.appendChild(this._counterCurrent);
+    var n = document.createElement("span");
+    n.textContent = "/", this._counter.appendChild(n), this._counterMax = document.createElement("span"), this._counterMax.className += " input-field-counter-max", this._counterMax.textContent = String(this._options.maxLength) || "∞", this._counter.appendChild(this._counterMax);
+  }
+  i.appendChild(this._validationElement), this._validationElement.className += " input-field-validation", this._validationElement.style.display = "none", this._options.showClear && (this.input.className += " input-field-clearable", this._clearButton = document.createElement("button"), i.appendChild(this._clearButton), this._clearButton.className += " input-field-clear", this._clearButton.style.display = "none", this._clearButton.textContent = "×"), this._options.showSearchIcon && (this._searchIcon.classList.add("input-field-search-icon"), this._searchIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" fill="currentColor"/></svg>', s.appendChild(this._searchIcon)), t && t.insertBefore(e, this.input), s.appendChild(this.input);
+}, _bindEvents: function() {
+  this.input.addEventListener("focus", this._boundHandles.focus), this.input.addEventListener("blur", this._boundHandles.blur), this.input.addEventListener("input", this._boundHandles.input), this.input.addEventListener("keydown", this._boundHandles.keydown), this._clearButton && this._clearButton.addEventListener("click", this._boundHandles.clear), this._options.showSearchIcon && this._boundHandles.search && this._searchIcon.addEventListener("click", this._boundHandles.search), this.input.addEventListener("change", this._boundHandles.validate);
+}, _handleFocus: function(t) {
+  this.isFocused = true, this._container.className += " input-field-focused", this._updateClearButton(), this._triggerFocusEvent(t);
+}, _handleBlur: function(t) {
+  this.isFocused = false;
+  for (var e = this._container.className.split(" "), i = [], s = 0; s < e.length; s++) "input-field-focused" !== e[s] && i.push(e[s]);
+  this._container.className = i.join(" "), this.validate(), this._triggerBlurEvent(t);
+}, _handleInput: function(t) {
+  this._updateClearButton(), this._updateCounter(), this._triggerInputEvent(t);
+}, _handleKeydown: function(t) {
+  var e = t.key || t.keyCode;
+  "Escape" !== e && 27 !== e || !this._options.showClear || (this.clear(), t.preventDefault()), "Enter" !== e && 13 !== e || this._triggerSubmit();
+}, _updateClearButton: function() {
+  if (this._clearButton) {
+    var t = this.input.value.length > 0;
+    this._clearButton.style.display = t ? "block" : "none";
+  }
+}, _updateCounter: function() {
+  if (this._counter && this._options.maxLength) {
+    var t = this.input.value.length, e = this._options.maxLength;
+    if (this._counterCurrent && (this._counterCurrent.textContent = String(t)), this._counterMax && (this._counterMax.textContent = String(e)), t > 0.9 * e) -1 === this._counter.className.split(" ").indexOf("input-field-counter-warning") && (this._counter.className += " input-field-counter-warning");
+    else this._counter.className = this._counter.className.split(" ").filter(function(t2) {
+      return "input-field-counter-warning" !== t2;
+    }).join(" ");
+    if (t > e) -1 === this._counter.className.split(" ").indexOf("input-field-counter-error") && (this._counter.className += " input-field-counter-error");
+    else this._counter.className = this._counter.className.split(" ").filter(function(t2) {
+      return "input-field-counter-error" !== t2;
+    }).join(" ");
+  }
+}, validate: function() {
+  if (!this._options.validation) return this.isValid = true, true;
+  var t = this.input.value, e = true, i = "";
+  if (this._options.required && !t.trim() ? (e = false, i = "This field is required") : this._options.minLength && t.length < this._options.minLength ? (e = false, i = "Minimum length is " + this._options.minLength + " characters") : this._options.maxLength && t.length > this._options.maxLength ? (e = false, i = "Maximum length is " + this._options.maxLength + " characters") : this._options.pattern && !new RegExp(this._options.pattern).test(t) && (e = false, i = "Invalid format"), e && "function" == typeof this._options.validation) {
+    var s = this._options.validation(t);
+    s && !s.isValid && (e = false, i = s.message || "Invalid value");
+  }
+  return this.isValid = e, this._validationMessage = i, this.updateValidationState(), e;
+}, updateValidationState: function() {
+  if (this.isValid) if (this.input.value.length > 0) {
+    this._validationElement.style.display = "none", -1 === this._container.className.split(" ").indexOf("input-field-valid") && (this._container.className += " input-field-valid"), this._container.className = this._container.className.split(" ").filter(function(t) {
+      return "input-field-invalid" !== t;
+    }).join(" ");
+  } else this._validationElement.style.display = "none", this._container.className = this._container.className.split(" ").filter(function(t) {
+    return "input-field-valid" !== t && "input-field-invalid" !== t;
+  }).join(" ");
+  else this._validationElement.textContent = this._validationMessage, this._validationElement.style.display = "block", -1 === this._container.className.split(" ").indexOf("input-field-invalid") && (this._container.className += " input-field-invalid"), this._container.className = this._container.className.split(" ").filter(function(t) {
+    return "input-field-valid" !== t;
+  }).join(" ");
+}, _updateState: function() {
+  this._updateClearButton(), this._updateCounter(), this.validate();
+}, getValue: function() {
+  return this.input.value.trim();
+}, setValue: function(t) {
+  this.input.value = t, this._updateState(), this._triggerChange();
+}, setPlaceholder: function(t) {
+  this.input.placeholder = t, this._options.placeholder = t;
+}, clear: function(t) {
+  t = void 0 === t || t, this.setValue(""), t && this.input.focus();
+}, focus: function() {
+  this.input.focus();
+}, blur: function() {
+  this.input.blur();
+}, enable: function() {
+  this.input.disabled = false, this._options.disabled = false, this._container.className = this._container.className.split(" ").filter(function(t) {
+    return "input-field-disabled" !== t;
+  }).join(" ");
+}, disable: function() {
+  this.input.disabled = true, this._options.disabled = true, -1 === this._container.className.split(" ").indexOf("input-field-disabled") && (this._container.className += " input-field-disabled");
+}, subscribe: function(t) {
+  var e = this;
+  return this._subscribers.push(t), { unsubscribe: function() {
+    e._subscribers = e._subscribers.filter(function(e2) {
+      return e2 !== t;
+    });
+  } };
+}, _triggerInputEvent: function(t) {
+  var e = { value: this.input.value, originalEvent: t };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "inputfield:input", detail: e });
+  });
+}, _triggerFocusEvent: function(t) {
+  var e = { value: this.input.value, originalEvent: t };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "inputfield:focus", detail: e });
+  });
+}, _triggerBlurEvent: function(t) {
+  var e = { value: this.input.value, originalEvent: t };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "inputfield:blur", detail: e });
+  });
+}, _triggerChange: function() {
+  var t = { value: this.input.value, isValid: this.isValid };
+  this._subscribers.forEach(function(e) {
+    e({ type: "inputfield:change", detail: t });
+  });
+}, _triggerSubmit: function() {
+  var t = { value: this.input.value, isValid: this.isValid };
+  this._subscribers.forEach(function(e) {
+    e({ type: "inputfield:submit", detail: t });
+  });
+}, destroy: function() {
+  if (this._subscribers = [], this._boundHandles) try {
+    this.input.removeEventListener("focus", this._boundHandles.focus), this.input.removeEventListener("blur", this._boundHandles.blur), this.input.removeEventListener("input", this._boundHandles.input), this.input.removeEventListener("keydown", this._boundHandles.keydown), this._clearButton && this._clearButton.removeEventListener("click", this._boundHandles.clear), this._options.showSearchIcon && this._boundHandles.search && this._searchIcon.removeEventListener("click", this._boundHandles.search), this.input.removeEventListener("change", this._boundHandles.validate);
+  } catch (t) {
+    console.error(t);
+  }
+  this._container.innerHTML = "", this._container.className = this._container.className.split(" ").filter(function(t) {
+    return "input-field-container" !== t;
+  }).join(" ");
+} }, Message.prototype = { constructor: Message, _options: { type: "info", text: "", title: "", duration: 0, closeButton: true, autoClose: false, closeOnClickOutside: true }, _outsideClickListener: null, _element: null, _timeoutId: null, _create: function() {
+  var t = document.createElement("div");
+  t.className = "message message-" + this._options.type, t.setAttribute("role", "alert");
+  var e = this._options.title;
+  if (!e) switch (e = "Error", this._options.type) {
+    case "success":
+      e = "Success";
+      break;
+    case "warning":
+      e = "Warning";
+      break;
+    case "info":
+      e = "Information";
+  }
+  var i = this._options.text;
+  if (!i) switch (i = "", this._options.type) {
+    case "success":
+      i = "Operation completed successfully.";
+      break;
+    case "warning":
+      i = "Please be cautious.";
+      break;
+    case "error":
+      i = "Something went wrong.";
+  }
+  if (t.innerHTML = '<div class="message-content"><span class="message-title">' + e + '</span><span class="message-text">' + i + "</span></div>", this._options.closeButton) {
+    var s = document.createElement("button");
+    s.className = "message-close", s.textContent = "×", s.setAttribute("aria-label", "Close"), s.onclick = this.close.bind(this), t.appendChild(s);
+  }
+  return t;
+}, addOutsideClickListener: function() {
+  this._outsideClickListener && document.removeEventListener("click", this._outsideClickListener);
+  var t = this;
+  this._outsideClickListener = function(e) {
+    e.target instanceof HTMLElement != false && t._element && !t._element.contains(e.target) && t.close();
+  }, setTimeout(function() {
+    t._outsideClickListener && document.addEventListener("click", t._outsideClickListener);
+  }, 10);
+}, removeOutsideClickListener: function() {
+  this._outsideClickListener && (document.removeEventListener("click", this._outsideClickListener), this._outsideClickListener = null);
+}, show: function(t, e) {
+  if (this._isShow) return this;
+  this._isShow = true, this.container.classList.contains("message-container") || this.container.classList.add("message-container"), e && (this._options.title = e), t && (this._options.text = t);
+  var i = this._create();
+  return this._element = i, this.container.appendChild(i), setTimeout(function() {
+    i.style.opacity = "1", i.style.transform = "translateY(0)";
+  }, 10), this._options.autoClose && Number(this._options.duration) > 0 && (this._timeoutId = setTimeout(this.close.bind(this), this._options.duration)), this._options.closeOnClickOutside && this.addOutsideClickListener(), this;
+}, close: function() {
+  if (this._isShow = false, this._element && this._element.parentNode) {
+    this._timeoutId && (clearTimeout(this._timeoutId), this._timeoutId = null), this.removeOutsideClickListener();
+    var t = this._element;
+    t.style.opacity = "0", t.style.transform = "translateY(-20px)", setTimeout(function() {
+      t.parentNode && t.parentNode.removeChild(t);
+    }, 300);
+  }
+} }, Button.prototype = { constructor: Button, _button: null, _buttonText: null, _spinner: null, _badgeElement: null, _createDOM: function() {
+  var t = this._button.parentNode, e = document.createDocumentFragment();
+  if (e.appendChild(this._container), this._container.className += " custom-button-container", this._button.className += " custom-button", this._button.className += " custom-button-" + this._options.variant, this._button.className += " custom-button-" + this._options.size, this._options.disabled && (this._button.className += " custom-button-disabled"), this._options.loading && (this._container.className += " custom-button-loading"), this._options.type && (this._button.type = this._options.type), this._options.tooltip && (this._button.title = this._options.tooltip), this._options.disabled && (this._button.disabled = true), this._options.text) if (this._button.textContent = "", this._buttonText = document.createElement("span"), this._buttonText.className = "custom-button-text", this._buttonText.textContent = this._options.text || "", this._options.icon) {
+    var i = document.createElement("span");
+    i.className = "custom-button-icon", "left" === this._options.iconPosition ? (i.className += " custom-button-icon-left", this._button.appendChild(i), this._button.appendChild(this._buttonText)) : (i.className += " custom-button-icon-right", this._button.appendChild(this._buttonText), this._button.appendChild(i)), i.innerHTML = this._options.icon;
+  } else this._button.appendChild(this._buttonText);
+  this._options.loading && (this._spinner = document.createElement("span"), this._spinner.className = "custom-button-spinner", this._button.appendChild(this._spinner)), this._options.badge && (this._badgeElement = document.createElement("span"), this._badgeElement.className = "custom-button-badge", this._badgeElement.textContent = this._options.badge, this._button.appendChild(this._badgeElement)), t && t.insertBefore(e, this._button), this._container.appendChild(this._button);
+}, _bindEvents: function() {
+  this._button.addEventListener("click", this._boundHandles.click), this._button.addEventListener("mouseenter", this._boundHandles.mouseenter), this._button.addEventListener("mouseleave", this._boundHandles.mouseleave), this._button.addEventListener("focus", this._boundHandles.focus), this._button.addEventListener("blur", this._boundHandles.blur), this._button.addEventListener("keydown", this._boundHandles.keydown);
+}, _handleClick: function(t) {
+  if (this._options.disabled || this.isLoading) return t.preventDefault(), void t.stopPropagation();
+  this.triggerClickEvent(t);
+}, _handleMouseEnter: function() {
+  -1 === this._button.className.split(" ").indexOf("custom-button-hover") && (this._button.className += " custom-button-hover"), this.triggerEvent("mouseenter");
+}, _handleMouseLeave: function() {
+  this._button.className = this._button.className.split(" ").filter(function(t) {
+    return "custom-button-hover" !== t;
+  }).join(" "), this.triggerEvent("mouseleave");
+}, _handleFocus: function() {
+  -1 === this._button.className.split(" ").indexOf("custom-button-focused") && (this._button.className += " custom-button-focused"), this.triggerEvent("focus");
+}, _handleBlur: function() {
+  this._button.className = this._button.className.split(" ").filter(function(t) {
+    return "custom-button-focused" !== t;
+  }).join(" "), this.triggerEvent("blur");
+}, _handleKeydown: function(t) {
+  var e = t.key || t.keyCode;
+  " " === e || "Enter" === e || 32 === e || 13 === e ? "BUTTON" === this._button.tagName || (t.preventDefault(), this._button.click()) : "Escape" !== e && 27 !== e || this._button.blur(), this.triggerEvent("keydown", { key: e });
+}, subscribe: function(t) {
+  var e = this;
+  return this._subscribers.push(t), { unsubscribe: function() {
+    e._subscribers = e._subscribers.filter(function(e2) {
+      return e2 !== t;
+    });
+  } };
+}, setText: function(t) {
+  void 0 !== t && (this._options.text = t, this._buttonText || (this._buttonText = document.createElement("span"), this._buttonText.className = "custom-button-text", this._buttonText.textContent = "", this._button.appendChild(this._buttonText)), this._buttonText.textContent = t);
+}, setIcon: function(t, e) {
+  this._options.icon = t, this._options.iconPosition = e || "left";
+}, setBadge: function(t) {
+  void 0 !== t && (this._options.badge = t, this._badgeElement && (this._badgeElement.textContent = t, this._badgeElement.style.display = t ? "flex" : "none"));
+}, setVariant: function(t) {
+  if (void 0 !== t) {
+    var e = "custom-button-" + this._options.variant, i = "custom-button-" + t;
+    this._button.className = this._button.className.split(" ").filter(function(t2) {
+      return t2 !== e;
+    }).join(" ") + " " + i, this._options.variant = t;
+  }
+}, setSize: function(t) {
+  if (void 0 !== t) {
+    var e = "custom-button-" + this._options.size, i = "custom-button-" + t;
+    this._button.className = this._button.className.split(" ").filter(function(t2) {
+      return t2 !== e;
+    }).join(" ") + " " + i, this._options.size = t;
+  }
+}, enable: function() {
+  this._options.disabled = false, this._button.disabled = false, this._button.className = this._button.className.split(" ").filter(function(t) {
+    return "custom-button-disabled" !== t;
+  }).join(" ");
+}, disable: function() {
+  this._options.disabled = true, this._button.disabled = true, -1 === this._button.className.split(" ").indexOf("custom-button-disabled") && (this._button.className += " custom-button-disabled");
+}, startLoading: function() {
+  this.isLoading = true, void 0 !== this._options.text && (this._originalText = this._options.text), -1 === this._container.className.split(" ").indexOf("custom-button-loading") && (this._container.className += " custom-button-loading"), this._spinner && (this._spinner.style.display = "inline-block"), this._buttonText && (this._buttonText.textContent = "Loading..."), this._button.disabled = true;
+}, stopLoading: function() {
+  this.isLoading = false, this._container.className = this._container.className.split(" ").filter(function(t) {
+    return "custom-button-loading" !== t;
+  }).join(" "), this._spinner && (this._spinner.style.display = "none"), this._buttonText && (this._buttonText.textContent = this._originalText), this._button.disabled = !!this._options.disabled;
+}, setTooltip: function(t) {
+  void 0 !== t && (this._options.tooltip = t, this._button.title = t || "");
+}, triggerClickEvent: function(t) {
+  var e = { originalEvent: t, button: this };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "button:click", detail: e });
+  });
+}, triggerEvent: function(t, e) {
+  (e = e || {}).button = this, this._subscribers.forEach(function(i) {
+    i({ type: "button:" + t, detail: e });
+  });
+}, updateState: function() {
+  this._options.disabled ? this.disable() : this.enable(), this._options.loading && this.startLoading();
+}, destroy: function() {
+  if (this._subscribers = [], this._boundHandles) try {
+    this._button.removeEventListener("click", this._boundHandles.click), this._button.removeEventListener("mouseenter", this._boundHandles.mouseenter), this._button.removeEventListener("mouseleave", this._boundHandles.mouseleave), this._button.removeEventListener("focus", this._boundHandles.focus), this._button.removeEventListener("blur", this._boundHandles.blur), this._button.removeEventListener("keydown", this._boundHandles.keydown);
+  } catch (t2) {
+    console.error(t2);
+  }
+  this._container.innerHTML = "";
+  var t = this._container.className.split(" ").filter(function(t2) {
+    return "custom-button-container" !== t2;
+  }).join(" ");
+  this._container.className = t;
+} };
+var _container$1 = /* @__PURE__ */ new WeakMap(), _input = /* @__PURE__ */ new WeakMap(), _visualRadio = /* @__PURE__ */ new WeakMap(), _labelElement = /* @__PURE__ */ new WeakMap(), _options = /* @__PURE__ */ new WeakMap(), _handlers = /* @__PURE__ */ new WeakMap(), _subscribers = /* @__PURE__ */ new WeakMap(), _Radio_brand = /* @__PURE__ */ new WeakSet();
 class Radio {
-    constructor(_radio, options) {
-        _classPrivateMethodInitSpec(this, _Radio_brand);
-        _classPrivateFieldInitSpec(this, _container$1, void 0);
-        _classPrivateFieldInitSpec(this, _input, void 0);
-        _classPrivateFieldInitSpec(this, _visualRadio, void 0);
-        _classPrivateFieldInitSpec(this, _labelElement, null);
-        _classPrivateFieldInitSpec(this, _options, void 0);
-        _classPrivateFieldInitSpec(this, _handlers, new Map);
-        _classPrivateFieldInitSpec(this, _subscribers, []);
-        if (typeof _radio === "string") {
-            var temp = document.getElementById(_radio);
-            if (temp instanceof HTMLInputElement) {
-                _radio = temp;
-            }
-        }
-        if (!(_radio instanceof HTMLInputElement)) {
-            throw new Error("Invalid input element");
-        }
-        _classPrivateFieldSet2(_input, this, _radio);
-        _classPrivateFieldSet2(_options, this, Object.assign({
-            id: "radio_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)),
-            checked: false,
-            disabled: false,
-            indeterminate: false,
-            label: "",
-            name: "",
-            value: "on"
-        }, options));
-        _assertClassBrand(_Radio_brand, this, _applyInputAttributes).call(this);
-        _classPrivateFieldSet2(_container$1, this, document.createElement("div"));
-        _classPrivateFieldSet2(_visualRadio, this, document.createElement("span"));
-        _assertClassBrand(_Radio_brand, this, _createDOM$2).call(this);
-        _assertClassBrand(_Radio_brand, this, _setupEventListeners).call(this);
-        _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
-        if (!_classPrivateFieldGet2(_options, this).name) {
-            throw new Error("Name attribute is required");
-        }
-        var sameNameInstances = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
-        if (!sameNameInstances) {
-            sameNameInstances = new Array;
-            _instances$1._.set(_classPrivateFieldGet2(_options, this).name, sameNameInstances);
-        }
-        sameNameInstances.push(this);
+  constructor(t, e) {
+    if (_classPrivateMethodInitSpec(this, _Radio_brand), _classPrivateFieldInitSpec(this, _container$1, void 0), _classPrivateFieldInitSpec(this, _input, void 0), _classPrivateFieldInitSpec(this, _visualRadio, void 0), _classPrivateFieldInitSpec(this, _labelElement, null), _classPrivateFieldInitSpec(this, _options, void 0), _classPrivateFieldInitSpec(this, _handlers, /* @__PURE__ */ new Map()), _classPrivateFieldInitSpec(this, _subscribers, []), "string" == typeof t) {
+      var i = document.getElementById(t);
+      i instanceof HTMLInputElement && (t = i);
     }
-    subscribe(callback) {
-        var self = this;
-        _classPrivateFieldGet2(_subscribers, this).push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                _classPrivateFieldSet2(_subscribers, self, _classPrivateFieldGet2(_subscribers, self).filter(function(cb) {
-                    return cb !== callback;
-                }));
-            }
-        };
-    }
-    getElement() {
-        return _classPrivateFieldGet2(_container$1, this);
-    }
-    check(bSilent) {
-        if (_classPrivateFieldGet2(_options, this).disabled || _classPrivateFieldGet2(_options, this).checked) return;
-        if (_classPrivateFieldGet2(_options, this).name) {
-            var radios = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
-            radios && radios.forEach(radio => {
-                if (radio !== this && _classPrivateFieldGet2(_options, radio).checked) {
-                    radio.uncheck();
-                }
-            });
-        }
-        _classPrivateFieldGet2(_options, this).checked = true;
-        _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
-        if (bSilent) return;
-        _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this);
-    }
-    uncheck(bSilent) {
-        if (_classPrivateFieldGet2(_options, this).disabled || !_classPrivateFieldGet2(_options, this).checked) return;
-        _classPrivateFieldGet2(_options, this).checked = false;
-        _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this);
-        if (bSilent) return;
-        _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this);
-    }
-    enable() {
-        if (!_classPrivateFieldGet2(_options, this).disabled) return;
-        _classPrivateFieldGet2(_options, this).disabled = false;
-        _classPrivateFieldGet2(_input, this).disabled = false;
-        _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", "false");
-        if (_classPrivateFieldGet2(_options, this).checked) {
-            _classPrivateFieldGet2(_container$1, this).tabIndex = 0;
-        } else {
-            _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
-        }
-        _classPrivateFieldGet2(_container$1, this).classList.remove("radio--disabled");
-    }
-    disable() {
-        if (_classPrivateFieldGet2(_options, this).disabled) return;
-        _classPrivateFieldGet2(_options, this).disabled = true;
-        _classPrivateFieldGet2(_input, this).disabled = true;
-        _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", "true");
-        _classPrivateFieldGet2(_container$1, this).tabIndex = -1;
-        _classPrivateFieldGet2(_container$1, this).classList.add("radio--disabled");
-    }
-    setLabel(label) {
-        _classPrivateFieldGet2(_options, this).label = label;
-        if (_classPrivateFieldGet2(_labelElement, this)) {
-            _classPrivateFieldGet2(_labelElement, this).textContent = label;
-        } else if (label) {
-            _classPrivateFieldSet2(_labelElement, this, document.createElement("label"));
-            _classPrivateFieldGet2(_labelElement, this).className = "radio-label";
-            _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id);
-            _classPrivateFieldGet2(_labelElement, this).textContent = label;
-            _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_labelElement, this));
-        }
-    }
-    getState() {
-        return {
-            checked: !!_classPrivateFieldGet2(_options, this).checked,
-            disabled: !!_classPrivateFieldGet2(_options, this).disabled,
-            value: _classPrivateFieldGet2(_options, this).value || "",
-            name: _classPrivateFieldGet2(_options, this).name || ""
-        };
-    }
-    destroy() {
-        _classPrivateFieldSet2(_subscribers, this, []);
-        if (!_classPrivateFieldGet2(_options, this).name) return;
-        var sameNameInstances = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
-        if (sameNameInstances) {
-            var index = sameNameInstances.indexOf(this);
-            if (index >= 0) sameNameInstances.splice(index, 1);
-        }
-        _classPrivateFieldGet2(_handlers, this).forEach((handler, event) => {
-            _classPrivateFieldGet2(_container$1, this).removeEventListener(event, handler);
+    if (!(t instanceof HTMLInputElement)) throw new Error("Invalid input element");
+    if (_classPrivateFieldSet2(_input, this, t), _classPrivateFieldSet2(_options, this, Object.assign({ id: "radio_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)), checked: false, disabled: false, indeterminate: false, label: "", name: "", value: "on" }, e)), _assertClassBrand(_Radio_brand, this, _applyInputAttributes).call(this), _classPrivateFieldSet2(_container$1, this, document.createElement("div")), _classPrivateFieldSet2(_visualRadio, this, document.createElement("span")), _assertClassBrand(_Radio_brand, this, _createDOM$2).call(this), _assertClassBrand(_Radio_brand, this, _setupEventListeners).call(this), _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this), !_classPrivateFieldGet2(_options, this).name) throw new Error("Name attribute is required");
+    var s = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
+    s || (s = new Array(), _instances$1._.set(_classPrivateFieldGet2(_options, this).name, s)), s.push(this);
+  }
+  subscribe(t) {
+    var e = this;
+    return _classPrivateFieldGet2(_subscribers, this).push(t), { unsubscribe: function() {
+      _classPrivateFieldSet2(_subscribers, e, _classPrivateFieldGet2(_subscribers, e).filter(function(e2) {
+        return e2 !== t;
+      }));
+    } };
+  }
+  getElement() {
+    return _classPrivateFieldGet2(_container$1, this);
+  }
+  check(t) {
+    if (!_classPrivateFieldGet2(_options, this).disabled && !_classPrivateFieldGet2(_options, this).checked) {
+      if (_classPrivateFieldGet2(_options, this).name) {
+        var e = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
+        e && e.forEach((t2) => {
+          t2 !== this && _classPrivateFieldGet2(_options, t2).checked && t2.uncheck();
         });
-        _classPrivateFieldGet2(_handlers, this).clear();
-        if (_classPrivateFieldGet2(_container$1, this) && _classPrivateFieldGet2(_container$1, this).parentNode) {
-            _classPrivateFieldGet2(_container$1, this).parentNode.removeChild(_classPrivateFieldGet2(_container$1, this));
-        }
-        _classPrivateFieldSet2(_labelElement, this, null);
+      }
+      _classPrivateFieldGet2(_options, this).checked = true, _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this), t || _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this);
     }
+  }
+  uncheck(t) {
+    !_classPrivateFieldGet2(_options, this).disabled && _classPrivateFieldGet2(_options, this).checked && (_classPrivateFieldGet2(_options, this).checked = false, _assertClassBrand(_Radio_brand, this, _updateVisualState).call(this), t || _assertClassBrand(_Radio_brand, this, _triggerChange$1).call(this));
+  }
+  enable() {
+    _classPrivateFieldGet2(_options, this).disabled && (_classPrivateFieldGet2(_options, this).disabled = false, _classPrivateFieldGet2(_input, this).disabled = false, _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", "false"), _classPrivateFieldGet2(_options, this).checked ? _classPrivateFieldGet2(_container$1, this).tabIndex = 0 : _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this), _classPrivateFieldGet2(_container$1, this).classList.remove("radio--disabled"));
+  }
+  disable() {
+    _classPrivateFieldGet2(_options, this).disabled || (_classPrivateFieldGet2(_options, this).disabled = true, _classPrivateFieldGet2(_input, this).disabled = true, _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", "true"), _classPrivateFieldGet2(_container$1, this).tabIndex = -1, _classPrivateFieldGet2(_container$1, this).classList.add("radio--disabled"));
+  }
+  setLabel(t) {
+    _classPrivateFieldGet2(_options, this).label = t, _classPrivateFieldGet2(_labelElement, this) ? _classPrivateFieldGet2(_labelElement, this).textContent = t : t && (_classPrivateFieldSet2(_labelElement, this, document.createElement("label")), _classPrivateFieldGet2(_labelElement, this).className = "radio-label", _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id), _classPrivateFieldGet2(_labelElement, this).textContent = t, _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_labelElement, this)));
+  }
+  getState() {
+    return { checked: !!_classPrivateFieldGet2(_options, this).checked, disabled: !!_classPrivateFieldGet2(_options, this).disabled, value: _classPrivateFieldGet2(_options, this).value || "", name: _classPrivateFieldGet2(_options, this).name || "" };
+  }
+  destroy() {
+    if (_classPrivateFieldSet2(_subscribers, this, []), _classPrivateFieldGet2(_options, this).name) {
+      var t = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
+      if (t) {
+        var e = t.indexOf(this);
+        e >= 0 && t.splice(e, 1);
+      }
+      _classPrivateFieldGet2(_handlers, this).forEach((t2, e2) => {
+        _classPrivateFieldGet2(_container$1, this).removeEventListener(e2, t2);
+      }), _classPrivateFieldGet2(_handlers, this).clear(), _classPrivateFieldGet2(_container$1, this) && _classPrivateFieldGet2(_container$1, this).parentNode && _classPrivateFieldGet2(_container$1, this).parentNode.removeChild(_classPrivateFieldGet2(_container$1, this)), _classPrivateFieldSet2(_labelElement, this, null);
+    }
+  }
 }
-
 function _applyInputAttributes() {
-    _classPrivateFieldGet2(_input, this).type = "radio";
-    var elId = _classPrivateFieldGet2(_input, this).getAttribute("id");
-    var elName = _classPrivateFieldGet2(_input, this).getAttribute("name");
-    var elValue = _classPrivateFieldGet2(_input, this).getAttribute("value");
-    var elChecked = _classPrivateFieldGet2(_input, this).getAttribute("checked");
-    var elDisabled = _classPrivateFieldGet2(_input, this).getAttribute("disabled");
-    if (elId !== null) {
-        _classPrivateFieldGet2(_options, this).id = elId;
-    } else if (_classPrivateFieldGet2(_options, this).id) {
-        _classPrivateFieldGet2(_input, this).setAttribute("id", _classPrivateFieldGet2(_options, this).id);
-    }
-    if (elName !== null) {
-        _classPrivateFieldGet2(_options, this).name = elName;
-    } else if (_classPrivateFieldGet2(_options, this).name) {
-        _classPrivateFieldGet2(_input, this).setAttribute("name", _classPrivateFieldGet2(_options, this).name);
-    }
-    if (elValue !== null) {
-        _classPrivateFieldGet2(_options, this).value = elValue;
-    } else if (_classPrivateFieldGet2(_options, this).value) {
-        _classPrivateFieldGet2(_input, this).setAttribute("value", _classPrivateFieldGet2(_options, this).value);
-    }
-    if (elChecked !== null) {
-        _classPrivateFieldGet2(_options, this).checked = elChecked === "true";
-    } else if (_classPrivateFieldGet2(_options, this).checked) {
-        _classPrivateFieldGet2(_input, this).setAttribute("checked", "true");
-    }
-    if (elDisabled !== null) {
-        _classPrivateFieldGet2(_options, this).disabled = elDisabled === "true";
-    } else if (_classPrivateFieldGet2(_options, this).disabled) {
-        _classPrivateFieldGet2(_input, this).setAttribute("disabled", "true");
-    }
+  _classPrivateFieldGet2(_input, this).type = "radio";
+  var t = _classPrivateFieldGet2(_input, this).getAttribute("id"), e = _classPrivateFieldGet2(_input, this).getAttribute("name"), i = _classPrivateFieldGet2(_input, this).getAttribute("value"), s = _classPrivateFieldGet2(_input, this).getAttribute("checked"), n = _classPrivateFieldGet2(_input, this).getAttribute("disabled");
+  null !== t ? _classPrivateFieldGet2(_options, this).id = t : _classPrivateFieldGet2(_options, this).id && _classPrivateFieldGet2(_input, this).setAttribute("id", _classPrivateFieldGet2(_options, this).id), null !== e ? _classPrivateFieldGet2(_options, this).name = e : _classPrivateFieldGet2(_options, this).name && _classPrivateFieldGet2(_input, this).setAttribute("name", _classPrivateFieldGet2(_options, this).name), null !== i ? _classPrivateFieldGet2(_options, this).value = i : _classPrivateFieldGet2(_options, this).value && _classPrivateFieldGet2(_input, this).setAttribute("value", _classPrivateFieldGet2(_options, this).value), null !== s ? _classPrivateFieldGet2(_options, this).checked = "true" === s : _classPrivateFieldGet2(_options, this).checked && _classPrivateFieldGet2(_input, this).setAttribute("checked", "true"), null !== n ? _classPrivateFieldGet2(_options, this).disabled = "true" === n : _classPrivateFieldGet2(_options, this).disabled && _classPrivateFieldGet2(_input, this).setAttribute("disabled", "true");
 }
-
 function _createDOM$2() {
-    var parent = _classPrivateFieldGet2(_input, this).parentNode;
-    var fragment = document.createDocumentFragment();
-    fragment.appendChild(_classPrivateFieldGet2(_container$1, this));
-    _classPrivateFieldGet2(_container$1, this).classList.add("radio-button-container");
-    _classPrivateFieldGet2(_container$1, this).setAttribute("role", "radio");
-    _classPrivateFieldGet2(_container$1, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked));
-    _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", String(!!_classPrivateFieldGet2(_options, this).disabled));
-    _classPrivateFieldGet2(_container$1, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
-    _classPrivateFieldGet2(_visualRadio, this).className = "radio-visual";
-    _classPrivateFieldGet2(_visualRadio, this).setAttribute("aria-hidden", "true");
-    if (_classPrivateFieldGet2(_options, this).label) {
-        _classPrivateFieldSet2(_labelElement, this, document.createElement("label"));
-        _classPrivateFieldGet2(_labelElement, this).className = "i18n radio-label";
-        _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id);
-        _classPrivateFieldGet2(_labelElement, this).textContent = _classPrivateFieldGet2(_options, this).label;
-    }
-    if (_classPrivateFieldGet2(_options, this).disabled) {
-        _classPrivateFieldGet2(_container$1, this).classList.add("radio--disabled");
-    }
-    if (parent) {
-        parent.insertBefore(fragment, _classPrivateFieldGet2(_input, this));
-    }
-    _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_input, this));
-    _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_visualRadio, this));
-    if (_classPrivateFieldGet2(_labelElement, this)) {
-        _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_labelElement, this));
-    }
-    _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
+  var t = _classPrivateFieldGet2(_input, this).parentNode, e = document.createDocumentFragment();
+  e.appendChild(_classPrivateFieldGet2(_container$1, this)), _classPrivateFieldGet2(_container$1, this).classList.add("radio-button-container"), _classPrivateFieldGet2(_container$1, this).setAttribute("role", "radio"), _classPrivateFieldGet2(_container$1, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked)), _classPrivateFieldGet2(_container$1, this).setAttribute("aria-disabled", String(!!_classPrivateFieldGet2(_options, this).disabled)), _classPrivateFieldGet2(_container$1, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0, _classPrivateFieldGet2(_visualRadio, this).className = "radio-visual", _classPrivateFieldGet2(_visualRadio, this).setAttribute("aria-hidden", "true"), _classPrivateFieldGet2(_options, this).label && (_classPrivateFieldSet2(_labelElement, this, document.createElement("label")), _classPrivateFieldGet2(_labelElement, this).className = "i18n radio-label", _classPrivateFieldGet2(_labelElement, this).htmlFor = String(_classPrivateFieldGet2(_options, this).id), _classPrivateFieldGet2(_labelElement, this).textContent = _classPrivateFieldGet2(_options, this).label), _classPrivateFieldGet2(_options, this).disabled && _classPrivateFieldGet2(_container$1, this).classList.add("radio--disabled"), t && t.insertBefore(e, _classPrivateFieldGet2(_input, this)), _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_input, this)), _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_visualRadio, this)), _classPrivateFieldGet2(_labelElement, this) && _classPrivateFieldGet2(_container$1, this).appendChild(_classPrivateFieldGet2(_labelElement, this)), _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
 }
-
 function _updateRadioGroupTabIndex() {
-    if (_classPrivateFieldGet2(_options, this).checked) {
-        _classPrivateFieldGet2(_container$1, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
-    } else if (_classPrivateFieldGet2(_options, this).name && _instances$1._.has(_classPrivateFieldGet2(_options, this).name)) {
-        var radios = _instances$1._.get(_classPrivateFieldGet2(_options, this).name);
-        var hasChecked = false;
-        radios && radios.forEach(radio => {
-            if (_classPrivateFieldGet2(_options, radio).checked && radio !== this) {
-                hasChecked = true;
-            }
-        });
-        if (!hasChecked && !_classPrivateFieldGet2(_options, this).checked && !_classPrivateFieldGet2(_options, this).disabled) {
-            _classPrivateFieldGet2(_container$1, this).tabIndex = 0;
-        } else {
-            _classPrivateFieldGet2(_container$1, this).tabIndex = -1;
-        }
-    }
+  if (_classPrivateFieldGet2(_options, this).checked) _classPrivateFieldGet2(_container$1, this).tabIndex = _classPrivateFieldGet2(_options, this).disabled ? -1 : 0;
+  else if (_classPrivateFieldGet2(_options, this).name && _instances$1._.has(_classPrivateFieldGet2(_options, this).name)) {
+    var t = _instances$1._.get(_classPrivateFieldGet2(_options, this).name), e = false;
+    t && t.forEach((t2) => {
+      _classPrivateFieldGet2(_options, t2).checked && t2 !== this && (e = true);
+    }), e || _classPrivateFieldGet2(_options, this).checked || _classPrivateFieldGet2(_options, this).disabled ? _classPrivateFieldGet2(_container$1, this).tabIndex = -1 : _classPrivateFieldGet2(_container$1, this).tabIndex = 0;
+  }
 }
-
 function _setupEventListeners() {
-    var handleClick = e => {
-        e.preventDefault();
-        if (!_classPrivateFieldGet2(_options, this).disabled && !_classPrivateFieldGet2(_options, this).checked) {
-            this.check();
-            _classPrivateFieldGet2(_container$1, this).focus();
-        }
-    };
-    var handleKeyDown = e => {
-        if (_classPrivateFieldGet2(_options, this).disabled) return;
-        switch (e.key) {
-          case " ":
-          case "Spacebar":
-          case "Enter":
-            e.preventDefault();
-            if (!_classPrivateFieldGet2(_options, this).checked) {
-                this.check();
-            }
-            break;
-        }
-    };
-    var handleFocus = () => {
-        _classPrivateFieldGet2(_container$1, this).classList.add("radio--focused");
-    };
-    var handleBlur = () => {
-        _classPrivateFieldGet2(_container$1, this).classList.remove("radio--focused");
-    };
-    _classPrivateFieldGet2(_handlers, this).set("click", handleClick);
-    _classPrivateFieldGet2(_handlers, this).set("keydown", handleKeyDown);
-    _classPrivateFieldGet2(_handlers, this).set("focus", handleFocus);
-    _classPrivateFieldGet2(_handlers, this).set("blur", handleBlur);
-    _classPrivateFieldGet2(_container$1, this).addEventListener("click", handleClick);
-    _classPrivateFieldGet2(_container$1, this).addEventListener("keydown", handleKeyDown);
-    _classPrivateFieldGet2(_container$1, this).addEventListener("focus", handleFocus);
-    _classPrivateFieldGet2(_container$1, this).addEventListener("blur", handleBlur);
-}
-
-function _updateVisualState() {
-    _classPrivateFieldGet2(_container$1, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked));
-    _classPrivateFieldGet2(_container$1, this).classList.toggle("radio--checked", _classPrivateFieldGet2(_options, this).checked);
-    _classPrivateFieldGet2(_input, this).checked = !!_classPrivateFieldGet2(_options, this).checked;
-    _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
-}
-
-function _triggerChange$1(e) {
-    var detail = this.getState();
-    var objEvent = {
-        type: "radio:change",
-        detail: detail
-    };
-    if (e) {
-        objEvent.originalEvent = e;
-    }
-    _classPrivateFieldGet2(_subscribers, this).forEach(function(cb) {
-        cb(objEvent);
-    });
-}
-
-var _instances$1 = {
-    _: new Map
-};
-
-function Checkbox(checkbox, options) {
-    if (typeof checkbox === "string") {
-        var temp = document.getElementById(checkbox);
-        if (temp instanceof HTMLInputElement) {
-            checkbox = temp;
-        }
-    }
-    if (checkbox instanceof HTMLInputElement === false) {
-        throw new Error("Invalid input element");
-    }
-    this._options = Object.assign({
-        id: "checkbox_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)),
-        checked: false,
-        disabled: false,
-        indeterminate: false,
-        label: "",
-        name: "",
-        value: "on"
-    }, options);
-    this._options.disabled = options.disabled || false;
-    this._handlers = new Map;
-    this._createDOM(checkbox);
-    this._setupEventListeners();
-    this._updateVisualState();
-    this._subscribers = [];
-}
-
-Checkbox.prototype = {
-    constructor: Checkbox,
-    _container: null,
-    _input: null,
-    _visualCheckbox: null,
-    _labelElement: null,
-    _createDOM: function _createDOM(checkbox) {
-        var parent = checkbox.parentNode;
-        var fragment = document.createDocumentFragment();
-        this._container = document.createElement("div");
-        fragment.appendChild(this._container);
-        this._container.classList.add("checkbox-container");
-        this._container.setAttribute("role", "checkbox");
-        this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false");
-        this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false");
-        this._container.tabIndex = this._options.disabled ? -1 : 0;
-        this._input = checkbox;
-        var elId = this._input.getAttribute("id");
-        if (elId !== null) {
-            this._options.id = elId;
-        } else if (this._options.id) {
-            this._input.setAttribute("id", this._options.id);
-        }
-        this._input.type = "checkbox";
-        if (this._options.name) {
-            this._input.name = this._options.name;
-        }
-        if (this._options.value) {
-            this._input.value = this._options.value;
-        }
-        this._input.checked = !!this._options.checked;
-        if (this._options.disabled) {
-            this._input.disabled = true;
-        }
-        if (this._options.indeterminate) {
-            this._input.indeterminate = true;
-        }
-        this._visualCheckbox = document.createElement("span");
-        this._visualCheckbox.className = "checkbox-visual";
-        this._visualCheckbox.setAttribute("aria-hidden", "true");
-        var svgNS = "http://www.w3.org/2000/svg";
-        var checkmarkSVG = document.createElementNS(svgNS, "svg");
-        checkmarkSVG.setAttribute("viewBox", "0 0 10 8");
-        checkmarkSVG.setAttribute("class", "checkbox-checkmark");
-        var path = document.createElementNS(svgNS, "path");
-        path.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116");
-        path.setAttribute("fill", "none");
-        path.setAttribute("stroke", "currentColor");
-        path.setAttribute("stroke-width", "2");
-        checkmarkSVG.appendChild(path);
-        this._visualCheckbox.appendChild(checkmarkSVG);
-        var indeterminateLine = document.createElement("span");
-        indeterminateLine.className = "checkbox-indeterminate";
-        this._visualCheckbox.appendChild(indeterminateLine);
-        if (this._options.label) {
-            this._labelElement = document.createElement("label");
-            this._labelElement.className = "checkbox-label i18n";
-            if (this._options.id) this._labelElement.htmlFor = this._options.id;
-            this._labelElement.textContent = this._options.label;
-            if (this._options.title) {
-                this._labelElement.setAttribute("title", this._options.label);
-            }
-        } else {
-            var label = document.querySelector("label[for='" + this._options.id + "']");
-            if (label instanceof HTMLLabelElement) {
-                this._labelElement = label;
-            }
-        }
-        if (this._options.disabled) {
-            this._container.classList.add("checkbox--disabled");
-        }
-        if (parent) {
-            parent.insertBefore(fragment, checkbox);
-        }
-        this._container.appendChild(this._input);
-        this._container.appendChild(this._visualCheckbox);
-        if (this._labelElement) {
-            this._container.appendChild(this._labelElement);
-        }
-    },
-    _setupEventListeners: function _setupEventListeners() {
-        var self = this;
-        if (!this._container) return;
-        var handleClick = function handleClick(e) {
-            e.preventDefault();
-            if (!self._options.disabled && self._container) {
-                self.toggle();
-                self._container.focus();
-            }
-        };
-        var handleKeyDown = function handleKeyDown(e) {
-            if (self._options.disabled) return;
-            switch (e.key) {
-              case " ":
-              case "Spacebar":
-              case "Enter":
-                e.preventDefault();
-                self.toggle();
-                break;
-
-              case "ArrowRight":
-              case "ArrowDown":
-                e.preventDefault();
-                if (!self._options.checked && !self._options.indeterminate) {
-                    self._options.checked ? self.setIndeterminate() : self.check();
-                }
-                break;
-
-              case "ArrowLeft":
-              case "ArrowUp":
-                e.preventDefault();
-                if (self._options.checked || self._options.indeterminate) {
-                    self._options.indeterminate ? self.uncheck() : self.setIndeterminate();
-                }
-                break;
-            }
-        };
-        var handleFocus = function handleFocus() {
-            if (!self._container) return;
-            self._container.classList.add("checkbox--focused");
-        };
-        var handleBlur = function handleBlur() {
-            if (!self._container) return;
-            self._container.classList.remove("checkbox--focused");
-        };
-        this._handlers.set("click", handleClick);
-        this._handlers.set("keydown", handleKeyDown);
-        this._handlers.set("focus", handleFocus);
-        this._handlers.set("blur", handleBlur);
-        this._container.addEventListener("click", handleClick);
-        this._container.addEventListener("keydown", handleKeyDown);
-        this._container.addEventListener("focus", handleFocus);
-        this._container.addEventListener("blur", handleBlur);
-    },
-    _updateVisualState: function _updateVisualState() {
-        if (!this._container || !this._input) return;
-        this._container.setAttribute("aria-checked", this._options.indeterminate ? "mixed" : String(this._options.checked));
-        this._container.classList.toggle("checkbox--checked", this._options.checked);
-        this._container.classList.toggle("checkbox--indeterminate", this._options.indeterminate);
-        this._input.checked = !!this._options.checked;
-        this._input.indeterminate = !!this._options.indeterminate;
-    },
-    toggle: function toggle() {
-        if (this._options.disabled) return !!this._options.checked;
-        if (this._options.indeterminate) {
-            this._options.indeterminate = false;
-            this._options.checked = true;
-        } else {
-            this._options.checked = !this._options.checked;
-        }
-        this._updateVisualState();
-        this._triggerChange();
-        return this._options.checked;
-    },
-    check: function check(bSilent) {
-        if (this._options.disabled || this._options.checked && !this._options.indeterminate) return;
-        this._options.checked = true;
-        this._options.indeterminate = false;
-        this._updateVisualState();
-        if (!bSilent) this._triggerChange();
-    },
-    uncheck: function uncheck(bSilent) {
-        if (this._options.disabled || !this._options.checked && !this._options.indeterminate) return;
-        this._options.checked = false;
-        this._options.indeterminate = false;
-        this._updateVisualState();
-        if (!bSilent) this._triggerChange();
-    },
-    setIndeterminate: function setIndeterminate() {
-        if (this._options.disabled || this._options.indeterminate) return;
-        this._options.indeterminate = true;
-        this._updateVisualState();
-        this._triggerChange();
-    },
-    enable: function enable() {
-        if (!this._options.disabled || !this._container || !this._input) return;
-        this._options.disabled = false;
-        this._input.disabled = false;
-        this._container.setAttribute("aria-disabled", "false");
-        this._container.tabIndex = 0;
-        this._container.classList.remove("checkbox--disabled");
-    },
-    disable: function disable() {
-        if (this._options.disabled || !this._container || !this._input) return;
-        this._options.disabled = true;
-        this._input.disabled = true;
-        this._container.setAttribute("aria-disabled", "true");
-        this._container.tabIndex = -1;
-        this._container.classList.add("checkbox--disabled");
-    },
-    setLabel: function setLabel(label) {
-        this._options.label = label;
-        if (this._labelElement) {
-            this._labelElement.textContent = label;
-        } else if (label && this._container) {
-            this._labelElement = document.createElement("label");
-            this._labelElement.className = "checkbox-label";
-            if (this._options.id) this._labelElement.htmlFor = this._options.id;
-            this._labelElement.textContent = label;
-            this._container.appendChild(this._labelElement);
-        }
-        if (this._options.title && this._labelElement) {
-            this._labelElement.setAttribute("title", label);
-        }
-    },
-    getState: function getState() {
-        if (this._input) {
-            return {
-                checked: this._input.checked,
-                disabled: this._input.disabled,
-                value: this._input.value
-            };
-        }
-        return {
-            checked: false,
-            disabled: false,
-            value: ""
-        };
-    },
-    subscribe: function subscribe(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe: function unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    },
-    _triggerChange: function _triggerChange(e) {
-        var detail = this.getState();
-        var objEvent = {
-            type: "checkbox:change",
-            detail: detail
-        };
-        if (e) {
-            objEvent.originalEvent = e;
-        }
-        this._subscribers.forEach(function(cb) {
-            cb(objEvent);
-        });
-    },
-    destroy: function destroy() {
-        this._subscribers = [];
-        this._handlers.forEach((handler, event) => {
-            this._container && this._container.removeEventListener(event, handler);
-        });
-        this._handlers.clear();
-        if (this._container && this._container.parentNode) {
-            this._container.parentNode.removeChild(this._container);
-        }
-        this._container = null;
-        this._input = null;
-        this._visualCheckbox = null;
-        this._labelElement = null;
-    }
-};
-
-var _SelectBox_brand = new WeakSet;
-
-class SelectBox {
-    constructor(_selectbox, _options) {
-        _classPrivateMethodInitSpec(this, _SelectBox_brand);
-        if (typeof _selectbox === "string") {
-            var temp = document.getElementById(_selectbox);
-            if (temp instanceof HTMLSelectElement) {
-                _selectbox = temp;
-            } else if (temp instanceof HTMLElement) {
-                this._container = temp;
-            } else {
-                throw new Error("Invalid selectbox");
-            }
-        } else if (_selectbox instanceof HTMLElement) {
-            this._container = _selectbox;
-        }
-        if (_selectbox instanceof HTMLSelectElement) {
-            this._selectbox = _selectbox;
-            this._container = document.createElement("div");
-        } else if (this._container instanceof HTMLElement === false) {
-            throw new Error("Invalid container");
-        }
-        this._options = Object.assign(_options, {
-            placeholder: _options.placeholder || "Select...",
-            searchable: _options.searchable || false,
-            sortable: _options.sortable || false,
-            multiple: _options.multiple || false,
-            description: _options.description || ""
-        });
-        this._selectedValues = new Set;
-        this.isOpen = false;
-        this._items = [];
-        this._customItems = [];
-        this._subscribers = [];
-        this._boundHandles = {
-            toggle: e => {
-                _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, e);
-            },
-            search: e => {
-                _assertClassBrand(_SelectBox_brand, this, _handleSearch).call(this, e);
-            },
-            close: e => {
-                if (e.target instanceof HTMLElement && !this._container.contains(e.target) && !e.target.classList.contains("selectbox-option")) {
-                    _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-                }
-            },
-            keydown: e => {
-                _assertClassBrand(_SelectBox_brand, this, _handleKeydown).call(this, e);
-            },
-            dropdownClick: e => {
-                _assertClassBrand(_SelectBox_brand, this, _handleDropdownClick).call(this, e);
-            }
-        };
-        this._optionsContainer = null;
-        this.searchInput = null;
-        this._select = document.createElement("div");
-        this._header = document.createElement("div");
-        this._selectedText = document.createElement("span");
-        this._arrow = document.createElement("span");
-        this._dropdown = document.createElement("div");
-        _assertClassBrand(_SelectBox_brand, this, _createDOM$1).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _bindEvents).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-        _instances._.add(this);
-    }
-    openDropdown() {
-        if (!this.isOpen) {
-            document.addEventListener("click", this._boundHandles.close);
-        }
-        this.isOpen = true;
-        this._dropdown.style.display = "block";
-        this._arrow.className += " selectbox-arrow-open";
-        this._header.className += " selectbox-header-open";
-        if (this.searchInput) {
-            setTimeout(function(self) {
-                return function() {
-                    if (self.searchInput) {
-                        self.searchInput.focus();
-                    }
-                };
-            }(this), 100);
-        }
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-    }
-    subscribe(callback) {
-        var self = this;
-        this._subscribers.push(callback);
-        return {
-            unsubscribe() {
-                self._subscribers = self._subscribers.filter(function(cb) {
-                    return cb !== callback;
-                });
-            }
-        };
-    }
-    addItem(value, text, selected) {
-        selected = selected || false;
-        var bHasItem = this._items.some(item => item && item.value === value);
-        if (bHasItem) {
-            var item = this._items.find(item => item && item.value === value);
-            if (item) item.selected = selected;
-        } else {
-            this._items.push({
-                value: value,
-                text: text,
-                selected: selected
-            });
-            if (this._options.sortable) {
-                this._items.sort((a, b) => !!a && !!b ? a.text.localeCompare(b.text) : !!a ? -1 : !!b ? 1 : 0);
-            }
-        }
-        if (selected) {
-            if (this._options.multiple) {
-                this._selectedValues.add(value);
-            } else {
-                this._selectedValues.clear();
-                this._selectedValues.add(value);
-            }
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    }
-    addItems(values, selectedValue) {
-        var self = this;
-        values.forEach(function(pair, index) {
-            var bHasItem = self._items.some(item => item && item.value === pair[0]);
-            if (bHasItem) return;
-            var isSelected = selectedValue ? pair[0] === selectedValue : index === 0;
-            if (isSelected) {
-                if (self._options.multiple) {
-                    self._selectedValues.add(pair[0]);
-                } else {
-                    self._selectedValues.clear();
-                    self._selectedValues.add(pair[0]);
-                }
-            }
-            self._items.push({
-                value: pair[0],
-                text: pair[1],
-                selected: isSelected
-            });
-        }, this);
-        if (this.isOpen) {
-            _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    }
-    addCustomItem(value, text) {
-        this._customItems.push({
-            value: value,
-            text: text,
-            selected: false
-        });
-    }
-    addSeparator() {
-        this._items.push(null);
-    }
-    removeItem(value) {
-        this._items = this._items.filter(function(item) {
-            if (item === null || item.value !== value) {
-                return true;
-            }
-            return false;
-        });
-        this._customItems = this._customItems.filter(function(item) {
-            if (item === null || item.value !== value) {
-                return true;
-            }
-            return false;
-        });
-        this._selectedValues.delete(value);
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    }
-    getSelectedValue() {
-        if (this._options.multiple) {
-            console.error("Method getSelectedValue is only available for single-select boxes.");
-            return null;
-        } else {
-            var values = Array.from(this._selectedValues);
-            return values.length > 0 ? values[0] : null;
-        }
-    }
-    getSelectedValues() {
-        if (this._options.multiple) {
-            return Array.from(this._selectedValues);
-        } else {
-            var values = Array.from(this._selectedValues);
-            return values.length > 0 ? values[0] : null;
-        }
-    }
-    selectItems(values, bSilent) {
-        var self = this;
-        if (!this._options.multiple && Array.isArray(values)) {
-            console.error("Method selectItem is only available for multi-select boxes.");
-            return;
-        }
-        var value = "";
-        if (this._options.multiple) {
-            var checkMultiOption = function checkMultiOption(value) {
-                if (self._optionsContainer) {
-                    var option = self._optionsContainer.querySelector('[data-value="' + value + '"]');
-                    if (option) {
-                        var checkbox = option.querySelector('input[type="checkbox"]');
-                        if (checkbox && checkbox instanceof HTMLInputElement) {
-                            checkbox.checked = true;
-                        }
-                        option.classList.add("selectbox-option-selected");
-                        option.classList.add("checkbox--checked");
-                    }
-                }
-            };
-            if (Array.isArray(values)) {
-                for (var i = 0; i < values.length; i++) {
-                    value = values[i];
-                    if (!this._selectedValues.has(value)) {
-                        this._selectedValues.add(value);
-                        checkMultiOption(value);
-                    }
-                }
-            } else {
-                value = values;
-                if (!this._selectedValues.has(value)) {
-                    this._selectedValues.add(value);
-                    checkMultiOption(value);
-                }
-            }
-        } else if (!Array.isArray(values)) {
-            value = values;
-            this._selectedValues.clear();
-            this._selectedValues.add(value);
-            if (this._optionsContainer) {
-                var selectedOptions = this._optionsContainer.querySelectorAll('.selectbox-option-selected[data-value="' + value + '"]');
-                selectedOptions.forEach(function(option) {
-                    option.classList.remove("selectbox-option-selected");
-                    option.classList.remove("checkbox--checked");
-                });
-                var option = this._optionsContainer.querySelector('[data-value="' + value + '"]');
-                if (option) {
-                    option.classList.add("selectbox-option-selected");
-                    option.classList.add("checkbox--checked");
-                }
-            }
-            _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        if (bSilent) {
-            return;
-        }
-        _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, true);
-    }
-    unselectItems(values, bSilent) {
-        var self = this;
-        if (!this._options.multiple) {
-            console.error("Method unselectItem is only available for multi-select boxes.");
-            return;
-        }
-        var value = "";
-        var uncheckMultiOption = function uncheckMultiOption(value) {
-            if (self._optionsContainer) {
-                var option = self._optionsContainer.querySelector('[data-value="' + value + '"]');
-                if (option) {
-                    var checkbox = option.querySelector('input[type="checkbox"]');
-                    if (checkbox && checkbox instanceof HTMLInputElement) {
-                        checkbox.checked = false;
-                    }
-                    option.classList.remove("selectbox-option-selected");
-                    option.classList.remove("checkbox--checked");
-                }
-            }
-        };
-        if (Array.isArray(values)) {
-            for (var i = 0; i < values.length; i++) {
-                value = values[i];
-                if (this._selectedValues.has(value)) {
-                    this._selectedValues.delete(value);
-                    uncheckMultiOption(value);
-                }
-            }
-        } else {
-            value = values;
-            if (this._selectedValues.has(value)) {
-                this._selectedValues.delete(value);
-                uncheckMultiOption(value);
-            }
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        if (bSilent) {
-            return;
-        }
-        _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, true);
-    }
-    disable() {
-        this._select.classList.add("selectbox-disabled");
-    }
-    enable() {
-        this._select.classList.remove("selectbox-disabled");
-    }
-    clear(bSelectFirst) {
-        bSelectFirst = bSelectFirst || false;
-        this._selectedValues.clear();
-        if (bSelectFirst && this._items.length > 0) {
-            var firstItem = this._items[0];
-            if (firstItem) {
-                this._selectedValues.add(firstItem.value);
-            }
-        }
-        _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-        _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
-    }
-    destroy() {
-        this._subscribers = [];
-        _instances._.delete(this);
-        try {
-            if (this._header && this._boundHandles) {
-                this._header.removeEventListener("click", this._boundHandles.toggle);
-            }
-            if (this.searchInput && this._boundHandles) {
-                this.searchInput.removeEventListener("input", this._boundHandles.search);
-            }
-            if (this._dropdown && this._boundHandles) {
-                this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick);
-            }
-            if (document && this._boundHandles) {
-                document.removeEventListener("click", this._boundHandles.close);
-            }
-            if (this._header && this._boundHandles) {
-                this._header.removeEventListener("keydown", this._boundHandles.keydown);
-            }
-            if (this._dropdown && this._boundHandles) {
-                this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-        this._container.innerHTML = "";
-        var containerClasses = this._container.className.split(" ");
-        var newClasses = [];
-        for (var i = 0; i < containerClasses.length; i++) {
-            if (containerClasses[i] !== "selectbox-container") {
-                newClasses.push(containerClasses[i]);
-            }
-        }
-        this._container.className = newClasses.join(" ");
-    }
-}
-
-function _createDOM$1() {
-    this._container.innerHTML = "";
-    this._container.className += " selectbox-container";
-    var fragment = document.createDocumentFragment();
-    this._select.className += " selectbox";
-    if (this._options.multiple) {
-        this._select.className += " selectbox-multiple";
-    }
-    fragment.appendChild(this._select);
-    this._header.className += " selectbox-header";
-    this._select.appendChild(this._header);
-    this._header.setAttribute("tabindex", "0");
-    this._selectedText.className += " selectbox-selected-text";
-    this._selectedText.textContent = this._options.placeholder;
-    this._header.appendChild(this._selectedText);
-    this._arrow.className += " selectbox-arrow";
-    this._arrow.innerHTML = "<b></b>";
-    this._header.appendChild(this._arrow);
-    this._dropdown.className += " selectbox-dropdown";
-    this._select.appendChild(this._dropdown);
-    if (this._options.description) {
-        var description = document.createElement("div");
-        description.className += " i18n selectbox-description";
-        description.textContent = this._options.description;
-        this._dropdown.appendChild(description);
-    }
-    if (this._options.searchable) {
-        var search = document.createElement("div");
-        search.className += " selectbox-search";
-        this._dropdown.appendChild(search);
-        this.searchInput = document.createElement("input");
-        this.searchInput.className += " selectbox-search-input";
-        this.searchInput.type = "text";
-        this.searchInput.placeholder = "Search...";
-        search.appendChild(this.searchInput);
-    }
-    this._optionsContainer = document.createElement("div");
-    this._optionsContainer.className += " selectbox-options";
-    this._dropdown.appendChild(this._optionsContainer);
-    this._container.appendChild(fragment);
-    if (this._selectbox) {
-        var parent = this._selectbox.parentNode;
-        if (parent) {
-            parent.insertBefore(this._container, this._selectbox);
-            var options = _assertClassBrand(_SelectBox_brand, this, _extractOptions).call(this, this._selectbox);
-            this.addItems(options.values, options.selectedValue);
-            this._selectbox.remove();
-        }
-    }
-}
-
-function _bindEvents() {
-    this._header.addEventListener("click", this._boundHandles.toggle);
-    if (this.searchInput) {
-        this.searchInput.addEventListener("input", this._boundHandles.search);
-    }
-    this._dropdown.addEventListener("click", this._boundHandles.dropdownClick);
-    this._dropdown.addEventListener("wheel", function(e) {
-        e.stopPropagation();
-    });
-    this._header.addEventListener("keydown", this._boundHandles.keydown);
-    this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
-}
-
-function _toggle(e) {
-    e && e.stopPropagation();
-    this.isOpen ? _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this) : this.openDropdown();
-    if (e && e.type === "click") {
-        for (var selBox of _instances._) {
-            if (selBox.isOpen && selBox !== this) {
-                _assertClassBrand(_SelectBox_brand, selBox, _closeDropdown).call(selBox);
-            }
-        }
-    }
-}
-
-function _closeDropdown() {
-    if (this.isOpen && document && this._boundHandles) {
-        document.removeEventListener("click", this._boundHandles.close);
-    }
-    this.isOpen = false;
-    this._dropdown.style.display = "none";
-    var arrowClasses = this._arrow.className.split(" ");
-    var newArrowClasses = [];
-    for (var i = 0; i < arrowClasses.length; i++) {
-        if (arrowClasses[i] !== "selectbox-arrow-open") {
-            newArrowClasses.push(arrowClasses[i]);
-        }
-    }
-    this._arrow.className = newArrowClasses.join(" ");
-    var headerClasses = this._header.className.split(" ");
-    var newHeaderClasses = [];
-    for (var i = 0; i < headerClasses.length; i++) {
-        if (headerClasses[i] !== "selectbox-header-open") {
-            newHeaderClasses.push(headerClasses[i]);
-        }
-    }
-    this._header.className = newHeaderClasses.join(" ");
-    if (this.searchInput) {
-        this.searchInput.value = "";
-    }
-}
-
-function _handleSearch(e) {
-    var target = e.target;
-    if (!(target instanceof HTMLInputElement)) {
-        return;
-    }
-    var searchTerm = target.value.toLowerCase();
-    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, searchTerm);
-}
-
-function _selectNextPrevItem(direction) {
-    var searchTerm = this.searchInput ? this.searchInput.value.toLowerCase() : "";
-    var newItem;
-    var items = this._items.filter(function(item) {
-        return item !== null;
-    });
-    if (searchTerm) {
-        items = items.filter(function(item) {
-            return item.text.toLowerCase().indexOf(searchTerm) !== -1;
-        });
-    }
-    if (items.length === 0) {
-        return;
-    }
-    if (direction === "up") {
-        if (this._selectedValues.size === 0 && items.length > 0) {
-            newItem = items[items.length - 1];
-            this._selectedValues.add(newItem.value);
-        } else {
-            var selectedArray = Array.from(this._selectedValues);
-            var currentIndex = -1;
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].value === selectedArray[0]) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            var prevIndex = (currentIndex - 1 + items.length) % items.length;
-            this._selectedValues.clear();
-            newItem = items[prevIndex];
-            this._selectedValues.add(newItem.value);
-        }
-    } else {
-        if (this._selectedValues.size === 0 && items.length > 0) {
-            newItem = items[0];
-            this._selectedValues.add(newItem.value);
-        } else {
-            var selectedArray = Array.from(this._selectedValues);
-            var currentIndex = -1;
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].value === selectedArray[0]) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            var nextIndex = (currentIndex + 1) % items.length;
-            if (nextIndex === items.length) {
-                nextIndex = 0;
-            }
-            this._selectedValues.clear();
-            newItem = items[nextIndex];
-            this._selectedValues.add(newItem.value);
-        }
-    }
-    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, searchTerm, true);
-    _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, newItem.value, true);
-}
-
-function _handleKeydown(e) {
-    var key = e.key || e.keyCode;
-    switch (key) {
+  var t = (t2) => {
+    t2.preventDefault(), _classPrivateFieldGet2(_options, this).disabled || _classPrivateFieldGet2(_options, this).checked || (this.check(), _classPrivateFieldGet2(_container$1, this).focus());
+  }, e = (t2) => {
+    if (!_classPrivateFieldGet2(_options, this).disabled) switch (t2.key) {
+      case " ":
+      case "Spacebar":
       case "Enter":
-      case 13:
-        e.preventDefault();
-        _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, e);
-        break;
-
-      case "Escape":
-      case 27:
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-        break;
-
-      case "ArrowDown":
-      case 40:
-        e.preventDefault();
-        _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "down");
-        break;
-
-      case "ArrowUp":
-      case 38:
-        e.preventDefault();
-        _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "up");
-        break;
-
-      case "Tab":
-      case 9:
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-        break;
+        t2.preventDefault(), _classPrivateFieldGet2(_options, this).checked || this.check();
     }
+  }, i = () => {
+    _classPrivateFieldGet2(_container$1, this).classList.add("radio--focused");
+  }, s = () => {
+    _classPrivateFieldGet2(_container$1, this).classList.remove("radio--focused");
+  };
+  _classPrivateFieldGet2(_handlers, this).set("click", t), _classPrivateFieldGet2(_handlers, this).set("keydown", e), _classPrivateFieldGet2(_handlers, this).set("focus", i), _classPrivateFieldGet2(_handlers, this).set("blur", s), _classPrivateFieldGet2(_container$1, this).addEventListener("click", t), _classPrivateFieldGet2(_container$1, this).addEventListener("keydown", e), _classPrivateFieldGet2(_container$1, this).addEventListener("focus", i), _classPrivateFieldGet2(_container$1, this).addEventListener("blur", s);
 }
-
-function _renderOptions(searchTerm, scrollIntoView) {
-    searchTerm = searchTerm || "";
-    if (!this._optionsContainer) return;
-    this._optionsContainer.innerHTML = "";
-    var selectedOption = null;
-    var filteredItems = this._items;
-    if (searchTerm) {
-        filteredItems = filteredItems.filter(function(item) {
-            return item !== null && item.text.toLowerCase().indexOf(searchTerm) !== -1;
-        });
+function _updateVisualState() {
+  _classPrivateFieldGet2(_container$1, this).setAttribute("aria-checked", String(!!_classPrivateFieldGet2(_options, this).checked)), _classPrivateFieldGet2(_container$1, this).classList.toggle("radio--checked", _classPrivateFieldGet2(_options, this).checked), _classPrivateFieldGet2(_input, this).checked = !!_classPrivateFieldGet2(_options, this).checked, _assertClassBrand(_Radio_brand, this, _updateRadioGroupTabIndex).call(this);
+}
+function _triggerChange$1(t) {
+  var e = { type: "radio:change", detail: this.getState() };
+  t && (e.originalEvent = t), _classPrivateFieldGet2(_subscribers, this).forEach(function(t2) {
+    t2(e);
+  });
+}
+var _instances$1 = { _: /* @__PURE__ */ new Map() };
+function Checkbox(t, e) {
+  if ("string" == typeof t) {
+    var i = document.getElementById(t);
+    i instanceof HTMLInputElement && (t = i);
+  }
+  if (t instanceof HTMLInputElement == false) throw new Error("Invalid input element");
+  this._options = Object.assign({ id: "checkbox_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)), checked: false, disabled: false, indeterminate: false, label: "", name: "", value: "on" }, e), this._options.disabled = e.disabled || false, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(t), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
+}
+Checkbox.prototype = { constructor: Checkbox, _container: null, _input: null, _visualCheckbox: null, _labelElement: null, _createDOM: function(t) {
+  var e = t.parentNode, i = document.createDocumentFragment();
+  this._container = document.createElement("div"), i.appendChild(this._container), this._container.classList.add("checkbox-container"), this._container.setAttribute("role", "checkbox"), this._container.setAttribute("aria-checked", this._options.checked ? "true" : "false"), this._container.setAttribute("aria-disabled", this._options.disabled ? "true" : "false"), this._container.tabIndex = this._options.disabled ? -1 : 0, this._input = t;
+  var s = this._input.getAttribute("id");
+  null !== s ? this._options.id = s : this._options.id && this._input.setAttribute("id", this._options.id), this._input.type = "checkbox", this._options.name && (this._input.name = this._options.name), this._options.value && (this._input.value = this._options.value), this._input.checked = !!this._options.checked, this._options.disabled && (this._input.disabled = true), this._options.indeterminate && (this._input.indeterminate = true), this._visualCheckbox = document.createElement("span"), this._visualCheckbox.className = "checkbox-visual", this._visualCheckbox.setAttribute("aria-hidden", "true");
+  var n = "http://www.w3.org/2000/svg", a = document.createElementNS(n, "svg");
+  a.setAttribute("viewBox", "0 0 10 8"), a.setAttribute("class", "checkbox-checkmark");
+  var r = document.createElementNS(n, "path");
+  r.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "2"), a.appendChild(r), this._visualCheckbox.appendChild(a);
+  var o = document.createElement("span");
+  if (o.className = "checkbox-indeterminate", this._visualCheckbox.appendChild(o), this._options.label) this._labelElement = document.createElement("label"), this._labelElement.className = "checkbox-label i18n", this._options.id && (this._labelElement.htmlFor = this._options.id), this._labelElement.textContent = this._options.label, this._options.title && this._labelElement.setAttribute("title", this._options.label);
+  else {
+    var l = document.querySelector("label[for='" + this._options.id + "']");
+    l instanceof HTMLLabelElement && (this._labelElement = l);
+  }
+  this._options.disabled && this._container.classList.add("checkbox--disabled"), e && e.insertBefore(i, t), this._container.appendChild(this._input), this._container.appendChild(this._visualCheckbox), this._labelElement && this._container.appendChild(this._labelElement);
+}, _setupEventListeners: function() {
+  var t = this;
+  if (this._container) {
+    var e = function(e2) {
+      e2.preventDefault(), !t._options.disabled && t._container && (t.toggle(), t._container.focus());
+    }, i = function(e2) {
+      if (!t._options.disabled) switch (e2.key) {
+        case " ":
+        case "Spacebar":
+        case "Enter":
+          e2.preventDefault(), t.toggle();
+          break;
+        case "ArrowRight":
+        case "ArrowDown":
+          e2.preventDefault(), t._options.checked || t._options.indeterminate || (t._options.checked ? t.setIndeterminate() : t.check());
+          break;
+        case "ArrowLeft":
+        case "ArrowUp":
+          e2.preventDefault(), (t._options.checked || t._options.indeterminate) && (t._options.indeterminate ? t.uncheck() : t.setIndeterminate());
+      }
+    }, s = function() {
+      t._container && t._container.classList.add("checkbox--focused");
+    }, n = function() {
+      t._container && t._container.classList.remove("checkbox--focused");
+    };
+    this._handlers.set("click", e), this._handlers.set("keydown", i), this._handlers.set("focus", s), this._handlers.set("blur", n), this._container.addEventListener("click", e), this._container.addEventListener("keydown", i), this._container.addEventListener("focus", s), this._container.addEventListener("blur", n);
+  }
+}, _updateVisualState: function() {
+  this._container && this._input && (this._container.setAttribute("aria-checked", this._options.indeterminate ? "mixed" : String(this._options.checked)), this._container.classList.toggle("checkbox--checked", this._options.checked), this._container.classList.toggle("checkbox--indeterminate", this._options.indeterminate), this._input.checked = !!this._options.checked, this._input.indeterminate = !!this._options.indeterminate);
+}, toggle: function() {
+  return this._options.disabled ? !!this._options.checked : (this._options.indeterminate ? (this._options.indeterminate = false, this._options.checked = true) : this._options.checked = !this._options.checked, this._updateVisualState(), this._triggerChange(), this._options.checked);
+}, check: function(t) {
+  this._options.disabled || this._options.checked && !this._options.indeterminate || (this._options.checked = true, this._options.indeterminate = false, this._updateVisualState(), t || this._triggerChange());
+}, uncheck: function(t) {
+  this._options.disabled || !this._options.checked && !this._options.indeterminate || (this._options.checked = false, this._options.indeterminate = false, this._updateVisualState(), t || this._triggerChange());
+}, setIndeterminate: function() {
+  this._options.disabled || this._options.indeterminate || (this._options.indeterminate = true, this._updateVisualState(), this._triggerChange());
+}, enable: function() {
+  this._options.disabled && this._container && this._input && (this._options.disabled = false, this._input.disabled = false, this._container.setAttribute("aria-disabled", "false"), this._container.tabIndex = 0, this._container.classList.remove("checkbox--disabled"));
+}, disable: function() {
+  !this._options.disabled && this._container && this._input && (this._options.disabled = true, this._input.disabled = true, this._container.setAttribute("aria-disabled", "true"), this._container.tabIndex = -1, this._container.classList.add("checkbox--disabled"));
+}, setLabel: function(t) {
+  this._options.label = t, this._labelElement ? this._labelElement.textContent = t : t && this._container && (this._labelElement = document.createElement("label"), this._labelElement.className = "checkbox-label", this._options.id && (this._labelElement.htmlFor = this._options.id), this._labelElement.textContent = t, this._container.appendChild(this._labelElement)), this._options.title && this._labelElement && this._labelElement.setAttribute("title", t);
+}, getState: function() {
+  return this._input ? { checked: this._input.checked, disabled: this._input.disabled, value: this._input.value } : { checked: false, disabled: false, value: "" };
+}, subscribe: function(t) {
+  var e = this;
+  return this._subscribers.push(t), { unsubscribe: function() {
+    e._subscribers = e._subscribers.filter(function(e2) {
+      return e2 !== t;
+    });
+  } };
+}, _triggerChange: function(t) {
+  var e = { type: "checkbox:change", detail: this.getState() };
+  t && (e.originalEvent = t), this._subscribers.forEach(function(t2) {
+    t2(e);
+  });
+}, destroy: function() {
+  this._subscribers = [], this._handlers.forEach((t, e) => {
+    this._container && this._container.removeEventListener(e, t);
+  }), this._handlers.clear(), this._container && this._container.parentNode && this._container.parentNode.removeChild(this._container), this._container = null, this._input = null, this._visualCheckbox = null, this._labelElement = null;
+} };
+var _SelectBox_brand = /* @__PURE__ */ new WeakSet();
+class SelectBox {
+  constructor(t, e) {
+    if (_classPrivateMethodInitSpec(this, _SelectBox_brand), "string" == typeof t) {
+      var i = document.getElementById(t);
+      if (i instanceof HTMLSelectElement) t = i;
+      else {
+        if (!(i instanceof HTMLElement)) throw new Error("Invalid selectbox");
+        this._container = i;
+      }
+    } else t instanceof HTMLElement && (this._container = t);
+    if (t instanceof HTMLSelectElement) this._selectbox = t, this._container = document.createElement("div");
+    else if (this._container instanceof HTMLElement == false) throw new Error("Invalid container");
+    this._options = Object.assign(e, { placeholder: e.placeholder || "Select...", searchable: e.searchable || false, sortable: e.sortable || false, multiple: e.multiple || false, description: e.description || "" }), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = false, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = { toggle: (t2) => {
+      _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, t2);
+    }, search: (t2) => {
+      _assertClassBrand(_SelectBox_brand, this, _handleSearch).call(this, t2);
+    }, close: (t2) => {
+      t2.target instanceof HTMLElement && !this._container.contains(t2.target) && !t2.target.classList.contains("selectbox-option") && _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+    }, keydown: (t2) => {
+      _assertClassBrand(_SelectBox_brand, this, _handleKeydown).call(this, t2);
+    }, dropdownClick: (t2) => {
+      _assertClassBrand(_SelectBox_brand, this, _handleDropdownClick).call(this, t2);
+    } }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), _assertClassBrand(_SelectBox_brand, this, _createDOM$1).call(this), _assertClassBrand(_SelectBox_brand, this, _bindEvents).call(this), _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this), _instances._.add(this);
+  }
+  openDropdown() {
+    var t;
+    this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = true, this._dropdown.style.display = "block", this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout((t = this, function() {
+      t.searchInput && t.searchInput.focus();
+    }), 100), _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
+  }
+  subscribe(t) {
+    var e = this;
+    return this._subscribers.push(t), { unsubscribe() {
+      e._subscribers = e._subscribers.filter(function(e2) {
+        return e2 !== t;
+      });
+    } };
+  }
+  addItem(t, e, i) {
+    i = i || false;
+    var s = this._items.some((e2) => e2 && e2.value === t);
+    if (s) {
+      var n = this._items.find((e2) => e2 && e2.value === t);
+      n && (n.selected = i);
+    } else this._items.push({ value: t, text: e, selected: i }), this._options.sortable && this._items.sort((t2, e2) => t2 && e2 ? t2.text.localeCompare(e2.text) : t2 ? -1 : e2 ? 1 : 0);
+    i && (this._options.multiple || this._selectedValues.clear(), this._selectedValues.add(t)), _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+  }
+  addItems(t, e) {
+    var i = this;
+    t.forEach(function(t2, s) {
+      if (!i._items.some((e2) => e2 && e2.value === t2[0])) {
+        var n = e ? t2[0] === e : 0 === s;
+        n && (i._options.multiple || i._selectedValues.clear(), i._selectedValues.add(t2[0])), i._items.push({ value: t2[0], text: t2[1], selected: n });
+      }
+    }, this), this.isOpen && _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this), _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+  }
+  addCustomItem(t, e) {
+    this._customItems.push({ value: t, text: e, selected: false });
+  }
+  addSeparator() {
+    this._items.push(null);
+  }
+  removeItem(t) {
+    this._items = this._items.filter(function(e) {
+      return null === e || e.value !== t;
+    }), this._customItems = this._customItems.filter(function(e) {
+      return null === e || e.value !== t;
+    }), this._selectedValues.delete(t), _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
+  }
+  getSelectedValue() {
+    if (this._options.multiple) return console.error("Method getSelectedValue is only available for single-select boxes."), null;
+    var t = Array.from(this._selectedValues);
+    return t.length > 0 ? t[0] : null;
+  }
+  getSelectedValues() {
+    if (this._options.multiple) return Array.from(this._selectedValues);
+    var t = Array.from(this._selectedValues);
+    return t.length > 0 ? t[0] : null;
+  }
+  selectItems(t, e) {
+    var i = this;
+    if (this._options.multiple || !Array.isArray(t)) {
+      var s = "";
+      if (this._options.multiple) {
+        var n = function(t2) {
+          if (i._optionsContainer) {
+            var e2 = i._optionsContainer.querySelector('[data-value="' + t2 + '"]');
+            if (e2) {
+              var s2 = e2.querySelector('input[type="checkbox"]');
+              s2 && s2 instanceof HTMLInputElement && (s2.checked = true), e2.classList.add("selectbox-option-selected"), e2.classList.add("checkbox--checked");
+            }
+          }
+        };
+        if (Array.isArray(t)) for (var a = 0; a < t.length; a++) s = t[a], this._selectedValues.has(s) || (this._selectedValues.add(s), n(s));
+        else s = t, this._selectedValues.has(s) || (this._selectedValues.add(s), n(s));
+      } else if (!Array.isArray(t)) {
+        if (s = t, this._selectedValues.clear(), this._selectedValues.add(s), this._optionsContainer) {
+          this._optionsContainer.querySelectorAll('.selectbox-option-selected[data-value="' + s + '"]').forEach(function(t2) {
+            t2.classList.remove("selectbox-option-selected"), t2.classList.remove("checkbox--checked");
+          });
+          var r = this._optionsContainer.querySelector('[data-value="' + s + '"]');
+          r && (r.classList.add("selectbox-option-selected"), r.classList.add("checkbox--checked"));
+        }
+        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+      }
+      _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this), e || _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, s, true);
+    } else console.error("Method selectItem is only available for multi-select boxes.");
+  }
+  unselectItems(t, e) {
+    var i = this;
+    if (this._options.multiple) {
+      var s = "", n = function(t2) {
+        if (i._optionsContainer) {
+          var e2 = i._optionsContainer.querySelector('[data-value="' + t2 + '"]');
+          if (e2) {
+            var s2 = e2.querySelector('input[type="checkbox"]');
+            s2 && s2 instanceof HTMLInputElement && (s2.checked = false), e2.classList.remove("selectbox-option-selected"), e2.classList.remove("checkbox--checked");
+          }
+        }
+      };
+      if (Array.isArray(t)) for (var a = 0; a < t.length; a++) s = t[a], this._selectedValues.has(s) && (this._selectedValues.delete(s), n(s));
+      else s = t, this._selectedValues.has(s) && (this._selectedValues.delete(s), n(s));
+      _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this), e || _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, s, true);
+    } else console.error("Method unselectItem is only available for multi-select boxes.");
+  }
+  disable() {
+    this._select.classList.add("selectbox-disabled");
+  }
+  enable() {
+    this._select.classList.remove("selectbox-disabled");
+  }
+  clear(t) {
+    if (t = t || false, this._selectedValues.clear(), t && this._items.length > 0) {
+      var e = this._items[0];
+      e && this._selectedValues.add(e.value);
     }
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < filteredItems.length; i++) {
-        var item = filteredItems[i];
-        if (!item) {
-            var hr = document.createElement("hr");
-            hr.className += " selectbox-option-divider";
-            fragment.appendChild(hr);
-            continue;
+    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this), _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this);
+  }
+  destroy() {
+    this._subscribers = [], _instances._.delete(this);
+    try {
+      this._header && this._boundHandles && this._header.removeEventListener("click", this._boundHandles.toggle), this.searchInput && this._boundHandles && this.searchInput.removeEventListener("input", this._boundHandles.search), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick), document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this._header && this._boundHandles && this._header.removeEventListener("keydown", this._boundHandles.keydown), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
+    } catch (t2) {
+      console.error(t2);
+    }
+    this._container.innerHTML = "";
+    for (var t = this._container.className.split(" "), e = [], i = 0; i < t.length; i++) "selectbox-container" !== t[i] && e.push(t[i]);
+    this._container.className = e.join(" ");
+  }
+}
+function _createDOM$1() {
+  this._container.innerHTML = "", this._container.className += " selectbox-container";
+  var t = document.createDocumentFragment();
+  if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), t.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._select.appendChild(this._dropdown), this._options.description) {
+    var e = document.createElement("div");
+    e.className += " i18n selectbox-description", e.textContent = this._options.description, this._dropdown.appendChild(e);
+  }
+  if (this._options.searchable) {
+    var i = document.createElement("div");
+    i.className += " selectbox-search", this._dropdown.appendChild(i), this.searchInput = document.createElement("input"), this.searchInput.className += " selectbox-search-input", this.searchInput.type = "text", this.searchInput.placeholder = "Search...", i.appendChild(this.searchInput);
+  }
+  if (this._optionsContainer = document.createElement("div"), this._optionsContainer.className += " selectbox-options", this._dropdown.appendChild(this._optionsContainer), this._container.appendChild(t), this._selectbox) {
+    var s = this._selectbox.parentNode;
+    if (s) {
+      s.insertBefore(this._container, this._selectbox);
+      var n = _assertClassBrand(_SelectBox_brand, this, _extractOptions).call(this, this._selectbox);
+      this.addItems(n.values, n.selectedValue), this._selectbox.remove();
+    }
+  }
+}
+function _bindEvents() {
+  this._header.addEventListener("click", this._boundHandles.toggle), this.searchInput && this.searchInput.addEventListener("input", this._boundHandles.search), this._dropdown.addEventListener("click", this._boundHandles.dropdownClick), this._dropdown.addEventListener("wheel", function(t) {
+    t.stopPropagation();
+  }), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
+}
+function _toggle(t) {
+  if (t && t.stopPropagation(), this.isOpen ? _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this) : this.openDropdown(), t && "click" === t.type) for (var e of _instances._) e.isOpen && e !== this && _assertClassBrand(_SelectBox_brand, e, _closeDropdown).call(e);
+}
+function _closeDropdown() {
+  this.isOpen && document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this.isOpen = false, this._dropdown.style.display = "none";
+  for (var t = this._arrow.className.split(" "), e = [], i = 0; i < t.length; i++) "selectbox-arrow-open" !== t[i] && e.push(t[i]);
+  this._arrow.className = e.join(" ");
+  var s = this._header.className.split(" "), n = [];
+  for (i = 0; i < s.length; i++) "selectbox-header-open" !== s[i] && n.push(s[i]);
+  this._header.className = n.join(" "), this.searchInput && (this.searchInput.value = "");
+}
+function _handleSearch(t) {
+  var e = t.target;
+  if (e instanceof HTMLInputElement) {
+    var i = e.value.toLowerCase();
+    _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, i);
+  }
+}
+function _selectNextPrevItem(t) {
+  var e, i = this.searchInput ? this.searchInput.value.toLowerCase() : "", s = this._items.filter(function(t2) {
+    return null !== t2;
+  });
+  if (i && (s = s.filter(function(t2) {
+    return -1 !== t2.text.toLowerCase().indexOf(i);
+  })), 0 !== s.length) {
+    if ("up" === t) if (0 === this._selectedValues.size && s.length > 0) e = s[s.length - 1], this._selectedValues.add(e.value);
+    else {
+      for (var n = Array.from(this._selectedValues), a = -1, r = 0; r < s.length; r++) if (s[r].value === n[0]) {
+        a = r;
+        break;
+      }
+      var o = (a - 1 + s.length) % s.length;
+      this._selectedValues.clear(), e = s[o], this._selectedValues.add(e.value);
+    }
+    else if (0 === this._selectedValues.size && s.length > 0) e = s[0], this._selectedValues.add(e.value);
+    else {
+      for (n = Array.from(this._selectedValues), a = -1, r = 0; r < s.length; r++) if (s[r].value === n[0]) {
+        a = r;
+        break;
+      }
+      var l = (a + 1) % s.length;
+      l === s.length && (l = 0), this._selectedValues.clear(), e = s[l], this._selectedValues.add(e.value);
+    }
+    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this), _assertClassBrand(_SelectBox_brand, this, _renderOptions).call(this, i, true), _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, e.value, true);
+  }
+}
+function _handleKeydown(t) {
+  switch (t.key || t.keyCode) {
+    case "Enter":
+    case 13:
+      t.preventDefault(), _assertClassBrand(_SelectBox_brand, this, _toggle).call(this, t);
+      break;
+    case "Escape":
+    case 27:
+    case "Tab":
+    case 9:
+      _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+      break;
+    case "ArrowDown":
+    case 40:
+      t.preventDefault(), _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "down");
+      break;
+    case "ArrowUp":
+    case 38:
+      t.preventDefault(), _assertClassBrand(_SelectBox_brand, this, _selectNextPrevItem).call(this, "up");
+  }
+}
+function _renderOptions(t, e) {
+  if (t = t || "", this._optionsContainer) {
+    this._optionsContainer.innerHTML = "";
+    var i = null, s = this._items;
+    t && (s = s.filter(function(e2) {
+      return null !== e2 && -1 !== e2.text.toLowerCase().indexOf(t);
+    }));
+    for (var n = document.createDocumentFragment(), a = 0; a < s.length; a++) {
+      var r = s[a];
+      if (r) {
+        var o = document.createElement("div");
+        o.className += " selectbox-option", this._selectedValues.has(r.value) && (o.className += " selectbox-option-selected checkbox--checked", i = o), o.setAttribute("data-value", r.value);
+        var l = document.createElement("label");
+        if (l.className += " selectbox-option-text", l.textContent = r.text, this._options.multiple) {
+          o.className += " selectbox-option-checkbox";
+          var c = document.createElement("input");
+          c.type = "checkbox", c.id = "checkbox-" + r.value, c.className += " selectbox-checkbox", c.checked = this._selectedValues.has(r.value), o.appendChild(c);
+          var h = document.createElement("span");
+          h.className = "checkbox-visual", h.setAttribute("aria-hidden", "true");
+          var d = "http://www.w3.org/2000/svg", u = document.createElementNS(d, "svg");
+          u.setAttribute("viewBox", "0 0 10 8"), u.setAttribute("class", "checkbox-checkmark");
+          var _ = document.createElementNS(d, "path");
+          _.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), _.setAttribute("fill", "none"), _.setAttribute("stroke", "currentColor"), _.setAttribute("stroke-width", "2"), u.appendChild(_), h.appendChild(u), o.appendChild(h);
         }
-        var option = document.createElement("div");
-        option.className += " selectbox-option";
-        if (this._selectedValues.has(item.value)) {
-            option.className += " selectbox-option-selected checkbox--checked";
-            selectedOption = option;
-        }
-        option.setAttribute("data-value", item.value);
-        var label = document.createElement("label");
-        label.className += " selectbox-option-text";
-        label.textContent = item.text;
-        if (this._options.multiple) {
-            option.className += " selectbox-option-checkbox";
-            var input = document.createElement("input");
-            input.type = "checkbox";
-            input.id = "checkbox-" + item.value;
-            input.className += " selectbox-checkbox";
-            input.checked = this._selectedValues.has(item.value);
-            option.appendChild(input);
-            var visualCheckbox = document.createElement("span");
-            visualCheckbox.className = "checkbox-visual";
-            visualCheckbox.setAttribute("aria-hidden", "true");
-            var svgNS = "http://www.w3.org/2000/svg";
-            var checkmarkSVG = document.createElementNS(svgNS, "svg");
-            checkmarkSVG.setAttribute("viewBox", "0 0 10 8");
-            checkmarkSVG.setAttribute("class", "checkbox-checkmark");
-            var path = document.createElementNS(svgNS, "path");
-            path.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116");
-            path.setAttribute("fill", "none");
-            path.setAttribute("stroke", "currentColor");
-            path.setAttribute("stroke-width", "2");
-            checkmarkSVG.appendChild(path);
-            visualCheckbox.appendChild(checkmarkSVG);
-            option.appendChild(visualCheckbox);
-        }
-        option.appendChild(label);
-        fragment.appendChild(option);
+        o.appendChild(l), n.appendChild(o);
+      } else {
+        var p = document.createElement("hr");
+        p.className += " selectbox-option-divider", n.appendChild(p);
+      }
     }
     if (this._customItems.length) {
-        var _hr = document.createElement("hr");
-        _hr.className += " selectbox-option-divider";
-        fragment.appendChild(_hr);
+      var m = document.createElement("hr");
+      m.className += " selectbox-option-divider", n.appendChild(m);
     }
-    for (var i = 0; i < this._customItems.length; i++) {
-        var _item = this._customItems[i];
-        var _option = document.createElement("label");
-        _option.className += " selectbox-custom-option";
-        _option.setAttribute("data-value", _item.value);
-        _option.setAttribute("for", _item.value);
-        var span = document.createElement("span");
-        span.className += " selectbox-option-text";
-        span.textContent = _item.text;
-        _option.appendChild(span);
-        fragment.appendChild(_option);
+    for (a = 0; a < this._customItems.length; a++) {
+      var b = this._customItems[a], v = document.createElement("label");
+      v.className += " selectbox-custom-option", v.setAttribute("data-value", b.value), v.setAttribute("for", b.value);
+      var f = document.createElement("span");
+      f.className += " selectbox-option-text", f.textContent = b.text, v.appendChild(f), n.appendChild(v);
     }
-    this._optionsContainer.appendChild(fragment);
-    if (scrollIntoView && this.isOpen && this._optionsContainer && selectedOption) {
-        try {
-            if (selectedOption.scrollIntoView) {
-                selectedOption.scrollIntoView({
-                    block: "nearest"
-                });
-            }
-        } catch (err) {
-            console.error(err);
-        }
+    if (this._optionsContainer.appendChild(n), e && this.isOpen && this._optionsContainer && i) try {
+      i.scrollIntoView && i.scrollIntoView({ block: "nearest" });
+    } catch (t2) {
+      console.error(t2);
     }
+  }
 }
-
-function _handleDropdownClick(e) {
-    var target = e.target || e.srcElement;
-    var option = null;
-    if (target && target instanceof HTMLElement) {
-        var temp = null;
-        var classList = target.className.split(" ");
-        var hasOptionClass = false;
-        for (var i = 0; i < classList.length; i++) {
-            if (classList[i] === "selectbox-option") {
-                hasOptionClass = true;
-                break;
-            } else if (classList[i] === "selectbox-custom-option") {
-                var val = target.getAttribute("data-value");
-                if (val) {
-                    e.stopPropagation();
-                    _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, val);
-                    _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-                    return;
-                }
-                break;
-            }
-        }
-        if (hasOptionClass) {
-            temp = target;
-        } else if (target.parentNode && target.parentNode instanceof HTMLElement) {
-            var parentClassList = target.parentNode.className.split(" ");
-            var parentHasOptionClass = false;
-            for (var i = 0; i < parentClassList.length; i++) {
-                if (parentClassList[i] === "selectbox-option") {
-                    parentHasOptionClass = true;
-                    break;
-                } else if (parentClassList[i] === "selectbox-custom-option") {
-                    var _val = target.parentNode.getAttribute("data-value");
-                    if (_val) {
-                        e.stopPropagation();
-                        _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, _val);
-                        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
-                        return;
-                    }
-                    break;
-                }
-            }
-            if (parentHasOptionClass) {
-                temp = target.parentNode;
-            }
-        }
-        if (temp instanceof HTMLDivElement) {
-            option = temp;
-        } else {
-            return;
-        }
-    } else {
-        return;
+function _handleDropdownClick(t) {
+  var e = t.target || t.srcElement;
+  if (e && e instanceof HTMLElement) {
+    for (var i = null, s = e.className.split(" "), n = false, a = 0; a < s.length; a++) {
+      if ("selectbox-option" === s[a]) {
+        n = true;
+        break;
+      }
+      if ("selectbox-custom-option" === s[a]) {
+        var r = e.getAttribute("data-value");
+        if (r) return t.stopPropagation(), _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, r), void _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+        break;
+      }
     }
-    var value = option.getAttribute("data-value");
-    if (value === null) return;
-    var enabled = true;
-    if (this._options.multiple) {
-        if (this._selectedValues.has(value)) {
-            this.unselectItems(value, true);
-            enabled = false;
-        } else {
-            this.selectItems(value, true);
+    if (n) i = e;
+    else if (e.parentNode && e.parentNode instanceof HTMLElement) {
+      var o = e.parentNode.className.split(" "), l = false;
+      for (a = 0; a < o.length; a++) {
+        if ("selectbox-option" === o[a]) {
+          l = true;
+          break;
         }
-    } else {
-        this.selectItems(value, true);
-        _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+        if ("selectbox-custom-option" === o[a]) {
+          var c = e.parentNode.getAttribute("data-value");
+          if (c) return t.stopPropagation(), _assertClassBrand(_SelectBox_brand, this, _triggerCustomChange).call(this, c), void _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this);
+          break;
+        }
+      }
+      l && (i = e.parentNode);
     }
-    _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this);
-    _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, value, enabled);
+    if (i instanceof HTMLDivElement) {
+      var h = i.getAttribute("data-value");
+      if (null !== h) {
+        var d = true;
+        this._options.multiple ? this._selectedValues.has(h) ? (this.unselectItems(h, true), d = false) : this.selectItems(h, true) : (this.selectItems(h, true), _assertClassBrand(_SelectBox_brand, this, _closeDropdown).call(this)), _assertClassBrand(_SelectBox_brand, this, _updateSelectedText).call(this), _assertClassBrand(_SelectBox_brand, this, _triggerChange).call(this, h, d);
+      }
+    }
+  }
 }
-
 function _updateSelectedText() {
-    if (this._selectedValues.size === 0) {
-        this._selectedText.textContent = this._options.placeholder;
-        return;
+  if (0 !== this._selectedValues.size) if (this._options.multiple) {
+    for (var t = [], e = 0; e < this._items.length; e++) {
+      (s = this._items[e]) && this._selectedValues.has(s.value) && t.push(s);
     }
-    if (this._options.multiple) {
-        var selectedItems = [];
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
-            if (item && this._selectedValues.has(item.value)) {
-                selectedItems.push(item);
-            }
-        }
-        if (selectedItems.length === 0) {
-            this._selectedText.textContent = this._options.placeholder;
-        } else if (selectedItems.length === 1) {
-            this._selectedText.textContent = selectedItems[0].text;
-        } else {
-            this._selectedText.textContent = selectedItems.length + " items selected";
-        }
-    } else {
-        var selectedItem = null;
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
-            if (item && this._selectedValues.has(item.value)) {
-                selectedItem = item;
-                break;
-            }
-        }
-        this._selectedText.textContent = selectedItem ? selectedItem.text : this._options.placeholder;
+    0 === t.length ? this._selectedText.textContent = this._options.placeholder : 1 === t.length ? this._selectedText.textContent = t[0].text : this._selectedText.textContent = t.length + " items selected";
+  } else {
+    var i = null;
+    for (e = 0; e < this._items.length; e++) {
+      var s;
+      if ((s = this._items[e]) && this._selectedValues.has(s.value)) {
+        i = s;
+        break;
+      }
     }
+    this._selectedText.textContent = i ? i.text : this._options.placeholder;
+  }
+  else this._selectedText.textContent = this._options.placeholder;
 }
-
-function _triggerChange(currentValue, enabled) {
-    var values = Array.from(this._selectedValues);
-    var items = [];
-    for (var i = 0; i < this._items.length; i++) {
-        var item = this._items[i];
-        if (item && this._selectedValues.has(item.value)) {
-            items.push(item);
-        }
-    }
-    var detail = {
-        values: values,
-        items: items,
-        current: currentValue,
-        enabled: enabled
-    };
-    this._subscribers.forEach(function(cb) {
-        cb({
-            type: "selectbox:change",
-            detail: detail
-        });
-    });
+function _triggerChange(t, e) {
+  for (var i = Array.from(this._selectedValues), s = [], n = 0; n < this._items.length; n++) {
+    var a = this._items[n];
+    a && this._selectedValues.has(a.value) && s.push(a);
+  }
+  var r = { values: i, items: s, current: t, enabled: e };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "selectbox:change", detail: r });
+  });
 }
-
-function _triggerCustomChange(currentValue) {
-    var detail = {
-        values: [],
-        current: currentValue,
-        enabled: false
-    };
-    this._subscribers.forEach(function(cb) {
-        cb({
-            type: "selectbox:custom",
-            detail: detail
-        });
-    });
+function _triggerCustomChange(t) {
+  var e = { values: [], current: t, enabled: false };
+  this._subscribers.forEach(function(t2) {
+    t2({ type: "selectbox:custom", detail: e });
+  });
 }
-
-function _extractOptions(selectbox) {
-    var options = Array.from(selectbox.options).map(option => [ option.value, option.text ]);
-    var result = {
-        values: options
-    };
-    var selectedValue = selectbox.value;
-    if (selectedValue) result.selectedValue = selectedValue;
-    return result;
+function _extractOptions(t) {
+  var e = { values: Array.from(t.options).map((t2) => [t2.value, t2.text]) }, i = t.value;
+  return i && (e.selectedValue = i), e;
 }
-
-var _instances = {
-    _: new Set
-};
-
-var _container = new WeakMap;
-
-var _Loader_brand = new WeakSet;
-
+var _instances = { _: /* @__PURE__ */ new Set() }, _container = /* @__PURE__ */ new WeakMap(), _Loader_brand = /* @__PURE__ */ new WeakSet();
 class Loader {
-    constructor(containerId, _text) {
-        _classPrivateMethodInitSpec(this, _Loader_brand);
-        _classPrivateFieldInitSpec(this, _container, void 0);
-        var temp = document.getElementById(containerId);
-        if (temp instanceof HTMLElement === false) throw new Error("Invalid container");
-        _classPrivateFieldSet2(_container, this, temp);
-        _assertClassBrand(_Loader_brand, this, _createDOM).call(this, _text);
-    }
-    show() {
-        var _classPrivateFieldGet2$1;
-        (_classPrivateFieldGet2$1 = _classPrivateFieldGet2(_container, this)) === null || _classPrivateFieldGet2$1 === void 0 || _classPrivateFieldGet2$1.classList.remove("hidden");
-    }
-    hide() {
-        var _classPrivateFieldGet3;
-        (_classPrivateFieldGet3 = _classPrivateFieldGet2(_container, this)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.classList.add("hidden");
-    }
-    static show() {
-        var _assertClassBrand$_;
-        (_assertClassBrand$_ = _assertClassBrand(Loader, this, _mainLoaderContainer)._) === null || _assertClassBrand$_ === void 0 || _assertClassBrand$_.classList.remove("hidden");
-    }
-    static hide() {
-        var _assertClassBrand$_2;
-        (_assertClassBrand$_2 = _assertClassBrand(Loader, this, _mainLoaderContainer)._) === null || _assertClassBrand$_2 === void 0 || _assertClassBrand$_2.classList.add("hidden");
-    }
+  constructor(t, e) {
+    _classPrivateMethodInitSpec(this, _Loader_brand), _classPrivateFieldInitSpec(this, _container, void 0);
+    var i = document.getElementById(t);
+    if (i instanceof HTMLElement == false) throw new Error("Invalid container");
+    _classPrivateFieldSet2(_container, this, i), _assertClassBrand(_Loader_brand, this, _createDOM).call(this, e);
+  }
+  show() {
+    var t;
+    null === (t = _classPrivateFieldGet2(_container, this)) || void 0 === t || t.classList.remove("hidden");
+  }
+  hide() {
+    var t;
+    null === (t = _classPrivateFieldGet2(_container, this)) || void 0 === t || t.classList.add("hidden");
+  }
+  static show() {
+    var t;
+    null === (t = _assertClassBrand(Loader, this, _mainLoaderContainer)._) || void 0 === t || t.classList.remove("hidden");
+  }
+  static hide() {
+    var t;
+    null === (t = _assertClassBrand(Loader, this, _mainLoaderContainer)._) || void 0 === t || t.classList.add("hidden");
+  }
 }
-
-function _createDOM(text) {
-    _classPrivateFieldGet2(_container, this).classList.add("loader-container");
-    var svgNS = "http://www.w3.org/2000/svg";
-    var image = document.createElementNS(svgNS, "svg");
-    image.classList.add("loader-image");
-    image.setAttribute("viewBox", "0 0 20 20");
-    var circle = document.createElementNS(svgNS, "circle");
-    circle.setAttribute("cx", "10");
-    circle.setAttribute("cy", "10");
-    circle.setAttribute("fill", "none");
-    circle.setAttribute("stroke", "currentColor");
-    circle.setAttribute("stroke-width", "1.5");
-    circle.setAttribute("r", "7.25");
-    circle.setAttribute("stroke-dasharray", "160%, 40%");
-    image.appendChild(circle);
-    _classPrivateFieldGet2(_container, this).appendChild(image);
-    var title = document.createElement("div");
-    title.classList.add("loader-title");
-    title.classList.add("i18n");
-    title.innerText = text;
-    _classPrivateFieldGet2(_container, this).appendChild(title);
+function _createDOM(t) {
+  _classPrivateFieldGet2(_container, this).classList.add("loader-container");
+  var e = "http://www.w3.org/2000/svg", i = document.createElementNS(e, "svg");
+  i.classList.add("loader-image"), i.setAttribute("viewBox", "0 0 20 20");
+  var s = document.createElementNS(e, "circle");
+  s.setAttribute("cx", "10"), s.setAttribute("cy", "10"), s.setAttribute("fill", "none"), s.setAttribute("stroke", "currentColor"), s.setAttribute("stroke-width", "1.5"), s.setAttribute("r", "7.25"), s.setAttribute("stroke-dasharray", "160%, 40%"), i.appendChild(s), _classPrivateFieldGet2(_container, this).appendChild(i);
+  var n = document.createElement("div");
+  n.classList.add("loader-title"), n.classList.add("i18n"), n.innerText = t, _classPrivateFieldGet2(_container, this).appendChild(n);
 }
-
-var _mainLoaderContainer = {
-    _: document.getElementById("loader")
-};
-
-function translate(message) {
-    try {
-        return window.Asc.plugin.tr(message);
-    } catch (e) {
-        console.error(e);
-        return message;
-    }
+var _mainLoaderContainer = { _: document.getElementById("loader") };
+function translate(t) {
+  try {
+    return window.Asc.plugin.tr(t);
+  } catch (e) {
+    return console.error(e), t;
+  }
 }
-
 class CslHtmlParser {
-    static parseHtmlFormatting(htmlString) {
-        var result = {
-            text: "",
-            formatting: []
-        };
-        var stack = [];
-        var textPosition = 0;
-        var i = 0;
-        while (i < htmlString.length) {
-            if (htmlString[i] === "<" && i + 1 < htmlString.length) {
-                var isClosingTag = htmlString[i + 1] === "/";
-                var tagEnd = htmlString.indexOf(">", i);
-                if (tagEnd === -1) {
-                    result.text += htmlString[i];
-                    i++;
-                    continue;
-                }
-                var tag = htmlString.substring(isClosingTag ? i + 2 : i + 1, tagEnd).trim();
-                var tagParts = tag.split(" ");
-                if (tagParts.length === 0) {
-                    result.text += htmlString[i];
-                    i++;
-                    continue;
-                }
-                var loverCaseTagName = tagParts[0].toLowerCase();
-                if (loverCaseTagName === "br") {
-                    result.text += "\n";
-                    i = tagEnd + 1;
-                    continue;
-                }
-                var styleTag = loverCaseTagName;
-                if (tag.indexOf("font-variant:small-caps") !== -1) {
-                    styleTag = "sc";
-                } else if (tag.indexOf("text-decoration:underline") !== -1) {
-                    styleTag = "u";
-                }
-                if (_assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(loverCaseTagName)) {
-                    if (isClosingTag) {
-                        for (var j = stack.length - 1; j >= 0; j--) {
-                            if (stack[j].tag === loverCaseTagName) {
-                                var {start: start, styleTag: _styleTag} = stack.splice(j, 1)[0];
-                                result.formatting.push({
-                                    type: _styleTag,
-                                    start: start,
-                                    end: textPosition
-                                });
-                                break;
-                            }
-                        }
-                    } else {
-                        stack.push({
-                            tag: loverCaseTagName,
-                            start: textPosition,
-                            styleTag: styleTag
-                        });
-                    }
-                }
-                i = tagEnd + 1;
-            } else {
-                result.text += htmlString[i];
-                textPosition++;
-                i++;
-            }
+  static parseHtmlFormatting(t) {
+    for (var e = { text: "", formatting: [] }, i = [], s = 0, n = 0; n < t.length; ) if ("<" === t[n] && n + 1 < t.length) {
+      var a = "/" === t[n + 1], r = t.indexOf(">", n);
+      if (-1 === r) {
+        e.text += t[n], n++;
+        continue;
+      }
+      var o = t.substring(a ? n + 2 : n + 1, r).trim(), l = o.split(" ");
+      if (0 === l.length) {
+        e.text += t[n], n++;
+        continue;
+      }
+      var c = l[0].toLowerCase();
+      if ("br" === c) {
+        e.text += "\n", n = r + 1;
+        continue;
+      }
+      var h = c;
+      if (-1 !== o.indexOf("font-variant:small-caps") ? h = "sc" : -1 !== o.indexOf("text-decoration:underline") && (h = "u"), _assertClassBrand(CslHtmlParser, this, _allowedTags)._.has(c)) if (a) {
+        for (var d = i.length - 1; d >= 0; d--) if (i[d].tag === c) {
+          var { start: u, styleTag: _ } = i.splice(d, 1)[0];
+          e.formatting.push({ type: _, start: u, end: s });
+          break;
         }
-        result.formatting.sort((a, b) => {
-            if (a.start === b.start) {
-                return b.end - a.end;
-            }
-            return a.start - b.start;
-        });
-        return result;
-    }
+      } else i.push({ tag: c, start: s, styleTag: h });
+      n = r + 1;
+    } else e.text += t[n], s++, n++;
+    return e.formatting.sort((t2, e2) => t2.start === e2.start ? e2.end - t2.end : t2.start - e2.start), e;
+  }
 }
-
-var _allowedTags = {
-    _: new Set([ "i", "u", "b", "sc", "sup", "sub", "em", "div", "span" ])
-};
-
+var _allowedTags = { _: /* @__PURE__ */ new Set(["i", "u", "b", "sc", "sup", "sub", "em", "div", "span"]) };
 class CslDocFormatter {
-    static formatAfterInsert(positions) {
-        return new Promise(function(resolve) {
-            var isCalc = true;
-            var isClose = false;
-            Asc.scope.formatting = positions;
-            Asc.plugin.callCommand(function() {
-                var doc = Api.GetDocument();
-                var run = doc.GetCurrentRun();
-                for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                    var pos = Asc.scope.formatting[i];
-                    var range = run.GetRange(pos.start, pos.end);
-                    if (!range) continue;
-                    if ("sup" === pos.type) {
-                        range.SetVertAlign("superscript");
-                    } else if ("sub" === pos.type) {
-                        range.SetVertAlign("subscript");
-                    } else if ("sc" === pos.type) {
-                        range.SetSmallCaps(true);
-                    } else if ("u" === pos.type) {
-                        range.SetUnderline(true);
-                    } else if ("b" === pos.type) {
-                        range.SetBold(true);
-                    } else if ("i" === pos.type || "em" === pos.type) {
-                        range.SetItalic(true);
-                    }
-                }
-            }, isClose, isCalc, resolve);
-        });
-    }
-    static formatAfterUpdate(fieldId, formattingPositions) {
-        var isCalc = true;
-        var isClose = false;
-        Asc.scope.fieldId = fieldId;
-        Asc.scope.text = formattingPositions.text;
-        Asc.scope.formatting = formattingPositions.formatting;
-        return new Promise(function(resolve) {
-            Asc.plugin.callCommand(function() {
-                var doc = Api.GetDocument();
-                var selRange = doc.GetRangeBySelect();
-                if (!selRange) {
-                    return;
-                }
-                function applyFormatting(range, type) {
-                    if ("sup" === type) {
-                        range.SetVertAlign("superscript");
-                    } else if ("sub" === type) {
-                        range.SetVertAlign("subscript");
-                    } else if ("sc" === type) {
-                        range.SetSmallCaps(true);
-                    } else if ("u" === type) {
-                        range.SetUnderline(true);
-                    } else if ("b" === type) {
-                        range.SetBold(true);
-                    } else if ("i" === type || "em" === type) {
-                        range.SetItalic(true);
-                    }
-                }
-                if (Asc.scope.formatting.length === 1) {
-                    var pos = Asc.scope.formatting[0];
-                    if (pos.start === 0 && pos.end === selRange.GetText().length) {
-                        applyFormatting(selRange, pos.type);
-                        return;
-                    }
-                }
-                doc.MoveCursorToPos(selRange.GetEndPos() - Asc.scope.text.length);
-                var run = doc.GetCurrentRun();
-                for (var i = Asc.scope.formatting.length - 1; i >= 0; i--) {
-                    var _pos = Asc.scope.formatting[i];
-                    var range = run.GetRange(_pos.start, _pos.end);
-                    if (!range) continue;
-                    applyFormatting(range, _pos.type);
-                }
-            }, isClose, isCalc, resolve);
-        });
-    }
+  static formatAfterInsert(t) {
+    return new Promise(function(e) {
+      Asc.scope.formatting = t, Asc.plugin.callCommand(function() {
+        for (var t2 = Api.GetDocument().GetCurrentRun(), e2 = Asc.scope.formatting.length - 1; e2 >= 0; e2--) {
+          var i = Asc.scope.formatting[e2], s = t2.GetRange(i.start, i.end);
+          s && ("sup" === i.type ? s.SetVertAlign("superscript") : "sub" === i.type ? s.SetVertAlign("subscript") : "sc" === i.type ? s.SetSmallCaps(true) : "u" === i.type ? s.SetUnderline(true) : "b" === i.type ? s.SetBold(true) : "i" !== i.type && "em" !== i.type || s.SetItalic(true));
+        }
+      }, false, true, e);
+    });
+  }
+  static formatAfterUpdate(t, e) {
+    return Asc.scope.fieldId = t, Asc.scope.text = e.text, Asc.scope.formatting = e.formatting, new Promise(function(t2) {
+      Asc.plugin.callCommand(function() {
+        var t3 = Api.GetDocument(), e2 = t3.GetRangeBySelect();
+        if (e2) {
+          if (1 === Asc.scope.formatting.length) {
+            var i = Asc.scope.formatting[0];
+            if (0 === i.start && i.end === e2.GetText().length) return void o(e2, i.type);
+          }
+          t3.MoveCursorToPos(e2.GetEndPos() - Asc.scope.text.length);
+          for (var s = t3.GetCurrentRun(), n = Asc.scope.formatting.length - 1; n >= 0; n--) {
+            var a = Asc.scope.formatting[n], r = s.GetRange(a.start, a.end);
+            r && o(r, a.type);
+          }
+        }
+        function o(t4, e3) {
+          "sup" === e3 ? t4.SetVertAlign("superscript") : "sub" === e3 ? t4.SetVertAlign("subscript") : "sc" === e3 ? t4.SetSmallCaps(true) : "u" === e3 ? t4.SetUnderline(true) : "b" === e3 ? t4.SetBold(true) : "i" !== e3 && "em" !== e3 || t4.SetItalic(true);
+        }
+      }, false, true, t2);
+    });
+  }
 }
-
-var _citPrefixOld = new WeakMap;
-
-var _citPrefix = new WeakMap;
-
-var _bibPrefixOld = new WeakMap;
-
-var _citSuffix = new WeakMap;
-
-var _bibPrefix = new WeakMap;
-
-var _bibSuffix = new WeakMap;
-
-var _CitationDocService_brand = new WeakSet;
-
+var _citPrefixOld = /* @__PURE__ */ new WeakMap(), _citPrefix = /* @__PURE__ */ new WeakMap(), _bibPrefixOld = /* @__PURE__ */ new WeakMap(), _citSuffix = /* @__PURE__ */ new WeakMap(), _bibPrefix = /* @__PURE__ */ new WeakMap(), _bibSuffix = /* @__PURE__ */ new WeakMap(), _CitationDocService_brand = /* @__PURE__ */ new WeakSet();
 class CitationDocService {
-    constructor(citPrefix, citSuffix, bibPrefix, bibSuffix) {
-        _classPrivateMethodInitSpec(this, _CitationDocService_brand);
-        _classPrivateFieldInitSpec(this, _citPrefixOld, void 0);
-        _classPrivateFieldInitSpec(this, _citPrefix, void 0);
-        _classPrivateFieldInitSpec(this, _bibPrefixOld, void 0);
-        _classPrivateFieldInitSpec(this, _citSuffix, void 0);
-        _classPrivateFieldInitSpec(this, _bibPrefix, void 0);
-        _classPrivateFieldInitSpec(this, _bibSuffix, void 0);
-        _classPrivateFieldSet2(_citPrefixOld, this, "ZOTERO_CITATION");
-        _classPrivateFieldSet2(_bibPrefixOld, this, "ZOTERO_BIBLIOGRAPHY");
-        _classPrivateFieldSet2(_citPrefix, this, citPrefix);
-        _classPrivateFieldSet2(_citSuffix, this, citSuffix);
-        _classPrivateFieldSet2(_bibPrefix, this, bibPrefix);
-        _classPrivateFieldSet2(_bibSuffix, this, bibSuffix);
-    }
-    addBibliography(text, value) {
-        var _this = this;
-        return _asyncToGenerator(function*() {
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9004e3) {
-                var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-                var fieldId = "";
-                var field = {
-                    FieldId: fieldId,
-                    Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
-                    Content: formattingPositions.text
-                };
-                return _assertClassBrand(_CitationDocService_brand, _this, _addAddinField).call(_this, field).then(() => _this.getCurrentField()).then(addedField => {
-                    fieldId = (addedField === null || addedField === void 0 ? void 0 : addedField.FieldId) || "";
-                    if (!formattingPositions.formatting.length) return;
-                    return CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-                }).then(() => fieldId);
-            } else {
-                var _field = {
-                    FieldId: "",
-                    Value: _classPrivateFieldGet2(_bibPrefix, _this) + value + _classPrivateFieldGet2(_bibSuffix, _this),
-                    Content: " "
-                };
-                return yield _assertClassBrand(_CitationDocService_brand, _this, _pasteBibliographyWithHtml).call(_this, _field, text);
-            }
-        })();
-    }
-    addCitation(text, value, notesStyle) {
-        var _this2 = this;
-        return _asyncToGenerator(function*() {
-            var formattingPositions = CslHtmlParser.parseHtmlFormatting(text);
-            var field = {
-                FieldId: "",
-                Value: _classPrivateFieldGet2(_citPrefix, _this2) + " " + _classPrivateFieldGet2(_citSuffix, _this2) + value,
-                Content: formattingPositions.text
-            };
-            var bHasNotes = !!(notesStyle && [ "footnotes", "endnotes" ].indexOf(notesStyle) !== -1);
-            if (bHasNotes) {
-                yield _assertClassBrand(_CitationDocService_brand, _this2, _addNote).call(_this2, notesStyle);
-            }
-            yield _assertClassBrand(_CitationDocService_brand, _this2, _addAddinField).call(_this2, field);
-            if (!formattingPositions.formatting.length) return bHasNotes;
-            yield CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-            if (bHasNotes) {
-                yield _assertClassBrand(_CitationDocService_brand, _this2, _selectFieldReference).call(_this2);
-            }
-            return bHasNotes;
-        })();
-    }
-    getCurrentField() {
-        return new Promise(function(resolve, reject) {
-            window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
-        });
-    }
-    getAddinZoteroFields() {
-        var self = this;
-        return new Promise(function(resolve, reject) {
-            _assertClassBrand(_CitationDocService_brand, self, _getAllAddinFields).call(self).then(function(arrFields) {
-                try {
-                    if (arrFields.length) {
-                        arrFields = arrFields.filter(function(field) {
-                            return field.Value.indexOf(_classPrivateFieldGet2(_citPrefix, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_citPrefixOld, self)) !== -1 || field.Value.indexOf(_classPrivateFieldGet2(_bibPrefixOld, self)) !== -1;
-                        });
-                    }
-                } catch (e) {
-                    reject(e);
-                }
-                resolve(arrFields);
-            });
-        });
-    }
-    saveAsText() {
-        return this.getAddinZoteroFields().then(function(arrFields) {
-            var count = arrFields.length;
-            if (!count) {
-                window.Asc.plugin.executeCommand("close", "");
-                return false;
-            }
-            var promises = arrFields.map(function(field) {
-                return new Promise(function(resolve) {
-                    window.Asc.plugin.executeMethod("RemoveFieldWrapper", [ field.FieldId ], resolve);
-                });
-            });
-            return Promise.all(promises).then(() => true).catch(e => {
-                console.error(e);
-                return false;
-            });
-        });
-    }
-    updateAddinFields(fields) {
-        var _this3 = this;
-        return _asyncToGenerator(function*() {
-            var fieldIds = fields.map(field => field.FieldId);
-            var editorVersion = window.Asc.scope.editorVersion;
-            var bibFields = fields.filter(field => field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this3)) === 0);
-            if (bibFields.length && editorVersion && editorVersion >= 9004e3) {
-                fields = fields.filter(field => field.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, _this3)) !== 0);
-                var field = bibFields[0];
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, field.FieldId);
-                var text = field.Content || "";
-                field.Content = " ";
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _removeSelectedContent).call(_this3);
-                yield _assertClassBrand(_CitationDocService_brand, _this3, _pasteBibliographyWithHtml).call(_this3, field, text);
-            }
-            var formats = _assertClassBrand(_CitationDocService_brand, _this3, _makeFormattingPositions).call(_this3, fields);
-            yield new Promise(resolve => {
-                window.Asc.plugin.executeMethod("UpdateAddinFields", [ fields ], resolve);
-            });
-            if (!formats.size) return fieldIds;
-            for (var [fieldId, formattingPositions] of formats) {
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this3, _selectField).call(_this3, fieldId);
-                if (!selectFieldResult) continue;
-                yield CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions);
-            }
-            return fieldIds;
-        })();
-    }
-    convertNotesToText(fields) {
-        var _this4 = this;
-        return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this4, _makeFormattingPositions).call(_this4, fields);
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) {
-                    console.error("Field id is not defined");
-                    continue;
-                }
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectField).call(_this4, field.FieldId);
-                if (!selectFieldResult) continue;
-                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this4, _selectFieldReference).call(_this4);
-                if (!isReferenceSelected) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSuperscript).call(_this4);
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _removeSelectedContent).call(_this4);
-                yield _assertClassBrand(_CitationDocService_brand, _this4, _addAddinField).call(_this4, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
-            }
-        })();
-    }
-    convertTextToNotes(fields, notesStyle) {
-        var _this5 = this;
-        return _asyncToGenerator(function*() {
-            var formats = _assertClassBrand(_CitationDocService_brand, _this5, _makeFormattingPositions).call(_this5, fields);
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) continue;
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this5, _selectField).call(_this5, field.FieldId);
-                if (!selectFieldResult) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _removeSelectedContent).call(_this5);
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _addNote).call(_this5, notesStyle);
-                yield _assertClassBrand(_CitationDocService_brand, _this5, _addAddinField).call(_this5, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
-            }
-        })();
-    }
-    convertNotesStyle(fields, notesStyle) {
-        var _this6 = this;
-        return _asyncToGenerator(function*() {
-            var editedFields = [];
-            var formats = _assertClassBrand(_CitationDocService_brand, _this6, _makeFormattingPositions).call(_this6, fields);
-            for (var i = 0; i < fields.length; i++) {
-                var field = fields[i];
-                if (!field.FieldId) continue;
-                if (!field.Content) {
-                    editedFields.push(field);
-                    continue;
-                }
-                var selectFieldResult = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectField).call(_this6, field.FieldId);
-                if (!selectFieldResult) continue;
-                var isReferenceSelected = yield _assertClassBrand(_CitationDocService_brand, _this6, _selectFieldReference).call(_this6);
-                if (!isReferenceSelected) continue;
-                yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSuperscript).call(_this6);
-                yield _assertClassBrand(_CitationDocService_brand, _this6, _removeSelectedContent).call(_this6);
-                yield _assertClassBrand(_CitationDocService_brand, _this6, _addNote).call(_this6, notesStyle);
-                yield _assertClassBrand(_CitationDocService_brand, _this6, _addAddinField).call(_this6, field);
-                var formatting = formats.get(field.FieldId);
-                if (!formatting) continue;
-                yield CslDocFormatter.formatAfterInsert(formatting.formatting);
-            }
-            if (editedFields.length) {
-                yield new Promise(function(resolve) {
-                    window.Asc.plugin.executeMethod("UpdateAddinFields", [ editedFields ], resolve);
-                });
-            }
-        })();
-    }
-    moveCursorToField(fieldId, isBegin) {
-        return _asyncToGenerator(function*() {
-            return new Promise(resolve => {
-                isBegin = isBegin !== null && isBegin !== void 0 ? isBegin : true;
-                window.Asc.plugin.executeMethod("MoveCursorToField", [ fieldId, isBegin ], resolve);
-            });
-        })();
-    }
-    moveCursorOutsideField(fieldId, isBeforeField) {
-        return _asyncToGenerator(function*() {
-            return new Promise(resolve => {
-                isBeforeField = isBeforeField !== null && isBeforeField !== void 0 ? isBeforeField : false;
-                window.Asc.plugin.executeMethod("MoveCursorOutsideField", [ fieldId, isBeforeField ], resolve);
-            });
-        })();
-    }
-    moveCursorRight() {
-        return _asyncToGenerator(function*() {
-            return new Promise(resolve => {
-                var isCalc = true;
-                var isClose = false;
-                Asc.plugin.callCommand(() => {
-                    var doc = Api.GetDocument();
-                    doc.MoveCursorRight(1, false);
-                }, isClose, isCalc, resolve);
-            });
-        })();
-    }
-}
-
-function _addAddinField(field) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("AddAddinField", [ field ], resolve);
+  constructor(t, e, i, s) {
+    _classPrivateMethodInitSpec(this, _CitationDocService_brand), _classPrivateFieldInitSpec(this, _citPrefixOld, void 0), _classPrivateFieldInitSpec(this, _citPrefix, void 0), _classPrivateFieldInitSpec(this, _bibPrefixOld, void 0), _classPrivateFieldInitSpec(this, _citSuffix, void 0), _classPrivateFieldInitSpec(this, _bibPrefix, void 0), _classPrivateFieldInitSpec(this, _bibSuffix, void 0), _classPrivateFieldSet2(_citPrefixOld, this, "ZOTERO_CITATION"), _classPrivateFieldSet2(_bibPrefixOld, this, "ZOTERO_BIBLIOGRAPHY"), _classPrivateFieldSet2(_citPrefix, this, t), _classPrivateFieldSet2(_citSuffix, this, e), _classPrivateFieldSet2(_bibPrefix, this, i), _classPrivateFieldSet2(_bibSuffix, this, s);
+  }
+  addBibliography(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      var s = window.Asc.scope.editorVersion;
+      if (s && s < 9004e3) {
+        var n = CslHtmlParser.parseHtmlFormatting(t), a = "", r = { FieldId: a, Value: _classPrivateFieldGet2(_bibPrefix, i) + e + _classPrivateFieldGet2(_bibSuffix, i), Content: n.text };
+        return _assertClassBrand(_CitationDocService_brand, i, _addAddinField).call(i, r).then(() => i.getCurrentField()).then((t2) => {
+          if (a = (null == t2 ? void 0 : t2.FieldId) || "", n.formatting.length) return CslDocFormatter.formatAfterInsert(n.formatting);
+        }).then(() => a);
+      }
+      var o = { FieldId: "", Value: _classPrivateFieldGet2(_bibPrefix, i) + e + _classPrivateFieldGet2(_bibSuffix, i), Content: " " };
+      return yield _assertClassBrand(_CitationDocService_brand, i, _pasteBibliographyWithHtml).call(i, o, t);
+    })();
+  }
+  addCitation(t, e, i) {
+    var s = this;
+    return _asyncToGenerator(function* () {
+      var n = CslHtmlParser.parseHtmlFormatting(t), a = { FieldId: "", Value: _classPrivateFieldGet2(_citPrefix, s) + " " + _classPrivateFieldGet2(_citSuffix, s) + e, Content: n.text }, r = !(!i || -1 === ["footnotes", "endnotes"].indexOf(i));
+      return r && (yield _assertClassBrand(_CitationDocService_brand, s, _addNote).call(s, i)), yield _assertClassBrand(_CitationDocService_brand, s, _addAddinField).call(s, a), n.formatting.length ? (yield CslDocFormatter.formatAfterInsert(n.formatting), r && (yield _assertClassBrand(_CitationDocService_brand, s, _selectFieldReference).call(s)), r) : r;
+    })();
+  }
+  getCurrentField() {
+    return new Promise(function(t, e) {
+      window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, t);
     });
-}
-
-function _addNote(notesStyle) {
-    Asc.scope.notesStyle = notesStyle;
-    return new Promise(resolve => {
+  }
+  getAddinZoteroFields() {
+    var t = this;
+    return new Promise(function(e, i) {
+      _assertClassBrand(_CitationDocService_brand, t, _getAllAddinFields).call(t).then(function(s) {
+        try {
+          s.length && (s = s.filter(function(e2) {
+            return -1 !== e2.Value.indexOf(_classPrivateFieldGet2(_citPrefix, t)) || -1 !== e2.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, t)) || -1 !== e2.Value.indexOf(_classPrivateFieldGet2(_citPrefixOld, t)) || -1 !== e2.Value.indexOf(_classPrivateFieldGet2(_bibPrefixOld, t));
+          }));
+        } catch (t2) {
+          i(t2);
+        }
+        e(s);
+      });
+    });
+  }
+  saveAsText() {
+    return this.getAddinZoteroFields().then(function(t) {
+      if (!t.length) return window.Asc.plugin.executeCommand("close", ""), false;
+      var e = t.map(function(t2) {
+        return new Promise(function(e2) {
+          window.Asc.plugin.executeMethod("RemoveFieldWrapper", [t2.FieldId], e2);
+        });
+      });
+      return Promise.all(e).then(() => true).catch((t2) => (console.error(t2), false));
+    });
+  }
+  updateAddinFields(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      var i = t.map((t2) => t2.FieldId), s = window.Asc.scope.editorVersion, n = t.filter((t2) => 0 === t2.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, e)));
+      if (n.length && s && s >= 9004e3) {
+        t = t.filter((t2) => 0 !== t2.Value.indexOf(_classPrivateFieldGet2(_bibPrefix, e)));
+        var a = n[0];
+        yield _assertClassBrand(_CitationDocService_brand, e, _selectField).call(e, a.FieldId);
+        var r = a.Content || "";
+        a.Content = " ", yield _assertClassBrand(_CitationDocService_brand, e, _removeSelectedContent).call(e), yield _assertClassBrand(_CitationDocService_brand, e, _pasteBibliographyWithHtml).call(e, a, r);
+      }
+      var o = _assertClassBrand(_CitationDocService_brand, e, _makeFormattingPositions).call(e, t);
+      if (yield new Promise((e2) => {
+        window.Asc.plugin.executeMethod("UpdateAddinFields", [t], e2);
+      }), !o.size) return i;
+      for (var [l, c] of o) {
+        (yield _assertClassBrand(_CitationDocService_brand, e, _selectField).call(e, l)) && (yield CslDocFormatter.formatAfterUpdate(l, c));
+      }
+      return i;
+    })();
+  }
+  convertNotesToText(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      for (var i = _assertClassBrand(_CitationDocService_brand, e, _makeFormattingPositions).call(e, t), s = 0; s < t.length; s++) {
+        var n = t[s];
+        if (n.FieldId) {
+          if (yield _assertClassBrand(_CitationDocService_brand, e, _selectField).call(e, n.FieldId)) {
+            if (yield _assertClassBrand(_CitationDocService_brand, e, _selectFieldReference).call(e)) {
+              yield _assertClassBrand(_CitationDocService_brand, e, _removeSuperscript).call(e), yield _assertClassBrand(_CitationDocService_brand, e, _removeSelectedContent).call(e), yield _assertClassBrand(_CitationDocService_brand, e, _addAddinField).call(e, n);
+              var a = i.get(n.FieldId);
+              a && (yield CslDocFormatter.formatAfterInsert(a.formatting));
+            }
+          }
+        } else console.error("Field id is not defined");
+      }
+    })();
+  }
+  convertTextToNotes(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      for (var s = _assertClassBrand(_CitationDocService_brand, i, _makeFormattingPositions).call(i, t), n = 0; n < t.length; n++) {
+        var a = t[n];
+        if (a.FieldId) {
+          if (yield _assertClassBrand(_CitationDocService_brand, i, _selectField).call(i, a.FieldId)) {
+            yield _assertClassBrand(_CitationDocService_brand, i, _removeSelectedContent).call(i), yield _assertClassBrand(_CitationDocService_brand, i, _addNote).call(i, e), yield _assertClassBrand(_CitationDocService_brand, i, _addAddinField).call(i, a);
+            var r = s.get(a.FieldId);
+            r && (yield CslDocFormatter.formatAfterInsert(r.formatting));
+          }
+        }
+      }
+    })();
+  }
+  convertNotesStyle(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      for (var s = [], n = _assertClassBrand(_CitationDocService_brand, i, _makeFormattingPositions).call(i, t), a = 0; a < t.length; a++) {
+        var r = t[a];
+        if (r.FieldId) if (r.Content) {
+          if (yield _assertClassBrand(_CitationDocService_brand, i, _selectField).call(i, r.FieldId)) {
+            if (yield _assertClassBrand(_CitationDocService_brand, i, _selectFieldReference).call(i)) {
+              yield _assertClassBrand(_CitationDocService_brand, i, _removeSuperscript).call(i), yield _assertClassBrand(_CitationDocService_brand, i, _removeSelectedContent).call(i), yield _assertClassBrand(_CitationDocService_brand, i, _addNote).call(i, e), yield _assertClassBrand(_CitationDocService_brand, i, _addAddinField).call(i, r);
+              var o = n.get(r.FieldId);
+              o && (yield CslDocFormatter.formatAfterInsert(o.formatting));
+            }
+          }
+        } else s.push(r);
+      }
+      s.length && (yield new Promise(function(t2) {
+        window.Asc.plugin.executeMethod("UpdateAddinFields", [s], t2);
+      }));
+    })();
+  }
+  moveCursorToField(t, e) {
+    return _asyncToGenerator(function* () {
+      return new Promise((i) => {
+        e = null == e || e, window.Asc.plugin.executeMethod("MoveCursorToField", [t, e], i);
+      });
+    })();
+  }
+  moveCursorOutsideField(t, e) {
+    return _asyncToGenerator(function* () {
+      return new Promise((i) => {
+        e = null != e && e, window.Asc.plugin.executeMethod("MoveCursorOutsideField", [t, e], i);
+      });
+    })();
+  }
+  moveCursorRight() {
+    return _asyncToGenerator(function* () {
+      return new Promise((t) => {
         Asc.plugin.callCommand(() => {
-            var oDocument = Api.GetDocument();
-            if ("footnotes" === Asc.scope.notesStyle) {
-                oDocument.AddFootnote();
-            } else if ("endnotes" === Asc.scope.notesStyle) {
-                oDocument.AddEndnote();
-            }
-        }, false, false, resolve);
-    });
+          Api.GetDocument().MoveCursorRight(1, false);
+        }, false, true, t);
+      });
+    })();
+  }
 }
-
+function _addAddinField(t) {
+  return new Promise(function(e) {
+    window.Asc.plugin.executeMethod("AddAddinField", [t], e);
+  });
+}
+function _addNote(t) {
+  return Asc.scope.notesStyle = t, new Promise((t2) => {
+    Asc.plugin.callCommand(() => {
+      var t3 = Api.GetDocument();
+      "footnotes" === Asc.scope.notesStyle ? t3.AddFootnote() : "endnotes" === Asc.scope.notesStyle && t3.AddEndnote();
+    }, false, false, t2);
+  });
+}
 function _getAllAddinFields() {
-    return new Promise(function(resolve, reject) {
-        window.Asc.plugin.executeMethod("GetAllAddinFields", undefined, resolve);
-    });
+  return new Promise(function(t, e) {
+    window.Asc.plugin.executeMethod("GetAllAddinFields", void 0, t);
+  });
 }
-
-function _makeFormattingPositions(fields) {
-    var formats = new Map;
-    fields.forEach(function(field) {
-        if (!field.Content) return;
-        var formattingPositions = CslHtmlParser.parseHtmlFormatting(field.Content);
-        field.Content = formattingPositions.text;
-        if (formattingPositions.formatting.length && field.FieldId) {
-            formats.set(field.FieldId, formattingPositions);
-        }
-    });
-    return formats;
+function _makeFormattingPositions(t) {
+  var e = /* @__PURE__ */ new Map();
+  return t.forEach(function(t2) {
+    if (t2.Content) {
+      var i = CslHtmlParser.parseHtmlFormatting(t2.Content);
+      t2.Content = i.text, i.formatting.length && t2.FieldId && e.set(t2.FieldId, i);
+    }
+  }), e;
 }
-
-function _pasteHtml(html) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("PasteHtml", [ html ], resolve);
-    });
+function _pasteHtml(t) {
+  return new Promise(function(e) {
+    window.Asc.plugin.executeMethod("PasteHtml", [t], e);
+  });
 }
-
 function _removeSelectedContent() {
-    return new Promise(resolve => {
-        window.Asc.plugin.executeMethod("RemoveSelectedContent", undefined, resolve);
-    });
+  return new Promise((t) => {
+    window.Asc.plugin.executeMethod("RemoveSelectedContent", void 0, t);
+  });
 }
-
-function _selectField(fieldId) {
-    return new Promise(function(resolve) {
-        window.Asc.plugin.executeMethod("SelectAddinField", [ fieldId ], () => resolve(true));
-    });
+function _selectField(t) {
+  return new Promise(function(e) {
+    window.Asc.plugin.executeMethod("SelectAddinField", [t], () => e(true));
+  });
 }
-
 function _selectFieldReference() {
-    return new Promise(function(resolve) {
-        var isCalc = true;
-        var isClose = false;
-        Asc.plugin.callCommand(() => {
-            var doc = Api.GetDocument();
-            var note = doc.GetCurrentFootEndnote();
-            if (!note) return;
-            var reference = note.SelectNoteReference();
-            if (!reference) return;
-        }, isClose, isCalc, () => resolve(true));
-    });
+  return new Promise(function(t) {
+    Asc.plugin.callCommand(() => {
+      var t2 = Api.GetDocument().GetCurrentFootEndnote();
+      if (t2) t2.SelectNoteReference();
+    }, false, true, () => t(true));
+  });
 }
-
 function _removeSuperscript() {
-    return new Promise(function(resolve) {
-        var isCalc = false;
-        var isClose = false;
-        Asc.plugin.callCommand(() => {
-            var doc = Api.GetDocument();
-            var selRange = doc.GetRangeBySelect();
-            if (!selRange) return;
-            selRange.SetVertAlign("baseline");
-        }, isClose, isCalc, resolve);
-    });
+  return new Promise(function(t) {
+    Asc.plugin.callCommand(() => {
+      var t2 = Api.GetDocument().GetRangeBySelect();
+      t2 && t2.SetVertAlign("baseline");
+    }, false, false, t);
+  });
 }
-
-function _pasteBibliographyWithHtml(_x, _x2) {
-    return _pasteBibliographyWithHtml2.apply(this, arguments);
+function _pasteBibliographyWithHtml(t, e) {
+  return _pasteBibliographyWithHtml2.apply(this, arguments);
 }
-
 function _pasteBibliographyWithHtml2() {
-    _pasteBibliographyWithHtml2 = _asyncToGenerator(function*(field, html) {
-        yield _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, field);
-        yield new Promise(resolve => {
-            var isCalc = true;
-            var isClose = false;
-            Asc.plugin.callCommand(() => {
-                var doc = Api.GetDocument();
-                doc.MoveCursorLeft(1, true);
-            }, isClose, isCalc, resolve);
-        });
-        if (!Asc.scope.bibStyle) {
-            throw "Bibliography style is not defined";
+  return (_pasteBibliographyWithHtml2 = _asyncToGenerator(function* (t, e) {
+    if (yield _assertClassBrand(_CitationDocService_brand, this, _addAddinField).call(this, t), yield new Promise((t2) => {
+      Asc.plugin.callCommand(() => {
+        Api.GetDocument().MoveCursorLeft(1, true);
+      }, false, true, t2);
+    }), !Asc.scope.bibStyle) throw "Bibliography style is not defined";
+    var i = new DOMParser().parseFromString(e, "text/html"), s = i.querySelectorAll(".csl-entry"), n = new Array(s.length);
+    s.forEach((t2, e2) => {
+      var i2 = t2.querySelector(".csl-left-margin"), s2 = t2.querySelector(".csl-right-inline");
+      null == s2 || s2.replaceWith(...s2.childNodes), i2 && (n[e2] = i2.textContent.trim(), i2.remove());
+    }), e = i.body.innerHTML, yield _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, e);
+    var a = yield this.getCurrentField();
+    return a ? (yield _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, a.FieldId), yield new Promise((t2) => {
+      Asc.scope.numbers = n, Asc.plugin.callCommand(() => {
+        var t3 = Api.GetDocument().GetRangeBySelect();
+        if (t3) {
+          var e2 = Asc.scope.bibStyle;
+          t3.GetAllParagraphs().forEach((t4, i2) => {
+            if ("" !== t4.GetText().trim()) if ("number" == typeof e2.linespacing && t4.SetSpacingLine(240 * e2.linespacing, "exact"), "number" == typeof e2.entryspacing && t4.SetSpacingAfter(240 * e2.entryspacing), e2["second-field-align"]) {
+              var s2 = Api.CreateRun();
+              s2.AddText(Asc.scope.numbers[i2]), s2.AddTabStop();
+              var n2 = 0 === i2 ? 4 : 0;
+              t4.AddElement(s2, n2), t4.SetIndLeft(120 * e2.maxoffset), t4.SetIndFirstLine(-120 * e2.maxoffset);
+            } else e2.hangingindent && (t4.SetIndLeft(720), t4.SetIndFirstLine(-720));
+          });
         }
-        var parser = new DOMParser;
-        var doc = parser.parseFromString(html, "text/html");
-        var paragraphs = doc.querySelectorAll(".csl-entry");
-        var numbers = new Array(paragraphs.length);
-        paragraphs.forEach((p, index) => {
-            var margin = p.querySelector(".csl-left-margin");
-            var right = p.querySelector(".csl-right-inline");
-            right === null || right === void 0 || right.replaceWith(...right.childNodes);
-            if (margin) {
-                numbers[index] = margin.textContent.trim();
-                margin.remove();
-            }
-        });
-        html = doc.body.innerHTML;
-        yield _assertClassBrand(_CitationDocService_brand, this, _pasteHtml).call(this, html);
-        var addedField = yield this.getCurrentField();
-        if (!addedField) return "";
-        yield _assertClassBrand(_CitationDocService_brand, this, _selectField).call(this, addedField.FieldId);
-        yield new Promise(resolve => {
-            var isCalc = false;
-            var isClose = false;
-            Asc.scope.numbers = numbers;
-            Asc.plugin.callCommand(() => {
-                var doc = Api.GetDocument();
-                var range = doc.GetRangeBySelect();
-                if (!range) return;
-                var style = Asc.scope.bibStyle;
-                var paragraphs = range.GetAllParagraphs();
-                paragraphs.forEach((paragraph, index) => {
-                    var text = paragraph.GetText().trim();
-                    if (text === "") {
-                        return;
-                    }
-                    if (typeof style.linespacing === "number") {
-                        paragraph.SetSpacingLine(240 * style.linespacing, "exact");
-                    }
-                    if (typeof style.entryspacing === "number") {
-                        paragraph.SetSpacingAfter(240 * style.entryspacing);
-                    }
-                    if (style["second-field-align"]) {
-                        var margin = Api.CreateRun();
-                        margin.AddText(Asc.scope.numbers[index]);
-                        margin.AddTabStop();
-                        var elementIndex = index === 0 ? 4 : 0;
-                        paragraph.AddElement(margin, elementIndex);
-                        paragraph.SetIndLeft(style.maxoffset * 120);
-                        paragraph.SetIndFirstLine(-(style.maxoffset * 120));
-                    } else if (style.hangingindent) {
-                        paragraph.SetIndLeft(720);
-                        paragraph.SetIndFirstLine(-720);
-                    }
-                });
-            }, isClose, isCalc, resolve);
-        });
-        Asc.scope.bibStyle = null;
-        return addedField.FieldId;
-    });
-    return _pasteBibliographyWithHtml2.apply(this, arguments);
+      }, false, false, t2);
+    }), Asc.scope.bibStyle = null, a.FieldId) : "";
+  })).apply(this, arguments);
 }
-
-var _items = new WeakMap;
-
-var _itemIds = new WeakMap;
-
-var _citations = new WeakMap;
-
-var _CSLCitationStorage_brand = new WeakSet;
-
+var _items = /* @__PURE__ */ new WeakMap(), _itemIds = /* @__PURE__ */ new WeakMap(), _citations = /* @__PURE__ */ new WeakMap(), _CSLCitationStorage_brand = /* @__PURE__ */ new WeakSet();
 class CSLCitationStorage {
-    constructor() {
-        _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand);
-        _classPrivateFieldInitSpec(this, _items, void 0);
-        _classPrivateFieldInitSpec(this, _itemIds, void 0);
-        _classPrivateFieldInitSpec(this, _citations, void 0);
-        _classPrivateFieldSet2(_items, this, []);
-        _classPrivateFieldSet2(_itemIds, this, []);
-        _classPrivateFieldSet2(_citations, this, []);
-        this.size = 0;
+  constructor() {
+    _classPrivateMethodInitSpec(this, _CSLCitationStorage_brand), _classPrivateFieldInitSpec(this, _items, void 0), _classPrivateFieldInitSpec(this, _itemIds, void 0), _classPrivateFieldInitSpec(this, _citations, void 0), _classPrivateFieldSet2(_items, this, []), _classPrivateFieldSet2(_itemIds, this, []), _classPrivateFieldSet2(_citations, this, []), this.size = 0;
+  }
+  getItem(t) {
+    t = t.toString();
+    var e = _classPrivateFieldGet2(_itemIds, this).indexOf(t);
+    return e >= 0 ? _classPrivateFieldGet2(_items, this)[e] : null;
+  }
+  getItemIndex(t) {
+    return t = t.toString(), _classPrivateFieldGet2(_itemIds, this).indexOf(t);
+  }
+  clear() {
+    return _classPrivateFieldSet2(_items, this, []), _classPrivateFieldSet2(_citations, this, []), _classPrivateFieldSet2(_itemIds, this, []), this.size = 0, this;
+  }
+  deleteItem(t) {
+    t = t.toString();
+    var e = _classPrivateFieldGet2(_itemIds, this).indexOf(t);
+    return e >= 0 && (_classPrivateFieldGet2(_items, this).splice(e, 1), _classPrivateFieldGet2(_itemIds, this).splice(e, 1), this.size--), this;
+  }
+  forEachItem(t) {
+    for (var e = 0; e < this.size; e++) t(_classPrivateFieldGet2(_items, this)[e], _classPrivateFieldGet2(_itemIds, this)[e], this);
+  }
+  hasItem(t) {
+    return t = t.toString(), _classPrivateFieldGet2(_itemIds, this).indexOf(t) >= 0;
+  }
+  addCslCitation(t) {
+    return _classPrivateFieldGet2(_citations, this).push(t), t.setNoteIndex(_classPrivateFieldGet2(_citations, this).length), t.getCitationItems().forEach((t2) => {
+      _assertClassBrand(_CSLCitationStorage_brand, this, _setItem).call(this, t2.id, t2);
+    }), this;
+  }
+  getAllCitationsInJson() {
+    return _classPrivateFieldGet2(_citations, this).map((t) => t.toJSON());
+  }
+  getCitation(t) {
+    return _classPrivateFieldGet2(_citations, this).find((e) => e.citationID === t);
+  }
+  getCitationIndex(t) {
+    return _classPrivateFieldGet2(_citations, this).findIndex((e) => e.citationID === t);
+  }
+  getCitationsPre(t) {
+    var e = [];
+    return _classPrivateFieldGet2(_citations, this).find((i, s) => i.citationID === t || (e.push([i.citationID, s + 1]), false)), e;
+  }
+  getCitationsPost(t) {
+    for (var e = [], i = this.getCitationIndex(t) + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
+      var s = _classPrivateFieldGet2(_citations, this)[i];
+      e.push([s.citationID, i + 1]);
     }
-    getItem(id) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-        if (index >= 0) return _classPrivateFieldGet2(_items, this)[index];
-        return null;
-    }
-    getItemIndex(id) {
-        id = id.toString();
-        return _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-    }
-    clear() {
-        _classPrivateFieldSet2(_items, this, []);
-        _classPrivateFieldSet2(_citations, this, []);
-        _classPrivateFieldSet2(_itemIds, this, []);
-        this.size = 0;
-        return this;
-    }
-    deleteItem(id) {
-        id = id.toString();
-        var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-        if (index >= 0) {
-            _classPrivateFieldGet2(_items, this).splice(index, 1);
-            _classPrivateFieldGet2(_itemIds, this).splice(index, 1);
-            this.size--;
-        }
-        return this;
-    }
-    forEachItem(callback) {
-        for (var i = 0; i < this.size; i++) {
-            callback(_classPrivateFieldGet2(_items, this)[i], _classPrivateFieldGet2(_itemIds, this)[i], this);
-        }
-    }
-    hasItem(id) {
-        id = id.toString();
-        return _classPrivateFieldGet2(_itemIds, this).indexOf(id) >= 0;
-    }
-    addCslCitation(cslCitation) {
-        _classPrivateFieldGet2(_citations, this).push(cslCitation);
-        cslCitation.setNoteIndex(_classPrivateFieldGet2(_citations, this).length);
-        cslCitation.getCitationItems().forEach(item => {
-            _assertClassBrand(_CSLCitationStorage_brand, this, _setItem).call(this, item.id, item);
-        });
-        return this;
-    }
-    getAllCitationsInJson() {
-        return _classPrivateFieldGet2(_citations, this).map(citation => citation.toJSON());
-    }
-    getCitation(id) {
-        return _classPrivateFieldGet2(_citations, this).find(citation => citation.citationID === id);
-    }
-    getCitationIndex(id) {
-        return _classPrivateFieldGet2(_citations, this).findIndex(citation => citation.citationID === id);
-    }
-    getCitationsPre(id) {
-        var citationsPre = [];
-        _classPrivateFieldGet2(_citations, this).find((citation, index) => {
-            if (citation.citationID === id) {
-                return true;
-            }
-            citationsPre.push([ citation.citationID, index + 1 ]);
-            return false;
-        });
-        return citationsPre;
-    }
-    getCitationsPost(id) {
-        var citationsPost = [];
-        var citationIndex = this.getCitationIndex(id);
-        for (var i = citationIndex + 1; i < _classPrivateFieldGet2(_citations, this).length; i++) {
-            var citation = _classPrivateFieldGet2(_citations, this)[i];
-            citationsPost.push([ citation.citationID, i + 1 ]);
-        }
-        return citationsPost;
-    }
+    return e;
+  }
 }
-
-function _setItem(id, item) {
-    id = id.toString();
-    var index = _classPrivateFieldGet2(_itemIds, this).indexOf(id);
-    if (index >= 0) {
-        _classPrivateFieldGet2(_items, this)[index] = item;
-        return this;
-    }
-    _classPrivateFieldGet2(_items, this).push(item);
-    _classPrivateFieldGet2(_itemIds, this).push(id);
-    this.size++;
-    return this;
+function _setItem(t, e) {
+  t = t.toString();
+  var i = _classPrivateFieldGet2(_itemIds, this).indexOf(t);
+  return i >= 0 ? (_classPrivateFieldGet2(_items, this)[i] = e, this) : (_classPrivateFieldGet2(_items, this).push(e), _classPrivateFieldGet2(_itemIds, this).push(t), this.size++, this);
 }
-
-function CitationItemData(id) {
-    if (typeof id !== "string" && typeof id !== "number") {
-        throw new Error("CitationItemData: id is required");
-    }
-    this._id = id;
-    this._type = undefined;
-    this._citationKey = undefined;
-    this._categories = new Array;
-    this._language = undefined;
-    this._journalAbbreviation = undefined;
-    this._shortTitle = undefined;
-    this._author = new Array;
-    this._chair = new Array;
-    this._collectionEditor = new Array;
-    this._compiler = new Array;
-    this._composer = new Array;
-    this._containerAuthor = new Array;
-    this._contributor = new Array;
-    this._curator = new Array;
-    this._director = new Array;
-    this._editor = new Array;
-    this._editorialDirector = new Array;
-    this._executiveProducer = new Array;
-    this._guest = new Array;
-    this._host = new Array;
-    this._illustrator = new Array;
-    this._narrator = new Array;
-    this._organizer = new Array;
-    this._originalAuthor = new Array;
-    this._performer = new Array;
-    this._producer = new Array;
-    this._recipient = new Array;
-    this._reviewedAuthor = new Array;
-    this._scriptwriter = new Array;
-    this._seriesCreator = new Array;
-    this._translator = new Array;
-    this._accessed = {};
-    this._container = {};
-    this._eventDate = {};
-    this._issued = {};
-    this._originalDate = {};
-    this._submitted = {};
-    this._abstract = undefined;
-    this._annote = undefined;
-    this._archive = undefined;
-    this._archiveCollection = undefined;
-    this._archiveLocation = undefined;
-    this._archivePlace = undefined;
-    this._authority = undefined;
-    this._callNumber = undefined;
-    this._chapterNumber = undefined;
-    this._citationNumber = undefined;
-    this._citationLabel = undefined;
-    this._collectionNumber = undefined;
-    this._collectionTitle = undefined;
-    this._containerTitle = undefined;
-    this._containerTitleShort = undefined;
-    this._dimensions = undefined;
-    this._DOI = undefined;
-    this._edition = undefined;
-    this._event = undefined;
-    this._eventTitle = undefined;
-    this._eventPlace = undefined;
-    this._firstReferenceNoteNumber = undefined;
-    this._genre = undefined;
-    this._ISBN = undefined;
-    this._ISSN = undefined;
-    this._issue = undefined;
-    this._jurisdiction = undefined;
-    this._keyword = undefined;
-    this._locator = undefined;
-    this._medium = undefined;
-    this._note = undefined;
-    this._number = undefined;
-    this._numberOfPages = undefined;
-    this._numberOfVolumes = undefined;
-    this._originalPublisher = undefined;
-    this._originalPublisherPlace = undefined;
-    this._originalTitle = undefined;
-    this._page = undefined;
-    this._part = undefined;
-    this._partTitle = undefined;
-    this._pageFirst = undefined;
-    this._PMCID = undefined;
-    this._PMID = undefined;
-    this._printing = undefined;
-    this._publisher = undefined;
-    this._publisherPlace = undefined;
-    this._references = undefined;
-    this._reviewedGenre = undefined;
-    this._reviewedTitle = undefined;
-    this._scale = undefined;
-    this._section = undefined;
-    this._source = undefined;
-    this._status = undefined;
-    this._title = undefined;
-    this._titleShort = undefined;
-    this._URL = undefined;
-    this._version = undefined;
-    this._volume = undefined;
-    this._volumeTitle = undefined;
-    this._volumeTitleShort = undefined;
-    this._yearSuffix = undefined;
-    this._custom = {};
-    this.schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-data.json#/items";
+function CitationItemData(t) {
+  if ("string" != typeof t && "number" != typeof t) throw new Error("CitationItemData: id is required");
+  this._id = t, this._type = void 0, this._citationKey = void 0, this._categories = new Array(), this._language = void 0, this._journalAbbreviation = void 0, this._shortTitle = void 0, this._author = new Array(), this._chair = new Array(), this._collectionEditor = new Array(), this._compiler = new Array(), this._composer = new Array(), this._containerAuthor = new Array(), this._contributor = new Array(), this._curator = new Array(), this._director = new Array(), this._editor = new Array(), this._editorialDirector = new Array(), this._executiveProducer = new Array(), this._guest = new Array(), this._host = new Array(), this._illustrator = new Array(), this._narrator = new Array(), this._organizer = new Array(), this._originalAuthor = new Array(), this._performer = new Array(), this._producer = new Array(), this._recipient = new Array(), this._reviewedAuthor = new Array(), this._scriptwriter = new Array(), this._seriesCreator = new Array(), this._translator = new Array(), this._accessed = {}, this._container = {}, this._eventDate = {}, this._issued = {}, this._originalDate = {}, this._submitted = {}, this._abstract = void 0, this._annote = void 0, this._archive = void 0, this._archiveCollection = void 0, this._archiveLocation = void 0, this._archivePlace = void 0, this._authority = void 0, this._callNumber = void 0, this._chapterNumber = void 0, this._citationNumber = void 0, this._citationLabel = void 0, this._collectionNumber = void 0, this._collectionTitle = void 0, this._containerTitle = void 0, this._containerTitleShort = void 0, this._dimensions = void 0, this._DOI = void 0, this._edition = void 0, this._event = void 0, this._eventTitle = void 0, this._eventPlace = void 0, this._firstReferenceNoteNumber = void 0, this._genre = void 0, this._ISBN = void 0, this._ISSN = void 0, this._issue = void 0, this._jurisdiction = void 0, this._keyword = void 0, this._locator = void 0, this._medium = void 0, this._note = void 0, this._number = void 0, this._numberOfPages = void 0, this._numberOfVolumes = void 0, this._originalPublisher = void 0, this._originalPublisherPlace = void 0, this._originalTitle = void 0, this._page = void 0, this._part = void 0, this._partTitle = void 0, this._pageFirst = void 0, this._PMCID = void 0, this._PMID = void 0, this._printing = void 0, this._publisher = void 0, this._publisherPlace = void 0, this._references = void 0, this._reviewedGenre = void 0, this._reviewedTitle = void 0, this._scale = void 0, this._section = void 0, this._source = void 0, this._status = void 0, this._title = void 0, this._titleShort = void 0, this._URL = void 0, this._version = void 0, this._volume = void 0, this._volumeTitle = void 0, this._volumeTitleShort = void 0, this._yearSuffix = void 0, this._custom = {}, this.schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-data.json#/items";
 }
-
-CitationItemData.prototype._addCustomProperty = function(key, value) {
-    this._custom[key] = value;
-    return this;
-};
-
-CitationItemData.prototype.getCustomProperty = function(key) {
-    if (Object.hasOwnProperty.call(this._custom, key)) return this._custom[key];
-    return null;
-};
-
-CitationItemData.prototype.fillFromObject = function(itemDataObject) {
-    if (Object.hasOwnProperty.call(itemDataObject, "type")) {
-        this._type = itemDataObject.type;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "categories")) {
-        this._categories = itemDataObject.categories;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "citation-key")) {
-        this._citationKey = itemDataObject["citation-key"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "language")) {
-        this._language = itemDataObject.language;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "journalAbbreviation")) {
-        this._journalAbbreviation = itemDataObject.journalAbbreviation;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "shortTitle")) {
-        this._shortTitle = itemDataObject.shortTitle;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "author")) {
-        this._author = itemDataObject.author;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "chair")) {
-        this._chair = itemDataObject.chair;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "collection-editor")) {
-        this._collectionEditor = itemDataObject["collection-editor"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "compiler")) {
-        this._compiler = itemDataObject.compiler;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "composer")) {
-        this._composer = itemDataObject.composer;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "container-author")) {
-        this._containerAuthor = itemDataObject["container-author"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "contributor")) {
-        this._contributor = itemDataObject.contributor;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "curator")) {
-        this._curator = itemDataObject.curator;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "director")) {
-        this._director = itemDataObject.director;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "editorial-director")) {
-        this._editorialDirector = itemDataObject["editorial-director"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "editor")) {
-        this._editor = itemDataObject.editor;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "executive-producer")) {
-        this._executiveProducer = itemDataObject["executive-producer"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "guest")) {
-        this._guest = itemDataObject.guest;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "host")) {
-        this._host = itemDataObject.host;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "illustrator")) {
-        this._illustrator = itemDataObject.illustrator;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "narrator")) {
-        this._narrator = itemDataObject.narrator;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "organizer")) {
-        this._organizer = itemDataObject.organizer;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "original-author")) {
-        this._originalAuthor = itemDataObject["original-author"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "performer")) {
-        this._performer = itemDataObject.performer;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "producer")) {
-        this._producer = itemDataObject.producer;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "recipient")) {
-        this._recipient = itemDataObject.recipient;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-author")) {
-        this._reviewedAuthor = itemDataObject["reviewed-author"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "script-writer")) {
-        this._scriptWriter = itemDataObject["script-writer"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "series-creator")) {
-        this._seriesCreator = itemDataObject["series-creator"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "translator")) {
-        this._translator = itemDataObject.translator;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "accessed")) {
-        this._accessed = itemDataObject.accessed;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "container")) {
-        this._container = itemDataObject.container;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "event-date")) {
-        this._eventDate = itemDataObject["event-date"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "issued")) {
-        this._issued = itemDataObject.issued;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "original-date")) {
-        this._originalDate = itemDataObject["original-date"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "submitted")) {
-        this._submitted = itemDataObject.submitted;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "abstract")) {
-        this._abstract = itemDataObject.abstract;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "annote")) {
-        this._annote = itemDataObject.annote;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "archive")) {
-        this._archive = itemDataObject.archive;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "archive_collection")) {
-        this._archiveCollection = itemDataObject["archive_collection"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "archive_location")) {
-        this._archiveLocation = itemDataObject["archive_location"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "archive-place")) {
-        this._archivePlace = itemDataObject["archive-place"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "authority")) {
-        this._authority = itemDataObject.authority;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "call-number")) {
-        this._callNumber = itemDataObject["call-number"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "chapter-number")) {
-        this._chapterNumber = itemDataObject["chapter-number"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "citation-number")) {
-        this._citationNumber = itemDataObject["citation-number"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "citation-label")) {
-        this._citationLabel = itemDataObject["citation-label"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "collection-number")) {
-        this._collectionNumber = itemDataObject["collection-number"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "collection-title")) {
-        this._collectionTitle = itemDataObject["collection-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "container-title")) {
-        this._containerTitle = itemDataObject["container-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "container-title-short")) {
-        this._containerTitleShort = itemDataObject["container-title-short"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "dimensions")) {
-        this._dimensions = itemDataObject.dimensions;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "DOI")) {
-        this._DOI = itemDataObject.DOI;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "edition")) {
-        this._edition = itemDataObject.edition;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "event")) {
-        this._event = itemDataObject.event;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "event-title")) {
-        this._eventTitle = itemDataObject["event-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "event-place")) {
-        this._eventPlace = itemDataObject["event-place"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "first-reference-note-number")) {
-        this._firstReferenceNoteNumber = itemDataObject["first-reference-note-number"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "genre")) {
-        this._genre = itemDataObject.genre;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "ISBN")) {
-        this._ISBN = itemDataObject.ISBN;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "ISSN")) {
-        this._ISSN = itemDataObject.ISSN;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "issue")) {
-        this._issue = itemDataObject.issue;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "jurisdiction")) {
-        this._jurisdiction = itemDataObject.jurisdiction;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "keyword")) {
-        this._keyword = itemDataObject.keyword;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "locator")) {
-        this._locator = itemDataObject.locator;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "medium")) {
-        this._medium = itemDataObject.medium;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "note")) {
-        this._note = itemDataObject.note;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "number")) {
-        this._number = itemDataObject.number;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "number-of-pages")) {
-        this._numberOfPages = itemDataObject["number-of-pages"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "number-of-volumes")) {
-        this._numberOfVolumes = itemDataObject["number-of-volumes"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "original-publisher")) {
-        this._originalPublisher = itemDataObject["original-publisher"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "original-publisher-place")) {
-        this._originalPublisherPlace = itemDataObject["original-publisher-place"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "original-title")) {
-        this._originalTitle = itemDataObject["original-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "page")) {
-        this._page = itemDataObject.page;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "page-first")) {
-        this._pageFirst = itemDataObject["page-first"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "part")) {
-        this._part = itemDataObject.part;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "part-title")) {
-        this._partTitle = itemDataObject["part-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "PMCID")) {
-        this._PMCID = itemDataObject.PMCID;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "PMID")) {
-        this._PMID = itemDataObject.PMID;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "printing")) {
-        this._printing = itemDataObject.printing;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "publisher")) {
-        this._publisher = itemDataObject.publisher;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "publisher-place")) {
-        this._publisherPlace = itemDataObject["publisher-place"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "references")) {
-        this._references = itemDataObject.references;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-genre")) {
-        this._reviewedGenre = itemDataObject["reviewed-genre"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "reviewed-title")) {
-        this._reviewedTitle = itemDataObject["reviewed-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "scale")) {
-        this._scale = itemDataObject.scale;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "section")) {
-        this._section = itemDataObject.section;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "source")) {
-        this._source = itemDataObject.source;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "status")) {
-        this._status = itemDataObject.status;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "title")) {
-        this._title = itemDataObject.title;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "title-short")) {
-        this._titleShort = itemDataObject["title-short"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "URL")) {
-        this._URL = itemDataObject.URL;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "version")) {
-        this._version = itemDataObject.version;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "volume")) {
-        this._volume = itemDataObject.volume;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "volume-title")) {
-        this._volumeTitle = itemDataObject["volume-title"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "volume-title-short")) {
-        this._volumeTitleShort = itemDataObject["volume-title-short"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "year-suffix")) {
-        this._yearSuffix = itemDataObject["year-suffix"];
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "custom")) {
-        this._custom = itemDataObject.custom;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "userID")) {
-        this._addCustomProperty("userID", itemDataObject.userID);
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "groupID")) {
-        this._addCustomProperty("groupID", itemDataObject.groupID);
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "creators")) {
-        var self = this;
-        itemDataObject.creators.forEach(function(creator) {
-            var author = {};
-            if (creator.firstName) {
-                author.given = creator.firstName;
-            }
-            if (creator.lastName) {
-                author.family = creator.lastName;
-            }
-            var bHasAuthor = self._author.some(function(a) {
-                if (a.family !== author.family && (a.family || author.family)) {
-                    return false;
-                }
-                if (a.given !== author.given && (a.given || author.given)) {
-                    return false;
-                }
-                return true;
-            });
-            if (bHasAuthor) {
-                return;
-            }
-            self._author.push(author);
-        }, this);
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "libraryCatalog")) {
-        this._source = itemDataObject.libraryCatalog;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "place")) {
-        this._eventPlace = itemDataObject.place;
-        this._publisherPlace = itemDataObject.place;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "numberOfVolumes")) {
-        this._numberOfVolumes = itemDataObject.numberOfVolumes;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "callNumber")) {
-        this._callNumber = itemDataObject.callNumber;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "seriesNumber")) {
-        this._collectionNumber = itemDataObject.seriesNumber;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "series")) {
-        this._collectionTitle = itemDataObject.series;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "bookTitle")) {
-        this._containerTitle = itemDataObject.bookTitle;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
-        this._note = itemDataObject.extra;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "rights")) {
-        this._license = itemDataObject.rights;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "archiveLocation")) {
-        this._archiveLocation = itemDataObject.archiveLocation;
-    }
-    if (Object.hasOwnProperty.call(itemDataObject, "abstractNote")) {
-        this._abstract = itemDataObject.abstractNote;
-    }
-};
-
-CitationItemData.prototype.getTitle = function() {
-    return this._title;
-};
-
-CitationItemData.prototype.getType = function() {
-    return this._type;
-};
-
-CitationItemData.prototype.setType = function(type) {
-    this._type = type;
-    return this;
-};
-
-CitationItemData.prototype.setCitationKey = function(key) {
-    this._citationKey = key;
-    return this;
-};
-
-CitationItemData.prototype.setCategories = function(categories) {
-    this._categories = categories;
-    return this;
-};
-
-CitationItemData.prototype.setLanguage = function(language) {
-    this._language = language;
-    return this;
-};
-
-CitationItemData.prototype.setJournalAbbreviation = function(journalAbbreviation) {
-    this._journalAbbreviation = journalAbbreviation;
-    return this;
-};
-
-CitationItemData.prototype.setShortTitle = function(shortTitle) {
-    this._shortTitle = shortTitle;
-    return this;
-};
-
-CitationItemData.prototype.setAuthor = function(author) {
-    this._author = Array.isArray(author) ? author : [ author ];
-    return this;
-};
-
-CitationItemData.prototype.setChair = function(chair) {
-    this._chair = Array.isArray(chair) ? chair : [ chair ];
-    return this;
-};
-
-CitationItemData.prototype.setCollectionEditor = function(collectionEditor) {
-    this._collectionEditor = Array.isArray(collectionEditor) ? collectionEditor : [ collectionEditor ];
-    return this;
-};
-
-CitationItemData.prototype.setCompiler = function(compiler) {
-    this._compiler = Array.isArray(compiler) ? compiler : [ compiler ];
-    return this;
-};
-
-CitationItemData.prototype.setComposer = function(composer) {
-    this._composer = Array.isArray(composer) ? composer : [ composer ];
-    return this;
-};
-
-CitationItemData.prototype.setContainerAuthor = function(containerAuthor) {
-    this._containerAuthor = Array.isArray(containerAuthor) ? containerAuthor : [ containerAuthor ];
-    return this;
-};
-
-CitationItemData.prototype.setContributor = function(contributor) {
-    this._contributor = Array.isArray(contributor) ? contributor : [ contributor ];
-    return this;
-};
-
-CitationItemData.prototype.setCurator = function(curator) {
-    this._curator = Array.isArray(curator) ? curator : [ curator ];
-    return this;
-};
-
-CitationItemData.prototype.setDirector = function(director) {
-    this._director = Array.isArray(director) ? director : [ director ];
-    return this;
-};
-
-CitationItemData.prototype.setEditor = function(editor) {
-    this._editor = Array.isArray(editor) ? editor : [ editor ];
-    return this;
-};
-
-CitationItemData.prototype.setEditorialDirector = function(editorialDirector) {
-    this._editorialDirector = Array.isArray(editorialDirector) ? editorialDirector : [ editorialDirector ];
-    return this;
-};
-
-CitationItemData.prototype.setExecutiveProducer = function(executiveProducer) {
-    this._executiveProducer = Array.isArray(executiveProducer) ? executiveProducer : [ executiveProducer ];
-    return this;
-};
-
-CitationItemData.prototype.setGuest = function(guest) {
-    this._guest = Array.isArray(guest) ? guest : [ guest ];
-    return this;
-};
-
-CitationItemData.prototype.setHost = function(host) {
-    this._host = Array.isArray(host) ? host : [ host ];
-    return this;
-};
-
-CitationItemData.prototype.setIllustrator = function(illustrator) {
-    this._illustrator = Array.isArray(illustrator) ? illustrator : [ illustrator ];
-    return this;
-};
-
-CitationItemData.prototype.setNarrator = function(narrator) {
-    this._narrator = Array.isArray(narrator) ? narrator : [ narrator ];
-    return this;
-};
-
-CitationItemData.prototype.setOrganizer = function(organizer) {
-    this._organizer = Array.isArray(organizer) ? organizer : [ organizer ];
-    return this;
-};
-
-CitationItemData.prototype.setOriginalAuthor = function(originalAuthor) {
-    this._originalAuthor = Array.isArray(originalAuthor) ? originalAuthor : [ originalAuthor ];
-    return this;
-};
-
-CitationItemData.prototype.setPerformer = function(performer) {
-    this._performer = Array.isArray(performer) ? performer : [ performer ];
-    return this;
-};
-
-CitationItemData.prototype.setProducer = function(producer) {
-    this._producer = Array.isArray(producer) ? producer : [ producer ];
-    return this;
-};
-
-CitationItemData.prototype.setRecipient = function(recipient) {
-    this._recipient = Array.isArray(recipient) ? recipient : [ recipient ];
-    return this;
-};
-
-CitationItemData.prototype.setReviewedAuthor = function(reviewedAuthor) {
-    this._reviewedAuthor = Array.isArray(reviewedAuthor) ? reviewedAuthor : [ reviewedAuthor ];
-    return this;
-};
-
-CitationItemData.prototype.setScriptwriter = function(scriptwriter) {
-    this._scriptwriter = Array.isArray(scriptwriter) ? scriptwriter : [ scriptwriter ];
-    return this;
-};
-
-CitationItemData.prototype.setSeriesCreator = function(seriesCreator) {
-    this._seriesCreator = Array.isArray(seriesCreator) ? seriesCreator : [ seriesCreator ];
-    return this;
-};
-
-CitationItemData.prototype.setTranslator = function(translator) {
-    this._translator = Array.isArray(translator) ? translator : [ translator ];
-    return this;
-};
-
-CitationItemData.prototype.setAccessed = function(accessed) {
-    this._accessed = accessed || {};
-    return this;
-};
-
-CitationItemData.prototype.setContainer = function(container) {
-    this._container = container || {};
-    return this;
-};
-
-CitationItemData.prototype.setEventDate = function(eventDate) {
-    this._eventDate = eventDate || {};
-    return this;
-};
-
-CitationItemData.prototype.setIssued = function(issued) {
-    this._issued = issued || {};
-    return this;
-};
-
-CitationItemData.prototype.setOriginalDate = function(originalDate) {
-    this._originalDate = originalDate || {};
-    return this;
-};
-
-CitationItemData.prototype.setSubmitted = function(submitted) {
-    this._submitted = submitted || {};
-    return this;
-};
-
-CitationItemData.prototype.setAbstract = function(abstract) {
-    this._abstract = abstract;
-    return this;
-};
-
-CitationItemData.prototype.setAnnote = function(annote) {
-    this._annote = annote;
-    return this;
-};
-
-CitationItemData.prototype.setArchive = function(archive) {
-    this._archive = archive;
-    return this;
-};
-
-CitationItemData.prototype.setArchiveCollection = function(archiveCollection) {
-    this._archiveCollection = archiveCollection;
-    return this;
-};
-
-CitationItemData.prototype.setArchiveLocation = function(archiveLocation) {
-    this._archiveLocation = archiveLocation;
-    return this;
-};
-
-CitationItemData.prototype.setArchivePlace = function(archivePlace) {
-    this._archivePlace = archivePlace;
-    return this;
-};
-
-CitationItemData.prototype.setAuthority = function(authority) {
-    this._authority = authority;
-    return this;
-};
-
-CitationItemData.prototype.setCallNumber = function(callNumber) {
-    this._callNumber = callNumber;
-    return this;
-};
-
-CitationItemData.prototype.setChapterNumber = function(chapterNumber) {
-    this._chapterNumber = chapterNumber;
-    return this;
-};
-
-CitationItemData.prototype.setCitationNumber = function(citationNumber) {
-    this._citationNumber = citationNumber;
-    return this;
-};
-
-CitationItemData.prototype.setCitationLabel = function(citationLabel) {
-    this._citationLabel = citationLabel;
-    return this;
-};
-
-CitationItemData.prototype.setCollectionNumber = function(collectionNumber) {
-    this._collectionNumber = collectionNumber;
-    return this;
-};
-
-CitationItemData.prototype.setCollectionTitle = function(collectionTitle) {
-    this._collectionTitle = collectionTitle;
-    return this;
-};
-
-CitationItemData.prototype.setContainerTitle = function(containerTitle) {
-    this._containerTitle = containerTitle;
-    return this;
-};
-
-CitationItemData.prototype.setContainerTitleShort = function(containerTitleShort) {
-    this._containerTitleShort = containerTitleShort;
-    return this;
-};
-
-CitationItemData.prototype.setDimensions = function(dimensions) {
-    this._dimensions = dimensions;
-    return this;
-};
-
-CitationItemData.prototype.setDOI = function(DOI) {
-    this._DOI = DOI;
-    return this;
-};
-
-CitationItemData.prototype.setEdition = function(edition) {
-    this._edition = edition;
-    return this;
-};
-
-CitationItemData.prototype.setEvent = function(event) {
-    this._event = event;
-    return this;
-};
-
-CitationItemData.prototype.setEventTitle = function(eventTitle) {
-    this._eventTitle = eventTitle;
-    return this;
-};
-
-CitationItemData.prototype.setEventPlace = function(eventPlace) {
-    this._eventPlace = eventPlace;
-    return this;
-};
-
-CitationItemData.prototype.setFirstReferenceNoteNumber = function(firstReferenceNoteNumber) {
-    this._firstReferenceNoteNumber = firstReferenceNoteNumber;
-    return this;
-};
-
-CitationItemData.prototype.setGenre = function(genre) {
-    this._genre = genre;
-    return this;
-};
-
-CitationItemData.prototype.setISBN = function(ISBN) {
-    this._ISBN = ISBN;
-    return this;
-};
-
-CitationItemData.prototype.setISSN = function(ISSN) {
-    this._ISSN = ISSN;
-    return this;
-};
-
-CitationItemData.prototype.setIssue = function(issue) {
-    this._issue = issue;
-    return this;
-};
-
-CitationItemData.prototype.setJurisdiction = function(jurisdiction) {
-    this._jurisdiction = jurisdiction;
-    return this;
-};
-
-CitationItemData.prototype.setKeyword = function(keyword) {
-    this._keyword = keyword;
-    return this;
-};
-
-CitationItemData.prototype.setLocator = function(locator) {
-    this._locator = locator;
-    return this;
-};
-
-CitationItemData.prototype.setMedium = function(medium) {
-    this._medium = medium;
-    return this;
-};
-
-CitationItemData.prototype.setNote = function(note) {
-    this._note = note;
-    return this;
-};
-
-CitationItemData.prototype.setNumber = function(number) {
-    this._number = number;
-    return this;
-};
-
-CitationItemData.prototype.setNumberOfPages = function(numberOfPages) {
-    this._numberOfPages = numberOfPages;
-    return this;
-};
-
-CitationItemData.prototype.setNumberOfVolumes = function(numberOfVolumes) {
-    this._numberOfVolumes = numberOfVolumes;
-    return this;
-};
-
-CitationItemData.prototype.setOriginalPublisher = function(originalPublisher) {
-    this._originalPublisher = originalPublisher;
-    return this;
-};
-
-CitationItemData.prototype.setOriginalPublisherPlace = function(originalPublisherPlace) {
-    this._originalPublisherPlace = originalPublisherPlace;
-    return this;
-};
-
-CitationItemData.prototype.setOriginalTitle = function(originalTitle) {
-    this._originalTitle = originalTitle;
-    return this;
-};
-
-CitationItemData.prototype.setPage = function(page) {
-    this._page = page;
-    return this;
-};
-
-CitationItemData.prototype.setPageFirst = function(pageFirst) {
-    this._pageFirst = pageFirst;
-    return this;
-};
-
-CitationItemData.prototype.setPart = function(part) {
-    this._part = part;
-    return this;
-};
-
-CitationItemData.prototype.setPartTitle = function(partTitle) {
-    this._partTitle = partTitle;
-    return this;
-};
-
-CitationItemData.prototype.setPMCID = function(PMCID) {
-    this._PMCID = PMCID;
-    return this;
-};
-
-CitationItemData.prototype.setPMID = function(PMID) {
-    this._PMID = PMID;
-    return this;
-};
-
-CitationItemData.prototype.setPrinting = function(printing) {
-    this._printing = printing;
-    return this;
-};
-
-CitationItemData.prototype.setPublisher = function(publisher) {
-    this._publisher = publisher;
-    return this;
-};
-
-CitationItemData.prototype.setPublisherPlace = function(publisherPlace) {
-    this._publisherPlace = publisherPlace;
-    return this;
-};
-
-CitationItemData.prototype.setReferences = function(references) {
-    this._references = references;
-    return this;
-};
-
-CitationItemData.prototype.setReviewedGenre = function(reviewedGenre) {
-    this._reviewedGenre = reviewedGenre;
-    return this;
-};
-
-CitationItemData.prototype.setReviewedTitle = function(reviewedTitle) {
-    this._reviewedTitle = reviewedTitle;
-    return this;
-};
-
-CitationItemData.prototype.setScale = function(scale) {
-    this._scale = scale;
-    return this;
-};
-
-CitationItemData.prototype.setSection = function(section) {
-    this._section = section;
-    return this;
-};
-
-CitationItemData.prototype.setSource = function(source) {
-    this._source = source;
-    return this;
-};
-
-CitationItemData.prototype.setStatus = function(status) {
-    this._status = status;
-    return this;
-};
-
-CitationItemData.prototype.setTitle = function(title) {
-    this._title = title;
-    return this;
-};
-
-CitationItemData.prototype.setTitleShort = function(titleShort) {
-    this._titleShort = titleShort;
-    return this;
-};
-
-CitationItemData.prototype.setURL = function(URL) {
-    this._URL = URL;
-    return this;
-};
-
-CitationItemData.prototype.setVersion = function(version) {
-    this._version = version;
-    return this;
-};
-
-CitationItemData.prototype.setVolume = function(volume) {
-    this._volume = volume;
-    return this;
-};
-
-CitationItemData.prototype.setVolumeTitle = function(volumeTitle) {
-    this._volumeTitle = volumeTitle;
-    return this;
-};
-
-CitationItemData.prototype.setVolumeTitleShort = function(volumeTitleShort) {
-    this._volumeTitleShort = volumeTitleShort;
-    return this;
-};
-
-CitationItemData.prototype.setYearSuffix = function(yearSuffix) {
-    this._yearSuffix = yearSuffix;
-    return this;
-};
-
-CitationItemData.prototype.setCustom = function(custom) {
-    this._custom = Object.assign(this._custom, custom);
-    return this;
-};
-
-CitationItemData.prototype.toJSON = function() {
-    var result = {};
-    result.id = this._id;
-    if (this._type !== undefined && this._type !== "") result.type = this._type;
-    if (this._citationKey !== undefined && this._citationKey !== "") result["citation-key"] = this._citationKey;
-    if (this._categories.length > 0) result.categories = this._categories;
-    if (this._language !== undefined && this._language !== "") result.language = this._language;
-    if (this._journalAbbreviation !== undefined && this._journalAbbreviation !== "") result.journalAbbreviation = this._journalAbbreviation;
-    if (this._shortTitle !== undefined && this._shortTitle !== "") {
-        result.shortTitle = this._shortTitle;
-        if (this._titleShort === undefined) result["title-short"] = this._shortTitle;
-    }
-    if (this._author.length > 0) result.author = this._author;
-    if (this._chair.length > 0) result.chair = this._chair;
-    if (this._collectionEditor.length > 0) result["collection-editor"] = this._collectionEditor;
-    if (this._compiler.length > 0) result.compiler = this._compiler;
-    if (this._composer.length > 0) result.composer = this._composer;
-    if (this._containerAuthor.length > 0) result["container-author"] = this._containerAuthor;
-    if (this._contributor.length > 0) result.contributor = this._contributor;
-    if (this._curator.length > 0) result.curator = this._curator;
-    if (this._director.length > 0) result.director = this._director;
-    if (this._editor.length > 0) result.editor = this._editor;
-    if (this._editorialDirector.length > 0) result["editorial-director"] = this._editorialDirector;
-    if (this._executiveProducer.length > 0) result["executive-producer"] = this._executiveProducer;
-    if (this._guest.length > 0) result.guest = this._guest;
-    if (this._host.length > 0) result.host = this._host;
-    if (this._illustrator.length > 0) result.illustrator = this._illustrator;
-    if (this._narrator.length > 0) result.narrator = this._narrator;
-    if (this._organizer.length > 0) result.organizer = this._organizer;
-    if (this._originalAuthor.length > 0) result["original-author"] = this._originalAuthor;
-    if (this._performer.length > 0) result.performer = this._performer;
-    if (this._producer.length > 0) result.producer = this._producer;
-    if (this._recipient.length > 0) result.recipient = this._recipient;
-    if (this._reviewedAuthor.length > 0) result["reviewed-author"] = this._reviewedAuthor;
-    if (this._scriptwriter.length > 0) result["script-writer"] = this._scriptwriter;
-    if (this._seriesCreator.length > 0) result["series-creator"] = this._seriesCreator;
-    if (this._translator.length > 0) result.translator = this._translator;
-    if (Object.keys(this._accessed).length > 0) result.accessed = this._accessed;
-    if (Object.keys(this._container).length > 0) result.container = this._container;
-    if (Object.keys(this._eventDate).length > 0) result["event-date"] = this._eventDate;
-    if (Object.keys(this._issued).length > 0) result.issued = this._issued;
-    if (Object.keys(this._originalDate).length > 0) result["original-date"] = this._originalDate;
-    if (Object.keys(this._submitted).length > 0) result.submitted = this._submitted;
-    if (this._abstract !== undefined && this._abstract !== "") result.abstract = this._abstract;
-    if (this._annote !== undefined && this._annote !== "") result.annote = this._annote;
-    if (this._archive !== undefined && this._archive !== "") result.archive = this._archive;
-    if (this._archiveCollection !== undefined && this._archiveCollection !== "") result["archive_collection"] = this._archiveCollection;
-    if (this._archiveLocation !== undefined && this._archiveLocation !== "") result["archive_location"] = this._archiveLocation;
-    if (this._archivePlace !== undefined && this._archivePlace !== "") result["archive-place"] = this._archivePlace;
-    if (this._authority !== undefined && this._authority !== "") result.authority = this._authority;
-    if (this._callNumber !== undefined && this._callNumber !== "") result["call-number"] = this._callNumber;
-    if (this._chapterNumber !== undefined && this._chapterNumber !== "") result["chapter-number"] = this._chapterNumber;
-    if (this._citationNumber !== undefined && this._citationNumber !== "") result["citation-number"] = this._citationNumber;
-    if (this._citationLabel !== undefined && this._citationLabel !== "") result["citation-label"] = this._citationLabel;
-    if (this._collectionNumber !== undefined && this._collectionNumber !== "") result["collection-number"] = this._collectionNumber;
-    if (this._collectionTitle !== undefined && this._collectionTitle !== "") result["collection-title"] = this._collectionTitle;
-    if (this._containerTitle !== undefined && this._containerTitle !== "") result["container-title"] = this._containerTitle;
-    if (this._containerTitleShort !== undefined && this._containerTitleShort !== "") result["container-title-short"] = this._containerTitleShort;
-    if (this._dimensions !== undefined && this._dimensions !== "") result.dimensions = this._dimensions;
-    if (this._DOI !== undefined && this._DOI !== "") result.DOI = this._DOI;
-    if (this._edition !== undefined && this._edition !== "") result.edition = this._edition;
-    if (this._event !== undefined && this._event !== "") result.event = this._event;
-    if (this._eventTitle !== undefined && this._eventTitle !== "") result["event-title"] = this._eventTitle;
-    if (this._eventPlace !== undefined && this._eventPlace !== "") result["event-place"] = this._eventPlace;
-    if (this._firstReferenceNoteNumber !== undefined && this._firstReferenceNoteNumber !== "") result["first-reference-note-number"] = this._firstReferenceNoteNumber;
-    if (this._genre !== undefined && this._genre !== "") result.genre = this._genre;
-    if (this._ISBN !== undefined && this._ISBN !== "") result.ISBN = this._ISBN;
-    if (this._ISSN !== undefined && this._ISSN !== "") result.ISSN = this._ISSN;
-    if (this._issue !== undefined && this._issue !== "") result.issue = this._issue;
-    if (this._jurisdiction !== undefined && this._jurisdiction !== "") result.jurisdiction = this._jurisdiction;
-    if (this._keyword !== undefined && this._keyword !== "") result.keyword = this._keyword;
-    if (this._locator !== undefined && this._locator !== "") result.locator = this._locator;
-    if (this._medium !== undefined && this._medium !== "") result.medium = this._medium;
-    if (this._note !== undefined && this._note !== "") result.note = this._note;
-    if (this._number !== undefined && this._number !== "") result.number = this._number;
-    if (this._numberOfPages !== undefined && this._numberOfPages !== "") result["number-of-pages"] = this._numberOfPages;
-    if (this._numberOfVolumes !== undefined && this._numberOfVolumes !== "") result["number-of-volumes"] = this._numberOfVolumes;
-    if (this._originalPublisher !== undefined && this._originalPublisher !== "") result["original-publisher"] = this._originalPublisher;
-    if (this._originalPublisherPlace !== undefined && this._originalPublisherPlace !== "") result["original-publisher-place"] = this._originalPublisherPlace;
-    if (this._originalTitle !== undefined && this._originalTitle !== "") result["original-title"] = this._originalTitle;
-    if (this._page !== undefined && this._page !== "") result.page = this._page;
-    if (this._pageFirst !== undefined && this._pageFirst !== "") result["page-first"] = this._pageFirst;
-    if (this._part !== undefined && this._part !== "") result.part = this._part;
-    if (this._partTitle !== undefined && this._partTitle !== "") result["part-title"] = this._partTitle;
-    if (this._PMCID !== undefined && this._PMCID !== "") result.PMCID = this._PMCID;
-    if (this._PMID !== undefined && this._PMID !== "") result.PMID = this._PMID;
-    if (this._printing !== undefined && this._printing !== "") result.printing = this._printing;
-    if (this._publisher !== undefined && this._publisher !== "") result.publisher = this._publisher;
-    if (this._publisherPlace !== undefined && this._publisherPlace !== "") result["publisher-place"] = this._publisherPlace;
-    if (this._references !== undefined && this._references !== "") result.references = this._references;
-    if (this._reviewedGenre !== undefined && this._reviewedGenre !== "") result["reviewed-genre"] = this._reviewedGenre;
-    if (this._reviewedTitle !== undefined && this._reviewedTitle !== "") result["reviewed-title"] = this._reviewedTitle;
-    if (this._scale !== undefined && this._scale !== "") result.scale = this._scale;
-    if (this._section !== undefined && this._section !== "") result.section = this._section;
-    if (this._source !== undefined && this._source !== "") result.source = this._source;
-    if (this._status !== undefined && this._status !== "") result.status = this._status;
-    if (this._title !== undefined && this._title !== "") result.title = this._title;
-    if (this._titleShort !== undefined && this._titleShort !== "") result["title-short"] = this._titleShort;
-    if (this._URL !== undefined && this._URL !== "") result.URL = this._URL;
-    if (this._version !== undefined && this._version !== "") result.version = this._version;
-    if (this._volume !== undefined && this._volume !== "") result.volume = this._volume;
-    if (this._volumeTitle !== undefined && this._volumeTitle !== "") result["volume-title"] = this._volumeTitle;
-    if (this._volumeTitleShort !== undefined && this._volumeTitleShort !== "") result["volume-title-short"] = this._volumeTitleShort;
-    if (this._yearSuffix !== undefined && this._yearSuffix !== "") result["year-suffix"] = this._yearSuffix;
-    if (Object.keys(this._custom).length !== 0) result.custom = this._custom;
-    if (this._license !== undefined && this._license !== "") result.license = this._license;
-    return result;
-};
-
-function CitationItem(id) {
-    if (typeof id !== "string" && typeof id !== "number") {
-        throw new Error("CitationItem: id is required");
-    }
-    this.id = id;
-    this._itemData = new CitationItemData(id);
-    this._prefix = undefined;
-    this._suffix = undefined;
-    this._locator = undefined;
-    this._label = undefined;
-    this._suppressAuthor = undefined;
-    this._authorOnly = undefined;
-    this._uris = new Array;
+function CitationItem(t) {
+  if ("string" != typeof t && "number" != typeof t) throw new Error("CitationItem: id is required");
+  this.id = t, this._itemData = new CitationItemData(t), this._prefix = void 0, this._suffix = void 0, this._locator = void 0, this._label = void 0, this._suppressAuthor = void 0, this._authorOnly = void 0, this._uris = new Array();
 }
-
-CitationItem.prototype.fillFromObject = function(itemObject) {
-    var self = this;
-    if (Object.hasOwnProperty.call(itemObject, "version") && Object.hasOwnProperty.call(itemObject, "library")) {
-        this._itemData.fillFromObject(itemObject.data);
-        if (Object.hasOwnProperty.call(itemObject, "links")) {
-            if (Object.hasOwnProperty.call(itemObject.links, "self")) {
-                this.addUri(itemObject.links.self.href);
-            }
-            if (Object.hasOwnProperty.call(itemObject.links, "alternate")) {
-                this.addUri(itemObject.links.alternate.href);
-            }
-        }
-    } else if (Object.hasOwnProperty.call(itemObject, "itemData")) {
-        this._itemData.fillFromObject(itemObject.itemData);
-    } else {
-        this._itemData.fillFromObject(itemObject);
-    }
-    if (Object.hasOwnProperty.call(itemObject, "prefix")) this._prefix = itemObject.prefix;
-    if (Object.hasOwnProperty.call(itemObject, "suffix")) this._suffix = itemObject.suffix;
-    if (Object.hasOwnProperty.call(itemObject, "locator")) this._locator = itemObject.locator;
-    if (Object.hasOwnProperty.call(itemObject, "label")) this._label = itemObject.label;
-    if (Object.hasOwnProperty.call(itemObject, "suppress-author")) this._suppressAuthor = itemObject["suppress-author"];
-    if (Object.hasOwnProperty.call(itemObject, "author-only")) this._authorOnly = itemObject["author-only"];
-    if (Object.hasOwnProperty.call(itemObject, "uris")) {
-        itemObject.uris.forEach(function(uri) {
-            self.addUri(uri);
-        }, this);
-    }
+CitationItemData.prototype._addCustomProperty = function(t, e) {
+  return this._custom[t] = e, this;
+}, CitationItemData.prototype.getCustomProperty = function(t) {
+  return Object.hasOwnProperty.call(this._custom, t) ? this._custom[t] : null;
+}, CitationItemData.prototype.fillFromObject = function(t) {
+  if (Object.hasOwnProperty.call(t, "type") && (this._type = t.type), Object.hasOwnProperty.call(t, "categories") && (this._categories = t.categories), Object.hasOwnProperty.call(t, "citation-key") && (this._citationKey = t["citation-key"]), Object.hasOwnProperty.call(t, "language") && (this._language = t.language), Object.hasOwnProperty.call(t, "journalAbbreviation") && (this._journalAbbreviation = t.journalAbbreviation), Object.hasOwnProperty.call(t, "shortTitle") && (this._shortTitle = t.shortTitle), Object.hasOwnProperty.call(t, "author") && (this._author = t.author), Object.hasOwnProperty.call(t, "chair") && (this._chair = t.chair), Object.hasOwnProperty.call(t, "collection-editor") && (this._collectionEditor = t["collection-editor"]), Object.hasOwnProperty.call(t, "compiler") && (this._compiler = t.compiler), Object.hasOwnProperty.call(t, "composer") && (this._composer = t.composer), Object.hasOwnProperty.call(t, "container-author") && (this._containerAuthor = t["container-author"]), Object.hasOwnProperty.call(t, "contributor") && (this._contributor = t.contributor), Object.hasOwnProperty.call(t, "curator") && (this._curator = t.curator), Object.hasOwnProperty.call(t, "director") && (this._director = t.director), Object.hasOwnProperty.call(t, "editorial-director") && (this._editorialDirector = t["editorial-director"]), Object.hasOwnProperty.call(t, "editor") && (this._editor = t.editor), Object.hasOwnProperty.call(t, "executive-producer") && (this._executiveProducer = t["executive-producer"]), Object.hasOwnProperty.call(t, "guest") && (this._guest = t.guest), Object.hasOwnProperty.call(t, "host") && (this._host = t.host), Object.hasOwnProperty.call(t, "illustrator") && (this._illustrator = t.illustrator), Object.hasOwnProperty.call(t, "narrator") && (this._narrator = t.narrator), Object.hasOwnProperty.call(t, "organizer") && (this._organizer = t.organizer), Object.hasOwnProperty.call(t, "original-author") && (this._originalAuthor = t["original-author"]), Object.hasOwnProperty.call(t, "performer") && (this._performer = t.performer), Object.hasOwnProperty.call(t, "producer") && (this._producer = t.producer), Object.hasOwnProperty.call(t, "recipient") && (this._recipient = t.recipient), Object.hasOwnProperty.call(t, "reviewed-author") && (this._reviewedAuthor = t["reviewed-author"]), Object.hasOwnProperty.call(t, "script-writer") && (this._scriptWriter = t["script-writer"]), Object.hasOwnProperty.call(t, "series-creator") && (this._seriesCreator = t["series-creator"]), Object.hasOwnProperty.call(t, "translator") && (this._translator = t.translator), Object.hasOwnProperty.call(t, "accessed") && (this._accessed = t.accessed), Object.hasOwnProperty.call(t, "container") && (this._container = t.container), Object.hasOwnProperty.call(t, "event-date") && (this._eventDate = t["event-date"]), Object.hasOwnProperty.call(t, "issued") && (this._issued = t.issued), Object.hasOwnProperty.call(t, "original-date") && (this._originalDate = t["original-date"]), Object.hasOwnProperty.call(t, "submitted") && (this._submitted = t.submitted), Object.hasOwnProperty.call(t, "abstract") && (this._abstract = t.abstract), Object.hasOwnProperty.call(t, "annote") && (this._annote = t.annote), Object.hasOwnProperty.call(t, "archive") && (this._archive = t.archive), Object.hasOwnProperty.call(t, "archive_collection") && (this._archiveCollection = t.archive_collection), Object.hasOwnProperty.call(t, "archive_location") && (this._archiveLocation = t.archive_location), Object.hasOwnProperty.call(t, "archive-place") && (this._archivePlace = t["archive-place"]), Object.hasOwnProperty.call(t, "authority") && (this._authority = t.authority), Object.hasOwnProperty.call(t, "call-number") && (this._callNumber = t["call-number"]), Object.hasOwnProperty.call(t, "chapter-number") && (this._chapterNumber = t["chapter-number"]), Object.hasOwnProperty.call(t, "citation-number") && (this._citationNumber = t["citation-number"]), Object.hasOwnProperty.call(t, "citation-label") && (this._citationLabel = t["citation-label"]), Object.hasOwnProperty.call(t, "collection-number") && (this._collectionNumber = t["collection-number"]), Object.hasOwnProperty.call(t, "collection-title") && (this._collectionTitle = t["collection-title"]), Object.hasOwnProperty.call(t, "container-title") && (this._containerTitle = t["container-title"]), Object.hasOwnProperty.call(t, "container-title-short") && (this._containerTitleShort = t["container-title-short"]), Object.hasOwnProperty.call(t, "dimensions") && (this._dimensions = t.dimensions), Object.hasOwnProperty.call(t, "DOI") && (this._DOI = t.DOI), Object.hasOwnProperty.call(t, "edition") && (this._edition = t.edition), Object.hasOwnProperty.call(t, "event") && (this._event = t.event), Object.hasOwnProperty.call(t, "event-title") && (this._eventTitle = t["event-title"]), Object.hasOwnProperty.call(t, "event-place") && (this._eventPlace = t["event-place"]), Object.hasOwnProperty.call(t, "first-reference-note-number") && (this._firstReferenceNoteNumber = t["first-reference-note-number"]), Object.hasOwnProperty.call(t, "genre") && (this._genre = t.genre), Object.hasOwnProperty.call(t, "ISBN") && (this._ISBN = t.ISBN), Object.hasOwnProperty.call(t, "ISSN") && (this._ISSN = t.ISSN), Object.hasOwnProperty.call(t, "issue") && (this._issue = t.issue), Object.hasOwnProperty.call(t, "jurisdiction") && (this._jurisdiction = t.jurisdiction), Object.hasOwnProperty.call(t, "keyword") && (this._keyword = t.keyword), Object.hasOwnProperty.call(t, "locator") && (this._locator = t.locator), Object.hasOwnProperty.call(t, "medium") && (this._medium = t.medium), Object.hasOwnProperty.call(t, "note") && (this._note = t.note), Object.hasOwnProperty.call(t, "number") && (this._number = t.number), Object.hasOwnProperty.call(t, "number-of-pages") && (this._numberOfPages = t["number-of-pages"]), Object.hasOwnProperty.call(t, "number-of-volumes") && (this._numberOfVolumes = t["number-of-volumes"]), Object.hasOwnProperty.call(t, "original-publisher") && (this._originalPublisher = t["original-publisher"]), Object.hasOwnProperty.call(t, "original-publisher-place") && (this._originalPublisherPlace = t["original-publisher-place"]), Object.hasOwnProperty.call(t, "original-title") && (this._originalTitle = t["original-title"]), Object.hasOwnProperty.call(t, "page") && (this._page = t.page), Object.hasOwnProperty.call(t, "page-first") && (this._pageFirst = t["page-first"]), Object.hasOwnProperty.call(t, "part") && (this._part = t.part), Object.hasOwnProperty.call(t, "part-title") && (this._partTitle = t["part-title"]), Object.hasOwnProperty.call(t, "PMCID") && (this._PMCID = t.PMCID), Object.hasOwnProperty.call(t, "PMID") && (this._PMID = t.PMID), Object.hasOwnProperty.call(t, "printing") && (this._printing = t.printing), Object.hasOwnProperty.call(t, "publisher") && (this._publisher = t.publisher), Object.hasOwnProperty.call(t, "publisher-place") && (this._publisherPlace = t["publisher-place"]), Object.hasOwnProperty.call(t, "references") && (this._references = t.references), Object.hasOwnProperty.call(t, "reviewed-genre") && (this._reviewedGenre = t["reviewed-genre"]), Object.hasOwnProperty.call(t, "reviewed-title") && (this._reviewedTitle = t["reviewed-title"]), Object.hasOwnProperty.call(t, "scale") && (this._scale = t.scale), Object.hasOwnProperty.call(t, "section") && (this._section = t.section), Object.hasOwnProperty.call(t, "source") && (this._source = t.source), Object.hasOwnProperty.call(t, "status") && (this._status = t.status), Object.hasOwnProperty.call(t, "title") && (this._title = t.title), Object.hasOwnProperty.call(t, "title-short") && (this._titleShort = t["title-short"]), Object.hasOwnProperty.call(t, "URL") && (this._URL = t.URL), Object.hasOwnProperty.call(t, "version") && (this._version = t.version), Object.hasOwnProperty.call(t, "volume") && (this._volume = t.volume), Object.hasOwnProperty.call(t, "volume-title") && (this._volumeTitle = t["volume-title"]), Object.hasOwnProperty.call(t, "volume-title-short") && (this._volumeTitleShort = t["volume-title-short"]), Object.hasOwnProperty.call(t, "year-suffix") && (this._yearSuffix = t["year-suffix"]), Object.hasOwnProperty.call(t, "custom") && (this._custom = t.custom), Object.hasOwnProperty.call(t, "userID") && this._addCustomProperty("userID", t.userID), Object.hasOwnProperty.call(t, "groupID") && this._addCustomProperty("groupID", t.groupID), Object.hasOwnProperty.call(t, "creators")) {
+    var e = this;
+    t.creators.forEach(function(t2) {
+      var i = {};
+      t2.firstName && (i.given = t2.firstName), t2.lastName && (i.family = t2.lastName), e._author.some(function(t3) {
+        return (t3.family === i.family || !t3.family && !i.family) && (t3.given === i.given || !t3.given && !i.given);
+      }) || e._author.push(i);
+    }, this);
+  }
+  Object.hasOwnProperty.call(t, "libraryCatalog") && (this._source = t.libraryCatalog), Object.hasOwnProperty.call(t, "place") && (this._eventPlace = t.place, this._publisherPlace = t.place), Object.hasOwnProperty.call(t, "numberOfVolumes") && (this._numberOfVolumes = t.numberOfVolumes), Object.hasOwnProperty.call(t, "callNumber") && (this._callNumber = t.callNumber), Object.hasOwnProperty.call(t, "seriesNumber") && (this._collectionNumber = t.seriesNumber), Object.hasOwnProperty.call(t, "series") && (this._collectionTitle = t.series), Object.hasOwnProperty.call(t, "bookTitle") && (this._containerTitle = t.bookTitle), Object.hasOwnProperty.call(t, "extra") && (this._note = t.extra), Object.hasOwnProperty.call(t, "rights") && (this._license = t.rights), Object.hasOwnProperty.call(t, "archiveLocation") && (this._archiveLocation = t.archiveLocation), Object.hasOwnProperty.call(t, "abstractNote") && (this._abstract = t.abstractNote);
+}, CitationItemData.prototype.getTitle = function() {
+  return this._title;
+}, CitationItemData.prototype.getType = function() {
+  return this._type;
+}, CitationItemData.prototype.setType = function(t) {
+  return this._type = t, this;
+}, CitationItemData.prototype.setCitationKey = function(t) {
+  return this._citationKey = t, this;
+}, CitationItemData.prototype.setCategories = function(t) {
+  return this._categories = t, this;
+}, CitationItemData.prototype.setLanguage = function(t) {
+  return this._language = t, this;
+}, CitationItemData.prototype.setJournalAbbreviation = function(t) {
+  return this._journalAbbreviation = t, this;
+}, CitationItemData.prototype.setShortTitle = function(t) {
+  return this._shortTitle = t, this;
+}, CitationItemData.prototype.setAuthor = function(t) {
+  return this._author = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setChair = function(t) {
+  return this._chair = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setCollectionEditor = function(t) {
+  return this._collectionEditor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setCompiler = function(t) {
+  return this._compiler = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setComposer = function(t) {
+  return this._composer = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setContainerAuthor = function(t) {
+  return this._containerAuthor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setContributor = function(t) {
+  return this._contributor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setCurator = function(t) {
+  return this._curator = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setDirector = function(t) {
+  return this._director = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setEditor = function(t) {
+  return this._editor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setEditorialDirector = function(t) {
+  return this._editorialDirector = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setExecutiveProducer = function(t) {
+  return this._executiveProducer = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setGuest = function(t) {
+  return this._guest = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setHost = function(t) {
+  return this._host = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setIllustrator = function(t) {
+  return this._illustrator = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setNarrator = function(t) {
+  return this._narrator = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setOrganizer = function(t) {
+  return this._organizer = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setOriginalAuthor = function(t) {
+  return this._originalAuthor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setPerformer = function(t) {
+  return this._performer = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setProducer = function(t) {
+  return this._producer = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setRecipient = function(t) {
+  return this._recipient = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setReviewedAuthor = function(t) {
+  return this._reviewedAuthor = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setScriptwriter = function(t) {
+  return this._scriptwriter = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setSeriesCreator = function(t) {
+  return this._seriesCreator = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setTranslator = function(t) {
+  return this._translator = Array.isArray(t) ? t : [t], this;
+}, CitationItemData.prototype.setAccessed = function(t) {
+  return this._accessed = t || {}, this;
+}, CitationItemData.prototype.setContainer = function(t) {
+  return this._container = t || {}, this;
+}, CitationItemData.prototype.setEventDate = function(t) {
+  return this._eventDate = t || {}, this;
+}, CitationItemData.prototype.setIssued = function(t) {
+  return this._issued = t || {}, this;
+}, CitationItemData.prototype.setOriginalDate = function(t) {
+  return this._originalDate = t || {}, this;
+}, CitationItemData.prototype.setSubmitted = function(t) {
+  return this._submitted = t || {}, this;
+}, CitationItemData.prototype.setAbstract = function(t) {
+  return this._abstract = t, this;
+}, CitationItemData.prototype.setAnnote = function(t) {
+  return this._annote = t, this;
+}, CitationItemData.prototype.setArchive = function(t) {
+  return this._archive = t, this;
+}, CitationItemData.prototype.setArchiveCollection = function(t) {
+  return this._archiveCollection = t, this;
+}, CitationItemData.prototype.setArchiveLocation = function(t) {
+  return this._archiveLocation = t, this;
+}, CitationItemData.prototype.setArchivePlace = function(t) {
+  return this._archivePlace = t, this;
+}, CitationItemData.prototype.setAuthority = function(t) {
+  return this._authority = t, this;
+}, CitationItemData.prototype.setCallNumber = function(t) {
+  return this._callNumber = t, this;
+}, CitationItemData.prototype.setChapterNumber = function(t) {
+  return this._chapterNumber = t, this;
+}, CitationItemData.prototype.setCitationNumber = function(t) {
+  return this._citationNumber = t, this;
+}, CitationItemData.prototype.setCitationLabel = function(t) {
+  return this._citationLabel = t, this;
+}, CitationItemData.prototype.setCollectionNumber = function(t) {
+  return this._collectionNumber = t, this;
+}, CitationItemData.prototype.setCollectionTitle = function(t) {
+  return this._collectionTitle = t, this;
+}, CitationItemData.prototype.setContainerTitle = function(t) {
+  return this._containerTitle = t, this;
+}, CitationItemData.prototype.setContainerTitleShort = function(t) {
+  return this._containerTitleShort = t, this;
+}, CitationItemData.prototype.setDimensions = function(t) {
+  return this._dimensions = t, this;
+}, CitationItemData.prototype.setDOI = function(t) {
+  return this._DOI = t, this;
+}, CitationItemData.prototype.setEdition = function(t) {
+  return this._edition = t, this;
+}, CitationItemData.prototype.setEvent = function(t) {
+  return this._event = t, this;
+}, CitationItemData.prototype.setEventTitle = function(t) {
+  return this._eventTitle = t, this;
+}, CitationItemData.prototype.setEventPlace = function(t) {
+  return this._eventPlace = t, this;
+}, CitationItemData.prototype.setFirstReferenceNoteNumber = function(t) {
+  return this._firstReferenceNoteNumber = t, this;
+}, CitationItemData.prototype.setGenre = function(t) {
+  return this._genre = t, this;
+}, CitationItemData.prototype.setISBN = function(t) {
+  return this._ISBN = t, this;
+}, CitationItemData.prototype.setISSN = function(t) {
+  return this._ISSN = t, this;
+}, CitationItemData.prototype.setIssue = function(t) {
+  return this._issue = t, this;
+}, CitationItemData.prototype.setJurisdiction = function(t) {
+  return this._jurisdiction = t, this;
+}, CitationItemData.prototype.setKeyword = function(t) {
+  return this._keyword = t, this;
+}, CitationItemData.prototype.setLocator = function(t) {
+  return this._locator = t, this;
+}, CitationItemData.prototype.setMedium = function(t) {
+  return this._medium = t, this;
+}, CitationItemData.prototype.setNote = function(t) {
+  return this._note = t, this;
+}, CitationItemData.prototype.setNumber = function(t) {
+  return this._number = t, this;
+}, CitationItemData.prototype.setNumberOfPages = function(t) {
+  return this._numberOfPages = t, this;
+}, CitationItemData.prototype.setNumberOfVolumes = function(t) {
+  return this._numberOfVolumes = t, this;
+}, CitationItemData.prototype.setOriginalPublisher = function(t) {
+  return this._originalPublisher = t, this;
+}, CitationItemData.prototype.setOriginalPublisherPlace = function(t) {
+  return this._originalPublisherPlace = t, this;
+}, CitationItemData.prototype.setOriginalTitle = function(t) {
+  return this._originalTitle = t, this;
+}, CitationItemData.prototype.setPage = function(t) {
+  return this._page = t, this;
+}, CitationItemData.prototype.setPageFirst = function(t) {
+  return this._pageFirst = t, this;
+}, CitationItemData.prototype.setPart = function(t) {
+  return this._part = t, this;
+}, CitationItemData.prototype.setPartTitle = function(t) {
+  return this._partTitle = t, this;
+}, CitationItemData.prototype.setPMCID = function(t) {
+  return this._PMCID = t, this;
+}, CitationItemData.prototype.setPMID = function(t) {
+  return this._PMID = t, this;
+}, CitationItemData.prototype.setPrinting = function(t) {
+  return this._printing = t, this;
+}, CitationItemData.prototype.setPublisher = function(t) {
+  return this._publisher = t, this;
+}, CitationItemData.prototype.setPublisherPlace = function(t) {
+  return this._publisherPlace = t, this;
+}, CitationItemData.prototype.setReferences = function(t) {
+  return this._references = t, this;
+}, CitationItemData.prototype.setReviewedGenre = function(t) {
+  return this._reviewedGenre = t, this;
+}, CitationItemData.prototype.setReviewedTitle = function(t) {
+  return this._reviewedTitle = t, this;
+}, CitationItemData.prototype.setScale = function(t) {
+  return this._scale = t, this;
+}, CitationItemData.prototype.setSection = function(t) {
+  return this._section = t, this;
+}, CitationItemData.prototype.setSource = function(t) {
+  return this._source = t, this;
+}, CitationItemData.prototype.setStatus = function(t) {
+  return this._status = t, this;
+}, CitationItemData.prototype.setTitle = function(t) {
+  return this._title = t, this;
+}, CitationItemData.prototype.setTitleShort = function(t) {
+  return this._titleShort = t, this;
+}, CitationItemData.prototype.setURL = function(t) {
+  return this._URL = t, this;
+}, CitationItemData.prototype.setVersion = function(t) {
+  return this._version = t, this;
+}, CitationItemData.prototype.setVolume = function(t) {
+  return this._volume = t, this;
+}, CitationItemData.prototype.setVolumeTitle = function(t) {
+  return this._volumeTitle = t, this;
+}, CitationItemData.prototype.setVolumeTitleShort = function(t) {
+  return this._volumeTitleShort = t, this;
+}, CitationItemData.prototype.setYearSuffix = function(t) {
+  return this._yearSuffix = t, this;
+}, CitationItemData.prototype.setCustom = function(t) {
+  return this._custom = Object.assign(this._custom, t), this;
+}, CitationItemData.prototype.toJSON = function() {
+  var t = {};
+  return t.id = this._id, void 0 !== this._type && "" !== this._type && (t.type = this._type), void 0 !== this._citationKey && "" !== this._citationKey && (t["citation-key"] = this._citationKey), this._categories.length > 0 && (t.categories = this._categories), void 0 !== this._language && "" !== this._language && (t.language = this._language), void 0 !== this._journalAbbreviation && "" !== this._journalAbbreviation && (t.journalAbbreviation = this._journalAbbreviation), void 0 !== this._shortTitle && "" !== this._shortTitle && (t.shortTitle = this._shortTitle, void 0 === this._titleShort && (t["title-short"] = this._shortTitle)), this._author.length > 0 && (t.author = this._author), this._chair.length > 0 && (t.chair = this._chair), this._collectionEditor.length > 0 && (t["collection-editor"] = this._collectionEditor), this._compiler.length > 0 && (t.compiler = this._compiler), this._composer.length > 0 && (t.composer = this._composer), this._containerAuthor.length > 0 && (t["container-author"] = this._containerAuthor), this._contributor.length > 0 && (t.contributor = this._contributor), this._curator.length > 0 && (t.curator = this._curator), this._director.length > 0 && (t.director = this._director), this._editor.length > 0 && (t.editor = this._editor), this._editorialDirector.length > 0 && (t["editorial-director"] = this._editorialDirector), this._executiveProducer.length > 0 && (t["executive-producer"] = this._executiveProducer), this._guest.length > 0 && (t.guest = this._guest), this._host.length > 0 && (t.host = this._host), this._illustrator.length > 0 && (t.illustrator = this._illustrator), this._narrator.length > 0 && (t.narrator = this._narrator), this._organizer.length > 0 && (t.organizer = this._organizer), this._originalAuthor.length > 0 && (t["original-author"] = this._originalAuthor), this._performer.length > 0 && (t.performer = this._performer), this._producer.length > 0 && (t.producer = this._producer), this._recipient.length > 0 && (t.recipient = this._recipient), this._reviewedAuthor.length > 0 && (t["reviewed-author"] = this._reviewedAuthor), this._scriptwriter.length > 0 && (t["script-writer"] = this._scriptwriter), this._seriesCreator.length > 0 && (t["series-creator"] = this._seriesCreator), this._translator.length > 0 && (t.translator = this._translator), Object.keys(this._accessed).length > 0 && (t.accessed = this._accessed), Object.keys(this._container).length > 0 && (t.container = this._container), Object.keys(this._eventDate).length > 0 && (t["event-date"] = this._eventDate), Object.keys(this._issued).length > 0 && (t.issued = this._issued), Object.keys(this._originalDate).length > 0 && (t["original-date"] = this._originalDate), Object.keys(this._submitted).length > 0 && (t.submitted = this._submitted), void 0 !== this._abstract && "" !== this._abstract && (t.abstract = this._abstract), void 0 !== this._annote && "" !== this._annote && (t.annote = this._annote), void 0 !== this._archive && "" !== this._archive && (t.archive = this._archive), void 0 !== this._archiveCollection && "" !== this._archiveCollection && (t.archive_collection = this._archiveCollection), void 0 !== this._archiveLocation && "" !== this._archiveLocation && (t.archive_location = this._archiveLocation), void 0 !== this._archivePlace && "" !== this._archivePlace && (t["archive-place"] = this._archivePlace), void 0 !== this._authority && "" !== this._authority && (t.authority = this._authority), void 0 !== this._callNumber && "" !== this._callNumber && (t["call-number"] = this._callNumber), void 0 !== this._chapterNumber && "" !== this._chapterNumber && (t["chapter-number"] = this._chapterNumber), void 0 !== this._citationNumber && "" !== this._citationNumber && (t["citation-number"] = this._citationNumber), void 0 !== this._citationLabel && "" !== this._citationLabel && (t["citation-label"] = this._citationLabel), void 0 !== this._collectionNumber && "" !== this._collectionNumber && (t["collection-number"] = this._collectionNumber), void 0 !== this._collectionTitle && "" !== this._collectionTitle && (t["collection-title"] = this._collectionTitle), void 0 !== this._containerTitle && "" !== this._containerTitle && (t["container-title"] = this._containerTitle), void 0 !== this._containerTitleShort && "" !== this._containerTitleShort && (t["container-title-short"] = this._containerTitleShort), void 0 !== this._dimensions && "" !== this._dimensions && (t.dimensions = this._dimensions), void 0 !== this._DOI && "" !== this._DOI && (t.DOI = this._DOI), void 0 !== this._edition && "" !== this._edition && (t.edition = this._edition), void 0 !== this._event && "" !== this._event && (t.event = this._event), void 0 !== this._eventTitle && "" !== this._eventTitle && (t["event-title"] = this._eventTitle), void 0 !== this._eventPlace && "" !== this._eventPlace && (t["event-place"] = this._eventPlace), void 0 !== this._firstReferenceNoteNumber && "" !== this._firstReferenceNoteNumber && (t["first-reference-note-number"] = this._firstReferenceNoteNumber), void 0 !== this._genre && "" !== this._genre && (t.genre = this._genre), void 0 !== this._ISBN && "" !== this._ISBN && (t.ISBN = this._ISBN), void 0 !== this._ISSN && "" !== this._ISSN && (t.ISSN = this._ISSN), void 0 !== this._issue && "" !== this._issue && (t.issue = this._issue), void 0 !== this._jurisdiction && "" !== this._jurisdiction && (t.jurisdiction = this._jurisdiction), void 0 !== this._keyword && "" !== this._keyword && (t.keyword = this._keyword), void 0 !== this._locator && "" !== this._locator && (t.locator = this._locator), void 0 !== this._medium && "" !== this._medium && (t.medium = this._medium), void 0 !== this._note && "" !== this._note && (t.note = this._note), void 0 !== this._number && "" !== this._number && (t.number = this._number), void 0 !== this._numberOfPages && "" !== this._numberOfPages && (t["number-of-pages"] = this._numberOfPages), void 0 !== this._numberOfVolumes && "" !== this._numberOfVolumes && (t["number-of-volumes"] = this._numberOfVolumes), void 0 !== this._originalPublisher && "" !== this._originalPublisher && (t["original-publisher"] = this._originalPublisher), void 0 !== this._originalPublisherPlace && "" !== this._originalPublisherPlace && (t["original-publisher-place"] = this._originalPublisherPlace), void 0 !== this._originalTitle && "" !== this._originalTitle && (t["original-title"] = this._originalTitle), void 0 !== this._page && "" !== this._page && (t.page = this._page), void 0 !== this._pageFirst && "" !== this._pageFirst && (t["page-first"] = this._pageFirst), void 0 !== this._part && "" !== this._part && (t.part = this._part), void 0 !== this._partTitle && "" !== this._partTitle && (t["part-title"] = this._partTitle), void 0 !== this._PMCID && "" !== this._PMCID && (t.PMCID = this._PMCID), void 0 !== this._PMID && "" !== this._PMID && (t.PMID = this._PMID), void 0 !== this._printing && "" !== this._printing && (t.printing = this._printing), void 0 !== this._publisher && "" !== this._publisher && (t.publisher = this._publisher), void 0 !== this._publisherPlace && "" !== this._publisherPlace && (t["publisher-place"] = this._publisherPlace), void 0 !== this._references && "" !== this._references && (t.references = this._references), void 0 !== this._reviewedGenre && "" !== this._reviewedGenre && (t["reviewed-genre"] = this._reviewedGenre), void 0 !== this._reviewedTitle && "" !== this._reviewedTitle && (t["reviewed-title"] = this._reviewedTitle), void 0 !== this._scale && "" !== this._scale && (t.scale = this._scale), void 0 !== this._section && "" !== this._section && (t.section = this._section), void 0 !== this._source && "" !== this._source && (t.source = this._source), void 0 !== this._status && "" !== this._status && (t.status = this._status), void 0 !== this._title && "" !== this._title && (t.title = this._title), void 0 !== this._titleShort && "" !== this._titleShort && (t["title-short"] = this._titleShort), void 0 !== this._URL && "" !== this._URL && (t.URL = this._URL), void 0 !== this._version && "" !== this._version && (t.version = this._version), void 0 !== this._volume && "" !== this._volume && (t.volume = this._volume), void 0 !== this._volumeTitle && "" !== this._volumeTitle && (t["volume-title"] = this._volumeTitle), void 0 !== this._volumeTitleShort && "" !== this._volumeTitleShort && (t["volume-title-short"] = this._volumeTitleShort), void 0 !== this._yearSuffix && "" !== this._yearSuffix && (t["year-suffix"] = this._yearSuffix), 0 !== Object.keys(this._custom).length && (t.custom = this._custom), void 0 !== this._license && "" !== this._license && (t.license = this._license), t;
+}, CitationItem.prototype.fillFromObject = function(t) {
+  var e = this;
+  Object.hasOwnProperty.call(t, "version") && Object.hasOwnProperty.call(t, "library") ? (this._itemData.fillFromObject(t.data), Object.hasOwnProperty.call(t, "links") && (Object.hasOwnProperty.call(t.links, "self") && this.addUri(t.links.self.href), Object.hasOwnProperty.call(t.links, "alternate") && this.addUri(t.links.alternate.href))) : Object.hasOwnProperty.call(t, "itemData") ? this._itemData.fillFromObject(t.itemData) : this._itemData.fillFromObject(t), Object.hasOwnProperty.call(t, "prefix") && (this._prefix = t.prefix), Object.hasOwnProperty.call(t, "suffix") && (this._suffix = t.suffix), Object.hasOwnProperty.call(t, "locator") && (this._locator = t.locator), Object.hasOwnProperty.call(t, "label") && (this._label = t.label), Object.hasOwnProperty.call(t, "suppress-author") && (this._suppressAuthor = t["suppress-author"]), Object.hasOwnProperty.call(t, "author-only") && (this._authorOnly = t["author-only"]), Object.hasOwnProperty.call(t, "uris") && t.uris.forEach(function(t2) {
+    e.addUri(t2);
+  }, this);
+}, CitationItem.prototype.getInfoForCitationCluster = function() {
+  var t = { id: this.id, "suppress-author": this._suppressAuthor };
+  return this._prefix && (t.prefix = this._prefix), this._suffix && (t.suffix = this._suffix), this._locator && (t.locator = this._locator), this._label && (t.label = this._label), t;
+}, CitationItem.prototype.getItemData = function() {
+  return this._itemData;
+}, CitationItem.prototype.getProperty = function(t) {
+  return null !== this._itemData.getCustomProperty(t) ? this._itemData.getCustomProperty(t) : null;
+}, CitationItem.prototype.setPrefix = function(t) {
+  return this._prefix = t, this;
+}, CitationItem.prototype.setSuffix = function(t) {
+  return this._suffix = t, this;
+}, CitationItem.prototype.setLocator = function(t) {
+  return this._locator = t, this;
+}, CitationItem.prototype.setLabel = function(t) {
+  if (t) {
+    if (-1 === ["act", "appendix", "article-locator", "book", "canon", "chapter", "column", "elocation", "equation", "figure", "folio", "issue", "line", "note", "opus", "page", "paragraph", "part", "rule", "scene", "section", "sub-verbo", "supplement", "table", "timestamp", "title-locator", "verse", "version", "volume"].indexOf(t)) throw new Error('CitationItem.setLocator: Invalid label "' + t + '"');
+    this._label = t;
+  }
+  return this;
+}, CitationItem.prototype.setSuppressAuthor = function(t) {
+  return this._suppressAuthor = t, this;
+}, CitationItem.prototype.setAuthorOnly = function(t) {
+  return this._authorOnly = t, this;
+}, CitationItem.prototype.addUri = function(t) {
+  return -1 !== this._uris.indexOf(t) || this._uris.push(t), this;
+}, CitationItem.prototype.toJSON = function() {
+  var t = {};
+  return t.id = this.id, this._itemData && (t.itemData = this._itemData.toJSON ? this._itemData.toJSON() : this._itemData), void 0 !== this._prefix && (t.prefix = this._prefix), void 0 !== this._suffix && (t.suffix = this._suffix), void 0 !== this._locator && (t.locator = this._locator), void 0 !== this._label && (t.label = this._label), void 0 !== this._suppressAuthor && (t["suppress-author"] = this._suppressAuthor), void 0 !== this._authorOnly && (t["author-only"] = this._authorOnly), this._uris.length && (t.uris = this._uris), t;
+}, CitationItem.prototype.toFlatJSON = function(t) {
+  var e = { id: this.id, index: t };
+  void 0 !== this._suppressAuthor && (e["suppress-author"] = this._suppressAuthor);
+  var i = this._itemData.toJSON();
+  return Object.assign(e, i), void 0 !== this._itemData.getCustomProperty("userID") && null !== this._itemData.getCustomProperty("userID") && (e.userID = String(this._itemData.getCustomProperty("userID"))), void 0 !== this._itemData.getCustomProperty("groupID") && null !== this._itemData.getCustomProperty("groupID") && (e.groupID = String(this._itemData.getCustomProperty("groupID"))), e;
 };
-
-CitationItem.prototype.getInfoForCitationCluster = function() {
-    var info = {
-        id: this.id,
-        "suppress-author": this._suppressAuthor
-    };
-    if (this._prefix) {
-        info.prefix = this._prefix;
-    }
-    if (this._suffix) {
-        info.suffix = this._suffix;
-    }
-    if (this._locator) {
-        info.locator = this._locator;
-    }
-    if (this._label) {
-        info.label = this._label;
-    }
-    return info;
-};
-
-CitationItem.prototype.getItemData = function() {
-    return this._itemData;
-};
-
-CitationItem.prototype.getProperty = function(key) {
-    if (this._itemData.getCustomProperty(key) !== null) {
-        return this._itemData.getCustomProperty(key);
-    }
-    return null;
-};
-
-CitationItem.prototype.setPrefix = function(prefix) {
-    this._prefix = prefix;
-    return this;
-};
-
-CitationItem.prototype.setSuffix = function(suffix) {
-    this._suffix = suffix;
-    return this;
-};
-
-CitationItem.prototype.setLocator = function(locator) {
-    this._locator = locator;
-    return this;
-};
-
-CitationItem.prototype.setLabel = function(label) {
-    if (label) {
-        var validLabels = [ "act", "appendix", "article-locator", "book", "canon", "chapter", "column", "elocation", "equation", "figure", "folio", "issue", "line", "note", "opus", "page", "paragraph", "part", "rule", "scene", "section", "sub-verbo", "supplement", "table", "timestamp", "title-locator", "verse", "version", "volume" ];
-        if (validLabels.indexOf(label) === -1) {
-            throw new Error('CitationItem.setLocator: Invalid label "' + label + '"');
-        }
-        this._label = label;
-    }
-    return this;
-};
-
-CitationItem.prototype.setSuppressAuthor = function(value) {
-    this._suppressAuthor = value;
-    return this;
-};
-
-CitationItem.prototype.setAuthorOnly = function(value) {
-    this._authorOnly = value;
-    return this;
-};
-
-CitationItem.prototype.addUri = function(uri) {
-    if (this._uris.indexOf(uri) !== -1) {
-        return this;
-    }
-    this._uris.push(uri);
-    return this;
-};
-
-CitationItem.prototype.toJSON = function() {
-    var result = {};
-    result.id = this.id;
-    if (this._itemData) {
-        result.itemData = this._itemData.toJSON ? this._itemData.toJSON() : this._itemData;
-    }
-    if (this._prefix !== undefined) result.prefix = this._prefix;
-    if (this._suffix !== undefined) result.suffix = this._suffix;
-    if (this._locator !== undefined) result.locator = this._locator;
-    if (this._label !== undefined) result.label = this._label;
-    if (this._suppressAuthor !== undefined) result["suppress-author"] = this._suppressAuthor;
-    if (this._authorOnly !== undefined) result["author-only"] = this._authorOnly;
-    if (this._uris.length) result.uris = this._uris;
-    return result;
-};
-
-CitationItem.prototype.toFlatJSON = function(index) {
-    var oldItem = {
-        id: this.id,
-        index: index
-    };
-    if (this._suppressAuthor !== undefined) {
-        oldItem["suppress-author"] = this._suppressAuthor;
-    }
-    var itemDataObject = this._itemData.toJSON();
-    Object.assign(oldItem, itemDataObject);
-    if (typeof this._itemData.getCustomProperty("userID") !== "undefined" && this._itemData.getCustomProperty("userID") !== null) {
-        oldItem.userID = String(this._itemData.getCustomProperty("userID"));
-    }
-    if (typeof this._itemData.getCustomProperty("groupID") !== "undefined" && this._itemData.getCustomProperty("groupID") !== null) {
-        oldItem.groupID = String(this._itemData.getCustomProperty("groupID"));
-    }
-    return oldItem;
-};
-
-var _CSLCitation_brand = new WeakSet;
-
+var _CSLCitation_brand = /* @__PURE__ */ new WeakSet();
 class CSLCitation {
-    constructor(citationID) {
-        _classPrivateMethodInitSpec(this, _CSLCitation_brand);
-        if (!citationID) {
-            citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
-        }
-        if (_usedIDs._.has(citationID)) {
-            console.warn("Citation ID must be unique");
-            citationID = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this);
-        }
-        _usedIDs._.add(citationID);
-        this.citationID = citationID;
-        this._citationItems = new Array;
-        this._properties = {};
-        this._manualOverride = {};
-        this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
-    }
-    static resetUsedIDs() {
-        _usedIDs._ = new Set;
-    }
-    fillFromObject(citationObject) {
-        if (Object.hasOwnProperty.call(citationObject, "properties") || Object.hasOwnProperty.call(citationObject, "manualOverride") || Object.hasOwnProperty.call(citationObject, "schema")) {
-            return _assertClassBrand(_CSLCitation_brand, this, _fillFromCitationObject).call(this, citationObject);
-        } else if (Object.hasOwnProperty.call(citationObject, "citationItems")) {
-            return _assertClassBrand(_CSLCitation_brand, this, _fillFromFlatCitationObject).call(this, citationObject);
-        } else if (Object.hasOwnProperty.call(citationObject, "version") && Object.hasOwnProperty.call(citationObject, "library")) {
-            return _assertClassBrand(_CSLCitation_brand, this, _fillFromJson).call(this, citationObject);
-        }
-        return _assertClassBrand(_CSLCitation_brand, this, _fillFromCslJson).call(this, citationObject);
-    }
-    getCitationItems() {
-        return this._citationItems;
-    }
-    getDoNotUpdate() {
-        if (Object.hasOwnProperty.call(this._properties, "dontUpdate")) {
-            return !!this._properties.dontUpdate;
-        }
-        if (Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden")) {
-            return !!this._manualOverride.isManuallyOverridden;
-        }
-        return false;
-    }
-    getInfoForCitationCluster() {
-        return this._citationItems.map(function(item) {
-            return item.getInfoForCitationCluster();
-        }, this);
-    }
-    getPlainCitation() {
-        if (Object.hasOwnProperty.call(this._properties, "plainCitation")) {
-            return String(this._properties.plainCitation);
-        } else if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
-            return String(this._manualOverride.citeprocText);
-        }
-        return "";
-    }
-    setDoNotUpdate() {
-        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
-            dontUpdate: true
-        });
-        return this;
-    }
-    setNoteIndex(noteIndex) {
-        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
-            noteIndex: noteIndex
-        });
-        return this;
-    }
-    setPlainCitation(plainCitation) {
-        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, {
-            plainCitation: plainCitation
-        });
-        return this;
-    }
-    setManualOverride(citeprocText, manualOverrideText) {
-        var manualOverride = {
-            citeprocText: citeprocText,
-            isManuallyOverridden: !!manualOverrideText,
-            manualOverrideText: manualOverrideText || ""
-        };
-        this._manualOverride = manualOverride;
-        return this;
-    }
-    validate() {
-        var errors = [];
-        if (!this._schema) errors.push("Schema is required");
-        if (!this.citationID) errors.push("citationID is required");
-        if (this._citationItems && Array.isArray(this._citationItems)) {
-            for (var i = 0; i < this._citationItems.length; i++) {
-                if (!this._citationItems[i].id) {
-                    errors.push("Citation item at index " + i + " must have an id");
-                }
-            }
-        }
-        return errors.length === 0 ? true : errors;
-    }
-    toJSON() {
-        var result = {
-            citationID: this.citationID,
-            schema: this._schema
-        };
-        if (this._properties && Object.keys(this._properties).length > 0) {
-            result.properties = this._properties;
-        }
-        if (this._manualOverride && Object.keys(this._manualOverride).length > 0) {
-            result.manualOverride = this._manualOverride;
-        }
-        if (this._citationItems && this._citationItems.length > 0) {
-            result.citationItems = this._citationItems.map(function(item) {
-                return item.toJSON();
-            });
-        }
-        return result;
-    }
-}
-
-function _fillFromCitationObject(citationObject) {
-    var self = this;
-    if (Object.hasOwnProperty.call(citationObject, "schema")) ;
-    if (Object.hasOwnProperty.call(citationObject, "properties")) {
-        _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, citationObject.properties);
-    }
-    if (Object.hasOwnProperty.call(citationObject, "manualOverride")) {
-        this._manualOverride = citationObject.manualOverride;
-    }
-    if (!Object.hasOwnProperty.call(citationObject, "citationItems")) {
-        console.error("citationItems is empty");
-        return 0;
-    }
-    var existingIds = this._citationItems.map(function(item) {
-        return item.id;
-    });
-    citationObject.citationItems.forEach(function(item) {
-        var id = item.id;
-        var citationItem;
-        if (existingIds.indexOf(id) >= 0) {
-            citationItem = self._citationItems[existingIds.indexOf(id)];
-        } else {
-            citationItem = new CitationItem(id);
-            existingIds.push(id);
-        }
-        if (typeof id === "number") {
-            id = _assertClassBrand(_CSLCitation_brand, self, _extractIdFromWord365Citation).call(self, item);
-        }
-        citationItem.fillFromObject(item);
-        _assertClassBrand(_CSLCitation_brand, self, _addCitationItem).call(self, citationItem);
+  constructor(t) {
+    _classPrivateMethodInitSpec(this, _CSLCitation_brand), t || (t = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this)), _usedIDs._.has(t) && (console.warn("Citation ID must be unique"), t = _assertClassBrand(_CSLCitation_brand, this, _generateId).call(this)), _usedIDs._.add(t), this.citationID = t, this._citationItems = new Array(), this._properties = {}, this._manualOverride = {}, this._schema = "https://raw.githubusercontent.com/citation-style-language/schema/master/schemas/input/csl-citation.json";
+  }
+  static resetUsedIDs() {
+    _usedIDs._ = /* @__PURE__ */ new Set();
+  }
+  fillFromObject(t) {
+    return Object.hasOwnProperty.call(t, "properties") || Object.hasOwnProperty.call(t, "manualOverride") || Object.hasOwnProperty.call(t, "schema") ? _assertClassBrand(_CSLCitation_brand, this, _fillFromCitationObject).call(this, t) : Object.hasOwnProperty.call(t, "citationItems") ? _assertClassBrand(_CSLCitation_brand, this, _fillFromFlatCitationObject).call(this, t) : Object.hasOwnProperty.call(t, "version") && Object.hasOwnProperty.call(t, "library") ? _assertClassBrand(_CSLCitation_brand, this, _fillFromJson).call(this, t) : _assertClassBrand(_CSLCitation_brand, this, _fillFromCslJson).call(this, t);
+  }
+  getCitationItems() {
+    return this._citationItems;
+  }
+  getDoNotUpdate() {
+    return Object.hasOwnProperty.call(this._properties, "dontUpdate") ? !!this._properties.dontUpdate : !!Object.hasOwnProperty.call(this._manualOverride, "isManuallyOverridden") && !!this._manualOverride.isManuallyOverridden;
+  }
+  getInfoForCitationCluster() {
+    return this._citationItems.map(function(t) {
+      return t.getInfoForCitationCluster();
     }, this);
-    return existingIds.length;
+  }
+  getPlainCitation() {
+    return Object.hasOwnProperty.call(this._properties, "plainCitation") ? String(this._properties.plainCitation) : this._manualOverride && Object.keys(this._manualOverride).length > 0 ? String(this._manualOverride.citeprocText) : "";
+  }
+  setDoNotUpdate() {
+    return _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, { dontUpdate: true }), this;
+  }
+  setNoteIndex(t) {
+    return _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, { noteIndex: t }), this;
+  }
+  setPlainCitation(t) {
+    return _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, { plainCitation: t }), this;
+  }
+  setManualOverride(t, e) {
+    var i = { citeprocText: t, isManuallyOverridden: !!e, manualOverrideText: e || "" };
+    return this._manualOverride = i, this;
+  }
+  validate() {
+    var t = [];
+    if (this._schema || t.push("Schema is required"), this.citationID || t.push("citationID is required"), this._citationItems && Array.isArray(this._citationItems)) for (var e = 0; e < this._citationItems.length; e++) this._citationItems[e].id || t.push("Citation item at index " + e + " must have an id");
+    return 0 === t.length || t;
+  }
+  toJSON() {
+    var t = { citationID: this.citationID, schema: this._schema };
+    return this._properties && Object.keys(this._properties).length > 0 && (t.properties = this._properties), this._manualOverride && Object.keys(this._manualOverride).length > 0 && (t.manualOverride = this._manualOverride), this._citationItems && this._citationItems.length > 0 && (t.citationItems = this._citationItems.map(function(t2) {
+      return t2.toJSON();
+    })), t;
+  }
 }
-
-function _fillFromFlatCitationObject(citationObject) {
-    var self = this;
-    if (citationObject.citationItems.length === 0) {
-        console.error("CSLCitation.citationItems: citationItems is empty");
-        return 0;
-    } else if (citationObject.citationItems.length > 1) {
-        console.warn("CSLCitation.citationItems: citationItems has more than one item");
-    }
-    citationObject.citationItems.forEach(function(itemObject) {
-        _assertClassBrand(_CSLCitation_brand, self, _fillFromCslJson).call(self, itemObject);
-    }, this);
-    return 1;
+function _fillFromCitationObject(t) {
+  var e = this;
+  if (Object.hasOwnProperty.call(t, "schema"), Object.hasOwnProperty.call(t, "properties") && _assertClassBrand(_CSLCitation_brand, this, _setProperties).call(this, t.properties), Object.hasOwnProperty.call(t, "manualOverride") && (this._manualOverride = t.manualOverride), !Object.hasOwnProperty.call(t, "citationItems")) return console.error("citationItems is empty"), 0;
+  var i = this._citationItems.map(function(t2) {
+    return t2.id;
+  });
+  return t.citationItems.forEach(function(t2) {
+    var s, n = t2.id;
+    i.indexOf(n) >= 0 ? s = e._citationItems[i.indexOf(n)] : (s = new CitationItem(n), i.push(n)), "number" == typeof n && (n = _assertClassBrand(_CSLCitation_brand, e, _extractIdFromWord365Citation).call(e, t2)), s.fillFromObject(t2), _assertClassBrand(_CSLCitation_brand, e, _addCitationItem).call(e, s);
+  }, this), i.length;
 }
-
-function _fillFromCslJson(itemObject) {
-    var id = itemObject.id;
-    var citationItem;
-    var existingIds = this._citationItems.map(function(item) {
-        return item.id;
-    });
-    if (existingIds.indexOf(id) >= 0) {
-        citationItem = this._citationItems[existingIds.indexOf(id)];
-    } else {
-        citationItem = new CitationItem(id);
-    }
-    citationItem.fillFromObject(itemObject);
-    _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
-    return 1;
+function _fillFromFlatCitationObject(t) {
+  var e = this;
+  return 0 === t.citationItems.length ? (console.error("CSLCitation.citationItems: citationItems is empty"), 0) : (t.citationItems.length > 1 && console.warn("CSLCitation.citationItems: citationItems has more than one item"), t.citationItems.forEach(function(t2) {
+    _assertClassBrand(_CSLCitation_brand, e, _fillFromCslJson).call(e, t2);
+  }, this), 1);
 }
-
-function _fillFromJson(itemObject) {
-    if (!Object.hasOwnProperty.call(itemObject, "data")) {
-        console.error("Invalid citation object");
-        return 0;
-    }
-    var existingIds = this._citationItems.map(function(item) {
-        return item.id;
-    });
-    var id = itemObject.data.key;
-    var citationItem;
-    if (existingIds.indexOf(id) >= 0) {
-        citationItem = this._citationItems[existingIds.indexOf(id)];
-    } else {
-        citationItem = new CitationItem(id);
-    }
-    citationItem.fillFromObject(itemObject);
-    _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, citationItem);
-    return 1;
+function _fillFromCslJson(t) {
+  var e, i = t.id, s = this._citationItems.map(function(t2) {
+    return t2.id;
+  });
+  return (e = s.indexOf(i) >= 0 ? this._citationItems[s.indexOf(i)] : new CitationItem(i)).fillFromObject(t), _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, e), 1;
 }
-
-function _addCitationItem(item) {
-    var existingIds = this._citationItems.map(function(item) {
-        return item.id;
-    });
-    if (existingIds.indexOf(item.id) >= 0) {
-        this._citationItems[existingIds.indexOf(item.id)] = item;
-        return this;
-    }
-    this._citationItems.push(item);
-    return this;
+function _fillFromJson(t) {
+  if (!Object.hasOwnProperty.call(t, "data")) return console.error("Invalid citation object"), 0;
+  var e, i = this._citationItems.map(function(t2) {
+    return t2.id;
+  }), s = t.data.key;
+  return (e = i.indexOf(s) >= 0 ? this._citationItems[i.indexOf(s)] : new CitationItem(s)).fillFromObject(t), _assertClassBrand(_CSLCitation_brand, this, _addCitationItem).call(this, e), 1;
 }
-
-function _setProperties(properties) {
-    var self = this;
-    Object.keys(properties).forEach(function(key) {
-        if (Object.hasOwnProperty.call(properties, key)) {
-            self._properties[key] = properties[key];
-        }
-    }, this);
-    return this;
+function _addCitationItem(t) {
+  var e = this._citationItems.map(function(t2) {
+    return t2.id;
+  });
+  return e.indexOf(t.id) >= 0 ? (this._citationItems[e.indexOf(t.id)] = t, this) : (this._citationItems.push(t), this);
 }
-
-function _extractIdFromWord365Citation(item) {
-    if (Object.hasOwnProperty.call(item, "uris") && item.uris.length) {
-        var index = item.uris[0].lastIndexOf("/");
-        return item.uris[0].slice(index + 1);
-    }
-    return item.id;
+function _setProperties(t) {
+  var e = this;
+  return Object.keys(t).forEach(function(i) {
+    Object.hasOwnProperty.call(t, i) && (e._properties[i] = t[i]);
+  }, this), this;
 }
-
+function _extractIdFromWord365Citation(t) {
+  if (Object.hasOwnProperty.call(t, "uris") && t.uris.length) {
+    var e = t.uris[0].lastIndexOf("/");
+    return t.uris[0].slice(e + 1);
+  }
+  return t.id;
+}
 function _generateId() {
-    return Math.random().toString(36).substring(2, 15);
+  return Math.random().toString(36).substring(2, 15);
 }
-
-var _usedIDs = {
-    _: new Set
-};
-
-var _window = new WeakMap;
-
-var _defaultButtonFn = new WeakMap;
-
-var _defaultThemeChangedFn = new WeakMap;
-
-var _defaultTranslateFn = new WeakMap;
-
-var _AdditionalWindow_brand = new WeakSet;
-
+var _usedIDs = { _: /* @__PURE__ */ new Set() }, _window = /* @__PURE__ */ new WeakMap(), _defaultButtonFn = /* @__PURE__ */ new WeakMap(), _defaultThemeChangedFn = /* @__PURE__ */ new WeakMap(), _defaultTranslateFn = /* @__PURE__ */ new WeakMap(), _AdditionalWindow_brand = /* @__PURE__ */ new WeakSet();
 class AdditionalWindow {
-    constructor() {
-        _classPrivateMethodInitSpec(this, _AdditionalWindow_brand);
-        _classPrivateFieldInitSpec(this, _window, void 0);
-        _classPrivateFieldInitSpec(this, _defaultButtonFn, void 0);
-        _classPrivateFieldInitSpec(this, _defaultThemeChangedFn, void 0);
-        _classPrivateFieldInitSpec(this, _defaultTranslateFn, void 0);
-        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-        _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
-        _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
-        _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
-    }
-    show(description, text) {
-        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-        var variation = {
-            name: "Zotero",
-            url: "info-window.html",
-            description: window.Asc.plugin.tr(description),
-            isVisual: true,
-            buttons: [ {
-                text: window.Asc.plugin.tr("Yes"),
-                primary: true,
-                isViewer: false
-            }, {
-                text: window.Asc.plugin.tr("No"),
-                primary: false
-            } ],
-            isModal: false,
-            EditorsSupport: [ "word" ],
-            size: [ 380, 240 ],
-            isViewer: true,
-            isDisplayedInViewer: false,
-            isInsideMode: false
-        };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, text, "default");
-        _classPrivateFieldGet2(_window, this).show(variation);
-        return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
-                if (buttonId === 0) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
-            };
-        });
-    }
-    showEditWindow(content) {
-        var _this = this;
-        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-        var variation = {
-            name: "Zotero",
-            url: "edit-window.html",
-            description: window.Asc.plugin.tr("Edit citation"),
-            isVisual: true,
-            buttons: [ {
-                text: window.Asc.plugin.tr("Save"),
-                primary: true,
-                isViewer: false
-            }, {
-                text: window.Asc.plugin.tr("Cancel"),
-                primary: false
-            } ],
-            isModal: false,
-            EditorsSupport: [ "word" ],
-            size: [ 380, 150 ],
-            isViewer: true,
-            isDisplayedInViewer: false,
-            isInsideMode: false
-        };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, content, "default");
-        _classPrivateFieldGet2(_window, this).show(variation);
-        return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = function() {
-                var _ref = _asyncToGenerator(function*(buttonId, windowId) {
-                    var element = yield new Promise(resolve => {
-                        if (!_classPrivateFieldGet2(_window, _this)) {
-                            resolve(null);
-                            return;
-                        }
-                        _classPrivateFieldGet2(_window, _this).attachEvent("onSaveFields", resolve);
-                        _classPrivateFieldGet2(_window, _this).command("onClickSave");
-                    });
-                    if (buttonId === 0) {
-                        resolve(element);
-                    } else {
-                        resolve(null);
-                    }
-                    _assertClassBrand(_AdditionalWindow_brand, _this, _hide).call(_this);
-                });
-                return function(_x, _x2) {
-                    return _ref.apply(this, arguments);
-                };
-            }();
-        });
-    }
-    showInfoWindow(description, text, type) {
-        if (typeof type !== "string") {
-            type = "warning";
-        }
-        _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow);
-        var variation = {
-            name: "Mendeley",
-            url: "info-window.html",
-            description: window.Asc.plugin.tr(description),
-            isVisual: true,
-            buttons: [ {
-                text: window.Asc.plugin.tr("OK"),
-                primary: true,
-                isViewer: false
-            } ],
-            isModal: false,
-            EditorsSupport: [ "word" ],
-            size: [ 350, 76 ],
-            isViewer: true,
-            isDisplayedInViewer: false,
-            isInsideMode: false
-        };
-        _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, variation, window.Asc.plugin.tr(text), type);
-        _classPrivateFieldGet2(_window, this).show(variation);
-        return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
-                if (buttonId === 0) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-                _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
-            };
-        });
-    }
-    destroy() {
-        _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
-        _classPrivateFieldSet2(_window, this, null);
-    }
-}
-
-function _onShow(variation, content, type) {
-    if (!_classPrivateFieldGet2(_window, this)) return;
-    _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button);
-    _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged);
-    _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
-    window.Asc.plugin.onThemeChanged = theme => {
-        var _classPrivateFieldGet2$1;
-        (_classPrivateFieldGet2$1 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet2$1 === void 0 || _classPrivateFieldGet2$1.command("onThemeChanged", theme);
-        _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, theme);
-    };
-    window.Asc.plugin.onTranslate = () => {
-        var _classPrivateFieldGet3;
-        (_classPrivateFieldGet3 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.command("onTranslate");
-        _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
-    };
-    _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
-        if (type === "warning") {
-            var _classPrivateFieldGet4;
-            (_classPrivateFieldGet4 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet4 === void 0 || _classPrivateFieldGet4.command("onWarning", content);
-        } else if (type === "success") {
-            var _classPrivateFieldGet5;
-            (_classPrivateFieldGet5 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet5 === void 0 || _classPrivateFieldGet5.command("onSuccess", content);
-        } else {
-            var _classPrivateFieldGet6;
-            (_classPrivateFieldGet6 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet6 === void 0 || _classPrivateFieldGet6.command("onAttachedContent", content);
-        }
+  constructor() {
+    _classPrivateMethodInitSpec(this, _AdditionalWindow_brand), _classPrivateFieldInitSpec(this, _window, void 0), _classPrivateFieldInitSpec(this, _defaultButtonFn, void 0), _classPrivateFieldInitSpec(this, _defaultThemeChangedFn, void 0), _classPrivateFieldInitSpec(this, _defaultTranslateFn, void 0), _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow()), _classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button), _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged), _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate);
+  }
+  show(t, e) {
+    _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow());
+    var i = { name: "Zotero", url: "info-window.html", description: window.Asc.plugin.tr(t), isVisual: true, buttons: [{ text: window.Asc.plugin.tr("Yes"), primary: true, isViewer: false }, { text: window.Asc.plugin.tr("No"), primary: false }], isModal: false, EditorsSupport: ["word"], size: [380, 240], isViewer: true, isDisplayedInViewer: false, isInsideMode: false };
+    return _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, i, e, "default"), _classPrivateFieldGet2(_window, this).show(i), new Promise((t2, e2) => {
+      window.Asc.plugin.button = (e3, i2) => {
+        t2(0 === e3), _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
+      };
     });
-    _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", height => {
-        var _classPrivateFieldGet7;
-        Asc.plugin.executeMethod("ResizeWindow", [ (_classPrivateFieldGet7 = _classPrivateFieldGet2(_window, this)) === null || _classPrivateFieldGet7 === void 0 ? void 0 : _classPrivateFieldGet7.id, [ variation.size[0] - 2, height ] ], () => {});
+  }
+  showEditWindow(t) {
+    var e = this;
+    _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow());
+    var i = { name: "Zotero", url: "edit-window.html", description: window.Asc.plugin.tr("Edit citation"), isVisual: true, buttons: [{ text: window.Asc.plugin.tr("Save"), primary: true, isViewer: false }, { text: window.Asc.plugin.tr("Cancel"), primary: false }], isModal: false, EditorsSupport: ["word"], size: [380, 150], isViewer: true, isDisplayedInViewer: false, isInsideMode: false };
+    return _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, i, t, "default"), _classPrivateFieldGet2(_window, this).show(i), new Promise((t2, i2) => {
+      window.Asc.plugin.button = (function() {
+        var i3 = _asyncToGenerator(function* (i4, s) {
+          var n = yield new Promise((t3) => {
+            _classPrivateFieldGet2(_window, e) ? (_classPrivateFieldGet2(_window, e).attachEvent("onSaveFields", t3), _classPrivateFieldGet2(_window, e).command("onClickSave")) : t3(null);
+          });
+          t2(0 === i4 ? n : null), _assertClassBrand(_AdditionalWindow_brand, e, _hide).call(e);
+        });
+        return function(t3, e2) {
+          return i3.apply(this, arguments);
+        };
+      })();
     });
+  }
+  showInfoWindow(t, e, i) {
+    "string" != typeof i && (i = "warning"), _classPrivateFieldSet2(_window, this, new window.Asc.PluginWindow());
+    var s = { name: "Mendeley", url: "info-window.html", description: window.Asc.plugin.tr(t), isVisual: true, buttons: [{ text: window.Asc.plugin.tr("OK"), primary: true, isViewer: false }], isModal: false, EditorsSupport: ["word"], size: [350, 76], isViewer: true, isDisplayedInViewer: false, isInsideMode: false };
+    return _assertClassBrand(_AdditionalWindow_brand, this, _onShow).call(this, s, window.Asc.plugin.tr(e), i), _classPrivateFieldGet2(_window, this).show(s), new Promise((t2, e2) => {
+      window.Asc.plugin.button = (e3, i2) => {
+        t2(0 === e3), _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this);
+      };
+    });
+  }
+  destroy() {
+    _assertClassBrand(_AdditionalWindow_brand, this, _hide).call(this), _classPrivateFieldSet2(_window, this, null);
+  }
 }
-
+function _onShow(t, e, i) {
+  _classPrivateFieldGet2(_window, this) && (_classPrivateFieldSet2(_defaultButtonFn, this, window.Asc.plugin.button), _classPrivateFieldSet2(_defaultThemeChangedFn, this, Asc.plugin.onThemeChanged), _classPrivateFieldSet2(_defaultTranslateFn, this, Asc.plugin.onTranslate), window.Asc.plugin.onThemeChanged = (t2) => {
+    var e2;
+    null === (e2 = _classPrivateFieldGet2(_window, this)) || void 0 === e2 || e2.command("onThemeChanged", t2), _classPrivateFieldGet2(_defaultThemeChangedFn, this).call(this, t2);
+  }, window.Asc.plugin.onTranslate = () => {
+    var t2;
+    null === (t2 = _classPrivateFieldGet2(_window, this)) || void 0 === t2 || t2.command("onTranslate"), _classPrivateFieldGet2(_defaultTranslateFn, this).call(this);
+  }, _classPrivateFieldGet2(_window, this).attachEvent("onWindowReady", () => {
+    var t2;
+    if ("warning" === i) null === (t2 = _classPrivateFieldGet2(_window, this)) || void 0 === t2 || t2.command("onWarning", e);
+    else if ("success" === i) {
+      var s;
+      null === (s = _classPrivateFieldGet2(_window, this)) || void 0 === s || s.command("onSuccess", e);
+    } else {
+      var n;
+      null === (n = _classPrivateFieldGet2(_window, this)) || void 0 === n || n.command("onAttachedContent", e);
+    }
+  }), _classPrivateFieldGet2(_window, this).attachEvent("onUpdateHeight", (e2) => {
+    var i2;
+    Asc.plugin.executeMethod("ResizeWindow", [null === (i2 = _classPrivateFieldGet2(_window, this)) || void 0 === i2 ? void 0 : i2.id, [t.size[0] - 2, e2]], () => {
+    });
+  }));
+}
 function _hide() {
-    if (_classPrivateFieldGet2(_window, this)) {
-        _classPrivateFieldGet2(_window, this).close();
-    }
-    window.Asc.plugin.button = _classPrivateFieldGet2(_defaultButtonFn, this);
-    window.Asc.plugin.onThemeChanged = _classPrivateFieldGet2(_defaultThemeChangedFn, this);
+  _classPrivateFieldGet2(_window, this) && _classPrivateFieldGet2(_window, this).close(), window.Asc.plugin.button = _classPrivateFieldGet2(_defaultButtonFn, this), window.Asc.plugin.onThemeChanged = _classPrivateFieldGet2(_defaultThemeChangedFn, this);
 }
-
-var _additionalWindow = new WeakMap;
-
-var _CitationService_brand = new WeakSet;
-
+var _additionalWindow = /* @__PURE__ */ new WeakMap(), _CitationService_brand = /* @__PURE__ */ new WeakSet();
 class CitationService {
-    constructor(localesManager, cslStylesManager, sdk) {
-        _classPrivateMethodInitSpec(this, _CitationService_brand);
-        _classPrivateFieldInitSpec(this, _additionalWindow, void 0);
-        this._bibPlaceholderIfEmpty = "Please insert some citation into the document.";
-        this._citPrefixNew = "ZOTERO_ITEM";
-        this._citSuffixNew = "CSL_CITATION";
-        this._citPrefix = "ZOTERO_CITATION";
-        this._bibPrefixNew = "ZOTERO_BIBL";
-        this._bibSuffixNew = "CSL_BIBLIOGRAPHY";
-        this._bibPrefix = "ZOTERO_BIBLIOGRAPHY";
-        this._sdk = sdk;
-        this._localesManager = localesManager;
-        this._cslStylesManager = cslStylesManager;
-        this._storage = new CSLCitationStorage;
-        this._formatter;
-        this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew);
-        _classPrivateFieldSet2(_additionalWindow, this, new AdditionalWindow);
-    }
-    getCurrentField() {
-        var _this = this;
-        return _asyncToGenerator(function*() {
-            return _this.citationDocService.getCurrentField();
-        })();
-    }
-    saveAsText() {
-        var _this2 = this;
-        return _asyncToGenerator(function*() {
-            var isOk = yield _this2.citationDocService.saveAsText();
-            if (isOk) {
-                _classPrivateFieldGet2(_additionalWindow, _this2).showInfoWindow("Success!", "All active Mendeley citations and Bibliography have been replaced.", "success");
-            }
-            return isOk;
-        })();
-    }
-    insertSelectedCitations(items) {
-        var _this3 = this;
-        return _asyncToGenerator(function*() {
-            var self = _this3;
-            try {
-                yield _assertClassBrand(_CitationService_brand, _this3, _synchronizeStorageWithDocItems).call(_this3);
-                _assertClassBrand(_CitationService_brand, _this3, _updateFormatter).call(_this3);
-            } catch (e) {
-                throw e;
-            }
-            var cslCitation = new CSLCitation("");
-            for (var citationID in items) {
-                var item = items[citationID];
-                cslCitation.fillFromObject(item);
-            }
-            return _assertClassBrand(_CitationService_brand, _this3, _getSelectedInJsonFormat).call(_this3, items).then(items => {
-                items.forEach(function(item) {
-                    cslCitation.fillFromObject(item);
-                });
-                _this3._storage.addCslCitation(cslCitation);
-                return _assertClassBrand(_CitationService_brand, self, _formatInsertLink).call(self, cslCitation);
-            });
-        })();
-    }
-    insertBibliography() {
-        var _this4 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibFieldValue: bibFieldValue, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this4, _synchronizeStorageWithDocItems).call(_this4);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this4, _updateFormatter).call(_this4);
-                if (bibField) {
-                    var updatedFields = [ yield _assertClassBrand(_CitationService_brand, _this4, _updateBibliography).call(_this4, bNoHaveFields, bibField) ];
-                    return _this4.citationDocService.updateAddinFields(updatedFields).then(fieldIds => fieldIds ? fieldIds[0] : "");
-                } else {
-                    return _assertClassBrand(_CitationService_brand, _this4, _addBibliography).call(_this4, bNoHaveFields, bibFieldValue);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    moveCursorToField(fieldId, isBegin) {
-        var _this5 = this;
-        return _asyncToGenerator(function*() {
-            return _this5.citationDocService.moveCursorToField(fieldId, isBegin);
-        })();
-    }
-    moveCursorOutsideField(fieldId, isBeforeField) {
-        var _this6 = this;
-        return _asyncToGenerator(function*() {
-            return _this6.citationDocService.moveCursorOutsideField(fieldId, isBeforeField);
-        })();
-    }
-    moveCursorRight() {
-        var _this7 = this;
-        return _asyncToGenerator(function*() {
-            return _this7.citationDocService.moveCursorRight();
-        })();
-    }
-    updateCslItems(bHardRefresh) {
-        var _this8 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this8, _synchronizeStorageWithDocItems).call(_this8);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this8, _updateFormatter).call(_this8);
-                var updatedFields = [];
-                if (typeof bHardRefresh === "undefined") {
-                    var format = _this8._cslStylesManager.getLastUsedFormat();
-                    if (format === "numeric") {
-                        bHardRefresh = true;
-                    }
-                }
-                if (typeof bHardRefresh === "boolean") {
-                    updatedFields = yield _assertClassBrand(_CitationService_brand, _this8, _getUpdatedFields).call(_this8, fieldsWithCitations, bHardRefresh);
-                }
-                if (bibField) {
-                    updatedFields.push(yield _assertClassBrand(_CitationService_brand, _this8, _updateBibliography).call(_this8, bNoHaveFields, bibField));
-                }
-                if (updatedFields && updatedFields.length) {
-                    return _this8.citationDocService.updateAddinFields(updatedFields);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    updateCslItemsInNotes(notesStyle) {
-        var _this9 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this9, _synchronizeStorageWithDocItems).call(_this9);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this9, _updateFormatter).call(_this9);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this9, _getUpdatedFields).call(_this9, fieldsWithCitations, false);
-                if (updatedFields && updatedFields.length) {
-                    yield _this9.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-                }
-                if (bibField) {
-                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this9, _updateBibliography).call(_this9, bNoHaveFields, bibField) ];
-                    yield _this9.citationDocService.updateAddinFields(bibFields);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    updateItem(updatedField, notesStyle) {
-        var _this0 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this0, _synchronizeStorageWithDocItems).call(_this0, updatedField);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this0, _updateFormatter).call(_this0);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this0, _getUpdatedFields).call(_this0, fieldsWithCitations, true);
-                if (notesStyle && updatedFields && updatedFields.length) {
-                    yield _this0.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-                    updatedFields = [];
-                }
-                if (updatedFields && updatedFields.length) {
-                    return _this0.citationDocService.updateAddinFields(updatedFields);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    switchingBetweenNotesAndText(notesStyle) {
-        var _this1 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations, bibField: bibField} = yield _assertClassBrand(_CitationService_brand, _this1, _synchronizeStorageWithDocItems).call(_this1);
-                var bNoHaveFields = fieldsWithCitations.length === 0;
-                _assertClassBrand(_CitationService_brand, _this1, _updateFormatter).call(_this1);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this1, _getUpdatedFields).call(_this1, fieldsWithCitations, true);
-                if (updatedFields && updatedFields.length) {
-                    if (notesStyle) {
-                        yield _this1.citationDocService.convertTextToNotes(updatedFields, notesStyle);
-                    } else {
-                        yield _this1.citationDocService.convertNotesToText(updatedFields);
-                    }
-                }
-                if (bibField) {
-                    var bibFields = [ yield _assertClassBrand(_CitationService_brand, _this1, _updateBibliography).call(_this1, bNoHaveFields, bibField) ];
-                    yield _this1.citationDocService.updateAddinFields(bibFields);
-                }
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    convertNotesStyle(notesStyle) {
-        var _this10 = this;
-        return _asyncToGenerator(function*() {
-            try {
-                var {fieldsWithCitations: fieldsWithCitations} = yield _assertClassBrand(_CitationService_brand, _this10, _synchronizeStorageWithDocItems).call(_this10);
-                _assertClassBrand(_CitationService_brand, _this10, _updateFormatter).call(_this10);
-                var updatedFields = yield _assertClassBrand(_CitationService_brand, _this10, _getUpdatedFields).call(_this10, fieldsWithCitations, false, true);
-                if (!updatedFields || !updatedFields.length) return;
-                yield _this10.citationDocService.convertNotesStyle(updatedFields, notesStyle);
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-    showEditCitationWindow(field) {
-        var _this11 = this;
-        return _asyncToGenerator(function*() {
-            if (!field) return null;
-            var citationObject = _assertClassBrand(_CitationService_brand, _this11, _extractField).call(_this11, field);
-            var updatedField = yield _classPrivateFieldGet2(_additionalWindow, _this11).showEditWindow(citationObject);
-            if (!updatedField) {
-                return null;
-            }
-            return updatedField;
-        })();
-    }
+  constructor(t, e, i) {
+    _classPrivateMethodInitSpec(this, _CitationService_brand), _classPrivateFieldInitSpec(this, _additionalWindow, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = i, this._localesManager = t, this._cslStylesManager = e, this._storage = new CSLCitationStorage(), this._formatter, this.citationDocService = new CitationDocService(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), _classPrivateFieldSet2(_additionalWindow, this, new AdditionalWindow());
+  }
+  getCurrentField() {
+    var t = this;
+    return _asyncToGenerator(function* () {
+      return t.citationDocService.getCurrentField();
+    })();
+  }
+  saveAsText() {
+    var t = this;
+    return _asyncToGenerator(function* () {
+      var e = yield t.citationDocService.saveAsText();
+      return e && _classPrivateFieldGet2(_additionalWindow, t).showInfoWindow("Success!", "All active Mendeley citations and Bibliography have been replaced.", "success"), e;
+    })();
+  }
+  insertSelectedCitations(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      var i = e;
+      try {
+        yield _assertClassBrand(_CitationService_brand, e, _synchronizeStorageWithDocItems).call(e), _assertClassBrand(_CitationService_brand, e, _updateFormatter).call(e);
+      } catch (t2) {
+        throw t2;
+      }
+      var s = new CSLCitation("");
+      for (var n in t) {
+        var a = t[n];
+        s.fillFromObject(a);
+      }
+      return _assertClassBrand(_CitationService_brand, e, _getSelectedInJsonFormat).call(e, t).then((t2) => (t2.forEach(function(t3) {
+        s.fillFromObject(t3);
+      }), e._storage.addCslCitation(s), _assertClassBrand(_CitationService_brand, i, _formatInsertLink).call(i, s)));
+    })();
+  }
+  insertBibliography() {
+    var t = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: e, bibFieldValue: i, bibField: s } = yield _assertClassBrand(_CitationService_brand, t, _synchronizeStorageWithDocItems).call(t), n = 0 === e.length;
+        if (_assertClassBrand(_CitationService_brand, t, _updateFormatter).call(t), s) {
+          var a = [yield _assertClassBrand(_CitationService_brand, t, _updateBibliography).call(t, n, s)];
+          return t.citationDocService.updateAddinFields(a).then((t2) => t2 ? t2[0] : "");
+        }
+        return _assertClassBrand(_CitationService_brand, t, _addBibliography).call(t, n, i);
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  moveCursorToField(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      return i.citationDocService.moveCursorToField(t, e);
+    })();
+  }
+  moveCursorOutsideField(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      return i.citationDocService.moveCursorOutsideField(t, e);
+    })();
+  }
+  moveCursorRight() {
+    var t = this;
+    return _asyncToGenerator(function* () {
+      return t.citationDocService.moveCursorRight();
+    })();
+  }
+  updateCslItems(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: i, bibField: s } = yield _assertClassBrand(_CitationService_brand, e, _synchronizeStorageWithDocItems).call(e), n = 0 === i.length;
+        _assertClassBrand(_CitationService_brand, e, _updateFormatter).call(e);
+        var a = [];
+        if (void 0 === t) "numeric" === e._cslStylesManager.getLastUsedFormat() && (t = true);
+        if ("boolean" == typeof t && (a = yield _assertClassBrand(_CitationService_brand, e, _getUpdatedFields).call(e, i, t)), s && a.push(yield _assertClassBrand(_CitationService_brand, e, _updateBibliography).call(e, n, s)), a && a.length) return e.citationDocService.updateAddinFields(a);
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  updateCslItemsInNotes(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: i, bibField: s } = yield _assertClassBrand(_CitationService_brand, e, _synchronizeStorageWithDocItems).call(e), n = 0 === i.length;
+        _assertClassBrand(_CitationService_brand, e, _updateFormatter).call(e);
+        var a = yield _assertClassBrand(_CitationService_brand, e, _getUpdatedFields).call(e, i, false);
+        if (a && a.length && (yield e.citationDocService.convertNotesStyle(a, t)), s) {
+          var r = [yield _assertClassBrand(_CitationService_brand, e, _updateBibliography).call(e, n, s)];
+          yield e.citationDocService.updateAddinFields(r);
+        }
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  updateItem(t, e) {
+    var i = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: s, bibField: n } = yield _assertClassBrand(_CitationService_brand, i, _synchronizeStorageWithDocItems).call(i, t);
+        s.length;
+        _assertClassBrand(_CitationService_brand, i, _updateFormatter).call(i);
+        var a = yield _assertClassBrand(_CitationService_brand, i, _getUpdatedFields).call(i, s, true);
+        if (e && a && a.length && (yield i.citationDocService.convertNotesStyle(a, e), a = []), a && a.length) return i.citationDocService.updateAddinFields(a);
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  switchingBetweenNotesAndText(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: i, bibField: s } = yield _assertClassBrand(_CitationService_brand, e, _synchronizeStorageWithDocItems).call(e), n = 0 === i.length;
+        _assertClassBrand(_CitationService_brand, e, _updateFormatter).call(e);
+        var a = yield _assertClassBrand(_CitationService_brand, e, _getUpdatedFields).call(e, i, true);
+        if (a && a.length && (t ? yield e.citationDocService.convertTextToNotes(a, t) : yield e.citationDocService.convertNotesToText(a)), s) {
+          var r = [yield _assertClassBrand(_CitationService_brand, e, _updateBibliography).call(e, n, s)];
+          yield e.citationDocService.updateAddinFields(r);
+        }
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  convertNotesStyle(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      try {
+        var { fieldsWithCitations: i } = yield _assertClassBrand(_CitationService_brand, e, _synchronizeStorageWithDocItems).call(e);
+        _assertClassBrand(_CitationService_brand, e, _updateFormatter).call(e);
+        var s = yield _assertClassBrand(_CitationService_brand, e, _getUpdatedFields).call(e, i, false, true);
+        if (!s || !s.length) return;
+        yield e.citationDocService.convertNotesStyle(s, t);
+      } catch (t2) {
+        throw t2;
+      }
+    })();
+  }
+  showEditCitationWindow(t) {
+    var e = this;
+    return _asyncToGenerator(function* () {
+      if (!t) return null;
+      var i = _assertClassBrand(_CitationService_brand, e, _extractField).call(e, t), s = yield _classPrivateFieldGet2(_additionalWindow, e).showEditWindow(i);
+      return s || null;
+    })();
+  }
 }
-
-function _formatInsertLink(cslCitation) {
-    var self = this;
-    var bUpdateItems = false;
-    return Promise.resolve().then(function() {
-        cslCitation.getCitationItems().forEach(function(item) {
-            if (!self._storage.hasItem(item.id)) {
-                bUpdateItems = true;
-            }
-        });
-        if (bUpdateItems) {
-            var arrIds = [];
-            self._storage.forEachItem(function(item, id) {
-                arrIds.push(id);
-            });
-            self._formatter.updateItems(arrIds);
-        }
-    }).then(function() {
-        var fragment = document.createDocumentFragment();
-        var tempElement = document.createElement("div");
-        var citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
-        var citationsPost = self._storage.getCitationsPost(cslCitation.citationID);
-        var citations = self._storage.getAllCitationsInJson();
-        self._formatter.rebuildProcessorState(citations);
-        var formattedCitationObj = self._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
-        var htmlCitation = _assertClassBrand(_CitationService_brand, self, _unEscapeHtml).call(self, formattedCitationObj[1][0][1]);
-        fragment.appendChild(tempElement);
-        tempElement.innerHTML = htmlCitation;
-        cslCitation.setPlainCitation(tempElement.innerText);
-        var notesStyle = null;
-        if ("note" === self._cslStylesManager.getLastUsedFormat()) {
-            notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
-        }
-        return self.citationDocService.addCitation(htmlCitation, JSON.stringify(cslCitation.toJSON()), notesStyle);
-    });
+function _formatInsertLink(t) {
+  var e = this, i = false;
+  return Promise.resolve().then(function() {
+    if (t.getCitationItems().forEach(function(t2) {
+      e._storage.hasItem(t2.id) || (i = true);
+    }), i) {
+      var s = [];
+      e._storage.forEachItem(function(t2, e2) {
+        s.push(e2);
+      }), e._formatter.updateItems(s);
+    }
+  }).then(function() {
+    var i2 = document.createDocumentFragment(), s = document.createElement("div"), n = e._storage.getCitationsPre(t.citationID), a = e._storage.getCitationsPost(t.citationID), r = e._storage.getAllCitationsInJson();
+    e._formatter.rebuildProcessorState(r);
+    var o = e._formatter.processCitationCluster(t.toJSON(), n, a), l = _assertClassBrand(_CitationService_brand, e, _unEscapeHtml).call(e, o[1][0][1]);
+    i2.appendChild(s), s.innerHTML = l, t.setPlainCitation(s.innerText);
+    var c = null;
+    return "note" === e._cslStylesManager.getLastUsedFormat() && (c = e._cslStylesManager.getLastUsedNotesStyle()), e.citationDocService.addCitation(l, JSON.stringify(t.toJSON()), c);
+  });
 }
-
-function _getSelectedInJsonFormat(items) {
-    var arrUsrItems = [];
-    var arrGroupsItems = {};
-    for (var citationID in items) {
-        var item = items[citationID];
-        var userID = item["userID"];
-        var _groupID = item["groupID"];
-        if (userID) {
-            arrUsrItems.push(item.id);
-        } else if (_groupID) {
-            if (!arrGroupsItems[_groupID]) {
-                arrGroupsItems[_groupID] = [];
-            }
-            arrGroupsItems[_groupID].push(item.id);
-        }
-    }
-    var promises = [];
-    if (arrUsrItems.length) {
-        promises.push(this._sdk.getItems(null, arrUsrItems, "json").then(function(res) {
-            return res.items || [];
-        }));
-    }
-    for (var groupID in arrGroupsItems) {
-        if (Object.hasOwnProperty.call(arrGroupsItems, groupID)) {
-            promises.push(this._sdk.getGroupItems(null, groupID, arrGroupsItems[groupID], "json").then(function(res) {
-                return res.items || [];
-            }));
-        }
-    }
-    return Promise.all(promises).then(function(res) {
-        return res.reduce((acc, resItems) => acc.concat(resItems), []);
-    });
+function _getSelectedInJsonFormat(t) {
+  var e = [], i = {};
+  for (var s in t) {
+    var n = t[s], a = n.userID, r = n.groupID;
+    a ? e.push(n.id) : r && (i[r] || (i[r] = []), i[r].push(n.id));
+  }
+  var o = [];
+  for (var l in e.length && o.push(this._sdk.getItems(null, e, "json").then(function(t2) {
+    return t2.items || [];
+  })), i) Object.hasOwnProperty.call(i, l) && o.push(this._sdk.getGroupItems(null, l, i[l], "json").then(function(t2) {
+    return t2.items || [];
+  }));
+  return Promise.all(o).then(function(t2) {
+    return t2.reduce((t3, e2) => t3.concat(e2), []);
+  });
 }
-
 function _makeBibliography() {
-    try {
-        var bibItems = new Array(this._storage.size);
-        var bibObject = this._formatter.makeBibliography();
-        for (var i = 0; i < bibObject[1].length; i++) {
-            var bibText = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, bibObject[1][i]);
-            bibText = bibText.replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim();
-            var paragraphStart = '<div class="csl-entry">';
-            var paragraphEnd = "</div>";
-            if (!bibObject[0]["second-field-align"]) {
-                bibText = bibText.replace(/<\/?div[^>]*>/g, "");
-                bibText = "<p>" + bibText + "</p>";
-            } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
-                bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
-            }
-            if (window.Asc.scope.editorVersion < 9004e3) {
-                bibText += "\n";
-            }
-            bibItems.push(bibText);
-        }
-        var htmlBibliography = bibItems.join("").trim();
-        Asc.scope.bibStyle = bibObject[0];
-        return htmlBibliography;
-    } catch (e) {
-        if (false === this._cslStylesManager.isLastUsedStyleContainBibliography()) {
-            _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Warning!", "Style does not describe the bibliography");
-        } else {
-            console.error(e);
-            throw "Failed to apply this style.";
-        }
-        return "";
+  try {
+    for (var t = new Array(this._storage.size), e = this._formatter.makeBibliography(), i = 0; i < e[1].length; i++) {
+      var s = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, e[1][i]);
+      s = s.replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim();
+      var n = '<div class="csl-entry">', a = "</div>";
+      e[0]["second-field-align"] ? 0 === s.indexOf(n) && s.endsWith(a) && (s = n + s.substring(23, s.length - 6).trim() + a) : s = "<p>" + (s = s.replace(/<\/?div[^>]*>/g, "")) + "</p>", window.Asc.scope.editorVersion < 9004e3 && (s += "\n"), t.push(s);
     }
+    var r = t.join("").trim();
+    return Asc.scope.bibStyle = e[0], r;
+  } catch (t2) {
+    if (false !== this._cslStylesManager.isLastUsedStyleContainBibliography()) throw console.error(t2), "Failed to apply this style.";
+    return _classPrivateFieldGet2(_additionalWindow, this).showInfoWindow("Warning!", "Style does not describe the bibliography"), "";
+  }
 }
-
-function _extractField(field) {
-    var citationObject;
-    var citationStartIndex = field.Value.indexOf("{");
-    var citationEndIndex = field.Value.lastIndexOf("}");
-    if (citationStartIndex !== -1) {
-        var citationString = field.Value.slice(citationStartIndex, citationEndIndex + 1);
-        citationObject = JSON.parse(citationString);
-    }
-    return citationObject;
+function _extractField(t) {
+  var e, i = t.Value.indexOf("{"), s = t.Value.lastIndexOf("}");
+  if (-1 !== i) {
+    var n = t.Value.slice(i, s + 1);
+    e = JSON.parse(n);
+  }
+  return e;
 }
-
-function _synchronizeStorageWithDocItems(updatedField) {
-    var self = this;
-    this._storage.clear();
-    CSLCitation.resetUsedIDs();
-    return this.citationDocService.getAddinZoteroFields().then(function(arrFields) {
-        var numOfItems = 0;
-        var bibFieldValue = " ";
-        var bibField = arrFields.find(function(field) {
-            return field.Value.indexOf(self._bibPrefixNew) !== -1 || field.Value.indexOf(self._bibPrefix) !== -1;
-        });
-        if (bibField) {
-            var citationObject = _assertClassBrand(_CitationService_brand, self, _extractField).call(self, bibField);
-            if (typeof citationObject === "object" && Object.keys(citationObject).length > 0) {
-                bibFieldValue = JSON.stringify(citationObject);
-            }
-        }
-        var fields = arrFields.filter(function(field) {
-            return field.Value.indexOf(self._citPrefixNew) !== -1 || field.Value.indexOf(self._citPrefix) !== -1;
-        });
-        var fieldsWithCitations = fields.map(function(field) {
-            var citationObject = _assertClassBrand(_CitationService_brand, self, _extractField).call(self, field);
-            var citationID = "";
-            if (field.Value.indexOf(self._citPrefix) === -1) {
-                citationID = citationObject.citationID;
-            }
-            var cslCitation = new CSLCitation(citationID);
-            if (updatedField) {
-                numOfItems += cslCitation.fillFromObject(updatedField);
-            } else {
-                numOfItems += cslCitation.fillFromObject(citationObject);
-            }
-            self._storage.addCslCitation(cslCitation);
-            return {
-                field: _objectSpread2({}, field),
-                cslCitation: cslCitation
-            };
-        });
-        if (updatedField) {
-            fieldsWithCitations = fieldsWithCitations.filter(function(b) {
-                if (b.cslCitation.citationID === updatedField.citationID) {
-                    return true;
-                }
-                return false;
-            });
-        }
-        return {
-            bibField: bibField,
-            bibFieldValue: bibFieldValue,
-            fieldsWithCitations: fieldsWithCitations
-        };
+function _synchronizeStorageWithDocItems(t) {
+  var e = this;
+  return this._storage.clear(), CSLCitation.resetUsedIDs(), this.citationDocService.getAddinZoteroFields().then(function(i) {
+    var s = " ", n = i.find(function(t2) {
+      return -1 !== t2.Value.indexOf(e._bibPrefixNew) || -1 !== t2.Value.indexOf(e._bibPrefix);
     });
-}
-
-function _addBibliography(bNoHaveFields, bibFieldValue) {
-    var bibliography = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
-    if (bNoHaveFields) {
-        bibliography = translate(this._bibPlaceholderIfEmpty);
+    if (n) {
+      var a = _assertClassBrand(_CitationService_brand, e, _extractField).call(e, n);
+      "object" == typeof a && Object.keys(a).length > 0 && (s = JSON.stringify(a));
     }
-    if (this._cslStylesManager.isLastUsedStyleContainBibliography()) {
-        return this.citationDocService.addBibliography(bibliography, bibFieldValue);
-    } else {
-        throw "The current bibliographic style does not describe the bibliography";
-    }
+    var r = i.filter(function(t2) {
+      return -1 !== t2.Value.indexOf(e._citPrefixNew) || -1 !== t2.Value.indexOf(e._citPrefix);
+    }).map(function(i2) {
+      var s2 = _assertClassBrand(_CitationService_brand, e, _extractField).call(e, i2), n2 = "";
+      -1 === i2.Value.indexOf(e._citPrefix) && (n2 = s2.citationID);
+      var a2 = new CSLCitation(n2);
+      return t ? a2.fillFromObject(t) : a2.fillFromObject(s2), e._storage.addCslCitation(a2), { field: _objectSpread2({}, i2), cslCitation: a2 };
+    });
+    return t && (r = r.filter(function(e2) {
+      return e2.cslCitation.citationID === t.citationID;
+    })), { bibField: n, bibFieldValue: s, fieldsWithCitations: r };
+  });
 }
-
-function _updateBibliography(bNoHaveFields, bibField) {
-    if (bNoHaveFields) {
-        bibField["Content"] = translate(this._bibPlaceholderIfEmpty);
-    } else {
-        var bibliography = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
-        bibField["Content"] = bibliography;
-    }
-    return bibField;
+function _addBibliography(t, e) {
+  var i = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
+  if (t && (i = translate(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography()) return this.citationDocService.addBibliography(i, e);
+  throw "The current bibliographic style does not describe the bibliography";
 }
-
-function _getUpdatedFields(_x, _x2, _x3) {
-    return _getUpdatedFields2.apply(this, arguments);
+function _updateBibliography(t, e) {
+  if (t) e.Content = translate(this._bibPlaceholderIfEmpty);
+  else {
+    var i = _assertClassBrand(_CitationService_brand, this, _makeBibliography).call(this);
+    e.Content = i;
+  }
+  return e;
 }
-
+function _getUpdatedFields(t, e, i) {
+  return _getUpdatedFields2.apply(this, arguments);
+}
 function _getUpdatedFields2() {
-    _getUpdatedFields2 = _asyncToGenerator(function*(fieldsWithCitations, bHardRefresh, bChangePosition) {
-        var fragment = document.createDocumentFragment();
-        var tempElement = document.createElement("div");
-        fragment.appendChild(tempElement);
-        var updatedFields = [];
-        for (var i = fieldsWithCitations.length - 1; i >= 0; i--) {
-            var bHasChanges = !!bChangePosition;
-            var {field: field, cslCitation: cslCitation} = fieldsWithCitations[i];
-            var citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
-            var citationsPost = this._storage.getCitationsPost(cslCitation.citationID);
-            var citations = this._storage.getAllCitationsInJson();
-            this._formatter.rebuildProcessorState(citations);
-            var formattedCitationObj = this._formatter.processCitationCluster(cslCitation.toJSON(), citationsPre, citationsPost);
-            var htmlCitation = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, formattedCitationObj[1][0][1]);
-            tempElement.innerHTML = htmlCitation;
-            var oldContentInCit = cslCitation.getPlainCitation();
-            var oldContentInDoc = field["Content"];
-            if (oldContentInCit === "") {
-                oldContentInCit = oldContentInDoc;
-            }
-            var newContent = tempElement.innerText;
-            if (cslCitation.getDoNotUpdate()) {
-                continue;
-            }
-            if (oldContentInCit !== oldContentInDoc && !bHardRefresh) {
-                var text = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p>" + "<p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p>" + "<p>" + translate("Original:") + " " + newContent + "</p>" + "<p>" + translate("Modified:") + " " + oldContentInDoc + "</p>";
-                var bNeedSaveUserInput = yield _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", text);
-                if (bNeedSaveUserInput) {
-                    cslCitation.setDoNotUpdate();
-                    delete field["Content"];
-                } else {
-                    field["Content"] = htmlCitation;
-                    cslCitation.setPlainCitation(newContent);
-                }
-                bHasChanges = true;
-            } else {
-                if (newContent !== oldContentInDoc || oldContentInCit !== oldContentInDoc || oldContentInCit !== newContent) {
-                    bHasChanges = true;
-                }
-                field["Content"] = htmlCitation;
-                cslCitation.setPlainCitation(newContent);
-            }
-            if (cslCitation) {
-                var newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
-                if (field["Value"] !== newValue) {
-                    bHasChanges = true;
-                }
-                field["Value"] = newValue;
-            }
-            if (bHasChanges) {
-                updatedFields.push(field);
-            }
+  return (_getUpdatedFields2 = _asyncToGenerator(function* (t, e, i) {
+    var s = document.createDocumentFragment(), n = document.createElement("div");
+    s.appendChild(n);
+    for (var a = [], r = t.length - 1; r >= 0; r--) {
+      var o = !!i, { field: l, cslCitation: c } = t[r], h = this._storage.getCitationsPre(c.citationID), d = this._storage.getCitationsPost(c.citationID), u = this._storage.getAllCitationsInJson();
+      this._formatter.rebuildProcessorState(u);
+      var _ = this._formatter.processCitationCluster(c.toJSON(), h, d), p = _assertClassBrand(_CitationService_brand, this, _unEscapeHtml).call(this, _[1][0][1]);
+      n.innerHTML = p;
+      var m = c.getPlainCitation(), b = l.Content;
+      "" === m && (m = b);
+      var v = n.innerText;
+      if (!c.getDoNotUpdate()) {
+        if (m === b || e) v === b && m === b && m === v || (o = true), l.Content = p, c.setPlainCitation(v);
+        else {
+          var f = "<p>" + translate("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + translate("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + translate("Original:") + " " + v + "</p><p>" + translate("Modified:") + " " + b + "</p>";
+          (yield _classPrivateFieldGet2(_additionalWindow, this).show("Saving custom edits", f)) ? (c.setDoNotUpdate(), delete l.Content) : (l.Content = p, c.setPlainCitation(v)), o = true;
         }
-        return updatedFields;
-    });
-    return _getUpdatedFields2.apply(this, arguments);
+        if (c) {
+          var g = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(c.toJSON());
+          l.Value !== g && (o = true), l.Value = g;
+        }
+        o && a.push(l);
+      }
+    }
+    return a;
+  })).apply(this, arguments);
 }
-
 function _updateFormatter() {
-    var self = this;
-    var arrIds = [];
-    this._storage.forEachItem(function(item, id) {
-        arrIds.push(id);
-    });
-    this._formatter = new CSL.Engine({
-        retrieveLocale: function retrieveLocale(id) {
-            if (self._localesManager.getLocale(id)) {
-                return self._localesManager.getLocale(id);
-            }
-            return self._localesManager.getLocale();
-        },
-        retrieveItem: function retrieveItem(id) {
-            var item = self._storage.getItem(id);
-            var index = self._storage.getItemIndex(id);
-            if (!item) return null;
-            return item.toFlatJSON(index);
-        }
-    }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true);
-    if (arrIds.length) {
-        this._formatter.updateItems(arrIds);
-    }
-    return;
+  var t = this, e = [];
+  this._storage.forEachItem(function(t2, i) {
+    e.push(i);
+  }), this._formatter = new CSL.Engine({ retrieveLocale: function(e2) {
+    return t._localesManager.getLocale(e2) ? t._localesManager.getLocale(e2) : t._localesManager.getLocale();
+  }, retrieveItem: function(e2) {
+    var i = t._storage.getItem(e2), s = t._storage.getItemIndex(e2);
+    return i ? i.toFlatJSON(s) : null;
+  } }, this._cslStylesManager.cached(this._cslStylesManager.getLastUsedStyleIdOrDefault()), this._localesManager.getLastUsedLanguage(), true), e.length && this._formatter.updateItems(e);
 }
-
-function _unEscapeHtml(htmlString) {
-    return htmlString.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
+function _unEscapeHtml(t) {
+  return t.replace(/\u00A0/g, " ").replace(/&#60;/g, "<").replace(/&#62;/g, ">").replace(/&#38;/g, "&");
 }
-
 class CursorService {
-    static getCursorPosition() {
-        return new Promise(function(resolve) {
-            var isCalc = false;
-            var isClose = false;
-            Asc.plugin.callCommand(() => {
-                var doc = Api.GetDocument();
-                var pos = 0;
-                if (!doc) {
-                    return pos;
-                }
-                var currentRun = doc.GetCurrentRun();
-                if (!currentRun) {
-                    return pos;
-                }
-                var range = currentRun.GetRange(0, 0);
-                if (range) {
-                    return range.GetEndPos();
-                }
-                return pos;
-            }, isClose, isCalc, resolve);
-        });
-    }
-    static setCursorPosition(pos) {
-        return new Promise(function(resolve) {
-            var isCalc = false;
-            var isClose = false;
-            Asc.scope.pos = pos;
-            Asc.plugin.callCommand(function() {
-                var doc = Api.GetDocument();
-                doc.MoveCursorToPos(Asc.scope.pos);
-            }, isClose, isCalc, resolve);
-        });
-    }
+  static getCursorPosition() {
+    return new Promise(function(t) {
+      Asc.plugin.callCommand(() => {
+        var t2 = Api.GetDocument();
+        if (!t2) return 0;
+        var e = t2.GetCurrentRun();
+        if (!e) return 0;
+        var i = e.GetRange(0, 0);
+        return i ? i.GetEndPos() : 0;
+      }, false, false, t);
+    });
+  }
+  static setCursorPosition(t) {
+    return new Promise(function(e) {
+      Asc.scope.pos = t, Asc.plugin.callCommand(function() {
+        Api.GetDocument().MoveCursorToPos(Asc.scope.pos);
+      }, false, false, e);
+    });
+  }
 }
-
-var CslStylesParser = {
-    getStyleInfo: function getStyleInfo(name, style) {
-        var parser = new DOMParser;
-        var xmlDoc = parser.parseFromString(style, "text/xml");
-        var styleInfo = {
-            categories: {
-                fields: [],
-                format: ""
-            },
-            dependent: 0,
-            href: "",
-            name: name,
-            title: "",
-            updated: ""
-        };
-        var title = xmlDoc.querySelector("info title");
-        if (title) styleInfo.title = title.textContent;
-        var href = xmlDoc.querySelector('info link[rel="self"]');
-        if (href) {
-            var attribute = href.getAttribute("href");
-            if (attribute) styleInfo.href = attribute;
-        }
-        var parent = xmlDoc.querySelector('info link[rel="independent-parent"]');
-        if (parent) {
-            var _attribute = parent.getAttribute("href");
-            if (_attribute) styleInfo.parent = _attribute;
-            styleInfo.dependent = 1;
-        }
-        var updated = xmlDoc.querySelector("info updated");
-        if (updated) styleInfo.updated = updated.textContent;
-        var categoryFormat = xmlDoc.querySelector("info category[citation-format]");
-        if (categoryFormat) {
-            var _attribute2 = categoryFormat.getAttribute("citation-format");
-            if (_attribute2) styleInfo.categories.format = _attribute2;
-        }
-        var categoryFields = xmlDoc.querySelectorAll("info category[field]");
-        if (categoryFields) {
-            categoryFields.forEach(function(category) {
-                var attribute = category.getAttribute("field");
-                if (attribute) styleInfo.categories.fields.push(attribute);
-            });
-        }
-        return styleInfo;
-    },
-    getCitationFormat: function getCitationFormat(styleContent) {
-        var parser = new DOMParser;
-        var xmlDoc = parser.parseFromString(styleContent, "text/xml");
-        var format = xmlDoc.querySelector("info category[citation-format]");
-        if (!format) throw new Error("Citation format not found");
-        var type = format.getAttribute("citation-format");
-        if (!type) throw new Error("Citation format not found");
-        switch (type) {
-          case "note":
-          case "numeric":
-          case "author":
-          case "author-date":
-          case "label":
-            return type;
-        }
-        throw new Error("Invalid citation format");
-    },
-    isStyleContainBibliography: function isStyleContainBibliography(styleContent) {
-        return styleContent.indexOf("<bibliography") > -1;
-    }
-};
-
+var CslStylesParser = { getStyleInfo: function(t, e) {
+  var i = new DOMParser().parseFromString(e, "text/xml"), s = { categories: { fields: [], format: "" }, dependent: 0, href: "", name: t, title: "", updated: "" }, n = i.querySelector("info title");
+  n && (s.title = n.textContent);
+  var a = i.querySelector('info link[rel="self"]');
+  if (a) {
+    var r = a.getAttribute("href");
+    r && (s.href = r);
+  }
+  var o = i.querySelector('info link[rel="independent-parent"]');
+  if (o) {
+    var l = o.getAttribute("href");
+    l && (s.parent = l), s.dependent = 1;
+  }
+  var c = i.querySelector("info updated");
+  c && (s.updated = c.textContent);
+  var h = i.querySelector("info category[citation-format]");
+  if (h) {
+    var d = h.getAttribute("citation-format");
+    d && (s.categories.format = d);
+  }
+  var u = i.querySelectorAll("info category[field]");
+  return u && u.forEach(function(t2) {
+    var e2 = t2.getAttribute("field");
+    e2 && s.categories.fields.push(e2);
+  }), s;
+}, getCitationFormat: function(t) {
+  var e = new DOMParser().parseFromString(t, "text/xml").querySelector("info category[citation-format]");
+  if (!e) throw new Error("Citation format not found");
+  var i = e.getAttribute("citation-format");
+  if (!i) throw new Error("Citation format not found");
+  switch (i) {
+    case "note":
+    case "numeric":
+    case "author":
+    case "author-date":
+    case "label":
+      return i;
+  }
+  throw new Error("Invalid citation format");
+}, isStyleContainBibliography: function(t) {
+  return t.indexOf("<bibliography") > -1;
+} };
 function CslStylesStorage() {
-    this._customStyleNamesKey = "zoteroCustomStyleNames";
-    this._customStylesKey = "zoteroCustomStyles";
+  this._customStyleNamesKey = "zoteroCustomStyleNames", this._customStylesKey = "zoteroCustomStyles";
 }
-
-CslStylesStorage.prototype.getStyleNames = function() {
-    var customStyleNames = localStorage.getItem(this._customStyleNamesKey);
-    if (customStyleNames) {
-        return JSON.parse(customStyleNames);
-    } else {
-        return [];
-    }
-};
-
-CslStylesStorage.prototype._getStyles = function() {
-    var customStyles = localStorage.getItem(this._customStylesKey);
-    if (customStyles) {
-        return JSON.parse(customStyles);
-    } else {
-        return [];
-    }
-};
-
-CslStylesStorage.prototype.getStyle = function(name) {
-    var customStyleNames = this.getStyleNames();
-    var styleIndex = customStyleNames.indexOf(name);
-    if (styleIndex === -1) {
-        return null;
-    }
-    return this._getStyles()[styleIndex];
-};
-
-CslStylesStorage.prototype.getStylesInfo = function() {
-    var customStyleNames = this.getStyleNames();
-    var customStyles = this._getStyles();
-    var styles = [];
-    for (var i = 0; i < customStyleNames.length; i++) {
-        var result = CslStylesParser.getStyleInfo(customStyleNames[i], customStyles[i]);
-        styles.push(result);
-    }
-    return styles;
-};
-
-CslStylesStorage.prototype.setStyle = function(name, data) {
-    var customStyleNames = this.getStyleNames();
-    var customStyles = this._getStyles();
-    var styleIndex = customStyleNames.indexOf(name);
-    if (styleIndex === -1) {
-        styleIndex = customStyleNames.length;
-    }
-    customStyleNames[styleIndex] = name;
-    customStyles[styleIndex] = data;
-    localStorage.setItem(this._customStyleNamesKey, JSON.stringify(customStyleNames));
-    localStorage.setItem(this._customStylesKey, JSON.stringify(customStyles));
-    return CslStylesParser.getStyleInfo(name, data);
-};
-
-CslStylesStorage.prototype.deleteStyle = function(name) {
-    var customStyleNames = this.getStyleNames();
-    var customStyles = this._getStyles();
-    var styleIndex = customStyleNames.indexOf(name);
-    if (styleIndex === -1) {
-        return name;
-    }
-    customStyleNames.splice(styleIndex, 1);
-    customStyles.splice(styleIndex, 1);
-    localStorage.setItem(this._customStyleNamesKey, JSON.stringify(customStyleNames));
-    localStorage.setItem(this._customStylesKey, JSON.stringify(customStyles));
-    return name;
-};
-
-function CslStylesManager(lastStyleKey) {
-    this._isOnlineAvailable = false;
-    this._isDesktopAvailable = false;
-    this._customStylesStorage = new CslStylesStorage;
-    this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json";
-    this._STYLES_JSON_LOCAL = "./resources/csl/styles.json";
-    this._STYLES_URL = "https://www.zotero.org/styles/";
-    this._STYLES_LOCAL = "./resources/csl/styles/";
-    this._lastStyleKey = lastStyleKey;
-    this._lastNotesStyleKey = "zoteroNotesStyleId";
-    this._lastFormatKey = "zoteroFormatId";
-    this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
-    this._defaultStyles = [ "american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature" ];
-    this._cache = {};
+function CslStylesManager(t) {
+  this._isOnlineAvailable = false, this._isDesktopAvailable = false, this._customStylesStorage = new CslStylesStorage(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = t, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._defaultStyles = ["american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature"], this._cache = {};
 }
-
-CslStylesManager.prototype.addCustomStyle = function(file) {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-        var fileName = file.name.toLowerCase();
-        if (fileName.slice(-4) === ".csl" || fileName.slice(-4) === ".xml") {
-            fileName = fileName.substring(0, fileName.length - 4).trim();
-        } else {
-            reject("Please select a .csl or .xml file.");
-        }
-        if (file.size > 1024 * 1024) {
-            reject("Maximum file size is 1 MB.");
-        }
-        resolve(fileName);
-    }).then(function(fileName) {
-        return self._readCSLFile(file).then(function(content) {
-            if (self._defaultStyles.indexOf(fileName) === -1) {
-                self._defaultStyles.push(fileName);
-            }
-            return self._customStylesStorage.setStyle(fileName, content);
-        });
-    });
-};
-
-CslStylesManager.prototype.getLastUsedFormat = function() {
-    var lastUsedFormat = localStorage.getItem(this._lastFormatKey);
-    switch (lastUsedFormat) {
-      case "note":
-      case "numeric":
-      case "author":
-      case "author-date":
-      case "label":
-        return lastUsedFormat;
-    }
-    return "numeric";
-};
-
-CslStylesManager.prototype.getLastUsedNotesStyle = function() {
-    var lastUsedNotesStyle = localStorage.getItem(this._lastNotesStyleKey);
-    if (lastUsedNotesStyle === "footnotes" || lastUsedNotesStyle === "endnotes") {
-        return lastUsedNotesStyle;
-    }
-    return "footnotes";
-};
-
-CslStylesManager.prototype.getLastUsedStyleId = function() {
-    var lastUsedStyle = localStorage.getItem(this._lastStyleKey);
-    if (lastUsedStyle) {
-        return lastUsedStyle;
-    }
-    return null;
-};
-
-CslStylesManager.prototype.getLastUsedStyleIdOrDefault = function() {
-    var lastUsedStyle = localStorage.getItem(this._lastStyleKey);
-    if (lastUsedStyle) {
-        return lastUsedStyle;
-    }
-    return "ieee";
-};
-
-CslStylesManager.prototype.getStyle = function(styleName) {
-    var saveToLocalStorage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    var self = this;
-    return Promise.resolve(styleName).then(function(styleName) {
-        if (self._cache[styleName]) {
-            return self._cache[styleName];
-        }
-        var customStyleNames = self._customStylesStorage.getStyleNames();
-        if (customStyleNames.indexOf(styleName) !== -1) {
-            return self._customStylesStorage.getStyle(styleName);
-        }
-        var url = self._STYLES_LOCAL + styleName + ".csl";
-        if (self._isOnlineAvailable) {
-            url = self._STYLES_URL + styleName;
-        } else if (self._defaultStyles.indexOf(styleName) === -1) {
-            throw "The style is not available in the local version of the plugin.";
-        }
-        return fetch(url).then(function(resp) {
-            return resp.text();
-        });
-    }).then(function(content) {
-        if (content && !self._isValidCSL(content) && self._isOnlineAvailable) {
-            var styleInfo = CslStylesParser.getStyleInfo(styleName, content);
-            if (styleInfo && styleInfo.dependent > 0 && styleInfo.parent) {
-                return fetch(styleInfo.parent).then(function(resp) {
-                    return resp.text();
-                });
-            }
-        }
-        return content;
-    }).then(function(content) {
-        var styleFormat = content && CslStylesParser.getCitationFormat(content) || "numeric";
-        var result = {
-            content: content,
-            styleFormat: styleFormat
-        };
-        if (content && saveToLocalStorage) {
-            self._saveLastUsedStyle(styleName, content, styleFormat);
-        }
-        return result;
-    });
-};
-
-CslStylesManager.prototype.getStylesInfo = function() {
-    var self = this;
-    return Promise.all([ this._getStylesJson(), this._customStylesStorage.getStylesInfo() ]).then(function(styles) {
-        var lastStyle = self.getLastUsedStyleId() || "ieee";
-        var resultStyles = [];
-        var resultStyleNames = self._customStylesStorage.getStyleNames();
-        var loadedStyles = styles[0];
-        var customStyles = styles[1];
-        if (self._isDesktopAvailable && !self._isOnlineAvailable) {
-            loadedStyles = loadedStyles.filter(function(style) {
-                return self._defaultStyles.indexOf(style.name) >= 0 || style.name == lastStyle;
-            });
-        }
-        customStyles.forEach(function(style) {
-            resultStyles.push(style);
-            if (self._defaultStyles.indexOf(style.name) === -1) {
-                self._defaultStyles.push(style.name);
-            }
-        });
-        loadedStyles.forEach(function(style) {
-            if (resultStyleNames.indexOf(style.name) !== -1) {
-                return;
-            }
-            resultStyles.push(style);
-        });
-        resultStyles.sort((a, b) => a.name.localeCompare(b.name));
-        return resultStyles;
-    });
-};
-
-CslStylesManager.prototype._getStylesJson = function() {
-    var url = this._STYLES_JSON_LOCAL;
-    if (this._isOnlineAvailable) {
-        url = this._STYLES_JSON_URL;
-    }
-    return fetch(url).then(function(resp) {
-        return resp.json();
-    });
-};
-
-CslStylesManager.prototype.cached = function(id) {
-    if (Object.hasOwnProperty.call(this._cache, id)) {
-        return this._cache[id];
-    }
-    return null;
-};
-
-CslStylesManager.prototype.isLastUsedStyleContainBibliography = function() {
-    var containBibliography = localStorage.getItem(this._lastUsedStyleContainBibliographyKey);
-    return containBibliography !== "false";
-};
-
-CslStylesManager.prototype.isStyleDefault = function(styleName) {
-    return this._defaultStyles.indexOf(styleName) >= 0;
-};
-
-CslStylesManager.prototype._isValidCSL = function(content) {
-    return content.indexOf("<?xml") > -1 && content.indexOf("<style") > -1 && content.indexOf("<macro") > -1 && content.indexOf("citation") > -1;
-};
-
-CslStylesManager.prototype._readCSLFile = function(file) {
-    var self = this;
-    return new Promise(function(resolve, reject) {
-        var reader = new FileReader;
-        reader.onload = function(e) {
-            var fileContent = e.target ? String(e.target.result) : "";
-            if (!self._isValidCSL(fileContent)) {
-                reject("The file is not a valid CSL file");
-                return;
-            }
-            resolve(fileContent);
-        };
-        reader.onerror = function() {
-            reject("Failed to read file");
-        };
-        reader.readAsText(file);
-    });
-};
-
-CslStylesManager.prototype._saveLastUsedStyle = function(id, content, currentStyleFormat) {
-    this._cache[id] = content;
-    localStorage.setItem(this._lastStyleKey, id);
-    localStorage.setItem(this._lastFormatKey, currentStyleFormat);
-    var containBibliography = CslStylesParser.isStyleContainBibliography(content);
-    localStorage.setItem(this._lastUsedStyleContainBibliographyKey, containBibliography.toString());
-};
-
-CslStylesManager.prototype.saveLastUsedNotesStyle = function(notesStyle) {
-    localStorage.setItem(this._lastNotesStyleKey, notesStyle);
-};
-
-CslStylesManager.prototype.setDesktopApiAvailable = function(isApiAvailable) {
-    this._isDesktopAvailable = isApiAvailable;
-};
-
-CslStylesManager.prototype.setRestApiAvailable = function(isApiAvailable) {
-    this._isOnlineAvailable = isApiAvailable;
-};
-
 function LocalesManager() {
-    this._isOnlineAvailable = false;
-    this._isDesktopAvailable = false;
-    this._LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/";
-    this._LOCALES_PATH = "./resources/csl/locales/";
-    this._lastLanguageKey = "zoteroLang";
-    this._selectedLanguage = null;
-    this._cache = {};
+  this._isOnlineAvailable = false, this._isDesktopAvailable = false, this._LOCALES_URL = "https://raw.githubusercontent.com/citation-style-language/locales/master/", this._LOCALES_PATH = "./resources/csl/locales/", this._lastLanguageKey = "zoteroLang", this._selectedLanguage = null, this._cache = {};
 }
-
-LocalesManager.prototype.loadLocale = function(langTag) {
-    var self = this;
-    this._selectedLanguage = langTag;
-    if (this._cache[langTag]) {
-        return Promise.resolve(this._cache[langTag]);
-    }
-    var url = this._getLocalesUrl() + "locales-" + langTag + ".xml";
-    return fetch(url).catch(function(err) {
-        console.error("Failed to load locale:", err);
-        return fetch(self._LOCALES_PATH + "locales-" + langTag + ".xml");
-    }).then(function(response) {
-        return response.text();
-    }).then(function(text) {
-        self._cache[langTag] = text;
-        return text;
-    });
-};
-
-LocalesManager.prototype.getLastUsedLanguage = function() {
-    this._selectedLanguage = this._selectedLanguage || localStorage.getItem(this._lastLanguageKey) || "en-US";
-    return this._selectedLanguage;
-};
-
-LocalesManager.prototype.getLocale = function(localeId) {
-    if (localeId) {
-        if (this._cache[localeId]) {
-            return this._cache[localeId];
-        }
-        return null;
-    }
-    if (this._selectedLanguage && this._cache[this._selectedLanguage]) {
-        return this._cache[this._selectedLanguage];
-    }
-    return null;
-};
-
-LocalesManager.prototype.saveLastUsedLanguage = function(language) {
-    this._selectedLanguage = language;
-    localStorage.setItem(this._lastLanguageKey, language);
-};
-
-LocalesManager.prototype._getLocalesUrl = function() {
-    return this._isOnlineAvailable ? this._LOCALES_URL : this._LOCALES_PATH;
-};
-
-LocalesManager.prototype.setDesktopApiAvailable = function(isApiAvailable) {
-    this._isDesktopAvailable = isApiAvailable;
-};
-
-LocalesManager.prototype.setRestApiAvailable = function(isApiAvailable) {
-    this._isOnlineAvailable = isApiAvailable;
-};
-
-function SettingsPage(router, displayNoneClass) {
-    this._router = router;
-    this._displayNoneClass = displayNoneClass;
-    this._saveBtn = new Button("saveSettingsBtn", {
-        variant: "primary"
-    });
-    this._cancelBtn = new Button("cancelBtn", {
-        variant: "secondary"
-    });
-    this._styleSelect = new SelectBox("styleSelectList", {
-        placeholder: "Enter style name",
-        sortable: true
-    });
-    this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
-        placeholder: "Enter style name",
-        searchable: true
-    });
-    this._notesStyleWrapper = document.getElementById("notesStyle");
-    if (!this._notesStyleWrapper) {
-        throw new Error("notesStyleWrapper not found");
-    }
-    this._footNotes = new Radio("footNotes", {
-        label: "Footnotes"
-    });
-    this._endNotes = new Radio("endNotes", {
-        label: "Endnotes"
-    });
-    this._cslFileInput = document.getElementById("cslFileInput");
-    if (!this._cslFileInput) {
-        throw new Error("cslFileInput not found");
-    }
-    this._languageSelect = new SelectBox("styleLangList", {
-        placeholder: "Select language"
-    });
-    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
-    this._localesManager = new LocalesManager;
-    this._selectLists = [];
-    this._onChangeState = function(newSettings, oldSettings) {};
-    this._styleMessage = new Message("styleMessage", {
-        type: "error"
-    });
-    this._langMessage = new Message("langMessage", {
-        type: "error"
-    });
-    this._LANGUAGES = [ [ "af-ZA", "Afrikaans" ], [ "ar", "Arabic" ], [ "bg-BG", "Bulgarian" ], [ "ca-AD", "Catalan" ], [ "cs-CZ", "Czech" ], [ "cy-GB", "Welsh" ], [ "da-DK", "Danish" ], [ "de-AT", "German (Austria)" ], [ "de-CH", "German (Switzerland)" ], [ "de-DE", "German (Germany)" ], [ "el-GR", "Greek" ], [ "en-GB", "English (UK)" ], [ "en-US", "English (US)" ], [ "es-CL", "Spanish (Chile)" ], [ "es-ES", "Spanish (Spain)" ], [ "es-MX", "Spanish (Mexico)" ], [ "et-EE", "Estonian" ], [ "eu", "Basque" ], [ "fa-IR", "Persian" ], [ "fi-FI", "Finnish" ], [ "fr-CA", "French (Canada)" ], [ "fr-FR", "French (France)" ], [ "he-IL", "Hebrew" ], [ "hr-HR", "Croatian" ], [ "hu-HU", "Hungarian" ], [ "id-ID", "Indonesian" ], [ "is-IS", "Icelandic" ], [ "it-IT", "Italian" ], [ "ja-JP", "Japanese" ], [ "km-KH", "Khmer" ], [ "ko-KR", "Korean" ], [ "la", "Latin" ], [ "lt-LT", "Lithuanian" ], [ "lv-LV", "Latvian" ], [ "mn-MN", "Mongolian" ], [ "nb-NO", "Norwegian (Bokmål)" ], [ "nl-NL", "Dutch" ], [ "nn-NO", "Norwegian (Nynorsk)" ], [ "pl-PL", "Polish" ], [ "pt-BR", "Portuguese (Brazil)" ], [ "pt-PT", "Portuguese (Portugal)" ], [ "ro-RO", "Romanian" ], [ "ru-RU", "Russian" ], [ "sk-SK", "Slovak" ], [ "sl-SI", "Slovenian" ], [ "sr-RS", "Serbian" ], [ "sv-SE", "Swedish" ], [ "th-TH", "Thai" ], [ "tr-TR", "Turkish" ], [ "uk-UA", "Ukrainian" ], [ "vi-VN", "Vietnamese" ], [ "zh-CN", "Chinese (PRC)" ], [ "zh-TW", "Chinese (Taiwan)" ] ];
-    this._bNumFormat = false;
-    this._stateSettings = {
-        style: "",
-        notesStyle: "footnotes",
-        styleFormat: "numeric"
-    };
+function SettingsPage(t, e) {
+  if (this._router = t, this._displayNoneClass = e, this._saveBtn = new Button("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new Button("cancelBtn", { variant: "secondary" }), this._styleSelect = new SelectBox("styleSelectList", { placeholder: "Enter style name", sortable: true }), this._styleSelectListOther = new SelectBox("styleSelectedListOther", { placeholder: "Enter style name", searchable: true }), this._notesStyleWrapper = document.getElementById("notesStyle"), !this._notesStyleWrapper) throw new Error("notesStyleWrapper not found");
+  if (this._footNotes = new Radio("footNotes", { label: "Footnotes" }), this._endNotes = new Radio("endNotes", { label: "Endnotes" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw new Error("cslFileInput not found");
+  this._languageSelect = new SelectBox("styleLangList", { placeholder: "Select language" }), this._cslStylesManager = new CslStylesManager("zoteroStyleId"), this._localesManager = new LocalesManager(), this._selectLists = [], this._onChangeState = function(t2, e2) {
+  }, this._styleMessage = new Message("styleMessage", { type: "error" }), this._langMessage = new Message("langMessage", { type: "error" }), this._LANGUAGES = [["af-ZA", "Afrikaans"], ["ar", "Arabic"], ["bg-BG", "Bulgarian"], ["ca-AD", "Catalan"], ["cs-CZ", "Czech"], ["cy-GB", "Welsh"], ["da-DK", "Danish"], ["de-AT", "German (Austria)"], ["de-CH", "German (Switzerland)"], ["de-DE", "German (Germany)"], ["el-GR", "Greek"], ["en-GB", "English (UK)"], ["en-US", "English (US)"], ["es-CL", "Spanish (Chile)"], ["es-ES", "Spanish (Spain)"], ["es-MX", "Spanish (Mexico)"], ["et-EE", "Estonian"], ["eu", "Basque"], ["fa-IR", "Persian"], ["fi-FI", "Finnish"], ["fr-CA", "French (Canada)"], ["fr-FR", "French (France)"], ["he-IL", "Hebrew"], ["hr-HR", "Croatian"], ["hu-HU", "Hungarian"], ["id-ID", "Indonesian"], ["is-IS", "Icelandic"], ["it-IT", "Italian"], ["ja-JP", "Japanese"], ["km-KH", "Khmer"], ["ko-KR", "Korean"], ["la", "Latin"], ["lt-LT", "Lithuanian"], ["lv-LV", "Latvian"], ["mn-MN", "Mongolian"], ["nb-NO", "Norwegian (Bokmål)"], ["nl-NL", "Dutch"], ["nn-NO", "Norwegian (Nynorsk)"], ["pl-PL", "Polish"], ["pt-BR", "Portuguese (Brazil)"], ["pt-PT", "Portuguese (Portugal)"], ["ro-RO", "Romanian"], ["ru-RU", "Russian"], ["sk-SK", "Slovak"], ["sl-SI", "Slovenian"], ["sr-RS", "Serbian"], ["sv-SE", "Swedish"], ["th-TH", "Thai"], ["tr-TR", "Turkish"], ["uk-UA", "Ukrainian"], ["vi-VN", "Vietnamese"], ["zh-CN", "Chinese (PRC)"], ["zh-TW", "Chinese (Taiwan)"]], this._bNumFormat = false, this._stateSettings = { style: "", notesStyle: "footnotes", styleFormat: "numeric" };
 }
-
-SettingsPage.prototype.getLocalesManager = function() {
-    return this._localesManager;
-};
-
-SettingsPage.prototype.getStyleManager = function() {
-    return this._cslStylesManager;
-};
-
-SettingsPage.prototype.getLocale = function() {
-    return this._localesManager.getLocale();
-};
-
-SettingsPage.prototype.getLastUsedStyleId = function() {
-    return this._cslStylesManager.getLastUsedStyleId();
-};
-
-SettingsPage.prototype.init = function() {
-    var lastStyle = this._cslStylesManager.getLastUsedStyleId() || "ieee";
-    var savedLang = this._localesManager.getLastUsedLanguage();
-    this._addEventListeners();
-    this._languageSelect.addItems(this._LANGUAGES, savedLang);
-    var promises = [ this._onStyleChange(lastStyle), this._localesManager.loadLocale(savedLang), this._loadStyles() ];
-    return Promise.all(promises);
-};
-
-SettingsPage.prototype.onChangeState = function(callbackFn) {
-    this._onChangeState = callbackFn;
-};
-
-SettingsPage.prototype.setDesktopApiAvailable = function(isAvailable) {
-    this._localesManager.setDesktopApiAvailable(isAvailable);
-    this._cslStylesManager.setDesktopApiAvailable(isAvailable);
-};
-
-SettingsPage.prototype.setRestApiAvailable = function(isAvailable) {
-    this._localesManager.setRestApiAvailable(isAvailable);
-    this._cslStylesManager.setRestApiAvailable(isAvailable);
-};
-
-SettingsPage.prototype._addEventListeners = function() {
-    var self = this;
-    this._saveBtn.subscribe(function(event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        var selectedLang = self._languageSelect.getSelectedValue();
-        if (selectedLang === null) {
-            console.error("No language selected");
-            return;
-        }
-        var oldState = _objectSpread2({}, self._stateSettings);
-        var promises = [];
-        if (self._stateSettings.language !== selectedLang) {
-            self._localesManager.saveLastUsedLanguage(selectedLang);
-            promises.push(self._localesManager.loadLocale(selectedLang).catch(function(err) {
-                console.error(err);
-                self._langMessage.show(translate("Failed to load language"));
-                throw err;
-            }));
-        }
-        var noteValue = "footnotes";
-        if (self._endNotes.getState().checked) {
-            noteValue = "endnotes";
-        }
-        if (self._stateSettings.notesStyle !== noteValue) {
-            self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
-            if (self._cslStylesManager.getLastUsedFormat() === "note") {
-                promises.push(Promise.resolve());
-            }
-        }
-        var selectedStyleId = self._styleSelect.getSelectedValue();
-        if (self._stateSettings.style !== selectedStyleId && selectedStyleId !== null) {
-            promises.push(self._onStyleChange(selectedStyleId));
-        }
-        if (promises.length) {
-            self._showLoader();
-            Promise.all(promises).then(function() {
-                self._hide();
-                self._hideLoader();
-                var newState = {
-                    language: selectedLang,
-                    style: selectedStyleId || "ieee",
-                    notesStyle: noteValue,
-                    styleFormat: self._cslStylesManager.getLastUsedFormat()
-                };
-                self._onChangeState(newState, oldState);
-            }).catch(function(err) {
-                self._hideLoader();
-            });
-        } else {
-            self._hide();
-        }
-    });
-    this._cancelBtn.subscribe(function(event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        var selectedLang = self._languageSelect.getSelectedValue();
-        var selectedStyleId = self._styleSelect.getSelectedValue();
-        if (selectedLang !== null && self._localesManager.getLastUsedLanguage() !== selectedLang) {
-            self._languageSelect.selectItems(self._localesManager.getLastUsedLanguage(), true);
-        }
-        if (self._stateSettings.style !== selectedStyleId && selectedStyleId !== null) {
-            self._styleSelect.selectItems(self._stateSettings.style, true);
-            self._styleSelectListOther.selectItems(self._stateSettings.style, true);
-            self._onStyleChange(self._stateSettings.style, true).then(function() {
-                self._hide();
-            });
-        } else {
-            self._hide();
-        }
-    });
-    this._cslFileInput.onchange = function(e) {
-        if (!(e.target instanceof HTMLInputElement)) return;
-        var target = e.target;
-        if (!target.files) return;
-        var file = target.files[0];
-        if (!file) {
-            console.error("No file selected");
-            return;
-        }
-        self._cslStylesManager.addCustomStyle(file).then(function(styleValue) {
-            self._addStylesToList([ styleValue ]);
-        }).catch(function(error) {
-            console.error(error);
-            self._styleMessage.show(translate("Invalid CSL style file"));
-        }).finally(function() {
-            self._hideLoader();
-        });
-    };
-    this._styleSelect.subscribe(function(event) {
-        if (event.type === "selectbox:change") {
-            self._styleSelectListOther.selectItems(event.detail.current.toString(), true);
-            self._somethingWasChanged();
-            self._onStyleChange(event.detail.current.toString(), true);
-            return;
-        } else if (event.type !== "selectbox:custom") {
-            return;
-        }
-        var actionId = event.detail.current;
-        if (actionId === "more_styles") {
-            self._styleSelectListOther.openDropdown();
-        }
-    });
-    self._styleSelectListOther.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        if (!event.detail.items) return;
-        var item = event.detail.items[0];
-        self._styleSelect.addItem(item.value, item.text, true);
-        self._somethingWasChanged();
-        self._onStyleChange(item.value, true);
-    });
-    this._languageSelect.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        self._somethingWasChanged();
-    });
-    this._footNotes.subscribe(function(event) {
-        self._somethingWasChanged();
-    });
-    this._endNotes.subscribe(function(event) {
-        self._somethingWasChanged();
-    });
-};
-
-SettingsPage.prototype._hideAllMessages = function() {
-    this._langMessage.close();
-    this._styleMessage.close();
-};
-
-SettingsPage.prototype._hide = function() {
-    this._router.openMain();
-};
-
-SettingsPage.prototype.show = function() {
-    this._stateSettings = {
-        language: this._localesManager.getLastUsedLanguage(),
-        style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
-        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
-        styleFormat: this._cslStylesManager.getLastUsedFormat()
-    };
-    this._saveBtn.disable();
-    this._router.openSettings();
-    if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
-        this._endNotes.check();
-    } else {
-        this._footNotes.check();
-    }
-};
-
-SettingsPage.prototype._loadStyles = function() {
-    var self = this;
-    return this._cslStylesManager.getStylesInfo().then(function(stylesInfo) {
-        self._addStylesToList(stylesInfo);
-        self._styleSelect.addCustomItem("more_styles", "More Styles...");
-        self._styleSelect.addCustomItem("cslFileInput", "Add custom style...");
-    }).catch(function(err) {
-        console.error(err);
-    });
-};
-
-SettingsPage.prototype._addStylesToList = function(stylesInfo) {
-    var self = this;
-    var lastStyle = this._cslStylesManager.getLastUsedStyleIdOrDefault();
-    var allStyles = stylesInfo.map(function(style) {
-        return [ style.name, style.title ];
-    });
-    var mainStyles = allStyles.filter(function(style) {
-        if (style[0] == lastStyle) return true;
-        if (self._cslStylesManager.isStyleDefault(style[0])) return true;
-        return false;
-    });
-    this._styleSelect.addItems(mainStyles, lastStyle);
-    this._styleSelectListOther.addItems(allStyles, lastStyle);
-};
-
-SettingsPage.prototype._somethingWasChanged = function() {
-    this._saveBtn.enable();
-};
-
-SettingsPage.prototype._onStyleChange = function(styleName, isClick) {
-    var self = this;
-    isClick && self._showLoader();
-    return self._cslStylesManager.getStyle(styleName, !isClick).then(function(styleInfo) {
-        var styleFormat = styleInfo.styleFormat;
-        self._bNumFormat = styleFormat == "numeric";
-        if ("note" === styleFormat) {
-            self._notesStyleWrapper.classList.remove(self._displayNoneClass);
-        } else {
-            self._notesStyleWrapper.classList.add(self._displayNoneClass);
-        }
-        isClick && self._hideLoader();
-    }).catch(function(err) {
-        console.error(err);
-        if (typeof err === "string") {
-            self._styleMessage.show(translate(err));
-        }
-        isClick && self._hideLoader();
-        throw err;
-    });
-};
-
-SettingsPage.prototype._showLoader = function() {
-    this._cancelBtn.disable();
-    this._saveBtn.disable();
-    this._styleSelect.disable();
-    this._languageSelect.disable();
-};
-
-SettingsPage.prototype._hideLoader = function() {
-    this._cancelBtn.enable();
-    this._saveBtn.enable();
-    this._styleSelect.enable();
-    this._languageSelect.enable();
-};
-
-function LoginPage(router, sdk) {
-    this._router = router;
-    this._sdk = sdk;
-    this._apiKeyLoginField = new InputField("apiKeyField", {
-        autofocus: true,
-        autocomplete: "on"
-    });
-    this._saveApiKeyBtn = new Button("saveApiKeyBtn", {
-        disabled: true
-    });
-    this._apiKeyMessage = new Message("apiKeyMessage", {
-        type: "error"
-    });
-    this._useDesktopMessage = new Message("useDesktopMessage", {
-        type: "error"
-    });
-    this._connectToLocalZotero = new Button("connectToLocalZotero", {
-        variant: "secondary"
-    });
-    this._useDesktopApp = document.getElementById("useDesktopApp");
-    if (!this._useDesktopApp) {
-        throw new Error("useDesktopApp not found");
-    }
-    this._logoutLink = document.getElementById("logoutLink");
-    if (!this._logoutLink) {
-        throw new Error("logoutLink not found");
-    }
-    this._onAuthorized = function(e) {};
-    this._onChangeState = function(e) {};
-    this._onOpen = function() {};
+function LoginPage(t, e) {
+  if (this._router = t, this._sdk = e, this._apiKeyLoginField = new InputField("apiKeyField", { autofocus: true, autocomplete: "on" }), this._saveApiKeyBtn = new Button("saveApiKeyBtn", { disabled: true }), this._apiKeyMessage = new Message("apiKeyMessage", { type: "error" }), this._useDesktopMessage = new Message("useDesktopMessage", { type: "error" }), this._connectToLocalZotero = new Button("connectToLocalZotero", { variant: "secondary" }), this._useDesktopApp = document.getElementById("useDesktopApp"), !this._useDesktopApp) throw new Error("useDesktopApp not found");
+  if (this._logoutLink = document.getElementById("logoutLink"), !this._logoutLink) throw new Error("logoutLink not found");
+  this._onAuthorized = function(t2) {
+  }, this._onChangeState = function(t2) {
+  }, this._onOpen = function() {
+  };
 }
-
-LoginPage.prototype.init = function() {
-    var self = this;
-    this._addEventListeners();
-    var hasFirstAnswer = false;
-    var onlineZoteroElements = document.querySelectorAll(".for-zotero-online");
-    var apisChecker = ZoteroApiChecker.runApisChecker(self._sdk);
-    apisChecker.subscribe(function(apis) {
-        self._onChangeState(apis);
-        if (!hasFirstAnswer) {
-            hasFirstAnswer = true;
-            if (!apis.desktopVersion && self._useDesktopApp) {
-                self._useDesktopApp.classList.add("hidden");
-            }
-            self._onOpen();
-            self._show();
-        }
-        if (apis.online) {
-            onlineZoteroElements.forEach(function(element) {
-                element.classList.remove("hidden");
-            });
-        } else {
-            onlineZoteroElements.forEach(function(element) {
-                element.classList.add("hidden");
-            });
-        }
-        if (apis.online && apis.hasKey) {
-            self._sdk.setIsOnlineAvailable(true);
-            self._hide(true);
-            self._onAuthorized(apis);
-            return;
-        } else if (apis.desktop && apis.hasPermission) {
-            self._sdk.setIsOnlineAvailable(false);
-            self._hide();
-            self._hideAllMessages();
-            self._onAuthorized(apis);
-            return;
-        }
-    });
-    var triggers = {
-        onOpen: function onOpen(callbackFn) {
-            self._onOpen = callbackFn;
-            return triggers;
-        },
-        onChangeState: function onChangeState(callbackFn) {
-            self._onChangeState = callbackFn;
-            return triggers;
-        },
-        onAuthorized: function onAuthorized(callbackFn) {
-            self._onAuthorized = callbackFn;
-            return triggers;
-        }
-    };
-    return triggers;
-};
-
-LoginPage.prototype._addEventListeners = function() {
-    var self = this;
-    this._apiKeyLoginField.subscribe(function(event) {
-        if (event.type !== "inputfield:submit") ;
-        if (event.type === "inputfield:input") {
-            if (self._apiKeyLoginField.getValue()) {
-                self._saveApiKeyBtn.enable();
-            } else {
-                self._saveApiKeyBtn.disable();
-            }
-        }
-    });
-    this._saveApiKeyBtn.subscribe(function(event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._tryToApplyKey();
-    });
-    this._connectToLocalZotero.subscribe(function(event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._showLoader();
-        ZoteroApiChecker.checkStatus(self._sdk).then(function(apis) {
-            if (apis.desktop && apis.hasPermission) {
-                self._sdk.setIsOnlineAvailable(false);
-                self._hide();
-                self._hideAllMessages();
-            } else if (apis.desktop && !apis.hasPermission) {
-                var errorMessage = "Connection to Zotero failed. " + "Please enable external connections in Zotero: " + 'Edit → Settings → Advanced → Check "Allow other ' + 'applications on this computer to communicate with Zotero"';
-                self._useDesktopMessage.show(translate(errorMessage));
-            } else if (!apis.desktop) {
-                self._useDesktopMessage.show(translate("Connection to Zotero failed. Make sure Zotero is running."));
-            }
-        }).finally(function() {
-            self._hideLoader();
-        });
-    });
-    this._logoutLink.onclick = function(e) {
-        self._sdk.clearSettings();
-        self._show();
-        return true;
-    };
-};
-
-LoginPage.prototype._tryToApplyKey = function() {
-    var self = this;
-    var apiKey = self._apiKeyLoginField.getValue();
-    if (apiKey) {
-        self._showLoader();
-        self._sdk.setApiKey(apiKey).then(function() {
-            ZoteroApiChecker.successfullyLoggedInUsingApiKey();
-            self._hide(true);
-        }).catch(function(err) {
-            console.error(err);
-            self._apiKeyMessage.show(translate("Invalid API key"));
-        }).finally(function() {
-            self._hideLoader();
-        });
-    }
-};
-
-LoginPage.prototype._hideAllMessages = function() {
-    this._apiKeyMessage.close();
-};
-
-LoginPage.prototype._hide = function(bShowLogoutLink) {
-    this._router.openMain();
-    if (bShowLogoutLink) {
-        this._logoutLink.classList.remove("hidden");
-    }
-};
-
-LoginPage.prototype._show = function() {
-    this._router.openLogin();
-    this._logoutLink.classList.add("hidden");
-};
-
-LoginPage.prototype._showLoader = function() {
-    this._saveApiKeyBtn.disable();
-    this._connectToLocalZotero.disable();
-    this._apiKeyLoginField.disable();
-};
-
-LoginPage.prototype._hideLoader = function() {
-    this._saveApiKeyBtn.enable();
-    this._connectToLocalZotero.enable();
-    this._apiKeyLoginField.enable();
-};
-
 function SearchFilterComponents() {
-    this._searchField = new InputField("searchField", {
-        type: "text",
-        autofocus: true,
-        showClear: false
-    });
-    this._filterButton = new Button("filterButton", {
-        variant: "secondary-icon",
-        size: "small"
-    });
-    this._librarySelectList = new SelectBox("librarySelectList", {
-        placeholder: translate("No items selected"),
-        multiple: true,
-        description: translate("Search in:")
-    });
-    this._subscribers = [];
-    this._addEventListeners();
+  this._searchField = new InputField("searchField", { type: "text", autofocus: true, showClear: false }), this._filterButton = new Button("filterButton", { variant: "secondary-icon", size: "small" }), this._librarySelectList = new SelectBox("librarySelectList", { placeholder: translate("No items selected"), multiple: true, description: translate("Search in:") }), this._subscribers = [], this._addEventListeners();
 }
-
-SearchFilterComponents.prototype._addEventListeners = function() {
-    var self = this;
-    this._searchField.subscribe(function(e) {
-        if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
-            var selectedGroups = self._getSelectedGroups();
-            self._subscribers.forEach(function(cb) {
-                cb(e.detail.value, selectedGroups);
-            });
-        }
+CslStylesStorage.prototype.getStyleNames = function() {
+  var t = localStorage.getItem(this._customStyleNamesKey);
+  return t ? JSON.parse(t) : [];
+}, CslStylesStorage.prototype._getStyles = function() {
+  var t = localStorage.getItem(this._customStylesKey);
+  return t ? JSON.parse(t) : [];
+}, CslStylesStorage.prototype.getStyle = function(t) {
+  var e = this.getStyleNames().indexOf(t);
+  return -1 === e ? null : this._getStyles()[e];
+}, CslStylesStorage.prototype.getStylesInfo = function() {
+  for (var t = this.getStyleNames(), e = this._getStyles(), i = [], s = 0; s < t.length; s++) {
+    var n = CslStylesParser.getStyleInfo(t[s], e[s]);
+    i.push(n);
+  }
+  return i;
+}, CslStylesStorage.prototype.setStyle = function(t, e) {
+  var i = this.getStyleNames(), s = this._getStyles(), n = i.indexOf(t);
+  return -1 === n && (n = i.length), i[n] = t, s[n] = e, localStorage.setItem(this._customStyleNamesKey, JSON.stringify(i)), localStorage.setItem(this._customStylesKey, JSON.stringify(s)), CslStylesParser.getStyleInfo(t, e);
+}, CslStylesStorage.prototype.deleteStyle = function(t) {
+  var e = this.getStyleNames(), i = this._getStyles(), s = e.indexOf(t);
+  return -1 === s || (e.splice(s, 1), i.splice(s, 1), localStorage.setItem(this._customStyleNamesKey, JSON.stringify(e)), localStorage.setItem(this._customStylesKey, JSON.stringify(i))), t;
+}, CslStylesManager.prototype.addCustomStyle = function(t) {
+  var e = this;
+  return new Promise(function(e2, i) {
+    var s = t.name.toLowerCase();
+    ".csl" === s.slice(-4) || ".xml" === s.slice(-4) ? s = s.substring(0, s.length - 4).trim() : i("Please select a .csl or .xml file."), t.size > 1048576 && i("Maximum file size is 1 MB."), e2(s);
+  }).then(function(i) {
+    return e._readCSLFile(t).then(function(t2) {
+      return -1 === e._defaultStyles.indexOf(i) && e._defaultStyles.push(i), e._customStylesStorage.setStyle(i, t2);
     });
-    this._filterButton.subscribe(function(e) {
-        if (e.type === "button:click") {
-            if (!self._librarySelectList.isOpen) {
-                if (e.detail.originalEvent) {
-                    e.detail.originalEvent.stopPropagation();
-                }
-                self._librarySelectList.openDropdown();
-            }
-        }
+  });
+}, CslStylesManager.prototype.getLastUsedFormat = function() {
+  var t = localStorage.getItem(this._lastFormatKey);
+  switch (t) {
+    case "note":
+    case "numeric":
+    case "author":
+    case "author-date":
+    case "label":
+      return t;
+  }
+  return "numeric";
+}, CslStylesManager.prototype.getLastUsedNotesStyle = function() {
+  var t = localStorage.getItem(this._lastNotesStyleKey);
+  return "footnotes" === t || "endnotes" === t ? t : "footnotes";
+}, CslStylesManager.prototype.getLastUsedStyleId = function() {
+  var t = localStorage.getItem(this._lastStyleKey);
+  return t || null;
+}, CslStylesManager.prototype.getLastUsedStyleIdOrDefault = function() {
+  var t = localStorage.getItem(this._lastStyleKey);
+  return t || "ieee";
+}, CslStylesManager.prototype.getStyle = function(t) {
+  var e = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1], i = this;
+  return Promise.resolve(t).then(function(t2) {
+    if (i._cache[t2]) return i._cache[t2];
+    if (-1 !== i._customStylesStorage.getStyleNames().indexOf(t2)) return i._customStylesStorage.getStyle(t2);
+    var e2 = i._STYLES_LOCAL + t2 + ".csl";
+    if (i._isOnlineAvailable) e2 = i._STYLES_URL + t2;
+    else if (-1 === i._defaultStyles.indexOf(t2)) throw "The style is not available in the local version of the plugin.";
+    return fetch(e2).then(function(t3) {
+      return t3.text();
     });
-};
-
-SearchFilterComponents.prototype.addGroups = function(groups) {
-    var self = this;
-    var savedGroups = localStorage.getItem("selectedGroups");
-    var selectedItems = savedGroups ? JSON.parse(savedGroups).map(function(id) {
-        return id.toString();
-    }) : [ "my_library", "group_libraries" ];
-    var hasSelected = false;
-    groups.forEach(function(group) {
-        group.id = String(group.id);
-    });
-    var customGroups = [ {
-        id: "my_library",
-        name: translate("My Library")
-    }, {
-        id: "group_libraries",
-        name: translate("Group Libraries")
-    } ];
-    !hasSelected && customGroups.forEach(function(group) {
-        if (selectedItems.indexOf(group.id) !== -1) {
-            hasSelected = true;
-        }
-    });
-    !hasSelected && groups.forEach(function(group) {
-        if (selectedItems.indexOf(group.id.toString()) !== -1) {
-            hasSelected = true;
-        }
-    });
-    if (!hasSelected) {
-        selectedItems = [ "my_library", "group_libraries" ];
+  }).then(function(e2) {
+    if (e2 && !i._isValidCSL(e2) && i._isOnlineAvailable) {
+      var s = CslStylesParser.getStyleInfo(t, e2);
+      if (s && s.dependent > 0 && s.parent) return fetch(s.parent).then(function(t2) {
+        return t2.text();
+      });
     }
-    var addGroupToSelectBox = function addGroupToSelectBox(id, name, selected) {
-        if (typeof id === "number") {
-            id = id.toString();
-        }
-        if (self._librarySelectList instanceof SelectBox) self._librarySelectList.addItem(id, name, selected);
-    };
-    for (var i = 0; i < customGroups.length; i++) {
-        var id = customGroups[i].id;
-        var name = customGroups[i].name;
-        addGroupToSelectBox(id, name, selectedItems.indexOf(id) !== -1);
+    return e2;
+  }).then(function(s) {
+    var n = s && CslStylesParser.getCitationFormat(s) || "numeric", a = { content: s, styleFormat: n };
+    return s && e && i._saveLastUsedStyle(t, s, n), a;
+  });
+}, CslStylesManager.prototype.getStylesInfo = function() {
+  var t = this;
+  return Promise.all([this._getStylesJson(), this._customStylesStorage.getStylesInfo()]).then(function(e) {
+    var i = t.getLastUsedStyleId() || "ieee", s = [], n = t._customStylesStorage.getStyleNames(), a = e[0], r = e[1];
+    return t._isDesktopAvailable && !t._isOnlineAvailable && (a = a.filter(function(e2) {
+      return t._defaultStyles.indexOf(e2.name) >= 0 || e2.name == i;
+    })), r.forEach(function(e2) {
+      s.push(e2), -1 === t._defaultStyles.indexOf(e2.name) && t._defaultStyles.push(e2.name);
+    }), a.forEach(function(t2) {
+      -1 === n.indexOf(t2.name) && s.push(t2);
+    }), s.sort((t2, e2) => t2.name.localeCompare(e2.name)), s;
+  });
+}, CslStylesManager.prototype._getStylesJson = function() {
+  var t = this._STYLES_JSON_LOCAL;
+  return this._isOnlineAvailable && (t = this._STYLES_JSON_URL), fetch(t).then(function(t2) {
+    return t2.json();
+  });
+}, CslStylesManager.prototype.cached = function(t) {
+  return Object.hasOwnProperty.call(this._cache, t) ? this._cache[t] : null;
+}, CslStylesManager.prototype.isLastUsedStyleContainBibliography = function() {
+  return "false" !== localStorage.getItem(this._lastUsedStyleContainBibliographyKey);
+}, CslStylesManager.prototype.isStyleDefault = function(t) {
+  return this._defaultStyles.indexOf(t) >= 0;
+}, CslStylesManager.prototype._isValidCSL = function(t) {
+  return t.indexOf("<?xml") > -1 && t.indexOf("<style") > -1 && t.indexOf("<macro") > -1 && t.indexOf("citation") > -1;
+}, CslStylesManager.prototype._readCSLFile = function(t) {
+  var e = this;
+  return new Promise(function(i, s) {
+    var n = new FileReader();
+    n.onload = function(t2) {
+      var n2 = t2.target ? String(t2.target.result) : "";
+      e._isValidCSL(n2) ? i(n2) : s("The file is not a valid CSL file");
+    }, n.onerror = function() {
+      s("Failed to read file");
+    }, n.readAsText(t);
+  });
+}, CslStylesManager.prototype._saveLastUsedStyle = function(t, e, i) {
+  this._cache[t] = e, localStorage.setItem(this._lastStyleKey, t), localStorage.setItem(this._lastFormatKey, i);
+  var s = CslStylesParser.isStyleContainBibliography(e);
+  localStorage.setItem(this._lastUsedStyleContainBibliographyKey, s.toString());
+}, CslStylesManager.prototype.saveLastUsedNotesStyle = function(t) {
+  localStorage.setItem(this._lastNotesStyleKey, t);
+}, CslStylesManager.prototype.setDesktopApiAvailable = function(t) {
+  this._isDesktopAvailable = t;
+}, CslStylesManager.prototype.setRestApiAvailable = function(t) {
+  this._isOnlineAvailable = t;
+}, LocalesManager.prototype.loadLocale = function(t) {
+  var e = this;
+  if (this._selectedLanguage = t, this._cache[t]) return Promise.resolve(this._cache[t]);
+  var i = this._getLocalesUrl() + "locales-" + t + ".xml";
+  return fetch(i).catch(function(i2) {
+    return console.error("Failed to load locale:", i2), fetch(e._LOCALES_PATH + "locales-" + t + ".xml");
+  }).then(function(t2) {
+    return t2.text();
+  }).then(function(i2) {
+    return e._cache[t] = i2, i2;
+  });
+}, LocalesManager.prototype.getLastUsedLanguage = function() {
+  return this._selectedLanguage = this._selectedLanguage || localStorage.getItem(this._lastLanguageKey) || "en-US", this._selectedLanguage;
+}, LocalesManager.prototype.getLocale = function(t) {
+  return t ? this._cache[t] ? this._cache[t] : null : this._selectedLanguage && this._cache[this._selectedLanguage] ? this._cache[this._selectedLanguage] : null;
+}, LocalesManager.prototype.saveLastUsedLanguage = function(t) {
+  this._selectedLanguage = t, localStorage.setItem(this._lastLanguageKey, t);
+}, LocalesManager.prototype._getLocalesUrl = function() {
+  return this._isOnlineAvailable ? this._LOCALES_URL : this._LOCALES_PATH;
+}, LocalesManager.prototype.setDesktopApiAvailable = function(t) {
+  this._isDesktopAvailable = t;
+}, LocalesManager.prototype.setRestApiAvailable = function(t) {
+  this._isOnlineAvailable = t;
+}, SettingsPage.prototype.getLocalesManager = function() {
+  return this._localesManager;
+}, SettingsPage.prototype.getStyleManager = function() {
+  return this._cslStylesManager;
+}, SettingsPage.prototype.getLocale = function() {
+  return this._localesManager.getLocale();
+}, SettingsPage.prototype.getLastUsedStyleId = function() {
+  return this._cslStylesManager.getLastUsedStyleId();
+}, SettingsPage.prototype.init = function() {
+  var t = this._cslStylesManager.getLastUsedStyleId() || "ieee", e = this._localesManager.getLastUsedLanguage();
+  this._addEventListeners(), this._languageSelect.addItems(this._LANGUAGES, e);
+  var i = [this._onStyleChange(t), this._localesManager.loadLocale(e), this._loadStyles()];
+  return Promise.all(i);
+}, SettingsPage.prototype.onChangeState = function(t) {
+  this._onChangeState = t;
+}, SettingsPage.prototype.setDesktopApiAvailable = function(t) {
+  this._localesManager.setDesktopApiAvailable(t), this._cslStylesManager.setDesktopApiAvailable(t);
+}, SettingsPage.prototype.setRestApiAvailable = function(t) {
+  this._localesManager.setRestApiAvailable(t), this._cslStylesManager.setRestApiAvailable(t);
+}, SettingsPage.prototype._addEventListeners = function() {
+  var t = this;
+  this._saveBtn.subscribe(function(e) {
+    if ("button:click" === e.type) {
+      var i = t._languageSelect.getSelectedValue();
+      if (null !== i) {
+        var s = _objectSpread2({}, t._stateSettings), n = [];
+        t._stateSettings.language !== i && (t._localesManager.saveLastUsedLanguage(i), n.push(t._localesManager.loadLocale(i).catch(function(e2) {
+          throw console.error(e2), t._langMessage.show(translate("Failed to load language")), e2;
+        })));
+        var a = "footnotes";
+        t._endNotes.getState().checked && (a = "endnotes"), t._stateSettings.notesStyle !== a && (t._cslStylesManager.saveLastUsedNotesStyle(a), "note" === t._cslStylesManager.getLastUsedFormat() && n.push(Promise.resolve()));
+        var r = t._styleSelect.getSelectedValue();
+        t._stateSettings.style !== r && null !== r && n.push(t._onStyleChange(r)), n.length ? (t._showLoader(), Promise.all(n).then(function() {
+          t._hide(), t._hideLoader();
+          var e2 = { language: i, style: r || "ieee", notesStyle: a, styleFormat: t._cslStylesManager.getLastUsedFormat() };
+          t._onChangeState(e2, s);
+        }).catch(function(e2) {
+          t._hideLoader();
+        })) : t._hide();
+      } else console.error("No language selected");
     }
-    if (groups.length === 0) {
-        return;
+  }), this._cancelBtn.subscribe(function(e) {
+    if ("button:click" === e.type) {
+      var i = t._languageSelect.getSelectedValue(), s = t._styleSelect.getSelectedValue();
+      null !== i && t._localesManager.getLastUsedLanguage() !== i && t._languageSelect.selectItems(t._localesManager.getLastUsedLanguage(), true), t._stateSettings.style !== s && null !== s ? (t._styleSelect.selectItems(t._stateSettings.style, true), t._styleSelectListOther.selectItems(t._stateSettings.style, true), t._onStyleChange(t._stateSettings.style, true).then(function() {
+        t._hide();
+      })) : t._hide();
     }
+  }), this._cslFileInput.onchange = function(e) {
+    if (e.target instanceof HTMLInputElement) {
+      var i = e.target;
+      if (i.files) {
+        var s = i.files[0];
+        s ? t._cslStylesManager.addCustomStyle(s).then(function(e2) {
+          t._addStylesToList([e2]);
+        }).catch(function(e2) {
+          console.error(e2), t._styleMessage.show(translate("Invalid CSL style file"));
+        }).finally(function() {
+          t._hideLoader();
+        }) : console.error("No file selected");
+      }
+    }
+  }, this._styleSelect.subscribe(function(e) {
+    if ("selectbox:change" === e.type) return t._styleSelectListOther.selectItems(e.detail.current.toString(), true), t._somethingWasChanged(), void t._onStyleChange(e.detail.current.toString(), true);
+    "selectbox:custom" === e.type && ("more_styles" === e.detail.current && t._styleSelectListOther.openDropdown());
+  }), t._styleSelectListOther.subscribe(function(e) {
+    if ("selectbox:change" === e.type && e.detail.items) {
+      var i = e.detail.items[0];
+      t._styleSelect.addItem(i.value, i.text, true), t._somethingWasChanged(), t._onStyleChange(i.value, true);
+    }
+  }), this._languageSelect.subscribe(function(e) {
+    "selectbox:change" === e.type && t._somethingWasChanged();
+  }), this._footNotes.subscribe(function(e) {
+    t._somethingWasChanged();
+  }), this._endNotes.subscribe(function(e) {
+    t._somethingWasChanged();
+  });
+}, SettingsPage.prototype._hideAllMessages = function() {
+  this._langMessage.close(), this._styleMessage.close();
+}, SettingsPage.prototype._hide = function() {
+  this._router.openMain();
+}, SettingsPage.prototype.show = function() {
+  this._stateSettings = { language: this._localesManager.getLastUsedLanguage(), style: this._cslStylesManager.getLastUsedStyleIdOrDefault(), notesStyle: this._cslStylesManager.getLastUsedNotesStyle(), styleFormat: this._cslStylesManager.getLastUsedFormat() }, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check() : this._footNotes.check();
+}, SettingsPage.prototype._loadStyles = function() {
+  var t = this;
+  return this._cslStylesManager.getStylesInfo().then(function(e) {
+    t._addStylesToList(e), t._styleSelect.addCustomItem("more_styles", "More Styles..."), t._styleSelect.addCustomItem("cslFileInput", "Add custom style...");
+  }).catch(function(t2) {
+    console.error(t2);
+  });
+}, SettingsPage.prototype._addStylesToList = function(t) {
+  var e = this, i = this._cslStylesManager.getLastUsedStyleIdOrDefault(), s = t.map(function(t2) {
+    return [t2.name, t2.title];
+  }), n = s.filter(function(t2) {
+    return t2[0] == i || !!e._cslStylesManager.isStyleDefault(t2[0]);
+  });
+  this._styleSelect.addItems(n, i), this._styleSelectListOther.addItems(s, i);
+}, SettingsPage.prototype._somethingWasChanged = function() {
+  this._saveBtn.enable();
+}, SettingsPage.prototype._onStyleChange = function(t, e) {
+  var i = this;
+  return e && i._showLoader(), i._cslStylesManager.getStyle(t, !e).then(function(t2) {
+    var s = t2.styleFormat;
+    i._bNumFormat = "numeric" == s, "note" === s ? i._notesStyleWrapper.classList.remove(i._displayNoneClass) : i._notesStyleWrapper.classList.add(i._displayNoneClass), e && i._hideLoader();
+  }).catch(function(t2) {
+    throw console.error(t2), "string" == typeof t2 && i._styleMessage.show(translate(t2)), e && i._hideLoader(), t2;
+  });
+}, SettingsPage.prototype._showLoader = function() {
+  this._cancelBtn.disable(), this._saveBtn.disable(), this._styleSelect.disable(), this._languageSelect.disable();
+}, SettingsPage.prototype._hideLoader = function() {
+  this._cancelBtn.enable(), this._saveBtn.enable(), this._styleSelect.enable(), this._languageSelect.enable();
+}, LoginPage.prototype.init = function() {
+  var t = this;
+  this._addEventListeners();
+  var e = false, i = document.querySelectorAll(".for-zotero-online");
+  ZoteroApiChecker.runApisChecker(t._sdk).subscribe(function(s2) {
+    return t._onChangeState(s2), e || (e = true, !s2.desktopVersion && t._useDesktopApp && t._useDesktopApp.classList.add("hidden"), t._onOpen(), t._show()), s2.online ? i.forEach(function(t2) {
+      t2.classList.remove("hidden");
+    }) : i.forEach(function(t2) {
+      t2.classList.add("hidden");
+    }), s2.online && s2.hasKey ? (t._sdk.setIsOnlineAvailable(true), t._hide(true), void t._onAuthorized(s2)) : s2.desktop && s2.hasPermission ? (t._sdk.setIsOnlineAvailable(false), t._hide(), t._hideAllMessages(), void t._onAuthorized(s2)) : void 0;
+  });
+  var s = { onOpen: function(e2) {
+    return t._onOpen = e2, s;
+  }, onChangeState: function(e2) {
+    return t._onChangeState = e2, s;
+  }, onAuthorized: function(e2) {
+    return t._onAuthorized = e2, s;
+  } };
+  return s;
+}, LoginPage.prototype._addEventListeners = function() {
+  var t = this;
+  this._apiKeyLoginField.subscribe(function(e) {
+    e.type, "inputfield:input" === e.type && (t._apiKeyLoginField.getValue() ? t._saveApiKeyBtn.enable() : t._saveApiKeyBtn.disable());
+  }), this._saveApiKeyBtn.subscribe(function(e) {
+    "button:click" === e.type && t._tryToApplyKey();
+  }), this._connectToLocalZotero.subscribe(function(e) {
+    "button:click" === e.type && (t._showLoader(), ZoteroApiChecker.checkStatus(t._sdk).then(function(e2) {
+      if (e2.desktop && e2.hasPermission) t._sdk.setIsOnlineAvailable(false), t._hide(), t._hideAllMessages();
+      else if (e2.desktop && !e2.hasPermission) {
+        t._useDesktopMessage.show(translate('Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check "Allow other applications on this computer to communicate with Zotero"'));
+      } else e2.desktop || t._useDesktopMessage.show(translate("Connection to Zotero failed. Make sure Zotero is running."));
+    }).finally(function() {
+      t._hideLoader();
+    }));
+  }), this._logoutLink.onclick = function(e) {
+    return t._sdk.clearSettings(), t._show(), true;
+  };
+}, LoginPage.prototype._tryToApplyKey = function() {
+  var t = this, e = t._apiKeyLoginField.getValue();
+  e && (t._showLoader(), t._sdk.setApiKey(e).then(function() {
+    ZoteroApiChecker.successfullyLoggedInUsingApiKey(), t._hide(true);
+  }).catch(function(e2) {
+    console.error(e2), t._apiKeyMessage.show(translate("Invalid API key"));
+  }).finally(function() {
+    t._hideLoader();
+  }));
+}, LoginPage.prototype._hideAllMessages = function() {
+  this._apiKeyMessage.close();
+}, LoginPage.prototype._hide = function(t) {
+  this._router.openMain(), t && this._logoutLink.classList.remove("hidden");
+}, LoginPage.prototype._show = function() {
+  this._router.openLogin(), this._logoutLink.classList.add("hidden");
+}, LoginPage.prototype._showLoader = function() {
+  this._saveApiKeyBtn.disable(), this._connectToLocalZotero.disable(), this._apiKeyLoginField.disable();
+}, LoginPage.prototype._hideLoader = function() {
+  this._saveApiKeyBtn.enable(), this._connectToLocalZotero.enable(), this._apiKeyLoginField.enable();
+}, SearchFilterComponents.prototype._addEventListeners = function() {
+  var t = this;
+  this._searchField.subscribe(function(e) {
+    if ("inputfield:blur" === e.type || "inputfield:submit" === e.type) {
+      var i = t._getSelectedGroups();
+      t._subscribers.forEach(function(t2) {
+        t2(e.detail.value, i);
+      });
+    }
+  }), this._filterButton.subscribe(function(e) {
+    "button:click" === e.type && (t._librarySelectList.isOpen || (e.detail.originalEvent && e.detail.originalEvent.stopPropagation(), t._librarySelectList.openDropdown()));
+  });
+}, SearchFilterComponents.prototype.addGroups = function(t) {
+  var e = this, i = localStorage.getItem("selectedGroups"), s = i ? JSON.parse(i).map(function(t2) {
+    return t2.toString();
+  }) : ["my_library", "group_libraries"], n = false;
+  t.forEach(function(t2) {
+    t2.id = String(t2.id);
+  });
+  var a = [{ id: "my_library", name: translate("My Library") }, { id: "group_libraries", name: translate("Group Libraries") }];
+  !n && a.forEach(function(t2) {
+    -1 !== s.indexOf(t2.id) && (n = true);
+  }), !n && t.forEach(function(t2) {
+    -1 !== s.indexOf(t2.id.toString()) && (n = true);
+  }), n || (s = ["my_library", "group_libraries"]);
+  for (var r = function(t2, i2, s2) {
+    "number" == typeof t2 && (t2 = t2.toString()), e._librarySelectList instanceof SelectBox && e._librarySelectList.addItem(t2, i2, s2);
+  }, o = 0; o < a.length; o++) {
+    var l = a[o].id;
+    r(l, a[o].name, -1 !== s.indexOf(l));
+  }
+  if (0 !== t.length) {
     this._librarySelectList.addSeparator();
-    var selected = selectedItems.indexOf("group_libraries") !== -1;
-    for (var i = 0; i < groups.length; i++) {
-        var _id = groups[i].id;
-        var _name = groups[i].name;
-        addGroupToSelectBox(_id, _name, selected || selectedItems.indexOf(_id.toString()) !== -1);
+    var c = -1 !== s.indexOf("group_libraries");
+    for (o = 0; o < t.length; o++) {
+      var h = t[o].id;
+      r(h, t[o].name, c || -1 !== s.indexOf(h.toString()));
     }
-    this._selectedGroupsWatcher(customGroups, groups);
-};
-
-SearchFilterComponents.prototype._getSelectedGroups = function() {
-    var self = this;
-    var ids = this._librarySelectList.getSelectedValues();
-    if (Array.isArray(ids) === false || ids.length === 0) {
-        setTimeout(function() {
-            self._librarySelectList.openDropdown();
-        }, 500);
-    }
-    if (ids === null || typeof ids === "string") {
-        return [];
-    }
-    return ids;
-};
-
-SearchFilterComponents.prototype.subscribe = function(callback) {
-    var self = this;
-    this._subscribers.push(callback);
-    return {
-        unsubscribe: function unsubscribe() {
-            self._subscribers = self._subscribers.filter(function(cb) {
-                return cb !== callback;
-            });
-        }
-    };
-};
-
-SearchFilterComponents.prototype._selectedGroupsWatcher = function(customGroups, groups) {
-    var self = this;
-    if (this._librarySelectList instanceof SelectBox === false) {
-        return;
-    }
-    this._librarySelectList.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        var aGroupsToSave = [];
-        var values = event.detail.values;
-        var current = event.detail.current;
-        var bEnabled = event.detail.enabled;
-        var customIds = customGroups.map(function(group) {
-            return group.id;
-        });
-        var ids = groups.map(function(group) {
-            return group.id.toString();
-        });
-        var bWasCustom = customIds.indexOf(String(current)) !== -1;
-        if (bWasCustom) {
-            if (current === "group_libraries") {
-                if (bEnabled) {
-                    aGroupsToSave.push("group_libraries");
-                    self._librarySelectList.selectItems(ids, true);
-                } else {
-                    self._librarySelectList.unselectItems(ids, true);
-                }
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
-            } else {
-                if (values.indexOf("group_libraries") !== -1) {
-                    aGroupsToSave.push("group_libraries");
-                    if (bEnabled) {
-                        aGroupsToSave.push(current);
-                    }
-                } else {
-                    aGroupsToSave = values.slice();
-                }
-            }
-        } else if (!bWasCustom) {
-            var bAllGroupsSelected = ids.every(function(id) {
-                return values.indexOf(id) !== -1;
-            });
-            if (bAllGroupsSelected) {
-                self._librarySelectList.selectItems("group_libraries", true);
-                aGroupsToSave.push("group_libraries");
-                if (values.indexOf("my_library") !== -1) {
-                    aGroupsToSave.push("my_library");
-                }
-            } else {
-                self._librarySelectList.unselectItems("group_libraries", true);
-                aGroupsToSave = values.filter(function(value) {
-                    return value !== "group_libraries";
-                });
-            }
-        }
-        if (aGroupsToSave.length === 0) {
-            localStorage.removeItem("selectedGroups");
-        } else {
-            localStorage.setItem("selectedGroups", JSON.stringify(aGroupsToSave));
-        }
+    this._selectedGroupsWatcher(a, t);
+  }
+}, SearchFilterComponents.prototype._getSelectedGroups = function() {
+  var t = this, e = this._librarySelectList.getSelectedValues();
+  return false !== Array.isArray(e) && 0 !== e.length || setTimeout(function() {
+    t._librarySelectList.openDropdown();
+  }, 500), null === e || "string" == typeof e ? [] : e;
+}, SearchFilterComponents.prototype.subscribe = function(t) {
+  var e = this;
+  return this._subscribers.push(t), { unsubscribe: function() {
+    e._subscribers = e._subscribers.filter(function(e2) {
+      return e2 !== t;
     });
-};
-
-var LOCATOR_VALUES = [ [ "appendix", "Appendix" ], [ "article", "Article" ], [ "book", "Book" ], [ "chapter", "Chapter" ], [ "column", "Column" ], [ "figure", "Figure" ], [ "folio", "Folio" ], [ "issue", "Issue" ], [ "line", "Line" ], [ "note", "Note" ], [ "opus", "Opus" ], [ "page", "Page" ], [ "paragraph", "Paragraph" ], [ "part", "Part" ], [ "rule", "Rule" ], [ "section", "Section" ], [ "sub-verbo", "Sub verbo" ], [ "table", "Table" ], [ "title", "Title" ], [ "verses", "Verses" ], [ "volume", "Volume" ] ];
-
-function SelectCitationsComponent(displayNoneClass, fLoadMore, fShouldLoadMore) {
-    this._displayNoneClass = displayNoneClass;
-    this._items = {};
-    this._html = {};
-    this._checks = {};
-    this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
-    this._docsHolder = document.getElementById("docsHolder");
-    this._nothingFound = document.getElementById("nothingFound");
-    this._docsThumb = document.getElementById("docsThumb");
-    this._selectedWrapper = document.getElementById("selectedWrapper");
-    this._selectedHolder = document.getElementById("selectedHolder");
-    this._selectedInfo = document.getElementById("selectedInfo");
-    this._selectedCount = document.getElementById("selectedCount");
-    this._selectedThumb = document.getElementById("selectedThumb");
-    if (this._selectedHolder && this._selectedThumb) {
-        this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20);
-    }
-    if (this._docsHolder && this._docsThumb) {
-        this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this));
-    }
-    this._lastSearch = null;
-    this._subscribers = [];
-    this._fShouldLoadMore = fShouldLoadMore;
-    this._fLoadMore = fLoadMore;
-    this._loadTimeout;
-    this._init();
-}
-
-SelectCitationsComponent.prototype._init = function() {
-    var self = this;
-    if (this._cancelSelectBtn) {
-        this._cancelSelectBtn.onclick = function(e) {
-            var ids = [];
-            for (var id in self._items) {
-                ids.push(id);
-            }
-            for (var i = 0; i < ids.length; i++) {
-                self._removeSelected(ids[i]);
-            }
-        };
-    }
-};
-
-SelectCitationsComponent.prototype.clearLibrary = function() {
-    this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
-    var holder = this._docsHolder;
-    while (holder && holder.lastChild) {
-        holder.removeChild(holder.lastChild);
-    }
-    if (holder) holder.scrollTop = 0;
-    this._docsScroller.onscroll();
-};
-
-SelectCitationsComponent.prototype.displayNothingFound = function() {
-    this.clearLibrary();
-    this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
-};
-
-SelectCitationsComponent.prototype.displaySearchItems = function(res, err, lastSearch) {
-    var self = this;
-    var holder = this._docsHolder;
-    this._lastSearch = lastSearch;
-    var numOfShown = 0;
-    return new Promise((resolve, reject) => {
-        if (res && res.items && res.items.length > 0) {
-            var page = document.createElement("div");
-            if (holder) page.classList.add("page" + holder.children.length);
-            for (var index = 0; index < res.items.length; index++) {
-                var item = res.items[index];
-                if (!item.title) {
-                    continue;
-                }
-                page.appendChild(self._buildDocElement(item));
-                numOfShown++;
-            }
-            if (holder) holder.appendChild(page);
-        } else if (err) {
-            reject(err);
-        }
-        this._docsScroller.onscroll();
-        resolve(numOfShown);
-    });
-};
-
-SelectCitationsComponent.prototype.getSelectedItems = function() {
-    var items = Object.assign({}, this._items || {});
-    return items;
-};
-
-SelectCitationsComponent.prototype.removeItems = function(keys) {
-    var self = this;
-    keys.forEach(function(key) {
-        self._removeSelected(key);
-    });
-};
-
-SelectCitationsComponent.prototype.subscribe = function(callback) {
-    var self = this;
-    this._subscribers.push(callback);
-    return {
-        unsubscribe: function unsubscribe() {
-            self._subscribers = self._subscribers.filter(function(cb) {
-                return cb !== callback;
-            });
-        }
-    };
-};
-
-SelectCitationsComponent.prototype._buildDocElement = function(item) {
-    var self = this;
-    var root = document.createElement("div");
-    root.classList.add("doc");
-    var docInfo = document.createElement("div");
-    docInfo.classList.add("docInfo");
-    var checkHolder = document.createElement("div");
-    var label = "";
-    if (item.author && item.author.length > 0) {
-        label = item.author.map(function(a) {
-            if (a.family && a.given) {
-                return a.family.trim() + ", " + a.given.trim();
-            } else if (a.family) {
-                return a.family.trim();
-            } else if (a.given) {
-                return a.given.trim();
-            }
-            return "";
-        }).join("; ");
-    }
-    var arrow = document.createElement("div");
-    arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML = "<b></b>";
-    var title = document.createElement("div");
-    title.textContent = item.title.trim();
-    title.classList.add("truncate-text");
-    title.classList.add("secondary-text");
-    if (item.publisher || item["publisher-place"]) {
-        title.textContent += " · " + (item.publisher || item["publisher-place"] || "");
-    }
-    if (item.issued && item.issued["date-parts"]) {
-        var date = item.issued["date-parts"][0];
-        if (label.length > 20) {
-            title.textContent += " (" + date.join("-") + ")";
-        } else {
-            if (label.length > 0 && label.slice(-1) !== "." && label.slice(-1) !== ",") label += ".";
-            label += " " + date.join("-");
-        }
-    }
-    if (label.length === 0) {
-        label = title.textContent;
-    }
-    title.setAttribute("title", title.textContent);
-    docInfo.appendChild(title);
-    var check = document.createElement("input");
-    checkHolder.appendChild(check);
-    var checkInput = new Checkbox(check, {
-        checked: !!this._items[item.id],
-        label: label,
-        title: true,
-        id: item.id
-    });
-    if (this._items[item.id]) {
-        this._checks[item.id] = checkInput;
-    }
-    checkHolder.appendChild(arrow);
-    root.appendChild(checkHolder);
-    root.appendChild(docInfo);
-    var params;
-    function toggleItem() {
-        root.classList.toggle("doc-open");
-        if (!params) {
-            params = self._buildCitationParams(item);
-            root.appendChild(params);
-        }
-    }
-    arrow.onclick = toggleItem;
-    checkInput.subscribe(function(event) {
-        if (event.type !== "checkbox:change") {
-            return;
-        }
-        if (event.detail.checked) {
-            self._addSelected(item, checkInput);
-        } else {
-            self._removeSelected(item.id);
-        }
-    });
-    return root;
-};
-
-SelectCitationsComponent.prototype._buildCitationParams = function(item) {
-    var locatorLabel = localStorage.getItem("selectedLocator") || "page";
-    item.label = locatorLabel;
-    var params = document.createDocumentFragment();
-    var prefixSuffixContainer = document.createElement("div");
-    var prefix = document.createElement("input");
-    var suffix = document.createElement("input");
-    var locatorContainer = document.createElement("div");
-    var locatorSelect = document.createElement("div");
-    var locator = document.createElement("input");
-    var omitAuthorContainer = document.createElement("div");
-    var omitAuthor = document.createElement("input");
-    params.appendChild(prefixSuffixContainer);
-    prefixSuffixContainer.appendChild(prefix);
-    prefixSuffixContainer.appendChild(suffix);
-    params.appendChild(locatorContainer);
-    locatorContainer.appendChild(locatorSelect);
-    locatorContainer.appendChild(locator);
-    var locatorPlaceholder = "";
-    params.appendChild(omitAuthorContainer);
-    omitAuthorContainer.appendChild(omitAuthor);
-    var prefixInput = new InputField(prefix, {
-        type: "text",
-        placeholder: "Prefix"
-    });
-    var suffixInput = new InputField(suffix, {
-        type: "text",
-        placeholder: "Suffix"
-    });
-    var locatorSelectbox = new SelectBox(locatorSelect, {
-        placeholder: "Locator"
-    });
-    LOCATOR_VALUES.forEach(function(info) {
-        var selected = info[0] === locatorLabel;
-        locatorSelectbox.addItem(info[0], info[1], selected);
-        if (selected) {
-            locatorPlaceholder = info[1];
-        }
-    });
-    var locatorInput = new InputField(locator, {
-        type: "text",
-        placeholder: locatorPlaceholder
-    });
-    var omitAuthorInput = new Checkbox(omitAuthor, {
-        label: translate("Omit author")
-    });
-    prefixInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.prefix = event.detail.value;
-    });
-    suffixInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.suffix = event.detail.value;
-    });
-    locatorInput.subscribe(function(event) {
-        if (event.type !== "inputfield:input") {
-            return;
-        }
-        item.locator = event.detail.value;
-    });
-    locatorSelectbox.subscribe(function(event) {
-        if (event.type !== "selectbox:change") {
-            return;
-        }
-        if (!event.detail.items) {
-            return;
-        }
-        var eventItem = event.detail.items[0];
-        locatorInput.setPlaceholder(eventItem.text);
-        item.label = event.detail.values[0].toString();
-        localStorage.setItem("selectedLocator", item.label);
-    });
-    omitAuthorInput.subscribe(function(event) {
-        if (event.type !== "checkbox:change") {
-            return;
-        }
-        item["suppress-author"] = event.detail.checked;
-    });
-    return params;
-};
-
-SelectCitationsComponent.prototype._buildSelectedElement = function(item) {
-    var self = this;
-    var root = document.createElement("div");
-    root.classList.add("selDoc");
-    var span = document.createElement("span");
-    if (item.author && item.author.length > 0) {
-        span.textContent = item.author.map(function(a) {
-            return a.family + ", " + a.given;
-        }).join("; ");
-    } else {
-        span.textContent = item.title;
-    }
-    if (item.issued && item.issued["date-parts"]) {
-        span.textContent += " " + item.issued["date-parts"][0].join("-");
-    }
-    span.setAttribute("title", span.textContent);
-    root.appendChild(span);
-    var remove = document.createElement("span");
-    remove.onclick = function() {
-        self._removeSelected(item.id);
-    };
-    remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' + '<path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829' + " 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275" + " 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443" + " 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162" + ' 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z"' + ' fill="currentColor" fill-opacity="0.8"/></svg>';
-    root.appendChild(remove);
-    return root;
-};
-
-SelectCitationsComponent.prototype._addSelected = function(item, checkbox) {
-    var el = this._buildSelectedElement(item);
-    this._items[item.id] = item;
-    this._html[item.id] = el;
-    this._checks[item.id] = checkbox;
-    if (this._selectedHolder) {
-        this._selectedHolder.appendChild(el);
-    }
-    this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
-    this._checkSelected();
-};
-
-SelectCitationsComponent.prototype._checkDocsScroll = function(holder, thumb) {
-    var self = this;
-    if (this._fShouldLoadMore(holder)) {
-        if (this._loadTimeout) {
-            clearTimeout(this._loadTimeout);
-        }
-        if (!this._lastSearch.obj && !this._lastSearch.text.trim() && !this._lastSearch.groups.length) return;
-        this._loadTimeout = setTimeout(function() {
-            if (self._fShouldLoadMore(holder)) {
-                self._fLoadMore();
-            }
-        }, 500);
-    }
-};
-
-SelectCitationsComponent.prototype._initScrollBox = function(holder, thumb, minThumbHeight, onscroll) {
-    var scroller = {};
-    scroller.onscroll = this._checkScroll(holder, thumb, minThumbHeight, onscroll);
-    holder.onwheel = function(e) {
-        holder.scrollTop += e.deltaY > 10 || e.deltaY < -10 ? e.deltaY : e.deltaY * 20;
-        scroller.onscroll();
-    };
-    thumb.onmousedown = function(e) {
-        thumb.classList.add("scrolling");
-        var y = e.clientY;
-        var initialPos = holder.scrollTop;
-        window.onmouseup = function(e) {
-            thumb.classList.remove("scrolling");
-            window.onmouseup = null;
-            window.onmousemove = null;
-        };
-        window.onmousemove = function(e) {
-            var delta = e.clientY - y;
-            var percMoved = delta / holder.clientHeight;
-            var deltaScroll = holder.scrollHeight * percMoved;
-            holder.scrollTop = initialPos + deltaScroll;
-            scroller.onscroll();
-        };
-    };
-    document.body.addEventListener("resize", function() {
-        scroller.onscroll();
-    });
-    return scroller;
-};
-
-SelectCitationsComponent.prototype._checkScroll = function(holder, thumb, minThumbHeight, func) {
-    var displayNoneClass = this._displayNoneClass;
-    return function() {
-        if (holder.scrollHeight <= holder.clientHeight) {
-            thumb.classList.add(displayNoneClass);
-        } else {
-            thumb.classList.remove(displayNoneClass);
-            var height = holder.clientHeight / holder.scrollHeight * holder.clientHeight;
-            height = height < minThumbHeight ? minThumbHeight : height;
-            thumb.style.height = height + "px";
-            var scroll = holder.scrollHeight - holder.clientHeight;
-            var percScrolled = holder.scrollTop / scroll;
-            var margin = percScrolled * (holder.clientHeight - height);
-            thumb.style.marginTop = margin + "px";
-        }
-        if (func) func(holder, thumb);
-    };
-};
-
-SelectCitationsComponent.prototype._removeSelected = function(id) {
-    var el = this._html[id];
-    if (this._selectedHolder) {
-        this._selectedHolder.removeChild(el);
-    }
-    delete this._items[id];
-    delete this._html[id];
-    if (this._checks[id]) {
-        this._checks[id].uncheck(true);
-        delete this._checks[id];
-    }
-    this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
-    this._checkSelected();
-};
-
-SelectCitationsComponent.prototype._checkSelected = function() {
-    var numOfSelected = this.count();
-    if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
-        return;
-    }
-    if (numOfSelected <= 0) {
-        this._selectedWrapper.classList.add(this._displayNoneClass);
-        this._selectedInfo.classList.add(this._displayNoneClass);
-    } else {
-        this._selectedWrapper.classList.remove(this._displayNoneClass);
-        this._selectedInfo.classList.remove(this._displayNoneClass);
-        this._selectedCount.textContent = numOfSelected + " " + translate("selected");
-    }
-    this._subscribers.forEach(function(cb) {
-        cb(numOfSelected);
-    });
-};
-
-SelectCitationsComponent.prototype.count = function() {
-    var k = 0;
-    for (var i in this._items) k++;
-    return k;
-};
-
-(function() {
-    var displayNoneClass = "hidden";
-    var router;
-    var sdk;
-    var settings;
-    var citationService;
-    var lastSearch = {
-        text: "",
-        obj: null,
-        groups: [],
-        groupsHash: ""
-    };
-    var searchFilter;
-    var selectCitation;
-    var saveAsTextBtn;
-    var insertLinkBtn;
-    var openSettingsBtn;
-    var insertBibBtn;
-    var refreshBtn;
-    var libLoader = new Loader("libLoader", translate("Loading..."));
-    var elements = {};
-    function initElements() {
-        var error = document.getElementById("errorWrapper");
-        if (!error) {
-            throw new Error("errorWrapper not found");
-        }
-        var mainState = document.getElementById("mainState");
-        if (!mainState) {
-            throw new Error("mainState not found");
-        }
-        searchFilter = new SearchFilterComponents;
-        selectCitation = new SelectCitationsComponent(displayNoneClass, loadMore, shouldLoadMore);
-        saveAsTextBtn = new Button("saveAsTextBtn", {
-            variant: "secondary"
-        });
-        insertLinkBtn = new Button("insertLinkBtn", {
-            disabled: true
-        });
-        openSettingsBtn = new Button("settingsBtn", {
-            variant: "icon-only",
-            size: "small"
-        });
-        insertBibBtn = new Button("insertBibBtn", {
-            variant: "secondary"
-        });
-        refreshBtn = new Button("refreshBtn", {
-            variant: "secondary"
-        });
-        elements = {
-            error: error,
-            mainState: mainState
-        };
-    }
-    window.Asc.plugin.init = function() {
-        Loader.show();
-        initElements();
-        router = new Router;
-        sdk = new ZoteroSdk;
-        var loginPage = new LoginPage(router, sdk);
-        settings = new SettingsPage(router, displayNoneClass);
-        citationService = new CitationService(settings.getLocalesManager(), settings.getStyleManager(), sdk);
-        var isInit = false;
-        addEventListeners();
-        loginPage.init().onOpen(function() {
-            Loader.hide();
-        }).onChangeState(function(apis) {
-            settings.setDesktopApiAvailable(apis.desktop);
-            settings.setRestApiAvailable(apis.online);
-        }).onAuthorized(function(apis) {
-            if (isInit) return;
-            isInit = true;
-            Loader.show();
-            var loadGroupsPromise = loadGroups().catch(e => {
-                console.error(e);
-                showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
-            });
-            var initSettingsPromise = settings.init().catch(e => {
-                console.error(e);
-                showError(translate("An error occurred while loading settings. Try restarting the plugin."));
-                settings.show();
-            });
-            Promise.all([ loadGroupsPromise, initSettingsPromise ]).then(function() {
-                Loader.hide();
-                return showCitationsAtTheStartFromMyLibrary();
-            }).finally(function() {
-                Loader.hide();
-            });
-        });
-        window.Asc.plugin.onTranslate = applyTranslations;
-        getEditorVersion().then(editorVersion => {
-            window.Asc.scope.editorVersion = editorVersion;
-            addContextMenuButtons();
-        }).catch(e => {
-            console.error(e);
-        });
-    };
-    function showCitationsAtTheStartFromMyLibrary() {
-        libLoader.show();
-        var promise = sdk.getItems(null).then(res => {
-            delete res.next;
-            return res;
-        });
-        return loadLibrary(promise, false).then(res => {
-            if (res > 0) {
-                updateHeaderText("started");
-            } else {
-                updateHeaderText("empty");
-            }
-        }).catch(e => {
-            console.error(e);
-        }).finally(() => {
-            libLoader.hide();
-        });
-    }
-    function loadGroups() {
-        return sdk.getUserGroups().then(function(groups) {
-            searchFilter.addGroups(groups);
-            return groups;
-        });
-    }
-    function addEventListeners() {
-        selectCitation.subscribe(checkSelected);
-        function searchFor(text, selectedGroups, groupsHash) {
-            selectCitation.clearLibrary();
-            var promises = [];
-            return sdk.getUserGroups().then(function(userGroups) {
-                var groups = selectedGroups.filter(function(group) {
-                    return group !== "my_library" && group !== "group_libraries";
-                });
-                if (selectedGroups.indexOf("my_library") !== -1) {
-                    promises.push(loadLibrary(sdk.getItems(text), false));
-                }
-                for (var i = 0; i < groups.length; i++) {
-                    promises.push(loadLibrary(sdk.getGroupItems(text, groups[i]), true));
-                }
-                lastSearch.text = text;
-                lastSearch.obj = null;
-                lastSearch.groups = [];
-                lastSearch.groupsHash = groupsHash;
-                return promises;
-            });
-        }
-        searchFilter.subscribe(function(text, selectedGroups) {
-            text = text.trim();
-            var groupsHash = selectedGroups.join(",");
-            if (elements.mainState.classList.contains(displayNoneClass) || !text || text == lastSearch.text && groupsHash === lastSearch.groupsHash || selectedGroups.length === 0) return;
-            searchFor(text, selectedGroups, groupsHash).catch(() => []).then(function(promises) {
-                if (promises.length) {
-                    libLoader.show();
-                    Promise.any(promises).then(function() {
-                        libLoader.hide();
-                    }).finally(function() {
-                        libLoader.hide();
-                    });
-                }
-                return Promise.allSettled(promises);
-            }).then(function(numOfShownByLib) {
-                var numOfShown = 0;
-                numOfShownByLib.forEach(function(promise) {
-                    if (promise.status === "fulfilled") {
-                        numOfShown += promise.value;
-                    }
-                });
-                if (numOfShown === 0) {
-                    updateHeaderText("empty");
-                    selectCitation.displayNothingFound();
-                } else {
-                    updateHeaderText("not-empty");
-                }
-            });
-        });
-        refreshBtn.subscribe(function() {
-            var _ref = _asyncToGenerator(function*(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                yield onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
-                var updateFn = citationService.updateCslItems.bind(citationService, false);
-                var styleManager = settings.getStyleManager();
-                if (styleManager.getLastUsedFormat() === "note") {
-                    updateFn = citationService.updateCslItemsInNotes.bind(citationService, styleManager.getLastUsedNotesStyle());
-                }
-                updateFn().catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to refresh");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                });
-            });
-            return function(_x) {
-                return _ref.apply(this, arguments);
-            };
-        }());
-        insertBibBtn.subscribe(function() {
-            var _ref2 = _asyncToGenerator(function*(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                yield onStartAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
-                var addedFieldId = "";
-                citationService.insertBibliography().then(function(fieldId) {
-                    addedFieldId = fieldId;
-                }).catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to insert bibliography");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
-                    if (addedFieldId) {
-                        citationService.moveCursorOutsideField(addedFieldId);
-                    }
-                });
-            });
-            return function(_x2) {
-                return _ref2.apply(this, arguments);
-            };
-        }());
-        insertLinkBtn.subscribe(function() {
-            var _ref3 = _asyncToGenerator(function*(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                if (!settings.getLastUsedStyleId()) {
-                    showError(translate("Style is not selected"));
-                    return;
-                }
-                if (!settings.getLocale()) {
-                    showError(translate("Language is not selected"));
-                    return;
-                }
-                yield onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
-                var items = selectCitation.getSelectedItems();
-                var addedField = null;
-                var bHasNotes = false;
-                return citationService.insertSelectedCitations(items).then(function(hasNotes) {
-                    bHasNotes = hasNotes;
-                    selectCitation.removeItems(Object.keys(items));
-                    return citationService.getCurrentField();
-                }).then(function(field) {
-                    addedField = field;
-                    return citationService.updateCslItems();
-                }).catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(_asyncToGenerator(function*() {
-                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    if (bHasNotes) {
-                        yield citationService.moveCursorRight();
-                    } else if (addedField) {
-                        yield citationService.moveCursorOutsideField(addedField.FieldId);
-                    }
-                }));
-            });
-            return function(_x3) {
-                return _ref3.apply(this, arguments);
-            };
-        }());
-        openSettingsBtn.subscribe(function(event) {
-            if (event.type !== "button:click") {
-                return;
-            }
-            settings.show();
-        });
-        saveAsTextBtn.subscribe(function() {
-            var _ref5 = _asyncToGenerator(function*(event) {
-                if (event.type !== "button:click") {
-                    return;
-                }
-                yield onStartAction(false, "Zotero (" + translate("Saving as text") + ")");
-                citationService.saveAsText().then(function() {
-                    onEndAction(false, "Zotero (" + translate("Saving as text") + ")");
-                });
-            });
-            return function(_x4) {
-                return _ref5.apply(this, arguments);
-            };
-        }());
-        settings.onChangeState(function() {
-            var _ref6 = _asyncToGenerator(function*(newState, oldState) {
-                yield onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
-                var updateFn = citationService.updateCslItems.bind(citationService, true);
-                if ([ newState.styleFormat, oldState.styleFormat ].includes("note")) {
-                    if (newState.styleFormat !== oldState.styleFormat) {
-                        if (newState.styleFormat === "note") {
-                            updateFn = citationService.switchingBetweenNotesAndText.bind(citationService, newState.notesStyle);
-                        } else {
-                            updateFn = citationService.switchingBetweenNotesAndText.bind(citationService);
-                        }
-                    } else if (newState.notesStyle !== oldState.notesStyle) {
-                        updateFn = citationService.convertNotesStyle.bind(citationService, newState.notesStyle);
-                    } else {
-                        updateFn = citationService.updateCslItems.bind(citationService, true);
-                    }
-                }
-                updateFn().catch(function(error) {
-                    console.error(error);
-                    var message = translate("Failed to refresh");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                }).finally(function() {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                });
-            });
-            return function(_x5, _x6) {
-                return _ref6.apply(this, arguments);
-            };
-        }());
-    }
-    Asc.plugin.onThemeChanged = function(theme) {
-        window.Asc.plugin.onThemeChangedBase(theme);
-        Theme.fixThemeForIE(theme);
-        Theme.addStylesForComponents(theme);
-        var rules = "";
-        rules += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n";
-        rules += ".doc { border-color: " + theme["border-regular-control"] + "; background-color: " + theme["background-normal"] + "; }\n";
-        rules += ".scrollThumb { box-shadow: 0 0 8px 8px " + theme["highlight-button-hover"] + " inset; }\n";
-        rules += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + theme["canvas-scroll-thumb-pressed"] + " inset; }\n";
-        rules += ".scrollThumb:hover { box-shadow: 0 0 8px 8px " + theme["canvas-scroll-thumb-hover"] + " inset; }\n";
-        if ([ "theme-white", "theme-night" ].indexOf(theme.name) !== -1 || [ "theme-white", "theme-night" ].indexOf(theme.Name) !== -1) {
-            rules += ".doc { border-radius: 4px; }\n";
-        }
-        var styleTheme = document.getElementById("pluginStyles");
-        if (!styleTheme) {
-            styleTheme = document.createElement("style");
-            styleTheme.id = "pluginStyles";
-            styleTheme.innerHTML = rules;
-            document.getElementsByTagName("head")[0].appendChild(styleTheme);
-        } else {
-            styleTheme.innerHTML = rules;
-        }
-        var themeType = theme.type || "light";
-        var body = document.body;
-        body.classList.remove("theme-dark");
-        body.classList.remove("theme-light");
-        body.classList.add("theme-" + themeType);
-    };
-    function applyTranslations() {
-        var elements = document.getElementsByClassName("i18n");
-        var _loop = function _loop() {
-            var el = elements[i];
-            if (el instanceof HTMLElement === false) return 1;
-            [ "placeholder", "title" ].forEach(attr => {
-                if (el.hasAttribute(attr)) {
-                    el.setAttribute(attr, translate(el.getAttribute(attr) || ""));
-                }
-            });
-            var translated = translate(el.innerText.trim().replace(/\s+/g, " "));
-            if (translated) el.innerText = translated;
-        };
-        for (var i = 0; i < elements.length; i++) {
-            if (_loop()) continue;
-        }
-    }
-    function showError(message) {
-        if (message && typeof message === "string") {
-            translate("");
-            elements.error.classList.remove(displayNoneClass);
-            elements.error.textContent = message;
-            setTimeout(function() {
-                window.onclick = function() {
-                    showError(false);
-                };
-            }, 100);
-        } else {
-            elements.error.classList.add(displayNoneClass);
-            elements.error.textContent = "";
-            window.onclick = null;
-        }
-    }
-    function onStartAction(_x7, _x8) {
-        return _onStartAction.apply(this, arguments);
-    }
-    function _onStartAction() {
-        _onStartAction = _asyncToGenerator(function*(keepSelection, preloaderMessage) {
-            insertBibBtn.disable();
-            refreshBtn.disable();
-            insertLinkBtn.disable();
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9004e3) {
-                window._cursorPosition = yield CursorService.getCursorPosition();
-            } else {
-                yield new Promise(resolve => {
-                    Asc.plugin.executeMethod("StartAction", [ "GroupActions", {
-                        lockScroll: true,
-                        keepSelection: keepSelection
-                    } ], resolve);
-                });
-            }
-        });
-        return _onStartAction.apply(this, arguments);
-    }
-    function onEndAction(_x9, _x0) {
-        return _onEndAction.apply(this, arguments);
-    }
-    function _onEndAction() {
-        _onEndAction = _asyncToGenerator(function*(scrollToTarget, preloaderMessage) {
-            insertBibBtn.enable();
-            refreshBtn.enable();
-            checkSelected();
-            var editorVersion = window.Asc.scope.editorVersion;
-            if (editorVersion && editorVersion < 9004e3) {
-                CursorService.setCursorPosition(window._cursorPosition || 0);
-            } else {
-                yield new Promise(resolve => {
-                    Asc.plugin.executeMethod("EndAction", [ "GroupActions", {
-                        scrollToTarget: scrollToTarget
-                    } ], resolve);
-                });
-            }
-        });
-        return _onEndAction.apply(this, arguments);
-    }
-    function updateHeaderText(whatToShow) {
-        var searchLabel = document.getElementById("searchLabel");
-        if (!searchLabel) {
-            console.error("Search label not found");
-            return;
-        }
-        var textWhenEmpty = searchLabel.querySelector(".when-empty");
-        var textWhenNotEmpty = searchLabel.querySelector(".when-not-empty");
-        var textWhenStarted = searchLabel.querySelector(".when-started");
-        if (!textWhenEmpty || !textWhenNotEmpty || !textWhenStarted) {
-            console.error("Search label elements not found");
-            return;
-        }
-        textWhenEmpty.classList.add("hidden");
-        textWhenNotEmpty.classList.add("hidden");
-        textWhenStarted.classList.add("hidden");
-        switch (whatToShow) {
-          case "empty":
-            textWhenEmpty.classList.remove("hidden");
-            break;
-
-          case "not-empty":
-            textWhenNotEmpty.classList.remove("hidden");
-            break;
-
-          case "started":
-            textWhenNotEmpty.classList.remove("hidden");
-            textWhenStarted.classList.remove("hidden");
-            break;
-        }
-    }
-    function loadMore() {
-        console.warn("Loading more...");
-        if (lastSearch.obj && lastSearch.obj.next) {
-            loadLibrary(lastSearch.obj.next(), false);
-        }
-        for (var i = 0; i < lastSearch.groups.length && lastSearch.groups[i].next; i++) {
-            loadLibrary(sdk.getGroupItems(lastSearch.groups[i].next(), lastSearch.groups[i].id), true);
-        }
-    }
-    function shouldLoadMore(holder) {
-        if (router.getRoute() != "main") return false;
-        if (holder.scrollTop + holder.clientHeight < holder.scrollHeight) {
-            return false;
-        }
-        var flag = true;
-        lastSearch.groups.forEach(function(el) {
-            if (el.next) flag = false;
-        });
-        if (!lastSearch.obj || !lastSearch.obj.next || !flag) return false;
-        if (!lastSearch.obj && !lastSearch.text.trim() && !lastSearch.groups.length) return false;
-        return true;
-    }
-    function loadLibrary(promise, isGroup) {
-        return promise.then(function(res) {
-            return displaySearchItems(res, null, isGroup);
-        }).catch(function(err) {
-            console.error(err);
-            if (err.message) {
-                showError(translate(err.message));
-            }
-            return displaySearchItems(null, err, isGroup);
-        }).then(function(numOfShown) {
-            return numOfShown;
-        });
-    }
-    function displaySearchItems(res, err, isGroup) {
-        var first = false;
-        if (!lastSearch.obj && res && res.items && !res.items.length) first = true;
-        if (err) {
-            if (first) {
-                lastSearch.obj = null;
-                lastSearch.groups = [];
-            }
-            if (lastSearch && lastSearch.obj) {
-                delete lastSearch.obj.next;
-            }
-        } else {
-            if (isGroup && res && res.next) lastSearch.groups.push(res); else lastSearch.obj = res && res.items.length ? res : null;
-        }
-        var fillUrisFromId = function fillUrisFromId(item) {
-            if (!item.id) return item;
-            var slashFirstIndex = item.id.indexOf("/") + 1;
-            var slashLastIndex = item.id.lastIndexOf("/") + 1;
-            var httpIndex = item.id.indexOf("http");
-            if (slashFirstIndex !== slashLastIndex && httpIndex === 0) {
-                if (!item.uris) {
-                    item.uris = [];
-                }
-                item.uris.push(item.id);
-            }
-            if (slashLastIndex) item.id = item.id.substring(slashLastIndex);
-            return item;
-        };
-        if (res && res.items && res.items.length > 0) {
-            res.items = res.items.map(item => {
-                item = convertJsonToCsl(item);
-                item[isGroup ? "groupID" : "userID"] = res.id;
-                fillUrisFromId(item);
-                return item;
-            });
-        }
-        return selectCitation.displaySearchItems(res, err, lastSearch);
-    }
-    function convertJsonToCsl(item) {
-        if (item.id || !item.key) return item;
-        var res = {
-            id: item.key,
-            title: item.data.title,
-            type: item.data.itemType
-        };
-        if (Object.hasOwnProperty.call(item, "url")) {
-            res.URL = item.data.url;
-        }
-        if (Object.hasOwnProperty.call(item, "volume")) {
-            res.volume = item.data.volume;
-        }
-        if (Object.hasOwnProperty.call(item, "language")) {
-            res.language = item.data.language;
-        }
-        if (Object.hasOwnProperty.call(item, "abstract")) {
-            res.abstract = item.data.abstract;
-        }
-        if (Object.hasOwnProperty.call(item, "note")) {
-            res.note = item.data.note;
-        }
-        if (Object.hasOwnProperty.call(item, "page")) {
-            res.page = item.data.page;
-        }
-        if (Object.hasOwnProperty.call(item, "shortTitle")) {
-            res.shortTitle = item.data.shortTitle;
-        }
-        if (Object.hasOwnProperty.call(item, "links")) {
-            res.uris = [];
-            if (Object.hasOwnProperty.call(item.links, "self")) {
-                res.uris.push(item.links.self.href);
-            }
-            if (Object.hasOwnProperty.call(item.links, "alternate")) {
-                res.uris.push(item.links.alternate.href);
-            }
-        }
-        return res;
-    }
-    function checkSelected(numOfSelected) {
-        if (typeof numOfSelected === "undefined") {
-            numOfSelected = selectCitation.count();
-        }
-        if (numOfSelected <= 0) {
-            insertLinkBtn.disable();
-            insertLinkBtn.setText(translate("Insert Citation"));
-        } else {
-            insertLinkBtn.enable();
-            if (numOfSelected > 1) {
-                insertLinkBtn.setText(translate("Insert " + numOfSelected + " Citations"));
-            } else {
-                insertLinkBtn.setText(translate("Insert Citation"));
-            }
-        }
-    }
-    function getEditorVersion() {
-        return _getEditorVersion.apply(this, arguments);
-    }
-    function _getEditorVersion() {
-        _getEditorVersion = _asyncToGenerator(function*() {
-            try {
-                var version = yield new Promise(resolve => {
-                    Asc.plugin.executeMethod("GetVersion", [], resolve);
-                });
-                if ("develop" == version) version = "99.99.99";
-                var arrVer = version.split(".");
-                while (3 > arrVer.length) arrVer.push("0");
-                return 1e6 * parseInt(arrVer[0]) + 1e3 * parseInt(arrVer[1]) + parseInt(arrVer[2]);
-            } catch (error) {
-                console.error(error);
-                return 99999999;
-            }
-        });
-        return _getEditorVersion.apply(this, arguments);
-    }
-    function addContextMenuButtons() {
-        var buttonMain = new Asc.ButtonContextMenu;
-        buttonMain.text = "Edit citation";
-        buttonMain.addCheckers("Target", "Selection");
-        buttonMain.attachOnClick(_asyncToGenerator(function*() {
-            var field = yield new Promise(resolve => {
-                window.Asc.plugin.executeMethod("GetCurrentAddinField", undefined, resolve);
-            });
-            if (!field || !field.Value || field.Value.toLowerCase().indexOf("zotero_item") === -1) {
-                return;
-            }
-            var updatedField = yield citationService.showEditCitationWindow(field);
-            if (!updatedField) {
-                return;
-            }
-            yield onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-            var updateFn = citationService.updateItem.bind(citationService, updatedField);
-            var styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                updateFn = citationService.updateItem.bind(citationService, updatedField, styleManager.getLastUsedNotesStyle());
-            }
-            updateFn().catch(function(error) {
-                console.error(error);
-                var message = translate("Failed to insert citation");
-                if (typeof error === "string") {
-                    message += ". " + translate(error);
-                }
-                showError(message);
-            }).finally(function() {
-                onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                if (field) {
-                    citationService.moveCursorOutsideField(field.FieldId);
-                }
-            });
+  } };
+}, SearchFilterComponents.prototype._selectedGroupsWatcher = function(t, e) {
+  var i = this;
+  this._librarySelectList instanceof SelectBox != false && this._librarySelectList.subscribe(function(s) {
+    if ("selectbox:change" === s.type) {
+      var n = [], a = s.detail.values, r = s.detail.current, o = s.detail.enabled, l = t.map(function(t2) {
+        return t2.id;
+      }), c = e.map(function(t2) {
+        return t2.id.toString();
+      }), h = -1 !== l.indexOf(String(r));
+      if (h) "group_libraries" === r ? (o ? (n.push("group_libraries"), i._librarySelectList.selectItems(c, true)) : i._librarySelectList.unselectItems(c, true), -1 !== a.indexOf("my_library") && n.push("my_library")) : -1 !== a.indexOf("group_libraries") ? (n.push("group_libraries"), o && n.push(r)) : n = a.slice();
+      else if (!h) {
+        c.every(function(t2) {
+          return -1 !== a.indexOf(t2);
+        }) ? (i._librarySelectList.selectItems("group_libraries", true), n.push("group_libraries"), -1 !== a.indexOf("my_library") && n.push("my_library")) : (i._librarySelectList.unselectItems("group_libraries", true), n = a.filter(function(t2) {
+          return "group_libraries" !== t2;
         }));
-        Asc.Buttons.registerContextMenu();
+      }
+      0 === n.length ? localStorage.removeItem("selectedGroups") : localStorage.setItem("selectedGroups", JSON.stringify(n));
     }
+  });
+};
+var LOCATOR_VALUES = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]];
+function SelectCitationsComponent(t, e, i) {
+  this._displayNoneClass = t, this._items = {}, this._html = {}, this._checks = {}, this._cancelSelectBtn = document.getElementById("cancelSelectBtn"), this._docsHolder = document.getElementById("docsHolder"), this._nothingFound = document.getElementById("nothingFound"), this._docsThumb = document.getElementById("docsThumb"), this._selectedWrapper = document.getElementById("selectedWrapper"), this._selectedHolder = document.getElementById("selectedHolder"), this._selectedInfo = document.getElementById("selectedInfo"), this._selectedCount = document.getElementById("selectedCount"), this._selectedThumb = document.getElementById("selectedThumb"), this._selectedHolder && this._selectedThumb && (this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20)), this._docsHolder && this._docsThumb && (this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this))), this._lastSearch = null, this._subscribers = [], this._fShouldLoadMore = i, this._fLoadMore = e, this._loadTimeout, this._init();
+}
+SelectCitationsComponent.prototype._init = function() {
+  var t = this;
+  this._cancelSelectBtn && (this._cancelSelectBtn.onclick = function(e) {
+    var i = [];
+    for (var s in t._items) i.push(s);
+    for (var n = 0; n < i.length; n++) t._removeSelected(i[n]);
+  });
+}, SelectCitationsComponent.prototype.clearLibrary = function() {
+  this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
+  for (var t = this._docsHolder; t && t.lastChild; ) t.removeChild(t.lastChild);
+  t && (t.scrollTop = 0), this._docsScroller.onscroll();
+}, SelectCitationsComponent.prototype.displayNothingFound = function() {
+  this.clearLibrary(), this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
+}, SelectCitationsComponent.prototype.displaySearchItems = function(t, e, i) {
+  var s = this, n = this._docsHolder;
+  this._lastSearch = i;
+  var a = 0;
+  return new Promise((i2, r) => {
+    if (t && t.items && t.items.length > 0) {
+      var o = document.createElement("div");
+      n && o.classList.add("page" + n.children.length);
+      for (var l = 0; l < t.items.length; l++) {
+        var c = t.items[l];
+        c.title && (o.appendChild(s._buildDocElement(c)), a++);
+      }
+      n && n.appendChild(o);
+    } else e && r(e);
+    this._docsScroller.onscroll(), i2(a);
+  });
+}, SelectCitationsComponent.prototype.getSelectedItems = function() {
+  return Object.assign({}, this._items || {});
+}, SelectCitationsComponent.prototype.removeItems = function(t) {
+  var e = this;
+  t.forEach(function(t2) {
+    e._removeSelected(t2);
+  });
+}, SelectCitationsComponent.prototype.subscribe = function(t) {
+  var e = this;
+  return this._subscribers.push(t), { unsubscribe: function() {
+    e._subscribers = e._subscribers.filter(function(e2) {
+      return e2 !== t;
+    });
+  } };
+}, SelectCitationsComponent.prototype._buildDocElement = function(t) {
+  var e = this, i = document.createElement("div");
+  i.classList.add("doc");
+  var s = document.createElement("div");
+  s.classList.add("docInfo");
+  var n = document.createElement("div"), a = "";
+  t.author && t.author.length > 0 && (a = t.author.map(function(t2) {
+    return t2.family && t2.given ? t2.family.trim() + ", " + t2.given.trim() : t2.family ? t2.family.trim() : t2.given ? t2.given.trim() : "";
+  }).join("; "));
+  var r = document.createElement("div");
+  r.classList.add("selectbox-arrow"), r.innerHTML = "<b></b>";
+  var o = document.createElement("div");
+  if (o.textContent = t.title.trim(), o.classList.add("truncate-text"), o.classList.add("secondary-text"), (t.publisher || t["publisher-place"]) && (o.textContent += " · " + (t.publisher || t["publisher-place"] || "")), t.issued && t.issued["date-parts"]) {
+    var l = t.issued["date-parts"][0];
+    a.length > 20 ? o.textContent += " (" + l.join("-") + ")" : (a.length > 0 && "." !== a.slice(-1) && "," !== a.slice(-1) && (a += "."), a += " " + l.join("-"));
+  }
+  0 === a.length && (a = o.textContent), o.setAttribute("title", o.textContent), s.appendChild(o);
+  var c = document.createElement("input");
+  n.appendChild(c);
+  var h, d = new Checkbox(c, { checked: !!this._items[t.id], label: a, title: true, id: t.id });
+  return this._items[t.id] && (this._checks[t.id] = d), n.appendChild(r), i.appendChild(n), i.appendChild(s), r.onclick = function() {
+    i.classList.toggle("doc-open"), h || (h = e._buildCitationParams(t), i.appendChild(h));
+  }, d.subscribe(function(i2) {
+    "checkbox:change" === i2.type && (i2.detail.checked ? e._addSelected(t, d) : e._removeSelected(t.id));
+  }), i;
+}, SelectCitationsComponent.prototype._buildCitationParams = function(t) {
+  var e = localStorage.getItem("selectedLocator") || "page";
+  t.label = e;
+  var i = document.createDocumentFragment(), s = document.createElement("div"), n = document.createElement("input"), a = document.createElement("input"), r = document.createElement("div"), o = document.createElement("div"), l = document.createElement("input"), c = document.createElement("div"), h = document.createElement("input");
+  i.appendChild(s), s.appendChild(n), s.appendChild(a), i.appendChild(r), r.appendChild(o), r.appendChild(l);
+  var d = "";
+  i.appendChild(c), c.appendChild(h);
+  var u = new InputField(n, { type: "text", placeholder: "Prefix" }), _ = new InputField(a, { type: "text", placeholder: "Suffix" }), p = new SelectBox(o, { placeholder: "Locator" });
+  LOCATOR_VALUES.forEach(function(t2) {
+    var i2 = t2[0] === e;
+    p.addItem(t2[0], t2[1], i2), i2 && (d = t2[1]);
+  });
+  var m = new InputField(l, { type: "text", placeholder: d }), b = new Checkbox(h, { label: translate("Omit author") });
+  return u.subscribe(function(e2) {
+    "inputfield:input" === e2.type && (t.prefix = e2.detail.value);
+  }), _.subscribe(function(e2) {
+    "inputfield:input" === e2.type && (t.suffix = e2.detail.value);
+  }), m.subscribe(function(e2) {
+    "inputfield:input" === e2.type && (t.locator = e2.detail.value);
+  }), p.subscribe(function(e2) {
+    if ("selectbox:change" === e2.type && e2.detail.items) {
+      var i2 = e2.detail.items[0];
+      m.setPlaceholder(i2.text), t.label = e2.detail.values[0].toString(), localStorage.setItem("selectedLocator", t.label);
+    }
+  }), b.subscribe(function(e2) {
+    "checkbox:change" === e2.type && (t["suppress-author"] = e2.detail.checked);
+  }), i;
+}, SelectCitationsComponent.prototype._buildSelectedElement = function(t) {
+  var e = this, i = document.createElement("div");
+  i.classList.add("selDoc");
+  var s = document.createElement("span");
+  t.author && t.author.length > 0 ? s.textContent = t.author.map(function(t2) {
+    return t2.family + ", " + t2.given;
+  }).join("; ") : s.textContent = t.title, t.issued && t.issued["date-parts"] && (s.textContent += " " + t.issued["date-parts"][0].join("-")), s.setAttribute("title", s.textContent), i.appendChild(s);
+  var n = document.createElement("span");
+  return n.onclick = function() {
+    e._removeSelected(t.id);
+  }, n.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z" fill="currentColor" fill-opacity="0.8"/></svg>', i.appendChild(n), i;
+}, SelectCitationsComponent.prototype._addSelected = function(t, e) {
+  var i = this._buildSelectedElement(t);
+  this._items[t.id] = t, this._html[t.id] = i, this._checks[t.id] = e, this._selectedHolder && this._selectedHolder.appendChild(i), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
+}, SelectCitationsComponent.prototype._checkDocsScroll = function(t, e) {
+  var i = this;
+  if (this._fShouldLoadMore(t)) {
+    if (this._loadTimeout && clearTimeout(this._loadTimeout), !this._lastSearch.obj && !this._lastSearch.text.trim() && !this._lastSearch.groups.length) return;
+    this._loadTimeout = setTimeout(function() {
+      i._fShouldLoadMore(t) && i._fLoadMore();
+    }, 500);
+  }
+}, SelectCitationsComponent.prototype._initScrollBox = function(t, e, i, s) {
+  var n = {};
+  return n.onscroll = this._checkScroll(t, e, i, s), t.onwheel = function(e2) {
+    t.scrollTop += e2.deltaY > 10 || e2.deltaY < -10 ? e2.deltaY : 20 * e2.deltaY, n.onscroll();
+  }, e.onmousedown = function(i2) {
+    e.classList.add("scrolling");
+    var s2 = i2.clientY, a = t.scrollTop;
+    window.onmouseup = function(t2) {
+      e.classList.remove("scrolling"), window.onmouseup = null, window.onmousemove = null;
+    }, window.onmousemove = function(e2) {
+      var i3 = (e2.clientY - s2) / t.clientHeight, r = t.scrollHeight * i3;
+      t.scrollTop = a + r, n.onscroll();
+    };
+  }, document.body.addEventListener("resize", function() {
+    n.onscroll();
+  }), n;
+}, SelectCitationsComponent.prototype._checkScroll = function(t, e, i, s) {
+  var n = this._displayNoneClass;
+  return function() {
+    if (t.scrollHeight <= t.clientHeight) e.classList.add(n);
+    else {
+      e.classList.remove(n);
+      var a = t.clientHeight / t.scrollHeight * t.clientHeight;
+      a = a < i ? i : a, e.style.height = a + "px";
+      var r = t.scrollHeight - t.clientHeight, o = t.scrollTop / r * (t.clientHeight - a);
+      e.style.marginTop = o + "px";
+    }
+    s && s(t, e);
+  };
+}, SelectCitationsComponent.prototype._removeSelected = function(t) {
+  var e = this._html[t];
+  this._selectedHolder && this._selectedHolder.removeChild(e), delete this._items[t], delete this._html[t], this._checks[t] && (this._checks[t].uncheck(true), delete this._checks[t]), this._docsScroller.onscroll(), this._selectedScroller.onscroll(), this._checkSelected();
+}, SelectCitationsComponent.prototype._checkSelected = function() {
+  var t = this.count();
+  this._selectedInfo && this._selectedCount && this._selectedWrapper && (t <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = t + " " + translate("selected")), this._subscribers.forEach(function(e) {
+    e(t);
+  }));
+}, SelectCitationsComponent.prototype.count = function() {
+  var t = 0;
+  for (var e in this._items) t++;
+  return t;
+}, (function() {
+  var t, e, i, s, n, a, r, o, l, c, h, d = "hidden", u = { text: "", obj: null, groups: [], groupsHash: "" }, _ = new Loader("libLoader", translate("Loading...")), p = {};
+  function m() {
+    for (var t2 = document.getElementsByClassName("i18n"), e2 = function() {
+      var e3 = t2[i2];
+      if (e3 instanceof HTMLElement == false) return 1;
+      ["placeholder", "title"].forEach((t3) => {
+        e3.hasAttribute(t3) && e3.setAttribute(t3, translate(e3.getAttribute(t3) || ""));
+      });
+      var s2 = translate(e3.innerText.trim().replace(/\s+/g, " "));
+      s2 && (e3.innerText = s2);
+    }, i2 = 0; i2 < t2.length; i2++) e2();
+  }
+  function b(t2) {
+    t2 && "string" == typeof t2 ? (translate(""), p.error.classList.remove(d), p.error.textContent = t2, setTimeout(function() {
+      window.onclick = function() {
+        b(false);
+      };
+    }, 100)) : (p.error.classList.add(d), p.error.textContent = "", window.onclick = null);
+  }
+  function v(t2, e2) {
+    return f.apply(this, arguments);
+  }
+  function f() {
+    return (f = _asyncToGenerator(function* (t2, e2) {
+      c.disable(), h.disable(), o.disable();
+      var i2 = window.Asc.scope.editorVersion;
+      i2 && i2 < 9004e3 ? window._cursorPosition = yield CursorService.getCursorPosition() : yield new Promise((e3) => {
+        Asc.plugin.executeMethod("StartAction", ["GroupActions", { lockScroll: true, keepSelection: t2 }], e3);
+      });
+    })).apply(this, arguments);
+  }
+  function g(t2, e2) {
+    return y.apply(this, arguments);
+  }
+  function y() {
+    return (y = _asyncToGenerator(function* (t2, e2) {
+      c.enable(), h.enable(), x();
+      var i2 = window.Asc.scope.editorVersion;
+      i2 && i2 < 9004e3 ? CursorService.setCursorPosition(window._cursorPosition || 0) : yield new Promise((e3) => {
+        Asc.plugin.executeMethod("EndAction", ["GroupActions", { scrollToTarget: t2 }], e3);
+      });
+    })).apply(this, arguments);
+  }
+  function S(t2) {
+    var e2 = document.getElementById("searchLabel");
+    if (e2) {
+      var i2 = e2.querySelector(".when-empty"), s2 = e2.querySelector(".when-not-empty"), n2 = e2.querySelector(".when-started");
+      if (i2 && s2 && n2) switch (i2.classList.add("hidden"), s2.classList.add("hidden"), n2.classList.add("hidden"), t2) {
+        case "empty":
+          i2.classList.remove("hidden");
+          break;
+        case "not-empty":
+          s2.classList.remove("hidden");
+          break;
+        case "started":
+          s2.classList.remove("hidden"), n2.classList.remove("hidden");
+      }
+      else console.error("Search label elements not found");
+    } else console.error("Search label not found");
+  }
+  function C() {
+    console.warn("Loading more..."), u.obj && u.obj.next && P(u.obj.next(), false);
+    for (var t2 = 0; t2 < u.groups.length && u.groups[t2].next; t2++) P(e.getGroupItems(u.groups[t2].next(), u.groups[t2].id), true);
+  }
+  function w(e2) {
+    if ("main" != t.getRoute()) return false;
+    if (e2.scrollTop + e2.clientHeight < e2.scrollHeight) return false;
+    var i2 = true;
+    return u.groups.forEach(function(t2) {
+      t2.next && (i2 = false);
+    }), !!(u.obj && u.obj.next && i2) && !!(u.obj || u.text.trim() || u.groups.length);
+  }
+  function P(t2, e2) {
+    return t2.then(function(t3) {
+      return I(t3, null, e2);
+    }).catch(function(t3) {
+      return console.error(t3), t3.message && b(translate(t3.message)), I(null, t3, e2);
+    }).then(function(t3) {
+      return t3;
+    });
+  }
+  function I(t2, e2, i2) {
+    var s2 = false;
+    !u.obj && t2 && t2.items && !t2.items.length && (s2 = true), e2 ? (s2 && (u.obj = null, u.groups = []), u && u.obj && delete u.obj.next) : i2 && t2 && t2.next ? u.groups.push(t2) : u.obj = t2 && t2.items.length ? t2 : null;
+    return t2 && t2.items && t2.items.length > 0 && (t2.items = t2.items.map((e3) => (e3 = (function(t3) {
+      if (t3.id || !t3.key) return t3;
+      var e4 = { id: t3.key, title: t3.data.title, type: t3.data.itemType };
+      Object.hasOwnProperty.call(t3, "url") && (e4.URL = t3.data.url);
+      Object.hasOwnProperty.call(t3, "volume") && (e4.volume = t3.data.volume);
+      Object.hasOwnProperty.call(t3, "language") && (e4.language = t3.data.language);
+      Object.hasOwnProperty.call(t3, "abstract") && (e4.abstract = t3.data.abstract);
+      Object.hasOwnProperty.call(t3, "note") && (e4.note = t3.data.note);
+      Object.hasOwnProperty.call(t3, "page") && (e4.page = t3.data.page);
+      Object.hasOwnProperty.call(t3, "shortTitle") && (e4.shortTitle = t3.data.shortTitle);
+      Object.hasOwnProperty.call(t3, "links") && (e4.uris = [], Object.hasOwnProperty.call(t3.links, "self") && e4.uris.push(t3.links.self.href), Object.hasOwnProperty.call(t3.links, "alternate") && e4.uris.push(t3.links.alternate.href));
+      return e4;
+    })(e3), e3[i2 ? "groupID" : "userID"] = t2.id, (function(t3) {
+      if (!t3.id) return t3;
+      var e4 = t3.id.indexOf("/") + 1, i3 = t3.id.lastIndexOf("/") + 1, s3 = t3.id.indexOf("http");
+      e4 !== i3 && 0 === s3 && (t3.uris || (t3.uris = []), t3.uris.push(t3.id)), i3 && (t3.id = t3.id.substring(i3));
+    })(e3), e3))), a.displaySearchItems(t2, e2, u);
+  }
+  function x(t2) {
+    void 0 === t2 && (t2 = a.count()), t2 <= 0 ? (o.disable(), o.setText(translate("Insert Citation"))) : (o.enable(), t2 > 1 ? o.setText(translate("Insert " + t2 + " Citations")) : o.setText(translate("Insert Citation")));
+  }
+  function O() {
+    return (O = _asyncToGenerator(function* () {
+      try {
+        var t2 = yield new Promise((t3) => {
+          Asc.plugin.executeMethod("GetVersion", [], t3);
+        });
+        "develop" == t2 && (t2 = "99.99.99");
+        for (var e2 = t2.split("."); 3 > e2.length; ) e2.push("0");
+        return 1e6 * parseInt(e2[0]) + 1e3 * parseInt(e2[1]) + parseInt(e2[2]);
+      } catch (t3) {
+        return console.error(t3), 99999999;
+      }
+    })).apply(this, arguments);
+  }
+  window.Asc.plugin.init = function() {
+    Loader.show(), (function() {
+      var t2 = document.getElementById("errorWrapper");
+      if (!t2) throw new Error("errorWrapper not found");
+      var e2 = document.getElementById("mainState");
+      if (!e2) throw new Error("mainState not found");
+      n = new SearchFilterComponents(), a = new SelectCitationsComponent(d, C, w), r = new Button("saveAsTextBtn", { variant: "secondary" }), o = new Button("insertLinkBtn", { disabled: true }), l = new Button("settingsBtn", { variant: "icon-only", size: "small" }), c = new Button("insertBibBtn", { variant: "secondary" }), h = new Button("refreshBtn", { variant: "secondary" }), p = { error: t2, mainState: e2 };
+    })(), t = new Router(), e = new ZoteroSdk();
+    var f2 = new LoginPage(t, e);
+    i = new SettingsPage(t, d), s = new CitationService(i.getLocalesManager(), i.getStyleManager(), e);
+    var y2 = false;
+    !(function() {
+      function t2(t3, i2, s2) {
+        a.clearLibrary();
+        var n2 = [];
+        return e.getUserGroups().then(function(a2) {
+          var r2 = i2.filter(function(t4) {
+            return "my_library" !== t4 && "group_libraries" !== t4;
+          });
+          -1 !== i2.indexOf("my_library") && n2.push(P(e.getItems(t3), false));
+          for (var o2 = 0; o2 < r2.length; o2++) n2.push(P(e.getGroupItems(t3, r2[o2]), true));
+          return u.text = t3, u.obj = null, u.groups = [], u.groupsHash = s2, n2;
+        });
+      }
+      a.subscribe(x), n.subscribe(function(e2, i2) {
+        e2 = e2.trim();
+        var s2 = i2.join(",");
+        p.mainState.classList.contains(d) || !e2 || e2 == u.text && s2 === u.groupsHash || 0 === i2.length || t2(e2, i2, s2).catch(() => []).then(function(t3) {
+          return t3.length && (_.show(), Promise.any(t3).then(function() {
+            _.hide();
+          }).finally(function() {
+            _.hide();
+          })), Promise.allSettled(t3);
+        }).then(function(t3) {
+          var e3 = 0;
+          t3.forEach(function(t4) {
+            "fulfilled" === t4.status && (e3 += t4.value);
+          }), 0 === e3 ? (S("empty"), a.displayNothingFound()) : S("not-empty");
+        });
+      }), h.subscribe((function() {
+        var t3 = _asyncToGenerator(function* (t4) {
+          if ("button:click" === t4.type) if (i.getLastUsedStyleId()) if (i.getLocale()) {
+            yield v(true, "Zotero (" + translate("Updating citations") + ")");
+            var e2 = s.updateCslItems.bind(s, false), n2 = i.getStyleManager();
+            "note" === n2.getLastUsedFormat() && (e2 = s.updateCslItemsInNotes.bind(s, n2.getLastUsedNotesStyle())), e2().catch(function(t5) {
+              console.error(t5);
+              var e3 = translate("Failed to refresh");
+              "string" == typeof t5 && (e3 += ". " + translate(t5)), b(e3);
+            }).finally(function() {
+              g(false, "Zotero (" + translate("Updating citations") + ")");
+            });
+          } else b(translate("Language is not selected"));
+          else b(translate("Style is not selected"));
+        });
+        return function(e2) {
+          return t3.apply(this, arguments);
+        };
+      })()), c.subscribe((function() {
+        var t3 = _asyncToGenerator(function* (t4) {
+          if ("button:click" === t4.type) if (i.getLastUsedStyleId()) if (i.getLocale()) {
+            yield v(false, "Zotero (" + translate("Inserting bibliography") + ")");
+            var e2 = "";
+            s.insertBibliography().then(function(t5) {
+              e2 = t5;
+            }).catch(function(t5) {
+              console.error(t5);
+              var e3 = translate("Failed to insert bibliography");
+              "string" == typeof t5 && (e3 += ". " + translate(t5)), b(e3);
+            }).finally(function() {
+              g(false, "Zotero (" + translate("Inserting bibliography") + ")"), e2 && s.moveCursorOutsideField(e2);
+            });
+          } else b(translate("Language is not selected"));
+          else b(translate("Style is not selected"));
+        });
+        return function(e2) {
+          return t3.apply(this, arguments);
+        };
+      })()), o.subscribe((function() {
+        var t3 = _asyncToGenerator(function* (t4) {
+          if ("button:click" === t4.type) if (i.getLastUsedStyleId()) {
+            if (i.getLocale()) {
+              yield v(true, "Zotero (" + translate("Inserting citation") + ")");
+              var e2 = a.getSelectedItems(), n2 = null, r2 = false;
+              return s.insertSelectedCitations(e2).then(function(t5) {
+                return r2 = t5, a.removeItems(Object.keys(e2)), s.getCurrentField();
+              }).then(function(t5) {
+                return n2 = t5, s.updateCslItems();
+              }).catch(function(t5) {
+                console.error(t5);
+                var e3 = translate("Failed to insert citation");
+                "string" == typeof t5 && (e3 += ". " + translate(t5)), b(e3);
+              }).finally(_asyncToGenerator(function* () {
+                g(false, "Zotero (" + translate("Inserting citation") + ")"), r2 ? yield s.moveCursorRight() : n2 && (yield s.moveCursorOutsideField(n2.FieldId));
+              }));
+            }
+            b(translate("Language is not selected"));
+          } else b(translate("Style is not selected"));
+        });
+        return function(e2) {
+          return t3.apply(this, arguments);
+        };
+      })()), l.subscribe(function(t3) {
+        "button:click" === t3.type && i.show();
+      }), r.subscribe((function() {
+        var t3 = _asyncToGenerator(function* (t4) {
+          "button:click" === t4.type && (yield v(false, "Zotero (" + translate("Saving as text") + ")"), s.saveAsText().then(function() {
+            g(false, "Zotero (" + translate("Saving as text") + ")");
+          }));
+        });
+        return function(e2) {
+          return t3.apply(this, arguments);
+        };
+      })()), i.onChangeState((function() {
+        var t3 = _asyncToGenerator(function* (t4, e2) {
+          yield v(true, "Zotero (" + translate("Updating citations") + ")");
+          var i2 = s.updateCslItems.bind(s, true);
+          [t4.styleFormat, e2.styleFormat].includes("note") && (i2 = t4.styleFormat !== e2.styleFormat ? "note" === t4.styleFormat ? s.switchingBetweenNotesAndText.bind(s, t4.notesStyle) : s.switchingBetweenNotesAndText.bind(s) : t4.notesStyle !== e2.notesStyle ? s.convertNotesStyle.bind(s, t4.notesStyle) : s.updateCslItems.bind(s, true)), i2().catch(function(t5) {
+            console.error(t5);
+            var e3 = translate("Failed to refresh");
+            "string" == typeof t5 && (e3 += ". " + translate(t5)), b(e3);
+          }).finally(function() {
+            g(false, "Zotero (" + translate("Updating citations") + ")");
+          });
+        });
+        return function(e2, i2) {
+          return t3.apply(this, arguments);
+        };
+      })());
+    })(), f2.init().onOpen(function() {
+      Loader.hide();
+    }).onChangeState(function(t2) {
+      i.setDesktopApiAvailable(t2.desktop), i.setRestApiAvailable(t2.online);
+    }).onAuthorized(function(t2) {
+      if (!y2) {
+        y2 = true, Loader.show();
+        var s2 = e.getUserGroups().then(function(t3) {
+          return n.addGroups(t3), t3;
+        }).catch((t3) => {
+          console.error(t3), b(translate("An error occurred while loading library groups. Try restarting the plugin."));
+        }), a2 = i.init().catch((t3) => {
+          console.error(t3), b(translate("An error occurred while loading settings. Try restarting the plugin.")), i.show();
+        });
+        Promise.all([s2, a2]).then(function() {
+          return Loader.hide(), _.show(), P(e.getItems(null).then((t3) => (delete t3.next, t3)), false).then((t3) => {
+            S(t3 > 0 ? "started" : "empty");
+          }).catch((t3) => {
+            console.error(t3);
+          }).finally(() => {
+            _.hide();
+          });
+        }).finally(function() {
+          Loader.hide();
+        });
+      }
+    }), window.Asc.plugin.onTranslate = m, (function() {
+      return O.apply(this, arguments);
+    })().then((t2) => {
+      var e2;
+      window.Asc.scope.editorVersion = t2, (e2 = new Asc.ButtonContextMenu()).text = "Edit citation", e2.addCheckers("Target", "Selection"), e2.attachOnClick(_asyncToGenerator(function* () {
+        var t3 = yield new Promise((t4) => {
+          window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, t4);
+        });
+        if (t3 && t3.Value && -1 !== t3.Value.toLowerCase().indexOf("zotero_item")) {
+          var e3 = yield s.showEditCitationWindow(t3);
+          if (e3) {
+            yield v(false, "Zotero (" + translate("Updating citations") + ")");
+            var n2 = s.updateItem.bind(s, e3), a2 = i.getStyleManager();
+            "note" === a2.getLastUsedFormat() && (n2 = s.updateItem.bind(s, e3, a2.getLastUsedNotesStyle())), n2().catch(function(t4) {
+              console.error(t4);
+              var e4 = translate("Failed to insert citation");
+              "string" == typeof t4 && (e4 += ". " + translate(t4)), b(e4);
+            }).finally(function() {
+              g(false, "Zotero (" + translate("Updating citations") + ")"), t3 && s.moveCursorOutsideField(t3.FieldId);
+            });
+          }
+        }
+      })), Asc.Buttons.registerContextMenu();
+    }).catch((t2) => {
+      console.error(t2);
+    });
+  }, Asc.plugin.onThemeChanged = function(t2) {
+    window.Asc.plugin.onThemeChangedBase(t2), Theme.fixThemeForIE(t2), Theme.addStylesForComponents(t2);
+    var e2 = "";
+    e2 += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + " !important;}\n", e2 += ".doc { border-color: " + t2["border-regular-control"] + "; background-color: " + t2["background-normal"] + "; }\n", e2 += ".scrollThumb { box-shadow: 0 0 8px 8px " + t2["highlight-button-hover"] + " inset; }\n", e2 += ".scrollThumb:active, .scrollThumb.scrolling { box-shadow: 0 0 8px 8px " + t2["canvas-scroll-thumb-pressed"] + " inset; }\n", e2 += ".scrollThumb:hover { box-shadow: 0 0 8px 8px " + t2["canvas-scroll-thumb-hover"] + " inset; }\n", -1 === ["theme-white", "theme-night"].indexOf(t2.name) && -1 === ["theme-white", "theme-night"].indexOf(t2.Name) || (e2 += ".doc { border-radius: 4px; }\n");
+    var i2 = document.getElementById("pluginStyles");
+    i2 ? i2.innerHTML = e2 : ((i2 = document.createElement("style")).id = "pluginStyles", i2.innerHTML = e2, document.getElementsByTagName("head")[0].appendChild(i2));
+    var s2 = t2.type || "light", n2 = document.body;
+    n2.classList.remove("theme-dark"), n2.classList.remove("theme-light"), n2.classList.add("theme-" + s2);
+  };
 })();
 //# sourceMappingURL=bundle.modern.js.map
