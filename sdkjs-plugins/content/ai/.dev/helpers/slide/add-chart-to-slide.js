@@ -174,12 +174,13 @@
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		}
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.params.slideNumber) {
 				slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -187,7 +188,9 @@
 
 			if (!slide) return;
 
+			let validChartTypes = ["bar", "barStacked", "barStackedPercent", "bar3D", "barStacked3D", "barStackedPercent3D", "barStackedPercent3DPerspective", "horizontalBar", "horizontalBarStacked", "horizontalBarStackedPercent", "horizontalBar3D", "horizontalBarStacked3D", "horizontalBarStackedPercent3D", "lineNormal", "lineStacked", "lineStackedPercent", "line3D", "pie", "pie3D", "doughnut", "scatter", "stock", "area", "areaStacked", "areaStackedPercent"];
 			let chartType = Asc.scope.params.chartType || "bar3D";
+			if (validChartTypes.indexOf(chartType) === -1) return {error: "invalid_chart_type", validTypes: validChartTypes};
 			let data = Asc.scope.params.data || [[100, 120, 140], [90, 110, 130]];
 			let series = Asc.scope.params.series || ["Series 1", "Series 2"];
 			let categories = Asc.scope.params.categories || ["Category 1", "Category 2", "Category 3"];
@@ -241,6 +244,13 @@
 				slide.AddObject(chart);
 			}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_chart_type") {
+			throw new window.AgentState.ToolError("The chart type \"" + (params.chartType || "bar3D") + "\" is not valid! Here is a list of available chart types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 	return func;
 })();

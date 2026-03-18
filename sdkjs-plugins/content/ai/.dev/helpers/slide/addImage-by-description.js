@@ -133,11 +133,12 @@
 
 			if (imageUrl) {
 				Asc.scope.imageUrl = imageUrl;
-				await Asc.Editor.callCommand(function () {
+				let callResult = await Asc.Editor.callCommand(function () {
 					let oPresentation = Api.GetPresentation();
 					let oSlide;
-					if (params.slideNumber !== undefined && params.slideNumber !== null) {
-						oSlide = oPresentation.GetSlideByIndex(params.slideNum - 1);
+					if (Asc.scope.params.slideNumber) {
+						oSlide = oPresentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+						if (!oSlide) return {error: "slide_not_found", slidesCount: oPresentation.GetSlidesCount()};
 					}
 					else {
 						oSlide = oPresentation.GetCurrentSlide();
@@ -154,6 +155,10 @@
 					oImage.SetPosition(x, y);
 					oSlide.AddObject(oImage);
 				});
+
+				if (callResult && callResult.error === "slide_not_found") {
+					throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+				}
 			}
 		} catch (error) {
 			await checkEndAction();

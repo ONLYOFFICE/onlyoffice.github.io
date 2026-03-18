@@ -80,12 +80,13 @@
 		Asc.scope.textType = params.textType || "body";
 		Asc.scope.prompt = params.prompt;
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.slideNum) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -224,6 +225,9 @@
 			return;
 		});
 
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
 	};
 	return func;
 })();
