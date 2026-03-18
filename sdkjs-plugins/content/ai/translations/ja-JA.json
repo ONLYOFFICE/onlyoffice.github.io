@@ -182,5 +182,6 @@
 	"Replace + Hint": "置き換え + ヒント",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "ドキュメントを生成する"
+	"Generate Document": "ドキュメントを生成する",
+	"Operation was interrupted.": "操作が中断されました。"
 }

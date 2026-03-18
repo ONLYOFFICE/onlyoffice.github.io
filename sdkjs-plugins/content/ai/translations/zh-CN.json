@@ -182,5 +182,6 @@
 	"Replace + Hint": "替换 + 提示",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "生成文档"
+	"Generate Document": "生成文档",
+	"Operation was interrupted.": "操作已中断。"
 }

@@ -182,5 +182,6 @@
 	"Replace + Hint": "Ersetzen + Hinweis",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Dokument generieren"
+	"Generate Document": "Dokument generieren",
+	"Operation was interrupted.": "Der Vorgang wurde unterbrochen."
 }

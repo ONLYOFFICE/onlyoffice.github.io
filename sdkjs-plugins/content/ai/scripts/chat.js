@@ -1028,6 +1028,14 @@
 		}
 		streamingMessageIndex = null;
 		streamingContent = '';
+
+		if (isAgentStopped) {
+			let lastMsg = messagesList.get()[messagesList.get().length - 1];
+			if (lastMsg && lastMsg.isToolCall) {
+				messagesList.add({ role: 'assistant', content: [window.Asc.plugin.tr('Operation was interrupted.')] });
+			}
+		}
+
 		removeTyping();
 		finishAgentExecution();
 		document.getElementById('input_message').focus();
