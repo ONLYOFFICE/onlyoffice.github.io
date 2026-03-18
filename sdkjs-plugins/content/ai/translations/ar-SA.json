@@ -182,5 +182,6 @@
 	"Replace + Hint": "إضافة + إرشاد",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "إنشاء مستند"
+	"Generate Document": "إنشاء مستند",
+	"Operation was interrupted.": "تم مقاطعة العملية."
 }

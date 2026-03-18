@@ -181,5 +181,6 @@
 	"Replace + Hint": "Remplazar + Indice",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Generar documento"
+	"Generate Document": "Generar documento",
+	"Operation was interrupted.": "La operación fue interrumpida."
 }
