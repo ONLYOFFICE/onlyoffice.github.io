@@ -116,6 +116,19 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validOperators = ["xlAnd", "xlOr", "xlFilterValues", "xlTop10Items", "xlTop10Percent", "xlBottom10Items", "xlBottom10Percent", "xlFilterCellColor", "xlFilterFontColor", "xlFilterDynamic"];
+		if (params.operator !== undefined && params.operator !== null && !validOperators.includes(params.operator))
+			throw new window.AgentState.ToolError("Invalid operator \"" + params.operator + "\". Available options: " + JSON.stringify(validOperators));
+
+		if (Array.isArray(params.criteria2))
+			throw new window.AgentState.ToolError("Invalid criteria2: must be a string, not an array. Use criteria1 with xlFilterValues operator for multiple values.");
+
 		Asc.scope.range = params.range;
 		Asc.scope.field = params.field;
 		Asc.scope.fieldName = params.fieldName;
@@ -129,14 +142,22 @@
 				let ws = Api.GetActiveSheet();
 				let _range;
 
-				if (!Asc.scope.range) {
-					_range = Api.GetSelection();
-				} else {
+				if (Asc.scope.range) {
 					_range = ws.GetRange(Asc.scope.range);
+					if (!_range)
+						return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+				} else {
+					_range = Api.GetSelection();
 				}
 
 				return _range.GetValue2();
 			});
+
+			if (insertRes && insertRes.error)
+				throw new window.AgentState.ToolError(insertRes.error);
+
+			if (!insertRes)
+				throw new window.AgentState.ToolError("Failed to retrieve data from the specified range.");
 
 			let csv = insertRes.map(function(item){
 				return item.map(function(value) {
@@ -187,27 +208,31 @@
 			Asc.scope.field = result;
 		}
 
-		await Asc.Editor.callCommand(function(){
+		// Use Asc.scope.field — may have been updated by the fieldName AI lookup above
+		if (Asc.scope.field !== undefined && Asc.scope.field !== null) {
+			let fieldNum = Number(Asc.scope.field);
+			if (isNaN(fieldNum) || fieldNum < 1 || !Number.isInteger(fieldNum))
+				throw new window.AgentState.ToolError("Invalid field \"" + Asc.scope.field + "\". Field must be a positive integer starting from 1 (left-most column).");
+		}
+
+		let filterResult = await Asc.Editor.callCommand(function(){
 			let ws = Api.GetActiveSheet();
 			let range;
 
-			if (!Asc.scope.range) {
-				range = Api.GetSelection();
-			} else {
+			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+			} else {
+				range = Api.GetSelection();
+				if (!range)
+					return { error: "No range specified and no cells are currently selected. Please provide a range parameter (e.g., 'A1:D10')." };
 			}
 
-			if (!range) {
-				return;
-			}
-
-			let field = Asc.scope.field;
-			if (!field) {
-				field = 1;
-			}
+			let field = Asc.scope.field !== undefined ? Asc.scope.field : 1;
 
 			let criteria1 = Asc.scope.criteria1;
-			if (criteria1 && criteria1.startsWith && criteria1.startsWith("[") || criteria1.startsWith("{"))
+			if (criteria1 && criteria1.startsWith && (criteria1.startsWith("[") || criteria1.startsWith("{")))
 				criteria1 = eval(criteria1);
 			if (Asc.scope.operator === "xlFilterCellColor" || Asc.scope.operator === "xlFilterFontColor") {
 				if (criteria1 && typeof criteria1 === 'object' && criteria1.r !== undefined && criteria1.g !== undefined && criteria1.b !== undefined) {
@@ -223,6 +248,9 @@
 				Asc.scope.visibleDropDown
 			);
 		});
+
+		if (filterResult && filterResult.error)
+			throw new window.AgentState.ToolError(filterResult.error);
 	};
 
 	return func;

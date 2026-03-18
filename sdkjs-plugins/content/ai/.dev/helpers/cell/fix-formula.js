@@ -67,6 +67,12 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 
 		let rangeData = await Asc.Editor.callCommand(function(){
@@ -77,6 +83,8 @@
 				_range = ws.GetUsedRange();
 			} else {
 				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			}
 
 			if (!_range)
@@ -103,6 +111,9 @@
 				}
 			});
 
+			if (formulaData.length === 0)
+				return { error: "No formulas found in the specified range." };
+
 			return {
 				formulas: formulaData,
 				startRow: startRow,
@@ -110,9 +121,11 @@
 			};
 		});
 
-		if (!rangeData || !rangeData.formulas || rangeData.formulas.length === 0) {
+		if (rangeData && rangeData.error)
+			throw new window.AgentState.ToolError(rangeData.error);
+
+		if (!rangeData)
 			return;
-		}
 
 		let formulaData = rangeData.formulas;
 		let formulaValues = formulaData.map(function(item) { return item.cellValue; });
@@ -176,7 +189,7 @@
 					});
 				}
 			} catch (error) {
-				console.error("Error parsing formula fix result:", error);
+				throw new window.AgentState.ToolError("Failed to parse AI response for formula fixes: " + error.message);
 			}
 		}
 
