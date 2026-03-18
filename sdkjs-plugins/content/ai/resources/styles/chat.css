@@ -419,7 +419,8 @@ input {
     resize: none;
     line-height: 16px;
 	border: none;
-	font-family: Arial, sans-serif;
+	font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+	font-size: 13px;
 }
 
 /* Увеличиваем padding, когда видна кнопка голосового ввода или стоп */
@@ -523,6 +524,65 @@ body.theme-type-dark #input_voice_button .icon {
 	width: 20px;
 	height: 20px;
 } */
+/* ── Shared font ──────────────────────────────────────────────────────────── */
+.message_content,
+.span_message,
+#welcome_text,
+.welcome_button {
+	font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+}
+
+/* ── Text selection color ─────────────────────────────────────────────────── */
+::selection {
+	background-color: #c8c8c8;
+	color: inherit;
+}
+
+body.theme-type-dark ::selection {
+	background-color: #555;
+	color: inherit;
+}
+
+/* ── CHAT_MESSAGES_BORDER = false ─────────────────────────────────────────── */
+/* Remove border + add subtle background highlight (same as tool sections) */
+html.no-message-border .action_button.btn-text-default {
+	border: none !important;
+	background: transparent;
+}
+
+html.no-message-border .action_button.btn-text-default:hover {
+	background-color: #d8dadc !important;
+}
+
+html.no-message-border body.theme-type-dark .action_button.btn-text-default:hover {
+	background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.no-message-border .user_message .message_content,
+html.no-message-border .message:not(.user_message):not(.tool_call_message) .message_content {
+	border: none !important;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	padding: 6px 8px;
+}
+
+html.no-message-border body.theme-type-dark .user_message .message_content,
+html.no-message-border body.theme-type-dark .message:not(.user_message):not(.tool_call_message) .message_content {
+	background-color: #2a2a2a;
+}
+
+/* CHAT_AI_MESSAGE_BACKGROUND = false — no background on AI bubbles */
+html.no-message-border.no-ai-message-background .message:not(.user_message):not(.tool_call_message) .message_content {
+	background-color: transparent !important;
+}
+
+/* ── CHAT_ALL_MESSAGES_BORDER = false ─────────────────────────────────────── */
+html.no-all-messages-border #chat_wrapper {
+	border: none !important;
+	box-shadow: none !important;
+}
+
 /* Tool Call Styles - Minimalistic gray design */
 .tool_call_message {
 	background-color: transparent !important;
@@ -531,6 +591,9 @@ body.theme-type-dark #input_voice_button .icon {
 
 .tool_call_content {
 	padding: 6px 8px 6px 4px !important;
+	border-radius: 4px;
+	max-width: 100%;
+	box-sizing: border-box;
 }
 
 /* Header with collapse/expand */
@@ -565,23 +628,18 @@ body.theme-type-dark #input_voice_button .icon {
 }
 
 .tool_call_chevron {
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	border-right: 1.5px solid currentColor;
-	border-bottom: 1.5px solid currentColor;
-	transform: rotate(-45deg);
-	transition: transform 0.2s;
 	flex-shrink: 0;
-	margin-right: 6px;
-	margin-top: 1px;
+	margin-left: 2px;
+	margin-right: 4px;
+	display: inline-flex;
+	align-items: center;
 	opacity: 0.5;
+	transition: transform 0.2s;
+	transform-origin: center;
 }
 
 .tool_call_header.is-expanded .tool_call_chevron {
-	transform: rotate(45deg);
-	margin-top: -2px;
-	margin-left: 4px;
+	transform: rotate(90deg);
 }
 
 .tool_call_call + .tool_call_call {
@@ -612,6 +670,7 @@ body.theme-type-dark #input_voice_button .icon {
 	font-size: 12px;
 	white-space: pre-wrap;
 	word-wrap: break-word;
+	overflow-wrap: break-word;
 	color: #333;
 }
 
