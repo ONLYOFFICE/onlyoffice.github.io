@@ -54,15 +54,15 @@ input {
 .chat_window {
 	display: flex;
 	flex-direction: column;
-	margin: 12px;
+	margin: 12px 4px 12px 12px;
 	flex: 1;
-	width: calc(100% - 24px);
+	width: calc(100% - 16px);
 }
 
 #chat_wrapper {
 	flex: 1;
 	padding: 0;
-	margin-bottom: 6px;
+	margin-bottom: 2px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
@@ -73,12 +73,13 @@ input {
 
 #chat {
 	height: auto;
-	padding: 10px 13px;
+	padding: 10px 21px 18px 13px;
 	display: flex;
 	flex-direction: column;
 	overflow: auto;
 	position: relative;
 }
+
 
 .message {
 	margin-top: 10px;
@@ -690,4 +691,35 @@ body.theme-type-dark .tool_call_section strong {
 
 body.theme-type-dark .tool_call_section pre {
 	color: #ddd;
+}
+
+/* Dark theme: tone down PS scrollbar colors */
+body.theme-type-dark .ps__rail-x:hover,
+body.theme-type-dark .ps__rail-y:hover,
+body.theme-type-dark .ps__rail-x:focus,
+body.theme-type-dark .ps__rail-y:focus,
+body.theme-type-dark .ps__rail-x.ps--clicking,
+body.theme-type-dark .ps__rail-y.ps--clicking {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.theme-type-dark .ps__thumb-x,
+body.theme-type-dark .ps__thumb-y {
+	background-color: #555;
+	border-color: #666;
+}
+
+body.theme-type-dark .ps__rail-x:hover > .ps__thumb-x,
+body.theme-type-dark .ps__rail-y:hover > .ps__thumb-y,
+body.theme-type-dark .ps__thumb-x:hover,
+body.theme-type-dark .ps__thumb-y:hover {
+	background-color: #777;
+}
+
+body.theme-type-dark .ps__rail-x:focus > .ps__thumb-x,
+body.theme-type-dark .ps__rail-x.ps--clicking .ps__thumb-x,
+body.theme-type-dark .ps__rail-y:focus > .ps__thumb-y,
+body.theme-type-dark .ps__rail-y.ps--clicking .ps__thumb-y {
+	background-color: #888;
+	border-color: #888;
 }
