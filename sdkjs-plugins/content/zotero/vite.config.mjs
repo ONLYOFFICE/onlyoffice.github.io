@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { babel } from "@rollup/plugin-babel";
 import { resolve } from "path";
 import { readFileSync } from "fs";
+import { minify } from "terser";
 
 const isES5Build = process.env.TARGET === "es5";
 const suffix = isES5Build ? "es5" : "modern";
@@ -64,6 +65,20 @@ function getBabelConfig() {
 export default defineConfig({
     plugins: [
         {
+            name: "terser-minify",
+            enforce: "post",
+            async renderChunk(code, chunk) {
+                if (chunk.type !== "chunk") return null;
+                const result = await minify(code, {
+                    sourceMap: true,
+                    format: { comments: false },
+                    compress: true,
+                    mangle: true,
+                });
+                return result.code ? { code: result.code, map: result.map } : null;
+            },
+        },
+        {
             name: "license-banner",
             generateBundle(_, bundle) {
                 const banner = readFileSync(resolve(__dirname, "LICENSE"), "utf-8") + "\n";
@@ -79,7 +94,7 @@ export default defineConfig({
         outDir: "dist",
         emptyOutDir: false,
         sourcemap: true,
-        minify: true,
+        minify: false,
         lib: {
             entry: current.input,
             formats: [isES5Build ? "umd" : "es"],
