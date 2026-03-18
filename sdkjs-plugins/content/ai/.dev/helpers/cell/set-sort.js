@@ -79,6 +79,19 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validSortOrders = ["xlAscending", "xlDescending"];
+		const validHeaders = ["xlYes", "xlNo"];
+		if (params.sortOrder1 !== undefined && params.sortOrder1 !== null && !validSortOrders.includes(params.sortOrder1))
+			throw new window.AgentState.ToolError("Invalid sortOrder1 \"" + params.sortOrder1 + "\". Available options: " + JSON.stringify(validSortOrders));
+		if (params.header !== undefined && params.header !== null && !validHeaders.includes(params.header))
+			throw new window.AgentState.ToolError("Invalid header \"" + params.header + "\". Available options: " + JSON.stringify(validHeaders));
+
 		Asc.scope.range = params.range;
 		Asc.scope.key1 = params.key1;
 		Asc.scope.sortOrder1 = params.sortOrder1 || "xlAscending";
@@ -91,14 +104,22 @@
 				let ws = Api.GetActiveSheet();
 				let _range;
 
-				if (!Asc.scope.range) {
-					_range = Api.GetSelection();
-				} else {
+				if (Asc.scope.range) {
 					_range = ws.GetRange(Asc.scope.range);
+					if (!_range)
+						return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+				} else {
+					_range = Api.GetSelection();
 				}
 
 				return _range.GetValue2();
 			});
+
+			if (insertRes && insertRes.error)
+				throw new window.AgentState.ToolError(insertRes.error);
+
+			if (!insertRes)
+				throw new window.AgentState.ToolError("Failed to retrieve data from the specified range.");
 
 			let csv = insertRes.map(function(item){
 				return item.map(function(value) {
