@@ -62,7 +62,7 @@ input {
 #chat_wrapper {
 	flex: 1;
 	padding: 0;
-	margin-bottom: 2px;
+	margin-bottom: 6px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
