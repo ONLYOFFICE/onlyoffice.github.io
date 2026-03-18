@@ -66,6 +66,7 @@
 			let slide;
 			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
@@ -79,6 +80,9 @@
 			}
 			return null;
 		});
+		if (data && data.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + data.slidesCount + " slides.");
+		}
 		if (data) {
 			await Asc.Editor.callMethod("GoToSlide", [data["idx"] + 1]);
 		}

@@ -1256,12 +1256,13 @@ HELPERS.slide.push((function(){
 			await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
 		}
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.params.slideNumber) {
 				slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -1269,7 +1270,9 @@ HELPERS.slide.push((function(){
 
 			if (!slide) return;
 
+			let validChartTypes = ["bar", "barStacked", "barStackedPercent", "bar3D", "barStacked3D", "barStackedPercent3D", "barStackedPercent3DPerspective", "horizontalBar", "horizontalBarStacked", "horizontalBarStackedPercent", "horizontalBar3D", "horizontalBarStacked3D", "horizontalBarStackedPercent3D", "lineNormal", "lineStacked", "lineStackedPercent", "line3D", "pie", "pie3D", "doughnut", "scatter", "stock", "area", "areaStacked", "areaStackedPercent"];
 			let chartType = Asc.scope.params.chartType || "bar3D";
+			if (validChartTypes.indexOf(chartType) === -1) return {error: "invalid_chart_type", validTypes: validChartTypes};
 			let data = Asc.scope.params.data || [[100, 120, 140], [90, 110, 130]];
 			let series = Asc.scope.params.series || ["Series 1", "Series 2"];
 			let categories = Asc.scope.params.categories || ["Category 1", "Category 2", "Category 3"];
@@ -1323,6 +1326,13 @@ HELPERS.slide.push((function(){
 				slide.AddObject(chart);
 			}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_chart_type") {
+			throw new window.AgentState.ToolError("The chart type \"" + (params.chartType || "bar3D") + "\" is not valid! Here is a list of available chart types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 	return func;
 })());
@@ -1432,12 +1442,13 @@ HELPERS.slide.push((function(){
 	
 	func.call = async function(params) {
 		Asc.scope.params = params;
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 				let presentation = Api.GetPresentation();
 				let slide;
 
 				if (Asc.scope.params.slideNumber) {
 					slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+					if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 				}
 				else {
 					slide = presentation.GetCurrentSlide();
@@ -1445,10 +1456,12 @@ HELPERS.slide.push((function(){
 
 				if (!slide) return;
 
+				let validShapeTypes = ["rect", "roundRect", "ellipse", "triangle", "diamond", "pentagon", "hexagon", "star5", "plus", "mathMinus", "mathMultiply", "mathEqual", "mathNotEqual", "heart", "cloud", "leftArrow", "rightArrow", "upArrow", "downArrow", "leftRightArrow", "chevron", "bentArrow", "curvedRightArrow", "blockArc", "wedgeRectCallout", "cloudCallout", "ribbon", "wave", "can", "cube", "pie", "donut", "sun", "moon", "smileyFace", "lightningBolt", "noSmoking"];
+				let shapeType = Asc.scope.params.shapeType || "rect";
+				if (validShapeTypes.indexOf(shapeType) === -1) return {error: "invalid_shape_type", validTypes: validShapeTypes};
+
 				let slideWidth = presentation.GetWidth();
 				let slideHeight = presentation.GetHeight();
-
-				let shapeType = Asc.scope.params.shapeType || "rect";
 				let width = 2500000;
 				let height = 2500000;
 				let x = (slideWidth - width) / 2;
@@ -1475,6 +1488,13 @@ HELPERS.slide.push((function(){
 				}
 				slide.AddObject(shape);
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_shape_type") {
+			throw new window.AgentState.ToolError("The shape type \"" + (params.shapeType || "rect") + "\" is not valid! Here is a list of available shape types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;
@@ -1527,12 +1547,13 @@ HELPERS.slide.push((function(){
 	func.call = async function (params) {
 		Asc.scope.params = params;
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.params.slideNumber) {
 				slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -1553,6 +1574,8 @@ HELPERS.slide.push((function(){
 					columns = data[0].length;
 				}
 			}
+
+			if (rows <= 0 || columns <= 0) return {error: "invalid_table_size", rows: rows, columns: columns};
 
 			let tableWidth = 7000000;
 			let tableHeight = 3500000;
@@ -1593,6 +1616,13 @@ HELPERS.slide.push((function(){
 				slide.AddObject(table);
 			}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_table_size") {
+			throw new window.AgentState.ToolError("Invalid table size: rows=" + callResult.rows + ", columns=" + callResult.columns + ". Both rows and columns must be greater than 0.");
+		}
 	};
 	return func;
 })());
@@ -1645,12 +1675,13 @@ HELPERS.slide.push((function(){
 		Asc.scope.textType = params.textType || "body";
 		Asc.scope.prompt = params.prompt;
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.slideNum) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -1789,6 +1820,9 @@ HELPERS.slide.push((function(){
 			return;
 		});
 
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
 	};
 	return func;
 })());
@@ -1894,11 +1928,12 @@ HELPERS.slide.push((function(){
 
 			if (imageUrl) {
 				Asc.scope.imageUrl = imageUrl;
-				await Asc.Editor.callCommand(function () {
+				let callResult = await Asc.Editor.callCommand(function () {
 					let oPresentation = Api.GetPresentation();
 					let oSlide;
-					if (params.slideNumber !== undefined && params.slideNumber !== null) {
-						oSlide = oPresentation.GetSlideByIndex(params.slideNum - 1);
+					if (Asc.scope.params.slideNumber) {
+						oSlide = oPresentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+						if (!oSlide) return {error: "slide_not_found", slidesCount: oPresentation.GetSlidesCount()};
 					}
 					else {
 						oSlide = oPresentation.GetCurrentSlide();
@@ -1915,6 +1950,10 @@ HELPERS.slide.push((function(){
 					oImage.SetPosition(x, y);
 					oSlide.AddObject(oImage);
 				});
+
+				if (callResult && callResult.error === "slide_not_found") {
+					throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+				}
 			}
 		} catch (error) {
 			await checkEndAction();
@@ -1969,12 +2008,23 @@ HELPERS.slide.push((function(){
 	
 	func.call = async function(params) {
 		Asc.scope.params = params;
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 				let presentation = Api.GetPresentation();
-				let slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
-				if (!slide) 
+				let slide;
+
+				if (Asc.scope.params.slideNumber) {
+					slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+					if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
+				}
+				else {
 					slide = presentation.GetCurrentSlide();
+				}
 				if (!slide) return;
+
+				let validTypes = ["solid", "gradient"];
+				if (Asc.scope.params.backgroundType && validTypes.indexOf(Asc.scope.params.backgroundType) === -1) {
+					return {error: "invalid_background_type", validTypes: validTypes};
+				}
 
 				let fill;
 
@@ -2013,6 +2063,13 @@ HELPERS.slide.push((function(){
 					slide.SetBackground(fill);
 				}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_background_type") {
+			throw new window.AgentState.ToolError("The background type \"" + params.backgroundType + "\" is not valid! Valid types are: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;
@@ -2053,6 +2110,7 @@ HELPERS.slide.push((function(){
 			let slide;
 			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
@@ -2064,6 +2122,9 @@ HELPERS.slide.push((function(){
 			slide.Delete();
 			return {"curSlideIdx": curSlideIdx, "slideIdx": slideIdx};
 		});
+		if (data && data.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + data.slidesCount + " slides.");
+		}
 		if (data) {
 			if (data["slideIdx"] <= data["curSlideIdx"]) {
 				await Asc.Editor.callMethod("GoToSlide", [data["curSlideIdx"]]);
@@ -2107,6 +2168,7 @@ HELPERS.slide.push((function(){
 			let slide;
 			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
@@ -2120,6 +2182,9 @@ HELPERS.slide.push((function(){
 			}
 			return null;
 		});
+		if (data && data.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + data.slidesCount + " slides.");
+		}
 		if (data) {
 			await Asc.Editor.callMethod("GoToSlide", [data["idx"] + 1]);
 		}
