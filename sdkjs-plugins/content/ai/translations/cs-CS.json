@@ -182,5 +182,6 @@
 	"Replace + Hint": "Nahradit + Náznak",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Generovat dokument"
+	"Generate Document": "Generovat dokument",
+	"Operation was interrupted.": "Operace byla přerušena."
 }

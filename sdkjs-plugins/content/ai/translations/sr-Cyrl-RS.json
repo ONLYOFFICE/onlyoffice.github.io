@@ -182,5 +182,6 @@
 	"Replace + Hint": "Замени + Hint",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Генериши документ"
+	"Generate Document": "Генериши документ",
+	"Operation was interrupted.": "Операција је прекинута."
 }

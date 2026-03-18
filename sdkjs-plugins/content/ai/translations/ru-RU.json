@@ -182,5 +182,6 @@
 	"Replace + Hint": "Замена + Подсказка",
 	"Arguments": "Параметры",
 	"Result": "Результат",
-	"Generate Document": "Создать документ"
+	"Generate Document": "Создать документ",
+	"Operation was interrupted.": "Операция была прервана."
 }

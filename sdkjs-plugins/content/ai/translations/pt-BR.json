@@ -182,5 +182,6 @@
 	"Replace + Hint": "Substituir + Dica",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Gerar documento"
+	"Generate Document": "Gerar documento",
+	"Operation was interrupted.": "A operação foi interrompida."
 }

@@ -182,5 +182,6 @@
 	"Replace + Hint": "Zamini + Hint",
 	"Arguments": "Arguments",
 	"Result": "Result",
-	"Generate Document": "Gjenero dokument"
+	"Generate Document": "Gjenero dokument",
+	"Operation was interrupted.": "Operacioni u ndërpre."
 }
