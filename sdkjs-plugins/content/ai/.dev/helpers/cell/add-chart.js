@@ -81,7 +81,10 @@
 		Asc.scope.chartType = params.chartType || "bar";
 		Asc.scope.title = params.title;
 
-		await Asc.Editor.callCommand(function(){
+		let callResult = await Asc.Editor.callCommand(function(){
+			let validChartTypes = ["bar", "barStacked", "barStackedPercent", "bar3D", "barStacked3D", "barStackedPercent3D", "barStackedPercent3DPerspective", "horizontalBar", "horizontalBarStacked", "horizontalBarStackedPercent", "horizontalBar3D", "horizontalBarStacked3D", "horizontalBarStackedPercent3D", "lineNormal", "lineStacked", "lineStackedPercent", "line3D", "pie", "pie3D", "doughnut", "scatter", "stock", "area", "areaStacked", "areaStackedPercent"];
+			if (validChartTypes.indexOf(Asc.scope.chartType) === -1) return {error: "invalid_chart_type", validTypes: validChartTypes};
+
 			let ws = Api.GetActiveSheet();
 			let chartRange;
 
@@ -115,6 +118,10 @@
 				chart.SetTitle(Asc.scope.title, 14);
 			}
 		});
+
+		if (callResult && callResult.error === "invalid_chart_type") {
+			throw new window.AgentState.ToolError("The chart type \"" + (params.chartType || "bar") + "\" is not valid! Here is a list of available chart types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;
