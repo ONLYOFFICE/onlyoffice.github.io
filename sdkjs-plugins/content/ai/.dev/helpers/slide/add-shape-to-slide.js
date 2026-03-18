@@ -80,12 +80,13 @@
 	
 	func.call = async function(params) {
 		Asc.scope.params = params;
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 				let presentation = Api.GetPresentation();
 				let slide;
 
 				if (Asc.scope.params.slideNumber) {
 					slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+					if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 				}
 				else {
 					slide = presentation.GetCurrentSlide();
@@ -93,10 +94,12 @@
 
 				if (!slide) return;
 
+				let validShapeTypes = ["rect", "roundRect", "ellipse", "triangle", "diamond", "pentagon", "hexagon", "star5", "plus", "mathMinus", "mathMultiply", "mathEqual", "mathNotEqual", "heart", "cloud", "leftArrow", "rightArrow", "upArrow", "downArrow", "leftRightArrow", "chevron", "bentArrow", "curvedRightArrow", "blockArc", "wedgeRectCallout", "cloudCallout", "ribbon", "wave", "can", "cube", "pie", "donut", "sun", "moon", "smileyFace", "lightningBolt", "noSmoking"];
+				let shapeType = Asc.scope.params.shapeType || "rect";
+				if (validShapeTypes.indexOf(shapeType) === -1) return {error: "invalid_shape_type", validTypes: validShapeTypes};
+
 				let slideWidth = presentation.GetWidth();
 				let slideHeight = presentation.GetHeight();
-
-				let shapeType = Asc.scope.params.shapeType || "rect";
 				let width = 2500000;
 				let height = 2500000;
 				let x = (slideWidth - width) / 2;
@@ -123,6 +126,13 @@
 				}
 				slide.AddObject(shape);
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_shape_type") {
+			throw new window.AgentState.ToolError("The shape type \"" + (params.shapeType || "rect") + "\" is not valid! Here is a list of available shape types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;
