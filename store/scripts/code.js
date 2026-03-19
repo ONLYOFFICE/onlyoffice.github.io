@@ -1629,6 +1629,8 @@ function toogleView(current, oldEl, text, bAll, bForce) {
 				e.preventDefault();
 				installPluginManually();
 			}
+		} else {
+			elements.linkNewPlugin.onclick = null;
 		}
 	}
 };
