@@ -89,6 +89,16 @@
 	});
 	
 	func.call = async function(params) {
+		if (typeof params.prompt !== 'string' || !params.prompt.trim())
+			throw new window.AgentState.ToolError('Parameter "prompt" is required and must be a non-empty string.');
+		const validTypes = ["sentence", "paragraph"];
+		if (params.type !== undefined && params.type !== null && !validTypes.includes(params.type))
+			throw new window.AgentState.ToolError('Invalid type "' + params.type + '". Available options: ' + JSON.stringify(validTypes));
+		if (params.parNumber !== undefined && params.parNumber !== null && typeof params.parNumber !== 'number')
+			throw new window.AgentState.ToolError('Parameter "parNumber" must be a number. Got: ' + JSON.stringify(params.parNumber));
+		if (params.showDifference !== undefined && params.showDifference !== null && typeof params.showDifference !== 'boolean')
+			throw new window.AgentState.ToolError('Parameter "showDifference" must be a boolean. Got: ' + JSON.stringify(params.showDifference));
+
 		let text = "";
 		if ("paragraph" === params.type)
 		{
@@ -143,7 +153,7 @@
 			}
 		}
 
-		let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+		await requestEngine.chatRequest(argPromt, false, async function(data) {
 			if (!data)
 				return;
 			await checkEndAction();
@@ -160,7 +170,7 @@
 
 			await Asc.Library.PasteText(data);
 		});
-
+		
 		await checkEndAction();
 
 		if (turnOffTrackChanges)
