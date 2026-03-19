@@ -342,7 +342,13 @@ constructor() {\n\
 	_this.attachEditorEvent("ai_onCallTool", async function(toolCall) {
 		let funcName = toolCall.name;
 		let funcArgs = toolCall.arguments;
-		let argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+		let argsObj = null;
+
+		try {
+			argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+		} catch(e) {
+			argsObj = {};
+		}
 
 		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
