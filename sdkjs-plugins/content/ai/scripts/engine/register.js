@@ -49,10 +49,13 @@ async function registerButtons(window, undefined)
 	buttonMain.icons = getContextMenuButtonIcons("general-ai");
 	buttonMain.addCheckers("All");
 
-	function chatWindowShow(attachedText)
+	function chatWindowShow(attachedText, isForceSend)
 	{
 		if (window.chatWindow) {
 			window.chatWindow.activate();
+			if (attachedText && attachedText.trim()) {
+				window.chatWindow.command("onAttachedText", { text: attachedText, forceSend: true });
+			}
 			return;
 		}
 
@@ -62,6 +65,9 @@ async function registerButtons(window, undefined)
 
 		let panelPlace = window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window";
 		if (panelPlace === "panel")
+			panelPlace = "panelRight";
+
+		if (attachedText && attachedText.trim())
 			panelPlace = "panelRight";
 
 		let variation = {
@@ -84,7 +90,10 @@ async function registerButtons(window, undefined)
 		chatWindow.attachEvent("onWindowReady", function() {
 			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]]);
 			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
-				chatWindow.command("onAttachedText", attachedText);
+				chatWindow.command("onAttachedText", isForceSend
+					? { text: attachedText, forceSend: true }
+					: attachedText
+				);
 			}
 
 			function isSupportVoiceInput() {
@@ -379,6 +388,7 @@ async function registerButtons(window, undefined)
 
 		window.chatWindow = chatWindow;
 	}
+	window.chatWindowShow = chatWindowShow;
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
 	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
