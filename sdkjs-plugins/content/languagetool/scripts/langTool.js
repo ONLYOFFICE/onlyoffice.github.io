@@ -58,7 +58,7 @@ function checkInternetExplorer(){
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
     var elements         = null;
-    var serviceUrl       = "https://languagetool.org/api/v2/check";
+    var serviceUrl       = "https://api.languagetoolplus.com/v2/check";
     var paste_done       = true;
     var canAddText       = true;
     var isLangChangedManually = false;
@@ -281,7 +281,7 @@ function checkInternetExplorer(){
 	});
 
 	function getLanguages() {
-		var url = "https://languagetool.org/api/v2/languages";
+		var url = "https://api.languagetoolplus.com/v2/languages";
 		return $.ajax({
 			method: 'GET',
 			url: url
