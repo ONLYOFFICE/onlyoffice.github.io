@@ -81,7 +81,15 @@
 	});
 
 	func.call = async function(params) {
-		
+		if (typeof params.description !== 'string' || !params.description.trim())
+			throw new window.AgentState.ToolError('Parameter "description" is required and must be a non-empty string.');
+		if (params.width !== undefined && params.width !== null && (typeof params.width !== 'number' || params.width <= 0))
+			throw new window.AgentState.ToolError('Parameter "width" must be a positive number. Got: ' + JSON.stringify(params.width));
+		if (params.height !== undefined && params.height !== null && (typeof params.height !== 'number' || params.height <= 0))
+			throw new window.AgentState.ToolError('Parameter "height" must be a positive number. Got: ' + JSON.stringify(params.height));
+		if (params.style !== undefined && params.style !== null && typeof params.style !== 'string')
+			throw new window.AgentState.ToolError('Parameter "style" must be a string. Got: ' + JSON.stringify(params.style));
+
 		let requestEngine = null;
 		requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
 		if (!requestEngine) {
