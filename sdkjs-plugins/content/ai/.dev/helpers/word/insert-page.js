@@ -75,6 +75,10 @@
 	});
 	
 	func.call = async function(params) {
+		const validLocations = ["current", "start", "end"];
+		if (params.location !== undefined && params.location !== null && !validLocations.includes(params.location))
+			throw new window.AgentState.ToolError('Invalid location "' + params.location + '". Available options: ' + JSON.stringify(validLocations));
+
 		Asc.scope.location = params.location;
 
 		await Asc.Editor.callCommand(function(){
@@ -84,7 +88,7 @@
 			else if ("end" === Asc.scope.location)
 				doc.MoveCursorToEnd();
 
-			Api.GetDocument().InsertBlankPage();
+			doc.InsertBlankPage();
 		});
 	};
 	

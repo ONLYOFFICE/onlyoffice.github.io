@@ -83,7 +83,15 @@ HELPERS.word.push((function(){
 	});
 
 	func.call = async function(params) {
-		
+		if (typeof params.description !== 'string' || !params.description.trim())
+			throw new window.AgentState.ToolError('Parameter "description" is required and must be a non-empty string.');
+		if (params.width !== undefined && params.width !== null && (typeof params.width !== 'number' || params.width <= 0))
+			throw new window.AgentState.ToolError('Parameter "width" must be a positive number. Got: ' + JSON.stringify(params.width));
+		if (params.height !== undefined && params.height !== null && (typeof params.height !== 'number' || params.height <= 0))
+			throw new window.AgentState.ToolError('Parameter "height" must be a positive number. Got: ' + JSON.stringify(params.height));
+		if (params.style !== undefined && params.style !== null && typeof params.style !== 'string')
+			throw new window.AgentState.ToolError('Parameter "style" must be a string. Got: ' + JSON.stringify(params.style));
+
 		let requestEngine = null;
 		requestEngine = AI.Request.create(AI.ActionType.ImageGeneration);
 		if (!requestEngine) {
@@ -718,6 +726,10 @@ HELPERS.word.push((function(){
 	});
 	
 	func.call = async function(params) {
+		const validLocations = ["current", "start", "end"];
+		if (params.location !== undefined && params.location !== null && !validLocations.includes(params.location))
+			throw new window.AgentState.ToolError('Invalid location "' + params.location + '". Available options: ' + JSON.stringify(validLocations));
+
 		Asc.scope.location = params.location;
 
 		await Asc.Editor.callCommand(function(){
@@ -727,7 +739,7 @@ HELPERS.word.push((function(){
 			else if ("end" === Asc.scope.location)
 				doc.MoveCursorToEnd();
 
-			Api.GetDocument().InsertBlankPage();
+			doc.InsertBlankPage();
 		});
 	};
 	
@@ -862,6 +874,16 @@ HELPERS.word.push((function(){
 	});
 	
 	func.call = async function(params) {
+		if (typeof params.prompt !== 'string' || !params.prompt.trim())
+			throw new window.AgentState.ToolError('Parameter "prompt" is required and must be a non-empty string.');
+		const validTypes = ["sentence", "paragraph"];
+		if (params.type !== undefined && params.type !== null && !validTypes.includes(params.type))
+			throw new window.AgentState.ToolError('Invalid type "' + params.type + '". Available options: ' + JSON.stringify(validTypes));
+		if (params.parNumber !== undefined && params.parNumber !== null && typeof params.parNumber !== 'number')
+			throw new window.AgentState.ToolError('Parameter "parNumber" must be a number. Got: ' + JSON.stringify(params.parNumber));
+		if (params.showDifference !== undefined && params.showDifference !== null && typeof params.showDifference !== 'boolean')
+			throw new window.AgentState.ToolError('Parameter "showDifference" must be a boolean. Got: ' + JSON.stringify(params.showDifference));
+
 		let text = "";
 		if ("paragraph" === params.type)
 		{
@@ -916,7 +938,7 @@ HELPERS.word.push((function(){
 			}
 		}
 
-		let result = await requestEngine.chatRequest(argPromt, false, async function(data) {
+		await requestEngine.chatRequest(argPromt, false, async function(data) {
 			if (!data)
 				return;
 			await checkEndAction();
@@ -933,7 +955,7 @@ HELPERS.word.push((function(){
 
 			await Asc.Library.PasteText(data);
 		});
-
+		
 		await checkEndAction();
 
 		if (turnOffTrackChanges)
@@ -1012,6 +1034,19 @@ HELPERS.word.push((function(){
 	});
 	
 	func.call = async function(params) {
+		const boolParams = ["bold", "italic", "underline", "strikeout"];
+		for (let i = 0; i < boolParams.length; i++) {
+			let key = boolParams[i];
+			if (params[key] !== undefined && params[key] !== null && typeof params[key] !== 'boolean')
+				throw new window.AgentState.ToolError('Parameter "' + key + '" must be a boolean. Got: ' + JSON.stringify(params[key]));
+		}
+		if (params.fontSize !== undefined && params.fontSize !== null) {
+			if (typeof params.fontSize !== 'number')
+				throw new window.AgentState.ToolError('Parameter "fontSize" must be a number. Got: ' + JSON.stringify(params.fontSize));
+			if (params.fontSize < 1 || params.fontSize > 200)
+				throw new window.AgentState.ToolError('Parameter "fontSize" must be between 1 and 200. Got: ' + params.fontSize);
+		}
+
 		Asc.scope.params = params;
 		await Asc.Editor.callCommand(function(){
 			let doc = Api.GetDocument();
