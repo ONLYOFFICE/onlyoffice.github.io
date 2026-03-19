@@ -184,6 +184,17 @@ function fetchExternal(url, options, isStreaming) {
 					_fetch(requestUrl, request)
 						.then(function(response) {
 							fetchResponse = response;
+
+							if (response instanceof Error) {
+								resolve({ error: 1, message: response.message || "" });
+								return;
+							}
+
+							if (typeof response === "string") {
+								resolve({ error: 1, message: response });
+								return;
+							}
+							
 							return response.text();
 						})
 						.then(function(text) {
