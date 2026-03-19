@@ -228,8 +228,9 @@ constructor() {\n\
 	super(\"" + item.name + "\", \"" + url + "\", \"" + key + "\", \"" + addon + "\");\n\
 }\n\
 }";
-				AI.addExternalProvider(item.content);
 			}
+
+			AI.addExternalProvider(item.content, item);			
 		}
 
 		if (0 < providers.length) {
