@@ -1041,9 +1041,17 @@
 		document.getElementById('input_message').focus();
 	});
 
-	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
-		// For a future release.
-		// attachedText.set(text);
+	window.Asc.plugin.attachEvent("onAttachedText", function(data) {
+		if (typeof data === 'object' && data.forceSend) {
+			sendMessage(data.text.trim());
+		} else {
+			let text = (typeof data === 'string') ? data : data.text;
+			if (text && text.trim()) {
+				let textarea = document.getElementById('input_message');
+				textarea.value = text;
+				updateTextareaSize();
+			}
+		}
 	});
 
 	window.Asc.plugin.attachEvent("onVoiceInputSupport", function(isSupported) {
