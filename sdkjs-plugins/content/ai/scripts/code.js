@@ -217,8 +217,11 @@ async function initExternalProviders() {
 			if (!item.name)
 				continue;
 
+			if (!item.url)
+				item.url = "[external]";
+
 			if (!item.content) {
-				let url = item.url || "[external]";
+				let url = item.url;
 				let key = item.key || "";
 				let addon = item.addon || "";
 
