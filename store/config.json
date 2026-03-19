@@ -40,5 +40,6 @@
 	{ "name": "news", "discussion": "" },
 	{ "name": "texthighlighter", "discussion": "" },
 	{ "name": "bergamot", "discussion": "" },
-	{ "name": "textcleaner", "discussion": "" }
+	{ "name": "textcleaner", "discussion": "" },
+	{ "name": "odata", "discussion": "" }
 ]
