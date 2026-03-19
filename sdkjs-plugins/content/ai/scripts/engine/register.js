@@ -218,7 +218,12 @@ async function registerButtons(window, undefined)
 							let funcName = toolCall.function.name;
 							let funcArgs = toolCall.function.arguments;
 
-							let argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+							let argsObj = null;
+							try {
+								argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+							} catch(e) {
+								argsObj = {};
+							}
 
 							chatWindow.command("onToolCallStart", {
 								type: 'native',
