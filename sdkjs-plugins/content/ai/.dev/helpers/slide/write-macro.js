@@ -75,11 +75,26 @@ The return value of the last expression will be the tool's output.`,
 - To create a stroke: Api.CreateStroke(nWidth, oFill)
 - To create a color: Api.CreateRGBColor(r, g, b)
 - To set shape position: oDrawing.SetPosition(nPosX, nPosY)
+- To get shape x position (EMU): oDrawing.GetPosX()
+- To get shape y position (EMU): oDrawing.GetPosY()
+- To set shape x position: oDrawing.SetPosX(nPosX)
+- To set shape y position: oDrawing.SetPosY(nPosY)
 - To set shape size: oDrawing.SetSize(nWidth, nHeight)
+- To get shape width (EMU): oDrawing.GetWidth()
+- To get shape height (EMU): oDrawing.GetHeight()
+- To get shape rotation angle (degrees): oDrawing.GetRotation()
+- To set shape rotation angle (degrees): oDrawing.SetRotation(nAngle)
+- To get/set horizontal flip: oDrawing.GetFlipH(), oDrawing.SetFlipH(bFlip)
+- To get/set vertical flip: oDrawing.GetFlipV(), oDrawing.SetFlipV(bFlip)
 - To get shape content: oShape.GetDocContent() returns ApiDocumentContent
 - To add text to shape: let oContent = oShape.GetDocContent(); oContent.RemoveAllElements(); let oPar = Api.CreateParagraph(); oPar.AddText("text"); oContent.Push(oPar)
 - To format text runs: oRun.SetBold(true), oRun.SetItalic(true), oRun.SetFontSize(nSize), oRun.SetFontFamily(sFontName), oRun.SetColor(r, g, b)
 - Dimensions are in EMUs (English Metric Units): 1 inch = 914400 EMUs, 1 cm = 360000 EMUs, 1 pt = 12700 EMUs
+- To get presentation width (EMU): oPresentation.GetWidth()
+- To get presentation height (EMU): oPresentation.GetHeight()
+- To set presentation size: oPresentation.SetSizes(nWidth, nHeight)
+- To get slide width (EMU): oSlide.GetWidth()
+- To get slide height (EMU): oSlide.GetHeight()
 - Standard slide size: width = 9144000 EMUs (10 inches), height = 6858000 EMUs (7.5 inches)`
 				}
 			},
