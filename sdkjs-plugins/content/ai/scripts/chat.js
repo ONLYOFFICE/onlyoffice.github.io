@@ -903,6 +903,12 @@
 		updateBodyThemeClasses(theme.type, theme.name);
 		updateThemeVariables(theme);
 
+		// In no-all-messages-border mode: use compact border-radius for non-standard themes
+		if (!CHAT_ALL_MESSAGES_BORDER) {
+			var isStandardTheme = (theme.name === 'theme-white' || theme.name === 'theme-night');
+			document.documentElement.classList.toggle('compact-radius', !isStandardTheme);
+		}
+
 		$('img.icon').each(function() {
 			var src = $(this).attr('src');
 			var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
