@@ -303,6 +303,7 @@ input {
 	line-height: 16px;
 	padding: 4px 8px;
 	margin: 2px;
+	border-radius: 10px;
 }
 
 .user_message {
@@ -583,6 +584,16 @@ html.no-message-border.no-ai-message-background .message:not(.user_message):not(
 html.no-all-messages-border #chat_wrapper {
 	border: none !important;
 	box-shadow: none !important;
+}
+
+html.no-all-messages-border #input_message_wrapper {
+	border-radius: 9999px;
+}
+
+html.no-all-messages-border #input_message {
+	background-color: transparent;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 html.no-all-messages-border .message:not(.user_message):not(.tool_call_message) .message_content {
