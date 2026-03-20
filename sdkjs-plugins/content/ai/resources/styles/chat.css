@@ -588,7 +588,8 @@ html.no-all-messages-border #chat_wrapper {
 }
 
 html.no-all-messages-border #input_message_wrapper {
-	border-radius: 9999px;
+	border-radius: 18px;
+	overflow: hidden;
 }
 
 html.no-all-messages-border #input_message {

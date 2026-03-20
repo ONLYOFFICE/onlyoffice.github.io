@@ -75,7 +75,7 @@ async function registerButtons(window, undefined)
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
-			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+			icons: "resources/icons/%theme-name%(theme-default|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
 			isCanDocked: true,
 			dockedPlace: "panelRight",
