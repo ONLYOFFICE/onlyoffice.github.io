@@ -125,137 +125,11 @@ window.addSupportAgentMode = function(editorVersion) {
 				Asc.Editor.callMethod("FocusEditor");
 			});
 
-			helperWindow.attachEvent("onHelperAction", async function(prompt) {
-				//console.log("Helper action: " + prompt);
-
+			helperWindow.attachEvent("onHelperAction", function(prompt) {
 				helperWindow.close();
 				helperWindow = null;
-				Asc.Editor.callMethod("FocusEditor");
 
-				let requestEngine = AI.Request.create(AI.ActionType.Chat);
-				if (!requestEngine)
-					return;
-
-				let isSendedEndLongAction = false;
-				async function checkEndAction() {
-					if (!isSendedEndLongAction) {
-						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-						isSendedEndLongAction = true;
-					}
-				}
-
-				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
-				await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
-
-				let bufferWait = "[functionCalling";
-				let checkBuffer = true;
-				let buffer = "";
-
-				if (0 === agentHistory.length) {
-					let systemPrompt = window.EditorHelper.getSystemPrompt();
-					if (systemPrompt !== "") {
-						agentHistory.push({
-							role: "system", content: systemPrompt
-						});
-					}
-				}
-
-				if (agentHistory.length > 0 && agentHistory[agentHistory.length - 1].role === "user") {
-					agentHistory[agentHistory.length - 1].content += "\n" + prompt;
-				} else {
-					agentHistory.push({
-						role: "user",
-						content: prompt
-					});
-				}
-
-				let copyMessages = [];
-				for (let i = 0, len = agentHistory.length; i < len; i++) {
-					let item = agentHistory[i];
-					copyMessages.push({
-						role: item.role,
-						content: item.content
-					});
-				}
-
-				let markdownStreamer = new MarkDownStreamer();
-
-				let isSupportStreaming = window.EditorHelper.isSupportStreaming;
-				async function onStreamEvent(data, end) {
-					if (isSupportStreaming)
-						await markdownStreamer.onStreamChunk(data, end);
-					else if (end)
-						await Asc.Library.PasteText(data);					
-				}
-
-				let result = await requestEngine.chatRequest(copyMessages, false, async function(data) {
-					if (!data)
-						return;
-
-					let oldBuffer = buffer;
-					buffer += data;
-					if (checkBuffer && buffer.length >= bufferWait.length) {
-						if (!buffer.startsWith(bufferWait)) {
-							data = oldBuffer + data;
-							checkBuffer = false;
-						}
-					}
-
-					if (isSupportStreaming && !checkBuffer)
-						await checkEndAction();
-
-					if (!checkBuffer)
-						await onStreamEvent(data);
-				});
-
-				if (!isSupportStreaming)
-					buffer = result;
-
-				if (checkBuffer && !buffer.startsWith(bufferWait)) {
-					checkBuffer = false;
-				}
-
-				if (!isSupportStreaming && !checkBuffer)
-					await onStreamEvent(buffer, true);
-
-				if (isSupportStreaming)
-					markdownStreamer.onStreamEnd();
-
-				await checkEndAction();
-
-				if (checkBuffer) {
-					if (agentDebug)
-						console.log(buffer);
-
-					let resultFunc = await window.EditorHelper.callFunc(buffer);
-					if (resultFunc) {
-						if (resultFunc.error) {
-							agentHistory.push({
-								role: "assistant",
-								content: resultFunc.error
-							});
-						} else if (resultFunc.message !== undefined) {
-							agentHistory.push({
-								role: "assistant", content: resultFunc.message
-							});
-						}
-
-						if (resultFunc.prompt !== undefined) {
-							agentHistory.push({
-								role: "user", content: resultFunc.prompt
-							});
-						}
-					}
-				} else {
-					if (agentDebug)
-						console.log(result);
-
-					agentHistory.push({
-						role: "assistant",
-						content: result
-					});
-				}
-				await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+				chatWindowShow(prompt, true);
 			});
 
 			helperWindow.show(variation);
@@ -343,8 +217,11 @@ async function initExternalProviders() {
 			if (!item.name)
 				continue;
 
+			if (!item.url)
+				item.url = "[external]";
+
 			if (!item.content) {
-				let url = item.url || "[external]";
+				let url = item.url;
 				let key = item.key || "";
 				let addon = item.addon || "";
 
@@ -354,8 +231,9 @@ constructor() {\n\
 	super(\"" + item.name + "\", \"" + url + "\", \"" + key + "\", \"" + addon + "\");\n\
 }\n\
 }";
-				AI.addExternalProvider(item.content);
 			}
+
+			AI.addExternalProvider(item.content, item);			
 		}
 
 		if (0 < providers.length) {
@@ -464,7 +342,13 @@ constructor() {\n\
 	_this.attachEditorEvent("ai_onCallTool", async function(toolCall) {
 		let funcName = toolCall.name;
 		let funcArgs = toolCall.arguments;
-		let argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+		let argsObj = null;
+
+		try {
+			argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+		} catch(e) {
+			argsObj = {};
+		}
 
 		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
 
@@ -535,6 +419,7 @@ async function initWithTranslate(counter) {
 	if (3 === initCounter) {
 		initCounter = 5;
 		await AI.loadInternalProviders();
+		await AI.loadHelperTranslations();
 		await registerButtons(window);
 		Asc.Buttons.registerContextMenu();
 		Asc.Buttons.registerToolbarMenu();
@@ -580,7 +465,7 @@ async function initWithTranslate(counter) {
 				await Asc.Editor.callMethod("ReplacePageContent", [pageIndex, {
 					type : "html",
 					options : {
-						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]),
+						content : Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]),
 						separateParagraphs : false
 					}					
 				}]);
@@ -658,7 +543,7 @@ async function initWithTranslate(counter) {
 						data.type = AI.ActionType.OCR;
 						let result = await requestEngine.imageOCRRequest(params.data, isBlock);
 						if (result) {
-							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex]);
+							data.result = Asc.Library.ConvertMdToHTML(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 						}
 						break;
 					}
@@ -1338,6 +1223,86 @@ function onOpenAiModelsModal() {
 	aiModelsListWindow.show(variation);
 }
 
+async function detectFunctionCallingSupport(model) {
+	if ((model.capabilities & AI.CapabilitiesUI.Chat) === 0) return;
+	if ((model.capabilities & AI.CapabilitiesUI.Tools) !== 0) return;
+
+	await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + model.name + ")"]);
+
+	try {
+		var provider = AI.createProviderInstance(
+			model.provider.name,
+			model.provider.url,
+			model.provider.key
+		);
+
+		if (!provider)
+			return;
+
+		var tempFullModel = {
+			id: model.id,
+			name: model.name,
+			provider: model.provider.name,
+			endpoints: [],
+			options: {}
+		};
+
+		var tempModelUI = new AI.UI.Model(
+			model.name,
+			model.id,
+			model.provider.name,
+			model.capabilities
+		);
+
+		var request = new AI.Request(tempModelUI);
+		request.model = tempFullModel;
+
+		var testTools = [{
+			name: "get_current_time",
+			description: "Get the current time",
+			parameters: {
+				type: "object",
+				properties: {},
+				required: []
+			}
+		}];
+
+		var testMessages = [
+			{
+				role: "user",
+				content: "What time is it?"
+			}
+		];
+
+		var response = await request._chatRequestAgent({
+			messages: testMessages,
+			tools: testTools
+		}, undefined);
+
+		if (response && response.tool_calls && response.tool_calls.length > 0) {
+			var isSupportTools = false;
+			for (var j = 0; j < response.tool_calls.length; j++) {
+				if (response.tool_calls[j].function &&
+					response.tool_calls[j].function.name === "get_current_time") {
+					isSupportTools = true;
+					break;
+				}
+			}
+
+			if (isSupportTools) {
+				model.capabilities = model.capabilities | AI.CapabilitiesUI.Tools;
+				console.log("[AI tools detection]:" + model.name + ": true");
+			} else {
+				console.log("[AI tools detection]:" + model.name + ": false");
+			}
+		}
+	} catch (error) {
+		console.log("[AI tools detection]:" + model.name + ": false");
+	}
+
+	await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + model.name + ")"]);
+}
+
 /**
  * ADD/EDIT WINDOW
  */
@@ -1357,7 +1322,11 @@ function onOpenEditModal(data) {
 
 	if (!aiModelEditWindow) {
 		aiModelEditWindow = new window.Asc.PluginWindow();
-		aiModelEditWindow.attachEvent("onChangeModel", function(model){
+		aiModelEditWindow.attachEvent("onChangeModel", async function(model){
+			if ((model.capabilities & AI.CapabilitiesUI.Chat) !== 0) {
+				await detectFunctionCallingSupport(model);
+			}
+
 			//Assign this model to actions without a model
 			const models = AI.Storage.serializeModels();
 			let needUpdateSettingsWindow = false;

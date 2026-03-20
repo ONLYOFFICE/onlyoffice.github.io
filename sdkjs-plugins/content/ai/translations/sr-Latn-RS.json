@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Zadaci u realnom vremenu",
 	"Coding Help": "Pomoć u kodiranju",
 	"Visual Analysis": "Vizuelna analiza",
+	"Function Calling / Tools": "Pozivanje funkcija / Alatke",
 	"Updating": "Ažuriranje",
 	"Your text" : "Vaš tekst",
 	"Target language" : "Ciljni jezik",
@@ -121,7 +122,7 @@
 	"Get advice about": "Zatraži savet o",
 	"Get advice": "Zatraži savet",
 	"Ask AI anything": "Pitaj veštačku inteligenciju bilo šta",
-	"Generate new": "Generiši novo",
+	"Update": "Ažuriraj",
 	"Something went wrong": "Nešto je pošlo po zlu",
 	"Please try reloading the conversation": "Pokušajte da ponovo učitate konverzaciju",
 
@@ -168,7 +169,8 @@
 	"Not able to perform this action. Please use prompts related to text analysis, editing, or formatting.": "Nije u stanju da izvrsi ovu akciju. Molimo koristi prompove vezane za analizu teksta, uređivanje ili formatiranje.",
 	"Processing selection...": "Procesiranje izbora...",
 	"Processing document...": "Procesiranje dokumenta...",
-	"Action": "Akcija",
+	"Action": "Radnja",
+	"Function executed successfully": "Funkcija uspešno izvršena",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dajte vam alatku kratko ime za alatnu traku",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Rekajte AI što da radi sa odabranim tekstom (npr., \"Pronalazǐte grěsě u faktu\" ili \"Sažmi\")",
@@ -178,5 +180,8 @@
 	"Hint": "Hint",
 	"Replace": "Zamenjaj",
 	"Replace + Hint": "Zamenjaj + Hint",
-	"Generate Document": "Generiši dokument"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "Generiši dokument",
+	"Operation was interrupted.": "Operacija je prekinuta."
 }

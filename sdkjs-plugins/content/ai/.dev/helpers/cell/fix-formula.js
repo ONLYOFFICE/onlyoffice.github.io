@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "fixFormula",
+		"text": "Fix Formula Errors",
 		"description": "Scans cells for formulas containing errors and attempts to fix them automatically. Detects common formula errors including #DIV/0! (division by zero), #REF! (invalid cell references), #NAME? (unrecognized function names), #VALUE! (wrong value types), and #N/A (value not available). Applies appropriate fixes: wraps division operations in IF statements, corrects cell references, fixes function name typos, and adds IFERROR wrappers. Preserves formulas that have no errors. Can scan entire sheet or specific range.",
 		"parameters": {
 			"type": "object",
@@ -66,6 +67,12 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 
 		let rangeData = await Asc.Editor.callCommand(function(){
@@ -76,6 +83,8 @@
 				_range = ws.GetUsedRange();
 			} else {
 				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			}
 
 			if (!_range)
@@ -102,6 +111,9 @@
 				}
 			});
 
+			if (formulaData.length === 0)
+				return { error: "No formulas found in the specified range." };
+
 			return {
 				formulas: formulaData,
 				startRow: startRow,
@@ -109,9 +121,11 @@
 			};
 		});
 
-		if (!rangeData || !rangeData.formulas || rangeData.formulas.length === 0) {
+		if (rangeData && rangeData.error)
+			throw new window.AgentState.ToolError(rangeData.error);
+
+		if (!rangeData)
 			return;
-		}
 
 		let formulaData = rangeData.formulas;
 		let formulaValues = formulaData.map(function(item) { return item.cellValue; });
@@ -175,7 +189,7 @@
 					});
 				}
 			} catch (error) {
-				console.error("Error parsing formula fix result:", error);
+				throw new window.AgentState.ToolError("Failed to parse AI response for formula fixes: " + error.message);
 			}
 		}
 

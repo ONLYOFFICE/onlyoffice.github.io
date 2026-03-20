@@ -132,78 +132,58 @@
 			}
 		}
 
+		if (obj && obj.version !== AI.Storage.Version)
+			obj = null;
+
 		if (obj) {
-			let fixVersion2 = false;
-			switch (obj.version)
-			{
-			case undefined:
-			case 1:
-				obj = null;
-				break;
-			case 2:
-				// redesign provider url: add /v1
-				fixVersion2 = true;
-				break;
-			case 3:
-			default:
-				break;
+			let oldProviders = AI.Providers;
+			AI.Providers = {};
+
+			AI.InternalCustomProvidersSources = obj.customProviders || {};
+			AI.loadCustomProviders();
+
+			for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
+				let pr = AI.InternalCustomProviders[i];
+				oldProviders[pr.name] = pr;
+			}
+
+			for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
+				let pr = AI.ExternalCustomProviders[i];
+				oldProviders[pr.name] = pr;
 			}
 			
-			if (obj) {
-				let oldProviders = AI.Providers;
-				AI.Providers = {};
+			for (let i in obj.providers) {
+				let pr = obj.providers[i];
+				AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
+				AI.Providers[i].models = pr.models || [];
+			}
 
-				AI.InternalCustomProvidersSources = obj.customProviders || {};
-				AI.loadCustomProviders();
+			for (let pr in oldProviders)
+			{
+				if (!AI.Providers[pr])
+					AI.Providers[pr] = oldProviders[pr];
+			}
 
-				for (let i = 0, len = AI.InternalCustomProviders.length; i < len; i++) {
-					let pr = AI.InternalCustomProviders[i];
-					oldProviders[pr.name] = pr;
-				}
-
-				for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
-					let pr = AI.ExternalCustomProviders[i];
-					oldProviders[pr.name] = pr;
-				}
-				
-				for (let i in obj.providers) {
-					let pr = obj.providers[i];
-					AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
-					AI.Providers[i].models = pr.models || [];
-
-					if (fixVersion2) {
-						if (!AI.isInternalProvider(pr.name))
-							AI.Providers[i].addon = "v1";
-					}
-				}
-
-				for (let pr in oldProviders)
+			// correct old models information
+			for (let pr in AI.Providers)
+			{
+				if (AI.Providers[pr] && AI.Providers[pr].name === "OpenAI")
 				{
-					if (!AI.Providers[pr])
-						AI.Providers[pr] = oldProviders[pr];
-				}
-
-				// correct old models information
-				for (let pr in AI.Providers)
-				{
-					if (AI.Providers[pr] && AI.Providers[pr].name === "OpenAI")
-					{
-						let models = AI.Providers[pr].models;
-						for (let i = 0, len = models.length; i < len; i++) {
-							if (models[i].name.startsWith("gpt-4")) {
-								if (models[i].options && 
-									undefined !== models[i].options.max_input_tokens &&
-									models[i].options.max_input_tokens < AI.InputMaxTokens["128k"]) {
-									models[i].options.max_input_tokens = AI.InputMaxTokens["128k"];
-								}
+					let models = AI.Providers[pr].models;
+					for (let i = 0, len = models.length; i < len; i++) {
+						if (models[i].name.startsWith("gpt-4")) {
+							if (models[i].options && 
+								undefined !== models[i].options.max_input_tokens &&
+								models[i].options.max_input_tokens < AI.InputMaxTokens["128k"]) {
+								models[i].options.max_input_tokens = AI.InputMaxTokens["128k"];
 							}
 						}
-					}						
-				}
-
-				AI.Models = obj.models;
+					}
+				}						
 			}
-		}				
+
+			AI.Models = obj.models;
+		}
 
 		return obj ? true : false;
 	};

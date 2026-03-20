@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addColorScale",
+		"text": "Apply Color Scale",
 		"description": "Applies color scale conditional formatting to visualize data with gradient colors. Creates a heat map effect where values are represented by colors ranging from one color (minimum values) to another color (maximum values). Use 2-color scale for simple comparisons or 3-color scale for more detailed data visualization.",
 		"parameters": {
 			"type": "object",
@@ -68,21 +69,38 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.colorScaleType = params.colorScaleType || 3;
 
-		await Asc.Editor.callCommand(function() {
+		if (params.colorScaleType !== undefined && params.colorScaleType !== null && params.colorScaleType !== 2 && params.colorScaleType !== 3)
+			throw new window.AgentState.ToolError("Invalid colorScaleType \"" + params.colorScaleType + "\". Available options: " + JSON.stringify([2, 3]));
+
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			
 			let formatConditions = range.GetFormatConditions();
 			formatConditions.AddColorScale(Asc.scope.colorScaleType);
+			let condition = formatConditions.AddColorScale(Asc.scope.colorScaleType);
+			if (!condition)
+				return { error: "Failed to create color scale conditional formatting rule." };
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

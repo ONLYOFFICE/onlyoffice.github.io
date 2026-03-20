@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addImage",
+		"text": "Insert Image",
 		"description": "Use this function when you need to insert an image into the spreadsheet.",
 		"parameters": {
 			"type": "object",

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeSlideBackground",
+		"text": "Change Slide Background",
 		"description": "Changes the color of the slide in the presentation.",
 		"parameters": {
 			"type": "object",
@@ -74,12 +75,23 @@
 	
 	func.call = async function(params) {
 		Asc.scope.params = params;
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 				let presentation = Api.GetPresentation();
-				let slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
-				if (!slide) 
+				let slide;
+
+				if (Asc.scope.params.slideNumber) {
+					slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+					if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
+				}
+				else {
 					slide = presentation.GetCurrentSlide();
+				}
 				if (!slide) return;
+
+				let validTypes = ["solid", "gradient"];
+				if (Asc.scope.params.backgroundType && validTypes.indexOf(Asc.scope.params.backgroundType) === -1) {
+					return {error: "invalid_background_type", validTypes: validTypes};
+				}
 
 				let fill;
 
@@ -118,6 +130,13 @@
 					slide.SetBackground(fill);
 				}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_background_type") {
+			throw new window.AgentState.ToolError("The background type \"" + params.backgroundType + "\" is not valid! Valid types are: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;

@@ -38,6 +38,7 @@
 	"Realtime Tasks": "المهام الفورية",
 	"Coding Help": "المساعدة في البرمجة",
 	"Visual Analysis": "التحليل البصري",
+	"Function Calling / Tools": "استدعاء الدوال / الأدوات",
 	"Updating": "جارٍ التحديث",
 	"Your text" : "نصكم",
 	"Target language" : "اللغة الهدف",
@@ -121,7 +122,7 @@
 	"Get advice about": "نصيحة حول",
 	"Get advice": "نصيحة",
 	"Ask AI anything": "اطرحوا أي سؤال على الذكاء الاصطناعي",
-	"Generate new": "إنشاء جديد",
+	"Update": "تحديث",
 	"Something went wrong": "حدث خطأ ما",
 	"Please try reloading the conversation": "يرجى إعادة تحميل المحادثة",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "معالجة التحديد...",
 	"Processing document...": "معالجة المستند...",
 	"Action": "إجراء",
+	"Function executed successfully": "تم تنفيذ الوظيفة بنجاح",
 	"Prompt": "إدخال",
 	"Give your tool a short name for the toolbar": "أعطِ أداةك اسماً قصيراً للشريط الأدائي",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "قول للذكاء الاصطناعي ما يجب عليه فعله مع النص المحدد (مثل \"إيجاد أخطاء حقيقة\" أو \"إعادة صياغة\")",
@@ -178,5 +180,8 @@
 	"Hint": "الإرشاد",
 	"Replace": "الإضافة",
 	"Replace + Hint": "إضافة + إرشاد",
-	"Generate Document": "إنشاء مستند"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "إنشاء مستند",
+	"Operation was interrupted.": "تم مقاطعة العملية."
 }
