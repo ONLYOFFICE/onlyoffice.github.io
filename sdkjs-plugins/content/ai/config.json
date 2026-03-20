@@ -17,8 +17,8 @@
 	},
 
 	"guid" : "asc.{9DC93CDB-B576-4F0C-B55E-FCC9C48DD007}",
-	"version": "3.2.0",
-	"minVersion" : "8.2.1",
+	"version": "3.2.1",
+	"minVersion" : "8.2.0",
 
 	"variations" : [
 		{
