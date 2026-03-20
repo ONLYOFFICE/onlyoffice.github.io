@@ -156,3 +156,6 @@
 
 ## 3.2.0
 * Chat has been redesigned.
+
+## 3.2.1
+* Update storage version.

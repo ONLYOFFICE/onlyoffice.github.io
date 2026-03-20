@@ -36,7 +36,7 @@
 	var AI = exports.AI;
 	AI.UI = AI.UI || {};
 	AI.Storage = AI.Storage || {};
-	AI.Storage.Version = 3;
+	AI.Storage.Version = 4;
 
 	AI.isLocalDesktop = (function(){
 		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
