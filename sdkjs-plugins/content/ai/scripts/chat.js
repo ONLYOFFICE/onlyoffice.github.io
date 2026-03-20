@@ -43,6 +43,15 @@
 	let isAgentRunning = false;
 	let isAgentStopped = false;
 
+	function escapeHtml(str) {
+		if (!str) return '';
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+	}
+
 	// 'action' — show translated "Action" in collapsed header
 	// 'name'   — show human function name in collapsed header (truncated to TOOL_CALL_NAME_MAX_LENGTH)
 	// In both modes, expanded header always shows the full function name
@@ -152,12 +161,12 @@
 							if (parsed.code) displayArgs = parsed.code;
 						} catch(e) {}
 					}
-					$callBlock.append('<div class="tool_call_section"><pre>' + displayArgs + '</pre></div>');
+					$callBlock.append('<div class="tool_call_section"><pre>' + escapeHtml(displayArgs) + '</pre></div>');
 				}
 
 				if (call.result !== null) {
 					let resultText = typeof call.result === 'string' ? call.result : JSON.stringify(call.result, null, 2);
-					$callBlock.append('<div class="tool_call_section"><pre>' + resultText + '</pre></div>');
+					$callBlock.append('<div class="tool_call_section"><pre>' + escapeHtml(resultText) + '</pre></div>');
 				}
 
 				$details.append($callBlock);
@@ -831,9 +840,15 @@
 		loader = undefined;
 	};
 
+	let errClickBound = false;
 	function setError(error) {
+		let divErr = document.getElementById('div_err');
 		document.getElementById('lb_err').innerHTML = window.Asc.plugin.tr(error);
-		document.getElementById('div_err').classList.remove('hidden');
+		divErr.classList.remove('hidden');
+		if (!errClickBound) {
+			divErr.addEventListener('click', clearError);
+			errClickBound = true;
+		}
 		if (errTimeout) {
 			clearTimeout(errTimeout);
 			errTimeout = null;
@@ -844,6 +859,10 @@
 	function clearError() {
 		document.getElementById('div_err').classList.add('hidden');
 		document.getElementById('lb_err').innerHTML = '';
+		if (errTimeout) {
+			clearTimeout(errTimeout);
+			errTimeout = null;
+		}
 	};
 
 	function getFormattedPathForIcon(path) {
