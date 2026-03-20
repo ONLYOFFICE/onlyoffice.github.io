@@ -114,7 +114,8 @@ async function registerButtons(window, undefined)
 			MAX_LOOP_ITERATIONS : 10,
 			isStopped : false,
 			tools : null,
-			systemToolsPrompt : ""
+			systemToolsPrompt : "",
+			toolsSystemPrompt : ""
 		};
 		window.AgentState = AgentState;
 
@@ -153,6 +154,18 @@ async function registerButtons(window, undefined)
 
 				if (AgentState.tools && AgentState.tools.length > 0)
 					requestData.tools = AgentState.tools;
+
+				if ("" === AgentState.toolsSystemPrompt)
+					AgentState.toolsSystemPrompt = window.EditorHelper.getToolsSystemPrompt();
+
+				if (AgentState.toolsSystemPrompt) {
+					if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+						requestData.messages.unshift({
+							role: 'system',
+							content: AgentState.toolsSystemPrompt
+						});
+					}
+				}
 			} else {
 				if ("" === AgentState.systemToolsPrompt)
 					AgentState.systemToolsPrompt = window.EditorHelper.getSystemPrompt();
