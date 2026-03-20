@@ -91,6 +91,12 @@ class Provider extends AI.Provider {
 			model.endpoints.push(AI.Endpoints.Types.v1.Images_Generations);
 			return AI.CapabilitiesUI.Image;
 		}
+
+		if (-1 != model.id.indexOf("-image-"))
+		{
+			model.endpoints.push(AI.Endpoints.Types.v1.Images_Generations);
+			return AI.CapabilitiesUI.Image;
+		}
 		
 		if (0 === model.id.indexOf("gpt-4o") ||
 			0 === model.id.indexOf("o1-") ||
@@ -110,6 +116,10 @@ class Provider extends AI.Provider {
 
 	getImageGeneration(message, model) {
 		let result = super.getImageGeneration(message, model);
+		if (-1 != model.id.indexOf("-image-")) {
+			if (result.response_format)
+				delete result.response_format;
+		}
 		result.size = result.width + "x" + result.height;
 		delete result.width;
 		delete result.height;
