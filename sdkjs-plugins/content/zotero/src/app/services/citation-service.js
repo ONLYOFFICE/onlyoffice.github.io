@@ -212,13 +212,11 @@ class CitationService {
         fragment.appendChild(tempElement);
 
         try {
-            var bibItems = new Array(self._storage.size);
+            var bibItems = [];
             /** @type {false | any} */
             var bibObject = self._formatter.makeBibliography();
             // Sort bibliography items
             for (var i = 0; i < bibObject[0].entry_ids.length; i++) {
-                var citationId = bibObject[0].entry_ids[i][0];
-                var citationIndex = self._storage.getIndex(citationId);
                 /** @type {string} */
                 var bibText = bibObject[1][i];
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
@@ -233,7 +231,7 @@ class CitationService {
                         .replace(/<sub\b[^>]*>/gi, "&lt;sub&gt;")
                         .replace(/<\/sub>/gi, "&lt;/sub&gt;"); 
                 }*/
-                bibItems[citationIndex] = bibText;
+                bibItems.push(bibText);
             }
             tempElement.innerHTML = bibItems.join("");
         } catch (e) {
