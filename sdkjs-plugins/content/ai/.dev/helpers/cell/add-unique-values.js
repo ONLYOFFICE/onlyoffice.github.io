@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addUniqueValues",
+		"text": "Highlight Unique or Duplicate Values",
 		"description": "Highlights unique values or duplicate values in a range. Use this to identify data that appears only once (unique) or multiple times (duplicates) within the specified range. Perfect for data validation and cleanup tasks.",
 		"parameters": {
 			"type": "object",
@@ -77,38 +78,57 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validDuplicateUnique = ["unique", "duplicate"];
+		if (params.duplicateUnique !== undefined && params.duplicateUnique !== null && !validDuplicateUnique.includes(params.duplicateUnique))
+			throw new window.AgentState.ToolError("Invalid duplicateUnique \"" + params.duplicateUnique + "\". Available options: " + JSON.stringify(validDuplicateUnique));
+
+		if (params.fillColor !== undefined && params.fillColor !== null) {
+			let r = params.fillColor.r, g = params.fillColor.g, b = params.fillColor.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid fillColor: r, g, b must each be integers between 0 and 255. Example: {\"r\": 255, \"g\": 0, \"b\": 0} for red.");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.duplicateUnique = params.duplicateUnique || 'duplicate';
 		Asc.scope.fillColor = params.fillColor;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			
 			let formatConditions = range.GetFormatConditions();
 			let condition = formatConditions.AddUniqueValues();
+			if (!condition)
+				return { error: "Failed to create unique/duplicate values conditional formatting rule." };
 
-			if (condition) {
-				if (Asc.scope.duplicateUnique === 'unique') {
-					condition.SetDupeUnique("xlUnique");
-				} else {
-					condition.SetDupeUnique("xlDuplicate");
-				}
-				
-				if (Asc.scope.fillColor) {
-					let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
-					condition.SetFillColor(fillColor);
-				} else {
-					let defaultFillColor = Api.CreateColorFromRGB(255, 192, 203);
-					condition.SetFillColor(defaultFillColor);
-				}
+			condition.SetDupeUnique(Asc.scope.duplicateUnique === "unique" ? "xlUnique" : "xlDuplicate");
+
+			if (Asc.scope.fillColor) {
+				let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
+				condition.SetFillColor(fillColor);
+			} else {
+				let defaultFillColor = Api.CreateColorFromRGB(255, 192, 203);
+				condition.SetFillColor(defaultFillColor);
 			}
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

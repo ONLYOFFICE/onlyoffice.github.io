@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addChart",
+		"text": "Create Chart",
 		"description": "Creates charts from data ranges to visualize data. Supports multiple chart types including bar charts, line charts, pie charts, scatter plots, and area charts. Each chart type has variants like stacked, 3D, and percentage views. Charts are automatically positioned below the source data range with configurable dimensions. Optional chart titles can be added for better context.",
 		"parameters": {
 			"type": "object",
@@ -76,11 +77,20 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.chartType = params.chartType || "bar";
 		Asc.scope.title = params.title;
 
-		await Asc.Editor.callCommand(function(){
+		let callResult = await Asc.Editor.callCommand(function(){
+			let validChartTypes = ["bar", "barStacked", "barStackedPercent", "bar3D", "barStacked3D", "barStackedPercent3D", "barStackedPercent3DPerspective", "horizontalBar", "horizontalBarStacked", "horizontalBarStackedPercent", "horizontalBar3D", "horizontalBarStacked3D", "horizontalBarStackedPercent3D", "lineNormal", "lineStacked", "lineStackedPercent", "line3D", "pie", "pie3D", "doughnut", "scatter", "stock", "area", "areaStacked", "areaStackedPercent"];
+			if (validChartTypes.indexOf(Asc.scope.chartType) === -1) return {error: "invalid_chart_type", validTypes: validChartTypes};
+
 			let ws = Api.GetActiveSheet();
 			let chartRange;
 
@@ -114,6 +124,10 @@
 				chart.SetTitle(Asc.scope.title, 14);
 			}
 		});
+
+		if (callResult && callResult.error === "invalid_chart_type") {
+			throw new window.AgentState.ToolError("The chart type \"" + (params.chartType || "bar") + "\" is not valid! Here is a list of available chart types: " + JSON.stringify(callResult.validTypes));
+		}
 	};
 
 	return func;

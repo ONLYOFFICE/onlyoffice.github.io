@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeTextStyle",
+		"text": "Format Text",
 		"description": "Changes the style of the selected text, including bold, italic, underline, strikethrough, and font size.",
 		"parameters": {
 			"type": "object",
@@ -98,6 +99,19 @@
 	});
 	
 	func.call = async function(params) {
+		const boolParams = ["bold", "italic", "underline", "strikeout"];
+		for (let i = 0; i < boolParams.length; i++) {
+			let key = boolParams[i];
+			if (params[key] !== undefined && params[key] !== null && typeof params[key] !== 'boolean')
+				throw new window.AgentState.ToolError('Parameter "' + key + '" must be a boolean. Got: ' + JSON.stringify(params[key]));
+		}
+		if (params.fontSize !== undefined && params.fontSize !== null) {
+			if (typeof params.fontSize !== 'number')
+				throw new window.AgentState.ToolError('Parameter "fontSize" must be a number. Got: ' + JSON.stringify(params.fontSize));
+			if (params.fontSize < 1 || params.fontSize > 200)
+				throw new window.AgentState.ToolError('Parameter "fontSize" must be between 1 and 200. Got: ' + params.fontSize);
+		}
+
 		Asc.scope.params = params;
 		await Asc.Editor.callCommand(function(){
 			let doc = Api.GetDocument();

@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addCellValueCondition",
+		"text": "Highlight Cells by Condition",
 		"description": "Creates conditional formatting rules based on cell values using comparison operators (greater than, less than, equal to, between, etc.). This is the most flexible conditional formatting option, allowing you to highlight cells that meet specific criteria with custom colors for background and text.",
 		"parameters": {
 			"type": "object",
@@ -93,6 +94,30 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validOperators = ["xlGreater", "xlLess", "xlEqual", "xlNotEqual", "xlGreaterEqual", "xlLessEqual", "xlBetween", "xlNotBetween"];
+		if (params.operator !== undefined && params.operator !== null && !validOperators.includes(params.operator))
+			throw new window.AgentState.ToolError("Invalid operator \"" + params.operator + "\". Available options: " + JSON.stringify(validOperators));
+
+		function validateColor(color, paramName) {
+			if (color === undefined || color === null) return;
+			let r = color.r, g = color.g, b = color.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid " + paramName + ": r, g, b must each be integers between 0 and 255. Example: {\"r\": 255, \"g\": 0, \"b\": 0} for red.");
+		}
+		validateColor(params.fillColor, "fillColor");
+		validateColor(params.fontColor, "fontColor");
+
+		if ((params.operator === "xlBetween" || params.operator === "xlNotBetween") && params.value2 === undefined)
+			throw new window.AgentState.ToolError("Operator \"" + params.operator + "\" requires value2 parameter (the second boundary value).");
+
 		Asc.scope.range = params.range;
 		Asc.scope.operator = params.operator;
 		Asc.scope.value1 = params.value1;
@@ -100,36 +125,41 @@
 		Asc.scope.fillColor = params.fillColor;
 		Asc.scope.fontColor = params.fontColor;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			
 			let formatConditions = range.GetFormatConditions();
 			let condition = formatConditions.Add("xlCellValue", Asc.scope.operator, Asc.scope.value1, Asc.scope.value2);
-			
-			if (condition) {
-				if (Asc.scope.fontColor) {
-					let fontColor = Api.CreateColorFromRGB(Asc.scope.fontColor.r, Asc.scope.fontColor.g, Asc.scope.fontColor.b);
-					let font = condition.GetFont();
-					if (font && font.SetColor) {
-						font.SetColor(fontColor);
-					}
-				}
-				
-				if (Asc.scope.fillColor) {
-					let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
-					condition.SetFillColor(fillColor);
-				} else {
-					let defaultFillColor = Api.CreateColorFromRGB(255, 255, 0);
-					condition.SetFillColor(defaultFillColor);
+			if (!condition)
+				return { error: "Failed to create conditional formatting rule. Check that operator and value1 are valid." };
+
+			if (Asc.scope.fontColor) {
+				let fontColor = Api.CreateColorFromRGB(Asc.scope.fontColor.r, Asc.scope.fontColor.g, Asc.scope.fontColor.b);
+				let font = condition.GetFont();
+				if (font && font.SetColor) {
+					font.SetColor(fontColor);
 				}
 			}
+
+			if (Asc.scope.fillColor) {
+				let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
+				condition.SetFillColor(fillColor);
+			} else {
+				let defaultFillColor = Api.CreateColorFromRGB(255, 255, 0);
+				condition.SetFillColor(defaultFillColor);
+			}
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

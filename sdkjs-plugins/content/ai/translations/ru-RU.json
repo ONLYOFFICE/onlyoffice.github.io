@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Задачи в режиме реального времени",
 	"Coding Help": "Помощь в кодировании",
 	"Visual Analysis": "Визуальный анализ",
+	"Function Calling / Tools": "Вызов функций / Инструменты",
 	"Updating": "Обновление",
 	"Your text": "Ваш текст",
 	"Target language": "Язык перевода",
@@ -121,7 +122,7 @@
 	"Get advice about": "Получить совет по",
 	"Get advice": "Получить совет",
 	"Ask AI anything": "Задайте ИИ какой-нибудь вопрос",
-	"Generate new": "Сгенерировать новый",
+	"Update": "Обновить",
 	"Something went wrong": "Что-то пошло не так",
 	"Please try reloading the conversation": "Пожалуйста, попробуйте перезагрузить беседу",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "Обработка выделенного фрагмента...",
 	"Processing document...": "Обработка документа...",
 	"Action": "Действие",
+	"Function executed successfully": "Функция выполнена успешно",
 	"Prompt": "Пометка",
 	"Give your tool a short name for the toolbar": "Дайте вашему инструменту короткое имя для панели инструментов",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Попросите ИИ выполнить действие над выбранным текстом (например, \"Найти фактические ошибки\" или \"Сжать\")",
@@ -178,5 +180,8 @@
 	"Hint": "Подсказка",
 	"Replace": "Заменa",
 	"Replace + Hint": "Замена + Подсказка",
-	"Generate Document": "Создать документ"
+	"Arguments": "Параметры",
+	"Result": "Результат",
+	"Generate Document": "Создать документ",
+	"Operation was interrupted.": "Операция была прервана."
 }

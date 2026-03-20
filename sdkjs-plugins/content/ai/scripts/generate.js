@@ -47,6 +47,19 @@ MarkDownStreamer.prototype.onStreamChunk = async function(mdValue, isFinalChunk)
 {
 	if (!this.isStated) {
 		await Asc.Editor.callMethod("StartAction", ["GroupActions"]);
+		await Asc.Library.PasteText("\n");
+		await Asc.Editor.callCommand(function(){
+			let doc = Api.GetDocument();
+			let p = doc.GetCurrentParagraph();
+			let run = Api.CreateRun();
+			
+			if (!p || !run)
+				return;
+			
+			p.SetStyle("Normal");
+			p.AddElement(run, 0);
+			run.MoveCursorToPos(0);
+		});
 		this.isStated = true;
 	}
 
@@ -281,6 +294,8 @@ async function streamPromptResultToDocument(prompt)
 			await checkEndAction();
 		
 		await onStreamEvent(data);
+
+		return window.AgentState && window.AgentState.isStopped ? true : false;
 	} : undefined);
 
 	if (!isSupportStreaming) {

@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "generatePresentationWithTheme",
+		"text": "Generate Presentation",
 		"description": "Generates a complete presentation with custom theme, fonts, and streaming content",
 		"parameters": {
 			"type": "object",

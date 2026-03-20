@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addAboveAverage",
+		"text": "Highlight Above-Average Values",
 		"description": "Highlights cells that contain values above or below the average of all values in the range. This is useful for identifying data points that deviate significantly from the typical values in your dataset.",
 		"parameters": {
 			"type": "object",
@@ -81,16 +82,37 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		if (params.numStdDev !== undefined && params.numStdDev !== null) {
+			if (typeof params.numStdDev !== 'number' || isNaN(params.numStdDev))
+				throw new window.AgentState.ToolError("Invalid numStdDev \"" + params.numStdDev + "\". Must be a number (e.g., 0, 1, 2).");
+		}
+
+		if (params.fillColor !== undefined && params.fillColor !== null) {
+			let r = params.fillColor.r, g = params.fillColor.g, b = params.fillColor.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid fillColor: r, g, b must each be integers between 0 and 255. Example: {\"r\": 255, \"g\": 0, \"b\": 0} for red.");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.aboveBelow = params.aboveBelow !== false; // default true
 		Asc.scope.numStdDev = params.numStdDev || 0;
 		Asc.scope.fillColor = params.fillColor;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.GetSelection();
 			}
@@ -101,23 +123,25 @@
 
 			let formatConditions = range.GetFormatConditions();
 			let condition = formatConditions.AddAboveAverage();
-			
-			if (condition) {
-				condition.SetAboveBelow(Asc.scope.aboveBelow);
-				
-				if (Asc.scope.numStdDev !== 0) {
-					condition.SetNumStdDev(Asc.scope.numStdDev);
-				}
-				
-				if (Asc.scope.fillColor) {
-					let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
-					condition.SetFillColor(fillColor);
-				} else {
-					let defaultFillColor = Api.CreateColorFromRGB(255, 165, 0);
-					condition.SetFillColor(defaultFillColor);
-				}
+			if (!condition)
+				return { error: "Failed to create above/below average conditional formatting rule for the specified range." };
+
+			condition.SetAboveBelow(Asc.scope.aboveBelow);
+
+			if (Asc.scope.numStdDev !== 0)
+				condition.SetNumStdDev(Asc.scope.numStdDev);
+
+			if (Asc.scope.fillColor) {
+				let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
+				condition.SetFillColor(fillColor);
+			} else {
+				let defaultFillColor = Api.CreateColorFromRGB(255, 165, 0);
+				condition.SetFillColor(defaultFillColor);
 			}
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

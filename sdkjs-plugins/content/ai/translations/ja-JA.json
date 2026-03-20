@@ -38,6 +38,7 @@
 	"Realtime Tasks": "リアルタイムタスク",
 	"Coding Help": "コード支援",
 	"Visual Analysis": "ビジュアル分析",
+	"Function Calling / Tools": "関数呼び出し / ツール",
 	"Updating": "更新中",
 	"Your text" : "テキストを入力",
 	"Target language" : "翻訳先言語",
@@ -121,7 +122,7 @@
 	"Get advice about": "相談する",
 	"Get advice": "相談する",
 	"Ask AI anything": "AIに何でも聞く",
-	"Generate new": "新規生成",
+	"Update": "更新",
 	"Something went wrong": "何らかの問題が発生しました",
 	"Please try reloading the conversation": "会話を再読み込みしてみてください",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "選択を処理中...",
 	"Processing document...": "文書を処理中...",
 	"Action": "アクション",
+	"Function executed successfully": "関数が正常に実行されました",
 	"Prompt": "プロンプト",
 	"Give your tool a short name for the toolbar": "ツールバーに短い名前をつけてください",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "選択したテキストに対してAIに何をすべきかを教える (例: \"事実上の誤りを見つけ\"または\"要約\")",
@@ -178,5 +180,8 @@
 	"Hint": "ヒント",
 	"Replace": "置き換え",
 	"Replace + Hint": "置き換え + ヒント",
-	"Generate Document": "ドキュメントを生成する"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "ドキュメントを生成する",
+	"Operation was interrupted.": "操作が中断されました。"
 }
