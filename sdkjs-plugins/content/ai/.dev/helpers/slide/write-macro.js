@@ -34,8 +34,10 @@
 		"name": "writeMacro",
 		"text": "Run Macro",
 		"description": `Executes a JavaScript macro using the OnlyOffice Presentation API.
-Call this function ONLY when the user explicitly asks to execute/run a command (e.g. 'execute command', 'run this').
-Do NOT call this for regular editing requests or questions — only when the user explicitly requests execution.`,
+Use this tool to perform any presentation operation when no other specialized tool is available.
+This tool can also be used to READ/GET data from the presentation — make the last expression in the script be the value you want to retrieve, and it will be returned as the tool result.
+For example, to get the number of slides, write: Api.GetPresentation().GetSlidesCount()
+The return value of the last expression will be the tool's output.`,
 		"parameters": {
 			"type": "object",
 			"properties": {
@@ -121,7 +123,10 @@ oSlide.SetBackground(oFill);`
 		Asc.scope.macroCode = params.code;
 		let returnValue = await Asc.Editor.callCommand(function() {
 			try {
-				eval(Asc.scope.macroCode);
+				var __result = eval(Asc.scope.macroCode);
+				if (__result !== undefined && __result !== null) {
+					return { onlyoffice_id_result: __result };
+				}
 			} catch(e) {
 				return { onlyoffice_id_error_message: e.name + ": " + e.message };
 			}
@@ -129,6 +134,10 @@ oSlide.SetBackground(oFill);`
 
 		if (returnValue && returnValue.onlyoffice_id_error_message) {
 			throw new window.AgentState.ToolError(returnValue.onlyoffice_id_error_message);
+		}
+
+		if (returnValue && returnValue.onlyoffice_id_result !== undefined) {
+			return returnValue.onlyoffice_id_result;
 		}
 	};
 
