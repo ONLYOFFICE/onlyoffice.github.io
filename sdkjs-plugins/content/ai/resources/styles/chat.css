@@ -611,6 +611,14 @@ html.compact-radius .user_message .message_content {
 	border-radius: 2px !important;
 }
 
+html.compact-radius body.theme-type-light .user_message .message_content {
+	background-color: #FFFFFF !important;
+}
+
+html.compact-radius body.theme-type-dark .user_message .message_content {
+	background-color: #1E1E1E !important;
+}
+
 html.compact-radius #input_message_wrapper {
 	border-radius: 2px !important;
 }
