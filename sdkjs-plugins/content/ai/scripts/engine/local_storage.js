@@ -156,11 +156,6 @@
 				let pr = obj.providers[i];
 				AI.Providers[i] = AI.createProviderInstance(pr.name, pr.url, pr.key, pr.addon);
 				AI.Providers[i].models = pr.models || [];
-
-				if (fixVersion2) {
-					if (!AI.isInternalProvider(pr.name))
-						AI.Providers[i].addon = "v1";
-				}
 			}
 
 			for (let pr in oldProviders)
