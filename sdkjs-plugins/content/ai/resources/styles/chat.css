@@ -584,6 +584,7 @@ html.no-message-border.no-ai-message-background .message:not(.user_message):not(
 html.no-all-messages-border #chat_wrapper {
 	border: none !important;
 	box-shadow: none !important;
+	background: transparent !important;
 }
 
 html.no-all-messages-border #input_message_wrapper {
@@ -599,6 +600,23 @@ html.no-all-messages-border #input_message {
 html.no-all-messages-border .message:not(.user_message):not(.tool_call_message) .message_content {
 	padding-left: 0 !important;
 	padding-right: 0 !important;
+}
+
+/* ── compact-radius: non-standard themes in no-all-messages-border mode ──── */
+html.compact-radius .welcome_button {
+	border-radius: 2px !important;
+}
+
+html.compact-radius .user_message .message_content {
+	border-radius: 2px !important;
+}
+
+html.compact-radius #input_message_wrapper {
+	border-radius: 2px !important;
+}
+
+html.compact-radius .action_button {
+	border-radius: 2px !important;
 }
 
 /* Tool Call Styles - Minimalistic gray design */
