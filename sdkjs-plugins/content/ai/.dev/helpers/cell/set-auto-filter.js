@@ -229,7 +229,8 @@
 					return { error: "No range specified and no cells are currently selected. Please provide a range parameter (e.g., 'A1:D10')." };
 			}
 
-			let field = Asc.scope.field !== undefined ? Asc.scope.field : 1;
+			if (Asc.scope.field != null && typeof Asc.scope.field !== 'number')
+				return { error: "Invalid field \"" + Asc.scope.field + "\". Must be a number (e.g., 1)" };
 
 			let criteria1 = Asc.scope.criteria1;
 			if (criteria1 && criteria1.startsWith && (criteria1.startsWith("[") || criteria1.startsWith("{")))
@@ -241,7 +242,7 @@
 			}
 
 			range.SetAutoFilter(
-				field,
+				Asc.scope.field,
 				criteria1,
 				Asc.scope.operator,
 				Asc.scope.criteria2,
