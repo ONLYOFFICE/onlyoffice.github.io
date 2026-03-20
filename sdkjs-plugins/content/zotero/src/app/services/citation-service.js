@@ -224,6 +224,7 @@ class CitationService {
                 while (bibText.indexOf("\n") !== bibText.lastIndexOf("\n")) {
                     bibText = bibText.replace(/\n/, "");
                 }
+                bibText = bibText.replace(/<\/div>\s*<div[^>]*csl-right-inline[^>]*>/g, " ");
                 // Check if bibliography item contains <sup> or <sub>
                 /*if (/<sup[^>]*>|<\/sup>|<sub[^>]*>|<\/sub>/i.test(bibText)) {
                     // Escape <sup> and <sub>
