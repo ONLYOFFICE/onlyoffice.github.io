@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addDataBars",
+		"text": "Add Data Bars",
 		"description": "Adds data bar conditional formatting to display values as horizontal bars within cells. The length of each bar represents the value relative to other values in the range. Useful for creating in-cell bar charts and comparing values at a glance without additional charts.",
 		"parameters": {
 			"type": "object",
@@ -58,9 +59,9 @@
 				},
 				"direction": {
 					"type": "string",
-					"description": "Direction of bars - 'leftToRight', 'rightToLeft' (default: 'leftToRight').",
-					"enum": ["leftToRight", "rightToLeft"],
-					"default": "leftToRight"
+					"description": "Direction of bars - 'xlLTR' (left to right), 'xlRTL' (right to left), 'xlContext' (context-based, default: 'xlLTR').",
+					"enum": ["xlContext", "xlLTR", "xlRTL"],
+					"default": "xlLTR"
 				}
 			},
 			"required": []
@@ -82,41 +83,62 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validDirections = ["xlContext", "xlLTR", "xlRTL"];
+		if (params.direction !== undefined && params.direction !== null && !validDirections.includes(params.direction))
+			throw new window.AgentState.ToolError("Invalid direction \"" + params.direction + "\". Available options: " + JSON.stringify(validDirections));
+
+		if (params.barColor !== undefined && params.barColor !== null) {
+			let r = params.barColor.r, g = params.barColor.g, b = params.barColor.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid barColor: r, g, b must each be integers between 0 and 255. Example: {\"r\": 0, \"g\": 112, \"b\": 192} for blue.");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.barColor = params.barColor;
 		Asc.scope.showValue = params.showValue;
 		Asc.scope.direction = params.direction;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			
 			let formatConditions = range.GetFormatConditions();
 			let databar = formatConditions.AddDatabar();
-			
-			if (databar) {
-				if (Asc.scope.barColor) {
-					let barColor = Api.CreateColorFromRGB(Asc.scope.barColor.r, Asc.scope.barColor.g, Asc.scope.barColor.b);
-					databar.SetBarColor(barColor);
-				} else {
-					let defaultBarColor = Api.CreateColorFromRGB(70, 130, 180);
-					databar.SetBarColor(defaultBarColor);
-				}
-				
-				if (typeof Asc.scope.showValue === "boolean") {
-					databar.SetShowValue(Asc.scope.showValue);
-				}
-				
-				if (Asc.scope.direction) {
-					databar.SetDirection(Asc.scope.direction);
-				}
+			if (!databar)
+				return { error: "Failed to create data bar conditional formatting rule." };
+
+			if (Asc.scope.barColor) {
+				let barColor = Api.CreateColorFromRGB(Asc.scope.barColor.r, Asc.scope.barColor.g, Asc.scope.barColor.b);
+				databar.SetBarColor(barColor);
+			} else {
+				let defaultBarColor = Api.CreateColorFromRGB(70, 130, 180);
+				databar.SetBarColor(defaultBarColor);
 			}
+
+			if (typeof Asc.scope.showValue === "boolean")
+				databar.SetShowValue(Asc.scope.showValue);
+
+			if (Asc.scope.direction)
+				databar.SetDirection(Asc.scope.direction);
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addConditionalFormatting",
+		"text": "Add Conditional Formatting",
 		"description": "Use this function when user asks for conditional formatting without specifying the exact type. This applies the most commonly used conditional formatting rule - highlighting cells based on values greater than a threshold with color background. Perfect for general requests like 'add conditional formatting', 'highlight important data', or 'format cells conditionally'.",
 		"parameters": {
 			"type": "object",
@@ -75,15 +76,36 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		if (params.threshold !== undefined && params.threshold !== null) {
+			if (typeof params.threshold !== 'number' || isNaN(params.threshold))
+				throw new window.AgentState.ToolError("Invalid threshold \"" + params.threshold + "\". Must be a number (e.g., 100).");
+		}
+
+		if (params.fillColor !== undefined && params.fillColor !== null) {
+			let r = params.fillColor.r, g = params.fillColor.g, b = params.fillColor.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid fillColor: r, g, b must each be integers between 0 and 255. Example: {\"r\": 255, \"g\": 0, \"b\": 0} for red.");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.threshold = params.threshold;
 		Asc.scope.fillColor = params.fillColor || {r: 255, g: 200, b: 200};
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
@@ -110,14 +132,17 @@
 			
 			let formatConditions = range.GetFormatConditions();
 			let condition = formatConditions.Add("xlCellValue", "xlGreater", threshold);
-			
-			if (condition) {
-				let color = Asc.scope.fillColor ? 
-					Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b) :
-					Api.CreateColorFromRGB(255, 200, 200);
-				condition.SetFillColor(color);
-			}
+			if (!condition)
+				return { error: "Failed to create conditional formatting rule." };
+
+			let color = Asc.scope.fillColor ?
+				Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b) :
+				Api.CreateColorFromRGB(255, 200, 200);
+			condition.SetFillColor(color);
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

@@ -622,9 +622,10 @@
 	};
 
 	Library.prototype.getJSONResult = function(data) {
-		let markdownEscape = data.indexOf("```json");
+		const markdownMarker = "```json";
+		let markdownEscape = data.indexOf(markdownMarker);
 		if (-1 !== markdownEscape && markdownEscape < 5)
-			data = data.substring(markdownEscape + 5);
+			data = data.substring(markdownEscape + markdownMarker.length);
 		return this.trimResult(data);
 	};
 

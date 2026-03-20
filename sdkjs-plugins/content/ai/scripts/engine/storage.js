@@ -36,7 +36,7 @@
 	var AI = exports.AI;
 	AI.UI = AI.UI || {};
 	AI.Storage = AI.Storage || {};
-	AI.Storage.Version = 3;
+	AI.Storage.Version = 4;
 
 	AI.isLocalDesktop = (function(){
 		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
@@ -108,6 +108,25 @@
 				resolve("");
 			}
 		})());
-	};	
+	};
+
+	AI.helperTranslations = {};
+
+	AI.loadHelperTranslations = async function() {
+		let lang = window.Asc.plugin.info.lang || "en";
+		if (lang.startsWith("en"))
+			return;
+
+		if (lang.length === 2)
+			lang = lang.toLowerCase() + "-" + lang.toUpperCase();
+
+		let text = await AI.loadResourceAsText("./translations/helpers/" + lang + ".json");
+		if (text) {
+			try {
+				AI.helperTranslations = JSON.parse(text);
+				return;
+			} catch (e) {}
+		}
+	};
 
 })(window);

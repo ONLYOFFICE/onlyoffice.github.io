@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "changeParagraphStyle",
+		"text": "Change Paragraph Style",
 		"description": "Changes the style of a specified paragraph in the document. If no paragraph number is provided, affects the current paragraph.",
 		"parameters": {
 			"type": "object",
@@ -71,14 +72,32 @@
 	func.call = async function(params) {
 		Asc.scope.parNumber = params.parNumber;
 		Asc.scope.styleName = params.style;
-		await Asc.Editor.callCommand(function(){
+		let callResult = await Asc.Editor.callCommand(function(){
 			let doc = Api.GetDocument();
 			let par = undefined === Asc.scope.parNumber ? doc.GetCurrentParagraph() : doc.GetElement(Asc.scope.parNumber - 1);
 			if (!par)
 				return;
-			let style = doc.GetStyle(Asc.scope.styleName);
-			par.SetStyle(style);
+
+			let names = [];
+			doc.GetAllStyles().forEach(function(style){
+				if ("paragraph" === style.GetType())
+					names.push(style.GetName());
+			});
+
+			if (names.includes(Asc.scope.styleName))
+			{
+				let style = doc.GetStyle(Asc.scope.styleName);
+				par.SetStyle(style);
+			}
+			else
+			{
+				return names;
+			}
 		});
+
+		if (Array.isArray(callResult)) {
+			throw new window.AgentState.ToolError("The style \"" + params.style + "\" does not exist! Here is a list of available styles:" + JSON.stringify(callResult));
+		}
 	};
 
 	return func;

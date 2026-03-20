@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "checkSpelling",
+		"text": "Check and Fix Spelling",
 		"description": "Checks spelling and fixes text errors in the current paragraph.",
 		"parameters": {
 			"type": "object",

@@ -140,7 +140,7 @@ class Provider extends AI.Provider {
 			markdownContent += md;
 			markdownContent += "\n\n";
 		}
-		
+
 		return markdownContent;
 	}
 

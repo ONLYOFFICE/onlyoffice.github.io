@@ -49,10 +49,13 @@ async function registerButtons(window, undefined)
 	buttonMain.icons = getContextMenuButtonIcons("general-ai");
 	buttonMain.addCheckers("All");
 
-	function chatWindowShow(attachedText)
+	function chatWindowShow(attachedText, isForceSend)
 	{
 		if (window.chatWindow) {
 			window.chatWindow.activate();
+			if (attachedText && attachedText.trim()) {
+				window.chatWindow.command("onAttachedText", { text: attachedText, forceSend: true });
+			}
 			return;
 		}
 
@@ -60,15 +63,23 @@ async function registerButtons(window, undefined)
 		if (!requestEngine)
 			return;
 
+		let panelPlace = window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window";
+		if (panelPlace === "panel")
+			panelPlace = "panelRight";
+
+		if (attachedText && attachedText.trim())
+			panelPlace = "panelRight";
+
 		let variation = {
 			url : "chat.html",
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
-			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+			icons: "resources/icons/%theme-name%(theme-default|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
 			isCanDocked: true,
-			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
+			dockedPlace: "panelRight",
+			type: panelPlace,
 			EditorsSupport : ["word", "slide", "cell", "pdf"],
 			size : [ 400, 400 ]
 		};
@@ -79,20 +90,278 @@ async function registerButtons(window, undefined)
 		chatWindow.attachEvent("onWindowReady", function() {
 			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]]);
 			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
-				chatWindow.command("onAttachedText", attachedText);
+				chatWindow.command("onAttachedText", isForceSend
+					? { text: attachedText, forceSend: true }
+					: attachedText
+				);
 			}
+
+			function isSupportVoiceInput() {
+				if (window.AscDesktopEditor)
+					return false;
+				if (window.location.protocol.startsWith("https"))
+					return true;
+
+				return true;
+			}
+
+			chatWindow.command("onVoiceInputSupport", isSupportVoiceInput());
+
 			hasOpenedOnce = true;
 		});
-		chatWindow.attachEvent("onChatMessage", async function(message) {
+		
+		var AgentState = {
+			MAX_LOOP_ITERATIONS : 10,
+			isStopped : false,
+			tools : null,
+			systemToolsPrompt : "",
+			toolsSystemPrompt : ""
+		};
+		window.AgentState = AgentState;
+
+		class ToolError extends Error {
+			constructor(message) {
+				super(message);
+				this.name = "ToolError";
+			}
+		}
+		window.AgentState.ToolError = ToolError;
+
+		chatWindow.attachEvent("onStopAgent", function() {
+			AgentState.isStopped = true;
+		});
+
+		chatWindow.attachEvent("onChatMessage", async function(messageHistory) {
+			AgentState.isStopped = false;
+
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
 				return;
 
-			let result = await requestEngine.chatRequest(message);
-			if (!result) result = "";
+			if (!window.EditorHelper)
+				window.EditorHelper = new EditorHelperImpl();
 
-			//result = result.replace(/\n\n/g, '\n');
-			chatWindow.command("onChatReply", result);
+			let provider = AI.Storage.getProvider(requestEngine.modelUI.provider);
+			let isSupportTools = provider && provider.isSupportTools(requestEngine.model, requestEngine.modelUI);
+
+			let requestData = {
+				messages: messageHistory
+			};
+
+			if (isSupportTools) {
+				if (!AgentState.tools)
+					AgentState.tools = window.EditorHelper.getTools();
+
+				if (AgentState.tools && AgentState.tools.length > 0)
+					requestData.tools = AgentState.tools;
+
+				if ("" === AgentState.toolsSystemPrompt)
+					AgentState.toolsSystemPrompt = window.EditorHelper.getToolsSystemPrompt();
+
+				if (AgentState.toolsSystemPrompt) {
+					if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+						requestData.messages.unshift({
+							role: 'system',
+							content: AgentState.toolsSystemPrompt
+						});
+					}
+				}
+			} else {
+				if ("" === AgentState.systemToolsPrompt)
+					AgentState.systemToolsPrompt = window.EditorHelper.getSystemPrompt();
+
+				if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+					requestData.messages.unshift({
+						role: 'system',
+						content: AgentState.systemToolsPrompt
+					});
+				}
+			}
+
+			// LOOP
+			let iteration = 0;
+			while (iteration < AgentState.MAX_LOOP_ITERATIONS && !AgentState.isStopped) {
+				iteration++;
+
+				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+				let isSendedEndLongAction = false;
+				async function checkEndAction() {
+					if (!isSendedEndLongAction) {
+						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+						isSendedEndLongAction = true;
+					}
+				}
+
+				let isStreamToChat = false;
+				let fullResponse = await requestEngine.chatRequestAgent(requestData, false, async function(chunk) {
+					if (!isStreamToChat) {
+						isStreamToChat = true;
+						chatWindow.command("onChatStreamStart");
+
+						await checkEndAction();
+					}
+
+					chatWindow.command("onChatStreamChunk", chunk);
+				});
+
+				if (isStreamToChat) {
+					chatWindow.command("onChatStreamEnd");
+				}
+
+				await checkEndAction();
+
+				if (AgentState.isStopped)
+					break;
+
+				if (!fullResponse)
+					fullResponse = { content : Asc.plugin.tr("Error:") + " [provider]" };
+
+				let result = fullResponse.content || "";
+
+				let toolCalls = fullResponse.tool_calls || null;
+
+				// CHECK TOOLS
+				if (toolCalls && toolCalls.length > 0) {
+					for (let toolCall of toolCalls) {
+						if (AgentState.isStopped)
+							break;
+
+						try {
+							let funcName = toolCall.function.name;
+							let funcArgs = toolCall.function.arguments;
+
+							let argsObj = null;
+							try {
+								argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+							} catch(e) {
+								argsObj = {};
+							}
+
+							chatWindow.command("onToolCallStart", {
+								type: 'native',
+								id: toolCall.id,
+								functionName: funcName,
+								humanName: window.EditorHelper.getHumanName(funcName),
+								arguments: JSON.stringify(argsObj, null, 2)
+							});
+
+							let toolResult = {};
+							try {
+								let toolResultMessage = await window.EditorHelper.names2funcs[funcName].call(argsObj);
+								if (toolResultMessage)
+									toolResultMessage = Asc.plugin.tr("Function executed successfully") + "\n" + JSON.stringify(toolResultMessage);
+								else
+									toolResultMessage = Asc.plugin.tr("Function executed successfully");
+								toolResult.message = toolResultMessage;
+							} catch (e) {
+								let errorMsg = Asc.plugin.tr("Error:") + "\n";
+								if (e.name === "ToolError") {
+									errorMsg += ("\n" + e.message);
+								}
+								toolResult = {
+									error: errorMsg
+								};
+							}
+
+							chatWindow.command("onToolCallEnd", {
+								type: 'native',
+								id: toolCall.id,
+								functionName: funcName,
+								arguments: JSON.stringify(argsObj, null, 2),
+								result: toolResult
+							});
+
+							requestData.messages.push({
+								role: 'assistant',
+								content: result || null,
+								tool_calls: [toolCall]
+							});
+
+							let toolMessage = {
+								role: 'tool',
+								tool_call_id: toolCall.id,
+								content: toolResult.message || toolResult.error || 'Success'
+							};
+							requestData.messages.push(toolMessage);
+
+							if (toolResult.error) {
+								break;
+							}
+						} catch (e) {
+							console.error("Tool execution error:", e);
+							break;
+						}
+					}
+					continue;
+				}
+
+				// CHECK PROMT FUNCTION CALLING
+				if (!toolCalls && result.startsWith("[functionCalling")) {
+					if (AgentState.isStopped)
+						break;
+
+					try {
+						let toolCallId = 'system_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+						let sysNameMatch = result.match(/\(([^)]+)\)/);
+						let sysFuncName = sysNameMatch ? sysNameMatch[1].trim() : '';
+
+						chatWindow.command("onToolCallStart", {
+							type: 'system_prompt',
+							id: toolCallId,
+							call: result,
+							humanName: sysFuncName ? window.EditorHelper.getHumanName(sysFuncName) : ''
+						});
+
+						let toolResult = await window.EditorHelper.callFunc(result);
+
+						chatWindow.command("onToolCallEnd", {
+							type: 'system_prompt',
+							id: toolCallId,
+							call: result,
+							result: toolResult
+						});
+
+						requestData.messages.push({
+							role: 'assistant',
+							content: result
+						});
+
+						if (toolResult.error) {
+							requestData.messages.push({
+								role: 'user',
+								content: "SYSTEM: Function execution failed with error: " + toolResult.error + "\nPlease try a different approach or inform the user about the issue."
+							});							
+						} else {
+							let resultMessage = "SYSTEM: " + toolResult.message;
+							if (toolResult.prompt) {
+								resultMessage += "\n" + toolResult.prompt;
+							}
+							requestData.messages.push({
+								role: 'user',
+								content: resultMessage
+							});							
+						}
+						continue;
+					} catch (e) {
+						console.error("Tool execution error:", e);
+						break;
+					}
+				}
+
+				if (!isStreamToChat && result) {
+					chatWindow.command("onChatReply", result);
+				}
+				break;
+			}
+
+			if (iteration >= AgentState.MAX_LOOP_ITERATIONS) {
+				chatWindow.command("onChatReply", "Maximum iterations reached. Please try again.");
+			}
+
+			// always end (may be twice)
+			chatWindow.command("onChatStreamEnd");
 		});
 		chatWindow.attachEvent("onChatReplace", async function(data) {
 			switch (data.type) {
@@ -137,6 +406,7 @@ async function registerButtons(window, undefined)
 
 		window.chatWindow = chatWindow;
 	}
+	window.chatWindowShow = chatWindowShow;
 
 	let editorVersion = await Asc.Library.GetEditorVersion();
 	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
@@ -452,7 +722,7 @@ async function registerButtons(window, undefined)
 		let result = await requestEngine.imageOCRRequest(content);
 		if (!result) return;
 
-		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
+		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 	}
 
 	const on_click_text_to_image = async function (params) {
