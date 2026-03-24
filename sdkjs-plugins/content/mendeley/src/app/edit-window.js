@@ -178,8 +178,8 @@ import "../edit-window.css";
             } else {
                 this._container.classList.add('hide-remove-button');
             }
-            const formHeight = document.querySelector('form')?.offsetHeight || 0;
-            const winHeight = numOfCitations === 1 ? formHeight + 12 : 2 * formHeight;
+            const formHeight = (document.querySelector('form')?.offsetHeight || 134);
+            const winHeight = numOfCitations === 1 ? (formHeight + 16) : (2 * formHeight);
             window.Asc.plugin.sendToPlugin("onUpdateHeight", winHeight);
         }
 
