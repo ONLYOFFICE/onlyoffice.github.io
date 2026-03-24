@@ -532,13 +532,21 @@ class CitationDocService {
         const doc = parser.parseFromString(html, "text/html");
         const paragraphs = doc.querySelectorAll(".csl-entry");
         const numbers = new Array(paragraphs.length);
+        const hash = Date.now().toString(36);
         paragraphs.forEach((p, index) => {
             const margin = p.querySelector(".csl-left-margin");
             const right = p.querySelector(".csl-right-inline");
             right?.replaceWith(...right.childNodes);
             if (margin) {
-                numbers[index] = margin.textContent.trim();
-                margin.remove();
+                numbers[index] = margin.textContent.trim() + hash;
+                const em = document.createElement("em");
+                while (margin.firstChild) {
+                    em.appendChild(margin.firstChild);
+                }
+                const span = document.createElement("span");
+                span.textContent = hash;
+                em.appendChild(span);
+                margin.replaceWith(em);
             }
         });
         
@@ -552,6 +560,7 @@ class CitationDocService {
             const isCalc = false;
             const isClose = false;
             Asc.scope.numbers = numbers;
+            Asc.scope.hash = hash;
             Asc.plugin.callCommand(
                 () => {
                     const doc = Api.GetDocument();
@@ -560,7 +569,6 @@ class CitationDocService {
                     /** @type {BibliographyStyles} */
                     const style = Asc.scope.bibStyle;
                     const paragraphs = range.GetAllParagraphs();
-
                     paragraphs.forEach((paragraph, index) => {
                         const text = paragraph.GetText().trim();
                         if (text === '') {
@@ -573,11 +581,19 @@ class CitationDocService {
                             paragraph.SetSpacingAfter(240 * style.entryspacing);
                         }
                         if (style['second-field-align']) { 
-                            let margin = Api.CreateRun();
-                            margin.AddText(Asc.scope.numbers[index]);
-                            margin.AddTabStop();
-                            let elementIndex = index === 0 ? 4 : 0; // 4 - magic number, need to find out why
-                            paragraph.AddElement(margin, elementIndex);
+                            const numberText = String(Asc.scope.numbers[index]);
+                            
+                            for (let i = 0; i < paragraph.GetElementsCount(); i++) {
+                                 let margin = paragraph.GetElement(i);
+                                 if (margin.GetText() === numberText) {
+                                    margin.AddTabStop();
+                                    margin.SetItalic(false);
+                                    break;
+                                 }
+                            }
+                            let margin = paragraph.Search(Asc.scope.hash, true)[0];
+                            margin.Delete();
+
                             paragraph.SetIndLeft(style.maxoffset * 120);
                             paragraph.SetIndFirstLine(-(style.maxoffset * 120));
                         } else if (style.hangingindent) {
