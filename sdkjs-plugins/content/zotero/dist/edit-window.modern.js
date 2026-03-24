@@ -1597,7 +1597,7 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       if (this.citationObject) {
         var s = this.citationObject.citationItems.length;
         s > 1 ? this._container.classList.remove("hide-remove-button") : this._container.classList.add("hide-remove-button");
-        var a = ((i = document.querySelector("form")) === null || i === void 0 ? void 0 : i.offsetHeight) || 0, o = s === 1 ? a + 12 : 2 * a;
+        var a = ((i = document.querySelector("form")) === null || i === void 0 ? void 0 : i.offsetHeight) || 134, o = s === 1 ? a + 16 : 2 * a;
         window.Asc.plugin.sendToPlugin("onUpdateHeight", o);
       }
     }
