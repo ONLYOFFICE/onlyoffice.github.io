@@ -73,5 +73,6 @@
     "Updating citations": "引用を更新中",
     "Inserting bibliography": "参考文献を挿入中",
     "Inserting citation": "引用を挿入中",
-    "Saving as text": "テキストとして保存"
+    "Saving as text": "テキストとして保存",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "カーソルにZotero引用が見つかりません。引用を編集するには、直接クリックしてください。"
 }

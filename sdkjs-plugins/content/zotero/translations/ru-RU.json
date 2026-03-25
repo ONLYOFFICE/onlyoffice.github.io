@@ -73,5 +73,25 @@
     "Updating citations": "Обновление цитат",
     "Inserting bibliography": "Вставка библиографии",
     "Inserting citation": "Вставка цитаты",
-    "Saving as text": "Сохранение как текст"
+    "Saving as text": "Сохранение как текст",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Цитата Zotero не найдена. Пожалуйста, нажмите напрямую на цитату для редактирования.",
+    "Prefix": "Префикс",
+    "Suffix": "Суффикс",
+    "Book": "Книга",
+    "Chapter": "Глава",
+    "Column": "Столбец",
+    "Figure": "Рисунок",
+    "Folio": "Лист",
+    "Issue": "Выпуск",
+    "Line": "Строка",
+    "Note": "Примечание",
+    "Opus": "Сочинение",
+    "Page": "Страница",
+    "Paragraph": "Параграф",
+    "Part": "Часть",
+    "Section": "Раздел",
+    "Timestamp": "Временная отметка",
+    "Verse": "Стих",
+    "Volume": "Том"
+
 }

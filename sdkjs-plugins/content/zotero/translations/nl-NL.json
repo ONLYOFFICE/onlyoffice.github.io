@@ -73,5 +73,6 @@
     "Updating citations": "Citaten bijwerken",
     "Inserting bibliography": "Bibliografie invoegen",
     "Inserting citation": "Citaat invoegen",
-    "Saving as text": "Opslaan als tekst"
+    "Saving as text": "Opslaan als tekst",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Geen Zotero-citaat gevonden op de cursor. Klik direct op een citaat om het te bewerken."
 }

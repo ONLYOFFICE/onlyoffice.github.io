@@ -114,6 +114,17 @@ SelectCitationsComponent.prototype._init = function () {
             }
         };
     }
+    if (this._docsHolder) {
+        this._docsHolder.addEventListener("keydown", function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+                e.preventDefault();
+                var checkboxes = self._docsHolder?.querySelectorAll(".checkbox-container:not(.checkbox--checked)");
+                checkboxes?.forEach(function (cb) {
+                    /** @type {HTMLElement} */ (cb).click();
+                });
+            }
+        });
+    }
 };
 SelectCitationsComponent.prototype.clearLibrary = function () {
     this._nothingFound &&
@@ -358,7 +369,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
         placeholder: locatorPlaceholder,
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
-        label: translate("Omit author"),
+        label: translate("Omit Author"),
     });
 
     prefixInput.subscribe(function (event) {

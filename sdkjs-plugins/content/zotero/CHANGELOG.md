@@ -33,7 +33,7 @@
 * Refreshed interface for better usability
 * The ability to choose which library to search in
 * Ability to add prefix and suffix
-* "Omit author" feature
+* "Omit Author" feature
 * Citation locators support: Added ability to include page numbers, chapters, sections, and other location references in citations
 
 ## 1.0.7

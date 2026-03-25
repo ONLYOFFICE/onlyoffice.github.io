@@ -554,7 +554,11 @@ class CitationDocService {
         await this.#pasteHtml(html);
 
         const addedField = await this.getCurrentField();
-        if (!addedField) return "";
+        if (!addedField) {
+            console.error('Failed to get current field after paste');
+            return "";
+        }
+        
         await this.#selectField(addedField.FieldId);
         await new Promise((resolve) => {
             const isCalc = false;

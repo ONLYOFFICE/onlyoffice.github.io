@@ -73,5 +73,6 @@
     "Updating citations": "Atualizando citações",
     "Inserting bibliography": "Inserindo bibliografia",
     "Inserting citation": "Inserindo citação",
-    "Saving as text": "Salvar como texto"
+    "Saving as text": "Salvar como texto",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Citação Zotero não encontrada. Por favor, clique diretamente na citação para editá-la."
 }
