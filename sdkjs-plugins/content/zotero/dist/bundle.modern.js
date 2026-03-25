@@ -2054,10 +2054,10 @@ function Ct(t, e) {
         v.type = "checkbox", v.id = "checkbox-" + o.value, v.className += " selectbox-checkbox", v.checked = this._selectedValues.has(o.value), u.appendChild(v);
         var g = document.createElement("span");
         g.className = "checkbox-visual", g.setAttribute("aria-hidden", "true");
-        var y = "http://www.w3.org/2000/svg", b = document.createElementNS(y, "svg");
-        b.setAttribute("viewBox", "0 0 10 8"), b.setAttribute("class", "checkbox-checkmark");
+        var y = "http://www.w3.org/2000/svg", w = document.createElementNS(y, "svg");
+        w.setAttribute("viewBox", "0 0 10 8"), w.setAttribute("class", "checkbox-checkmark");
         var C = document.createElementNS(y, "path");
-        C.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), C.setAttribute("fill", "none"), C.setAttribute("stroke", "currentColor"), C.setAttribute("stroke-width", "2"), b.appendChild(C), g.appendChild(b), u.appendChild(g);
+        C.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), C.setAttribute("fill", "none"), C.setAttribute("stroke", "currentColor"), C.setAttribute("stroke-width", "2"), w.appendChild(C), g.appendChild(w), u.appendChild(g);
       }
       u.appendChild(h), s.appendChild(u);
     }
@@ -2227,7 +2227,7 @@ function vi(t) {
 var Ve = {
   _: document.getElementById("loader")
 };
-function w(t) {
+function b(t) {
   try {
     return window.Asc.plugin.tr(t);
   } catch (e) {
@@ -2269,12 +2269,12 @@ class Ht {
             for (var y = n.length - 1; y >= 0; y--)
               if (n[y].tag === v) {
                 var {
-                  start: b,
+                  start: w,
                   styleTag: C
                 } = n.splice(y, 1)[0];
                 i.formatting.push({
                   type: C,
-                  start: b,
+                  start: w,
                   end: s
                 });
                 break;
@@ -2334,8 +2334,8 @@ class xt {
         }
         o.MoveCursorToPos(l.GetEndPos() - Asc.scope.text.length);
         for (var v = o.GetCurrentRun(), g = Asc.scope.formatting.length - 1; g >= 0; g--) {
-          var y = Asc.scope.formatting[g], b = v.GetRange(y.start, y.end);
-          b && u(b, y.type);
+          var y = Asc.scope.formatting[g], w = v.GetRange(y.start, y.end);
+          w && u(w, y.type);
         }
       }, s, n, r);
     });
@@ -2657,8 +2657,8 @@ function me() {
         r[h] = v.textContent.trim() + o;
         for (var y = document.createElement("em"); v.firstChild; )
           y.appendChild(v.firstChild);
-        var b = document.createElement("span");
-        b.textContent = o, y.appendChild(b), v.replaceWith(y);
+        var w = document.createElement("span");
+        w.textContent = o, y.appendChild(w), v.replaceWith(y);
       }
     }), e = n.body.innerHTML, yield c(M, this, bi).call(this, e);
     var l = yield this.getCurrentField();
@@ -2667,11 +2667,11 @@ function me() {
       Asc.scope.numbers = r, Asc.scope.hash = o, Asc.plugin.callCommand(() => {
         var g = Api.GetDocument(), y = g.GetRangeBySelect();
         if (y) {
-          var b = Asc.scope.bibStyle, C = y.GetAllParagraphs();
+          var w = Asc.scope.bibStyle, C = y.GetAllParagraphs();
           C.forEach((A, R) => {
             var P = A.GetText().trim();
             if (P !== "")
-              if (typeof b.linespacing == "number" && A.SetSpacingLine(240 * b.linespacing, "exact"), typeof b.entryspacing == "number" && A.SetSpacingAfter(240 * b.entryspacing), b["second-field-align"]) {
+              if (typeof w.linespacing == "number" && A.SetSpacingLine(240 * w.linespacing, "exact"), typeof w.entryspacing == "number" && A.SetSpacingAfter(240 * w.entryspacing), w["second-field-align"]) {
                 for (var J = String(Asc.scope.numbers[R]), D = 0; D < A.GetElementsCount(); D++) {
                   var V = A.GetElement(D);
                   if (V.GetText() === J) {
@@ -2680,8 +2680,8 @@ function me() {
                   }
                 }
                 var rt = A.Search(Asc.scope.hash, !0)[0];
-                rt.Delete(), A.SetIndLeft(b.maxoffset * 120), A.SetIndFirstLine(-(b.maxoffset * 120));
-              } else b.hangingindent && (A.SetIndLeft(720), A.SetIndFirstLine(-720));
+                rt.Delete(), A.SetIndLeft(w.maxoffset * 120), A.SetIndFirstLine(-(w.maxoffset * 120));
+              } else w.hangingindent && (A.SetIndLeft(720), A.SetIndFirstLine(-720));
           });
         }
       }, v, h, u);
@@ -3823,13 +3823,13 @@ function ft(t) {
 }
 function Oi(t, e) {
   var i = c(T, this, Ye).call(this);
-  if (t && (i = w(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography())
+  if (t && (i = b(this._bibPlaceholderIfEmpty)), this._cslStylesManager.isLastUsedStyleContainBibliography())
     return this.citationDocService.addBibliography(i, e);
   throw "The current bibliographic style does not describe the bibliography";
 }
 function Jt(t, e) {
   if (t)
-    e.Content = w(this._bibPlaceholderIfEmpty);
+    e.Content = b(this._bibPlaceholderIfEmpty);
   else {
     var i = c(T, this, Ye).call(this);
     e.Content = i;
@@ -3849,14 +3849,14 @@ function Se() {
         cslCitation: h
       } = t[o], v = this._storage.getCitationsPre(h.citationID), g = this._storage.getCitationsPost(h.citationID), y = this._storage.getAllCitationsInJson();
       this._formatter.rebuildProcessorState(y);
-      var b = this._formatter.processCitationCluster(h.toJSON(), v, g), C = c(T, this, Ie).call(this, b[1][0][1]);
+      var w = this._formatter.processCitationCluster(h.toJSON(), v, g), C = c(T, this, Ie).call(this, w[1][0][1]);
       s.innerHTML = C;
       var A = h.getPlainCitation(), R = u.Content;
       A === "" && (A = R);
       var P = s.innerText;
       if (!h.getDoNotUpdate()) {
         if (A !== R && !e) {
-          var J = "<p>" + w("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + w("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + w("Original:") + " " + P + "</p><p>" + w("Modified:") + " " + R + "</p>", D = yield a(_t, this).show("Saving custom edits", J);
+          var J = "<p>" + b("You have modified this citation since Zotero generated it. Do you want to keep your modifications and prevent future updates?") + "</p><p>" + b("Clicking „Yes“ will prevent Zotero from updating this citation if you add additional citations, switch styles, or modify the item to which it refers. Clicking „No“ will erase your changes.") + "</p><p>" + b("Original:") + " " + P + "</p><p>" + b("Modified:") + " " + R + "</p>", D = yield a(_t, this).show("Saving custom edits", J);
           D ? (h.setDoNotUpdate(), delete u.Content) : (u.Content = C, h.setPlainCitation(P)), l = !0;
         } else
           (P !== R || A !== R || A !== P) && (l = !0), u.Content = C, h.setPlainCitation(P);
@@ -3954,8 +3954,8 @@ var Ut = {
     g && (r.updated = g.textContent);
     var y = s.querySelector("info category[citation-format]");
     if (y) {
-      var b = y.getAttribute("citation-format");
-      b && (r.categories.format = b);
+      var w = y.getAttribute("citation-format");
+      w && (r.categories.format = w);
     }
     var C = s.querySelectorAll("info category[field]");
     return C && C.forEach(function(A) {
@@ -4257,7 +4257,7 @@ K.prototype._addEventListeners = function() {
       }
       var n = Ze({}, t._stateSettings), s = [];
       t._stateSettings.language !== i && (t._localesManager.saveLastUsedLanguage(i), s.push(t._localesManager.loadLocale(i).catch(function(l) {
-        throw console.error(l), t._langMessage.show(w("Failed to load language")), l;
+        throw console.error(l), t._langMessage.show(b("Failed to load language")), l;
       })));
       var r = "footnotes";
       t._endNotes.getState().checked && (r = "endnotes"), t._stateSettings.notesStyle !== r && (t._cslStylesManager.saveLastUsedNotesStyle(r), t._cslStylesManager.getLastUsedFormat() === "note" && s.push(Promise.resolve()));
@@ -4294,7 +4294,7 @@ K.prototype._addEventListeners = function() {
         t._cslStylesManager.addCustomStyle(n).then(function(s) {
           t._addStylesToList([s]);
         }).catch(function(s) {
-          console.error(s), t._styleMessage.show(w("Invalid CSL style file"));
+          console.error(s), t._styleMessage.show(b("Invalid CSL style file"));
         }).finally(function() {
           t._hideLoader();
         });
@@ -4363,7 +4363,7 @@ K.prototype._onStyleChange = function(t, e) {
     var s = n.styleFormat;
     i._bNumFormat = s == "numeric", s === "note" ? i._notesStyleWrapper.classList.remove(i._displayNoneClass) : i._notesStyleWrapper.classList.add(i._displayNoneClass), e && i._hideLoader();
   }).catch(function(n) {
-    throw console.error(n), typeof n == "string" && i._styleMessage.show(w(n)), e && i._hideLoader(), n;
+    throw console.error(n), typeof n == "string" && i._styleMessage.show(b(n)), e && i._hideLoader(), n;
   });
 };
 K.prototype._showLoader = function() {
@@ -4444,8 +4444,8 @@ st.prototype._addEventListeners = function() {
         t._sdk.setIsOnlineAvailable(!1), t._hide(), t._hideAllMessages();
       else if (i.desktop && !i.hasPermission) {
         var n = 'Connection to Zotero failed. Please enable external connections in Zotero: Edit → Settings → Advanced → Check "Allow other applications on this computer to communicate with Zotero"';
-        t._useDesktopMessage.show(w(n));
-      } else i.desktop || t._useDesktopMessage.show(w("Connection to Zotero failed. Make sure Zotero is running."));
+        t._useDesktopMessage.show(b(n));
+      } else i.desktop || t._useDesktopMessage.show(b("Connection to Zotero failed. Make sure Zotero is running."));
     }).finally(function() {
       t._hideLoader();
     }));
@@ -4458,7 +4458,7 @@ st.prototype._tryToApplyKey = function() {
   e && (t._showLoader(), t._sdk.setApiKey(e).then(function() {
     xe.successfullyLoggedInUsingApiKey(), t._hide(!0);
   }).catch(function(i) {
-    console.error(i), t._apiKeyMessage.show(w("Invalid API key"));
+    console.error(i), t._apiKeyMessage.show(b("Invalid API key"));
   }).finally(function() {
     t._hideLoader();
   }));
@@ -4488,9 +4488,9 @@ function Nt() {
     size: "small"
   }), this._librarySelectList = new mt("librarySelectList", {
     // TODO: add translation
-    placeholder: w("No items selected"),
+    placeholder: b("No items selected"),
     multiple: !0,
-    description: w("Search in:")
+    description: b("Search in:")
   }), this._subscribers = [], this._addEventListeners();
 }
 Nt.prototype._addEventListeners = function() {
@@ -4507,23 +4507,23 @@ Nt.prototype._addEventListeners = function() {
   });
 };
 Nt.prototype.addGroups = function(t) {
-  var e = this, i = localStorage.getItem("selectedGroups"), n = i ? JSON.parse(i).map(function(b) {
-    return b.toString();
+  var e = this, i = localStorage.getItem("selectedGroups"), n = i ? JSON.parse(i).map(function(w) {
+    return w.toString();
   }) : ["my_library", "group_libraries"], s = !1;
-  t.forEach(function(b) {
-    b.id = String(b.id);
+  t.forEach(function(w) {
+    w.id = String(w.id);
   });
   var r = [{
     id: "my_library",
-    name: w("My Library")
+    name: b("My Library")
   }, {
     id: "group_libraries",
-    name: w("Group Libraries")
+    name: b("Group Libraries")
   }];
-  !s && r.forEach(function(b) {
-    n.indexOf(b.id) !== -1 && (s = !0);
-  }), !s && t.forEach(function(b) {
-    n.indexOf(b.id.toString()) !== -1 && (s = !0);
+  !s && r.forEach(function(w) {
+    n.indexOf(w.id) !== -1 && (s = !0);
+  }), !s && t.forEach(function(w) {
+    n.indexOf(w.id.toString()) !== -1 && (s = !0);
   }), s || (n = ["my_library", "group_libraries"]);
   for (var o = function(C, A, R) {
     typeof C == "number" && (C = C.toString()), e._librarySelectList instanceof mt && e._librarySelectList.addItem(C, A, R);
@@ -4654,8 +4654,8 @@ W.prototype._buildDocElement = function(t) {
   var n = document.createElement("div");
   n.classList.add("docInfo");
   var s = document.createElement("div"), r = "";
-  t.author && t.author.length > 0 && (r = t.author.map(function(b) {
-    return b.family && b.given ? b.family.trim() + ", " + b.given.trim() : b.family ? b.family.trim() : b.given ? b.given.trim() : "";
+  t.author && t.author.length > 0 && (r = t.author.map(function(w) {
+    return w.family && w.given ? w.family.trim() + ", " + w.given.trim() : w.family ? w.family.trim() : w.given ? w.given.trim() : "";
   }).join("; "));
   var o = document.createElement("div");
   o.classList.add("selectbox-arrow"), o.innerHTML = "<b></b>";
@@ -4678,8 +4678,8 @@ W.prototype._buildDocElement = function(t) {
   function y() {
     i.classList.toggle("doc-open"), g || (g = e._buildCitationParams(t), i.appendChild(g));
   }
-  return o.onclick = y, v.subscribe(function(b) {
-    b.type === "checkbox:change" && (b.detail.checked ? e._addSelected(t, v) : e._removeSelected(t.id));
+  return o.onclick = y, v.subscribe(function(w) {
+    w.type === "checkbox:change" && (w.detail.checked ? e._addSelected(t, v) : e._removeSelected(t.id));
   }), i;
 };
 W.prototype._buildCitationParams = function(t) {
@@ -4691,12 +4691,13 @@ W.prototype._buildCitationParams = function(t) {
   i.appendChild(h), h.appendChild(v);
   var y = new yt(s, {
     type: "text",
-    placeholder: "Prefix"
-  }), b = new yt(r, {
+    placeholder: b("Prefix")
+  }), w = new yt(r, {
     type: "text",
-    placeholder: "Suffix"
+    placeholder: b("Suffix")
   }), C = new mt(l, {
-    placeholder: "Locator"
+    placeholder: b("Locator"),
+    translate: b
   });
   Ni.forEach(function(P) {
     var J = P[0] === e;
@@ -4704,13 +4705,13 @@ W.prototype._buildCitationParams = function(t) {
   });
   var A = new yt(u, {
     type: "text",
-    placeholder: g
+    placeholder: b(g)
   }), R = new Xt(v, {
-    label: w("Omit Author")
+    label: b("Omit Author")
   });
   return y.subscribe(function(P) {
     P.type === "inputfield:input" && (t.prefix = P.detail.value);
-  }), b.subscribe(function(P) {
+  }), w.subscribe(function(P) {
     P.type === "inputfield:input" && (t.suffix = P.detail.value);
   }), A.subscribe(function(P) {
     P.type === "inputfield:input" && (t.locator = P.detail.value);
@@ -4786,7 +4787,7 @@ W.prototype._removeSelected = function(t) {
 };
 W.prototype._checkSelected = function() {
   var t = this.count();
-  !this._selectedInfo || !this._selectedCount || !this._selectedWrapper || (t <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = t + " " + w("selected")), this._subscribers.forEach(function(e) {
+  !this._selectedInfo || !this._selectedCount || !this._selectedWrapper || (t <= 0 ? (this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo.classList.add(this._displayNoneClass)) : (this._selectedWrapper.classList.remove(this._displayNoneClass), this._selectedInfo.classList.remove(this._displayNoneClass), this._selectedCount.textContent = t + " " + b("selected")), this._subscribers.forEach(function(e) {
     e(t);
   }));
 };
@@ -4801,7 +4802,7 @@ W.prototype.count = function() {
     obj: null,
     groups: [],
     groupsHash: ""
-  }, o, l, u, h, v, g, y, b = new et("libLoader", w("Loading...")), C = {};
+  }, o, l, u, h, v, g, y, w = new et("libLoader", b("Loading...")), C = {};
   function A() {
     var d = document.getElementById("errorWrapper");
     if (!d)
@@ -4838,9 +4839,9 @@ W.prototype.count = function() {
       if (!p) {
         p = !0, et.show();
         var I = P().catch((O) => {
-          console.error(O), V(w("An error occurred while loading library groups. Try restarting the plugin."));
+          console.error(O), V(b("An error occurred while loading library groups. Try restarting the plugin."));
         }), S = n.init().catch((O) => {
-          console.error(O), V(w("An error occurred while loading settings. Try restarting the plugin.")), n.show();
+          console.error(O), V(b("An error occurred while loading settings. Try restarting the plugin.")), n.show();
         });
         Promise.all([I, S]).then(function() {
           return et.hide(), R();
@@ -4855,14 +4856,14 @@ W.prototype.count = function() {
     });
   };
   function R() {
-    b.show();
+    w.show();
     var d = i.getItems(null).then((p) => (delete p.next, p));
     return Tt(d, !1).then((p) => {
       p > 0 ? Kt("started") : Kt("empty");
     }).catch((p) => {
       console.error(p);
     }).finally(() => {
-      b.hide();
+      w.hide();
     });
   }
   function P() {
@@ -4889,10 +4890,10 @@ W.prototype.count = function() {
       p = p.trim();
       var I = _.join(",");
       C.mainState.classList.contains(t) || !p || p == r.text && I === r.groupsHash || _.length === 0 || d(p, _, I).catch(() => []).then(function(S) {
-        return S.length && (b.show(), Promise.any(S).then(function() {
-          b.hide();
+        return S.length && (w.show(), Promise.any(S).then(function() {
+          w.hide();
         }).finally(function() {
-          b.hide();
+          w.hide();
         })), Promise.allSettled(S);
       }).then(function(S) {
         var O = 0;
@@ -4904,21 +4905,21 @@ W.prototype.count = function() {
       var p = E(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
-            V(w("Style is not selected"));
+            V(b("Style is not selected"));
             return;
           }
           if (!n.getLocale()) {
-            V(w("Language is not selected"));
+            V(b("Language is not selected"));
             return;
           }
-          yield rt(!0, "Zotero (" + w("Updating citations") + ")");
+          yield rt(!0, "Zotero (" + b("Updating citations") + ")");
           var I = s.updateCslItems.bind(s, !1), S = n.getStyleManager();
           S.getLastUsedFormat() === "note" && (I = s.updateCslItemsInNotes.bind(s, S.getLastUsedNotesStyle())), I().catch(function(O) {
             console.error(O);
-            var k = w("Failed to refresh");
-            typeof O == "string" && (k += ". " + w(O)), V(k);
+            var k = b("Failed to refresh");
+            typeof O == "string" && (k += ". " + b(O)), V(k);
           }).finally(function() {
-            wt(!1, "Zotero (" + w("Updating citations") + ")");
+            wt(!1, "Zotero (" + b("Updating citations") + ")");
           });
         }
       });
@@ -4929,23 +4930,23 @@ W.prototype.count = function() {
       var p = E(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
-            V(w("Style is not selected"));
+            V(b("Style is not selected"));
             return;
           }
           if (!n.getLocale()) {
-            V(w("Language is not selected"));
+            V(b("Language is not selected"));
             return;
           }
-          yield rt(!1, "Zotero (" + w("Inserting bibliography") + ")");
+          yield rt(!1, "Zotero (" + b("Inserting bibliography") + ")");
           var I = "";
           s.insertBibliography().then(function(S) {
             I = S;
           }).catch(function(S) {
             console.error(S);
-            var O = w("Failed to insert bibliography");
-            typeof S == "string" && (O += ". " + w(S)), V(O);
+            var O = b("Failed to insert bibliography");
+            typeof S == "string" && (O += ". " + b(S)), V(O);
           }).finally(function() {
-            wt(!1, "Zotero (" + w("Inserting bibliography") + ")"), I && s.moveCursorOutsideField(I);
+            wt(!1, "Zotero (" + b("Inserting bibliography") + ")"), I && s.moveCursorOutsideField(I);
           });
         }
       });
@@ -4956,14 +4957,14 @@ W.prototype.count = function() {
       var p = E(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
-            V(w("Style is not selected"));
+            V(b("Style is not selected"));
             return;
           }
           if (!n.getLocale()) {
-            V(w("Language is not selected"));
+            V(b("Language is not selected"));
             return;
           }
-          yield rt(!0, "Zotero (" + w("Inserting citation") + ")");
+          yield rt(!0, "Zotero (" + b("Inserting citation") + ")");
           var I = l.getSelectedItems(), S = null, O = !1;
           return s.insertSelectedCitations(I).then(function(k) {
             return O = k, l.removeItems(Object.keys(I)), s.getCurrentField();
@@ -4971,10 +4972,10 @@ W.prototype.count = function() {
             return S = k, s.updateCslItems();
           }).catch(function(k) {
             console.error(k);
-            var ot = w("Failed to insert citation");
-            typeof k == "string" && (ot += ". " + w(k)), V(ot);
+            var ot = b("Failed to insert citation");
+            typeof k == "string" && (ot += ". " + b(k)), V(ot);
           }).finally(/* @__PURE__ */ E(function* () {
-            wt(!1, "Zotero (" + w("Inserting citation") + ")"), O ? yield s.moveCursorRight() : S && (yield s.moveCursorOutsideField(S.FieldId));
+            wt(!1, "Zotero (" + b("Inserting citation") + ")"), O ? yield s.moveCursorRight() : S && (yield s.moveCursorOutsideField(S.FieldId));
           }));
         }
       });
@@ -4985,8 +4986,8 @@ W.prototype.count = function() {
       p.type === "button:click" && n.show();
     }), u.subscribe(/* @__PURE__ */ (function() {
       var p = E(function* (_) {
-        _.type === "button:click" && (yield rt(!1, "Zotero (" + w("Saving as text") + ")"), s.saveAsText().then(function() {
-          wt(!1, "Zotero (" + w("Saving as text") + ")");
+        _.type === "button:click" && (yield rt(!1, "Zotero (" + b("Saving as text") + ")"), s.saveAsText().then(function() {
+          wt(!1, "Zotero (" + b("Saving as text") + ")");
         }));
       });
       return function(_) {
@@ -4994,14 +4995,14 @@ W.prototype.count = function() {
       };
     })()), n.onChangeState(/* @__PURE__ */ (function() {
       var p = E(function* (_, I) {
-        yield rt(!0, "Zotero (" + w("Updating citations") + ")");
+        yield rt(!0, "Zotero (" + b("Updating citations") + ")");
         var S = s.updateCslItems.bind(s, !0);
         [_.styleFormat, I.styleFormat].includes("note") && (_.styleFormat !== I.styleFormat ? _.styleFormat === "note" ? S = s.switchingBetweenNotesAndText.bind(s, _.notesStyle) : S = s.switchingBetweenNotesAndText.bind(s) : _.notesStyle !== I.notesStyle ? S = s.convertNotesStyle.bind(s, _.notesStyle) : S = s.updateCslItems.bind(s, !0)), S().catch(function(O) {
           console.error(O);
-          var k = w("Failed to refresh");
-          typeof O == "string" && (k += ". " + w(O)), V(k);
+          var k = b("Failed to refresh");
+          typeof O == "string" && (k += ". " + b(O)), V(k);
         }).finally(function() {
-          wt(!1, "Zotero (" + w("Updating citations") + ")");
+          wt(!1, "Zotero (" + b("Updating citations") + ")");
         });
       });
       return function(_, I) {
@@ -5029,15 +5030,15 @@ W.prototype.count = function() {
       var S = d[_];
       if (!(S instanceof HTMLElement)) return 1;
       ["placeholder", "title"].forEach((k) => {
-        S.hasAttribute(k) && S.setAttribute(k, w(S.getAttribute(k) || ""));
+        S.hasAttribute(k) && S.setAttribute(k, b(S.getAttribute(k) || ""));
       });
-      var O = w(S.innerText.trim().replace(/\s+/g, " "));
+      var O = b(S.innerText.trim().replace(/\s+/g, " "));
       O && (S.innerText = O);
     }, _ = 0; _ < d.length; _++)
       p();
   }
   function V(d) {
-    d && typeof d == "string" ? (w(""), C.error.classList.remove(t), C.error.textContent = d, setTimeout(function() {
+    d && typeof d == "string" ? (b(""), C.error.classList.remove(t), C.error.textContent = d, setTimeout(function() {
       window.onclick = function() {
         V(!1);
       };
@@ -5112,7 +5113,7 @@ W.prototype.count = function() {
     return d.then(function(_) {
       return ke(_, null, p);
     }).catch(function(_) {
-      return console.error(_), _.message && V(w(_.message)), ke(null, _, p);
+      return console.error(_), _.message && V(b(_.message)), ke(null, _, p);
     }).then(function(_) {
       return _;
     });
@@ -5137,7 +5138,7 @@ W.prototype.count = function() {
     return Object.hasOwnProperty.call(d, "url") && (p.URL = d.data.url), Object.hasOwnProperty.call(d, "volume") && (p.volume = d.data.volume), Object.hasOwnProperty.call(d, "language") && (p.language = d.data.language), Object.hasOwnProperty.call(d, "abstract") && (p.abstract = d.data.abstract), Object.hasOwnProperty.call(d, "note") && (p.note = d.data.note), Object.hasOwnProperty.call(d, "page") && (p.page = d.data.page), Object.hasOwnProperty.call(d, "shortTitle") && (p.shortTitle = d.data.shortTitle), Object.hasOwnProperty.call(d, "links") && (p.uris = [], Object.hasOwnProperty.call(d.links, "self") && p.uris.push(d.links.self.href), Object.hasOwnProperty.call(d.links, "alternate") && p.uris.push(d.links.alternate.href)), p;
   }
   function Ce(d) {
-    typeof d > "u" && (d = l.count()), d <= 0 ? (h.disable(), h.setText(w("Insert Citation"))) : (h.enable(), d > 1 ? h.setText(w("Insert " + d + " Citations")) : h.setText(w("Insert Citation")));
+    typeof d > "u" && (d = l.count()), d <= 0 ? (h.disable(), h.setText(b("Insert Citation"))) : (h.enable(), d > 1 ? h.setText(b("Insert " + d + " Citations")) : h.setText(b("Insert Citation")));
   }
   function Qe() {
     return se.apply(this, arguments);
@@ -5168,14 +5169,14 @@ W.prototype.count = function() {
       }
       var _ = yield s.showEditCitationWindow(p);
       if (_) {
-        yield rt(!1, "Zotero (" + w("Updating citations") + ")");
+        yield rt(!1, "Zotero (" + b("Updating citations") + ")");
         var I = s.updateItem.bind(s, _), S = n.getStyleManager();
         S.getLastUsedFormat() === "note" && (I = s.updateItem.bind(s, _, S.getLastUsedNotesStyle())), I().catch(function(O) {
           console.error(O);
-          var k = w("Failed to insert citation");
-          typeof O == "string" && (k += ". " + w(O)), V(k);
+          var k = b("Failed to insert citation");
+          typeof O == "string" && (k += ". " + b(O)), V(k);
         }).finally(function() {
-          wt(!1, "Zotero (" + w("Updating citations") + ")"), p && s.moveCursorOutsideField(p.FieldId);
+          wt(!1, "Zotero (" + b("Updating citations") + ")"), p && s.moveCursorOutsideField(p.FieldId);
         });
       }
     })), Asc.Buttons.registerContextMenu();
