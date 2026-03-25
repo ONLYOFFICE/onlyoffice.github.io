@@ -548,15 +548,34 @@ class CitationDocService {
                 em.appendChild(span);
                 margin.replaceWith(em);
             }
+            const paragraph = document.createElement('p');
+            while (p.firstChild) {
+                paragraph.appendChild(p.firstChild);
+            }
+            p.replaceWith(paragraph);
         });
         
         html = doc.body.innerHTML;
         await this.#pasteHtml(html);
 
-        const addedField = await this.getCurrentField();
+        let addedField = await this.getCurrentField();
         if (!addedField) {
-            console.error('Failed to get current field after paste');
-            return "";
+            console.warn('Failed to get current field after paste');
+            // I don't know why the field is unavailable, but this happens with a large number of quotes.
+            for (let i = 0; i < 5; i++) {
+                await new Promise(r => {
+                    setTimeout(() => {r(true)}, 100);
+                });
+                addedField = await this.getCurrentField();
+                if (addedField) {
+                    break;
+                }
+            }
+            
+            if (!addedField) {
+                throw new Error('Failed to get current field after paste');
+            }
+            
         }
         
         await this.#selectField(addedField.FieldId);
