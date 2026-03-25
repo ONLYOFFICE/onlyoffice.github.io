@@ -73,5 +73,6 @@
     "Updating citations": "更新引用",
     "Inserting bibliography": "插入參考文獻",
     "Inserting citation": "插入引用",
-    "Saving as text": "保存為文本"
+    "Saving as text": "保存為文本",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "在游標位置未找到 Zotero 引用。請直接點擊引用以進行編輯。"
 }
