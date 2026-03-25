@@ -10,6 +10,7 @@
         "build:all": "npm run clean && npm run build:modern && npm run build:es5",
         "build": "npm run build:all",
         "watch": "cross-env ENTRY=main vite build --watch",
+        "watch-edit": "cross-env ENTRY=edit-window vite build --watch",
         "dev": "cross-env ENTRY=main vite build --watch",
         "es-check": "npx es-check es5 dist/bundle.es5.js"
     },

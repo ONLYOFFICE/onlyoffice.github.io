@@ -76,6 +76,7 @@ class SelectBox {
             placeholder: options.placeholder || "Select...",
             searchable: options.searchable || false,
             sortable: options.sortable || false,
+            translate: options.translate,
             multiple: options.multiple || false,
             description: options.description || "",
         });

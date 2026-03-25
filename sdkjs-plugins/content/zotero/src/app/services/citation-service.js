@@ -826,6 +826,10 @@ class CitationService {
         }
         return updatedField;
     }
+
+    async showNoHaveCitationMessage() {
+        this.#additionalWindow.showInfoWindow("Warning!", "No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
+    }
 }
 
 export { CitationService };
