@@ -348,14 +348,15 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
 
     const prefixInput = new InputField(prefix, {
         type: "text",
-        placeholder: "Prefix",
+        placeholder: translate("Prefix"),
     });
     const suffixInput = new InputField(suffix, {
         type: "text",
-        placeholder: "Suffix",
+        placeholder: translate("Suffix"),
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
-        placeholder: "Locator",
+        placeholder: translate("Locator"),
+        translate: translate
     });
     LOCATOR_VALUES.forEach(function (info) {
         const selected = info[0] === locatorLabel;
@@ -366,7 +367,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
     const locatorInput = new InputField(locator, {
         type: "text",
-        placeholder: locatorPlaceholder,
+        placeholder: translate(locatorPlaceholder),
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
         label: translate("Omit Author"),
