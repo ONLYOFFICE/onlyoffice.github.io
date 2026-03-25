@@ -928,6 +928,7 @@ import "../styles.css";
                 !field.Value ||
                 field.Value.toLowerCase().indexOf("zotero_item") === -1
             ) {
+                citationService.showNoHaveCitationMessage();
                 return;
             }
             const updatedField = await citationService.showEditCitationWindow(field);

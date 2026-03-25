@@ -73,5 +73,6 @@
     "Updating citations": "Aktualizace citací",
     "Inserting bibliography": "Vkládání bibliografie",
     "Inserting citation": "Vkládání citace",
-    "Saving as text": "Uložit jako text"
+    "Saving as text": "Uložit jako text",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nenalezeno žádné Zotero citace na kurzoru. Klikněte prosím přímo na citaci, kterou chcete upravit."
 }

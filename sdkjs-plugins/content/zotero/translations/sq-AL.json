@@ -73,5 +73,6 @@
     "Updating citations": "Perditesimi i citimeve",
     "Inserting bibliography": "Futja e bibliografise",
     "Inserting citation": "Futja e citimit",
-    "Saving as text": "Ruaj si tekst"
+    "Saving as text": "Ruaj si tekst",
+    "No Zotero citation found at the cursor. Please click directly on a citation to edit it.": "Nuk u gjet citat Zotero në kursor. Ju lutem klikoni direkt në një citat për të redaktuar atë."
 }
