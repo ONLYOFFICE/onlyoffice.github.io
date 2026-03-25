@@ -178,7 +178,7 @@ import "../styles.css";
         window.Asc.plugin.onTranslate = applyTranslations;
         
         getEditorVersion().then((editorVersion) => {
-            window.Asc.scope.editorVersion = editorVersion;
+            window.Asc.scope.editorVersion = editorVersion; // 9003000
             addContextMenuButtons();
         }).catch((e) => {
             console.error(e);
@@ -380,11 +380,12 @@ import "../styles.css";
                 })
                 .catch(function (error) {
                     console.error(error);
-                    let message = translate("Failed to insert bibliography");
+                    citationService.showWarningMessage("Failed to insert bibliography");
+
                     if (typeof error === "string") {
-                        message += ". " + translate(error);
+                        let message = translate(error);
+                        showError(message);
                     }
-                    showError(message);
                 })
                 .finally(function () {
                     onEndAction(false, "Zotero (" + translate("Inserting bibliography") + ")");
@@ -928,7 +929,7 @@ import "../styles.css";
                 !field.Value ||
                 field.Value.toLowerCase().indexOf("zotero_item") === -1
             ) {
-                citationService.showNoHaveCitationMessage();
+                citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
                 return;
             }
             const updatedField = await citationService.showEditCitationWindow(field);
