@@ -38,6 +38,7 @@
 	"Realtime Tasks": "处理实时任务",
 	"Coding Help": "处理代码",
 	"Visual Analysis": "进行视觉分析",
+	"Function Calling / Tools": "函数调用 / 工具",
 	"Updating": "正在更新",
 	"Your text" : "您的文本",
 	"Target language" : "目标语言",
@@ -121,7 +122,7 @@
 	"Get advice about": "获取建议",
 	"Get advice": "获取建议",
 	"Ask AI anything": "询问AI任何问题",
-	"Generate new": "生成新内容",
+	"Update": "更新",
 	"Something went wrong": "出现错误",
 	"Please try reloading the conversation": "请尝试重新加载对话",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "处理选择...",
 	"Processing document...": "处理文档...",
 	"Action": "操作",
+	"Function executed successfully": "函数执行成功",
 	"Prompt": "提示词",
 	"Give your tool a short name for the toolbar": "为工具栏提供一个简短的名称",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "告诉 AI 选中文本要做什么（例如，\"查找事实错误\" 或 \"摘要\"）",
@@ -178,5 +180,8 @@
 	"Hint": "提示",
 	"Replace": "替换",
 	"Replace + Hint": "替换 + 提示",
-	"Generate Document": "生成文档"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "生成文档",
+	"Operation was interrupted.": "操作已中断。"
 }

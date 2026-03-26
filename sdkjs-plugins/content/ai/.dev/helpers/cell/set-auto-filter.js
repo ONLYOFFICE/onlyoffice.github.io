@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "setAutoFilter",
+		"text": "Apply Data Filter",
 		"description": "Applies autofilter to a data range, enabling dropdown filters on column headers. Supports filtering by column number or column name (with fuzzy matching). Offers multiple filter types: value comparison operators (greater than, less than, equals), multiple value selection, top/bottom N items or percentage, color-based filtering (cell background or font color), and dynamic filters. Can be used to filter active selection or specific ranges.",
 		"parameters": {
 			"type": "object",
@@ -51,8 +52,8 @@
 					"description": "Column name/header for filtering (e.g., 'Name', 'Age'). Will automatically find the column number."
 				},
 				"criteria1": {
-					"type": ["string", "array", "object"],
-					"description": "Filter criteria - string for operators (e.g., '>10'), array for multiple values (e.g., [1,2,3]), ApiColor object for color filters, or dynamic filter constant."
+					"type": ["string"],
+					"description": "Filter criteria - string for operators (e.g., '>10'), JSON-encoded array for multiple values (e.g., '[1,2,3]'), JSON-encoded color object ('{\"r\":255,\"g\":0,\"b\":0}') for color filters, or dynamic filter constant."
 				},
 				"operator": {
 					"type": "string",
@@ -93,7 +94,7 @@
 			},
 			{
 				"prompt": "Filter column 2 for specific values [2,5,8]",
-				"arguments": { "range": "A1:D10", "field": 2, "criteria1": [2, 5, 8], "operator": "xlFilterValues" }
+				"arguments": { "range": "A1:D10", "field": 2, "criteria1": "[2, 5, 8]", "operator": "xlFilterValues" }
 			},
 			{
 				"prompt": "Filter column 1 for top 10 items",
@@ -105,16 +106,29 @@
 			},
 			{
 				"prompt": "Filter by cell background color (yellow)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 255, "b": 0 }, "operator": "xlFilterCellColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 255, \"b\": 0 }", "operator": "xlFilterCellColor" }
 			},
 			{
 				"prompt": "Filter by font color (red)",
-				"arguments": { "range": "A1:D10", "field": 1, "criteria1": { "r": 255, "g": 0, "b": 0 }, "operator": "xlFilterFontColor" }
+				"arguments": { "range": "A1:D10", "field": 1, "criteria1": "{ \"r\": 255, \"g\": 0, \"b\": 0 }", "operator": "xlFilterFontColor" }
 			}
 		]
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validOperators = ["xlAnd", "xlOr", "xlFilterValues", "xlTop10Items", "xlTop10Percent", "xlBottom10Items", "xlBottom10Percent", "xlFilterCellColor", "xlFilterFontColor", "xlFilterDynamic"];
+		if (params.operator !== undefined && params.operator !== null && !validOperators.includes(params.operator))
+			throw new window.AgentState.ToolError("Invalid operator \"" + params.operator + "\". Available options: " + JSON.stringify(validOperators));
+
+		if (Array.isArray(params.criteria2))
+			throw new window.AgentState.ToolError("Invalid criteria2: must be a string, not an array. Use criteria1 with xlFilterValues operator for multiple values.");
+
 		Asc.scope.range = params.range;
 		Asc.scope.field = params.field;
 		Asc.scope.fieldName = params.fieldName;
@@ -128,14 +142,22 @@
 				let ws = Api.GetActiveSheet();
 				let _range;
 
-				if (!Asc.scope.range) {
-					_range = Api.GetSelection();
-				} else {
+				if (Asc.scope.range) {
 					_range = ws.GetRange(Asc.scope.range);
+					if (!_range)
+						return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+				} else {
+					_range = Api.GetSelection();
 				}
 
 				return _range.GetValue2();
 			});
+
+			if (insertRes && insertRes.error)
+				throw new window.AgentState.ToolError(insertRes.error);
+
+			if (!insertRes)
+				throw new window.AgentState.ToolError("Failed to retrieve data from the specified range.");
 
 			let csv = insertRes.map(function(item){
 				return item.map(function(value) {
@@ -186,26 +208,33 @@
 			Asc.scope.field = result;
 		}
 
-		await Asc.Editor.callCommand(function(){
+		// Use Asc.scope.field — may have been updated by the fieldName AI lookup above
+		if (Asc.scope.field !== undefined && Asc.scope.field !== null) {
+			let fieldNum = Number(Asc.scope.field);
+			if (isNaN(fieldNum) || fieldNum < 1 || !Number.isInteger(fieldNum))
+				throw new window.AgentState.ToolError("Invalid field \"" + Asc.scope.field + "\". Field must be a positive integer starting from 1 (left-most column).");
+		}
+
+		let filterResult = await Asc.Editor.callCommand(function(){
 			let ws = Api.GetActiveSheet();
 			let range;
 
-			if (!Asc.scope.range) {
-				range = Api.GetSelection();
-			} else {
+			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+			} else {
+				range = Api.GetSelection();
+				if (!range)
+					return { error: "No range specified and no cells are currently selected. Please provide a range parameter (e.g., 'A1:D10')." };
 			}
 
-			if (!range) {
-				return;
-			}
-
-			let field = Asc.scope.field;
-			if (!field) {
-				field = 1;
-			}
+			if (Asc.scope.field != null && typeof Asc.scope.field !== 'number')
+				return { error: "Invalid field \"" + Asc.scope.field + "\". Must be a number (e.g., 1)" };
 
 			let criteria1 = Asc.scope.criteria1;
+			if (criteria1 && criteria1.startsWith && (criteria1.startsWith("[") || criteria1.startsWith("{")))
+				criteria1 = eval(criteria1);
 			if (Asc.scope.operator === "xlFilterCellColor" || Asc.scope.operator === "xlFilterFontColor") {
 				if (criteria1 && typeof criteria1 === 'object' && criteria1.r !== undefined && criteria1.g !== undefined && criteria1.b !== undefined) {
 					criteria1 = Api.CreateColorFromRGB(criteria1.r, criteria1.g, criteria1.b);
@@ -213,13 +242,16 @@
 			}
 
 			range.SetAutoFilter(
-				field,
+				Asc.scope.field,
 				criteria1,
 				Asc.scope.operator,
 				Asc.scope.criteria2,
 				Asc.scope.visibleDropDown
 			);
 		});
+
+		if (filterResult && filterResult.error)
+			throw new window.AgentState.ToolError(filterResult.error);
 	};
 
 	return func;

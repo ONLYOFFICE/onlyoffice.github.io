@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "formatTable",
+		"text": "Format as Table",
 		"description": "Applies professional table formatting to a data range with consistent styling, colors, and alignment. Features include: automatic or manual color scheme selection (blue, green, orange, gray, red), alternating row colors for readability, optional header row formatting (bold, centered, colored background), table borders, and automatic column width adjustment. Can auto-detect existing formatting to avoid overriding intentional styles. Supports smart content-based text alignment (right-align numbers, left-align text).",
 		"parameters": {
 			"type": "object",
@@ -91,6 +92,16 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validColorSchemes = ["blue", "green", "orange", "gray", "red", "auto"];
+		if (params.colorScheme !== undefined && params.colorScheme !== null && !validColorSchemes.includes(params.colorScheme))
+			throw new window.AgentState.ToolError("Invalid colorScheme \"" + params.colorScheme + "\". Available options: " + JSON.stringify(validColorSchemes));
+
 		Asc.scope.range = params.range;
 		Asc.scope.applyHeaderStyle = params.applyHeaderStyle !== false; // default true
 		Asc.scope.applyBorders = params.applyBorders !== false; // default true
@@ -99,22 +110,23 @@
 
 		await Asc.Editor.callMethod("StartAction", ["GroupActions", "Format table"]);
 
-		await Asc.Editor.callCommand(function(){
+		let result = await Asc.Editor.callCommand(function(){
 			let ws = Api.GetActiveSheet();
 			let _range;
 
-			if (!Asc.scope.range) {
+			if (Asc.scope.range) {
+				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+			} else {
 				_range = Api.GetSelection();
 				// If no selection, use the used range of the sheet
 				if (!_range || (_range.GetRowsCount() === 1 && _range.GetColumnsCount() === 1)) {
 					_range = ws.GetUsedRange();
 				}
-			} else {
-				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "No range specified and the sheet appears to be empty. Please provide a range parameter (e.g., 'A1:D10')." };
 			}
-
-			if (!_range)
-				return;
 
 		
 			let rowsCount = _range.GetRowsCount();
@@ -316,6 +328,9 @@
 		});
 
 		await Asc.Editor.callMethod("EndAction", ["GroupActions"]);
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

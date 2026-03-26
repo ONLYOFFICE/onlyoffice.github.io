@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "generateForm",
+		"text": "Generate Form Template",
 		"description": "Use this function if you are asked to generate a form or document template (contract, any document for filling) based on a description. Input: a detailed description of the desired form or template.",
 		"parameters": {
 			"type": "object",

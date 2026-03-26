@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "summarizeData",
+		"text": "Summarize Data",
 		"description": "Analyzes and creates a comprehensive text summary of data in the specified range. Automatically determines data types (numeric, categorical, dates) and provides relevant statistics for each type. For numeric data: calculates totals, averages, ranges, and identifies outliers. For categorical data: finds most frequent values and distribution patterns. The summary is placed in a new cell adjacent to the data range with proper formatting and text wrapping.",
 		"parameters": {
 			"type": "object",
@@ -62,6 +63,12 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 		
 		let rangeData = await Asc.Editor.callCommand(function(){
@@ -69,11 +76,19 @@
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
-				range = ws.Selection; 
+				range = ws.Selection;
 			}
 			return [range.Address, range.GetValue2()];
 		});
+
+		if (rangeData && rangeData.error)
+			throw new window.AgentState.ToolError(rangeData.error);
+
+		if (!rangeData || !rangeData[1])
+			throw new window.AgentState.ToolError("Failed to retrieve data from the specified range.");
 
 		let address = rangeData[0];
 		let data = rangeData[1];

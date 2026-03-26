@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "deleteSlide",
+		"text": "Delete Slide",
 		"description": "Deletes slide with the specific index or current",
 		"parameters": {
 			"type": "object",
@@ -66,6 +67,7 @@
 			let slide;
 			if (Asc.scope.slideNum !== undefined && Asc.scope.slideNum !== null) {
 				slide = presentation.GetSlideByIndex(Asc.scope.slideNum - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			if (!slide)
 				slide = presentation.GetCurrentSlide();
@@ -77,6 +79,9 @@
 			slide.Delete();
 			return {"curSlideIdx": curSlideIdx, "slideIdx": slideIdx};
 		});
+		if (data && data.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + data.slidesCount + " slides.");
+		}
 		if (data) {
 			if (data["slideIdx"] <= data["curSlideIdx"]) {
 				await Asc.Editor.callMethod("GoToSlide", [data["curSlideIdx"]]);
