@@ -1,8 +1,8 @@
-const i={title:"Components/Loader",tags:["autodocs"],parameters:{docs:{description:{component:"Loader from ONLYOFFICE plugin UI."}}}},r=()=>(setTimeout(()=>{const n=o=>new Promise(e=>{if(document.querySelector(`script[src="${o}"]`))return e();const t=document.createElement("script");t.src=o,t.onload=e,document.head.appendChild(t)});(async()=>{await n("https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"),await n("https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"),await n("https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js");const o=window.jQuery;let e;o("#show-loader").on("click",function(){e&&(e.remove?e.remove():o("#loader-container")[0].removeChild(e)),e=window.showLoader(o("#loader-container")[0],"Loading...")}),o("#hide-loader").on("click",function(){e&&(e.remove?e.remove():o("#loader-container")[0].removeChild(e)),e=void 0})})()},0),`
+import{n as e}from"./chunk-BneVvdWh.js";var t,n,r;e((()=>{t={title:`Components/Loader`,tags:[`autodocs`],parameters:{docs:{description:{component:`Loader from ONLYOFFICE plugin UI.`}}}},n=()=>(setTimeout(()=>{let e=e=>new Promise(t=>{if(document.querySelector(`script[src="${e}"]`))return t();let n=document.createElement(`script`);n.src=e,n.onload=t,document.head.appendChild(n)});(async()=>{await e(`https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js`),await e(`https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js`),await e(`https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js`);let t=window.jQuery,n;t(`#show-loader`).on(`click`,function(){n&&(n.remove?n.remove():t(`#loader-container`)[0].removeChild(n)),n=window.showLoader(t(`#loader-container`)[0],`Loading...`)}),t(`#hide-loader`).on(`click`,function(){n&&(n.remove?n.remove():t(`#loader-container`)[0].removeChild(n)),n=void 0})})()},0),`
     <div id="loader-container" class="asc-loader-container" style="margin: 10px; height: 40px; border: 1px solid #cfcfcf;"></div>
     <button id="show-loader">Show Loader</button>
     <button id="hide-loader">Hide Loader</button>
-  `);r.storyName="Interactive Loader";r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`() => {
+  `),n.storyName=`Interactive Loader`,n.parameters={...n.parameters,docs:{...n.parameters?.docs,source:{originalSource:`() => {
   setTimeout(() => {
     const loadScript = src => new Promise(resolve => {
       if (document.querySelector(\`script[src="\${src}"]\`)) return resolve();
@@ -32,4 +32,4 @@ const i={title:"Components/Loader",tags:["autodocs"],parameters:{docs:{descripti
     <button id="show-loader">Show Loader</button>
     <button id="hide-loader">Hide Loader</button>
   \`;
-}`,...r.parameters?.docs?.source}}};const a=["InteractiveLoader"];export{r as InteractiveLoader,a as __namedExportsOrder,i as default};
+}`,...n.parameters?.docs?.source}}},r=[`InteractiveLoader`]}))();export{n as InteractiveLoader,r as __namedExportsOrder,t as default};
