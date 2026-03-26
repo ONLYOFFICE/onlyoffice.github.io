@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addIconSet",
+		"text": "Add Icon Indicators",
 		"description": "Applies icon set conditional formatting to display icons (arrows, traffic lights, symbols) based on value ranges. Icons provide visual indicators for data trends and performance levels. Each icon represents a different value range, making it easy to identify patterns and outliers in your data.",
 		"parameters": {
 			"type": "object",
@@ -44,8 +45,9 @@
 				},
 				"iconSetType": {
 					"type": "string",
-					"description": "Type of icon set - 'threeArrows', 'threeTrafficLights', 'fourArrows', 'fiveArrows', etc. (default: 'threeArrows').",
-					"default": "threeArrows"
+					"description": "Type of icon set (default: 'xl3Arrows').",
+					"enum": ["xl3Arrows","xl3ArrowsGray","xl3Flags","xl3TrafficLights1","xl3TrafficLights2","xl3Signs","xl3Symbols","xl3Symbols2","xl4Arrows","xl4ArrowsGray","xl4RedToBlack","xl4CRV","xl4TrafficLights","xl5Arrows","xl5ArrowsGray","xl5CRV","xl5Quarters","xl3Stars","xl3Triangles","xl5Boxes"],
+					"default": "xl3Arrows"
 				},
 				"showIconOnly": {
 					"type": "boolean",
@@ -67,7 +69,7 @@
 			},
 			{
 				"prompt": "Apply traffic lights icon set to range A1:D10",
-				"arguments": { "range": "A1:D10", "iconSetType": "threeTrafficLights" }
+				"arguments": { "range": "A1:D10", "iconSetType": "xl3TrafficLights1" }
 			},
 			{
 				"prompt": "When user asks to add icon set, arrow icons, traffic lights, symbols formatting",
@@ -77,41 +79,49 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validIconSetTypes = ["xl3Arrows","xl3ArrowsGray","xl3Flags","xl3TrafficLights1","xl3TrafficLights2","xl3Signs","xl3Symbols","xl3Symbols2","xl4Arrows","xl4ArrowsGray","xl4RedToBlack","xl4CRV","xl4TrafficLights","xl5Arrows","xl5ArrowsGray","xl5CRV","xl5Quarters","xl3Stars","xl3Triangles","xl5Boxes"];
+		if (params.iconSetType !== undefined && params.iconSetType !== null && !validIconSetTypes.includes(params.iconSetType))
+			throw new window.AgentState.ToolError("Invalid iconSetType \"" + params.iconSetType + "\". Available options: " + JSON.stringify(validIconSetTypes));
+
 		Asc.scope.range = params.range;
 		Asc.scope.iconSetType = params.iconSetType;
 		Asc.scope.showIconOnly = params.showIconOnly;
 		Asc.scope.reverseOrder = params.reverseOrder;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.GetSelection();
-			}
-			
-			if (!range) {
-				return;
 			}
 
 			let formatConditions = range.GetFormatConditions();
 			let iconSet = formatConditions.AddIconSetCondition();
-			
-			if (iconSet) {
-				if (Asc.scope.iconSetType) {
-					iconSet.SetIconSet(Asc.scope.iconSetType);
-				}
-				
-				if (typeof Asc.scope.showIconOnly === "boolean") {
-					iconSet.SetShowIconOnly(Asc.scope.showIconOnly);
-				}
-				
-				if (typeof Asc.scope.reverseOrder === "boolean") {
-					iconSet.SetReverseOrder(Asc.scope.reverseOrder);
-				}
-			}
+			if (!iconSet)
+				return { error: "Failed to create icon set conditional formatting rule." };
+
+			if (Asc.scope.iconSetType)
+				iconSet.SetIconSet(Asc.scope.iconSetType);
+
+			if (typeof Asc.scope.showIconOnly === "boolean")
+				iconSet.SetShowIconOnly(Asc.scope.showIconOnly);
+
+			if (typeof Asc.scope.reverseOrder === "boolean")
+				iconSet.SetReverseOrder(Asc.scope.reverseOrder);
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

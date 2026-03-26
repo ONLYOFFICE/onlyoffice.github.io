@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "highlightAnomalies",
+		"text": "Highlight Data Anomalies",
 		"description": "Detects and highlights statistical outliers (anomalies) in numeric data using the IQR (Interquartile Range) method or Z-score analysis. Applies conservative outlier detection to avoid false positives - only marks clear statistical anomalies. Automatically extracts numeric values from the range, calculates quartiles, and identifies values that fall outside Q1-1.5*IQR or Q3+1.5*IQR. Highlights detected anomalies with customizable colors. Requires at least 4 numeric values for analysis.",
 		"parameters": {
 			"type": "object",
@@ -79,6 +80,19 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		if (params.highlightColor !== undefined && params.highlightColor !== null) {
+			if (typeof params.highlightColor !== 'string' || params.highlightColor.trim() === '')
+				throw new window.AgentState.ToolError("Invalid highlightColor: must be a non-empty string. Use a hex color like '#FF0000' or a color name like 'red', 'yellow', 'blue'.");
+			if (params.highlightColor.startsWith('#') && !/^#[0-9A-Fa-f]{6}$/.test(params.highlightColor))
+				throw new window.AgentState.ToolError("Invalid highlightColor \"" + params.highlightColor + "\": hex color must be in '#RRGGBB' format (e.g., '#FF0000' for red).");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.highlightColor = params.highlightColor || "yellow";
 
@@ -90,6 +104,8 @@
 				_range = Api.GetSelection();
 			} else {
 				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			}
 
 			if (!_range)
@@ -108,9 +124,11 @@
 			};
 		});
 
-		if (!rangeData || !rangeData.values) {
-			return;
-		}
+		if (rangeData && rangeData.error)
+			throw new window.AgentState.ToolError(rangeData.error);
+
+		if (!rangeData || !rangeData.values)
+			throw new window.AgentState.ToolError("Failed to retrieve data from the specified range.");
 
 		// Extract numeric values with their positions
 		let numericData = [];
@@ -150,9 +168,8 @@
 			}
 		}
 
-		if (numericData.length === 0) {
-			return; // No numeric data to analyze
-		}
+		if (numericData.length === 0)
+			throw new window.AgentState.ToolError("No numeric data found in the specified range. Please select a range that contains numeric values.");
 
 		let dataValues = numericData.map(function(item) { return item.value; });
 		

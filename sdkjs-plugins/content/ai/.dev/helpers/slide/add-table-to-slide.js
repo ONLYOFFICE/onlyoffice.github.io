@@ -33,6 +33,7 @@
 (function(){
 	let func = new RegisteredFunction({
 		"name": "addTableToSlide",
+		"text": "Insert Table",
 		"description": "Adds a table to the slide (194x97mm, centered)",
 		"parameters": {
 			"type": "object",
@@ -78,12 +79,13 @@
 	func.call = async function (params) {
 		Asc.scope.params = params;
 
-		await Asc.Editor.callCommand(function () {
+		let callResult = await Asc.Editor.callCommand(function () {
 			let presentation = Api.GetPresentation();
 			let slide;
 
 			if (Asc.scope.params.slideNumber) {
 				slide = presentation.GetSlideByIndex(Asc.scope.params.slideNumber - 1);
+				if (!slide) return {error: "slide_not_found", slidesCount: presentation.GetSlidesCount()};
 			}
 			else {
 				slide = presentation.GetCurrentSlide();
@@ -104,6 +106,8 @@
 					columns = data[0].length;
 				}
 			}
+
+			if (rows <= 0 || columns <= 0) return {error: "invalid_table_size", rows: rows, columns: columns};
 
 			let tableWidth = 7000000;
 			let tableHeight = 3500000;
@@ -144,6 +148,13 @@
 				slide.AddObject(table);
 			}
 		});
+
+		if (callResult && callResult.error === "slide_not_found") {
+			throw new window.AgentState.ToolError("Slide " + params.slideNumber + " does not exist! The presentation has " + callResult.slidesCount + " slides.");
+		}
+		if (callResult && callResult.error === "invalid_table_size") {
+			throw new window.AgentState.ToolError("Invalid table size: rows=" + callResult.rows + ", columns=" + callResult.columns + ". Both rows and columns must be greater than 0.");
+		}
 	};
 	return func;
 })();

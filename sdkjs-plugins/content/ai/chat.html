@@ -1,28 +1,28 @@
 <!--
  (c) Copyright Ascensio System SIA 2010-2025
- 
+
  This program is a free software product. You can redistribute it and/or
  modify it under the terms of the GNU Affero General Public License (AGPL)
  version 3 as published by the Free Software Foundation. In accordance with
  Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
  that Ascensio System SIA expressly excludes the warranty of non-infringement
  of any third-party rights.
- 
+
  This program is distributed WITHOUT ANY WARRANTY; without even the implied
  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
  details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
- 
+
  You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
  street, Riga, Latvia, EU, LV-1050.
- 
+
  The  interactive user interfaces in modified source and object code versions
  of the Program must display Appropriate Legal Notices, as required under
  Section 5 of the GNU AGPL version 3.
- 
+
  Pursuant to Section 7(b) of the License you must retain the original Product
  logo when distributing the program. Pursuant to Section 7(e) we decline to
  grant you any rights under trademark law for use of our trademarks.
- 
+
  All the Product's GUI elements, including illustrations and icon sets, as
  well as technical writing content are licensed under the terms of the
  Creative Commons Attribution-ShareAlike 4.0 International. See the License
@@ -36,14 +36,21 @@
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
 	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-	<script src="vendor/jquery/jquery-3.7.1.min.js"></script>
+
+	<script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="vendor/GPT-3-Encoder/encoder.js"></script>
-	<script src="vendor/md/markdown-it.js"></script>
+	<script type="text/javascript" src="vendor/md/markdown-it.js"></script>
+
 	<script type="text/javascript" src="components/Tooltip/script.js"></script>
 	<link rel="stylesheet" href="components/Tooltip/style.css">
 	<link rel="stylesheet" href="./resources/styles/chat.css">
 	<script type="text/javascript" src="scripts/utils/theme.js"></script>
+
+	<script type="text/javascript" src="scripts/helpers/helperFuncs.js"></script>
+	<script type="text/javascript" src="scripts/helpers/helpers.js"></script>
+	<script type="text/javascript" src="scripts/chatVoice.js"></script>
 	<script type="text/javascript" src="scripts/chat.js"></script>
+
 </head>
 <body style="display: flex;">
 	<div id="chat_window" class="chat_window hidden">
@@ -56,7 +63,7 @@
 						<span class="i18n">I'm here to assist you with all your text creation and editing needs. Feel free to ask me anything about your document or anything else that's on your mind.</span>
 						<br/>
 						<br/>
-						<span class="i18n">Let’s make your content shine together!</span>
+						<span class="i18n">Let's make your content shine together!</span>
 					</div>
 					<div id="welcome_buttons_list"></div>
 				</div>
@@ -71,7 +78,7 @@
 				<span class="i18n">That's why sometimes you should clear your chat history.</span>
 				<div class="text_align_end">
 					<button id="clear_history" style="margin-top: 5px;" class="form-control btn-text-default i18n">Clear history</button>
-				</div>	
+				</div>
 			</div>
 			<div class="text_align_end">
 				<span class="i18n">Tokens in the request about: </span>
@@ -89,14 +96,21 @@
 		</div>
 		<div id="input_message_wrapper">
 			<textarea id="input_message" rows="1" class="form-control" spellcheck="false"></textarea>
-			<div id="input_message_submit" class="noselect">
-				<img src="resources/icons/light/btn-demote.png" draggable="false" class="icon"/>
+			<div id="input_buttons_container">
+				<div id="input_voice_button" class="input_control_button hidden" title="Voice input">
+					<img src="resources/icons/light/btn-microphone.png" draggable="false" class="icon"/>
+				</div>
+				<div id="input_stop_button" class="input_control_button hidden" title="Stop">
+					<span class="icon">⏹</span>
+				</div>
+				<div id="input_message_submit" class="input_control_button noselect">
+					<img src="resources/icons/light/btn-demote.png" draggable="false" class="icon"/>
+				</div>
 			</div>
 		</div>
 	</div>
 	<div id="loader-container" class="loader hidden"></div>
 	<div id="div_err" class="hidden div_error err_background">
-		<label class="lb_err i18n" style="font-weight: bold;">Error:</label>
 		<label id="lb_err" class="lb_err"></label>
 	</div>
 </body>

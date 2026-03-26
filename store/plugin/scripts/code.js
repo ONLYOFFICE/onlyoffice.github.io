@@ -123,9 +123,9 @@
 			
 		switch (data.type) {
 			case 'getInstalled':
-				// данное сообщение используется только при инициализации плагина и по умолчанию идёт парсинг и отрисовка плагинов из стора
-				// добавлен флаг updateInstalled - в этом случае не загружаем плагины из стора повторно, работаем только с установленными
-				
+				// this message is used only during plugin initialization, by default plugins from the store are parsed and rendered
+				// added updateInstalled flag - in this case we don't load plugins from the store again, we only work with installed ones
+
 				window.Asc.plugin.executeMethod('GetInstalledPlugins', null, function(result) {
 					postMessage({ type: 'InstalledPlugins', data: result, updateInstalled: data.updateInstalled } );
 				});

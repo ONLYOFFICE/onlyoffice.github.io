@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Tâches en temps réel",
 	"Coding Help": "Aide au codage",
 	"Visual Analysis": "Analyse visuelle",
+	"Function Calling / Tools": "Appel de fonctions / Outils",
 	"Updating": "Mise à jour",
 	"Your text" : "Votre texte",
 	"Target language" : "Langue cible",
@@ -121,7 +122,7 @@
 	"Get advice about": "Obtenir des conseils sur",
 	"Get advice": "Obtenir des conseils",
 	"Ask AI anything": "Demander quelque chose à l'IA",
-	"Generate new": "Générer de nouveaux",
+	"Update": "Mettre à jour",
 	"Something went wrong": "Un problème est survenu",
 	"Please try reloading the conversation": "Veuillez essayer de recharger la conversation",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "Traitement de la sélection...",
 	"Processing document...": "Traitement du document...",
 	"Action": "Action",
+	"Function executed successfully": "Fonction exécutée avec succès",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Donnez un nom court à votre outil pour la barre d'outils",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dites à l'IA ce qu'elle doit faire avec le texte sélectionné (par exemple, \"Trouver les erreurs factuelles\" ou \"Riassumer\")",
@@ -178,5 +180,8 @@
 	"Hint": "Indice",
 	"Replace": "Remplacer",
 	"Replace + Hint": "Remplacer + Indice",
-	"Generate Document": "Générer un document"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "Générer un document",
+	"Operation was interrupted.": "L'opération a été interrompue."
 }

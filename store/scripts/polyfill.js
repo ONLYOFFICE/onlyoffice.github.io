@@ -30,8 +30,8 @@ Math.imul = Math.imul || function(a, b) {
   var al = a & 0xffff;
   var bh = (b >>> 16) & 0xffff;
   var bl = b & 0xffff;
-  // сдвиг на 0 бит закрепляет знак в старшей части числа
-  // окончательный |0 преобразует беззнаковое значение обратно в знаковое значение
+  // shifting by 0 bits preserves the sign in the high part of the number
+  // the final |0 converts the unsigned value back to a signed value
   return ((al * bl) + (((ah * bl + al * bh) << 16) >>> 0)|0);
 };
 

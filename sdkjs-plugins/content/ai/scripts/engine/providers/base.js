@@ -127,7 +127,7 @@
 		None            : 0x00,
 
 		Chat            : 0x01,
-		
+
 		Image           : 0x02,
 
 		Embeddings      : 0x04,
@@ -140,7 +140,9 @@
 
 		Code            : 0x40,
 
-		Vision          : 0x80
+		Vision          : 0x80,
+
+		Tools           : 0x100
 
 	};
 
@@ -253,13 +255,27 @@
 
 	};
 
-	AI.addExternalProvider = function(providerContent) {
+	AI.addExternalProvider = function(providerContent, item) {
 
 		try {
 			let content = "(function(){\n" + providerContent + "\nreturn new Provider();})();";
-			let provider = eval(content);
+			let provider = null;
+			
+			if (item.basedOn)
+			{
+				for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
+					let internalProvider = window.AI.InternalProviders[i];
+					if (item.basedOn === internalProvider.name)
+					{
+						provider = window.AI.InternalProviders[i].createInstance(item.name, item.url, item.key, item.addon);
+						break;	
+					}
+				}
+			}
+			if (!provider)
+				provider = eval(content);
 
-			if (!provider.name)
+			if (!provider || !provider.name)
 				return false;
 
 			if (provider.isOnlyDesktop() && (-1 === navigator.userAgent.indexOf("AscDesktopEditor")))

@@ -38,6 +38,7 @@
 	"Realtime Tasks": "Attività in tempo reale",
 	"Coding Help": "Aiuto per la codifica",
 	"Visual Analysis": "Analisi visiva",
+	"Function Calling / Tools": "Chiamata di funzioni / Strumenti",
 	"Updating": "Aggiornamento",
 	"Your text" : "Il tuo testo",
 	"Target language" : "Lingua di destinazione",
@@ -121,7 +122,7 @@
 	"Get advice about": "Ricevi consigli su",
 	"Get advice": "Ricevi consigli",
 	"Ask AI anything": "Chiedi qualsiasi cosa all'AI",
-	"Generate new": "Genera nuovo",
+	"Update": "Aggiorna",
 	"Something went wrong": "Qualcosa è andato storto",
 	"Please try reloading the conversation": "Prova a ricaricare la conversazione",
 
@@ -169,6 +170,7 @@
 	"Processing selection...": "Processamento selezione...",
 	"Processing document...": "Processamento documento...",
 	"Action": "Azione",
+	"Function executed successfully": "Funzione eseguita con successo",
 	"Prompt": "Prompt",
 	"Give your tool a short name for the toolbar": "Dai un nome breve al tuo strumento per la barra degli strumenti",
 	"Tell the AI what to do with the selected text (e.g., \"Find factual errors\" or \"Summarize\")": "Dai all'AI le istruzioni su come gestire il testo selezionato (ad esempio, \"Trova errori fatti\" o \"Riassumi\")",
@@ -178,5 +180,8 @@
 	"Hint": "Dica",
 	"Replace": "Sostituisci",
 	"Replace + Hint": "Sostituisci + Dica",
-	"Generate Document": "Genera documento"
+	"Arguments": "Arguments",
+	"Result": "Result",
+	"Generate Document": "Genera documento",
+	"Operation was interrupted.": "L'operazione è stata interrotta."
 }
