@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "changeTextStyle",
+		"text": "Format Cell Text",
 		"description": "Applies text formatting styles to cells in the specified range or current selection. Supports comprehensive text styling options including bold, italic, underline (multiple types), strikeout, font family, font size, and font color. Colors can be specified using hex codes (#FF0000) or preset color names (red, blue, etc.). All formatting parameters are optional - only specified properties will be changed, leaving others unchanged.",
 		"parameters": {
 			"type": "object",
@@ -109,6 +110,21 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		const validUnderlines = ["none", "single", "singleAccounting", "double", "doubleAccounting"];
+		if (params.underline !== undefined && params.underline !== null && !validUnderlines.includes(params.underline))
+			throw new window.AgentState.ToolError("Invalid underline \"" + params.underline + "\". Available options: " + JSON.stringify(validUnderlines));
+
+		if (params.fontSize !== undefined && params.fontSize !== null) {
+			if (typeof params.fontSize !== 'number' || params.fontSize < 1 || params.fontSize > 200)
+				throw new window.AgentState.ToolError("Invalid fontSize \"" + params.fontSize + "\". Must be a number between 1 and 200.");
+		}
+
 		Asc.scope.bold = params.bold;
 		Asc.scope.italic = params.italic;
 		Asc.scope.underline = params.underline;
@@ -118,18 +134,17 @@
 		Asc.scope.fontColor = params.fontColor;
 		Asc.scope.range = params.range;
 
-		await Asc.Editor.callCommand(function(){
+		let result = await Asc.Editor.callCommand(function(){
 			let ws = Api.GetActiveSheet();
 			let _range;
 
-			if (!Asc.scope.range) {
-				_range = Api.GetSelection();
-			} else {
+			if (Asc.scope.range) {
 				_range = ws.GetRange(Asc.scope.range);
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
+			} else {
+				_range = Api.GetSelection();
 			}
-
-			if (!_range)
-				return;
 
 			if (undefined !== Asc.scope.bold)
 				_range.SetBold(Asc.scope.bold);
@@ -167,6 +182,9 @@
 					_range.SetFontColor(color);
 			}
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

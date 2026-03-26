@@ -899,7 +899,7 @@
 		$('#tab_replace_id').select2({
 			minimumResultsForSearch: Infinity
 		}).on('change', function(e) {
-			// так как парсятся не все языки, то на редактировании изменения будут только у тех, что обрабатываются через библиотеки (при вставке в документ у всех)
+			// since not all languages are parsed, on editing changes will only apply to those processed through libraries (on document insertion - to all)
 			switch (e.currentTarget.value) {
 				case "0":
 					xml_formatter_settings.indentation = "\t";

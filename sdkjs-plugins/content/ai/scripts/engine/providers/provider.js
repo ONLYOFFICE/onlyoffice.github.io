@@ -497,14 +497,60 @@
 		}
 
 		/**
-		 * Is provider support AI tools.
+		 * Is provider support AI tools in native format (OpenAI tools).
+		 * If true - tools will be passed as 'tools' parameter in request body.
+		 * If false - tools will be described in system prompt.
 		 */
-		isSupportTools(model) {
+		isSupportTools(model, modelUI) {
+			// Check if model has Tools capability
+			if (modelUI && modelUI.capabilities !== undefined) {
+				return (modelUI.capabilities & AI.CapabilitiesUI.Tools) !== 0;
+			}
 			return false;
 		}
 
-		addTools(message) {
-			return;
+		/**
+		 * Add tools to request body.
+		 * @param {Object} body - Request body object
+		 * @param {Array} tools - Array of tool definitions in OpenAI format
+		 */
+		addTools(body, tools) {
+			if (!tools || tools.length === 0)
+				return;
+			body.tools = tools.map(tool => ({
+				type: "function",
+				function: {
+					name: tool.name,
+					description: tool.description,
+					parameters: tool.parameters
+				}
+			}));
+		}
+
+		/**
+		 * Extract tool calls from provider response.
+		 * @param {Object} message - Response from provider
+		 * @returns {Array|null} - Array of tool calls or null
+		 */
+		getToolCallsResult(message) {
+			let data = message.data || message;
+			let arrResult = data.choices || data.content || data.candidates;
+			if (!arrResult)
+				return null;
+
+			let choice = arrResult[0] ? arrResult[0] : arrResult;
+			if (!choice)
+				return null;
+
+			// OpenAI format
+			if (choice.message && choice.message.tool_calls)
+				return choice.message.tool_calls;
+
+			// Delta format (streaming)
+			if (choice.delta && choice.delta.tool_calls)
+				return choice.delta.tool_calls;
+
+			return null;
 		}
 
 		/**

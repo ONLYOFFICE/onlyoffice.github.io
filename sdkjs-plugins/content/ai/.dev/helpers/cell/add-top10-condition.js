@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "addTop10Condition",
+		"text": "Highlight Top or Bottom Values",
 		"description": "Highlights the top or bottom ranked values in a range. You can choose to highlight by item count (e.g., top 10 values) or by percentage (e.g., top 20% of values). Perfect for identifying highest performers, outliers, or values that need attention in your dataset.",
 		"parameters": {
 			"type": "object",
@@ -86,44 +87,67 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
+		if (params.rank !== undefined && params.rank !== null) {
+			if (typeof params.rank !== 'number' || isNaN(params.rank) || params.rank < 1)
+				throw new window.AgentState.ToolError("Invalid rank \"" + params.rank + "\". Must be a positive number (e.g., 10).");
+		}
+
+		if (params.fillColor !== undefined && params.fillColor !== null) {
+			let r = params.fillColor.r, g = params.fillColor.g, b = params.fillColor.b;
+			if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number' ||
+					r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
+					!Number.isInteger(r) || !Number.isInteger(g) || !Number.isInteger(b))
+				throw new window.AgentState.ToolError("Invalid fillColor: r, g, b must each be integers between 0 and 255. Example: {\"r\": 255, \"g\": 0, \"b\": 0} for red.");
+		}
+
 		Asc.scope.range = params.range;
 		Asc.scope.rank = params.rank || 10;
 		Asc.scope.isBottom = params.isBottom || false;
 		Asc.scope.isPercent = params.isPercent || false;
 		Asc.scope.fillColor = params.fillColor;
 
-		await Asc.Editor.callCommand(function() {
+		let result = await Asc.Editor.callCommand(function() {
 			let ws = Api.GetActiveSheet();
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			
 			let formatConditions = range.GetFormatConditions();
 			let condition = formatConditions.AddTop10();
-			
-			if (condition) {
-				if (condition.SetRank) {
-					condition.SetRank(Asc.scope.rank);
-				}
-				if (condition.SetBottom) {
-					condition.SetBottom(Asc.scope.isBottom);
-				}
-				if (condition.SetPercent) {
-					condition.SetPercent(Asc.scope.isPercent);
-				}
-				
-				if (Asc.scope.fillColor) {
-					let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
-					condition.SetFillColor(fillColor);
-				} else {
-					let defaultFillColor = Api.CreateColorFromRGB(144, 238, 144);
-					condition.SetFillColor(defaultFillColor);
-				}
+			if (!condition)
+				return { error: "Failed to create top/bottom conditional formatting rule." };
+
+			if (condition.SetRank)
+				condition.SetRank(Asc.scope.rank);
+
+			if (condition.SetBottom)
+				condition.SetBottom(Asc.scope.isBottom);
+
+			if (condition.SetPercent)
+				condition.SetPercent(Asc.scope.isPercent);
+
+			if (Asc.scope.fillColor) {
+				let fillColor = Api.CreateColorFromRGB(Asc.scope.fillColor.r, Asc.scope.fillColor.g, Asc.scope.fillColor.b);
+				condition.SetFillColor(fillColor);
+			} else {
+				let defaultFillColor = Api.CreateColorFromRGB(144, 238, 144);
+				condition.SetFillColor(defaultFillColor);
 			}
 		});
+
+		if (result && result.error)
+			throw new window.AgentState.ToolError(result.error);
 	};
 
 	return func;

@@ -203,7 +203,7 @@ Available functions:\n";
 
 	function loadJSONSync(url) {
 		const xhr = new XMLHttpRequest();
-		xhr.open("GET", url, false); // false — делает запрос синхронным
+		xhr.open("GET", url, false); // false - makes the request synchronous
 		xhr.send(null);
 
 		if (xhr.status === 200) {

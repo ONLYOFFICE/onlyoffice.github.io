@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "explainFormula",
+		"text": "Explain Formula",
 		"description": "Analyzes and explains Excel formulas in natural language. Uses AI to provide detailed explanations of formula logic, function parameters, nested operations, and expected results. The explanation is added as a cell comment to the cell containing the formula. Particularly useful for understanding complex formulas with multiple nested functions or unfamiliar Excel functions. Keeps explanations concise (under 1024 characters recommended) while covering all essential information.",
 		"parameters": {
 			"type": "object",
@@ -62,6 +63,12 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 
 		let formulaData = await Asc.Editor.callCommand(function(){
@@ -72,26 +79,32 @@
 				_range = Api.GetSelection();
 			} else {
 				_range = ws.GetRange(Asc.scope.range);
-			}
-
-			if (!_range || !_range.GetCells(1, 1)) {
-				return null;
+				if (!_range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel cell address like 'A1'." };
 			}
 
 			let cell = _range.GetCells(1, 1);
+			if (!cell)
+				return { error: "Could not access cell in the specified range." };
+
 			let formula = cell.GetFormula();
 			let cellAddress = cell.GetAddress();
-			
+			let hasFormula = !!(formula && formula.toString().startsWith('='));
+
+			if (!hasFormula)
+				return { error: "Cell " + cellAddress + " does not contain a formula. Its current value is: " + cell.GetValue() };
+
 			return {
 				formula: formula,
-				address: cellAddress,
-				hasFormula: formula && formula.toString().startsWith('=')
+				address: cellAddress
 			};
 		});
 
-		if (!formulaData || !formulaData.hasFormula) {
-			return; // No formula to explain
-		}
+		if (formulaData && formulaData.error)
+			throw new window.AgentState.ToolError(formulaData.error);
+
+		if (!formulaData)
+			return;
 
 		let argPrompt = "Explain the following Excel formula in detail:\n\n" +
 			"Formula: " + formulaData.formula + "\n" +

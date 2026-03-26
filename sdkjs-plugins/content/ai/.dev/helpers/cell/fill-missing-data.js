@@ -34,6 +34,7 @@
 
 	let func = new RegisteredFunction({
 		"name": "fillMissingData",
+		"text": "Fill Missing Data",
 		"description": "Intelligently fills missing or empty cells in a data range using appropriate statistical methods. For numeric columns, fills with median values. For categorical columns, uses the most frequent value. For time series data, applies forward fill (uses the previous non-empty value). Automatically detects column types and highlights filled cells with light blue color for easy identification.",
 		"parameters": {
 			"type": "object",
@@ -66,6 +67,12 @@
 	});
 
 	func.call = async function(params) {
+		if (params.range !== undefined && typeof params.range !== 'string') {
+			throw new window.AgentState.ToolError(
+				'Parameter "range" must be a string like "A1:D100". Got: ' + JSON.stringify(params.range)
+			);
+		}
+
 		Asc.scope.range = params.range;
 		
 		let rangeData = await Asc.Editor.callCommand(function(){
@@ -73,11 +80,19 @@
 			let range;
 			if (Asc.scope.range) {
 				range = ws.GetRange(Asc.scope.range);
+				if (!range)
+					return { error: "Invalid range \"" + Asc.scope.range + "\". Please provide a valid Excel range like 'A1:D10'." };
 			} else {
 				range = ws.Selection;
 			}
 			return [range.Address, range.GetValue2()];
 		});
+
+		if (rangeData && rangeData.error)
+			throw new window.AgentState.ToolError(rangeData.error);
+
+		if (!rangeData)
+			return;
 
 		//make csv from source data
 		let address = rangeData[0];
