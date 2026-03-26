@@ -1339,7 +1339,7 @@ Y.prototype = /** @lends Button.prototype */
     this._container.className = e;
   }
 };
-var P = /* @__PURE__ */ new WeakMap(), U = /* @__PURE__ */ new WeakMap(), Bt = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakMap(), m = /* @__PURE__ */ new WeakMap(), vt = /* @__PURE__ */ new WeakMap(), Ct = /* @__PURE__ */ new WeakMap(), D = /* @__PURE__ */ new WeakSet();
+var O = /* @__PURE__ */ new WeakMap(), U = /* @__PURE__ */ new WeakMap(), Bt = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakMap(), m = /* @__PURE__ */ new WeakMap(), vt = /* @__PURE__ */ new WeakMap(), Ct = /* @__PURE__ */ new WeakMap(), D = /* @__PURE__ */ new WeakSet();
 class Me {
   /**
    * Create a Radio instance
@@ -1349,7 +1349,7 @@ class Me {
    * @throws {Error} If invalid input element
    */
   constructor(e, i) {
-    if (st(this, D), R(this, P, void 0), R(this, U, void 0), R(this, Bt, void 0), R(this, Z, null), R(this, m, void 0), R(this, vt, /* @__PURE__ */ new Map()), R(this, Ct, []), typeof e == "string") {
+    if (st(this, D), R(this, O, void 0), R(this, U, void 0), R(this, Bt, void 0), R(this, Z, null), R(this, m, void 0), R(this, vt, /* @__PURE__ */ new Map()), R(this, Ct, []), typeof e == "string") {
       var n = document.getElementById(e);
       n instanceof HTMLInputElement && (e = n);
     }
@@ -1363,7 +1363,7 @@ class Me {
       label: "",
       name: "",
       value: "on"
-    }, i)), c(D, this, ai).call(this), x(P, this, document.createElement("div")), x(Bt, this, document.createElement("span")), c(D, this, li).call(this), c(D, this, ci).call(this), c(D, this, oe).call(this), !a(m, this).name)
+    }, i)), c(D, this, ai).call(this), x(O, this, document.createElement("div")), x(Bt, this, document.createElement("span")), c(D, this, li).call(this), c(D, this, ci).call(this), c(D, this, oe).call(this), !a(m, this).name)
       throw new Error("Name attribute is required");
     var s = kt._.get(a(m, this).name);
     s || (s = new Array(), kt._.set(a(m, this).name, s)), s.push(this);
@@ -1386,7 +1386,7 @@ class Me {
    * @returns {HTMLElement}
    */
   getElement() {
-    return a(P, this);
+    return a(O, this);
   }
   /** @param {boolean} [bSilent] */
   check(e) {
@@ -1405,14 +1405,14 @@ class Me {
     a(m, this).disabled || !a(m, this).checked || (a(m, this).checked = !1, c(D, this, oe).call(this), !e && c(D, this, Fe).call(this));
   }
   enable() {
-    a(m, this).disabled && (a(m, this).disabled = !1, a(U, this).disabled = !1, a(P, this).setAttribute("aria-disabled", "false"), a(m, this).checked ? a(P, this).tabIndex = 0 : c(D, this, Ce).call(this), a(P, this).classList.remove("radio--disabled"));
+    a(m, this).disabled && (a(m, this).disabled = !1, a(U, this).disabled = !1, a(O, this).setAttribute("aria-disabled", "false"), a(m, this).checked ? a(O, this).tabIndex = 0 : c(D, this, Ce).call(this), a(O, this).classList.remove("radio--disabled"));
   }
   disable() {
-    a(m, this).disabled || (a(m, this).disabled = !0, a(U, this).disabled = !0, a(P, this).setAttribute("aria-disabled", "true"), a(P, this).tabIndex = -1, a(P, this).classList.add("radio--disabled"));
+    a(m, this).disabled || (a(m, this).disabled = !0, a(U, this).disabled = !0, a(O, this).setAttribute("aria-disabled", "true"), a(O, this).tabIndex = -1, a(O, this).classList.add("radio--disabled"));
   }
   /** @param {string} label */
   setLabel(e) {
-    a(m, this).label = e, a(Z, this) ? a(Z, this).textContent = e : e && (x(Z, this, document.createElement("label")), a(Z, this).className = "radio-label", a(Z, this).htmlFor = String(a(m, this).id), a(Z, this).textContent = e, a(P, this).appendChild(a(Z, this)));
+    a(m, this).label = e, a(Z, this) ? a(Z, this).textContent = e : e && (x(Z, this, document.createElement("label")), a(Z, this).className = "radio-label", a(Z, this).htmlFor = String(a(m, this).id), a(Z, this).textContent = e, a(O, this).appendChild(a(Z, this)));
   }
   /** @returns {{checked: boolean, disabled: boolean, value: string, name: string}}} */
   getState() {
@@ -1431,8 +1431,8 @@ class Me {
         i >= 0 && e.splice(i, 1);
       }
       a(vt, this).forEach((n, s) => {
-        a(P, this).removeEventListener(s, n);
-      }), a(vt, this).clear(), a(P, this) && a(P, this).parentNode && a(P, this).parentNode.removeChild(a(P, this)), x(Z, this, null);
+        a(O, this).removeEventListener(s, n);
+      }), a(vt, this).clear(), a(O, this) && a(O, this).parentNode && a(O, this).parentNode.removeChild(a(O, this)), x(Z, this, null);
     }
   }
 }
@@ -1443,21 +1443,21 @@ function ai() {
 }
 function li() {
   var t = a(U, this).parentNode, e = document.createDocumentFragment();
-  e.appendChild(a(P, this)), a(P, this).classList.add("radio-button-container"), a(P, this).setAttribute("role", "radio"), a(P, this).setAttribute("aria-checked", String(!!a(m, this).checked)), a(P, this).setAttribute("aria-disabled", String(!!a(m, this).disabled)), a(P, this).tabIndex = a(m, this).disabled ? -1 : 0, a(Bt, this).className = "radio-visual", a(Bt, this).setAttribute("aria-hidden", "true"), a(m, this).label && (x(Z, this, document.createElement("label")), a(Z, this).className = "i18n radio-label", a(Z, this).htmlFor = String(a(m, this).id), a(Z, this).textContent = a(m, this).label), a(m, this).disabled && a(P, this).classList.add("radio--disabled"), t && t.insertBefore(e, a(U, this)), a(P, this).appendChild(a(U, this)), a(P, this).appendChild(a(Bt, this)), a(Z, this) && a(P, this).appendChild(a(Z, this)), c(D, this, Ce).call(this);
+  e.appendChild(a(O, this)), a(O, this).classList.add("radio-button-container"), a(O, this).setAttribute("role", "radio"), a(O, this).setAttribute("aria-checked", String(!!a(m, this).checked)), a(O, this).setAttribute("aria-disabled", String(!!a(m, this).disabled)), a(O, this).tabIndex = a(m, this).disabled ? -1 : 0, a(Bt, this).className = "radio-visual", a(Bt, this).setAttribute("aria-hidden", "true"), a(m, this).label && (x(Z, this, document.createElement("label")), a(Z, this).className = "i18n radio-label", a(Z, this).htmlFor = String(a(m, this).id), a(Z, this).textContent = a(m, this).label), a(m, this).disabled && a(O, this).classList.add("radio--disabled"), t && t.insertBefore(e, a(U, this)), a(O, this).appendChild(a(U, this)), a(O, this).appendChild(a(Bt, this)), a(Z, this) && a(O, this).appendChild(a(Z, this)), c(D, this, Ce).call(this);
 }
 function Ce() {
   if (a(m, this).checked)
-    a(P, this).tabIndex = a(m, this).disabled ? -1 : 0;
+    a(O, this).tabIndex = a(m, this).disabled ? -1 : 0;
   else if (a(m, this).name && kt._.has(a(m, this).name)) {
     var t = kt._.get(a(m, this).name), e = !1;
     t && t.forEach((i) => {
       a(m, i).checked && i !== this && (e = !0);
-    }), !e && !a(m, this).checked && !a(m, this).disabled ? a(P, this).tabIndex = 0 : a(P, this).tabIndex = -1;
+    }), !e && !a(m, this).checked && !a(m, this).disabled ? a(O, this).tabIndex = 0 : a(O, this).tabIndex = -1;
   }
 }
 function ci() {
   var t = (s) => {
-    s.preventDefault(), !a(m, this).disabled && !a(m, this).checked && (this.check(), a(P, this).focus());
+    s.preventDefault(), !a(m, this).disabled && !a(m, this).checked && (this.check(), a(O, this).focus());
   }, e = (s) => {
     if (!a(m, this).disabled)
       switch (s.key) {
@@ -1468,14 +1468,14 @@ function ci() {
           break;
       }
   }, i = () => {
-    a(P, this).classList.add("radio--focused");
+    a(O, this).classList.add("radio--focused");
   }, n = () => {
-    a(P, this).classList.remove("radio--focused");
+    a(O, this).classList.remove("radio--focused");
   };
-  a(vt, this).set("click", t), a(vt, this).set("keydown", e), a(vt, this).set("focus", i), a(vt, this).set("blur", n), a(P, this).addEventListener("click", t), a(P, this).addEventListener("keydown", e), a(P, this).addEventListener("focus", i), a(P, this).addEventListener("blur", n);
+  a(vt, this).set("click", t), a(vt, this).set("keydown", e), a(vt, this).set("focus", i), a(vt, this).set("blur", n), a(O, this).addEventListener("click", t), a(O, this).addEventListener("keydown", e), a(O, this).addEventListener("focus", i), a(O, this).addEventListener("blur", n);
 }
 function oe() {
-  a(P, this).setAttribute("aria-checked", String(!!a(m, this).checked)), a(P, this).classList.toggle("radio--checked", a(m, this).checked), a(U, this).checked = !!a(m, this).checked, c(D, this, Ce).call(this);
+  a(O, this).setAttribute("aria-checked", String(!!a(m, this).checked)), a(O, this).classList.toggle("radio--checked", a(m, this).checked), a(U, this).checked = !!a(m, this).checked, c(D, this, Ce).call(this);
 }
 function Fe(t) {
   var e = this.getState(), i = {
@@ -4849,10 +4849,10 @@ W.prototype.count = function() {
     }).onAuthorized(function(_) {
       if (!p) {
         p = !0, it.show();
-        var L = E().catch((O) => {
-          console.error(O), V(b("An error occurred while loading library groups. Try restarting the plugin."));
-        }), S = n.init().catch((O) => {
-          console.error(O), V(b("An error occurred while loading settings. Try restarting the plugin.")), n.show();
+        var L = E().catch((P) => {
+          console.error(P), V(b("An error occurred while loading library groups. Try restarting the plugin."));
+        }), S = n.init().catch((P) => {
+          console.error(P), V(b("An error occurred while loading settings. Try restarting the plugin.")), n.show();
         });
         Promise.all([L, S]).then(function() {
           return it.hide(), N();
@@ -4887,7 +4887,7 @@ W.prototype.count = function() {
     function d(p, _, L) {
       l.clearLibrary();
       var S = [];
-      return i.getUserGroups().then(function(O) {
+      return i.getUserGroups().then(function(P) {
         var k = _.filter(function(St) {
           return St !== "my_library" && St !== "group_libraries";
         });
@@ -4907,10 +4907,10 @@ W.prototype.count = function() {
           w.hide();
         })), Promise.allSettled(S);
       }).then(function(S) {
-        var O = 0;
+        var P = 0;
         S.forEach(function(k) {
-          k.status === "fulfilled" && (O += k.value);
-        }), O === 0 ? (Gt("empty"), l.displayNothingFound()) : Gt("not-empty");
+          k.status === "fulfilled" && (P += k.value);
+        }), P === 0 ? (Gt("empty"), l.displayNothingFound()) : Gt("not-empty");
       });
     }), y.subscribe(/* @__PURE__ */ (function() {
       var p = I(function* (_) {
@@ -4925,10 +4925,10 @@ W.prototype.count = function() {
           }
           yield Q(!0, "Zotero (" + b("Updating citations") + ")");
           var L = s.updateCslItems.bind(s, !1), S = n.getStyleManager();
-          S.getLastUsedFormat() === "note" && (L = s.updateCslItemsInNotes.bind(s, S.getLastUsedNotesStyle())), L().catch(function(O) {
-            console.error(O);
+          S.getLastUsedFormat() === "note" && (L = s.updateCslItemsInNotes.bind(s, S.getLastUsedNotesStyle())), L().catch(function(P) {
+            console.error(P);
             var k = b("Failed to refresh");
-            typeof O == "string" && (k += ". " + b(O)), V(k);
+            typeof P == "string" && (k += ". " + b(P)), V(k);
           }).finally(function() {
             wt(!1, "Zotero (" + b("Updating citations") + ")");
           });
@@ -4954,8 +4954,8 @@ W.prototype.count = function() {
             L = S;
           }).catch(function(S) {
             if (console.error(S), s.showWarningMessage("Failed to insert bibliography"), typeof S == "string") {
-              var O = b(S);
-              V(O);
+              var P = b(S);
+              V(P);
             }
           }).finally(function() {
             wt(!1, "Zotero (" + b("Inserting bibliography") + ")"), L && s.moveCursorOutsideField(L);
@@ -4977,17 +4977,17 @@ W.prototype.count = function() {
             return;
           }
           yield Q(!0, "Zotero (" + b("Inserting citation") + ")");
-          var L = l.getSelectedItems(), S = null, O = !1;
+          var L = l.getSelectedItems(), S = null, P = !1;
           return s.insertSelectedCitations(L).then(function(k) {
-            return O = k, l.removeItems(Object.keys(L)), s.getCurrentField();
+            return P = k, l.removeItems(Object.keys(L)), s.getCurrentField();
           }).then(function(k) {
-            return S = k, s.updateCslItems();
+            return S = k, s.updateCslItems(P);
           }).catch(function(k) {
             console.error(k);
             var ot = b("Failed to insert citation");
             typeof k == "string" && (ot += ". " + b(k)), V(ot);
           }).finally(/* @__PURE__ */ I(function* () {
-            wt(!1, "Zotero (" + b("Inserting citation") + ")"), O ? yield s.moveCursorRight() : S && (yield s.moveCursorOutsideField(S.FieldId));
+            wt(!1, "Zotero (" + b("Inserting citation") + ")"), P ? yield s.moveCursorRight() : S && (yield s.moveCursorOutsideField(S.FieldId));
           }));
         }
       });
@@ -5009,10 +5009,10 @@ W.prototype.count = function() {
       var p = I(function* (_, L) {
         yield Q(!0, "Zotero (" + b("Updating citations") + ")");
         var S = s.updateCslItems.bind(s, !0);
-        [_.styleFormat, L.styleFormat].includes("note") && (_.styleFormat !== L.styleFormat ? _.styleFormat === "note" ? S = s.switchingBetweenNotesAndText.bind(s, _.notesStyle) : S = s.switchingBetweenNotesAndText.bind(s) : _.notesStyle !== L.notesStyle ? S = s.convertNotesStyle.bind(s, _.notesStyle) : S = s.updateCslItems.bind(s, !0)), S().catch(function(O) {
-          console.error(O);
+        [_.styleFormat, L.styleFormat].includes("note") && (_.styleFormat !== L.styleFormat ? _.styleFormat === "note" ? S = s.switchingBetweenNotesAndText.bind(s, _.notesStyle) : S = s.switchingBetweenNotesAndText.bind(s) : _.notesStyle !== L.notesStyle ? S = s.convertNotesStyle.bind(s, _.notesStyle) : S = s.updateCslItems.bind(s, !0)), S().catch(function(P) {
+          console.error(P);
           var k = b("Failed to refresh");
-          typeof O == "string" && (k += ". " + b(O)), V(k);
+          typeof P == "string" && (k += ". " + b(P)), V(k);
         }).finally(function() {
           wt(!1, "Zotero (" + b("Updating citations") + ")");
         });
@@ -5044,8 +5044,8 @@ W.prototype.count = function() {
       ["placeholder", "title"].forEach((k) => {
         S.hasAttribute(k) && S.setAttribute(k, b(S.getAttribute(k) || ""));
       });
-      var O = b(S.innerText.trim().replace(/\s+/g, " "));
-      O && (S.innerText = O);
+      var P = b(S.innerText.trim().replace(/\s+/g, " "));
+      P && (S.innerText = P);
     }, _ = 0; _ < d.length; _++)
       p();
   }
@@ -5138,7 +5138,7 @@ W.prototype.count = function() {
       var ot = k.id.indexOf("/") + 1, St = k.id.lastIndexOf("/") + 1, ei = k.id.indexOf("http");
       return ot !== St && ei === 0 && (k.uris || (k.uris = []), k.uris.push(k.id)), St && (k.id = k.id.substring(St)), k;
     };
-    return d && d.items && d.items.length > 0 && (d.items = d.items.map((O) => (O = Xe(O), O[_ ? "groupID" : "userID"] = d.id, S(O), O))), l.displaySearchItems(d, p, r);
+    return d && d.items && d.items.length > 0 && (d.items = d.items.map((P) => (P = Xe(P), P[_ ? "groupID" : "userID"] = d.id, S(P), P))), l.displaySearchItems(d, p, r);
   }
   function Xe(d) {
     if (d.id || !d.key) return d;
@@ -5172,8 +5172,8 @@ W.prototype.count = function() {
   function ti() {
     var d = new Asc.ButtonContextMenu();
     d.text = "Edit citation", d.addCheckers("Target", "Selection"), d.attachOnClick(/* @__PURE__ */ I(function* () {
-      var p = yield new Promise((O) => {
-        window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, O);
+      var p = yield new Promise((P) => {
+        window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, P);
       });
       if (!p || !p.Value || p.Value.toLowerCase().indexOf("zotero_item") === -1) {
         s.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
@@ -5183,10 +5183,10 @@ W.prototype.count = function() {
       if (_) {
         yield Q(!1, "Zotero (" + b("Updating citations") + ")");
         var L = s.updateItem.bind(s, _), S = n.getStyleManager();
-        S.getLastUsedFormat() === "note" && (L = s.updateItem.bind(s, _, S.getLastUsedNotesStyle())), L().catch(function(O) {
-          console.error(O);
+        S.getLastUsedFormat() === "note" && (L = s.updateItem.bind(s, _, S.getLastUsedNotesStyle())), L().catch(function(P) {
+          console.error(P);
           var k = b("Failed to insert citation");
-          typeof O == "string" && (k += ". " + b(O)), V(k);
+          typeof P == "string" && (k += ". " + b(P)), V(k);
         }).finally(function() {
           wt(!1, "Zotero (" + b("Updating citations") + ")"), p && s.moveCursorOutsideField(p.FieldId);
         });

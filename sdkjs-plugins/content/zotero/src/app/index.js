@@ -421,7 +421,7 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     addedField = field;
-                    return citationService.updateCslItems();
+                    return citationService.updateCslItems(bHasNotes);
                 })
                 .catch(function (error) {
                     console.error(error);
