@@ -14,7 +14,7 @@ The plugin is pre-installed in ONLYOFFICE Workspace (both Enterprise and Communi
 
 4. Press `Insert citation`.
 
-5. Press the button `Isert bibliography` to add or refresh a bibliography.
+5. Press the button `Insert bibliography` to add or refresh a bibliography.
 
 6. Press the button `Refresh` to refresh all citations and a bibliography fields into the document.
 
@@ -32,7 +32,7 @@ Two installation ways are available:
 
     For Windows - `%ProgramFiles%\ONLYOFFICE\DocumentServer\sdkjs-plugins\`.
 
-    The plugins will be available to all the users users of ONLYOFFICE Document Server.
+    The plugins will be available to all the users of ONLYOFFICE Document Server.
     No service restart is required.
 
 2.  Edit the Document Server config to add the following lines:
