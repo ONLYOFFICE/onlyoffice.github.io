@@ -41,7 +41,7 @@ function Ee(t, e, i, n, s, r, o) {
   }
   l.done ? e(u) : Promise.resolve(u).then(n, s);
 }
-function I(t) {
+function k(t) {
   return function() {
     var e = this, i = arguments;
     return new Promise(function(n, s) {
@@ -388,7 +388,7 @@ class ri {
    */
   fetchWithRetry(e, i, n) {
     var s = this;
-    return I(function* () {
+    return k(function* () {
       try {
         yield c(tt, s, oi).call(s);
         var r = yield fetch(e, {
@@ -426,7 +426,7 @@ function oi() {
   return ge.apply(this, arguments);
 }
 function ge() {
-  return ge = I(function* () {
+  return ge = k(function* () {
     var t;
     if (c(tt, this, Ne).call(this), a(et, this).length >= a($t, this)) {
       var e = a(et, this)[0], i = Date.now() - e;
@@ -1365,8 +1365,8 @@ class Me {
       value: "on"
     }, i)), c(D, this, ai).call(this), x(O, this, document.createElement("div")), x(Bt, this, document.createElement("span")), c(D, this, li).call(this), c(D, this, ci).call(this), c(D, this, oe).call(this), !a(m, this).name)
       throw new Error("Name attribute is required");
-    var s = kt._.get(a(m, this).name);
-    s || (s = new Array(), kt._.set(a(m, this).name, s)), s.push(this);
+    var s = It._.get(a(m, this).name);
+    s || (s = new Array(), It._.set(a(m, this).name, s)), s.push(this);
   }
   /**
    * @param {function(RadioEventType): void} callback
@@ -1392,7 +1392,7 @@ class Me {
   check(e) {
     if (!(a(m, this).disabled || a(m, this).checked)) {
       if (a(m, this).name) {
-        var i = kt._.get(a(m, this).name);
+        var i = It._.get(a(m, this).name);
         i && i.forEach((n) => {
           n !== this && a(m, n).checked && n.uncheck();
         });
@@ -1425,7 +1425,7 @@ class Me {
   }
   destroy() {
     if (x(Ct, this, []), !!a(m, this).name) {
-      var e = kt._.get(a(m, this).name);
+      var e = It._.get(a(m, this).name);
       if (e) {
         var i = e.indexOf(this);
         i >= 0 && e.splice(i, 1);
@@ -1448,8 +1448,8 @@ function li() {
 function Ce() {
   if (a(m, this).checked)
     a(O, this).tabIndex = a(m, this).disabled ? -1 : 0;
-  else if (a(m, this).name && kt._.has(a(m, this).name)) {
-    var t = kt._.get(a(m, this).name), e = !1;
+  else if (a(m, this).name && It._.has(a(m, this).name)) {
+    var t = It._.get(a(m, this).name), e = !1;
     t && t.forEach((i) => {
       a(m, i).checked && i !== this && (e = !0);
     }), !e && !a(m, this).checked && !a(m, this).disabled ? a(O, this).tabIndex = 0 : a(O, this).tabIndex = -1;
@@ -1486,7 +1486,7 @@ function Fe(t) {
     n(i);
   });
 }
-var kt = {
+var It = {
   _: /* @__PURE__ */ new Map()
 };
 function Qt(t, e) {
@@ -1731,14 +1731,14 @@ class mt {
       dropdownClick: (s) => {
         c(A, this, pi).call(this, s);
       }
-    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), c(A, this, ui).call(this), c(A, this, hi).call(this), c(A, this, It).call(this), ye._.add(this);
+    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), c(A, this, ui).call(this), c(A, this, hi).call(this), c(A, this, kt).call(this), ye._.add(this);
   }
   openDropdown() {
     this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(/* @__PURE__ */ (function(e) {
       return function() {
         e.searchInput && e.searchInput.focus();
       };
-    })(this), 100), c(A, this, It).call(this);
+    })(this), 100), c(A, this, kt).call(this);
   }
   /**
    * @param {function(SelectboxEventType): void} callback
@@ -1789,7 +1789,7 @@ class mt {
           selected: l
         });
       }
-    }, this), this.isOpen && c(A, this, It).call(this), c(A, this, lt).call(this);
+    }, this), this.isOpen && c(A, this, kt).call(this), c(A, this, lt).call(this);
   }
   /**
    * @param {string} value
@@ -1912,7 +1912,7 @@ class mt {
       var i = this._items[0];
       i && this._selectedValues.add(i.value);
     }
-    c(A, this, lt).call(this), c(A, this, It).call(this);
+    c(A, this, lt).call(this), c(A, this, kt).call(this);
   }
   destroy() {
     this._subscribers = [], ye._.delete(this);
@@ -1970,7 +1970,7 @@ function di(t) {
   var e = t.target;
   if (e instanceof HTMLInputElement) {
     var i = e.value.toLowerCase();
-    c(A, this, It).call(this, i);
+    c(A, this, kt).call(this, i);
   }
 }
 function Re(t) {
@@ -2003,7 +2003,7 @@ function Re(t) {
       var u = (r + 1) % n.length;
       u === n.length && (u = 0), this._selectedValues.clear(), i = n[u], this._selectedValues.add(i.value);
     }
-    c(A, this, lt).call(this), c(A, this, It).call(this, e, !0), c(A, this, te).call(this, i.value, !0);
+    c(A, this, lt).call(this), c(A, this, kt).call(this, e, !0), c(A, this, te).call(this, i.value, !0);
   }
 }
 function fi(t) {
@@ -2031,7 +2031,7 @@ function fi(t) {
       break;
   }
 }
-function It(t, e) {
+function kt(t, e) {
   if (t = t || "", !!this._optionsContainer) {
     this._optionsContainer.innerHTML = "";
     var i = null, n = this._items;
@@ -2359,7 +2359,7 @@ class yi {
    */
   addBibliography(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       var s = window.Asc.scope.editorVersion;
       if (s && s < 9004e3) {
         var r = Vt.parseHtmlFormatting(e), o = "", l = {
@@ -2389,7 +2389,7 @@ class yi {
    */
   addCitation(e, i, n) {
     var s = this;
-    return I(function* () {
+    return k(function* () {
       var r = Vt.parseHtmlFormatting(e), o = {
         FieldId: "",
         Value: a(Wt, s) + " " + a(ce, s) + i,
@@ -2440,7 +2440,7 @@ class yi {
    */
   updateAddinFields(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       var n = e.map((y) => y.FieldId), s = window.Asc.scope.editorVersion, r = e.filter((y) => y.Value.indexOf(a(dt, i)) === 0);
       if (r.length && s && s >= 9004e3) {
         e = e.filter((y) => y.Value.indexOf(a(dt, i)) !== 0);
@@ -2466,7 +2466,7 @@ class yi {
    */
   convertNotesToText(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       for (var n = c(F, i, zt).call(i, e), s = 0; s < e.length; s++) {
         var r = e[s];
         if (!r.FieldId) {
@@ -2492,7 +2492,7 @@ class yi {
    */
   convertTextToNotes(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       for (var s = c(F, n, zt).call(n, e), r = 0; r < e.length; r++) {
         var o = e[r];
         if (o.FieldId) {
@@ -2513,7 +2513,7 @@ class yi {
    */
   convertNotesStyle(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       for (var s = [], r = c(F, n, zt).call(n, e), o = 0; o < e.length; o++) {
         var l = e[o];
         if (l.FieldId) {
@@ -2543,7 +2543,7 @@ class yi {
    * @returns {Promise<void>}
   */
   moveCursorToField(e, i) {
-    return I(function* () {
+    return k(function* () {
       return new Promise((n) => {
         i = i ?? !0, window.Asc.plugin.executeMethod("MoveCursorToField", [e, i], n);
       });
@@ -2555,7 +2555,7 @@ class yi {
    * @returns {Promise<void>}
   */
   moveCursorOutsideField(e, i) {
-    return I(function* () {
+    return k(function* () {
       return new Promise((n) => {
         i = i ?? !1, window.Asc.plugin.executeMethod("MoveCursorOutsideField", [e, i], n);
       });
@@ -2565,7 +2565,7 @@ class yi {
    * @returns {Promise<void>}
   */
   moveCursorRight() {
-    return I(function* () {
+    return k(function* () {
       return new Promise((e) => {
         var i = !0, n = !1;
         Asc.plugin.callCommand(() => {
@@ -2641,7 +2641,7 @@ function Ke(t, e) {
   return me.apply(this, arguments);
 }
 function me() {
-  return me = I(function* (t, e) {
+  return me = k(function* (t, e) {
     if (yield c(F, this, At).call(this, t), yield new Promise((h) => {
       var v = !0, g = !1;
       Asc.plugin.callCommand(() => {
@@ -3360,7 +3360,7 @@ function We() {
 var de = {
   _: /* @__PURE__ */ new Set()
 }, H = /* @__PURE__ */ new WeakMap(), ee = /* @__PURE__ */ new WeakMap(), Ut = /* @__PURE__ */ new WeakMap(), ie = /* @__PURE__ */ new WeakMap(), at = /* @__PURE__ */ new WeakSet();
-class ki {
+class Ii {
   constructor() {
     st(this, at), R(this, H, void 0), R(this, ee, void 0), R(this, Ut, void 0), R(this, ie, void 0), x(H, this, new window.Asc.PluginWindow()), x(ee, this, window.Asc.plugin.button), x(Ut, this, Asc.plugin.onThemeChanged), x(ie, this, Asc.plugin.onTranslate);
   }
@@ -3424,7 +3424,7 @@ class ki {
     };
     return c(at, this, fe).call(this, n, e, "default"), a(H, this).show(n), new Promise((s, r) => {
       window.Asc.plugin.button = /* @__PURE__ */ (function() {
-        var o = I(function* (l, u) {
+        var o = k(function* (l, u) {
           var h = yield new Promise((v) => {
             if (!a(H, i)) {
               v(null);
@@ -3502,19 +3502,19 @@ function Jt() {
   a(H, this) && a(H, this).close(), window.Asc.plugin.button = a(ee, this), window.Asc.plugin.onThemeChanged = a(Ut, this);
 }
 var _t = /* @__PURE__ */ new WeakMap(), T = /* @__PURE__ */ new WeakSet();
-class Ii {
+class ki {
   /**
    * @param {LocalesManager} localesManager
    * @param {CslStylesManager} cslStylesManager
    * @param {ZoteroSdk} sdk
    */
   constructor(e, i, n) {
-    st(this, T), R(this, _t, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = i, this._storage = new wi(), this._formatter, this.citationDocService = new yi(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), x(_t, this, new ki());
+    st(this, T), R(this, _t, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = i, this._storage = new wi(), this._formatter, this.citationDocService = new yi(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), x(_t, this, new Ii());
   }
   /** @returns {Promise<AddinFieldData | null>} */
   getCurrentField() {
     var e = this;
-    return I(function* () {
+    return k(function* () {
       return e.citationDocService.getCurrentField();
     })();
   }
@@ -3523,7 +3523,7 @@ class Ii {
    */
   saveAsText() {
     var e = this;
-    return I(function* () {
+    return k(function* () {
       var i = yield e.citationDocService.saveAsText();
       return i && a(_t, e).showInfoWindow("Success!", "All active Mendeley citations and Bibliography have been replaced.", "success"), i;
     })();
@@ -3534,7 +3534,7 @@ class Ii {
    */
   insertSelectedCitations(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       var n = i;
       try {
         yield c(T, i, ft).call(i), c(T, i, pt).call(i);
@@ -3554,7 +3554,7 @@ class Ii {
   /** @returns {Promise<string>} */
   insertBibliography() {
     var e = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: i,
@@ -3578,7 +3578,7 @@ class Ii {
    */
   moveCursorToField(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       return n.citationDocService.moveCursorToField(e, i);
     })();
   }
@@ -3589,7 +3589,7 @@ class Ii {
    */
   moveCursorOutsideField(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       return n.citationDocService.moveCursorOutsideField(e, i);
     })();
   }
@@ -3598,7 +3598,7 @@ class Ii {
    */
   moveCursorRight() {
     var e = this;
-    return I(function* () {
+    return k(function* () {
       return e.citationDocService.moveCursorRight();
     })();
   }
@@ -3608,7 +3608,7 @@ class Ii {
    */
   updateCslItems(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: n,
@@ -3634,7 +3634,7 @@ class Ii {
    */
   updateCslItemsInNotes(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: n,
@@ -3658,7 +3658,7 @@ class Ii {
    */
   updateItem(e, i) {
     var n = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: s,
@@ -3679,7 +3679,7 @@ class Ii {
    */
   switchingBetweenNotesAndText(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: n,
@@ -3702,7 +3702,7 @@ class Ii {
    */
   convertNotesStyle(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       try {
         var {
           fieldsWithCitations: n
@@ -3722,7 +3722,7 @@ class Ii {
    */
   showEditCitationWindow(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       if (!e) return null;
       var n = c(T, i, we).call(i, e), s = yield a(_t, i).showEditWindow(n);
       return s || null;
@@ -3731,7 +3731,7 @@ class Ii {
   /** @param {string} message */
   showWarningMessage(e) {
     var i = this;
-    return I(function* () {
+    return k(function* () {
       a(_t, i).showInfoWindow("Warning!", e);
     })();
   }
@@ -3851,7 +3851,7 @@ function Ft(t, e, i) {
   return Se.apply(this, arguments);
 }
 function Se() {
-  return Se = I(function* (t, e, i) {
+  return Se = k(function* (t, e, i) {
     var n = document.createDocumentFragment(), s = document.createElement("div");
     n.appendChild(s);
     for (var r = [], o = t.length - 1; o >= 0; o--) {
@@ -4840,7 +4840,7 @@ W.prototype.count = function() {
   window.Asc.plugin.init = function() {
     it.show(), M(), e = new Ot(), i = new B();
     var d = new rt(e, i);
-    n = new K(e, t), s = new Ii(n.getLocalesManager(), n.getStyleManager(), i);
+    n = new K(e, t), s = new ki(n.getLocalesManager(), n.getStyleManager(), i);
     var p = !1;
     J(), d.init().onOpen(function() {
       it.hide();
@@ -4883,17 +4883,17 @@ W.prototype.count = function() {
     });
   }
   function J() {
-    l.subscribe(Ie);
+    l.subscribe(ke);
     function d(p, _, L) {
       l.clearLibrary();
       var S = [];
       return i.getUserGroups().then(function(P) {
-        var k = _.filter(function(St) {
+        var I = _.filter(function(St) {
           return St !== "my_library" && St !== "group_libraries";
         });
         _.indexOf("my_library") !== -1 && S.push(Mt(i.getItems(p), !1));
-        for (var ot = 0; ot < k.length; ot++)
-          S.push(Mt(i.getGroupItems(p, k[ot]), !0));
+        for (var ot = 0; ot < I.length; ot++)
+          S.push(Mt(i.getGroupItems(p, I[ot]), !0));
         return r.text = p, r.obj = null, r.groups = [], r.groupsHash = L, S;
       });
     }
@@ -4908,12 +4908,12 @@ W.prototype.count = function() {
         })), Promise.allSettled(S);
       }).then(function(S) {
         var P = 0;
-        S.forEach(function(k) {
-          k.status === "fulfilled" && (P += k.value);
+        S.forEach(function(I) {
+          I.status === "fulfilled" && (P += I.value);
         }), P === 0 ? (Gt("empty"), l.displayNothingFound()) : Gt("not-empty");
       });
     }), y.subscribe(/* @__PURE__ */ (function() {
-      var p = I(function* (_) {
+      var p = k(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
             V(b("Style is not selected"));
@@ -4927,8 +4927,8 @@ W.prototype.count = function() {
           var L = s.updateCslItems.bind(s, !1), S = n.getStyleManager();
           S.getLastUsedFormat() === "note" && (L = s.updateCslItemsInNotes.bind(s, S.getLastUsedNotesStyle())), L().catch(function(P) {
             console.error(P);
-            var k = b("Failed to refresh");
-            typeof P == "string" && (k += ". " + b(P)), V(k);
+            var I = b("Failed to refresh");
+            typeof P == "string" && (I += ". " + b(P)), V(I);
           }).finally(function() {
             wt(!1, "Zotero (" + b("Updating citations") + ")");
           });
@@ -4938,7 +4938,7 @@ W.prototype.count = function() {
         return p.apply(this, arguments);
       };
     })()), g.subscribe(/* @__PURE__ */ (function() {
-      var p = I(function* (_) {
+      var p = k(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
             V(b("Style is not selected"));
@@ -4966,7 +4966,7 @@ W.prototype.count = function() {
         return p.apply(this, arguments);
       };
     })()), h.subscribe(/* @__PURE__ */ (function() {
-      var p = I(function* (_) {
+      var p = k(function* (_) {
         if (_.type === "button:click") {
           if (!n.getLastUsedStyleId()) {
             V(b("Style is not selected"));
@@ -4978,15 +4978,15 @@ W.prototype.count = function() {
           }
           yield Q(!0, "Zotero (" + b("Inserting citation") + ")");
           var L = l.getSelectedItems(), S = null, P = !1;
-          return s.insertSelectedCitations(L).then(function(k) {
-            return P = k, l.removeItems(Object.keys(L)), s.getCurrentField();
-          }).then(function(k) {
-            return S = k, s.updateCslItems(P);
-          }).catch(function(k) {
-            console.error(k);
+          return s.insertSelectedCitations(L).then(function(I) {
+            return P = I, l.removeItems(Object.keys(L)), s.getCurrentField();
+          }).then(function(I) {
+            return S = I, P ? s.updateCslItems(!1) : s.updateCslItems();
+          }).catch(function(I) {
+            console.error(I);
             var ot = b("Failed to insert citation");
-            typeof k == "string" && (ot += ". " + b(k)), V(ot);
-          }).finally(/* @__PURE__ */ I(function* () {
+            typeof I == "string" && (ot += ". " + b(I)), V(ot);
+          }).finally(/* @__PURE__ */ k(function* () {
             wt(!1, "Zotero (" + b("Inserting citation") + ")"), P ? yield s.moveCursorRight() : S && (yield s.moveCursorOutsideField(S.FieldId));
           }));
         }
@@ -4997,7 +4997,7 @@ W.prototype.count = function() {
     })()), v.subscribe(function(p) {
       p.type === "button:click" && n.show();
     }), u.subscribe(/* @__PURE__ */ (function() {
-      var p = I(function* (_) {
+      var p = k(function* (_) {
         _.type === "button:click" && (yield Q(!1, "Zotero (" + b("Saving as text") + ")"), s.saveAsText().then(function() {
           wt(!1, "Zotero (" + b("Saving as text") + ")");
         }));
@@ -5006,13 +5006,13 @@ W.prototype.count = function() {
         return p.apply(this, arguments);
       };
     })()), n.onChangeState(/* @__PURE__ */ (function() {
-      var p = I(function* (_, L) {
+      var p = k(function* (_, L) {
         yield Q(!0, "Zotero (" + b("Updating citations") + ")");
         var S = s.updateCslItems.bind(s, !0);
         [_.styleFormat, L.styleFormat].includes("note") && (_.styleFormat !== L.styleFormat ? _.styleFormat === "note" ? S = s.switchingBetweenNotesAndText.bind(s, _.notesStyle) : S = s.switchingBetweenNotesAndText.bind(s) : _.notesStyle !== L.notesStyle ? S = s.convertNotesStyle.bind(s, _.notesStyle) : S = s.updateCslItems.bind(s, !0)), S().catch(function(P) {
           console.error(P);
-          var k = b("Failed to refresh");
-          typeof P == "string" && (k += ". " + b(P)), V(k);
+          var I = b("Failed to refresh");
+          typeof P == "string" && (I += ". " + b(P)), V(I);
         }).finally(function() {
           wt(!1, "Zotero (" + b("Updating citations") + ")");
         });
@@ -5041,8 +5041,8 @@ W.prototype.count = function() {
     for (var d = document.getElementsByClassName("i18n"), p = function() {
       var S = d[_];
       if (!(S instanceof HTMLElement)) return 1;
-      ["placeholder", "title"].forEach((k) => {
-        S.hasAttribute(k) && S.setAttribute(k, b(S.getAttribute(k) || ""));
+      ["placeholder", "title"].forEach((I) => {
+        S.hasAttribute(I) && S.setAttribute(I, b(S.getAttribute(I) || ""));
       });
       var P = b(S.innerText.trim().replace(/\s+/g, " "));
       P && (S.innerText = P);
@@ -5060,7 +5060,7 @@ W.prototype.count = function() {
     return Tt.apply(this, arguments);
   }
   function Tt() {
-    return Tt = I(function* (d, p) {
+    return Tt = k(function* (d, p) {
       g.disable(), y.disable(), h.disable();
       var _ = window.Asc.scope.editorVersion;
       _ && _ < 9004e3 ? window._cursorPosition = yield qe.getCursorPosition() : yield new Promise((L) => {
@@ -5075,8 +5075,8 @@ W.prototype.count = function() {
     return ne.apply(this, arguments);
   }
   function ne() {
-    return ne = I(function* (d, p) {
-      g.enable(), y.enable(), Ie();
+    return ne = k(function* (d, p) {
+      g.enable(), y.enable(), ke();
       var _ = window.Asc.scope.editorVersion;
       _ && _ < 9004e3 ? qe.setCursorPosition(window._cursorPosition || 0) : yield new Promise((L) => {
         Asc.plugin.executeMethod("EndAction", ["GroupActions", {
@@ -5123,20 +5123,20 @@ W.prototype.count = function() {
   }
   function Mt(d, p) {
     return d.then(function(_) {
-      return ke(_, null, p);
+      return Ie(_, null, p);
     }).catch(function(_) {
-      return console.error(_), _.message && V(b(_.message)), ke(null, _, p);
+      return console.error(_), _.message && V(b(_.message)), Ie(null, _, p);
     }).then(function(_) {
       return _;
     });
   }
-  function ke(d, p, _) {
+  function Ie(d, p, _) {
     var L = !1;
     !r.obj && d && d.items && !d.items.length && (L = !0), p ? (L && (r.obj = null, r.groups = []), r && r.obj && delete r.obj.next) : _ && d && d.next ? r.groups.push(d) : r.obj = d && d.items.length ? d : null;
-    var S = function(k) {
-      if (!k.id) return k;
-      var ot = k.id.indexOf("/") + 1, St = k.id.lastIndexOf("/") + 1, ei = k.id.indexOf("http");
-      return ot !== St && ei === 0 && (k.uris || (k.uris = []), k.uris.push(k.id)), St && (k.id = k.id.substring(St)), k;
+    var S = function(I) {
+      if (!I.id) return I;
+      var ot = I.id.indexOf("/") + 1, St = I.id.lastIndexOf("/") + 1, ei = I.id.indexOf("http");
+      return ot !== St && ei === 0 && (I.uris || (I.uris = []), I.uris.push(I.id)), St && (I.id = I.id.substring(St)), I;
     };
     return d && d.items && d.items.length > 0 && (d.items = d.items.map((P) => (P = Xe(P), P[_ ? "groupID" : "userID"] = d.id, S(P), P))), l.displaySearchItems(d, p, r);
   }
@@ -5149,14 +5149,14 @@ W.prototype.count = function() {
     };
     return Object.hasOwnProperty.call(d, "url") && (p.URL = d.data.url), Object.hasOwnProperty.call(d, "volume") && (p.volume = d.data.volume), Object.hasOwnProperty.call(d, "language") && (p.language = d.data.language), Object.hasOwnProperty.call(d, "abstract") && (p.abstract = d.data.abstract), Object.hasOwnProperty.call(d, "note") && (p.note = d.data.note), Object.hasOwnProperty.call(d, "page") && (p.page = d.data.page), Object.hasOwnProperty.call(d, "shortTitle") && (p.shortTitle = d.data.shortTitle), Object.hasOwnProperty.call(d, "links") && (p.uris = [], Object.hasOwnProperty.call(d.links, "self") && p.uris.push(d.links.self.href), Object.hasOwnProperty.call(d.links, "alternate") && p.uris.push(d.links.alternate.href)), p;
   }
-  function Ie(d) {
+  function ke(d) {
     typeof d > "u" && (d = l.count()), d <= 0 ? (h.disable(), h.setText(b("Insert Citation"))) : (h.enable(), d > 1 ? h.setText(b("Insert " + d + " Citations")) : h.setText(b("Insert Citation")));
   }
   function Qe() {
     return se.apply(this, arguments);
   }
   function se() {
-    return se = I(function* () {
+    return se = k(function* () {
       try {
         var d = yield new Promise((_) => {
           Asc.plugin.executeMethod("GetVersion", [], _);
@@ -5171,7 +5171,7 @@ W.prototype.count = function() {
   }
   function ti() {
     var d = new Asc.ButtonContextMenu();
-    d.text = "Edit citation", d.addCheckers("Target", "Selection"), d.attachOnClick(/* @__PURE__ */ I(function* () {
+    d.text = "Edit citation", d.addCheckers("Target", "Selection"), d.attachOnClick(/* @__PURE__ */ k(function* () {
       var p = yield new Promise((P) => {
         window.Asc.plugin.executeMethod("GetCurrentAddinField", void 0, P);
       });
@@ -5185,8 +5185,8 @@ W.prototype.count = function() {
         var L = s.updateItem.bind(s, _), S = n.getStyleManager();
         S.getLastUsedFormat() === "note" && (L = s.updateItem.bind(s, _, S.getLastUsedNotesStyle())), L().catch(function(P) {
           console.error(P);
-          var k = b("Failed to insert citation");
-          typeof P == "string" && (k += ". " + b(P)), V(k);
+          var I = b("Failed to insert citation");
+          typeof P == "string" && (I += ". " + b(P)), V(I);
         }).finally(function() {
           wt(!1, "Zotero (" + b("Updating citations") + ")"), p && s.moveCursorOutsideField(p.FieldId);
         });

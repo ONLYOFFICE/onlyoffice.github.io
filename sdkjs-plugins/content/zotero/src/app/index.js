@@ -421,7 +421,10 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     addedField = field;
-                    return citationService.updateCslItems(bHasNotes);
+                    if (bHasNotes) {
+                        return citationService.updateCslItems(false);
+                    }
+                    return citationService.updateCslItems();
                 })
                 .catch(function (error) {
                     console.error(error);
