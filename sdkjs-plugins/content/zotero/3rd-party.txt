@@ -4,9 +4,9 @@ Zotero ONLYOFFICE integration plugin uses code from the following 3rd party proj
 1. citeproc-js - A JavaScript implementation of the Citation Style Language (CSL) citation formatting language. (https://github.com/Juris-M/citeproc-js)
 
 License:        CPAL-1.0 OR AGPL-3.0-or-later
-License File:   citeproc.license
+License File:   licenses/citeproc.license
 
 2. core-js - Modular standard library for JavaScript. Includes polyfills for ECMAScript up to 2024. (https://github.com/zloirock/core-js)
 
 License:        MIT
-License File:   core-js.license
+License File:   licenses/core-js.license
