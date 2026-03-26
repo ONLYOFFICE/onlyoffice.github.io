@@ -25,7 +25,7 @@
 * Add support for styles that inherit behavior from parent styles.
 * Improved compatibility with MS Word.
 * Ability to add prefix and suffix
-* "Omit author" feature
+* "Omit Author" feature
 * Citation locators support: Added ability to include page numbers, chapters, sections, and other location references in citations
 * Preserve formatting and editing of manual citations.
 * Support for styles with footnotes and endnotes

@@ -33,7 +33,7 @@
 
 /// <reference path="./types-global.js" />
 /// <reference path="./sdk/types.js" />
-/// <reference path="../../scripts/mendeley-sdk/standalone.min.js" />
+/// <reference path="../../vendor/mendeley-sdk/standalone.min.js" />
 
 /** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
 
@@ -214,7 +214,7 @@ import "../styles.css";
         window.Asc.plugin.onTranslate = applyTranslations;
         
         getEditorVersion().then((editorVersion) => {
-            window.Asc.scope.editorVersion = editorVersion;
+            window.Asc.scope.editorVersion = editorVersion; // 9003000
         });
     };
     
@@ -417,11 +417,12 @@ import "../styles.css";
                 .insertBibliography()
                 .catch(function (error) {
                     console.error(error);
-                    let message = translate("Failed to insert bibliography");
+                    citationService.showWarningMessage("Failed to insert bibliography");
+
                     if (typeof error === "string") {
-                        message += ". " + translate(error);
+                        let message = translate(error);
+                        showError(message);
                     }
-                    showError(message);
                 })
                 .finally(function () {
                     onEndAction(false, "Mendeley (" + translate("Inserting bibliography") + ")");
@@ -445,10 +446,14 @@ import "../styles.css";
             let internalId = "";
 
             return citationService.insertSelectedCitations(items)
-                .then(function (id) {
-                    internalId = id;
+                .then(function (result) {
+                    internalId = result.internalId;
                     selectCitation.removeItems(Object.keys(items));
-                    return citationService.updateCslItems();
+                    if (result.bHasNotes) {
+                        return citationService.updateCslItems(false);
+                    } else {
+                        return citationService.updateCslItems();
+                    }
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -927,6 +932,7 @@ import "../styles.css";
                 !controlTag ||
                 controlTag.indexOf("MENDELEY_CITATION") === -1
             ) {
+                citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
                 return;
             }
             const updatedObject = await citationService.showEditCitationWindow(controlTag);

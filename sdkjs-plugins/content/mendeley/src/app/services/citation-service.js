@@ -33,7 +33,7 @@
 // @ts-check
 
 /// <reference path="../sdk/types.js" />
-/// <reference path="../../../scripts/citeproc/citeproc_commonjs.js" />
+/// <reference path="../../../vendor/citeproc/citeproc_commonjs.js" />
 
 /**
  * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
@@ -72,11 +72,12 @@ class CitationService {
 
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<string>}
+     * @returns {Promise<{internalId: string, bHasNotes: boolean}>}
      */
     #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
+        const bHasNotes = self._cslStylesManager.getLastUsedFormat() === "note";
 
         return Promise.resolve()
             .then(function () {
@@ -118,7 +119,7 @@ class CitationService {
                 tempElement.innerHTML = htmlCitation;
                 cslCitation.setManualOverride(tempElement.innerText);
                 let notesStyle = null;
-                if ("note" === self._cslStylesManager.getLastUsedFormat()) {
+                if (bHasNotes) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
                 let tag = JSON.stringify(cslCitation.toJSON());
@@ -128,6 +129,8 @@ class CitationService {
                     tag,
                     notesStyle,
                 );
+            }).then(function(internalId) {
+                return { internalId, bHasNotes }; 
             });
     }
 
@@ -545,7 +548,7 @@ class CitationService {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @returns {Promise<string>}
+     * @returns {Promise<{internalId: string, bHasNotes: boolean}>}
      */
     async insertSelectedCitations(items) {
         try {
@@ -911,6 +914,11 @@ class CitationService {
             return null;
         }
         return updatedObject;
+    }
+    
+    /** @param {string} message */
+    async showWarningMessage(message) {
+        this.#additionalWindow.showInfoWindow("Warning!", message);
     }
 
 }

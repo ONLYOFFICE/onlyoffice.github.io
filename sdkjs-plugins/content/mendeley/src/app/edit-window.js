@@ -86,6 +86,7 @@ import "../edit-window.css";
             deleteBtn.textContent = "×";
             deleteBtn.setAttribute("aria-label", "Close");
             deleteBtn.setAttribute("title", "Remove");
+            deleteBtn.setAttribute("type", "button");
 
             deleteBtn.onclick = this.removeItem.bind(this, form, citationItem.id);
             form.appendChild(deleteBtn);
@@ -129,6 +130,7 @@ import "../edit-window.css";
             });
             const locatorSelectbox = new SelectBox(locatorSelect, {
                 placeholder: "Locator",
+                translate: Asc.plugin.tr,
             });
             const locatorLabel = citationItem.label || "page";
             LOCATOR_VALUES.forEach(function (info) {
@@ -145,7 +147,7 @@ import "../edit-window.css";
                 showClear: false,
             });
             const omitAuthorInput = new Checkbox(omitAuthor, {
-                label: "Omit author",
+                label: "Omit Author",
                 checked: !!citationItem["suppress-author"],
             });
 
@@ -197,6 +199,28 @@ import "../edit-window.css";
             this.updateRemoveButtonsVisibility();
         }
 
+        onTranslate() {
+            const elements = document.getElementsByClassName("i18n");
+            for (let i = 0; i < elements.length; i++) {
+                let el = elements[i];
+                if (el instanceof HTMLElement === false) continue;
+
+                ["placeholder", "title"].forEach((attr) => {
+                    if (el.hasAttribute(attr)) {
+                        el.setAttribute(
+                            attr,
+                            window.Asc.plugin.tr(el.getAttribute(attr) || ""),
+                        );
+                    }
+                });
+
+                const translated = window.Asc.plugin.tr(
+                    el.innerText.trim().replace(/\s+/g, " "),
+                );
+                if (translated) el.innerText = translated;
+            }
+        }
+
         /** @param {AscTheme} theme */
         onThemeChanged(theme) {
             window.Asc.plugin.onThemeChangedBase(theme);
@@ -220,7 +244,7 @@ import "../edit-window.css";
         }
 
         /** @param {{citationItems: CitationItem[]}} citationObject */
-        onAttachedContent(citationObject) {
+        async onAttachedContent(citationObject) {
             this.citationObject = citationObject;
 
             if (!this.citationObject) {
@@ -232,6 +256,15 @@ import "../edit-window.css";
                 },
             );
             this.updateRemoveButtonsVisibility();
+
+            for (let i = 0; i < 10; i++) {
+                if (window.Asc.plugin.translateManager) {
+                    this.onTranslate();
+                    i = Number.MAX_SAFE_INTEGER;
+                    break;
+                }
+                await new Promise(resolve => setTimeout(() => resolve(true), 100));
+            }
         }
 
         onClickSave() {

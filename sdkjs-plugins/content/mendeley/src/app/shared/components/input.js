@@ -185,7 +185,7 @@ InputField.prototype = {
         inputField.appendChild(inputFieldMain);
         inputFieldMain.className += " input-field-main";
 
-        this.input.className += " input-field-element";
+        this.input.className += " input-field-element i18n";
         this.input.type = this._options.type || "text";
         this.input.placeholder = this._options.placeholder || "";
         this.input.value = String(this._options.value) || "";

@@ -33,7 +33,7 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
-/// <reference path="../../../scripts/mendeley-sdk/standalone.min.js" />
+/// <reference path="../../../vendor/mendeley-sdk/standalone.min.js" />
 /// <reference path="./types.js" />
 
 import { MendeleyToCls } from "./mendeley-to-csl";

@@ -34,15 +34,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Mendeley</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
     <link rel="stylesheet" href="dist/styles.css">
     <style id="componentsStyles"></style>
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="scripts/mendeley-sdk/standalone.min.js"></script>
-    <script src="scripts/citeproc/citeproc_commonjs.js"></script>
+    <script src="vendor/mendeley-sdk/standalone.min.js"></script>
+    <script src="vendor/citeproc/citeproc_commonjs.js"></script>
     <script>
         if (typeof Promise === 'function' && typeof Promise.any === 'function') {
             document.write(
@@ -89,7 +88,7 @@
                     <span class="i18n">Click</span>
                     <b class="i18n">Unlink citations</b>
                     <span class="i18n">to replace all active Mendeley citations and Bibliography with plain text.</span>
-                    <span class="i18n"></span>After conversion, citations can no longer be updated.</span>
+                    <span class="i18n">After conversion, citations can no longer be updated.</span>
                 </p>
                 <button id="saveAsTextBtn" class="i18n" style="width: 100%;">Unlink citations</button>
             </div>
@@ -194,5 +193,4 @@
 
     </div>
 </body>
-    <!--script src="scripts/code.js"></script-->
 </html>

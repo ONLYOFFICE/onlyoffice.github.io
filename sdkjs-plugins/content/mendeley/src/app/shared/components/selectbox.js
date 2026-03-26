@@ -76,6 +76,7 @@ class SelectBox {
             placeholder: options.placeholder || "Select...",
             searchable: options.searchable || false,
             sortable: options.sortable || false,
+            translate: options.translate,
             multiple: options.multiple || false,
             description: options.description || "",
         });
@@ -145,7 +146,7 @@ class SelectBox {
         this._select.appendChild(this._header);
         this._header.setAttribute("tabindex", "0");
 
-        this._selectedText.className += " selectbox-selected-text";
+        this._selectedText.className += " selectbox-selected-text i18n";
         this._selectedText.textContent = this._options.placeholder;
         this._header.appendChild(this._selectedText);
 
@@ -432,7 +433,10 @@ class SelectBox {
             option.setAttribute("data-value", item.value);
 
             let label = document.createElement("label");
-            label.className += " selectbox-option-text";
+            label.className += " selectbox-option-text i18n";
+            if (this._options.translate) {
+                item.text = this._options.translate(item.text);
+            }
             label.textContent = item.text;
 
             if (this._options.multiple) {
@@ -484,7 +488,10 @@ class SelectBox {
             option.setAttribute("for", item.value);
 
             var span = document.createElement("span");
-            span.className += " selectbox-option-text";
+            span.className += " selectbox-option-text i18n";
+            if (this._options.translate) {
+                item.text = this._options.translate(item.text);
+            }
             span.textContent = item.text;
             option.appendChild(span);
             fragment.appendChild(option);
