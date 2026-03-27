@@ -31,7 +31,9 @@
         "uk": "Швидко видаляйте фони зображень і отримуйте чисті, прозорі результати одним кліком.",
         "zh": "一键快速去除图像背景，获得干净透明的效果。"
       },
-      "icons": "resources/plugin-icon/icon.png",
+      "icons": [
+        "resources/%theme-type%(light|dark)/icon%scale%(default|*).%extension%(png)"
+      ],
       "EditorsSupport": [
         "word",
         "cell",
