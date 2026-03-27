@@ -81,13 +81,23 @@ class CitationService {
 
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean>} - has notes
      */
     #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
+        /** @type {AddinFieldData | null} */
+        let currentField = null;
 
-        return Promise.resolve()
+        return this.getCurrentField()
+            .then((field) => {
+                if (!field) {
+                    return;
+                }
+                currentField = field;
+                const citationObject = this.#extractField(currentField);
+                cslCitation.fillFromObject(citationObject);
+            })
             .then(function () {
                 cslCitation
                     .getCitationItems()
@@ -132,6 +142,13 @@ class CitationService {
                 let notesStyle = null;
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
+                }
+                
+                if (currentField) {
+                    currentField.Content = htmlCitation;
+                    currentField.Value = self._citPrefixNew + " " + self._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                    return self.citationDocService.updateAddinFields([currentField])
+                        .then(() => !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1));
                 }
                 return self.citationDocService.addCitation(
                     tempElement.innerText,
