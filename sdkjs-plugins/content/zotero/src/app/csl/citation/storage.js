@@ -32,17 +32,21 @@
 
 // @ts-check
 
-import { CitationItem } from "./citation-item";
+/** @typedef {import('./citation').CSLCitation} CSLCitation */
+/** @typedef {import('./citation-item').CitationItem} CitationItem */
 
 class CSLCitationStorage {
     /** @type {Array<CitationItem>} */
     #items;
     /** @type {Array<string>} */
-    #ids;
+    #itemIds;
+    /** @type {Array<CSLCitation>} */
+    #citations;
 
     constructor() {
         this.#items = [];
-        this.#ids = [];
+        this.#itemIds = [];
+        this.#citations = [];
         this.size = 0;
     }
 
@@ -51,9 +55,9 @@ class CSLCitationStorage {
      * @param {string|number} id
      * @returns {CitationItem|null}
      **/
-    get(id) {
+    getItem(id) {
         id = id.toString();
-        const index = this.#ids.indexOf(id);
+        const index = this.#itemIds.indexOf(id);
         if (index >= 0) return this.#items[index];
         return null;
     }
@@ -62,13 +66,14 @@ class CSLCitationStorage {
      * @param {string|number} id
      * @returns {number}
      */
-    getIndex(id) {
+    getItemIndex(id) {
         id = id.toString();
-        return this.#ids.indexOf(id);
+        return this.#itemIds.indexOf(id);
     }
     clear() {
         this.#items = [];
-        this.#ids = [];
+        this.#citations = [];
+        this.#itemIds = [];
         this.size = 0;
         return this;
     }
@@ -76,12 +81,12 @@ class CSLCitationStorage {
      * @param {string|number} id
      * @returns {CSLCitationStorage}
      */
-    delete(id) {
+    deleteItem(id) {
         id = id.toString();
-        const index = this.#ids.indexOf(id);
+        const index = this.#itemIds.indexOf(id);
         if (index >= 0) {
             this.#items.splice(index, 1);
-            this.#ids.splice(index, 1);
+            this.#itemIds.splice(index, 1);
             this.size--;
         }
         return this;
@@ -89,36 +94,100 @@ class CSLCitationStorage {
     /**
      * @param {function(CitationItem, string, CSLCitationStorage?): void} callback
      */
-    forEach(callback) {
+    forEachItem(callback) {
         for (var i = 0; i < this.size; i++) {
-            callback(this.#items[i], this.#ids[i], this);
+            callback(this.#items[i], this.#itemIds[i], this);
         }
     }
     /**
      * @param {string|number} id
      * @returns {boolean}
      */
-    has(id) {
+    hasItem(id) {
         id = id.toString();
-        return this.#ids.indexOf(id) >= 0;
+        return this.#itemIds.indexOf(id) >= 0;
     }
     /**
      * @param {string|number} id
      * @param {CitationItem} item
      * @returns {CSLCitationStorage}
      */
-    set(id, item) {
+    #setItem(id, item) {
         id = id.toString();
-        const index = this.#ids.indexOf(id);
+        const index = this.#itemIds.indexOf(id);
         if (index >= 0) {
             this.#items[index] = item;
             return this;
         }
         this.#items.push(item);
-        this.#ids.push(id);
+        this.#itemIds.push(id);
         this.size++;
         return this;
     }
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {CSLCitationStorage}
+     */
+    addCslCitation(cslCitation) {
+        this.#citations.push(cslCitation);
+        cslCitation.setNoteIndex(this.#citations.length);
+
+        cslCitation.getCitationItems().forEach((item) => {
+            this.#setItem(item.id, item);
+        });
+        return this;
+    }
+    getAllCitationsInJson() {
+        return this.#citations.map(citation => citation.toJSON());
+    }
+    /**
+     * @param {string} id
+     * @returns {CSLCitation|undefined}
+     */
+    getCitation(id) {
+        return this.#citations.find(citation =>
+            citation.citationID === id
+        );
+    }
+    /**
+     * @param {string} id
+     * @returns {number}
+     */
+    getCitationIndex(id) {
+        return this.#citations.findIndex(citation => citation.citationID === id)
+    }
+    /**
+     * @param {string} id
+     * @returns {Array<[string, number]>}
+     */
+    getCitationsPre(id) {
+        /** @type {Array<[string, number]>} */
+        const citationsPre = [];
+        this.#citations.find((citation, index) => {
+            if (citation.citationID === id) {
+                return true;
+            }
+            citationsPre.push([citation.citationID, index + 1]);
+            return false;
+        });
+        return citationsPre;
+    }
+    /**
+     * @param {string} id
+     * @returns {Array<[string, number]>}
+     */
+    getCitationsPost(id) {
+        /** @type {Array<[string, number]>} */
+        const citationsPost = [];
+        const citationIndex = this.getCitationIndex(id);
+        for (let i = citationIndex + 1; i < this.#citations.length; i++) {
+            const citation = this.#citations[i];
+            citationsPost.push([citation.citationID, i + 1]);
+        }
+
+        return citationsPost;
+    }
+
 }
 
 export { CSLCitationStorage };

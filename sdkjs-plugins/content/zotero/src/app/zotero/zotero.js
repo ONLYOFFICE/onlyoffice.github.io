@@ -173,17 +173,14 @@ ZoteroSdk.prototype._parseLinkHeader = function (headerValue) {
 /**
  * Parse response for desktop (offline) mode
  * @param {Promise<AscSimpleResponse>} promise
- * @param {function(any): void} resolve
- * @param {function(any): void} reject
  * @param {number|string} id
- * @returns {Promise<void>}
+ * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._parseDesktopItemsResponse = function (
     promise,
-    resolve,
-    reject,
     id
 ) {
+    
     return promise
         .then(function (response) {
             return {
@@ -191,22 +188,16 @@ ZoteroSdk.prototype._parseDesktopItemsResponse = function (
                 id: id,
             };
         })
-        .then(resolve)
-        .catch(reject);
 };
 
 /**
  * Parse response for online mode with pagination support
  * @param {Promise<FetchResponse>} promise
- * @param {function(any): void} resolve
- * @param {function(any): void} reject
  * @param {number|string} id
- * @returns {Promise<void>}
+ * @returns {Promise<SearchResult>}
  */
 ZoteroSdk.prototype._parseItemsResponse = function (
     promise,
-    resolve,
-    reject,
     id
 ) {
     var self = this;
@@ -231,41 +222,33 @@ ZoteroSdk.prototype._parseItemsResponse = function (
 
             if (links.next) {
                 result.next = function () {
-                    return new Promise(function (rs, rj) {
-                        self._parseItemsResponse(
-                            self._getOnlineRequest(new URL(links.next)),
-                            rs,
-                            rj,
-                            id
-                        );
-                    });
+                    return self._parseItemsResponse(
+                        self._getOnlineRequest(new URL(links.next)),
+                        id
+                    );
                 };
             }
 
-            resolve(result);
-        })
-        .catch(reject);
+            return result;
+        });
 };
 
 /**
  * Universal items response parser
  * @param {Promise<AscSimpleResponse | FetchResponse>} promise
- * @param {function(any): void} resolve
- * @param {function(any): void} reject
  * @param {number|string} id
+ * @returns {Promise<SearchResult>}
  */
-ZoteroSdk.prototype._parseResponse = function (promise, resolve, reject, id) {
+ZoteroSdk.prototype._parseResponse = function (promise, id) {
     if (this._isOnlineAvailable) {
         const fetchPromise = /** @type {Promise<FetchResponse>} */ (promise);
-        this._parseItemsResponse(fetchPromise, resolve, reject, id);
+        return this._parseItemsResponse(fetchPromise, id);
     } else {
         const ascSimplePromise = /** @type {Promise<AscSimpleResponse>} */ (
             promise
         );
-        this._parseDesktopItemsResponse(
+        return this._parseDesktopItemsResponse(
             /** @type {Promise<AscSimpleResponse>} */ ascSimplePromise,
-            resolve,
-            reject,
             id
         );
     }
@@ -274,7 +257,7 @@ ZoteroSdk.prototype._parseResponse = function (promise, resolve, reject, id) {
 /**
  * Get items from user library
  * @param {string|null} search
- * @param {string[]} [itemsID]
+ * @param {string[]|null} [itemsID]
  * @param {"csljson"|"json"} [format]
  * @returns {Promise<SearchResult>}
  */
@@ -282,28 +265,32 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    return new Promise(function (resolve, reject) {
-        var queryParams =
-            /** @type {{format: string, q?: string, itemKey?: string}} */ ({
-                format: format,
-            });
+    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+    let queryParams = {
+        format: format,
+        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
+    };
 
-        if (search) {
-            queryParams.q = search;
-        } else if (itemsID) {
-            queryParams.itemKey = itemsID.join(",");
+    if (search) {
+        queryParams.q = search;
+    } else if (itemsID) {
+        queryParams.itemKey = itemsID.join(",");
+    } else {
+        queryParams.limit = 20;
+        if (!this._isOnlineAvailable) {
+            queryParams.format = "json";
         }
+    }
 
-        var path =
-            self.API_PATHS.USERS +
-            "/" +
-            self._userId +
-            "/" +
-            self.API_PATHS.ITEMS;
-        var request = self._buildGetRequest(path, queryParams);
+    var path =
+        self.API_PATHS.USERS +
+        "/" +
+        self._userId +
+        "/" +
+        self.API_PATHS.ITEMS;
+    var request = self._buildGetRequest(path, queryParams);
 
-        return self._parseResponse(request, resolve, reject, self._userId);
-    });
+    return self._parseResponse(request, self._userId);
 };
 
 /**
@@ -323,23 +310,22 @@ ZoteroSdk.prototype.getGroupItems = function (
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    return new Promise(function (resolve, reject) {
-        var queryParams =
-            /** @type {{format: string, q?: string, itemKey?: string}} */ ({
-                format: format,
-            });
+    var queryParams =
+        /** @type {{format: string, q?: string, itemKey?: string}} */ ({
+            format: format,
+        });
 
-        if (search) {
-            queryParams.q = search;
-        } else if (itemsID) {
-            queryParams.itemKey = itemsID.join(",");
-        }
+    if (search) {
+        queryParams.q = search;
+    } else if (itemsID) {
+        queryParams.itemKey = itemsID.join(",");
+    }
 
-        var path =
-            self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
-        var request = self._buildGetRequest(path, queryParams);
-        return self._parseResponse(request, resolve, reject, groupId);
-    });
+    var path =
+        self.API_PATHS.GROUPS + "/" + groupId + "/" + self.API_PATHS.ITEMS;
+    var request = self._buildGetRequest(path, queryParams);
+    return self._parseResponse(request, groupId);
+
 };
 
 /**
@@ -391,30 +377,6 @@ ZoteroSdk.prototype.getUserGroups = function () {
             .catch(reject);
     });
 };
-
-/**
- * Format citations
- */
-/*ZoteroSdk.prototype.format = function (ids, groupKey, style, locale) {
-    var queryParams = {
-        format: "bib",
-        style: style,
-        locale: locale,
-        itemKey: ids.join(","),
-    };
-
-    var path = groupKey
-        ? this.API_PATHS.GROUPS + "/" + groupKey + "/" + this.API_PATHS.ITEMS
-        : this.API_PATHS.USERS +
-          "/" +
-          this._userId +
-          "/" +
-          this.API_PATHS.ITEMS;
-
-    return this._buildGetRequest(path, queryParams).then(function (response) {
-        return response.text();
-    });
-};*/
 
 /**
  * Set API key and validate it

@@ -37,6 +37,7 @@
 
 import { translate } from "../../services";
 import { Checkbox, InputField, SelectBox } from "../components";
+import LOCATOR_VALUES from "../constants/locator-values";
 
 /**
  * @typedef {Object} Scroller
@@ -60,30 +61,6 @@ function SelectCitationsComponent(
     this._html = {};
     /** @type {Object<string|number, Checkbox>} */
     this._checks = {};
-
-    this._LOCATOR_VALUES = [
-        ["appendix", "Appendix"],
-        ["article", "Article"],
-        ["book", "Book"],
-        ["chapter", "Chapter"],
-        ["column", "Column"],
-        ["figure", "Figure"],
-        ["folio", "Folio"],
-        ["issue", "Issue"],
-        ["line", "Line"],
-        ["note", "Note"],
-        ["opus", "Opus"],
-        ["page", "Page"],
-        ["paragraph", "Paragraph"],
-        ["part", "Part"],
-        ["rule", "Rule"],
-        ["section", "Section"],
-        ["sub-verbo", "Sub verbo"],
-        ["table", "Table"],
-        ["title", "Title"],
-        ["verses", "Verses"],
-        ["volume", "Volume"],
-    ];
 
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
@@ -113,6 +90,8 @@ function SelectCitationsComponent(
             this._checkDocsScroll.bind(this)
         );
     }
+    /** @type {LastSearch | null} */
+    this._lastSearch = null;
     /** @type {Function[]} */
     this._subscribers = [];
     this._fShouldLoadMore = fShouldLoadMore;
@@ -135,6 +114,17 @@ SelectCitationsComponent.prototype._init = function () {
             }
         };
     }
+    if (this._docsHolder) {
+        this._docsHolder.addEventListener("keydown", function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+                e.preventDefault();
+                var checkboxes = self._docsHolder?.querySelectorAll(".checkbox-container:not(.checkbox--checked)");
+                checkboxes?.forEach(function (cb) {
+                    /** @type {HTMLElement} */ (cb).click();
+                });
+            }
+        });
+    }
 };
 SelectCitationsComponent.prototype.clearLibrary = function () {
     this._nothingFound &&
@@ -156,11 +146,13 @@ SelectCitationsComponent.prototype.displayNothingFound = function () {
 /**
  * @param {SearchResult | null} res
  * @param {Error | null} err
+ * @param {LastSearch} lastSearch
  * @returns {Promise<number>}
  */
-SelectCitationsComponent.prototype.displaySearchItems = function (res, err) {
+SelectCitationsComponent.prototype.displaySearchItems = function (res, err, lastSearch) {
     const self = this;
     var holder = this._docsHolder;
+    this._lastSearch = lastSearch;
 
     let numOfShown = 0;
 
@@ -170,6 +162,9 @@ SelectCitationsComponent.prototype.displaySearchItems = function (res, err) {
             if (holder) page.classList.add("page" + holder.children.length);
             for (let index = 0; index < res.items.length; index++) {
                 let item = res.items[index];
+                if (!item.title) {
+                    continue;
+                }
                 page.appendChild(self._buildDocElement(item));
                 numOfShown++;
             }
@@ -247,13 +242,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     }
     const arrow = document.createElement("div");
     arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML =
-        '<svg width="6" height="6" viewBox="0 0 6 6" ' +
-        'fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<path fill-rule="evenodd" clip-rule="evenodd"' +
-        ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75' +
-        ' 2.24889L3 4.49724L5.25 2.24889L3 0.00053797Z" ' +
-        'fill="currentColor"/></svg>';
+    arrow.innerHTML = "<b></b>";
 
     var title = document.createElement("div");
     title.textContent = item.title.trim();
@@ -359,16 +348,17 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
 
     const prefixInput = new InputField(prefix, {
         type: "text",
-        placeholder: "Prefix",
+        placeholder: translate("Prefix"),
     });
     const suffixInput = new InputField(suffix, {
         type: "text",
-        placeholder: "Suffix",
+        placeholder: translate("Suffix"),
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
-        placeholder: "Locator",
+        placeholder: translate("Locator"),
+        translate: translate
     });
-    this._LOCATOR_VALUES.forEach(function (info) {
+    LOCATOR_VALUES.forEach(function (info) {
         const selected = info[0] === locatorLabel;
         locatorSelectbox.addItem(info[0], info[1], selected);
         if (selected) {
@@ -377,10 +367,10 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
     const locatorInput = new InputField(locator, {
         type: "text",
-        placeholder: locatorPlaceholder,
+        placeholder: translate(locatorPlaceholder),
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
-        label: "Omit author",
+        label: translate("Omit Author"),
     });
 
     prefixInput.subscribe(function (event) {
@@ -497,9 +487,9 @@ SelectCitationsComponent.prototype._checkDocsScroll = function (holder, thumb) {
         }
 
         if (
-            !lastSearch.obj &&
-            !lastSearch.text.trim() &&
-            !lastSearch.groups.length
+            !this._lastSearch.obj &&
+            !this._lastSearch.text.trim() &&
+            !this._lastSearch.groups.length
         )
             return;
 

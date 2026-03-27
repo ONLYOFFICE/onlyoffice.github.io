@@ -19,14 +19,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Zotero</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css" />
     <link rel="stylesheet" href="dist/styles.css">
     <style id="componentsStyles"></style>
     <style id="pluginStyles"></style>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
     <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-    <script src="dist/citeproc_commonjs.js"></script>
+    <script src="vendor/citeproc/citeproc_commonjs.js"></script>
     <script>
         if (typeof Promise === 'function' && typeof Promise.any === 'function') {
             document.write(
@@ -85,12 +84,16 @@
                     <span class="i18n">Click</span>
                     <b class="i18n">Unlink citations</b>
                     <span class="i18n">to replace all active Zotero citations and Bibliography with plain text.</span>
-                    <span class="i18n"></span>After conversion, citations can no longer be updated.</span>
+                    <span class="i18n">After conversion, citations can no longer be updated.</span>
                 </p>
                 <button id="saveAsTextBtn" class="i18n" style="width: 100%;">Unlink citations</button>
             </div>
             <div id="mainState" class="flexCol flexSize hidden">
-                <label for="searchField" class="i18n">Search the references you want to cite in this document.</label>
+                <label for="searchField" id="searchLabel">
+                    <span class="i18n when-empty">Search the references you want to cite in this document.</span>
+                    <span class="i18n when-not-empty hidden">Select the references you want to cite in this document.</span>
+                    <span class="i18n when-started hidden">You see sources from My library, use the search to see others.</span>
+                </label>
                 <div id="searchWrapper">
                     <div id="librarySelectList"></div>
                     <input id="searchField" autocomplete="off" class="i18n" type="text"

@@ -37,7 +37,10 @@
 import { CslStylesStorage } from "./storage";
 import { CslStylesParser } from "./style-parser";
 
-function CslStylesManager() {
+/**
+ * @param {string} lastStyleKey
+ */
+function CslStylesManager(lastStyleKey) {
     this._isOnlineAvailable = false;
     this._isDesktopAvailable = false;
 
@@ -48,20 +51,22 @@ function CslStylesManager() {
     this._STYLES_URL = "https://www.zotero.org/styles/";
     this._STYLES_LOCAL = "./resources/csl/styles/";
 
-    this._lastStyleKey = "zoteroStyleId";
+    this._lastStyleKey = lastStyleKey;
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
 
     this._defaultStyles = [
+        "american-anthropological-association",
         "american-medical-association",
         "american-political-science-association",
-        "apa",
         "american-sociological-association",
-        "chicago-author-date-17th-edition",
-        "harvard-cite-them-right-10th-edition",
+        "apa",
+        "chicago-author-date",
+        "chicago-notes-bibliography",
+        "harvard-cite-them-right",
         "ieee",
-        "modern-language-association-8th-edition",
+        "modern-language-association",
         "nature",
     ];
 
@@ -175,6 +180,8 @@ CslStylesManager.prototype.getStyle = function (
             let url = self._STYLES_LOCAL + styleName + ".csl";
             if (self._isOnlineAvailable) {
                 url = self._STYLES_URL + styleName;
+            } else if (self._defaultStyles.indexOf(styleName) === -1) {
+                throw "The style is not available in the local version of the plugin.";
             }
             return fetch(url).then(function (resp) {
                 return resp.text();
@@ -244,11 +251,7 @@ CslStylesManager.prototype.getStylesInfo = function () {
         }
 
         customStyles.forEach(function (style) {
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
             if (self._defaultStyles.indexOf(style.name) === -1) {
                 self._defaultStyles.push(style.name);
             }
@@ -259,12 +262,9 @@ CslStylesManager.prototype.getStylesInfo = function () {
                 // already added
                 return;
             }
-            if (lastStyle === style.name) {
-                resultStyles.unshift(style);
-            } else {
-                resultStyles.push(style);
-            }
+            resultStyles.push(style);
         });
+        resultStyles.sort((a, b) => a.name.localeCompare(b.name));
 
         return resultStyles;
     });
