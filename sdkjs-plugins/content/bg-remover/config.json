@@ -3,7 +3,7 @@
   "guid": "asc.{5782f7f6-7a5d-4451-843e-937f795c74a6}",
   "baseUrl": "",
   "version": "1.0.0",
-  "provider": "joselmm",
+  "offered": "joselmm",
   "nameLocale": {
     "ru": "Ластик фона",
     "fr": "Effaceur d'arrière-plan",
