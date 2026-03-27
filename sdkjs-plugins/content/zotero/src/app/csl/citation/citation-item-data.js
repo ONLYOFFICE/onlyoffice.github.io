@@ -1384,8 +1384,11 @@ CitationItemData.prototype.setCustom = function (custom) {
     this._custom = Object.assign(this._custom, custom);
     return this;
 };
-
-CitationItemData.prototype.toJSON = function () {
+/**
+ * @param {boolean} [bCompressed]
+ * @returns 
+ */
+CitationItemData.prototype.toJSON = function (bCompressed) {
     var result = {};
     result.id = this._id;
 

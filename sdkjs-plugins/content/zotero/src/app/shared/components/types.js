@@ -108,6 +108,8 @@
  * @property {boolean} [searchable]
  * @property {boolean} [multiple]
  * @property {string} [description]
+ * @property {boolean} [sortable]
+ * @property {(string) => string} [translate]
  */
 
 /**

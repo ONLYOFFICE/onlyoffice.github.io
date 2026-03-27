@@ -1,0 +1,22 @@
+{
+  "name": "@types/onlyoffice-plugins-api",
+  "version": "0.1.0",
+  "types": "index.d.ts",
+  "description": "TypeScript definitions for OnlyOffice plugins",
+  "license": "MIT",
+  "keywords": [
+    "onlyoffice",
+    "plugin",
+    "typescript",
+    "types"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate-types.js"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

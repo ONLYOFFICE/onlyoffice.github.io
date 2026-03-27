@@ -1,22 +1,12 @@
 Zotero ONLYOFFICE integration plugin uses code from the following 3rd party projects:
 
 
-1. fetch-polyfill - This project is a polyfill that implements a subset of the standard Fetch specification, enough to make fetch a viable replacement for most uses of XMLHttpRequest in traditional web applications. (https://github.com/github/fetch)
+1. citeproc-js - A JavaScript implementation of the Citation Style Language (CSL) citation formatting language. (https://github.com/Juris-M/citeproc-js)
+
+License:        CPAL-1.0 OR AGPL-3.0-or-later
+License File:   licenses/citeproc.license
+
+2. core-js - Modular standard library for JavaScript. Includes polyfills for ECMAScript up to 2024. (https://github.com/zloirock/core-js)
 
 License:        MIT
-License File:   fetch-polyfill.license
-
-2. promise-polyfill - Lightweight ES6 Promise polyfill for the browser and node. (https://github.com/taylorhakes/promise-polyfill)
-
-License:        MIT
-License File:   promise-polyfill.license
-
-3. url-polyfill - Polyfill URL and URLSearchParams to match last WHATWG specifications. (https://github.com/lifaon74/url-polyfill)
-
-License:        MIT
-License File:   url-polyfill.license
-
-4. jQuery - Query is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development. (http://jquery.com/)
-
-License:        MIT License
-License File:   jQuery.license
+License File:   licenses/core-js.license

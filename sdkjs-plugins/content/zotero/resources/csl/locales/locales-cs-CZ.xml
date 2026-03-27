@@ -6,6 +6,7 @@
     </translator>
     <translator>
       <name>Andrew Dunning</name>
+      <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </translator>
     <translator>
       <name>libora</name>
@@ -14,7 +15,7 @@
       <name>Michal Hoftich</name>
     </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-    <updated>2025-10-16T03:08:07+00:00</updated>
+    <updated>2026-01-10T00:00:07+00:00</updated>
   </info>
   <style-options punctuation-in-quote="false"/>
   <date form="text">
@@ -177,9 +178,9 @@
 
     <!-- PUNCTUATION -->
     <term name="open-quote">„</term>
-    <term name="close-quote">"</term>
+    <term name="close-quote">“</term>
     <term name="open-inner-quote">‚</term>
-    <term name="close-inner-quote">´</term>
+    <term name="close-inner-quote">‘</term>
     <term name="page-range-delimiter">–</term>
     <term name="colon">:</term>
     <term name="comma">,</term>
@@ -474,6 +475,7 @@
     </term>
 
     <!-- LONG ROLE FORMS -->
+    <term name="author"/> <!-- generally blank -->
     <term name="chair">
       <single>chair</single>
       <multiple>chairs</multiple>
@@ -486,6 +488,8 @@
       <single>compiler</single>
       <multiple>compilers</multiple>
     </term>
+    <term name="composer"/> <!-- generally blank -->
+    <term name="container-author"/> <!-- generally blank -->
     <term name="contributor">
       <single>contributor</single>
       <multiple>contributors</multiple>
@@ -530,6 +534,7 @@
       <single>ilustrátor</single>
       <multiple>ilustrátoři</multiple>
     </term>
+    <term name="interviewer"/> <!-- generally blank -->
     <term name="narrator">
       <single>narrator</single>
       <multiple>narrators</multiple>
@@ -538,6 +543,7 @@
       <single>organizer</single>
       <multiple>organizers</multiple>
     </term>
+    <term name="original-author"/> <!-- generally blank -->
     <term name="performer">
       <single>performer</single>
       <multiple>performers</multiple>
@@ -546,6 +552,8 @@
       <single>producer</single>
       <multiple>producers</multiple>
     </term>
+    <term name="recipient"/> <!-- generally blank -->
+    <term name="reviewed-author"/> <!-- generally blank -->
     <term name="script-writer">
       <single>writer</single>
       <multiple>writers</multiple>

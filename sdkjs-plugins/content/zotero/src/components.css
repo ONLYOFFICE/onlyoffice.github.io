@@ -334,11 +334,27 @@
     }
 
     .selectbox-arrow {
+        position: relative;
         transition: transform 0.3s ease;
         width: 24px;
         height: 22px;
         text-align: center;
         line-height: 20px;
+        b {
+            width: 4px;
+            height: 4px;
+            margin: -1px 1px;
+            border-left-style: solid;
+            border-top-style: solid;
+            border-top-width: 1px;
+            border-left-width: 1px;
+            box-sizing: border-box;
+            transform: rotate(-135deg) translate(1px, 1px);
+            display: inline-block;
+            position: absolute;
+            top: 10px;
+            right: 9px;
+        }
     }
 
     .selectbox-arrow-open {

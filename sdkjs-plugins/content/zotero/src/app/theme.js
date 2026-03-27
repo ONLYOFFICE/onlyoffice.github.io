@@ -31,11 +31,14 @@
  */
 
 // @ts-check
-/// <reference path="./types-global.js" />
+
+/**
+ * @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme
+ */
 
 const Theme = {
     /**
-     * @param {ThemeColors} theme
+     * @param {AscTheme} theme
      */
     addStylesForComponents: function (theme) {
         let styles = "";
@@ -471,6 +474,10 @@ const Theme = {
                 ".input-field-search-icon svg { fill: " +
                 theme["text-normal"] +
                 "; }\n";
+            styles +=
+                ".selectbox-arrow b { border-color: " +
+                theme["text-normal"] +
+                "; }\n";
         }
         if (theme["text-secondary"]) {
             styles +=
@@ -568,7 +575,7 @@ const Theme = {
     },
 
     /**
-     * @param {ThemeColors} theme
+     * @param {AscTheme} theme
      */
     fixThemeForIE: function (theme) {
         if (!theme["background-toolbar"]) {

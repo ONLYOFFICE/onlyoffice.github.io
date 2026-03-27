@@ -44,22 +44,30 @@
  */
 
 class SelectBox {
-    static #instances = new Set();
+    static #instances = new Set(); 
 
     /**
-     * @param {string | HTMLElement} container
+     * @param {string | HTMLSelectElement | HTMLElement} selectbox
      * @param {SelectboxOptionsType} options
      */
-    constructor(container, options) {
-        if (typeof container === "string") {
-            var temp = document.getElementById(container);
-            if (temp instanceof HTMLElement) {
-                container = temp;
+    constructor(selectbox, options) {
+        if (typeof selectbox === "string") {
+            const temp = document.getElementById(selectbox);
+            if (temp instanceof HTMLSelectElement) {
+                selectbox = temp;
+            } else if (temp instanceof HTMLElement) {
+                this._container = temp;
+            } else {
+                throw new Error("Invalid selectbox");
             }
+        } else if (selectbox instanceof HTMLElement) {
+            this._container = selectbox;
         }
-        if (container instanceof HTMLElement) {
-            this._container = container;
-        } else {
+
+        if (selectbox instanceof HTMLSelectElement) {
+            this._selectbox = selectbox;
+            this._container = document.createElement("div");
+        } else if (this._container instanceof HTMLElement === false) {
             throw new Error("Invalid container");
         }
 
@@ -67,6 +75,8 @@ class SelectBox {
         this._options = Object.assign(options, {
             placeholder: options.placeholder || "Select...",
             searchable: options.searchable || false,
+            sortable: options.sortable || false,
+            translate: options.translate,
             multiple: options.multiple || false,
             description: options.description || "",
         });
@@ -136,18 +146,12 @@ class SelectBox {
         this._select.appendChild(this._header);
         this._header.setAttribute("tabindex", "0");
 
-        this._selectedText.className += " selectbox-selected-text";
+        this._selectedText.className += " selectbox-selected-text i18n";
         this._selectedText.textContent = this._options.placeholder;
         this._header.appendChild(this._selectedText);
 
         this._arrow.className += " selectbox-arrow";
-        this._arrow.innerHTML =
-            '<svg width="6" height="6" viewBox="0 0 6 6" ' +
-            'fill="none" xmlns="http://www.w3.org/2000/svg">' +
-            '<path fill-rule="evenodd" clip-rule="evenodd"' +
-            ' d="M3 0L0 2.9978L3 5.99561L6 2.9978L3 0ZM3 0.00053797L0.75 2.24889L3 4.49724L5.25 ' +
-            '2.24889L3 0.00053797Z" fill="currentColor"/>' +
-            "</svg>";
+        this._arrow.innerHTML = "<b></b>";
         this._header.appendChild(this._arrow);
 
         this._dropdown.className += " selectbox-dropdown";
@@ -175,6 +179,16 @@ class SelectBox {
         this._dropdown.appendChild(this._optionsContainer);
 
         this._container.appendChild(fragment);
+
+        if (this._selectbox) {
+            const parent = this._selectbox.parentNode;
+            if (parent) {
+                parent.insertBefore(this._container, this._selectbox);
+                const options = this.#extractOptions(this._selectbox);
+                this.addItems(options.values, options.selectedValue);
+                this._selectbox.remove();
+            }
+        }
     }
 
     #bindEvents() {
@@ -240,9 +254,7 @@ class SelectBox {
 
         this.#renderOptions();
     }
-    /**
-     * @private
-     */
+
     #closeDropdown() {
         if (this.isOpen && document && this._boundHandles) {
             document.removeEventListener("click", this._boundHandles.close);
@@ -274,7 +286,6 @@ class SelectBox {
     }
     /**
      * @param {Event} e
-     * @private
      */
     #handleSearch(e) {
         var target = e.target;
@@ -351,7 +362,6 @@ class SelectBox {
     }
     /**
      * @param {KeyboardEvent} e
-     * @private
      */
     #handleKeydown(e) {
         var key = e.key || e.keyCode;
@@ -385,7 +395,6 @@ class SelectBox {
     /**
      * @param {string} [searchTerm]
      * @param {boolean} [scrollIntoView]
-     * @private
      * */
     #renderOptions(searchTerm, scrollIntoView) {
         searchTerm = searchTerm || "";
@@ -424,7 +433,10 @@ class SelectBox {
             option.setAttribute("data-value", item.value);
 
             let label = document.createElement("label");
-            label.className += " selectbox-option-text";
+            label.className += " selectbox-option-text i18n";
+            if (this._options.translate) {
+                item.text = this._options.translate(item.text);
+            }
             label.textContent = item.text;
 
             if (this._options.multiple) {
@@ -476,7 +488,10 @@ class SelectBox {
             option.setAttribute("for", item.value);
 
             var span = document.createElement("span");
-            span.className += " selectbox-option-text";
+            span.className += " selectbox-option-text i18n";
+            if (this._options.translate) {
+                item.text = this._options.translate(item.text);
+            }
             span.textContent = item.text;
             option.appendChild(span);
             fragment.appendChild(option);
@@ -501,7 +516,6 @@ class SelectBox {
     }
     /**
      * @param {Event} e
-     * @private
      */
     #handleDropdownClick(e) {
         var target = e.target || e.srcElement;
@@ -588,9 +602,7 @@ class SelectBox {
 
         this.#triggerChange(value, enabled);
     }
-    /**
-     * @private
-     */
+
     #updateSelectedText() {
         if (this._selectedValues.size === 0) {
             this._selectedText.textContent = this._options.placeholder;
@@ -632,7 +644,6 @@ class SelectBox {
     /**
      * @param {string} currentValue
      * @param {boolean} enabled
-     * @private
      */
     #triggerChange(currentValue, enabled) {
         var values = Array.from(this._selectedValues);
@@ -661,7 +672,6 @@ class SelectBox {
     }
     /**
      * @param {string} currentValue
-     * @private
      */
     #triggerCustomChange(currentValue) {
         /** @type {SelectboxEventDetail} */
@@ -677,6 +687,21 @@ class SelectBox {
                 detail: detail,
             });
         });
+    }
+    /**
+     * @param {HTMLSelectElement} selectbox 
+     * @returns {{values: Array<[string, string]>, selectedValue?: string}}
+     */
+    #extractOptions(selectbox) {
+        /** @type {Array<[string, string]>} */
+        const options = Array.from(selectbox.options).map((option) => {
+            return [option.value, option.text];
+        });
+        /** @type {{values: Array<[string, string]>, selectedValue?: string}} */
+        const result = { values: options };
+        const selectedValue = selectbox.value;
+        if (selectedValue) result.selectedValue = selectedValue;
+        return result;
     }
     /**
      * @param {function(SelectboxEventType): void} callback
@@ -711,6 +736,9 @@ class SelectBox {
             if (item) item.selected = selected;
         } else {
             this._items.push({ value: value, text: text, selected: selected });
+            if (this._options.sortable) {
+                this._items.sort((a, b) => (!!a && !!b ? a.text.localeCompare(b.text) : (!!a ? -1 : (!!b ? 1 : 0))));
+            }
         }
 
         if (selected) {
