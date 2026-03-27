@@ -12,14 +12,16 @@ const STYLES_JSON_FOLDER = "../../resources/csl/";
 const STYLES_DEST_FOLDER = "../../resources/csl/styles";
 
 const DEFAULT_STYLES = [
+    "american-anthropological-association",
     "american-medical-association",
     "american-political-science-association",
-    "apa",
     "american-sociological-association",
-    "chicago-author-date-17th-edition",
-    "harvard-cite-them-right-10th-edition",
+    "apa",
+    "chicago-author-date",
+    "chicago-notes-bibliography",
+    "harvard-cite-them-right",
     "ieee",
-    "modern-language-association-8th-edition",
+    "modern-language-association",
     "nature",
 ];
 
@@ -46,7 +48,7 @@ async function copyLocales() {
         await fs.ensureDir(LOCALES_DEST_FOLDER);
 
         let numOfFiles = 0;
-        for (const filePath of xmlLocalesFiles) {
+        for (const filePath of xmlLocalesFiles.found) {
             const fileName = path.basename(filePath);
             const targetPath = path.join(LOCALES_DEST_FOLDER, fileName);
             await fs.copy(filePath, targetPath);

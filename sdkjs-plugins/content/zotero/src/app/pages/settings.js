@@ -63,10 +63,6 @@ function SettingsPage(router, displayNoneClass) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
 
-    this._openSettingsBtn = new Button("settingsBtn", {
-        variant: "icon-only",
-        size: "small",
-    });
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
     });
@@ -76,6 +72,7 @@ function SettingsPage(router, displayNoneClass) {
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
+        sortable: true
     });
     this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
         placeholder: "Enter style name",
@@ -103,15 +100,17 @@ function SettingsPage(router, displayNoneClass) {
         placeholder: "Select language",
     });
 
-    this._cslStylesManager = new CslStylesManager();
+    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
     this._localesManager = new LocalesManager();
 
     /** @type {HTMLElement[]} */
     this._selectLists = [];
     /**
-     * @param {Settings} settings
+     * @param {Settings} newSettings
+     * @param {Settings} oldSettings 
+     * @returns {void}
      */
-    this._onChangeState = function (settings) {};
+    this._onChangeState = function (newSettings, oldSettings) {};
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -229,7 +228,7 @@ SettingsPage.prototype.init = function () {
 };
 
 /**
- * @param {function(Settings): void} callbackFn
+ * @param {function(Settings, Settings): void} callbackFn
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
@@ -254,12 +253,6 @@ SettingsPage.prototype.setRestApiAvailable = function (isAvailable) {
 SettingsPage.prototype._addEventListeners = function () {
     const self = this;
 
-    this._openSettingsBtn.subscribe(function (event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._show();
-    });
     this._saveBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
@@ -269,6 +262,10 @@ SettingsPage.prototype._addEventListeners = function () {
             console.error("No language selected");
             return;
         }
+
+        /** @type {Settings} */
+        const oldState = {...self._stateSettings};
+
         const promises = [];
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -292,6 +289,9 @@ SettingsPage.prototype._addEventListeners = function () {
         }
         if (self._stateSettings.notesStyle !== noteValue) {
             self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+            if (self._cslStylesManager.getLastUsedFormat() === "note") {
+                promises.push(Promise.resolve());
+            }
         }
 
         const selectedStyleId = self._styleSelect.getSelectedValue();
@@ -309,12 +309,14 @@ SettingsPage.prototype._addEventListeners = function () {
                     self._hide();
                     self._hideLoader();
 
-                    self._onChangeState({
+                    const newState = {
                         language: selectedLang,
                         style: selectedStyleId || "ieee",
                         notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
-                    });
+                    };
+
+                    self._onChangeState(newState, oldState);
                 })
                 .catch(function (err) {
                     self._hideLoader();
@@ -435,7 +437,7 @@ SettingsPage.prototype._hide = function () {
     this._router.openMain();
 };
 
-SettingsPage.prototype._show = function () {
+SettingsPage.prototype.show = function () {
     this._stateSettings = {
         language: this._localesManager.getLastUsedLanguage(),
         style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
@@ -529,6 +531,7 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._styleMessage.show(translate(err));
             }
             isClick && self._hideLoader();
+            throw err;
         });
 };
 
