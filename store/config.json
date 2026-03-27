@@ -42,5 +42,6 @@
 	{ "name": "bergamot", "discussion": "" },
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
-	{"name": "lizardtypst", "discussion": ""}
+	{"name": "lizardtypst", "discussion": ""},
+	{ "name": "textcure", "discussion": "" }
 ]
