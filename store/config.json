@@ -34,7 +34,9 @@
 	{ "name": "onlydraw", "discussion": "" },
 	{ "name": "pomodoro", "discussion": "" },
 	{ "name": "videoembedder", "discussion": "" },
+	{ "name": "mathtype", "discussion": "" },
 	{ "name": "mathpix", "discussion": "" },
+	{ "name": "bg-remover", "discussion": "" },
 	{ "name": "icons", "discussion": "" },
 	{ "name": "datepicker", "discussion": "" },
 	{ "name": "news", "discussion": "" },
@@ -42,5 +44,5 @@
 	{ "name": "bergamot", "discussion": "" },
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
-	{"name": "lizardtypst", "discussion": ""}
+	{ "name": "lizardtypst", "discussion": "" }
 ]
