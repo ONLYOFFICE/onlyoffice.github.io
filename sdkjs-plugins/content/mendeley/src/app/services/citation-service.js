@@ -72,12 +72,14 @@ class CitationService {
 
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<{internalId: string, bHasNotes: boolean}>}
+     * @returns {Promise<{internalId: string, notesStyle?: "footnotes" | "endnotes"}>}
      */
     #formatInsertLink(cslCitation) {
         const self = this;
         let bUpdateItems = false;
         const bHasNotes = self._cslStylesManager.getLastUsedFormat() === "note";
+        /** @type {"footnotes" | "endnotes" | null} */
+        let notesStyle = null;
 
         return Promise.resolve()
             .then(function () {
@@ -118,7 +120,6 @@ class CitationService {
                 fragment.appendChild(tempElement);
                 tempElement.innerHTML = htmlCitation;
                 cslCitation.setManualOverride(tempElement.innerText);
-                let notesStyle = null;
                 if (bHasNotes) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
@@ -130,7 +131,14 @@ class CitationService {
                     notesStyle,
                 );
             }).then(function(internalId) {
-                return { internalId, bHasNotes }; 
+                /** @type {{internalId: string, notesStyle?: "footnotes" | "endnotes"}} */
+                const res = {
+                    internalId
+                }
+                if (notesStyle) {
+                    res.notesStyle = notesStyle;
+                }
+                return res;
             });
     }
 
@@ -548,7 +556,7 @@ class CitationService {
 
     /**
      * @param {Array<SearchResultItem>} items
-     * @returns {Promise<{internalId: string, bHasNotes: boolean}>}
+     * @returns {Promise<{internalId: string, notesStyle?: "footnotes" | "endnotes"}>}
      */
     async insertSelectedCitations(items) {
         try {

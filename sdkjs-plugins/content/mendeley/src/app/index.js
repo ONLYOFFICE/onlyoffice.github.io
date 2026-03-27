@@ -449,8 +449,8 @@ import "../styles.css";
                 .then(function (result) {
                     internalId = result.internalId;
                     selectCitation.removeItems(Object.keys(items));
-                    if (result.bHasNotes) {
-                        return citationService.updateCslItems(false);
+                    if (result.notesStyle) {
+                        return citationService.updateCslItemsInNotes(result.notesStyle);
                     } else {
                         return citationService.updateCslItems();
                     }
