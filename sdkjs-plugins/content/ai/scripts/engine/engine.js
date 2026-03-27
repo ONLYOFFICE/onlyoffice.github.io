@@ -30,165 +30,101 @@
  *
  */
 
-(function(window, undefined)
-{
-	window.AI = window.AI || {};
-	var AI = window.AI;
-
-	if (!AI.isLocalDesktop)
-		return;
-
-	window.fetch = function(url, obj) {
-		function TextResponse(text, isOk) {
-			if (isOk)
-				this.textResponse = text;
-			else
-				this.message = text;
-
-			this.text = function() { return new Promise(function(resolve) {
-				resolve(text)
-			})};
-			this.json = function() { return new Promise(function(resolve, reject) {
-				try {
-					resolve(JSON.parse(text));
-				} catch (error) {
-					reject(error);
-				}
-			})};
-			this.ok = isOk;
+function fetchExternal(url, options, isStreaming) {
+	if (!window.externalFetchRecords) {
+		window.externalFetchRecords = {
+			counter : 0,
+			requests : {}
 		};
+		window.Asc.plugin.attachEditorEvent("ai_onExternalFetch", function(e) {
+			let request = window.externalFetchRecords.requests[e.id];
+			if (!request)
+				return;
 
-		return new Promise(function (resolve, reject) {
-			var xhr = new XMLHttpRequest();
-			xhr.open(obj.method, url, true);
+			if (e.type === "error") {
+				if (request.controller)
+					request.controller.close();
+				request.resolve(new Error(e.error));
+				delete window.externalFetchRecords.requests[e.id];
+				return;
+			}
 
-			for (let h in obj.headers)
-				if (obj.headers.hasOwnProperty(h))
-					xhr.setRequestHeader(h, obj.headers[h]);
-
-			xhr.onload = function() {
-				if (this.status == 200 || this.status == 0)
-					resolve(new TextResponse(this.response, true));
-				else
-					resolve(new TextResponse(this.response, false));
-			};
-			xhr.onerror = function() {
-				reject(new TextResponse(this.response || "Failed to fetch.", false));
-			};
-
-			xhr.send(obj.body);
-		});
-	};
-
-	/*
-	window.fetchStreamed = function(url, obj) {
-		function StreamResponse(xhr) {
-			this.ok = xhr.status === 200 || xhr.status === 0;
-			this.status = xhr.status;
-			this.statusText = xhr.statusText;
-			this.url = url;
-			
-			if (false) {
-				this.headers = new Map();
-				const headerStr = xhr.getAllResponseHeaders();
-				if (headerStr) {
-					headerStr.split('\r\n').forEach(function(line) {
-						const colonIndex = line.indexOf(': ');
-						if (colonIndex > 0) {
-							const name = line.substring(0, colonIndex).toLowerCase();
-							const value = line.substring(colonIndex + 2);
-							this.headers.set(name, value);
+			if (e.type === "response") {
+				if (request.streaming) {
+					let stream = new ReadableStream({
+						start : function(controller) {
+							request.controller = controller;
 						}
 					});
+
+					let response = new Response(stream, { 
+						status : e.status,
+						headers : e.headers
+					});
+
+					request.resolve(response);
+				} else {
+					let response = new Response(e.body, { 
+						status : e.status,
+						headers : e.headers
+					});
+
+					request.resolve(response);
+					delete window.externalFetchRecords.requests[e.id];
 				}
 			}
 
-			let streamController;
-			let bufferLen = 0;
-			
-			this.body = new ReadableStream({
-				start: function(controller) {
-					streamController = controller;
+			if (e.type === "chunk" && request.streaming && request.controller) {
+				request.controller.enqueue(new TextEncoder().encode(e.chunk));
+			}
+
+			if (e.type === "end" && request.streaming && request.controller) {
+				request.controller.close();
+				delete window.externalFetchRecords.requests[e.id];
+			}			
+		});
+	}
+
+	return new Promise((resolve, reject) => {
+		let request = {
+			id : ++window.externalFetchRecords.counter,
+			streaming : isStreaming,
+			resolve : resolve,
+			reject : reject,
+			controller : null
+		};
+
+		window.externalFetchRecords.requests[request.id] = request;
+
+		if (options && options.signal) {
+			options.signal.addEventListener('abort', function(){
+				if (!request.aborted) {
+					request.aborted = true;
+					
+					window.Asc.plugin.sendEvent("ai_onExternalFetch", {
+						id : request.id,
+						type : "abort"
+					});
+					
+					if (request.controller) {
+						request.controller.close();
+					}
+					
+					request.resolve(new Error("Request aborted"));
+					delete window.externalFetchRecords.requests[request.id];
 				}
 			});
-
-			const processStreamData = function() {
-				if (!xhr.response)
-					return;
-
-				let data = new Uint8Array(xhr.response);
-				if (0 === bufferLen) {
-					streamController.enqueue(data);
-				} else {
-					streamController.enqueue(data.slice(bufferLen));
-				}
-				bufferLen = data.length;
-				console.log("progress: " + bufferLen);
-			};
-
-			xhr.addEventListener('progress', function(){
-				processStreamData();
-			});
-			xhr.addEventListener('load', function() {
-				processStreamData();
-				streamController.close();
-			});
-			xhr.addEventListener('error', function() {
-				streamController.error(new Error('Stream error'));
-			});
-
-			this.text = async function() {
-				return xhr.responseText || "";
-			};
-
-			this.json = async function() {
-				let text = await this.text();
-				try {
-					return JSON.parse(text);
-				} catch (error) {
-					return {};
-				}
-			};
 		}
 
-		return new Promise(function(resolve, reject) {
-			const xhr = new XMLHttpRequest();
-			const method = obj.method || 'GET';
-		
-			xhr.open(method, url, true);
-
-			if (obj.headers) {
-				const headerKeys = Object.keys(obj.headers);
-				let i = 0;
-				while (i < headerKeys.length) {
-					const key = headerKeys[i];
-					xhr.setRequestHeader(key, obj.headers[key]);
-					i++;
-				}
-			}
-
-			xhr.responseType = "arraybuffer";
-			xhr.onreadystatechange = function() {
-				console.log("readyState: " + this.readyState);
-				if (this.readyState === 2) {
-					resolve(new StreamResponse(this, true));
-				}
-			};
-
-			xhr.onerror = function() {
-				reject(new Error('Network error'));
-			};
-
-			xhr.ontimeout = function() {
-				reject(new Error('Request timeout'));
-			};
-
-			xhr.send(obj.body || null);
+		window.Asc.plugin.sendEvent("ai_onExternalFetch", {
+			id : request.id,
+			url : url,
+			options : options,
+			streaming : isStreaming,
+			type: "request"
 		});
-	};
-	*/
-
-})(window);
+	});
+}
 
 (function(window, undefined)
 {
@@ -210,6 +146,7 @@
 					}
 				});
 			} else {
+				let requestUrl = message.url;
 				let request = {
 					method: message.method,
 					headers: message.headers
@@ -228,24 +165,50 @@
 							})
 						}
 						if (AI.serverSettings){
-							message.url = AI.serverSettings.proxy;
+							requestUrl = AI.serverSettings.proxy;
 							request["headers"] = {
 								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
 							}
 						} else {
-							message.url = AI.PROXY_URL;
+							requestUrl = AI.PROXY_URL;
 						}
 					}
-				}				
-
+				}
+				
 				try {
-					fetch(message.url, request)
+					let _fetch = fetch;
+					if (requestUrl.startsWith("[external]"))
+						_fetch = fetchExternal;
+					
+					let fetchResponse;
+					_fetch(requestUrl, request)
 						.then(function(response) {
-							return response.json()
+							fetchResponse = response;
+
+							if (response instanceof Error) {
+								resolve({ error: 1, message: response.message || "" });
+								return;
+							}
+
+							if (typeof response === "string") {
+								resolve({ error: 1, message: response });
+								return;
+							}
+							
+							return response.text();
+						})
+						.then(function(text) {
+							try {
+								return JSON.parse(text)
+    						} catch {
+      							return { error : text };
+    						}
 						})
 						.then(function(data) {
 							if (data.error)
 								resolve({error: 1, message: data.error.message ? data.error.message : ((typeof data.error === "string") ? data.error : "")});
+							else if (fetchResponse && fetchResponse.status == 401 )
+								resolve({error: 1, message: fetchResponse.statusText ? fetchResponse.statusText : "Unauthorized"});	
 							else
 								resolve({error: 0, data: data.data ? data.data : data});
 						})
@@ -260,147 +223,69 @@
 	}
 
 	async function requestWrapperStream(message) {
-
-		function FetchReader(reader) {
+		function FetchReader(reader, abortController) {
 			this.reader = reader;
 			this.decoder = new TextDecoder();
+			this.abortController = abortController;
 
 			this.read = async function() {
 				try {
 					const { done, value } = await this.reader.read();
 					return {
-						done: done, 
+						done: done,
 						value: done ? "" : this.decoder.decode(value, { stream: true })
 					};
 				}
 				catch (error) {
-					return { 
-						error: 1, 
-						message: error.message ? error.message : "" 
+					if (error.name === "AbortError") {
+						return { done: true };
+					}
+					return {
+						error: 1,
+						message: error.message || ""
 					};
 				}
 			};
-		}
 
-		function SimpleRequestReader() {
-			this.decoder = new TextDecoder();
-			this.isComplete = false;
-			this.error = "";
-			this.data = null;
-			this.resolver = null;
-
-			this._complete = function(data) {
-				this.isComplete = true;
-				this._resolve();
-			};
-			
-			this._progress = function(data) {
-				this.data = AscCommon.Base64.decode(data);
-				this._resolve();
-			};
-
-			this._error = function(error) {
-				this.isComplete = true;
-				this.error = error;
-				this._resolve();
-			};
-
-			this._resolve = function() {
-				if (!this.resolver)
-					return;
-
-				if (this.isComplete) {
-					if ("" == this.error) {
-						this.resolver({
-							done: true, 
-							value: ""
-						});
-					}
-					else {
-						this.resolver({
-							error: 1, 
-							message: this.error
-						});
-					}
-					this.resolver = null;
-				}
-
-				if (this.data) {
-					this.resolver({
-						done: false, 
-						value: this.decoder.decode(this.data, { stream: true }) 
-					});
-					this.resolver = null;
-					this.data = null;
-				}				
-			};
-
-			this.read = async function() {
-				return new Promise((resolve) => {
-					this.resolver = resolve;
-					this._resolve();
-				});
-			};			
-		}
-
-		return new Promise(async function (resolve, reject) {
-			if (false) {
-				var reader = new SimpleRequestReader();
-				window.AscSimpleRequest.createRequest({
-					url: message.url,
-					method: message.method + ":stream",
-					headers: message.headers,
-					body: message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : ""),
-					complete: function(e, status) {
-						let data = JSON.parse(e.responseText);
-						reader._complete(data);
-					},
-					error: function(e, status, error) {
-						reader._error(error);
-					},
-					progress: function(e, status) {
-						reader._progress(e.responseText);
-					}
-				});
-				resolve(reader);
-			} else {
-				let request = {
-					method: message.method,
-					headers: message.headers
-				};
-				if (request.method != "GET") {
-					request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
-
-					if (message.isUseProxy) {
-						request = {
-							"method" : request.method,
-							"body" : JSON.stringify({
-								"target" : message.url,
-								"method" : request.method,
-								"headers" : request.headers,
-								"data" : request.body
-							})
-						}
-						if (AI.serverSettings){
-							message.url = AI.serverSettings.proxy;
-							request["headers"] = {
-								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
-							}
-						} else {
-							message.url = AI.PROXY_URL;
-						}
-					}
-				}
-				
+			this.abort = async function() {
 				try {
-					const response = await fetch(message.url, request);
-					resolve(response.body ? new FetchReader(response.body.getReader()) : null);
-				}
-				catch (error) {
-					resolve(null);
-				}
-			}
-		});
+					if (this.abortController)
+						this.abortController.abort();
+				} catch {}
+
+				try {
+					if (this.reader)
+						await this.reader.cancel();
+				} catch {}
+			};
+		}
+
+		let abortController = new AbortController();
+
+		let request = {
+			method: message.method,
+			headers: message.headers,
+			signal: abortController.signal
+		};
+
+		if (request.method !== "GET") {
+			request.body = message.isBlob
+				? message.body
+				: (message.body ? JSON.stringify(message.body) : "");
+		}
+
+		try {
+			let response = !message.url.startsWith("[external]")
+				? await fetch(message.url, request)
+				: await fetchExternal(message.url, request, true);
+
+			return response.body
+				? new FetchReader(response.body.getReader(), abortController)
+				: null;
+		}
+		catch (error) {
+			return null;
+		}
 	}
 
 	AI.TmpProviderForModels = null;
@@ -422,7 +307,7 @@
 	AI._extendBody = function(_provider, body) {
 		let provider = _provider.createInstance ? _provider : AI.Storage.getProvider(_provider.name);
 		if (!provider) provider = new AI.Provider();
-		let bodyPr = provider.getRequestBodyOptions();
+		let bodyPr = provider.getRequestBodyOptions(body);
 
 		if (provider.isUseProxy())
 			bodyPr.target = provider.url;
@@ -467,6 +352,7 @@
 			function resolveRequest(data) {
 				if (data.error)
 					resolve({
+						provider: provider.name,
 						error : 1,
 						message : data.message,
 						models : []
@@ -497,6 +383,7 @@
 					}
 
 					resolve({
+						provider: provider.name,
 						error : 0,
 						message : "",
 						models : AI.TmpProviderForModels.modelsUI
@@ -514,9 +401,10 @@
 				return;
 			}
 
+			let url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models);
 			let headers = AI._getHeaders(provider);
 			requestWrapper({
-				url : AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Models),
+				url : url,
 				headers : headers,
 				method : "GET"
 			}).then(function(data) {
@@ -529,6 +417,11 @@
 		this.modelUI = model;
 		this.model = null;
 		this.errorHandler = null;
+
+		if (model.id.startsWith(AI.externalModelPrefix)) {
+			this.model = this.modelUI;
+			return;
+		}
 
 		if ("" !== model.provider) {
 			let provider = null;
@@ -551,10 +444,11 @@
 		}
 	};
 
-	AI.Request.create = function(action) {
+	AI.Request.create = function(action, disableSettings) {
 		let model = AI.Storage.getModelById(AI.Actions[action].model);
 		if (!model) {
-			onOpenSettingsModal();
+			if (!disableSettings)
+				onOpenSettingsModal();
 			return null;
 		}
 		return new AI.Request(model);
@@ -579,7 +473,10 @@
 					this.errorHandler(err);
 				else {
 					if (true) {
-						await Asc.Library.SendError(err.message, 0);
+						// timer for exit from long action
+						setTimeout(async function(){
+							await Asc.Library.SendError(err.message, 0);
+						}, 100);						
 					} else {
 						// since 8.3.0!!!
 						await Asc.Editor.callMethod("ShowError", [err.message, 0]);
@@ -596,6 +493,11 @@
 	// CHAT REQUESTS
 	AI.Request.prototype.chatRequest = async function(content, block, streamFunc) {
 		return await this._wrapRequest(this._chatRequest, content, block !== false, streamFunc);
+	};
+
+	// Chat request with full response (includes tool_calls)
+	AI.Request.prototype.chatRequestAgent = async function(content, block, streamFunc) {
+		return await this._wrapRequest(this._chatRequestAgent, content, block !== false, streamFunc);
 	};
 
 	AI.Request.prototype._chatRequest = async function(content, streamFunc) {
@@ -696,7 +598,7 @@
 		let requestBody = {};
 		let model = this.model;
 		let processResult = function(data) {
-			let result = provider.getChatCompletionsResult(data, model);
+			let result = provider.getChatCompletionsResult(data, model, isStreaming ? false : true);
 			if (result.content.length === 0)
 				return "";
 
@@ -731,6 +633,8 @@
 				readerAsync = await requestWrapperStream(objRequest);
 
 			if (!readerAsync) {
+				if (isStreaming && objRequest.body.stream)
+					delete objRequest.body.stream;
 				let result = await requestWrapper(objRequest);
 				if (result.error) {
 					throw {
@@ -761,21 +665,47 @@
 					let resultObj = getStreamedResult(tail + readData.value);
 					tail = resultObj.tail;
 
-					let chunks = eval(resultObj.result);
+					//let chunks = eval(resultObj.result);
+					let chunks = JSON.parse(resultObj.result);
+
+					let errorObj = null;
+					try {
+						if (chunks.error)
+							errorObj = chunks.error;
+						else if (chunks[0].error)
+							errorObj = chunks[0].error;
+						else if (chunks.data && chunks.data.error)
+							errorObj = chunks.data.error;
+						else if (chunks[0].data && chunks[0].data.error)
+							errorObj = chunks[0].data.error;
+					} catch (err) {					
+					}
+
+					if (errorObj) {
+						throw {
+							error : errorObj, 
+							message : errorObj.message || JSON.stringify(errorObj)
+						};
+						return;
+					}
 
 					let dataChunk = "";
 					for (let j = 0, len = chunks.length; j < len; j++) {
 						dataChunk += processResult(chunks[j]);
 
 						// TODO: MD support
-						dataChunk = dataChunk.replace(/\n\n/g, '\n');
+						//dataChunk = dataChunk.replace(/\n\n/g, '\n');
 					}
 
-					//console.log(dataChunk);
 					allChunks += dataChunk;
 
-					if (streamFunc)
-						await streamFunc(dataChunk);
+					if (streamFunc) {
+						let isBreak = await streamFunc(dataChunk);
+						if (isBreak === true) {
+							await readerAsync.abort();
+							break;
+						}
+					}
 				}
 				return allChunks;
 			}
@@ -830,6 +760,227 @@
 				}				
 			}
 			return resultText;
+		}
+	};
+
+	// Version for agent
+	AI.Request.prototype._chatRequestAgent = async function(content, streamFunc) {
+		let provider = null;
+		if (this.modelUI)
+			provider = AI.Storage.getProvider(this.modelUI.provider);
+
+		if (!provider) {
+			throw {
+				error : 1,
+				message : "Please select the correct model for action."
+			};
+		}
+
+		let headers = AI._getHeaders(provider);
+
+		let objRequest = {
+			headers : headers,
+			method : "POST"
+		};
+
+		let isStreaming = (undefined !== streamFunc);
+		let options = { streaming: isStreaming };
+
+		objRequest.url = AI._getEndpointUrl(provider, AI.Endpoints.Types.v1.Chat_Completions, this.model, options);
+		objRequest.body = provider.getChatCompletions({ messages : content.messages }, this.model);
+
+		if (content.tools) {
+			provider.addTools(objRequest.body, content.tools);
+		}
+
+		if (isStreaming && options.streamingBody !== false) {
+			objRequest.body.stream = true;
+		}
+
+		objRequest.isUseProxy = AI._extendBody(provider, objRequest.body);
+
+		let processResult = function(data, model, isStreaming) {
+			let result = provider.getChatCompletionsResult(data, model, isStreaming ? false : true);
+			if (result.content.length === 0)
+				return "";
+
+			if (0 === result.content[0].indexOf("<think>")) {
+				let end = result.content[0].indexOf("</think>");
+				if (end !== -1)
+					result.content[0] = result.content[0].substring(end + 8);
+			}
+
+			return result.content[0];
+		};
+
+		if (isStreaming) {
+			let readerAsync = await requestWrapperStream(objRequest);
+
+			if (!readerAsync) {
+				if (objRequest.body.stream)
+					delete objRequest.body.stream;
+				let result = await requestWrapper(objRequest);
+				if (result.error) {
+					throw {
+						error : result.error,
+						message : result.message
+					};
+				}
+				return {
+					content: processResult(result, this.model, true),
+					tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
+					raw: result
+				};
+			}
+
+			// Streaming processing
+			let allContent = "";
+			let tail = "";
+			let isSimpleStream = content.tools ? true : false;
+			
+			let isBufferingFunction = false;
+			let functionBuffer = "";
+
+			let allTools = Object.create(null);
+
+			while (true) {
+				if (window.AgentState.isStopped) {
+					await readerAsync.abort();
+					break;
+				}
+
+				const readData = await readerAsync.read();
+				if (readData.error) {
+					throw {
+						error : readData.error,
+						message : readData.message
+					};
+				}
+
+				if (readData.done)
+					break;
+
+				let resultObj = getStreamedResult(tail + readData.value);
+				tail = resultObj.tail;
+
+				let chunks = JSON.parse(resultObj.result);
+
+				let errorObj = null;
+				try {
+					if (chunks.error)
+						errorObj = chunks.error;
+					else if (chunks[0].error)
+						errorObj = chunks[0].error;
+					else if (chunks.data && chunks.data.error)
+						errorObj = chunks.data.error;
+					else if (chunks[0].data && chunks[0].data.error)
+						errorObj = chunks[0].data.error;
+				} catch (err) {
+				}
+
+				if (errorObj) {
+					throw {
+						error : errorObj,
+						message : errorObj.message || JSON.stringify(errorObj)
+					};
+				}
+
+				for (let j = 0, len = chunks.length; j < len; j++) {
+					let chunk = chunks[j];
+
+					// TOOLS DETECTION (only if content tools was presented):
+					if (content.tools) {
+						// chunks from streaming
+						let chunkToolCalls = provider.getToolCallsResult ? provider.getToolCallsResult(chunk) : null;
+						if (chunkToolCalls && chunkToolCalls.length > 0) {
+							for (let tc of chunkToolCalls) {
+								let index = tc.index !== undefined ? tc.index : 0;
+
+								if (!allTools[index]) {
+									allTools[index] = {
+										index: index,
+										id: tc.id || '',
+										type: tc.type || 'function',
+										function: {
+											name: tc.function?.name || '',
+											arguments: tc.function?.arguments || ''
+										}
+									};
+								} else {
+									if (tc.id) allTools[index].id = tc.id;
+									if (tc.type) allTools[index].type = tc.type;
+									if (tc.function?.name) allTools[index].function.name = tc.function.name;
+
+									if (tc.function?.arguments) {
+										allTools[index].function.arguments += tc.function.arguments;
+									}
+								}
+							}
+							continue;
+						}
+					}
+
+					let chunkContent = processResult(chunk, this.model, true);
+					if (!chunkContent)
+						continue;
+
+					allContent += chunkContent;
+					if (isSimpleStream) {
+						await streamFunc(chunkContent);
+					} else if (isBufferingFunction) {
+						functionBuffer += chunkContent;
+					} else {
+						let testFuncCalling = "[functionCalling";
+						let testAllContent = allContent.trimStart();
+
+						if (testAllContent.length >= testFuncCalling.length) {
+							if (!allContent.startsWith(testFuncCalling)) {
+								isSimpleStream = true;
+								functionBuffer = "";
+								await streamFunc(allContent);
+							} else {
+								isBufferingFunction = true;
+								functionBuffer = testAllContent;
+							}
+						} else if (testFuncCalling.startsWith(testAllContent)) {
+							functionBuffer = testAllContent;
+						} else {
+							isSimpleStream = true;
+							functionBuffer = "";
+							await streamFunc(allContent);
+						}
+					}
+				}				
+			}
+
+			if (!window.AgentState.isStopped && !isBufferingFunction && functionBuffer.length > 0) {
+				await streamFunc(allContent);
+			}
+
+			let finalToolCalls = null;
+			if (Object.keys(allTools).length > 0) {
+				finalToolCalls = Object.values(allTools);
+			}
+
+			return {
+				content: allContent,
+				tool_calls: finalToolCalls,
+				raw: null
+			};
+		} else {
+			let result = await requestWrapper(objRequest);
+			if (result.error) {
+				throw {
+					error : result.error,
+					message : result.message
+				};
+			}
+
+			return {
+				content: processResult(result, this.model, true),
+				tool_calls: provider.getToolCallsResult ? provider.getToolCallsResult(result) : null,
+				raw: result
+			};
 		}
 	};
 
@@ -1121,7 +1272,7 @@
 	};
 
 	function getStreamedResult(responseText) {
-		
+
 		let result = "[";
 
 		let isEscaped = false;
@@ -1163,7 +1314,7 @@
 						firstObject = false;
 						
 						
-						result += ("{ data : " + responseText.substring(curObjectStartPos, i) + "}");
+						result += ("{ \"data\" : " + responseText.substring(curObjectStartPos, i) + "}");
 
 						while (i < inputLen) {
 							char = responseText[i];
@@ -1184,6 +1335,7 @@
 		}
 
 		result += "]";
+
 		return {
 			result : result,
 			tail : (curObjectPos === inputLen) ? "" : responseText.substring(curObjectPos)

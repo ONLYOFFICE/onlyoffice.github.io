@@ -1,0 +1,23 @@
+{
+  "name": "svg-path-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/generate-icons-json.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "fs-extra": "^11.3.1",
+    "glob": "^11.0.3",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "cheerio": "^1.1.2"
+  }
+}

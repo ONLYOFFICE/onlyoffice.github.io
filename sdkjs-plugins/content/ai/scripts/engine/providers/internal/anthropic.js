@@ -74,9 +74,22 @@ class Provider extends AI.Provider {
 		return super.getEndpointUrl(endpoint, model);
 	}
 
-	getRequestBodyOptions() {
+	getRequestBodyOptions(body) {
+		let max_output_tokens = 64000;
+		if (body.model) {
+			if (body.model.indexOf("-4-") != -1 || body.model.indexOf("-4-1-") != -1) {
+				max_output_tokens = 32000;
+			}
+			else if (body.model.indexOf("-3-5-") != -1) {
+				max_output_tokens = 8096;
+			}
+			else if (body.model.indexOf("-3-") != -1) {
+				max_output_tokens = 4096;
+			}
+		}
+
 		return {
-			max_tokens : 4096
+			max_tokens : max_output_tokens
 		};
 	}
 
@@ -97,6 +110,76 @@ class Provider extends AI.Provider {
 		if (systemPrompt !== "") {
 			result.system = systemPrompt;
 		}
+
+		if (result.messages) {
+			let converted = [];
+			for (let i = 0; i < result.messages.length; i++) {
+				let msg = result.messages[i];
+
+				if (msg.role === "assistant" && msg.tool_calls) 
+				{
+					let contentBlocks = [];
+					if (msg.content) 
+					{
+						contentBlocks.push({ type: "text", text: msg.content });
+					}
+					for (let tc of msg.tool_calls) 
+					{
+						let inputObj = tc.function.arguments;
+						if (typeof inputObj === "string")
+							try { inputObj = JSON.parse(inputObj); } catch(e) { inputObj = {}; }
+
+						contentBlocks.push({
+							type: "tool_use",
+							id: tc.id,
+							name: tc.function.name,
+							input: inputObj
+						});
+					}
+					converted.push({ role: "assistant", content: contentBlocks });
+					continue;
+				}
+
+				if (msg.role === "tool") {
+					converted.push({
+						role: "user",
+						content: [{
+							type: "tool_result",
+							tool_use_id: msg.tool_call_id,
+							content: msg.content || ""
+						}]
+					});
+					continue;
+				}
+
+				converted.push(msg);
+			}
+
+			if (true)
+			{
+				let merged = [];
+				for (let i = 0; i < converted.length; i++) 
+				{
+					let prev = merged.length > 0 ? merged[merged.length - 1] : null;
+					if (prev && prev.role === converted[i].role) 
+					{
+						let prevContent = Array.isArray(prev.content) ? prev.content : [{ type: "text", text: prev.content }];
+						let curContent = Array.isArray(converted[i].content) ? converted[i].content : [{ type: "text", text: converted[i].content }];
+						prev.content = prevContent.concat(curContent);
+					} 
+					else 
+					{
+						merged.push({ role: converted[i].role, content: converted[i].content });
+					}
+				}
+				result.messages = merged;
+			}
+			else
+			{
+				result.messages = converted;
+			}			
+		}
+
 		return result;
 	}
 
@@ -111,12 +194,12 @@ class Provider extends AI.Provider {
 				{
 					role: "user",
 					content: [
-						{							
+						{
 							type: "text",
 							text: message.prompt
 						},
 						{
-							type: "image", 
+							type: "image",
 							source: {
 								type: "base64",
 								media_type: AI.ImageEngine.getMimeTypeFromBase64(message.image),
@@ -127,6 +210,65 @@ class Provider extends AI.Provider {
 				}
 			]
 		}
+	}
+
+	addTools(body, tools) {
+		if (!tools || tools.length === 0)
+			return;
+
+		body.tools = tools.map(tool => ({
+			name: tool.name,
+			description: tool.description,
+			input_schema: tool.parameters
+		}));
+	}
+
+	getToolCallsResult(message) {
+		let data = message.data || message;
+		let content = data.content;
+		if (content && Array.isArray(content))
+		{
+			let toolCalls = [];
+			for (let item of content) {
+				if (item.type === 'tool_use') {
+					toolCalls.push({
+						id: item.id,
+						type: 'function',
+						function: {
+							name: item.name,
+							arguments: JSON.stringify(item.input)
+						}
+					});
+				}
+			}
+
+			return toolCalls.length > 0 ? toolCalls : null;
+		}
+
+		if (data.type === 'content_block_start' && data.content_block?.type === 'tool_use')
+		{
+			return [{
+				index: data.index || 0,
+				id: data.content_block.id,
+				type: 'function',
+				function: {
+					name: data.content_block.name,
+					arguments: ''
+				}
+			}];
+		}
+
+		if (data.type === 'content_block_delta' && data.delta?.type === 'input_json_delta')
+		{
+			return [{
+				index: data.index || 0,
+				function: {
+					arguments: data.delta.partial_json || ''
+				}
+			}];
+		}
+
+		return null;
 	}
 
 }

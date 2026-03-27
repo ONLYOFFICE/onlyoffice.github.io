@@ -1,0 +1,104 @@
+{
+  "name": "Text Highlighter",
+  "offered": "Office Extensions Group",
+  "nameLocale": {
+    "en-US": "Text Highlighter",
+    "ru": "Выделение текста",
+    "de": "Texthervorhebung",
+    "fr": "Surligneur de texte",
+    "es": "Resaltador de texto",
+    "pt-BR": "Marcador de Texto",
+    "it": "Evidenziatore di Testo",
+    "ja": "テキストハイライター",
+    "uk": "Виділення тексту",
+    "zh": "文本高亮",
+    "cs-CS": "Zvýrazňovač textu",
+    "sq-AL": "Theksues Teksti",
+    "sr-Cyrl-RS": "Истакнувач текста",
+    "sr-Latn-RS": "Istaknuvač teksta"
+  },
+
+  "version": "1.0.0",
+  "baseUrl": "https://raza2004.github.io/onlyoffice.github.io/sdkjs-plugins/content/texthighlighter/",
+  "guid": "asc.{07FD8DFA-DFE0-4089-AL24-0730933CC804}",
+  
+  "manifestVersion": "7.3.0",
+  
+      
+  "variations": [
+    {
+      "description": "This plugin allows you to search for text and apply highlighting, color, and formatting styles in the document.",
+      "descriptionLocale": {
+        "en": "This plugin allows you to search for text and apply highlighting, color, and formatting styles in the document.",
+       "ru": "Этот плагин позволяет вам искать текст и применять выделение, цвет и стили форматирования в документе.",
+        "de": "Dieses Plugin ermöglicht das Suchen von Text und das Anwenden von Hervorhebungen, Farben und Formatierungen im Dokument.",
+        "fr": "Ce plugin vous permet de rechercher du texte et d'appliquer des styles de surlignage, de couleur et de formatage dans le document.",
+        "es": "Este complemento le permite buscar texto y aplicar estilos de resaltado, color y formato en el documento.",
+        "pt-BR": "Este plugin permite pesquisar texto e aplicar estilos de destaque, cor e formatação no documento.",
+        "it": "Questo plugin consente di cercare testo e applicare stili di evidenziazione, colore e formattazione nel documento.",
+        "ja": "このプラグインを使用すると、ドキュメント内のテキストを検索し、ハイライト、色、およびフォーマットスタイルを適用できます。",
+        "zh": "此插件允许您在文档中搜索文本并应用高亮、颜色和格式样式。",
+        "uk": "Цей плагін дозволяє виконувати пошук тексту та застосовувати виділення, колір і стилі форматування у вашому документі.",
+        "cs-CS": "Tento plugin umožňuje vyhledávat text a aplikovat zvýraznění, barvu a formátovací styly v dokumentu.",
+        "sq-AL": "Ky shtojcë ju lejon të kërkoni tekst dhe të aplikoni stilet e theksimit, ngjyrës dhe formatimit në dokument.",
+        "sr-Cyrl-RS": "Овај додатак вам омогућава да претражујете текст и примењујете стилове истакнутог текста, боје и форматирања у документу.",
+        "sr-Latn-RS": "Ovaj dodatak vam omogućava da pretražujete tekst i primenjujete stilove istaknutog teksta, boje i formatiranja u dokumentu."
+        
+      },
+      "url": "index.html",
+       "type":          "panel",
+      "size":          [300, 600],
+      "isViewer" : true,
+			"EditorsSupport"  : ["word", "pdf"],
+			"isVisual" : true,
+			"isModal" : false,
+			"isInsideMode" : true,
+			"initDataType" : "text",
+			"isUpdateOleOnResize" : true,
+			"initOnSelectionChanged": true,                          
+      "events": ["onSelectionChanged", "onClick", "onApply", "onGetSelectedText"],
+    "methods": ["ApplyHighlight", "GetSelectedText"],
+      "buttons": [],
+       "icons": ["resources/light/icon.svg","resources/light/icon@2x.svg" ],
+      "icons2": [
+        {
+          "theme": "flat",
+          "style": "light",
+          "100%": { "normal": "resources/light/icon.svg" },
+          "125%": { "normal": "resources/light/icon@1.25x.svg" },
+          "150%": { "normal": "resources/light/icon@1.5x.svg" },
+          "175%": { "normal": "resources/light/icon@1.75x.svg" },
+          "200%": { "normal": "resources/light/icon@2x.svg" },
+          "default": { "normal": "resources/light/icon.svg" }
+        },
+        {
+          "theme": "flatDark",
+          "style": "dark",
+          "100%": { "normal": "resources/dark/icon.svg" },
+          "125%": { "normal": "resources/dark/icon@1.25x.svg" },
+          "150%": { "normal": "resources/dark/icon@1.5x.svg" },
+          "175%": { "normal": "resources/dark/icon@1.75x.svg" },
+          "200%": { "normal": "resources/dark/icon@2x.svg" }
+        }
+      ],
+
+       "store": {
+        "background": {
+          "light": "#107cbc",
+          "dark":  "#5f55af"
+        },
+        "screenshots" : [
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png",
+					"resources/store/screenshots/screen_4.png"
+				],
+        "categories": ["work","specAbilities"],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark":  "resources/store/icons"
+        }
+      }
+    }
+  ]
+}

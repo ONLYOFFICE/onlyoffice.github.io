@@ -127,7 +127,7 @@
 		None            : 0x00,
 
 		Chat            : 0x01,
-		
+
 		Image           : 0x02,
 
 		Embeddings      : 0x04,
@@ -140,7 +140,9 @@
 
 		Code            : 0x40,
 
-		Vision          : 0x80
+		Vision          : 0x80,
+
+		Tools           : 0x100
 
 	};
 
@@ -151,6 +153,11 @@
 
 	AI.InternalProviders = [];
 	AI.createProviderInstance = function(name, url, key, addon) {
+		// order is important
+		for (let i = 0, len = window.AI.ExternalCustomProviders.length; i < len; i++) {
+			if (name === AI.ExternalCustomProviders[i].name)
+				return AI.ExternalCustomProviders[i].createInstance(name, url, key, addon || AI.ExternalCustomProviders[i].addon);
+		}
 		for (let i = 0, len = window.AI.InternalCustomProviders.length; i < len; i++) {
 			if (name === AI.InternalCustomProviders[i].name)
 				return AI.InternalCustomProviders[i].createInstance(name, url, key, addon || AI.InternalCustomProviders[i].addon);
@@ -198,6 +205,7 @@
 
 	AI.InternalCustomProvidersSources = {};
 	AI.InternalCustomProviders = [];
+	AI.ExternalCustomProviders = [];
 	AI.providersWeights = {};
 
 	AI.loadCustomProviders = function() {
@@ -240,6 +248,50 @@
 
 			return true;
 
+		} catch(err) {			
+		}
+
+		return false;
+
+	};
+
+	AI.addExternalProvider = function(providerContent, item) {
+
+		try {
+			let content = "(function(){\n" + providerContent + "\nreturn new Provider();})();";
+			let provider = null;
+			
+			if (item.basedOn)
+			{
+				for (let i = 0, len = window.AI.InternalProviders.length; i < len; i++) {
+					let internalProvider = window.AI.InternalProviders[i];
+					if (item.basedOn === internalProvider.name)
+					{
+						provider = window.AI.InternalProviders[i].createInstance(item.name, item.url, item.key, item.addon);
+						break;	
+					}
+				}
+			}
+			if (!provider)
+				provider = eval(content);
+
+			if (!provider || !provider.name)
+				return false;
+
+			if (provider.isOnlyDesktop() && (-1 === navigator.userAgent.indexOf("AscDesktopEditor")))
+				return false;
+
+			provider.isExternal = true;
+
+			for (let i = 0, len = AI.ExternalCustomProviders.length; i < len; i++) {
+				if (AI.ExternalCustomProviders[i].name === provider.name) {
+					AI.ExternalCustomProviders.splice(i, 1);
+					break;
+				}
+			}
+
+			AI.ExternalCustomProviders.push(provider);
+			return true;
 		} catch(err) {			
 		}
 

@@ -1,0 +1,349 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    flex-flow: column;
+    display: flex;
+}
+
+textarea:focus,
+input[type="text"] {
+    outline: none;
+}
+
+input::selection,
+input::-moz-selection,
+div::selection,
+div::-moz-selection {
+    background: #d8dadc; /* Gecko Browsers */
+}
+
+.blur {
+    filter: blur(3px);
+}
+
+.link {
+    text-decoration: underline dotted;
+    cursor: pointer;
+}
+
+.flex {
+    display: flex;
+}
+
+.flexSize {
+    flex: 1;
+}
+
+.flexCenter {
+    align-items: center;
+    justify-content: center;
+}
+
+.flexCol {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.mrtop {
+    margin-top: 8px;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: hidden;
+    padding: 14px 12px 10px 12px;
+    overflow-y: auto;
+}
+
+#mainCont {
+    flex: 1;
+    overflow-y: auto;
+    & > div {
+        overflow-y: auto;
+    }
+}
+
+#loginState {
+    p {
+        margin: 1em 0;
+    }
+    & > p:first-child {
+        margin-top: 0;
+    }
+    .custom-button-container {
+        width: 100%;
+    }
+    .label > span {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+}
+
+#errorWrapper {
+    background-color: #ffffff;
+    padding: 10px 12px;
+}
+
+#docsWrapper {
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    margin-top: 17px;
+    min-height: 133px;
+}
+
+#docsHolder {
+    width: 100%;
+    overflow-x: hidden;
+}
+#nothingFound {
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+}
+
+#selectedWrapper:not(.hidden) {
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    font-size: 10px;
+    max-height: 33px;
+    margin-top: 14px;
+}
+
+#selectedHolder {
+    width: 100%;
+    overflow-y: hidden;
+}
+
+#selectedInfo:not(.hidden) {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#searchWrapper {
+    display: flex;
+    gap: 4px;
+    justify-content: space-between;
+    position: relative;
+    margin-top: 13px;
+    .selectbox-container {
+        position: absolute;
+    }
+    .selectbox-container .selectbox-header {
+        opacity: 0;
+    }
+}
+
+.controls-holder {
+    padding-top: 4px;
+    overflow-y: visible;
+    & > .custom-button-container {
+        width: 100%;
+    }
+    button {
+        margin-top: 8px;
+    }
+}
+
+#buttonsWrapper .custom-button-container:first-child {
+    width: calc(100% - 28px);
+}
+
+#prefixSuffixDiv {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    input[type="text"] {
+        width: 50%;
+    }
+}
+
+#styleWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 8px;
+    & > label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .style-select-combination {
+        position: relative;
+    }
+}
+
+#styleSelectedListOther {
+    position: absolute;
+    .selectbox-header {
+        opacity: 0;
+    }
+}
+
+.notesStyle {
+    & > span {
+        font-weight: bold;
+    }
+    .radioHolder {
+        margin-top: 8px;
+    }
+    label:first-of-type {
+        margin-right: 18px;
+    }
+}
+
+.scrollThumb {
+    width: 8px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.errorMsg {
+    color: #d9534f;
+}
+
+.doc {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    padding: 1px 6px 6px 6px;
+    max-height: 41px;
+    overflow: hidden;
+
+    & > div {
+        display: flex;
+        gap: 6px;
+    }
+    & .docInfo {
+        min-width: 0;
+        flex-direction: column;
+        white-space: nowrap;
+        margin-top: 0;
+    }
+    & > div:first-child .checkbox-container {
+        width: calc(100% - 27px);
+    }
+    & > div:first-child label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    & .selectbox-arrow {
+        transition: transform 0.3s ease;
+        width: 24px;
+        height: 22px;
+        text-align: center;
+        line-height: 20px;
+        cursor: pointer;
+        position: relative;
+    }
+    & .selectbox-arrow::after {
+        content: "";
+        display: inline-block;
+        width: 34px;
+        height: 36px;
+        position: absolute;
+        top: -7px;
+        left: -6px;
+    }
+
+    &:not(.doc-open) > div:nth-child(n + 3) {
+        display: none;
+    }
+
+    &.doc-open {
+        max-height: none;
+        overflow: visible;
+    }
+
+    &.doc-open > div:first-child .selectbox-arrow {
+        transform: rotate(180deg);
+    }
+    &.doc-open > div:not(:first-child) {
+        margin-top: 6px;
+    }
+    &.doc-open > div:last-child {
+        justify-content: end;
+    }
+    &.doc-open .docInfo {
+        white-space: normal;
+        margin-top: 6px;
+    }
+}
+.page0 > .doc:first-child {
+    margin-top: 0;
+}
+
+.secondary-text {
+    font-size: 11px;
+    color: #999999;
+}
+
+.truncate-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+#footerCont {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+#footerCont > span:first-of-type {
+    flex: 1;
+}
+
+.selDoc {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 1px;
+}
+
+.selDoc > span {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.selDoc > span:first-of-type {
+    max-width: 203px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.selDoc > span:last-of-type {
+    cursor: pointer;
+    margin-top: -2px;
+}
+
+.message-container {
+    margin-top: 12px;
+}
+
+.hidden {
+    display: none;
+}

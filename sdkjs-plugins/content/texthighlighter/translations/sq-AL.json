@@ -1,0 +1,42 @@
+{
+  "TextHighlighter": "Theksues Teksti",
+  "PluginInstructions": "Shkruani ose zgjidhni <b>një fjalë ose frazë</b> për të kërkuar në tekstin e dokumentit dhe konfiguroni cilësimet e nevojshme.",
+  
+  "TextToSearch": "Teksti për të kërkuar:",
+  "SearchPlaceholder": "Shkruani tekstin ose zgjidhni në dokument",
+  "IgnoreCase": "Injoro shkronjat e mëdha/vogla",
+
+  "HighlightColor": "Ngjyra e theksimit:",
+  "HighlightYellow": "E verdhë",
+  "HighlightGreen": "E gjelbër",
+  "HighlightBlue": "Blu",
+  "HighlightRed": "E kuqe",
+  "HighlightNone": "Pa mbushje",
+
+  "TextColorHeader": "Ngjyra e tekstit",
+  "TextColorPicker": "Zgjidh ngjyrën e tekstit",
+
+  "TextFormattingHeader": "Formatimi i tekstit",
+  "FormatBold": "Trashë",
+  "FormatItalic": "Pjerrët",
+  "FormatUnderline": "Nënvizuar",
+  "FormatStrike": "Me vijë në mes",
+
+  "ApplyButton": "Zbato",
+
+  "SearchNoResults": "Kërkimi përfundoi. <strong>Asnjë përputhje nuk u gjet.</strong>",
+  "HighlightMore": "Thekso më shumë",
+  "HighlightMore2": "Thekso më shumë",
+  "ArrowDropdown": "▸",
+
+  "SearchDone": "U krye! Kërkimi përfundoi dhe stilet u aplikuan.",
+  "MatchesFound": "Përputhje të gjetura:",
+  "RevertToOriginal": "Kthehu",
+
+  "LoadingMessage": "Duke përpunuar...",
+
+  "AboutTitle": "Theksues Teksti",
+  "AboutVersion": "Versioni 1.0.0",
+  "AboutDescription": "Ky shtesë ju lejon të kërkoni tekst dhe të aplikoni theksim, ngjyra dhe formate në dokumentin tuaj.",
+  "AboutCopyright": "© 2025 ONLYOFFICE Plugin"
+}

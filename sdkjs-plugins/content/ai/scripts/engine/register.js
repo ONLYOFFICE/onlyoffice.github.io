@@ -30,7 +30,7 @@
  *
  */
 
-function registerButtons(window, undefined)
+async function registerButtons(window, undefined)
 {
 	window.AI = window.AI || {};
 	var AI = window.AI;
@@ -49,10 +49,13 @@ function registerButtons(window, undefined)
 	buttonMain.icons = getContextMenuButtonIcons("general-ai");
 	buttonMain.addCheckers("All");
 
-	function chatWindowShow(attachedText)
+	function chatWindowShow(attachedText, isForceSend)
 	{
 		if (window.chatWindow) {
 			window.chatWindow.activate();
+			if (attachedText && attachedText.trim()) {
+				window.chatWindow.command("onAttachedText", { text: attachedText, forceSend: true });
+			}
 			return;
 		}
 
@@ -60,15 +63,23 @@ function registerButtons(window, undefined)
 		if (!requestEngine)
 			return;
 
+		let panelPlace = window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window";
+		if (panelPlace === "panel")
+			panelPlace = "panelRight";
+
+		if (attachedText && attachedText.trim())
+			panelPlace = "panelRight";
+
 		let variation = {
 			url : "chat.html",
 			description : window.Asc.plugin.tr("Chatbot"),
 			isVisual : true,
 			buttons : [],
-			icons: "resources/icons/%theme-name%(theme-default|theme-system|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
+			icons: "resources/icons/%theme-name%(theme-default|theme-classic-light)/%theme-type%(light|dark)/ask-ai%state%(normal|active)%scale%(default).png",
 			isModal : false,
 			isCanDocked: true,
-			type: window.localStorage.getItem("onlyoffice_ai_chat_placement") || "window",
+			dockedPlace: "panelRight",
+			type: panelPlace,
 			EditorsSupport : ["word", "slide", "cell", "pdf"],
 			size : [ 400, 400 ]
 		};
@@ -79,20 +90,278 @@ function registerButtons(window, undefined)
 		chatWindow.attachEvent("onWindowReady", function() {
 			Asc.Editor.callMethod("ResizeWindow", [chatWindow.id, [400, 400], [400, 400], [0, 0]]);
 			if(!hasOpenedOnce && attachedText && attachedText.trim()) {
-				chatWindow.command("onAttachedText", attachedText);
+				chatWindow.command("onAttachedText", isForceSend
+					? { text: attachedText, forceSend: true }
+					: attachedText
+				);
 			}
+
+			function isSupportVoiceInput() {
+				if (window.AscDesktopEditor)
+					return false;
+				if (window.location.protocol.startsWith("https"))
+					return true;
+
+				return true;
+			}
+
+			chatWindow.command("onVoiceInputSupport", isSupportVoiceInput());
+
 			hasOpenedOnce = true;
 		});
-		chatWindow.attachEvent("onChatMessage", async function(message) {
+		
+		var AgentState = {
+			MAX_LOOP_ITERATIONS : 10,
+			isStopped : false,
+			tools : null,
+			systemToolsPrompt : "",
+			toolsSystemPrompt : ""
+		};
+		window.AgentState = AgentState;
+
+		class ToolError extends Error {
+			constructor(message) {
+				super(message);
+				this.name = "ToolError";
+			}
+		}
+		window.AgentState.ToolError = ToolError;
+
+		chatWindow.attachEvent("onStopAgent", function() {
+			AgentState.isStopped = true;
+		});
+
+		chatWindow.attachEvent("onChatMessage", async function(messageHistory) {
+			AgentState.isStopped = false;
+
 			let requestEngine = AI.Request.create(AI.ActionType.Chat);
 			if (!requestEngine)
 				return;
 
-			let result = await requestEngine.chatRequest(message);
-			if (!result) result = "";
+			if (!window.EditorHelper)
+				window.EditorHelper = new EditorHelperImpl();
 
-			//result = result.replace(/\n\n/g, '\n');
-			chatWindow.command("onChatReply", result);
+			let provider = AI.Storage.getProvider(requestEngine.modelUI.provider);
+			let isSupportTools = provider && provider.isSupportTools(requestEngine.model, requestEngine.modelUI);
+
+			let requestData = {
+				messages: messageHistory
+			};
+
+			if (isSupportTools) {
+				if (!AgentState.tools)
+					AgentState.tools = window.EditorHelper.getTools();
+
+				if (AgentState.tools && AgentState.tools.length > 0)
+					requestData.tools = AgentState.tools;
+
+				if ("" === AgentState.toolsSystemPrompt)
+					AgentState.toolsSystemPrompt = window.EditorHelper.getToolsSystemPrompt();
+
+				if (AgentState.toolsSystemPrompt) {
+					if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+						requestData.messages.unshift({
+							role: 'system',
+							content: AgentState.toolsSystemPrompt
+						});
+					}
+				}
+			} else {
+				if ("" === AgentState.systemToolsPrompt)
+					AgentState.systemToolsPrompt = window.EditorHelper.getSystemPrompt();
+
+				if (requestData.messages.length === 0 || requestData.messages[0].role !== "system") {
+					requestData.messages.unshift({
+						role: 'system',
+						content: AgentState.systemToolsPrompt
+					});
+				}
+			}
+
+			// LOOP
+			let iteration = 0;
+			while (iteration < AgentState.MAX_LOOP_ITERATIONS && !AgentState.isStopped) {
+				iteration++;
+
+				await Asc.Editor.callMethod("StartAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+
+				let isSendedEndLongAction = false;
+				async function checkEndAction() {
+					if (!isSendedEndLongAction) {
+						await Asc.Editor.callMethod("EndAction", ["Block", "AI (" + requestEngine.modelUI.name + ")"]);
+						isSendedEndLongAction = true;
+					}
+				}
+
+				let isStreamToChat = false;
+				let fullResponse = await requestEngine.chatRequestAgent(requestData, false, async function(chunk) {
+					if (!isStreamToChat) {
+						isStreamToChat = true;
+						chatWindow.command("onChatStreamStart");
+
+						await checkEndAction();
+					}
+
+					chatWindow.command("onChatStreamChunk", chunk);
+				});
+
+				if (isStreamToChat) {
+					chatWindow.command("onChatStreamEnd");
+				}
+
+				await checkEndAction();
+
+				if (AgentState.isStopped)
+					break;
+
+				if (!fullResponse)
+					fullResponse = { content : Asc.plugin.tr("Error:") + " [provider]" };
+
+				let result = fullResponse.content || "";
+
+				let toolCalls = fullResponse.tool_calls || null;
+
+				// CHECK TOOLS
+				if (toolCalls && toolCalls.length > 0) {
+					for (let toolCall of toolCalls) {
+						if (AgentState.isStopped)
+							break;
+
+						try {
+							let funcName = toolCall.function.name;
+							let funcArgs = toolCall.function.arguments;
+
+							let argsObj = null;
+							try {
+								argsObj = typeof funcArgs === 'string' ? JSON.parse(funcArgs) : funcArgs;
+							} catch(e) {
+								argsObj = {};
+							}
+
+							chatWindow.command("onToolCallStart", {
+								type: 'native',
+								id: toolCall.id,
+								functionName: funcName,
+								humanName: window.EditorHelper.getHumanName(funcName),
+								arguments: JSON.stringify(argsObj, null, 2)
+							});
+
+							let toolResult = {};
+							try {
+								let toolResultMessage = await window.EditorHelper.names2funcs[funcName].call(argsObj);
+								if (toolResultMessage)
+									toolResultMessage = Asc.plugin.tr("Function executed successfully") + "\n" + JSON.stringify(toolResultMessage);
+								else
+									toolResultMessage = Asc.plugin.tr("Function executed successfully");
+								toolResult.message = toolResultMessage;
+							} catch (e) {
+								let errorMsg = Asc.plugin.tr("Error:") + "\n";
+								if (e.name === "ToolError") {
+									errorMsg += ("\n" + e.message);
+								}
+								toolResult = {
+									error: errorMsg
+								};
+							}
+
+							chatWindow.command("onToolCallEnd", {
+								type: 'native',
+								id: toolCall.id,
+								functionName: funcName,
+								arguments: JSON.stringify(argsObj, null, 2),
+								result: toolResult
+							});
+
+							requestData.messages.push({
+								role: 'assistant',
+								content: result || null,
+								tool_calls: [toolCall]
+							});
+
+							let toolMessage = {
+								role: 'tool',
+								tool_call_id: toolCall.id,
+								content: toolResult.message || toolResult.error || 'Success'
+							};
+							requestData.messages.push(toolMessage);
+
+							if (toolResult.error) {
+								break;
+							}
+						} catch (e) {
+							console.error("Tool execution error:", e);
+							break;
+						}
+					}
+					continue;
+				}
+
+				// CHECK PROMT FUNCTION CALLING
+				if (!toolCalls && result.startsWith("[functionCalling")) {
+					if (AgentState.isStopped)
+						break;
+
+					try {
+						let toolCallId = 'system_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+						let sysNameMatch = result.match(/\(([^)]+)\)/);
+						let sysFuncName = sysNameMatch ? sysNameMatch[1].trim() : '';
+
+						chatWindow.command("onToolCallStart", {
+							type: 'system_prompt',
+							id: toolCallId,
+							call: result,
+							humanName: sysFuncName ? window.EditorHelper.getHumanName(sysFuncName) : ''
+						});
+
+						let toolResult = await window.EditorHelper.callFunc(result);
+
+						chatWindow.command("onToolCallEnd", {
+							type: 'system_prompt',
+							id: toolCallId,
+							call: result,
+							result: toolResult
+						});
+
+						requestData.messages.push({
+							role: 'assistant',
+							content: result
+						});
+
+						if (toolResult.error) {
+							requestData.messages.push({
+								role: 'user',
+								content: "SYSTEM: Function execution failed with error: " + toolResult.error + "\nPlease try a different approach or inform the user about the issue."
+							});							
+						} else {
+							let resultMessage = "SYSTEM: " + toolResult.message;
+							if (toolResult.prompt) {
+								resultMessage += "\n" + toolResult.prompt;
+							}
+							requestData.messages.push({
+								role: 'user',
+								content: resultMessage
+							});							
+						}
+						continue;
+					} catch (e) {
+						console.error("Tool execution error:", e);
+						break;
+					}
+				}
+
+				if (!isStreamToChat && result) {
+					chatWindow.command("onChatReply", result);
+				}
+				break;
+			}
+
+			if (iteration >= AgentState.MAX_LOOP_ITERATIONS) {
+				chatWindow.command("onChatReply", "Maximum iterations reached. Please try again.");
+			}
+
+			// always end (may be twice)
+			chatWindow.command("onChatStreamEnd");
 		});
 		chatWindow.attachEvent("onChatReplace", async function(data) {
 			switch (data.type) {
@@ -136,6 +405,36 @@ function registerButtons(window, undefined)
 		chatWindow.show(variation);
 
 		window.chatWindow = chatWindow;
+	}
+	window.chatWindowShow = chatWindowShow;
+
+	let editorVersion = await Asc.Library.GetEditorVersion();
+	if (editorVersion >= 9002000 && Asc.Editor.getType() !== "pdf")
+	{
+		let buttonSub = new Asc.ButtonContextMenu(buttonMain);
+		buttonSub.text = "Grammar & Spelling";
+		buttonSub.icons = getContextMenuButtonIcons("grammar");
+		buttonSub.editors = ["word"];
+		buttonSub.addCheckers("Target", "Selection");
+		
+		let buttonAll = new Asc.ButtonContextMenu(buttonSub);
+		buttonAll.text = "Check all";
+		buttonAll.editors = ["word"];
+		buttonAll.addCheckers("Target", "Selection");
+
+		buttonAll.attachOnClick(async function(data){
+			onCheckGrammarSpelling(false);
+		});
+
+		let buttonCurrent = new Asc.ButtonContextMenu(buttonSub);
+		buttonCurrent.text = "Check current text";
+		buttonCurrent.editors = ["word"];
+		buttonCurrent.addCheckers("Target", "Selection");
+
+		buttonCurrent.attachOnClick(async function(data){
+			onCheckGrammarSpelling(true);
+		});
+	
 	}
 
 	// Submenu summarize:
@@ -423,7 +722,7 @@ function registerButtons(window, undefined)
 		let result = await requestEngine.imageOCRRequest(content);
 		if (!result) return;
 
-		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex]);
+		await Asc.Library.InsertAsMD(result, [Asc.PluginsMD.latex, Asc.PluginsMD.hr]);
 	}
 
 	const on_click_text_to_image = async function (params) {
@@ -440,9 +739,9 @@ function registerButtons(window, undefined)
 		let result = await requestEngine.imageGenerationRequest(content);
 		if (!result) return;
 
-			if (Asc.plugin.info.editorSubType === "pdf")
-				return await Asc.Library.AddGeneratedImage(result);
-			await Asc.Library.AddOleObject(result, content);
+		if (Asc.plugin.info.editorSubType === "pdf")
+			return await Asc.Library.AddGeneratedImage(result);
+		await Asc.Library.AddOleObject(result, content);
 	}
 
 	if (true)
@@ -530,12 +829,14 @@ function registerButtons(window, undefined)
 	window.buttonMainToolbar = buttonMainToolbar;
 	window.getToolBarButtonIcons = getToolBarButtonIcons;
 
+	window.buttonSettings = null;
+
 	if (!AI.serverSettings)
 	{
-		let button1 = new Asc.ButtonToolbar(buttonMainToolbar);
-		button1.text = "Settings";
-		button1.icons = getToolBarButtonIcons("settings");
-		button1.attachOnClick(function(data){
+		window.buttonSettings = new Asc.ButtonToolbar(buttonMainToolbar);
+		window.buttonSettings.text = "Settings";
+		window.buttonSettings.icons = getToolBarButtonIcons("settings");
+		window.buttonSettings.attachOnClick(function(data){
 			onOpenSettingsModal();
 		});
 	}
@@ -611,6 +912,91 @@ function registerButtons(window, undefined)
 			button2.icons = getToolBarButtonIcons("ocr");
 			button2.attachOnClick(on_click_ocr);
 		}
+
+		let lastButton = null;
+		if (editorVersion >= 9002000 && Asc.Editor.getType() === "word")
+		{
+			let buttonGS = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonGS.text = "Grammar & Spelling";
+			buttonGS.icons = getToolBarButtonIcons("grammar");
+			buttonGS.menu = [{
+				text: 'Check all',
+				id: 'sg10n-check-all',
+				onclick: () => onCheckGrammarSpelling(false)
+			}, 
+			{
+				text: 'Check current text',
+				id: 'sg10n-check-text',
+				onclick: () => onCheckGrammarSpelling(true)
+			}];
+			buttonGS.attachOnClick(async function(){
+				onCheckGrammarSpelling(true);
+			});
+			lastButton = buttonGS;			
+		}
+
+		if (editorVersion >= 9003000) {
+
+			if (window.AscDesktopEditor && Asc.Editor.getType() === "word") 
+			{
+				let isFillForm = await Asc.Editor.callMethod("IsFillingOFormMode");
+				if (true === isFillForm)
+				{
+					let buttonGenerate = new Asc.ButtonToolbar(buttonMainToolbar);
+					buttonGenerate.text = "Generate Document";
+					buttonGenerate.icons = window.getToolBarButtonIcons("form-to-doc");
+					
+					buttonGenerate.attachOnClick(async function(){
+						let content = await getFormGenerationPrompt();
+						window.AscDesktopEditor.generateNew("docx", "ai", content);
+					});
+
+					lastButton = buttonGenerate;
+				}
+			}
+		}
+
+		if (lastButton)
+			lastButton.split = true;
+
+		let neededVersionForAiAssistant = 9002000;
+		/*if (window.AscDesktopEditor) {
+			neededVersionForAiAssistant = 9003000;
+		}*/
+		if (editorVersion >= neededVersionForAiAssistant && Asc.Editor.getType() === "word")
+		{	
+			const buttonCustomAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+			buttonCustomAssistant.text = "Create AI assistant";
+			buttonCustomAssistant.icons = getToolBarButtonIcons("plugin-writer");
+			buttonCustomAssistant.separator = true;
+			buttonCustomAssistant.attachOnClick(function(){
+				customAssistantWindowShow();
+			});
+			const savedAssistants = JSON.parse(
+				localStorage.getItem("onlyoffice_ai_saved_assistants") || "[]"
+			);
+
+			savedAssistants.forEach(element => {
+				const buttonAssistant = new Asc.ButtonToolbar(buttonMainToolbar);
+				buttonAssistant.text = element.name;
+				buttonAssistant.icons = getToolBarButtonIcons("written-plugin");
+				buttonAssistant.split = true;
+				buttonAssistant.enableToggle = true;
+				buttonAssistant.menu = [{
+					text: 'Edit',
+					id: element.id + '-edit',
+					onclick: () => customAssistantWindowShow(element.id, buttonAssistant)
+				}, 
+				{
+					text: 'Delete',
+					id: element.id + '-delete',
+					onclick: () => customAssistantWindowDeleteConfirm(element.id, buttonAssistant)
+				}];
+				buttonAssistant.attachOnClick(async function(){
+					customAssistantOnClickToolbarIcon(element.id, buttonAssistant);
+				});
+			});
+		}
 	}
 
 	// register actions
@@ -625,7 +1011,7 @@ function registerButtons(window, undefined)
 		Vision           : "Vision"
 	};
 
-	AI.Actions = {};
+	AI.Actions = Object.create(null);
 
 	function ActionUI(name, icon, modelId, capabilities) {
 		this.name = name || "";
@@ -679,12 +1065,26 @@ function registerButtons(window, undefined)
 	{
 		try
 		{
+			// exclude external models
+			let excludeMap = Object.create(null);
+			for (let key in AI.Actions) {
+				if (AI.Actions[key].model.startsWith(AI.externalModelPrefix)) {
+					excludeMap[key] = AI.Actions[key].model;
+					AI.Actions[key].model = "";
+				}
+			}
+
 			window.localStorage.setItem(actions_key, JSON.stringify(AI.Actions));
+			
+			// restore excluded
+			for (let key in excludeMap) {
+				AI.Actions[key].model = excludeMap[key];
+			}
 			return true;
 		}
 		catch (e)
 		{
-		}
+		}		
 		return false;
 	};
 
@@ -723,6 +1123,9 @@ function registerButtons(window, undefined)
 			AI.Actions[id].model = model;
 			AI.ActionsSave();
 		}
+
+		if (Asc.plugin.sendEvent)
+			Asc.plugin.sendEvent("ai_onActionsChange", window.getActionsInfo());
 	};
 
 	AI.ActionsLoad();

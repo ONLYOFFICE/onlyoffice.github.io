@@ -45,6 +45,9 @@
                 },
                 "200%": {
                     "normal": "resources/light/icon@2x.png"
+                },
+                "*": {
+                    "normal": "resources/light/icon.svg"
                 }
             },
             {
@@ -64,6 +67,9 @@
                 },
                 "200%": {
                     "normal": "resources/dark/icon@2x.png"
+                },
+                "*": {
+                    "normal": "resources/dark/icon.svg"
                 }
             }
             ],

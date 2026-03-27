@@ -40,7 +40,42 @@
 	let loader = null;
 	let bCreateLoader = true;
 	let themeType = 'light';
-	let regenerationMessageIndex = null;	//Index of the message for which a new reply is being created
+	let isAgentRunning = false;
+	let isAgentStopped = false;
+
+	function escapeHtml(str) {
+		if (!str) return '';
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+	}
+
+	// 'action' — show translated "Action" in collapsed header
+	// 'name'   — show human function name in collapsed header (truncated to TOOL_CALL_NAME_MAX_LENGTH)
+	// In both modes, expanded header always shows the full function name
+	const TOOL_CALL_HEADER_MODE = 'name';
+	const TOOL_CALL_NAME_MAX_LENGTH = 40;
+
+	// ── Design flags ────────────────────────────────────────────────────────
+	// true  → show border + default padding around user / AI message bubbles
+	// false → no border, background highlight instead (same color as tool sections)
+	const CHAT_MESSAGES_BORDER = false;
+
+	// true  → show border around the entire chat messages area (#chat_wrapper)
+	// false → no border on the messages container
+	const CHAT_ALL_MESSAGES_BORDER = false;
+
+	// Only has effect when CHAT_MESSAGES_BORDER = false
+	// true  → draw background highlight on AI response bubbles
+	// false → AI responses have no background (transparent)
+	const CHAT_AI_MESSAGE_BACKGROUND = false;
+	// ────────────────────────────────────────────────────────────────────────
+
+	if (!CHAT_MESSAGES_BORDER)        document.documentElement.classList.add('no-message-border');
+	if (!CHAT_ALL_MESSAGES_BORDER)    document.documentElement.classList.add('no-all-messages-border');
+	if (!CHAT_AI_MESSAGE_BACKGROUND)  document.documentElement.classList.add('no-ai-message-background');
 
 	const ErrorCodes = {
 		UNKNOWN: 1
@@ -52,19 +87,117 @@
 		}
 	};
 
-	let scrollbarList; 
+	let scrollbarList;
 
 	let messagesList = {
 		_list: [],
-		
+
 		_renderItemToList: function(item, index) {
-			$('#chat_wrapper').removeClass('empty');
+			let $chatWrapper = $('#chat_wrapper');
+			$chatWrapper.removeClass('empty');
 
 			let $chat = $('#chat');
 			item.$el = $('<div class="message" style="order: ' + index + ';"></div>');
 			$chat.prepend(item.$el);
-			this._renderItem(item);
+			if (item.isToolCall) {
+				this._renderToolCall(item);
+			} else {
+				this._renderItem(item);
+			}
 			$chat.scrollTop($chat[0].scrollHeight);
+		},
+
+		_renderToolCall: function(item) {
+			// Migrate old serialized format (arguments/result directly on item → calls[])
+			if (!item.calls) {
+				item.calls = [{
+					arguments: item.arguments || '',
+					result: item.result !== undefined ? item.result : null
+				}];
+			}
+
+			// Preserve expanded state across re-renders (result update)
+			let wasExpanded = item.$el.find('.tool_call_header').hasClass('is-expanded');
+
+			item.$el.empty();
+			item.$el.addClass('tool_call_message');
+
+			let $toolCallContent = $('<div class="form-control message_content tool_call_content"></div>');
+
+			let funcName = item.functionName || 'Unknown';
+			let displayName = item.humanName || funcName;
+			let calls = item.calls || [];
+			let isLoading = calls.length === 0 || calls[calls.length - 1].result === null;
+
+			// Collapsed header text: "Action" or truncated name
+			let collapsedText;
+			if (TOOL_CALL_HEADER_MODE === 'name') {
+				collapsedText = displayName.length > TOOL_CALL_NAME_MAX_LENGTH
+					? displayName.substring(0, TOOL_CALL_NAME_MAX_LENGTH - 3) + '...'
+					: displayName;
+			} else {
+				collapsedText = window.Asc.plugin.tr('Action');
+			}
+
+			let $header = $('<div class="tool_call_header"></div>');
+			let $chevron = $('<span class="tool_call_chevron"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="2,0.5 6,4 2,7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+			let $title = $('<span class="tool_call_title"></span>');
+
+			$header.append($chevron);
+			$header.append($title);
+
+			// Details — render each individual call's args + result
+			let $details = $('<div class="tool_call_details collapsed"></div>');
+
+			for (let i = 0; i < calls.length; i++) {
+				let call = calls[i];
+				let $callBlock = $('<div class="tool_call_call"></div>');
+
+				if (call.arguments) {
+					let displayArgs = call.arguments;
+					if (funcName === 'writeMacro') {
+						try {
+							let parsed = JSON.parse(call.arguments);
+							if (parsed.code) displayArgs = parsed.code;
+						} catch(e) {}
+					}
+					$callBlock.append('<div class="tool_call_section"><pre>' + escapeHtml(displayArgs) + '</pre></div>');
+				}
+
+				if (call.result !== null) {
+					let resultText = typeof call.result === 'string' ? call.result : JSON.stringify(call.result, null, 2);
+					$callBlock.append('<div class="tool_call_section"><pre>' + escapeHtml(resultText) + '</pre></div>');
+				}
+
+				$details.append($callBlock);
+			}
+
+			// Restore expanded/collapsed state
+			if (wasExpanded) {
+				$header.addClass('is-expanded');
+				$details.removeClass('collapsed');
+				$title.html(displayName);
+			} else {
+				$title.html(collapsedText + (isLoading ? '<span class="tool_call_dots">...</span>' : ''));
+			}
+
+			// Toggle collapse/expand
+			$header.on('click', function() {
+				let isExpanding = $details.hasClass('collapsed');
+				$details.toggleClass('collapsed');
+				$header.toggleClass('is-expanded');
+				if (isExpanding) {
+					$title.html(displayName);
+				} else {
+					$title.html(collapsedText + (isLoading ? '<span class="tool_call_dots">...</span>' : ''));
+				}
+					scrollbarList && scrollbarList.update();
+			});
+
+			$toolCallContent.append($header);
+			$toolCallContent.append($details);
+			item.$el.append($toolCallContent);
+			scrollbarList && scrollbarList.update();
 		},
 		_renderItem: function(item) {
 			item.$el.empty();
@@ -198,6 +331,56 @@
 			message.activeContentIndex = message.content.length - 1;
 			this._renderItem(message);
 		},
+		addToolCall: function(toolCallData) {
+			let $chat = $('#chat');
+			let $chatWrapper = $('#chat_wrapper');
+			let newCall = {
+				arguments: toolCallData.arguments || '',
+				result: toolCallData.result !== undefined ? toolCallData.result : null
+			};
+
+			// Merge with previous item if same function name and no non-tool item in between
+			let lastItem = this._list.length > 0 ? this._list[this._list.length - 1] : null;
+			if (lastItem && lastItem.isToolCall && lastItem.functionName === toolCallData.functionName) {
+				let callIndex = lastItem.calls.length;
+				lastItem.calls.push(newCall);
+				this._renderToolCall(lastItem);
+				$chat.scrollTop($chat[0].scrollHeight);
+				return { listIndex: this._list.length - 1, callIndex: callIndex };
+			}
+
+			// New tool call item
+			const toolCall = {
+				role: 'tool',
+				isToolCall: true,
+				functionName: toolCallData.functionName,
+				humanName: toolCallData.humanName || toolCallData.functionName,
+				calls: [newCall]
+			};
+
+			this._list.push(toolCall);
+			toolCall.$el = $('<div class="message" style="order: ' + (this._list.length - 1) + ';"></div>');
+			$chat.prepend(toolCall.$el);
+			this._renderToolCall(toolCall);
+			$chat.scrollTop($chat[0].scrollHeight);
+			return { listIndex: this._list.length - 1, callIndex: 0 };
+		},
+		updateToolCallResult: function(index, result) {
+			let listIndex, callIndex;
+			if (index && typeof index === 'object') {
+				listIndex = index.listIndex;
+				callIndex = index.callIndex;
+			} else {
+				listIndex = index;
+				callIndex = 0;
+			}
+			if (listIndex < 0 || listIndex >= this._list.length) return;
+			const item = this._list[listIndex];
+			if (item && item.isToolCall && item.calls && item.calls[callIndex] !== undefined) {
+				item.calls[callIndex].result = result;
+				this._renderToolCall(item);
+			}
+		},
 		get: function() {
 			return this._list;
 		}
@@ -221,17 +404,20 @@
 	};
 
 	let actionButtons = [
-		{ 
-			icon: 'resources/icons/light/btn-update.png', 
+		{
+			icon: 'resources/icons/light/btn-update.png',
 			tipOptions: {
-				text: 'Generate new',
+				text: 'Update',
 				align: 'left'
 			},
-			handler: function(message) { 
-				const messageIndex = messagesList.get().findIndex(function(item) { return item == message});
-				if(messageIndex > 0) {
-					regenerationMessageIndex = messageIndex;
-					sendMessage(messagesList.get()[messageIndex - 1].content);
+			handler: function() {
+				if (isAgentRunning) return;
+				let list = messagesList.get();
+				for (let i = list.length - 1; i >= 0; i--) {
+					if (list[i].role === 'user') {
+						sendMessage(list[i].content);
+						return;
+					}
 				}
 			}
 		},
@@ -311,10 +497,23 @@
 
 		updateTextareaSize();
 
+		// Initialize voice button visibility
+		updateVoiceButtonVisibility();
+
 		window.Asc.plugin.sendToPlugin("onWindowReady", {});
 
 		document.getElementById('input_message_submit').addEventListener('click', function() {
 			onSubmit();
+		});
+
+		// Voice input button handler
+		document.getElementById('input_voice_button').addEventListener('click', function() {
+			onVoiceInput();
+		});
+
+		// Stop button handler
+		document.getElementById('input_stop_button').addEventListener('click', function() {
+			onStopAgent();
 		});
 		document.getElementById('input_message').onkeydown = function(e) {
 			if ( (e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -396,6 +595,9 @@
 
 
 	function onSubmit() {
+		if (isAgentRunning)
+			return;
+
 		let textarea = document.getElementById('input_message');
 		if (textarea.classList.contains('error_border')){
 			setError('Too many tokens in your request.');
@@ -407,6 +609,104 @@
 			textarea.value = '';
 			updateTextareaSize();
 			document.getElementById('cur_tokens').innerText = 0;
+		}
+	};
+
+	function onVoiceInput() {
+		if (isAgentRunning)
+			return;
+
+		if (!recognition) {
+			initVoiceRecognition();
+		}
+
+		if (!recognition) {
+			setError('Voice input is not supported in your browser');
+			return;
+		}
+
+		if (recognition.isRecording) {
+			recognition.engine.stop();
+		} else {
+			try {
+				recognition.engine.start();
+			} catch (e) {
+				console.error('Failed to start voice recognition:', e);
+				setError('Failed to start voice input');
+			}
+		}
+	};
+
+	function onStopAgent() {
+		isAgentStopped = true;
+		updateControlButtonsState();
+		window.Asc.plugin.sendToPlugin("onStopAgent", {});
+	};
+
+	let voiceInputSupported = false;
+	let recognition = null;
+
+	function updateVoiceButtonVisibility() {
+		if (voiceInputSupported) {
+			document.getElementById('input_voice_button').classList.remove('hidden');
+		} else {
+			document.getElementById('input_voice_button').classList.add('hidden');
+		}
+	};
+
+	function initVoiceRecognition() {
+		recognition = window.initVoiceRecognitionEngine();
+
+		if (!recognition)
+			return;
+
+		recognition.onStart = function() {
+			const voiceBtn = document.getElementById('input_voice_button');
+			voiceBtn.classList.add('recording');
+			voiceBtn.title = 'Recording... Click to stop\nSay "comma", "period", etc. for punctuation';
+		};
+
+		recognition.onProgress = function(text) {
+			const textarea = document.getElementById('input_message');
+			const currentValue = textarea.value;
+
+			if (currentValue && !currentValue.endsWith(' ') && !currentValue.endsWith('\n')) {
+				text = ' ' + text;
+			}
+
+			textarea.value = currentValue + text;
+			updateTextareaSize();
+
+			textarea.focus();
+		};
+
+		recognition.onError = function(error) {
+			document.getElementById('input_voice_button').classList.remove('recording');
+			if (error !== 'no-speech' && error !== 'aborted') {
+				setError('Voice input error: ' + error);
+			}
+		};
+
+		recognition.onEnd = function() {
+			const voiceBtn = document.getElementById('input_voice_button');
+			voiceBtn.classList.remove('recording');
+			voiceBtn.title = 'Voice input\nSay "comma", "period", etc. for punctuation';
+		};
+	};
+
+	function updateControlButtonsState() {
+		const submitButton = document.getElementById('input_message_submit');
+		const stopButton = document.getElementById('input_stop_button');
+		const voiceButton = document.getElementById('input_voice_button');
+
+		if (isAgentRunning) {
+			submitButton.classList.add('hidden');
+			stopButton.classList.remove('hidden');
+			if (voiceButton) voiceButton.classList.add('hidden');
+		} else {
+			submitButton.classList.remove('hidden');
+			stopButton.classList.add('hidden');
+			updateVoiceButtonVisibility();
 		}
 	};
 
@@ -467,32 +767,35 @@
 	};
 
 	function sendMessage(text) {
-		const isRegenerating = regenerationMessageIndex !== null;
 		const message = { role: 'user', content: text };
 
 		if (attachedText.hasShow()) {
 			message.attachedText = attachedText.get();
 			attachedText.clear();
 		}
-		if (!isRegenerating) {
-			messagesList.add(message);
-			createTyping();
-		}
+		messagesList.add(message);
+		createTyping();
 
-		let list = isRegenerating 
-			? messagesList.get().slice(0, regenerationMessageIndex) 
-			: messagesList.get();
-		
-		//Remove the errors and user messages that caused the error
+		isAgentRunning = true;
+		isAgentStopped = false;
+		updateControlButtonsState();
+
+		let list = messagesList.get();
+
+		//Remove the errors, tool calls, and user messages that caused the error
 		list = list.filter(function(item, index) {
 			const nextItem = list[index + 1]
+			// Filter out tool messages (they are only for UI display)
+			if (item.isToolCall || item.role === 'tool') {
+				return false;
+			}
 			return !item.error && !(nextItem && nextItem.error);
-		});	
+		});
 		list = list.map(function(item) {
-			return { role: item.role, content: item.getActiveContent() }
+			return { role: item.role, content: item.getActiveContent ? item.getActiveContent() : item.content }
 		});
 
-		window.Asc.plugin.sendToPlugin("onChatMessage", list);	
+		window.Asc.plugin.sendToPlugin("onChatMessage", list);
 	};
 
 	function createTyping() {
@@ -514,8 +817,14 @@
 		clearInterval(interval);
 		interval = null;
 		let element = document.getElementById('loading');
-		element && element.remove();
+		element && element.remove();		
 		return;
+	};
+
+	function finishAgentExecution() {
+		isAgentRunning = false;
+		isAgentStopped = false;
+		updateControlButtonsState();
 	};
 
 	function createLoader() {
@@ -531,9 +840,15 @@
 		loader = undefined;
 	};
 
+	let errClickBound = false;
 	function setError(error) {
+		let divErr = document.getElementById('div_err');
 		document.getElementById('lb_err').innerHTML = window.Asc.plugin.tr(error);
-		document.getElementById('div_err').classList.remove('hidden');
+		divErr.classList.remove('hidden');
+		if (!errClickBound) {
+			divErr.addEventListener('click', clearError);
+			errClickBound = true;
+		}
 		if (errTimeout) {
 			clearTimeout(errTimeout);
 			errTimeout = null;
@@ -544,6 +859,10 @@
 	function clearError() {
 		document.getElementById('div_err').classList.add('hidden');
 		document.getElementById('lb_err').innerHTML = '';
+		if (errTimeout) {
+			clearTimeout(errTimeout);
+			errTimeout = null;
+		}
 	};
 
 	function getFormattedPathForIcon(path) {
@@ -603,6 +922,12 @@
 		updateBodyThemeClasses(theme.type, theme.name);
 		updateThemeVariables(theme);
 
+		// In no-all-messages-border mode: use compact border-radius for non-standard themes
+		if (!CHAT_ALL_MESSAGES_BORDER) {
+			var isStandardTheme = (theme.name === 'theme-white' || theme.name === 'theme-night');
+			document.documentElement.classList.toggle('compact-radius', !isStandardTheme);
+		}
+
 		$('img.icon').each(function() {
 			var src = $(this).attr('src');
 			var newSrc = src.replace(/(icons\/)([^\/]+)(\/)/, '$1' + themeType + '$3');
@@ -661,27 +986,110 @@
 	window.Asc.plugin.onThemeChanged = onThemeChanged;
 
 	window.Asc.plugin.attachEvent("onChatReply", function(reply) {
+		if (isAgentStopped) {
+			removeTyping();
+			finishAgentExecution();
+			return;
+		}
+
 		let errorCode = null;
 		if(!reply.trim()) {
 			errorCode = ErrorCodes.UNKNOWN;
 		}
 
-		if(regenerationMessageIndex) {
-			if(!errorCode) {
-				messagesList.pushContentForAssistant(regenerationMessageIndex, reply);
-			}
-		} else {
-			messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
-		}
-		regenerationMessageIndex = null;
-		
+		messagesList.add({ role: 'assistant', content: [reply], error: errorCode });
+
 		removeTyping();
+		finishAgentExecution();
 		document.getElementById('input_message').focus();
 	});
 
-	window.Asc.plugin.attachEvent("onAttachedText", function(text) {
-		// For a future release.
-		// attachedText.set(text);
+	// Streaming support
+	let streamingMessageIndex = null;
+	let streamingContent = '';
+
+	window.Asc.plugin.attachEvent("onChatStreamStart", function() {
+		removeTyping();
+		streamingContent = '';
+		messagesList.add({ role: 'assistant', content: [''] });
+		streamingMessageIndex = messagesList.get().length - 1;
+	});
+
+	window.Asc.plugin.attachEvent("onChatStreamChunk", function(chunk) {
+		if (streamingMessageIndex === null)
+			return;
+		if (isAgentStopped) 
+			return;
+
+		streamingContent += chunk;
+
+		const message = messagesList.get()[streamingMessageIndex];
+		if (message) {
+			message.content[0] = streamingContent;
+
+			// no update buttons
+			if (message.$el) {
+				const $spanMessage = message.$el.find('.span_message');
+				if ($spanMessage.length > 0) {
+					let c = window.markdownit();
+					let htmlContent = c.render(streamingContent.replace(/\n---#/g, '\n---\n#'));
+					$spanMessage.html(htmlContent);
+				}
+			}
+
+			// Auto-scroll to bottom
+			let $chat = $('#chat');
+			$chat.scrollTop($chat[0].scrollHeight);
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onChatStreamEnd", function() {
+		// Re-render the finished message so action button handlers capture the final content
+		if (streamingMessageIndex !== null) {
+			const message = messagesList.get()[streamingMessageIndex];
+			if (message) {
+				messagesList._renderItem(message);
+			}
+		}
+		streamingMessageIndex = null;
+		streamingContent = '';
+
+		if (isAgentStopped) {
+			let lastMsg = messagesList.get()[messagesList.get().length - 1];
+			if (lastMsg && lastMsg.isToolCall) {
+				messagesList.add({ role: 'assistant', content: [window.Asc.plugin.tr('Operation was interrupted.')] });
+			}
+		}
+
+		removeTyping();
+		finishAgentExecution();
+		document.getElementById('input_message').focus();
+	});
+
+	window.Asc.plugin.attachEvent("onAttachedText", function(data) {
+		if (typeof data === 'object' && data.forceSend) {
+			sendMessage(data.text.trim());
+		} else {
+			let text = (typeof data === 'string') ? data : data.text;
+			if (text && text.trim()) {
+				let textarea = document.getElementById('input_message');
+				textarea.value = text;
+				updateTextareaSize();
+			}
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onVoiceInputSupport", function(isSupported) {
+		voiceInputSupported = isSupported;
+		updateVoiceButtonVisibility();
+
+		// Set initial tooltip
+		if (isSupported) {
+			const voiceBtn = document.getElementById('input_voice_button');
+			if (voiceBtn) {
+				voiceBtn.title = 'Voice input\nSay "comma", "period", etc. for punctuation';
+			}
+		}
 	});
 
 	window.Asc.plugin.attachEvent("onThemeChanged", onThemeChanged);
@@ -693,6 +1101,107 @@
 			attachedText: attachedText.hasShow() ? attachedText.get() : ''
 		});
 		window.Asc.plugin.sendToPlugin("onUpdateState");
+	});
+
+	// Track tool call indices for updating
+	let toolCallIndices = {};
+
+	window.Asc.plugin.attachEvent("onToolCallStart", function(toolCallData) {
+		// Parse tool call data
+		let funcName = 'Unknown';
+		let funcArgs = '';
+
+		if (toolCallData.type === 'native') {
+			funcName = toolCallData.functionName || 'Unknown';
+			funcArgs = toolCallData.arguments || '';
+		} else if (toolCallData.type === 'system_prompt') {
+			let callStr = toolCallData.call;
+			let nameMatch = callStr.match(/\(([^)]+)\)/);
+			if (nameMatch) {
+				funcName = nameMatch[1];
+			}
+			let argsMatch = callStr.match(/\{[\s\S]*\}/);
+			if (argsMatch) {
+				try {
+					let args = JSON.parse(argsMatch[0]);
+					funcArgs = JSON.stringify(args, null, 2);
+				} catch (e) {
+					funcArgs = argsMatch[0];
+				}
+			}
+		}
+
+		// Add tool call immediately without result
+		const index = messagesList.addToolCall({
+			functionName: funcName,
+			humanName: toolCallData.humanName || funcName,
+			arguments: funcArgs,
+			result: null
+		});
+
+		// Store index for later update
+		if (toolCallData.id) {
+			toolCallIndices[toolCallData.id] = index;
+		}
+	});
+
+	window.Asc.plugin.attachEvent("onToolCallEnd", function(toolCallData) {
+		let result = '';
+
+		if (toolCallData.type === 'native') {
+			result = typeof toolCallData.result === 'object' ?
+				(toolCallData.result.message || toolCallData.result.error || JSON.stringify(toolCallData.result)) :
+				(toolCallData.result || 'Success');
+		} else if (toolCallData.type === 'system_prompt') {
+			result = toolCallData.result ? (toolCallData.result.message || toolCallData.result.error || 'Success') : '';
+		}
+
+		// Update the result for the existing tool call
+		if (toolCallData.id && toolCallIndices[toolCallData.id] !== undefined) {
+			messagesList.updateToolCallResult(toolCallIndices[toolCallData.id], result);
+			delete toolCallIndices[toolCallData.id];
+		}
+	});
+
+	// Keep old event for backward compatibility (deprecated)
+	window.Asc.plugin.attachEvent("onToolCall", function(toolCallData) {
+		// Parse tool call data
+		let funcName = 'Unknown';
+		let funcArgs = '';
+		let result = '';
+
+		if (toolCallData.type === 'native') {
+			// Native tool calls (OpenAI, Anthropic format)
+			funcName = toolCallData.functionName || 'Unknown';
+			funcArgs = toolCallData.arguments || '';
+			result = typeof toolCallData.result === 'object' ?
+				(toolCallData.result.message || toolCallData.result.error || JSON.stringify(toolCallData.result)) :
+				(toolCallData.result || 'Success');
+		} else if (toolCallData.type === 'system_prompt') {
+			// Parse system prompt style: [functionCalling (functionName)]: {...}
+			let callStr = toolCallData.call;
+			let nameMatch = callStr.match(/\(([^)]+)\)/);
+			if (nameMatch) {
+				funcName = nameMatch[1];
+			}
+			let argsMatch = callStr.match(/\{[\s\S]*\}/);
+			if (argsMatch) {
+				try {
+					let args = JSON.parse(argsMatch[0]);
+					funcArgs = JSON.stringify(args, null, 2);
+				} catch (e) {
+					funcArgs = argsMatch[0];
+				}
+			}
+			result = toolCallData.result ? (toolCallData.result.message || toolCallData.result.error || 'Success') : '';
+		}
+
+		messagesList.addToolCall({
+			functionName: funcName,
+			humanName: toolCallData.humanName || funcName,
+			arguments: funcArgs,
+			result: result
+		});
 	});
 
 })(window, undefined);

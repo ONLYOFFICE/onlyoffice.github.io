@@ -58,7 +58,7 @@ function checkInternetExplorer(){
 	var displayNoneClass = "display-none";
 	var blurClass        = "no_class";
     var elements         = null;
-    var serviceUrl       = "https://languagetool.org/api/v2/check";
+    var serviceUrl       = "https://api.languagetoolplus.com/v2/check";
     var paste_done       = true;
     var canAddText       = true;
     var isLangChangedManually = false;
@@ -281,7 +281,7 @@ function checkInternetExplorer(){
 	});
 
 	function getLanguages() {
-		var url = "https://languagetool.org/api/v2/languages";
+		var url = "https://api.languagetoolplus.com/v2/languages";
 		return $.ajax({
 			method: 'GET',
 			url: url
@@ -362,8 +362,8 @@ function checkInternetExplorer(){
             canAddText = false;
             changeLangInSelect(oResponse.language.name);
 
-			// чтобы сервис различал параграфы необходимо разделять их двумя "\n" во время отправки,
-			// поэтому после получения ответа нужно поправить позиции, чтобы в исходном тексте верно делать исправления
+			// for the service to distinguish paragraphs, they need to be separated by two "\n" when sending,
+			// so after receiving the response we need to correct positions to make corrections in the source text correctly
             correctMistakesPosition(matches);
             
             sTextForDisplay = txt;

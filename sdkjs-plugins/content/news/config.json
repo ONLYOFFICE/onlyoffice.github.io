@@ -1,0 +1,103 @@
+{
+  "name": "News",
+  "offered": "Office Extensions Group",
+  "guid": "asc.{0616AE85-5DBE-4B6B-A0A9-455C4F1503AD}",
+  "version": "1.0.0",
+  "baseUrl": "",
+  "variations": [
+    {
+      "description": "Search through millions of articles from over 80,000 large and small news sources and blogs.",
+      "descriptionLocale": {
+        "ru": "Поиск среди миллионов статей из более чем 80 000 крупных и малых новостных источников и блогов.",
+        "fr": "Recherchez parmi des millions d'articles",
+        "es": "Busque entre millones de artículos de más de 80,000 fuentes de noticias y blogs grandes y pequeños.",
+        "de": "Durchsuchen Sie Millionen von Artikeln aus über 80.000 großen und kleinen Nachrichtenquellen und Blogs.",
+        "br": "Pesquise entre milhões de artigos de mais de 80.000 fontes de notícias e blogs grandes e pequenos.",
+        "it": "Cerca tra milioni di articoli di oltre 80.000 fonti, tra notizie e blog grandi e piccoli.",
+        "zh": "在来自8万多家新闻媒体和博客的数百万篇文章中快速搜索所需信息。",
+        "ja": "80,000を超える大小のニュースソースとブログから数百万の記事を検索します。",
+        "cs-CZ": "Prohledejte miliony článků z více než 80 000 velkých a malých zpravodajských zdrojů a blogů."
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/store/icons/icon.png",
+        "resources/store/icons/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["word", "cell", "slide"],
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": true,
+      "buttons": [],
+      "size": [300, 0],
+      "store": {
+        "background": {
+          "light": "#F5F5F5",
+          "dark": "#444444"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screenshot1.png",
+          "resources/store/screenshots/screenshot2.png",
+          "resources/store/screenshots/screenshot3.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": ["specAbilities", "work"]
+      }
+    },
+    {
+      "description": "About",
+      "descriptionLocale": {
+        "de": "Über",
+        "es": "Acerca de",
+        "fr": "À propos",
+        "it": "Informazioni",
+        "pt": "Sobre",
+        "ru": "О программе",
+        "ja": "について",
+        "zh": "关于",
+        "cs": "O aplikaci",
+        "si": "O programu",
+        "sq": "Rreth"
+      },
+      "url": "index_about.html",
+      "icons": [
+        "resources/store/icons/icon.png",
+        "resources/store/icons/icon@2x.png"
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["word"],
+      "isVisual": true,
+      "isModal": true,
+      "isInsideMode": false,
+      "initDataType": "none",
+      "initData": "",
+      "isUpdateOleOnResize": true,
+      "buttons": [
+        {
+          "text": "Ok",
+          "textLocale": {
+            "de": "OK",
+            "es": "Aceptar",
+            "fr": "OK",
+            "it": "OK",
+            "pt": "OK",
+            "ru": "OK",
+            "ja": "OK",
+            "zh": "确定",
+            "cs": "OK",
+            "si": "V redu",
+            "sq": "OK"
+          },
+          "primary": true
+        }
+      ],
+      "size": [392, 147]
+    }
+  ]
+}

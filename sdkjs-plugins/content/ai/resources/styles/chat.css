@@ -13,6 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ul, ol {
+	padding-inline-start: 20px;
 	margin: 10px;
 }
 
@@ -53,9 +54,9 @@ input {
 .chat_window {
 	display: flex;
 	flex-direction: column;
-	margin: 12px;
+	margin: 12px 4px 12px 12px;
 	flex: 1;
-	width: calc(100% - 24px);
+	width: calc(100% - 16px);
 }
 
 #chat_wrapper {
@@ -72,12 +73,13 @@ input {
 
 #chat {
 	height: auto;
-	padding: 10px 13px;
+	padding: 10px 21px 18px 13px;
 	display: flex;
 	flex-direction: column;
 	overflow: auto;
 	position: relative;
 }
+
 
 .message {
 	margin-top: 10px;
@@ -301,6 +303,7 @@ input {
 	line-height: 16px;
 	padding: 4px 8px;
 	margin: 2px;
+	border-radius: 10px;
 }
 
 .user_message {
@@ -341,19 +344,35 @@ input {
 
 .div_error {
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	top: 4px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 100;
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	top: 0;
-	left: 0;
+	width: fit-content;
+	max-width: calc(100% - 16px);
+	padding: 4px 10px;
+	border-radius: 4px;
+	background-color: #fef2f2;
+	border: 1px solid #fecaca;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+
+body.theme-type-dark .div_error {
+	background-color: #2d1f1f;
+	border-color: #5c2e2e;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .lb_err {
-	color: red;
+	color: #c53030;
 	padding: 2px 10px;
+}
+
+body.theme-type-dark .lb_err {
+	color: #f87171;
 }
 
 .hidden {
@@ -400,6 +419,7 @@ input {
 	border: 1px solid #e1e1e1;
 	border: 1px solid var(--border-regular-control);
 	position: relative;
+	margin-right: 8px;
 }
 
 #input_message_wrapper.focused {
@@ -418,28 +438,78 @@ input {
     resize: none;
     line-height: 16px;
 	border: none;
-	font-family: Arial, sans-serif;
+	font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+}
+
+/* Увеличиваем padding, когда видна кнопка голосового ввода или стоп */
+#input_message_wrapper:has(#input_voice_button:not(.hidden)) #input_message {
+	padding-right: 54px;
 }
 #input_message::-webkit-scrollbar-track {
 	margin-bottom: 34px;
 }
 
-#input_message_submit {
+#input_buttons_container {
 	position: absolute;
 	right: 0;
 	bottom: 0;
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 7px 7px 7px 0px;
+}
+
+.input_control_button {
 	cursor: pointer;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 7px 7px 7px 0px;
+	min-width: 20px;
+	min-height: 20px;
 }
-#input_message_submit:hover {
+.input_control_button:hover {
 	opacity: 0.7;
 }
-#input_message_submit img {
+.input_control_button img,
+.input_control_button .icon {
 	width: 20px;
 	height: 20px;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: center;
+	user-select: none;
+}
+
+#input_stop_button .icon {
+	color: #666;
+	color: var(--text-secondary);
+	font-size: 14px;
+}
+
+body.theme-type-dark #input_stop_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button .icon {
+	font-size: 16px;
+	transition: filter 0.2s, color 0.2s;
+	color: #666;
+	color: var(--text-secondary);
+}
+
+body.theme-type-dark #input_voice_button .icon {
+	color: #aaa;
+}
+
+#input_voice_button.recording .icon {
+	filter: brightness(0) saturate(100%) invert(23%) sepia(96%) saturate(6943%) hue-rotate(357deg) brightness(99%) contrast(114%);
+	animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.5; }
 }
 
 
@@ -473,3 +543,243 @@ input {
 	width: 20px;
 	height: 20px;
 } */
+/* ── Shared font ──────────────────────────────────────────────────────────── */
+.message_content,
+.span_message,
+#welcome_text,
+.welcome_button {
+	font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+}
+
+/* ── Text selection color ─────────────────────────────────────────────────── */
+::selection {
+	background-color: #c8c8c8;
+	color: inherit;
+}
+
+body.theme-type-dark ::selection {
+	background-color: #555;
+	color: inherit;
+}
+
+/* ── CHAT_MESSAGES_BORDER = false ─────────────────────────────────────────── */
+/* Remove border + add subtle background highlight (same as tool sections) */
+html.no-message-border .action_button.btn-text-default {
+	border: none !important;
+	background: transparent;
+}
+
+html.no-message-border .action_button.btn-text-default:hover {
+	background-color: #d8dadc !important;
+}
+
+html.no-message-border body.theme-type-dark .action_button.btn-text-default:hover {
+	background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.no-message-border .user_message .message_content,
+html.no-message-border .message:not(.user_message):not(.tool_call_message) .message_content {
+	border: none !important;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	padding: 6px 8px;
+}
+
+html.no-message-border body.theme-type-dark .user_message .message_content,
+html.no-message-border body.theme-type-dark .message:not(.user_message):not(.tool_call_message) .message_content {
+	background-color: #2a2a2a;
+}
+
+/* CHAT_AI_MESSAGE_BACKGROUND = false — no background on AI bubbles */
+html.no-message-border.no-ai-message-background .message:not(.user_message):not(.tool_call_message) .message_content {
+	background-color: transparent !important;
+}
+
+/* ── CHAT_ALL_MESSAGES_BORDER = false ─────────────────────────────────────── */
+html.no-all-messages-border #chat_wrapper {
+	border: none !important;
+	box-shadow: none !important;
+	background: transparent !important;
+}
+
+html.no-all-messages-border #input_message_wrapper {
+	border-radius: 18px;
+	overflow: hidden;
+}
+
+html.no-all-messages-border #input_message {
+	background-color: transparent;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+html.no-all-messages-border .message:not(.user_message):not(.tool_call_message) .message_content {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+/* ── compact-radius: non-standard themes in no-all-messages-border mode ──── */
+html.compact-radius .welcome_button {
+	border-radius: 2px !important;
+}
+
+html.compact-radius .user_message .message_content {
+	border-radius: 2px !important;
+}
+
+html.compact-radius body.theme-type-light .user_message .message_content {
+	background-color: #FFFFFF !important;
+}
+
+html.compact-radius body.theme-type-dark .user_message .message_content {
+	background-color: #1E1E1E !important;
+}
+
+html.compact-radius #input_message_wrapper {
+	border-radius: 2px !important;
+}
+
+html.compact-radius .action_button {
+	border-radius: 2px !important;
+}
+
+/* Tool Call Styles - Minimalistic gray design */
+.tool_call_message {
+	background-color: transparent !important;
+	margin-top: 10px;
+}
+
+.tool_call_content {
+	padding: 6px 8px 6px 4px !important;
+	border-radius: 4px;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Header with collapse/expand */
+.tool_call_header {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	padding: 0;
+	user-select: none;
+}
+
+.tool_call_title {
+	font-size: 11px;
+	color: inherit;
+	flex: 1;
+	opacity: 0.5;
+	transition: opacity 0.15s;
+}
+
+.tool_call_header:hover .tool_call_title {
+	opacity: 1;
+}
+
+.tool_call_dots {
+	animation: tool_call_dots_blink 1.2s infinite;
+}
+
+@keyframes tool_call_dots_blink {
+	0%, 20% { opacity: 1; }
+	50% { opacity: 0.3; }
+	80%, 100% { opacity: 1; }
+}
+
+.tool_call_chevron {
+	flex-shrink: 0;
+	margin-left: 2px;
+	margin-right: 4px;
+	display: inline-flex;
+	align-items: center;
+	opacity: 0.5;
+	transition: transform 0.2s;
+	transform-origin: center;
+}
+
+.tool_call_header.is-expanded .tool_call_chevron {
+	transform: rotate(90deg);
+}
+
+.tool_call_call + .tool_call_call {
+	margin-top: 4px;
+}
+
+/* Details section - collapsible */
+.tool_call_details {
+	margin-top: 2px;
+	overflow: hidden;
+}
+
+.tool_call_details.collapsed {
+	display: none;
+}
+
+.tool_call_section {
+	margin: 8px 0;
+	padding: 8px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	border: 1px solid #e0e0e0;
+}
+
+.tool_call_section pre {
+	margin: 0;
+	font-family: monospace;
+	font-size: 12px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	color: #333;
+}
+
+/* Dark theme support */
+body.theme-type-dark .tool_call_message {
+	border-left-color: #555 !important;
+}
+
+body.theme-type-dark .tool_call_section {
+	background-color: #2a2a2a;
+	border-color: #444;
+}
+
+body.theme-type-dark .tool_call_section strong {
+	color: #aaa;
+}
+
+body.theme-type-dark .tool_call_section pre {
+	color: #ddd;
+}
+
+/* Dark theme: tone down PS scrollbar colors */
+body.theme-type-dark .ps__rail-x:hover,
+body.theme-type-dark .ps__rail-y:hover,
+body.theme-type-dark .ps__rail-x:focus,
+body.theme-type-dark .ps__rail-y:focus,
+body.theme-type-dark .ps__rail-x.ps--clicking,
+body.theme-type-dark .ps__rail-y.ps--clicking {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.theme-type-dark .ps__thumb-x,
+body.theme-type-dark .ps__thumb-y {
+	background-color: #555;
+	border-color: #666;
+}
+
+body.theme-type-dark .ps__rail-x:hover > .ps__thumb-x,
+body.theme-type-dark .ps__rail-y:hover > .ps__thumb-y,
+body.theme-type-dark .ps__thumb-x:hover,
+body.theme-type-dark .ps__thumb-y:hover {
+	background-color: #777;
+}
+
+body.theme-type-dark .ps__rail-x:focus > .ps__thumb-x,
+body.theme-type-dark .ps__rail-x.ps--clicking .ps__thumb-x,
+body.theme-type-dark .ps__rail-y:focus > .ps__thumb-y,
+body.theme-type-dark .ps__rail-y.ps--clicking .ps__thumb-y {
+	background-color: #888;
+	border-color: #888;
+}
