@@ -1,0 +1,13 @@
+<svg id="Users" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <rect id="Rectangle_3377" data-name="Rectangle 3377" width="30" height="30" fill="#fff" opacity="0.001"/>
+  <g id="Group_9411" data-name="Group 9411" transform="translate(6 8)">
+    <g id="Group_9409" data-name="Group 9409">
+      <path id="Path_5879" data-name="Path 5879" d="M17.712,20.59a1.466,1.466,0,0,1-.119.594,1.513,1.513,0,0,1-.633.72,1.439,1.439,0,0,1-.784.222H7.544A1.539,1.539,0,0,1,6,20.59a5.463,5.463,0,0,1,1.061-3.722A1.735,1.735,0,0,1,8.494,16.1a1.848,1.848,0,0,1,.824.206.266.266,0,0,0,.111.064,5.082,5.082,0,0,0,4.854,0,.26.26,0,0,0,.111-.064,1.934,1.934,0,0,1,.824-.206,1.671,1.671,0,0,1,.982.317,1.746,1.746,0,0,1,.451.452,5.748,5.748,0,0,1,.673,1.164A6.415,6.415,0,0,1,17.712,20.59Z" transform="translate(-6 -7.874)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <circle id="Ellipse_21892" data-name="Ellipse 21892" cx="3.238" cy="3.238" r="3.238" transform="translate(2.62)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+    <g id="Group_9410" data-name="Group 9410" transform="translate(10.2 2.828)">
+      <path id="Path_5880" data-name="Path 5880" d="M24,19.948a1.255,1.255,0,0,1-1.235,1.236H17.593a1.466,1.466,0,0,0,.119-.594,6.415,6.415,0,0,0-.388-2.558,5.748,5.748,0,0,0-.673-1.164,1.746,1.746,0,0,0-.451-.452,1.148,1.148,0,0,1,.4-.071,1.475,1.475,0,0,1,.665.166.257.257,0,0,0,.087.056,4.11,4.11,0,0,0,3.9,0,.257.257,0,0,0,.087-.056A1.524,1.524,0,0,1,22,16.345a1.4,1.4,0,0,1,1.149.618,4.123,4.123,0,0,1,.538.934A5.1,5.1,0,0,1,24,19.948Z" transform="translate(-16.2 -10.702)" fill="#282756"/>
+      <circle id="Ellipse_21893" data-name="Ellipse 21893" cx="2.596" cy="2.596" r="2.596" transform="translate(0.508)" fill="#282756"/>
+    </g>
+  </g>
+</svg>

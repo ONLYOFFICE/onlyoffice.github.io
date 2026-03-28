@@ -1,0 +1,1138 @@
+<!--
+ (c) Copyright Ascensio System SIA 2020
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<!-- Head Tag Start -->
+
+<head>
+    <title>ProPact</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/font-awesome.min.css">
+    <link rel="stylesheet" href="styles/jquery.atwho.min.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="vendor/jQuery-2.2.2-min/jquery-v2.2.2-min.js"></script>
+    <script src="scripts/jquery.caret.min.js"></script>
+    <script src="scripts/jquery.atwho.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<!-- Head Tag End -->
+<!-- Body Tag Start -->
+
+<body>
+<!-- Loader Start -->
+<div id="loader" class="page-loader d-none"></div>
+<!-- Loader End -->
+<div class="left-sidebar">
+    <!--  Section: Contract Lists  -->
+    <div class="contract-lists" id="sectionContractLists">
+        <div class="contract-drafting">
+            <div class="contract-header justify-content-end">
+                <a href="#" id="btnMarkupMode" class="btn btn-markup d-none">
+                    Our Working Draft
+                </a>
+                <a href="#" class="btn btn-primary" id="btnCreateClause">
+                    Review Section/Content
+                </a>
+            </div>
+            <div class="invite-counterpartie" id="divInviteCounterparty">
+                <a href="#" class="invite-button" id="btnInviteCounterparty">
+                    <img src="images/plus.svg" alt="plus">
+                    Invite Counterparty
+                </a>
+                <p style="font-size: 12px; line-height: 20px;">If you are working on a document without a Counterparty
+                    you can also invite another decision maker or team to discuss a document as the Counterparty - see
+                    <a href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                </p>
+            </div>
+            <div class="invite-counterpartie-pending d-none" id="divInviteCounterpartyInvited">
+                <div class="invite-form">
+                    <div class="contract-section disabled" id="divContractCounterpartySection">
+                        <div class="intellivision-inner">
+                            <img id="organizationImage" src="images/org-placeholder.png" alt="Organization">
+                            <h4 class="counterparty-organisation" id="txtOrganizationName">Organization</h4>
+                        </div>
+                        <div class="contract-user-list">
+                            <div class="contract-user-inner">
+                                <div class="contract-user-icon">
+                                    <img id="imgCounterpartyUserProfileA" class="counterparty-user-profile"
+                                         src="images/no-profile-image.jpg" alt="Rio Mendoza">
+                                </div>
+                                <div class="contract-user-name">
+                                    <h4 class="counterparty-user-profile-name" id="txtCounterpartyName">Counterparty
+                                        User</h4>
+                                    <span id="txtCounterpartyEmail">Counterparty Email</span>
+                                </div>
+                            </div>
+                            <p id="paragraphInvitationActions">
+                                <a href="#" id="btnResendInvitation">Click here</a>
+                                to resend invitation OR
+                                <a href="#" id="btnCancelInvitation">Cancel</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contract-list">
+                <div class="contract-search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search Sections" id="inputSearchbox">
+                        <button class="btn"><img src="images/icon-search.svg" alt="Icon Search"></button>
+                    </div>
+                </div>
+                <div class="clause-group-head d-none" id="divClauseGroupHead">
+                    <a href="#" id="btnAddClauseToGroup" class="btn btn-markup d-none">
+                        Add section to Group
+                    </a>
+                    <a href="#" id="btnRemoveFromGroup" class="btn btn-markup d-none">
+                        Remove From Group
+                    </a>
+                </div>
+                <div class="contract-clause-sections" id="divContractClauseSections">
+                    <div class="contract-list-items" id="divGroupClauseListItems">
+                    </div>
+                    <div class="contract-list-items" id="divContractListItems">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="scroll-down d-none" id="btnScrollDown" address="true"></a>
+    </div>
+    <!--  Section: Contract Lists  -->
+
+    <!--  Section: Invite Counterparty  -->
+    <div class="invite-counterpartie-form d-none" id="sectionInviteCounterparty">
+        <div class="invite-form">
+            <div class="invite-form-header">
+                <h3>Invite Counterparties</h3>
+            </div>
+            <div class="form-inner">
+                <form id="formInviteCounterparty" method="get" action>
+                    <div class="form-group">
+                        <label class="">First name</label>
+                        <input type="text" class="form-control" placeholder="First name" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Last Name</label>
+                        <input type="text" class="form-control" placeholder="Last name" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Email</label>
+                        <input type="email" class="form-control" placeholder="Email" name="email" required
+                               id="inviteEmailAddress">
+                    </div>
+                    <!--<div class="form-group">
+                    <label class="">Organisation name</label>
+                    <input type="text" class="form-control" placeholder="Organisation name" name="organisationName"
+                           required>
+                </div>-->
+                    <div class="form-group autocomplete">
+                        <label class="">Organisation name:</span></label>
+                        <span class="" style="color: red;">Important: please use your counterparties full business name.  Use <a
+                                href="https://abr.business.gov.au/" target="_blank" style="color: #69daee;"> abr.business.gov.au</a> to confirm.</span>
+                        <input id="inputOrganisationName" class="form-control" type="text" name="organisationName"
+                               placeholder="Organisation name" required autocomplete="off">
+                    </div>
+                    <div class="submit-btn">
+                        <a class="btn btn-secondary" href="#" id="btnInviteCounterpartyCancel">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Invite</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--  Section: Invite Counterparty  -->
+
+    <!--  Section: Create Clause  -->
+    <div class="contract-create-form d-none" id="sectionCreateClause">
+        <div class="create-contract">
+            <div class="create-contract-header">
+                <div class="conversation-left">
+                        <span class="user-icon">
+                            <img id="userProfileImages" class="loggedin-user-profile" src="images/profile-image.png"
+                                 alt="loggedin-user">
+                        </span>
+                    <div class="user-inner">
+                        <span class="user-name loggedin-user-name" id="userProfileNames">Jane Nelson</span>
+                        <p id="userProfileroles" class="loggedin-user-role">Lawyer</p>
+                    </div>
+                </div>
+                <a href="#" class="close-btn btn-redirect-contract-list" id="btnContractCreateClose"
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Close">
+                    <img src="images/close.svg" alt="Close Icon">
+                </a>
+            </div>
+            <div class="create-contract-inner">
+                <form id="formClause" method="get" action>
+                    <div class="form-group">
+                        <label class="">Clause/Section</label>
+                        <input type="text" class="form-control" placeholder="Clause/Section Number"
+                               name="contractSection"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Description or Comment</label>
+                        <textarea class="form-control" name="contractDescription"
+                                  placeholder="Description or Comment" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Invite Users</label>
+                        <input type="text" class="form-control invite-users-input" id="inputInviteUsersTeams"
+                               placeholder="Select users and teams" readonly>
+                        <div class="filter-box invite-users-box d-none" id="divInviteUsersBox">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button id="btnInviteTeamsCollapse" class="accordion-button collapsed"
+                                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseTeams"
+                                                aria-expanded="false" aria-controls="collapseTeams">
+                                            <input type="checkbox" id="chkboxInviteAllTeams"
+                                                   class="form-check-input d-none">
+                                            <label class="chkbox-label" for="chkboxInviteAllTeams">Teams</label>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTeams" class="accordion-collapse collapse"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body" id="accordionBodyTeams">
+                                            <p class="text-left" id="paragraphTeamsNotFoundMessage">
+                                                No teams have been created. Contract creators and admins can create
+                                                teams from their dashboard.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button id="btnInviteUsersCollapse" class="accordion-button collapsed"
+                                                type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsers"
+                                                aria-expanded="false" aria-controls="collapseUsers">
+                                            <input type="checkbox" id="chkboxInviteAllUsers"
+                                                   class="form-check-input d-none">
+                                            <label class="chkbox-label" for="chkboxInviteAllUsers">Users</label>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseUsers" class="accordion-collapse collapse"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body" id="accordionBodyUsers">
+                                            <p class="text-left" id="paragraphUsersNotFoundMessage">
+                                                No users have been added. Contract creators and admins can add users
+                                                from their dashboard.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="divClauseGroup">
+                        <label class="">Clause Group</label>
+                        <select class="form-control" name="clauseGroup" id="inputClauseGroup">
+                            <option value="">Select Group</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class=""></label>
+                        <input type="hidden" class="form-control " name="clauseText" id="clauseText" value="1"
+                               required>
+                    </div>
+                    <div class="submit-btn">
+                        <a class="btn btn-secondary btn-redirect-contract-list" href="#"
+                           id="btnContractCreateCancel" style="color: #282756 !important">Cancel</a>
+                        <button class="btn btn-primary" type="submit">Review Section</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--  Section: Create Clause  -->
+
+    <!--  Section: Conversation History  -->
+    <div class="contract-chat-history d-none" id="sectionConversionHistory">
+        <div class="meeting-screen chat-panel-wrap">
+            <div class="chat-create-header">
+                <!--                <h3>Conversation History</h3>-->
+                <div class="chat-top-new-part">
+                    <div class="line">Conversation History</div>
+                    <div class="line line3">Section: <span class="text" id="clauseSectionTitleCHistory"></span></div>
+                    <!--                    <div class="line line3">-->
+                    <!--                        <div>My Team: </div>-->
+                    <!--                        <div class="text"> Andreq, Temogen, Adam, Tax Team, Sue, Ritvik</div>-->
+                    <!--                    </div>-->
+                </div>
+                <a href="#" class="close-btn" id="btnCloseConversionHistory" data-bs-toggle="tooltip"
+                   data-bs-placement="top" title="Close">
+                    <img src="images/close.svg" alt="Close Icon">
+                </a>
+            </div>
+            <div class="chat-body" id="divChatHistoryBody">
+                <div class="chat-area" id="conversionHistory">
+
+                </div>
+            </div>
+            <div class="chat-create-footer">
+                <div class="chat-footer-inner">
+                    <button class="btn" id="btnGoToCounterpartyChat" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Open counterparty negotiation window">Go to counterparty
+                    </button>
+                    <button class="btn" id="btnGoToSameSideChat" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Open my side negotiation window">Go to my side
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Section: Conversation History  -->
+
+    <!--  Section: Sameside chat window  -->
+    <div class="contract-sameside-chat d-none" id="sectionSameSideChat">
+        <div class="meeting-screen chat-panel-wrap conversion-history">
+            <div class="chat-create-header" id="chatHeader">
+                <div class="conversation-left">
+                    <!--                    <span class="user-icon">-->
+                    <!--                        <img id="userProfileImage" class="loggedin-user-profile" src="images/profile-image.png"-->
+                    <!--                             alt="profile-picture">-->
+                    <!--                    </span>-->
+                    <!--                    <div class="user-inner">-->
+                    <!--                        <span class="user-name crop-text loggedin-user-name" id="userProfileName">-</span>-->
+                    <!--                        <p class="crop-text loggedin-user-role" id="userProfilerole">-</p>-->
+                    <!--                    </div>-->
+                    <div class="chat-top-new-part">
+                        <!--                        <div class="line">&check; Messaging Your Party</div>-->
+                        <div class="line line3">Section: <span class="text" id="clauseSectionTitleSameSide"></span>
+                        </div>
+                        <div class="line line3" id="divUserProfileA">
+                            <div>My Team: <span class="text" id="sameSideUserList"></span></div>
+                            <!--                            <div class="text" id="sameSideUserList"></div>-->
+                        </div>
+                        <!--                        <div class="line line3" id="divUserProfileA">-->
+                        <!--                            <div>My Users: </div>-->
+                        <!--                            <div class="text" id="sameSideUserList"></div>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+                <div class="conversation-right">
+                    <ul>
+                        <li class="action-sameside">
+                            <a href="#" id="btnOpenInviteUserTeam" data-bs-toggle="tooltip" data-bs-placement="top"
+                               title="Invite User & Team">
+                                <img src="images/invite-user-btn-icon-new.svg" alt="invite-icon"
+                                     id="imgInviteUserTeam">
+                            </a>
+                            <div class="invite-user-tabs active" id="divInviteUserTabs">
+                                <div class="invite-user-tabs-header">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab"
+                                               href="#usersTabs">Users</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#userTeams">Teams</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="invite-user-tabs-body">
+                                    <div class="tab-content">
+                                        <div id="usersTabs" class="tab-pane active">
+                                            <div class="invite-user-list">
+                                                <div id="divInvitedUsers">
+                                                </div>
+                                                <div class="invite-btn">
+                                                    <button class="btn btn-primary" id="btnInviteUsers">
+                                                        <img src="images/invite-user-btn-icon.svg"
+                                                             alt="invite user btn icon"> Invite
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="userTeams" class="tab-pane">
+                                            <div class="user-teams-list invite-user-list">
+                                                <div id="divInvitedTeams">
+                                                </div>
+                                                <div class="invite-btn">
+                                                    <button class="btn btn-primary" id="btnInviteTeams">
+                                                        <img src="images/invite-user-btn-icon.svg"
+                                                             alt="invite team btn icon"> Invite
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" id="btnGoToConversionHistory" data-bs-toggle="tooltip"
+                               data-bs-placement="top" title="View the Conversation History">
+                                <img src="images/chat-header-icon1.svg" alt="conversation-icon">
+                            </a>
+                        </li>
+                        <li class="action-sameside dropdown">
+                            <a class="clause-options" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </a>
+                            <ul class="dropdown-menu more-option" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item" id="btnWithdrawnClauseSameSide" href="#">
+                                        Withdraw section
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" id="btnSendPositionConfirmationSameSide" href="#">
+                                        Position/drafting confirmation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" id="btnScheduleMeetingSameSide" href="#">
+                                        Schedule meeting
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <a href="#" class="close-btn" id="btnCloseSameSideChat" data-bs-toggle="tooltip"
+                       data-bs-placement="top" title="Close">
+                        <img src="images/close.svg" alt="Close Icon">
+                    </a>
+                </div>
+            </div>
+            <div class="chat-body" id="divChatSameSideBody">
+                <div class="chat-area" id="conversionSameSide">
+                </div>
+            </div>
+            <div class="chat-create-footer" id="divChatContractSameSideFooter">
+                <div class="go-btn2">
+                    <lable id="initialMessageMySide" class="d-block d-none" style="margin-bottom: 10px;">What’s next? Enter your ‘my side’ message below.
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <lable id="positionMessageMySide" class="d-block d-none" style="margin-bottom: 10px;">When you reach agreement in principle use <img src="images/file-right.svg" class="file-icon" alt="Position/drafting confirmation"/> to confirm your position
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <lable id="draftingMessageMySide" class="d-block d-none" style="margin-bottom: 10px;">To test drafting with my side go to Our Working Draft.
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <button class="btn" id="btnGoToCounterparty" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Open counterparty negotiation window">Go to counterparty
+                    </button>
+                </div>
+                <div id="divSameSideTextbox">
+                    <span id="typingSpan"></span>
+                    <div class="form-group position-relative">
+                        <div contenteditable="true" id="messageInputSameSide" placeholder="Type message here"
+                             class="form-control editable-div">
+                        </div>
+                        <div id="errorFileUploadSameSide"></div>
+                        <div id="attchedFilenameSameSide"></div>
+                        <input type="file" class="d-none" id="attachFileSameSide" multiple>
+
+                    </div>
+                    <div class="chat-footer-inner chat-footer-inner-2" id="chatFooterInnerSameSide">
+                        <div class="type-sms-btn-part">
+                            <button type="submit" class="btn btn-secondary" id="btnAttachFileSameSide"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Attach File">
+                                <img src="images/attach-icon.svg" alt="Attach File">
+                            </button>
+                            <button type="submit" class="btn btn-secondary"
+                                    id="btnSendPositionConfirmationSameSideB" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Position/drafting confirmation">
+                                <img src="images/file-right.svg" alt="Position/drafting confirmation"/>
+                            </button>
+                            <button type="submit" class="btn btn-secondary" id="btnScheduleMeetingSameSideB"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Schedule meeting">
+                                <img src="images/calender-add.svg" alt="Schedule meeting">
+                            </button>
+                        </div>
+                        <div class="send-btn">
+                            <button class="btn-primary" id="btnSendSameSide"><img src="images/send-icon.svg"
+                                                                                  alt="">Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Section: Sameside chat window  -->
+
+    <!--  Section: Counterparty chat window  -->
+    <div class="contract-sameside-chat d-none" id="sectionCounterpartyChat">
+        <div class="meeting-screen chat-panel-wrap conversion-history">
+            <div class="chat-create-header counterparty" id="chatCounterpartyHeader">
+                <div class="conversation-left" id="divOppsiteUserProfile">
+                    <!--                    <span class="user-icon">-->
+                    <!--                        <img id="imgCounterpartyUserProfile" class="counterparty-user-profile"-->
+                    <!--                             src="images/profile-image.png" alt="">-->
+                    <!--                    </span>-->
+                    <!--                    <div class="user-inner">-->
+                    <!--                        <span class="user-name crop-text counterparty-user-profile-name"-->
+                    <!--                              id="counterpartyUserProfileName">-</span>-->
+                    <!--                        <p class="crop-text counterparty-user-profile-role" id="oppsiteUserProfilerole">-</p>-->
+                    <!--                    </div>-->
+                    <div class="chat-top-new-part">
+                        <div class="line">Messaging Counterparty</div>
+                        <div class="line line3">Section: <span class="text" id="clauseSectionTitleCounterParty"></span>
+                        </div>
+                        <!--                            <div class="line" id="clauseSectionTitleCounterParty"></div>-->
+                        <!--                        <div class="line line3">-->
+                        <!--                            <div>My Team: </div>-->
+                        <!--                            <div class="text" id="counterPartyTeamList"></div>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="line line3">-->
+                        <!--                            <div>My Users: </div>-->
+                        <!--                            <div class="text" id="counterPartyUserList"></div>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+                <div class="conversation-right">
+                    <ul>
+                        <li>
+                            <a href="#" id="btnGoToConversionChatHistory" data-bs-toggle="tooltip"
+                               data-bs-placement="top" title="View the Conversation History">
+                                <img src="images/chat-header-icon1.svg" alt="conversation-icon">
+                            </a>
+                        </li>
+                        <li class="action-counterparty dropdown">
+                            <a class="clause-options" href="#" role="button" id="dropdownMenuLinkCP"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </a>
+                            <ul class="dropdown-menu more-option" aria-labelledby="dropdownMenuLinkCP">
+                                <li>
+                                    <a class="dropdown-item" id="btnSendPositionConfirmationCounterparty" href="#">
+                                        Position/drafting confirmation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" id="btnScheduleMeetingCounterparty" href="#">
+                                        Schedule meeting
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <a href="#" class="close-btn" id="btnCloseCounterpartyChat" data-bs-toggle="tooltip"
+                       data-bs-placement="top" title="Close">
+                        <img src="images/close.svg" alt="Close Icon">
+                    </a>
+                </div>
+            </div>
+            <div class="chat-body" id="divChatCounterPartyBody">
+                <div class="chat-area" id="conversionCounterparty">
+                </div>
+            </div>
+            <div class="chat-create-footer" id="divChatContractCounterpartyFooter">
+                <div class="go-btn2">
+                    <lable id="initialMessage" class="d-block d-none" style="margin-bottom: 10px;">What’s next? Enter your message to the counterparty below.
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <lable id="positionMessage" class="d-block d-none" style="margin-bottom: 10px;">When you reach agreement in principle use <img src="images/file-right.svg" class="file-icon" alt="Position/drafting confirmation"/> to confirm your position
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <lable id="draftingMessage" class="d-block d-none" style="margin-bottom: 10px;">Add your amendments and use <img src="images/file-right.svg" alt="Position/drafting confirmation"/> to submit to the counterparty for approval. To test drafting with ‘my side’ select the Our Working Draft button
+                        <a style="color:red; text-decoration: underline" href="https://propact.com.au/faq" target="_blank">FAQ</a>
+                    </lable>
+                    <button class="btn" id="btnGoToSameSide" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="Open my side negotiation window">Go to my side
+                    </button>
+                </div>
+
+                <div id="divCounterpartyTextbox">
+                    <span id="typingSpanCP"></span>
+                    <div class="form-group position-relative">
+                        <div contenteditable="true" id="messageInputCounterParty" placeholder="Type message here"
+                             class="form-control editable-div">
+                        </div>
+                        <div id="errorFileUploadCounterparty"></div>
+                        <div id="attchedFilenameCounterparty"></div>
+                        <input type="file" class="d-none" id="attachFileCounterparty" multiple>
+                    </div>
+                    <div class="chat-footer-inner" id="chatFooterInnerCP">
+                        <!--                        <button class="btn" id="btnGoToSameSide">Go to my side</button>-->
+                        <div class="type-sms-btn-part">
+                            <button type="submit" class="btn btn-secondary" id="btnAttachFileCounterparty"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Attach File">
+                                <img src="images/attach-icon.svg" alt="Attach File">
+                            </button>
+                            <button type="submit" class="btn btn-secondary"
+                                    id="btnSendPositionConfirmationCounterpartyB" data-bs-toggle="tooltip"
+                                    data-bs-placement="top" title="Position/drafting confirmation">
+                                <img src="images/file-right.svg" alt="Position/drafting confirmation"/>
+                            </button>
+                            <button type="submit" class="btn btn-secondary" id="btnScheduleMeetingCounterpartyB"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Schedule meeting">
+                                <img src="images/calender-add.svg" alt="Schedule meeting">
+                            </button>
+                        </div>
+                        <div class="send-btn">
+                            <button class="btn-primary" id="btnSendCounterParty"><img src="images/send-icon.svg"
+                                                                                      alt="">
+                                Send to Counterparty
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Section: Counterparty chat window  -->
+
+    <!--  Section: Bottom slider popup  -->
+    <div class="bottom-popup">
+        <!--  Section: Invite Users popup  -->
+        <div class="invite-users-popup d-none" id="inviteUserPopup">
+            <div class="invite-users-inner">
+                <img src="images/invite-user-icon.svg" alt="Invite Users">
+                <h3 id="allUserInvitedMessage" class="d-none">All users have been added to this clause. Contract
+                    creators and Admins can add users to the contract from their dashboard.</h3>
+                <h3 id="noUserInviteListMessage" class="d-none">No users to invite, add via dashboard.</h3>
+                <h3 id="partiallyInvitedUserListMessage" class="d-none">Add a user to this section</h3>
+                <div class="select-user-table d-none" id="inviteUserTable">
+                </div>
+                <div class="confirmation-form">
+                    <div class="submit-btn">
+                        <button type="submit" class="btn btn-secondary btn-close-bottom-popup"
+                                id="goBackToScreen">Back
+                        </button>
+                        <button type="submit" class="btn btn-primary pull-right d-none" id="sendInviteUsers"
+                                disabled>
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Invite Users popup  -->
+
+        <!--  Section: Invite team popup  -->
+        <div class="invite-teams-popup d-none" id="inviteTeamPopup">
+            <div class="invite-users-inner">
+                <img src="images/invite-user-icon.svg" alt="Invite Users">
+                <h3 id="allTeamInvitedMessage" class="d-none">All teams have been added to this clause. Contract
+                    creators and Admins can create teams from their dashboard.
+                </h3>
+                <h3 id="noTeamInviteListMessage" class="d-none">No teams to invite, add via dashboard.</h3>
+                <h3 id="partiallyInvitedTeamListMessage" class="d-none">Add a team to this section</h3>
+                <div class="select-user-table d-none" id="inviteTeamTable">
+                </div>
+                <div class="confirmation-form">
+                    <div class="submit-btn">
+                        <button type="submit" class="btn btn-secondary btn-close-bottom-popup"
+                                id="goBackToScreenA">Back
+                        </button>
+                        <button type="submit" class="btn btn-primary pull-right d-none" id="sendInviteTeams"
+                                disabled>
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Invite team popup  -->
+
+        <!--  Section: Send Position Confirmation popup  -->
+        <div class="position-confirmation-popup d-none" id="sendPositionConfirmationPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Send Position Confirmation">
+                <h3>Send Position Confirmation</h3>
+                <div class="confirmation-form">
+                    <form id="formSendPositionConfirmation" method="get" action>
+                        <div class="form-group">
+                            <label class="form-label">Description of Position to be Agreed</label>
+                            <textarea class="form-control" name="contract-description"
+                                      id="inputSendPositionConfirmation"
+                                      placeholder="Describe the change(s) to the Section under negotiation to be agreed in principle"
+                                      required></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenB">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendPositionConfirmation">
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Send Position Confirmation popup  -->
+
+        <!--  Section: Position Confirmation popup  -->
+        <div class="position-confirmation-popup d-none" id="confirmPositionPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Position Confirmation">
+                <h3>Position Confirmation</h3>
+                <div class="confirmation-form">
+                    <form id="formReconfirmPosition" method="get" action>
+                        <input type="hidden" id="approvePositionMessageId" value=""/>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="inputPositionReason" id="inputPositionReason"
+                                      placeholder="Short message about Position Confirmation" required></textarea>
+                        </div>
+                        <div class="accordion-header">
+                            <div class="accordion-head">
+                                <div class="form-check form-check-inline">
+                                    <div class="radio-custom">
+                                        <input class="form-check-input" type="radio" name="myRadioButton"
+                                               id="sendToCounterpartyForDraft" value="counterparty">
+                                        <span></span>
+                                    </div>
+                                    <label class="form-check-label" for="sendToCounterpartyForDraft">
+                                        Send to counterparty to draft?
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <div class="radio-custom">
+                                        <input class="form-check-input" type="radio" name="myRadioButton"
+                                               id="sendToTeamForDraft" value="sameside">
+                                        <span></span>
+                                    </div>
+                                    <label class="form-check-label" for="sendToTeamForDraft">
+                                        Send to a team member to draft?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divDraftingBox" class="d-none">
+                            <input type="hidden" id="assignDraftingRequestUserId" value=""/>
+                            <div class="form-group">
+                                <label>User</label>
+                                <input type="text" class="form-control invite-users-input"
+                                       id="assignDraftingRequestInput" placeholder="Select user"
+                                       name="assignDraftingRequestInput" readonly>
+                                <div class="filter-box invite-users-box d-none" id="assignDraftingRequestBox">
+                                    <div class="accordion" id="accordionExampleB">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" id="btncollapseUsersB"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseUsersB" aria-expanded="false"
+                                                        aria-controls="collapseUsersB">
+                                                    Users
+                                                </button>
+                                            </h2>
+                                            <div id="collapseUsersB" class="accordion-collapse collapse"
+                                                 data-bs-parent="#accordionExampleB">
+                                                <div class="accordion-body" id="accordionPositionConfirmation">
+                                                    <p class="text-left" id="usersNoteFoundMessageB">
+                                                        There are no users to select. You need to add them from the
+                                                        contract
+                                                        dashboard first.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenD">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendReconfirmPosition">Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Position Confirmation popup  -->
+
+        <!--  Section: Reject Position popup  -->
+        <div class="position-confirmation-popup d-none" id="rejectPositionPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Reject Position">
+                <h3>Reject Position</h3>
+                <div class="confirmation-form">
+                    <form id="formRejectPosition" method="get" action>
+                        <input type="hidden" id="rejectPositionMessageId" value=""/>
+                        <div class="form-group">
+                            <label class="form-label">Rejection Reason</label>
+                            <textarea class="form-control" name="contract-description"
+                                      id="inputRejectPositionReason" placeholder="Rejection Reason" required></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenE">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendRejectPosition">Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Reject Position popup  -->
+
+        <!--  Section: Assign user to draft changes  popup  -->
+        <div class="position-confirmation-popup d-none" id="assignDraftRequestPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Assign user to draft changes">
+                <h3>Assign user to draft changes</h3>
+                <div class="confirmation-form">
+                    <form id="formAssignDraftRequest" method="get" action>
+                        <input type="hidden" id="assignDraftRequestMessageId" value=""/>
+                        <input type="hidden" id="assignDraftRequestUserId" value=""/>
+                        <div class="form-group">
+                            <input type="text" class="form-control invite-users-input" id="inputAssignDraftRequest"
+                                   placeholder="Select user" readonly>
+                            <div class="filter-box invite-users-box d-none" id="assignDraftRequestBox">
+                                <div class="accordion" id="accordionExampleA">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" id="btncollapseUsersA"
+                                                    type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseUsersA" aria-expanded="false"
+                                                    aria-controls="collapseUsersA">
+                                                Users
+                                            </button>
+                                        </h2>
+                                        <div id="collapseUsersA" class="accordion-collapse collapse"
+                                             data-bs-parent="#accordionExampleA">
+                                            <div class="accordion-body" id="accordionAssignDraftRequest">
+                                                <p class="text-left" id="usersNoteFoundMessage">
+                                                    There are no users to select. You need to add them from the
+                                                    contract
+                                                    dashboard first.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenF">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendAssignDraftRequest"
+                                    disabled>Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Assign user to draft changes  popup  -->
+
+        <!--  Section: Submit Drafting for Approval popup  -->
+        <div class="position-confirmation-popup d-none" id="sendDraftConfirmationPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Submit Drafting for Approval">
+                <h3>Submit Drafting for Approval</h3>
+                <div class="confirmation-form">
+                    <form id="formSendDraftConfirmation" method="get" action>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="contract-description"
+                                      id="inputSendDraftConfirmation" placeholder="Short message about drafting"
+                                      required></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenG">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendDraftConfirmation">
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Submit Drafting for Approval popup  -->
+
+        <!--  Section: Reject Draft Request popup  -->
+        <div class="position-confirmation-popup d-none" id="rejectDarftRequestPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Reject Draft Request">
+                <h3>Reject Draft Request</h3>
+                <div class="confirmation-form">
+                    <form id="formRejectDraftRequest" method="get" action>
+                        <input type="hidden" id="rejectDraftRequestMessageId" value=""/>
+                        <div class="form-group">
+                            <label class="form-label">Rejection Reason</label>
+                            <textarea class="form-control" name="contract-description"
+                                      id="inputRejectDraftRequestReason" placeholder="Rejection Reason"
+                                      required></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenI">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right"
+                                    id="sendRejectDraftRequest">Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Reject Draft Request popup  -->
+
+        <!--  Section: Reject Draft popup  -->
+        <div class="position-confirmation-popup d-none" id="rejectDarftPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Reject Drafting">
+                <h3>Reject Drafting</h3>
+                <div class="confirmation-form">
+                    <form id="formRejectDraft" method="get" action>
+                        <input type="hidden" id="rejectDraftMessageId" value=""/>
+                        <div class="form-group">
+                            <label class="form-label">Explanation</label>
+                            <textarea class="form-control" name="contract-description" id="inputRejectDraftReason"
+                                      placeholder="Explain reason for rejecting drafting" required></textarea>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenH">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendRejectDraft">Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Reject Draft popup  -->
+
+        <!--  Section: Meeting Details popup  -->
+        <div class="position-confirmation-popup d-none" id="meetingPopup">
+            <div class="meeting-details">
+                <div class="meeting-details-inner invite-users-inner">
+                    <img src="images/schedule_meeting-icon.svg" alt="Meeting">
+                    <h3>Meeting Details</h3>
+                    <div class="inner-title">
+                        <h4 id="meetingTitle">-</h4>
+                        <p id="meetingAgenda">-</p>
+                        <span id="meetingScheduleTime">-</span>
+                        <span id="MeetingTimings">-</span>
+                        <span id="meetingLocation">-</span>
+                    </div>
+                </div>
+                <div class="meeting-user-list">
+                    <div class="meeting-user-title">
+                        <h4>
+                            <span id="participantCounts">1</span> Participants
+                        </h4>
+                    </div>
+                    <div class="meeting-user-items" id="meetingParticipantList">
+                    </div>
+                    <div class="submit-btn">
+                        <div class="justify-content-start">
+                            <button type="button"
+                                    class="btn btn-secondary btn-meeting-close btn-close-bottom-popup">
+                                Close
+                            </button>
+                        </div>
+                        <div class="justify-content-end">
+                            <button type="submit" id="btnMeetingView"
+                                    class="btn btn-primary line-class-tmp btn-meeting-view">Join Now
+                            </button>
+                            <button type="submit" id="btnMeetingEnterOutcomes"
+                                    class="btn btn-primary line-class-tmp btn-meeting-view d-none">Minutes/Actions
+                            </button>
+                            <button type="submit" id="btnMeetingViewOutcomes"
+                                    class="btn btn-primary line-class-tmp btn-meeting-view d-none">Minutes/Actions
+                            </button>
+                        </div>
+                    </div>
+                    <div class="meeting-outcomes d-none" id="divMeetingViewOutcomes">
+                        <h5>Minutes/Actions:</h5>
+                        <p id="txtMeetingViewOutcomes">
+                        </p>
+                    </div>
+                    <div class="meeting-outcomes-form d-none" id="divMeetingEnterOutcomes">
+                        <form id="formMeetingOutcomes" method="get" action>
+                            <input type="hidden" id="enterOutcomesMeetingId" value=""/>
+                            <div class="form-group">
+                                <h5 class="form-label">Meeting Minutes/Actions</h5>
+                                <textarea class="form-control" name="meetingOutcomes" id="inputMeetingOutcomes"
+                                          placeholder="Enter Outcome(s)" required></textarea>
+                            </div>
+                            <div class="submit-btn justify-content-end">
+                                <button type="submit" class="btn btn-primary pull-right">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Meeting Details popup  -->
+
+        <!--  Section: Add clause to Group popup  -->
+        <div class="position-confirmation-popup d-none" id="addClauseToGroupPopup">
+            <div class="invite-users-inner">
+                <!-- <img src="images/position_confirmation.svg" alt="Send Position Confirmation">
+            <h3>Send Position Confirmation</h3> -->
+                <form id="formClauseToGroup" method="get" action>
+                    <div class="radio-group-top space-beetween">
+                        <div class="form-check form-check-inline">
+                            <div class="radio-custom">
+                                <input class="form-check-input" type="radio" name="isNewGroup" id="radioCreateGroup"
+                                       value="Yes">
+                                <span></span>
+                            </div>
+                            <label class="form-check-label" for="radioCreateGroup">Create Group</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <div class="radio-custom">
+                                <input class="form-check-input" type="radio" name="isNewGroup"
+                                       id="radioExistingGroup" value="No">
+                                <span></span>
+                            </div>
+                            <label class="form-check-label" for="radioExistingGroup">Existing Group</label>
+                        </div>
+                    </div>
+                    <div class="confirmation-form">
+                        <div class="form-group d-none" id="divGroupName">
+                            <label class="form-label">Group Name</label>
+                            <input type="text" class="form-control" name="groupname" placeholder="Enter group name">
+                        </div>
+                        <div class="form-group d-none" id="divExistingGroup">
+                            <label class="form-label">Group</label>
+                            <select class="form-control" name="groupid" id="selectExistingClauseGroup">
+                                <option value="">Select Group</option>
+                            </select>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenC">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="submitClauseGroup">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--  Section: Add clause to Group popup  -->
+
+        <!--  Section: Reassign Draft Request popup  -->
+        <div class="position-confirmation-popup d-none" id="reassignDraftRequestPopup">
+            <div class="invite-users-inner">
+                <img src="images/position_confirmation.svg" alt="Reassign Drafting">
+                <h3>Reassign Drafting</h3>
+                <div class="confirmation-form">
+                    <form id="formReassignDraftRequest" method="get" action>
+                        <input type="hidden" id="reassignDraftRequestMessageId" value=""/>
+                        <input type="hidden" id="reassignDraftRequestUserId" value=""/>
+                        <div class="accordion-header">
+                            <label>Reassign User</label>
+                            <div class="accordion-head">
+                                <div class="form-check form-check-inline">
+                                    <div class="radio-custom">
+                                        <input class="form-check-input" type="radio" name="reassignRadioButton"
+                                               id="sendToCounterpartyForDraftA" value="counterparty">
+                                        <span></span>
+                                    </div>
+                                    <label class="form-check-label" for="sendToCounterpartyForDraftA">
+                                        Send to counterparty for drafting?
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <div class="radio-custom">
+                                        <input class="form-check-input" type="radio" name="reassignRadioButton"
+                                               id="sendToTeamForDraftA" value="sameside">
+                                        <span></span>
+                                    </div>
+                                    <label class="form-check-label" for="sendToTeamForDraftA">
+                                        Send to a team member for drafting?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divReassignDraftingBox" class="d-none">
+                            <div class="form-group">
+                                <label>User</label>
+                                <input type="text" class="form-control invite-users-input"
+                                       id="inputReassignDraftRequest" placeholder="Select user" readonly>
+                                <div class="filter-box invite-users-box d-none" id="reassignDraftRequestBox">
+                                    <div class="accordion" id="accordionExampleC">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" id="btncollapseUsersC"
+                                                        type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseUsersC" aria-expanded="false"
+                                                        aria-controls="collapseUsersC">
+                                                    Users
+                                                </button>
+                                            </h2>
+                                            <div id="collapseUsersC" class="accordion-collapse collapse"
+                                                 data-bs-parent="#accordionExampleC">
+                                                <div class="accordion-body" id="accordionReassignDraftRequest">
+                                                    <p class="text-left" id="usersNoteFoundMessageC">
+                                                        There are no users to select. You need to add them from the
+                                                        contract
+                                                        dashboard first.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-btn">
+                            <button type="button" class="btn btn-secondary btn-close-bottom-popup"
+                                    id="goBackToScreenJ">
+                                Back
+                            </button>
+                            <button type="submit" class="btn btn-primary pull-right" id="sendReassignDraftRequest"
+                                    disabled>
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--  Section: Reassign Draft Request popup  -->
+    </div>
+    <!--  Section: Bottom slider popup  -->
+
+    <!--  Section: Snackbar  -->
+    <div id="snackbar">Snackbar text</div>
+    <!--  Section: Snackbar  -->
+</div>
+<script type="text/javascript" src="scripts/plugin.js"></script>
+</body>
+<!-- Body Tag End -->
+
+</html>

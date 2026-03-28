@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23.5" height="23.5" viewBox="0 0 23.5 23.5">
+  <g id="ic_schedule_meeting" transform="translate(60.752 -54.417)">
+    <g id="Group_7596" data-name="Group 7596" transform="translate(-60.002 55.167)">
+      <path id="Path_842" data-name="Path 842" d="M-54.461,73.458H-57.33A2.672,2.672,0,0,1-60,70.786V60.608a2.672,2.672,0,0,1,2.672-2.672h12.054A2.672,2.672,0,0,1-42.6,60.608V61.6" transform="translate(60.002 -56.059)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_137" data-name="Line 137" y2="3.753" transform="translate(4.242)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_138" data-name="Line 138" y2="3.753" transform="translate(8.699)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_139" data-name="Line 139" y2="3.753" transform="translate(13.157)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Union_6" data-name="Union 6" d="M0,7.306a.78.78,0,1,1,.78.781A.78.78,0,0,1,0,7.306ZM2.971,4.043a.781.781,0,1,1,.781.781A.781.781,0,0,1,2.971,4.043ZM0,4.043a.78.78,0,1,1,.78.781A.78.78,0,0,1,0,4.043ZM5.943.78a.781.781,0,1,1,.781.781A.781.781,0,0,1,5.943.78ZM2.971.78a.781.781,0,1,1,.781.781A.781.781,0,0,1,2.971.78ZM0,.78a.78.78,0,1,1,.78.781A.78.78,0,0,1,0,.78Z" transform="translate(3.462 6.133)" fill="#282756" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+    <circle id="Ellipse_51" data-name="Ellipse 51" cx="7.044" cy="7.044" r="7.044" transform="translate(-52.091 63.079)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <g id="Group_7597" data-name="Group 7597" transform="translate(-48.918 66.252)">
+      <line id="Line_140" data-name="Line 140" y2="7.743" transform="translate(3.871 0)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_141" data-name="Line 141" x1="7.743" transform="translate(0 3.871)" fill="none" stroke="#282756" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

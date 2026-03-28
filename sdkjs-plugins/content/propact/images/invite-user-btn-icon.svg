@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="invite-user-btn-icon" transform="translate(10147 -10856)">
+    <rect id="Rectangle_3377" data-name="Rectangle 3377" width="30" height="30" transform="translate(-10147 10856)" fill="#fff" opacity="0.001"/>
+    <g id="Group_9419" data-name="Group 9419" transform="translate(-10241.705 10730.354)">
+      <circle id="Ellipse_21894" data-name="Ellipse 21894" cx="4.088" cy="4.088" r="4.088" transform="translate(105.011 131.646)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_5882" data-name="Path 5882" d="M109.1,142.154a6.4,6.4,0,0,1-3.065-.778h0a1.123,1.123,0,0,1-.136-.078,2.185,2.185,0,0,0-2.851.7,10.217,10.217,0,0,0-1.342,5.7,1.945,1.945,0,0,0,1.945,1.946h4.66" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_253" data-name="Line 253" y2="6.673" transform="translate(113.157 142.973)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_254" data-name="Line 254" x1="6.673" transform="translate(109.821 146.309)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

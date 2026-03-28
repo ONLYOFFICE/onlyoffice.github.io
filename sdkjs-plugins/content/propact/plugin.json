@@ -1,0 +1,46 @@
+{
+  "name": "ProPact",
+  "guid": "asc.{C36NCMB5-08F0-4A68-B829-5F1F7D488588}",
+  "variations": [
+    {
+      "description": "ProPact's agile workflow drives efficiency, accountability and trust into legal and commercial document negotiation.",
+      "url": "index.html",
+      "icons": [
+        "resources/light/icon.png",
+        "resources/light/icon@2x.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/light/icon.png"
+          },
+          "200%": {
+            "normal": "resources/light/icon@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/dark/icon.png"
+          },
+          "200%": {
+            "normal": "resources/dark/icon@2x.png"
+          }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["word"],
+      "isVisual": true,
+      "isModal": false,
+      "isInsideMode": true,
+      "initDataType": "text",
+      "initData": "",
+      "size": [485, 712],
+      "isUpdateOleOnResize": false,
+      "buttons": [],
+      "initOnSelectionChanged": true,
+      "events": ["onTargetPositionChanged"]
+    }
+  ]
+}
