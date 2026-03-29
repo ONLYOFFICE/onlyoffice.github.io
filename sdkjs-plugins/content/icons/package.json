@@ -15,7 +15,7 @@
         "@rollup/plugin-commonjs": "^29.0.0",
         "@rollup/plugin-html": "^2.0.0",
         "@rollup/plugin-node-resolve": "^16.0.1",
-        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-terser": "^1.0.0",
         "autoprefixer": "^10.4.22",
         "cssnano": "^7.1.2",
         "postcss-import": "^16.1.1",
