@@ -9,7 +9,7 @@ class AdditionalWindow {
     #defaultTranslateFn;
 
     constructor() {
-        this.#window = new window.Asc.PluginWindow();
+        this.#window = null;
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
         this.#defaultTranslateFn = Asc.plugin.onTranslate;
@@ -20,6 +20,9 @@ class AdditionalWindow {
      * @param {string} text
      */
     show(description, text) {
+        if (this.#window) {
+            this.#hide();
+        }
         this.#window = new window.Asc.PluginWindow();
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
@@ -64,6 +67,9 @@ class AdditionalWindow {
      * @param {any} content
      */
     showEditWindow(content) {
+        if (this.#window) {
+            this.#hide();
+        }
         this.#window = new window.Asc.PluginWindow();
         const variation = {
             name: "Zotero",
@@ -110,7 +116,13 @@ class AdditionalWindow {
      * @param {string} description
      * @param {string} text
      */
-    showWarningWindow(description, text) {
+    showInfoWindow(description, text, type) {
+        if (this.#window) {
+            this.#hide();
+        }
+        if (typeof type !== "string") {
+            type = "warning";
+        }
         this.#window = new window.Asc.PluginWindow();
         const variation = {
             name: "Zotero",
@@ -201,14 +213,10 @@ class AdditionalWindow {
     #hide() {
         if (this.#window) {
             this.#window.close();
+            this.#window = null;
         }
         window.Asc.plugin.button = this.#defaultButtonFn;
         window.Asc.plugin.onThemeChanged = this.#defaultThemeChangedFn;
-    }
-
-    destroy() {
-        this.#hide();
-        this.#window = null;
     }
 }
 
