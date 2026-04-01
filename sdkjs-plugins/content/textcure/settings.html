@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Input dialog</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <style>
+    .form-row {
+      display: grid;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 2px;
+    }
+    </style>
+    <script type="module" crossorigin src="./scripts/settings.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/utils-Bl3K3gAw.js">
+    <link rel="modulepreload" crossorigin href="./assets/settings-DvhJVYV5.js">
+  </head>
+  <body>
+    <form style="font-size: 12px;">
+      <div class="form-row" style="grid-template-columns: 120px 1fr;">
+        <label id="lblAntidotePort" for="antidotePort">Websocket Port:</label>
+        <input id="antidotePort" type="text">
+      </div>
+      <div class="form-row" style="grid-template-columns: 120px 1fr;">
+        <label id="lblUpdateDelay" for="updateDelayMS">Update Delay (ms):</label>
+        <input id="updateDelayMS" type="text">
+      </div>
+      <div class="form-row" style="grid-template-columns: 20px 1fr;">
+        <input id="forceSetPort" type="checkbox">
+        <label id="lblForceSetPort" for="forceSetPort">Ignore Antidote Connector</label>
+      </div>
+    </form>
+  </body>
+</html>

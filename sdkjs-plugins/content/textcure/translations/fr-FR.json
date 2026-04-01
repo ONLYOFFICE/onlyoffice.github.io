@@ -1,0 +1,7 @@
+{
+  "Websocket Port:": "Port Websocket:",
+  "Update Delay (ms):": "Délai de Màj (ms):",
+  "Ignore Antidote Connector": "Ignorer Antidote Connector",
+  "Antidote Connection Error": "Erreur de connexion Antidote",
+  "Please make sure that the port number is correct or that Antidote Connector is installed.": "Veuillez vérifier que le numéro de port est correct ou que Antidote Connector est installé."
+}
