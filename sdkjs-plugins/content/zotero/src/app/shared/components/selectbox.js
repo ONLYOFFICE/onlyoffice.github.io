@@ -41,6 +41,7 @@
  * @property {(e: MouseEvent) => void} close
  * @property {(e: KeyboardEvent) => void} keydown
  * @property {(e: Event) => void} dropdownClick
+ * @property {(e: Event) => void} scrollCheck
  */
 
 class SelectBox {
@@ -78,6 +79,7 @@ class SelectBox {
             sortable: options.sortable || false,
             translate: options.translate,
             multiple: options.multiple || false,
+            usePortal: options.usePortal || false,
             description: options.description || "",
         });
 
@@ -111,6 +113,13 @@ class SelectBox {
             },
             dropdownClick: (e) => {
                 this.#handleDropdownClick(e);
+            },
+            scrollCheck: () => {
+                if (!this._headerRectOnOpen) return;
+                const rect = this._header.getBoundingClientRect();
+                if (Math.abs(rect.top - this._headerRectOnOpen.top) > 1) {
+                    this.#closeDropdown();
+                }
             },
         };
         /** @type {HTMLElement|null} */
@@ -155,6 +164,9 @@ class SelectBox {
         this._header.appendChild(this._arrow);
 
         this._dropdown.className += " selectbox-dropdown";
+        if (this._options.usePortal) {
+            this._dropdown.className += " selectbox-fixed";
+        }
         this._select.appendChild(this._dropdown);
 
         if (this._options.description) {
@@ -237,6 +249,8 @@ class SelectBox {
         }
         this.isOpen = true;
         this._dropdown.style.display = "block";
+        this._headerRectOnOpen = this._header.getBoundingClientRect();
+        document.addEventListener("scroll", this._boundHandles.scrollCheck, true);
         this._arrow.className += " selectbox-arrow-open";
         this._header.className += " selectbox-header-open";
         if (this.searchInput) {
@@ -253,14 +267,23 @@ class SelectBox {
         }
 
         this.#renderOptions();
+        this.#improvePositioning();
     }
 
     #closeDropdown() {
         if (this.isOpen && document && this._boundHandles) {
             document.removeEventListener("click", this._boundHandles.close);
+            document.removeEventListener("scroll", this._boundHandles.scrollCheck, true);
         }
         this.isOpen = false;
         this._dropdown.style.display = "none";
+        if (this._options.usePortal) {
+            this._dropdown.style.left = "";
+            this._dropdown.style.width = "";
+            this._dropdown.style.top = "";
+        } else {
+            this._dropdown.classList.remove('selectbox-dropdown-top');
+        }
 
         var arrowClasses = this._arrow.className.split(" ");
         var newArrowClasses = [];
@@ -640,6 +663,30 @@ class SelectBox {
                 ? selectedItem.text
                 : this._options.placeholder;
         }
+    }
+    #improvePositioning() {
+        const viewportHeight = window.innerHeight;
+
+        if (this._options.usePortal) {
+            const headerRect = this._header.getBoundingClientRect();
+            const dropdownHeight = this._dropdown.offsetHeight;
+
+            this._dropdown.style.left = headerRect.left + "px";
+            this._dropdown.style.width = (headerRect.width - 2) + "px";
+
+            const spaceBelow = viewportHeight - headerRect.bottom;
+            if (spaceBelow < dropdownHeight && headerRect.top > spaceBelow) {
+                this._dropdown.style.top = ((headerRect.top - dropdownHeight) - 2) + "px";
+            } else {
+                this._dropdown.style.top = headerRect.bottom + 2 + "px";
+            }
+        } else {
+             const dropdownRect = this._dropdown.getBoundingClientRect();
+            if (dropdownRect.bottom > viewportHeight) {
+                this._dropdown.classList.add('selectbox-dropdown-top');
+            }
+        }
+        
     }
     /**
      * @param {string} currentValue

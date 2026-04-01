@@ -374,6 +374,13 @@
         z-index: 1000;
         max-height: 200px;
         overflow: hidden;
+        &.selectbox-dropdown-top {
+            top: auto;
+            bottom: calc(100% + 2px);
+        }
+        &.selectbox-fixed {
+            position: fixed;
+        }
     }
 
     .selectbox-search {

@@ -356,6 +356,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: translate("Locator"),
+        usePortal: true,
         translate: translate
     });
     LOCATOR_VALUES.forEach(function (info) {
