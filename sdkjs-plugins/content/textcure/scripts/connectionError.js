@@ -1,0 +1,1 @@
+import{b as n}from"../assets/utils-Bl3K3gAw.js";function t(){window.Asc.plugin.init=()=>{},window.Asc.plugin.onTranslate=()=>{n("antidote-connction-error-heading","Antidote Connection Error"),n("antidote-connection-error-message","Please make sure that the port number is correct or that Antidote Connector is installed.")}}t();
