@@ -196,6 +196,19 @@ class CitationDocService {
     }
 
     /**
+     * @returns {Promise<ContentControlProperties | null>}
+     */
+    async getCurrentContentControlPr() {
+        return new Promise(function (resolve, reject) {
+            window.Asc.plugin.executeMethod(
+                "GetCurrentContentControlPr",
+                undefined,
+                resolve,
+            );
+        });
+    }
+
+    /**
      * @param {Array<string>} controlInternalIds
      * @param {string} notesStyle
      * @returns {Promise<Array<any>>}
@@ -575,7 +588,6 @@ class CitationDocService {
      * @returns {Promise<Array<ContentControlProperties>>}
      */
     #getAllContentControls() {
-        const self = this;
         return new Promise(function (resolve, reject) {
             window.Asc.plugin.executeMethod(
                 "GetAllContentControls",

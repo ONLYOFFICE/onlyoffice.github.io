@@ -87,6 +87,7 @@ import "../styles.css";
         groups: [],
         groupsHash: "",
     };
+    let bInProgress = false;
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -445,6 +446,31 @@ import "../styles.css";
             const items = selectCitation.getSelectedItems();
             let internalId = "";
 
+            /** @type {string | "INCORRECT_CONTROL" | null} */
+            let currentControlTag = await citationService.getCurrentContentControlTag();
+            if (currentControlTag) {
+                return citationService.insertSelectedCitationsToCurrentControl(items, currentControlTag)
+                    .then((controlTag) => {
+                        selectCitation.removeItems(Object.keys(items));
+                        return showEditCitationWindow(controlTag);
+                    })
+                    .then((bSuccess) => {
+                        if (bSuccess && currentControlTag) {
+                            citationService.showSuccessMessage("Citation has been updated successfully");
+                        }
+                    }).catch(function (error) {
+                        console.error(error);
+                        let message = translate("Failed to insert citation");
+                        if (typeof error === "string") {
+                            message += ". " + translate(error);
+                        }
+                        showError(message);
+                    })
+                    .finally(async () => {
+                        onEndAction(false, "Mendeley (" + translate("Inserting citation") + ")");
+                    });
+            }
+
             return citationService.insertSelectedCitations(items)
                 .then(function (result) {
                     internalId = result.internalId;
@@ -453,6 +479,11 @@ import "../styles.css";
                         return citationService.updateCslItemsInNotes(result.notesStyle);
                     } else {
                         return citationService.updateCslItems();
+                    }
+                })
+                .then(async () => {
+                    if (internalId) {
+                        await citationService.moveCursorOutsideControl(internalId);
                     }
                 })
                 .catch(function (error) {
@@ -465,9 +496,6 @@ import "../styles.css";
                 })
                 .finally(async () => {
                     await onEndAction(true, "Mendeley (" + translate("Inserting citation") + ")");
-                    if (internalId) {
-                        await citationService.moveCursorOutsideControl(internalId);
-                    }
                 });
         });
 
@@ -645,6 +673,7 @@ import "../styles.css";
      * @param {string} [preloaderMessage]
      */
     async function onStartAction(keepSelection, preloaderMessage) {
+        bInProgress = true;
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
@@ -672,6 +701,7 @@ import "../styles.css";
      * @param {string} [preloaderMessage]
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
+        bInProgress = false;
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -869,16 +899,16 @@ import "../styles.css";
         }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
-            insertLinkBtn.setText(translate("Insert Citation"));
+            insertLinkBtn.setText(translate("Insert/Edit Citation"));
         } else {
-            insertLinkBtn.enable();
+            !bInProgress && insertLinkBtn.enable();
             if (numOfSelected > 1) {
                 // TODO: add translate
                 insertLinkBtn.setText(
                     translate("Insert " + numOfSelected + " Citations"),
                 );
             } else {
-                insertLinkBtn.setText(translate("Insert Citation"));
+                insertLinkBtn.setText(translate("Insert/Edit Citation"));
             }
         }
     }
@@ -912,63 +942,57 @@ import "../styles.css";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
             /** @type {string | null} */
-            const controlTag = await new Promise((resolve) => {
-                Asc.plugin.callCommand(
-                    () => {
-                        const doc = Api.GetDocument();
-                        const control = doc.GetCurrentContentControl();
-                        if (control) {
-                            return control.GetTag();
-                        } else {
-                            return null;
-                        }
-                    },
-                    false,
-                    false,
-                    resolve,
-                );
-            });
-            if (
-                !controlTag ||
-                controlTag.indexOf("MENDELEY_CITATION") === -1
-            ) {
-                citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
-                return;
-            }
-            const updatedObject = await citationService.showEditCitationWindow(controlTag);
-            if (!updatedObject) {
-                return;
-            }
+            const currentControlTag = await citationService.getCurrentContentControlTag();
+
             await onStartAction(true, "Mendeley (" + translate("Updating citations") + ")");
-            let updateFn = citationService.updateItem.bind(
-                citationService,
-                updatedObject
-            );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItem.bind(
-                    citationService,
-                    updatedObject,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
-                });
+            await showEditCitationWindow(currentControlTag);
+            onEndAction(false, "Mendeley (" + translate("Updating citations") + ")");
         });
         Asc.Buttons.registerContextMenu();
 
+    }
+
+    /**
+     * @param {string | null} controlTag
+     * @returns {Promise<boolean>}
+     */
+    async function showEditCitationWindow(controlTag) {
+        if (
+            !controlTag ||
+            controlTag.indexOf("MENDELEY_CITATION") === -1
+        ) {
+            citationService.showWarningMessage("No Mendeley citation found at the cursor. Please click directly on a citation to edit it.");
+            return false;
+        }
+        const updatedObject = await citationService.showEditCitationWindow(controlTag);
+        if (!updatedObject) {
+            return false;
+        }
+
+        let updateFn = citationService.updateItem.bind(
+            citationService,
+            updatedObject
+        );
+
+        const styleManager = settings.getStyleManager();
+        if (styleManager.getLastUsedFormat() === "note") {
+            // this way, because "SelectAddinField" does not work with notes
+            updateFn = citationService.updateItem.bind(
+                citationService,
+                updatedObject,
+                styleManager.getLastUsedNotesStyle()
+            );
+        }
+
+        return updateFn()
+            .catch(function (error) {
+                console.error(error);
+                let message = translate("Failed to insert citation");
+                if (typeof error === "string") {
+                    message += ". " + translate(error);
+                }
+                showError(message);
+                return false;
+            });
     }
 })();

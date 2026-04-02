@@ -100,26 +100,8 @@ class CitationService {
                     self._formatter.updateItems(arrIds);
                 }
             })
-            .then(function () {
-                const fragment = document.createDocumentFragment();
-                const tempElement = document.createElement("div");
-
-                const citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
-                const citationsPost = self._storage.getCitationsPost(cslCitation.citationID);;
-
-                const citations = self._storage.getAllCitationsInJson();
-                self._formatter.rebuildProcessorState(citations);
-
-                const formattedCitationObj = self._formatter.processCitationCluster(
-                    cslCitation.toJSON(),
-                    citationsPre,
-                    citationsPost
-                );
-
-                let htmlCitation = self.#unEscapeHtml(formattedCitationObj[1][0][1]);
-                fragment.appendChild(tempElement);
-                tempElement.innerHTML = htmlCitation;
-                cslCitation.setManualOverride(tempElement.innerText);
+            .then(() => this.#makeCitationHtml(cslCitation))
+            .then(function (htmlCitation) {
                 if (bHasNotes) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
@@ -178,7 +160,7 @@ class CitationService {
                 false ===
                 this._cslStylesManager.isLastUsedStyleContainBibliography()
             ) {
-                this.#additionalWindow.showInfoWindow("Warning!", "Style does not describe the bibliography");
+                this.showWarningMessage("Style does not describe the bibliography");
             } else {
                 console.error(e);
                 throw "Failed to apply this style.";
@@ -187,7 +169,38 @@ class CitationService {
         }
     }
 
-    /** @param {string} controlTag */
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {string}
+     */
+    #makeCitationHtml(cslCitation) {
+        const fragment = document.createDocumentFragment();
+        const tempElement = document.createElement("div");
+
+        const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+        const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);
+
+        const citations = this._storage.getAllCitationsInJson();
+        this._formatter.rebuildProcessorState(citations);
+
+        const formattedCitationObj = this._formatter.processCitationCluster(
+            cslCitation.toJSON(),
+            citationsPre,
+            citationsPost
+        );
+
+        let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
+        fragment.appendChild(tempElement);
+        tempElement.innerHTML = htmlCitation;
+        cslCitation.setPlainCitation(tempElement.innerText);
+
+        return htmlCitation;
+    }
+
+    /** 
+     * @param {string} controlTag
+     * @returns {Object}
+     */
     #extractControlTag(controlTag) {
         let citationObject;
         if (controlTag.indexOf(this._bibPrefixNew) !== -1) {
@@ -220,6 +233,8 @@ class CitationService {
             } catch (e) {
                 console.error("Failed to extract citation", controlTag);
                 console.error(e);
+                this.showWarningMessage("A citation in this document is corrupted and cannot be processed. Please remove or replace it.");
+                return {};
             }
         }
         return citationObject;
@@ -240,10 +255,11 @@ class CitationService {
     }
     /**
      * @param {Object & {citationID: string}} [updatedControl]
+     * @param {string} [updatedCitationId]
      * @param {"footnotes" | "endnotes"} [notesStyle]
      * @returns {Promise<{controlsWithCitations: {control: ContentControlProperties, cslCitation: CSLCitation}[], bibControl: ContentControlProperties | undefined}>}
      */
-    #synchronizeStorageWithDocItems(updatedControl, notesStyle) {
+    #synchronizeStorageWithDocItems(updatedControl, updatedCitationId, notesStyle) {
         const self = this;
         this._storage.clear();
         CSLCitation.resetUsedIDs();
@@ -266,7 +282,7 @@ class CitationService {
                     let citationObject = self.#extractControlTag(control.Tag);
                     let citationID = citationObject.citationID || "";
                     let cslCitation = new CSLCitation(citationID);
-                    if (updatedControl) {
+                    if (updatedControl && updatedCitationId === citationID) {
                         cslCitation.fillFromObject(updatedControl);
                     } else {
                         cslCitation.fillFromObject(citationObject);
@@ -275,19 +291,6 @@ class CitationService {
 
                     return { control: { ...control }, cslCitation: cslCitation };
                 });
-                if (updatedControl) {
-                    controlsWithCitations = controlsWithCitations.filter(
-                        function (b) {
-                            if (
-                                b.cslCitation.citationID ===
-                                updatedControl.citationID
-                            ) {
-                                return true;
-                            }
-                            return false;
-                        },
-                    );
-                }
 
                 return {
                     bibControl: bibControl,
@@ -532,22 +535,34 @@ class CitationService {
         return controlsWithCitations;
     }
 
+    /** @returns {Promise<string | "INCORRECT_CONTROL" | null>} */
+    async getCurrentContentControlTag() {
+        const contentControl = await this.citationDocService.getCurrentContentControlPr();
+        if (!contentControl) {
+            return null;
+        }
+        if (!Object.hasOwn(contentControl, 'Tag')) {
+            return "INCORRECT_CONTROL";
+        }
+        const extracted = this.#extractControlTag(contentControl.Tag);
+        if (Object.keys(extracted).length === 0) {
+            return "INCORRECT_CONTROL";
+        }
+        return contentControl.Tag;
+    }
+
     /**
      * @returns {Promise<boolean>}
      */
     async saveAsText() {
         const isOk = await this.citationDocService.saveAsText();
         if (!isOk) {
-            await this.#additionalWindow.showInfoWindow(
-                "Success!",
+            await this.showSuccessMessage(
                 "All active Mendeley citations and Bibliography have been replaced.",
-                "success",
             );
         } else {
-            await this.#additionalWindow.showInfoWindow(
-                "Warning!",
+            await this.showWarningMessage(
                 "Replace all active Mendeley citations and Bibliography failed",
-                "warning",
             );
         }
         
@@ -568,13 +583,44 @@ class CitationService {
         const cslCitation = new CSLCitation("");
         for (var citationID in items) {
             const item = items[citationID];
-
             cslCitation.fillFromObject(item);
         }
 
         this._storage.addCslCitation(cslCitation);
         return this.#formatInsertLink(cslCitation);
 
+    }
+
+    /**
+     * @param {Array<SearchResultItem>} items
+     * @param {string} currentControlTag
+     * @returns {Promise<string>}
+     */
+    async insertSelectedCitationsToCurrentControl(items, currentControlTag) {
+        const citationObject = this.#extractControlTag(currentControlTag);
+        if (!Object.hasOwn(citationObject, 'citationID')) {
+            throw new Error("Invalid control tag");
+        }
+        const citationID = citationObject.citationID;
+
+        const tempCitation = new CSLCitation("");
+        tempCitation.fillFromObject(citationObject);
+        for (let id in items) {
+            const item = items[id];
+            tempCitation.fillFromObject(item);
+        }
+
+        const { controlsWithCitations } = await this.#synchronizeStorageWithDocItems(tempCitation.toJSON(), citationID);
+        this.#updateFormatter();
+
+        const cslCitation = controlsWithCitations.find((f) => f.cslCitation.citationID === citationID)?.cslCitation;
+        if (!cslCitation) {
+            throw new Error("Citation not found");
+        }
+
+        let tag = JSON.stringify(cslCitation.toJSON());
+        tag = this.#makeContentControlTag(tag);
+        return tag;
     }
 
     /** @returns {Promise<string>} */
@@ -694,11 +740,25 @@ class CitationService {
      */
     async updateItem(updatedControl, notesStyle) {
         try {
-            const { controlsWithCitations, bibControl } =
-                await this.#synchronizeStorageWithDocItems(updatedControl);
+            let { controlsWithCitations, bibControl } =
+                await this.#synchronizeStorageWithDocItems(updatedControl, updatedControl.citationID);
             const bNoHaveControls = controlsWithCitations.length === 0;
 
             this.#updateFormatter();
+
+            if (updatedControl) {
+                controlsWithCitations = controlsWithCitations.filter(
+                    function (b) {
+                        if (
+                            b.cslCitation.citationID ===
+                            updatedControl.citationID
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    },
+                );
+            }
 
             if (notesStyle) {
                 await this.#addFootnotesTextToControls(controlsWithCitations, notesStyle);
@@ -788,7 +848,7 @@ class CitationService {
     async convertNotesStyle(newNotesStyle, oldNotesStyle) {
         try {
             const { controlsWithCitations } =
-                await this.#synchronizeStorageWithDocItems(undefined, newNotesStyle);
+                await this.#synchronizeStorageWithDocItems(undefined, undefined, newNotesStyle);
 
             this.#updateFormatter();
 
@@ -927,6 +987,14 @@ class CitationService {
     /** @param {string} message */
     async showWarningMessage(message) {
         this.#additionalWindow.showInfoWindow("Warning!", message);
+    }
+    /** @param {string} message */
+    async showSuccessMessage(message) {
+        this.#additionalWindow.showInfoWindow(
+            "Success!",
+            message,
+            "success",
+        );
     }
 
 }
