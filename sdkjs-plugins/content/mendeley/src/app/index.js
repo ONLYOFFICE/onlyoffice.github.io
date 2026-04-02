@@ -460,7 +460,8 @@ import "../styles.css";
                         }
                     }).catch(function (error) {
                         console.error(error);
-                        let message = translate("Failed to insert citation");
+                        citationService.showWarningMessage("Failed to edit citation");
+                        let message = translate("Failed to edit citation");
                         if (typeof error === "string") {
                             message += ". " + translate(error);
                         }

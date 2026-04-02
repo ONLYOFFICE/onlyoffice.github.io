@@ -37,6 +37,7 @@
 	"Failed to apply this style": "Nepodařilo se použít tento styl",
     "The current bibliographic style does not describe the bibliography": "Aktuální bibliografický styl nepopisuje bibliografii",
     "Failed to insert citation": "Nepodařilo se vložit citaci",
+    "Failed to edit citation": "Nepodařilo se upravit citaci",
     "Citation has been updated successfully": "Citace byla úspěšně aktualizována",
     "Failed to insert bibliography": "Nepodařilo se vložit bibliografii",
     "Failed to refresh": "Nepodařilo se obnovit",

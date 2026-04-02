@@ -37,6 +37,7 @@
 	"Failed to apply this style": "无法套用此样式",
     "The current bibliographic style does not describe the bibliography": "当前的参考文献样式未描述参考文献",
     "Failed to insert citation": "插入引用失败",
+    "Failed to edit citation": "编辑引用失败",
     "Citation has been updated successfully": "引用已成功更新",
     "Failed to insert bibliography": "插入参考文献失败",
     "Failed to refresh": "刷新失败",

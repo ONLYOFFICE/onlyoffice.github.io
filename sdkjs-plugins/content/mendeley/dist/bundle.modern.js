@@ -3191,12 +3191,12 @@ class _i {
     var t = this;
     return L(function* () {
       var i = yield t.citationDocService.getCurrentContentControlPr();
-      if (!i)
+      if (typeof i != "object")
         return null;
       if (!Object.hasOwn(i, "Tag"))
         return "INCORRECT_CONTROL";
       var n = c(C, t, Ue).call(t, i.Tag);
-      return Object.keys(n).length === 0 ? "INCORRECT_CONTROL" : i.Tag;
+      return typeof n != "object" || !Object.hasOwn(n, "citationID") ? "INCORRECT_CONTROL" : i.Tag;
     })();
   }
   /**
@@ -3238,7 +3238,7 @@ class _i {
     var n = this;
     return L(function* () {
       var s, r = c(C, n, Ue).call(n, i);
-      if (!Object.hasOwn(r, "citationID"))
+      if (typeof r != "object" || !Object.hasOwn(r, "citationID"))
         throw new Error("Invalid control tag");
       var o = r.citationID, a = new xe("");
       a.fillFromObject(r);
@@ -4794,8 +4794,8 @@ G.prototype.count = function() {
           return E ? o.insertSelectedCitationsToCurrentControl(I, E).then((N) => (_.removeItems(Object.keys(I)), pt(N))).then((N) => {
             N && E && o.showSuccessMessage("Citation has been updated successfully");
           }).catch(function(N) {
-            console.error(N);
-            var de = m("Failed to insert citation");
+            console.error(N), o.showWarningMessage("Failed to edit citation");
+            var de = m("Failed to edit citation");
             typeof N == "string" && (de += ". " + m(N)), z(de);
           }).finally(/* @__PURE__ */ L(function* () {
             he(!1, "Mendeley (" + m("Inserting citation") + ")");

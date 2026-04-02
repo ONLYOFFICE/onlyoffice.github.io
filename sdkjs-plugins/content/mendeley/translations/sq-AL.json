@@ -37,6 +37,7 @@
 	"Failed to apply this style": "Nuk arriti të zbatojë këtë stil",
     "The current bibliographic style does not describe the bibliography": "Stili aktual bibliografik nuk përshkruan bibliografinë",
     "Failed to insert citation": "Nuk arriti të shtojë citimin",
+    "Failed to edit citation": "Nuk arriti të modifikojë citimin",
     "Citation has been updated successfully": "Citimi është përditësuar me sukses",
     "Failed to insert bibliography": "Nuk arriti të shtojë bibliografinë",
     "Failed to refresh": "Nuk arriti të rifreskojë",

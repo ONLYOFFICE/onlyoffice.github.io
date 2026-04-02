@@ -37,6 +37,7 @@
 	"Failed to apply this style": "No se pudo aplicar este estilo",
     "The current bibliographic style does not describe the bibliography": "El estilo bibliográfico actual no describe la bibliografía",
     "Failed to insert citation": "Error al insertar la cita",
+    "Failed to edit citation": "Error al editar la cita",
     "Citation has been updated successfully": "La cita se ha actualizado correctamente",
     "Failed to insert bibliography": "Error al insertar la bibliografía",
     "Failed to refresh": "Error al actualizar",

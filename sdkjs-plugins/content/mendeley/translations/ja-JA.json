@@ -37,6 +37,7 @@
 	"Failed to apply this style": "このスタイルを適用できませんでした",
     "The current bibliographic style does not describe the bibliography": "現在の参考文献スタイルは参考文献を記述していません",
     "Failed to insert citation": "引用の挿入に失敗しました",
+    "Failed to edit citation": "引用の編集に失敗しました",
     "Citation has been updated successfully": "引用が正常に更新されました",
     "Failed to insert bibliography": "参考文献の挿入に失敗しました",
     "Failed to refresh": "更新に失敗しました",

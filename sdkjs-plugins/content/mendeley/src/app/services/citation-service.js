@@ -538,14 +538,14 @@ class CitationService {
     /** @returns {Promise<string | "INCORRECT_CONTROL" | null>} */
     async getCurrentContentControlTag() {
         const contentControl = await this.citationDocService.getCurrentContentControlPr();
-        if (!contentControl) {
+        if (typeof contentControl !== 'object') {
             return null;
         }
         if (!Object.hasOwn(contentControl, 'Tag')) {
             return "INCORRECT_CONTROL";
         }
         const extracted = this.#extractControlTag(contentControl.Tag);
-        if (Object.keys(extracted).length === 0) {
+        if (typeof extracted !== "object" || !Object.hasOwn(extracted, "citationID")) {
             return "INCORRECT_CONTROL";
         }
         return contentControl.Tag;
@@ -598,7 +598,7 @@ class CitationService {
      */
     async insertSelectedCitationsToCurrentControl(items, currentControlTag) {
         const citationObject = this.#extractControlTag(currentControlTag);
-        if (!Object.hasOwn(citationObject, 'citationID')) {
+        if (typeof citationObject !== 'object' || !Object.hasOwn(citationObject, 'citationID')) {
             throw new Error("Invalid control tag");
         }
         const citationID = citationObject.citationID;

@@ -37,6 +37,7 @@
 	"Failed to apply this style": "Neuspelo postavljanje ovog stila",
     "The current bibliographic style does not describe the bibliography": "Trenutni bibliografski stil ne opisuje bibliografiju",
     "Failed to insert citation": "Neuspelo unosenje reference",
+    "Failed to edit citation": "Neuspelo uređivanje reference",
     "Citation has been updated successfully": "Citat je uspešno ažuriran",
     "Failed to insert bibliography": "Neuspelo unosenje bibliografije",
     "Failed to refresh": "Neuspelo osvežavanje",

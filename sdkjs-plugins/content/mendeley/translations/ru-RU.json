@@ -37,6 +37,7 @@
 	"Failed to apply this style": "Не удалось применить этот стиль",
     "The current bibliographic style does not describe the bibliography": "Текущий стиль не описывает библиографию",
     "Failed to insert citation": "Не удалось вставить цитату",
+    "Failed to edit citation": "Не удалось отредактировать цитату",
     "Citation has been updated successfully": "Цитата была успешно обновлена",
     "Failed to insert bibliography": "Не удалось вставить библиографию",
     "Failed to refresh": "Не удалось обновить",
