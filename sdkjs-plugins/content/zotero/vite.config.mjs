@@ -67,7 +67,7 @@ export default defineConfig({
             name: "license-banner",
             generateBundle(_, bundle) {
                 const banner = `/*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
