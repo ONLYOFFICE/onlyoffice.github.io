@@ -30,16 +30,23 @@
 
 ## 1.0.6
 
-* Refreshed interface for better usability
-* The ability to choose which library to search in
-* Ability to add prefix and suffix
-* "Omit Author" feature
-* Citation locators support: Added ability to include page numbers, chapters, sections, and other location references in citations
+* Refreshed interface for better usability.
+* The ability to choose which library to search in.
+* Ability to add prefix and suffix.
+* "Omit Author" feature.
+* Citation locators support: Added ability to include page numbers, chapters, sections, and other location references in citations.
 
 ## 1.0.7
 
-* Formatting text when inserting a bibliography using the Zotero plugin
+* Formatting text when inserting a bibliography using the Zotero plugin.
 * Preserve formatting and editing of manual citations.
-* Sorting bibliography according to style
-* Do not show attached files is search results
-* Support for styles with footnotes and endnotes
+* Sorting bibliography according to style.
+* Do not show attached files in search results.
+* Support for styles with footnotes and endnotes.
+* Ability to edit citations via the context menu.
+* Improved handling of repeated citations (e.g., automatic `Ibid.` support).
+* Added bibliography formatting feature. Starting from version 9.4.0, this feature will be fully supported.
+
+## 1.0.8
+
+* Added the ability to edit citations by adding new sources to them.
