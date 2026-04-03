@@ -1,34 +1,677 @@
-/*
- * (c) Copyright Ascensio System SIA 2010-2025
- *
- * This program is a free software product. You can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License (AGPL)
- * version 3 as published by the Free Software Foundation. In accordance with
- * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
- * that Ascensio System SIA expressly excludes the warranty of non-infringement
- * of any third-party rights.
- *
- * This program is distributed WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
- * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
- *
- * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
- * street, Riga, Latvia, EU, LV-1050.
- *
- * The  interactive user interfaces in modified source and object code versions
- * of the Program must display Appropriate Legal Notices, as required under
- * Section 5 of the GNU AGPL version 3.
- *
- * Pursuant to Section 7(b) of the License you must retain the original Product
- * logo when distributing the program. Pursuant to Section 7(e) we decline to
- * grant you any rights under trademark law for use of our trademarks.
- *
- * All the Product's GUI elements, including illustrations and icon sets, as
- * well as technical writing content are licensed under the terms of the
- * Creative Commons Attribution-ShareAlike 4.0 International. See the License
- * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
- *
- */
+                    GNU AFFERO GENERAL PUBLIC LICENSE
+                       Version 3, 19 November 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU Affero General Public License is a free, copyleft license for
+software and other kinds of works, specifically designed to ensure
+cooperation with the community in the case of network server software.
+
+  The licenses for most software and other practical works are designed
+to take away your freedom to share and change the works.  By contrast,
+our General Public Licenses are intended to guarantee your freedom to
+share and change all versions of a program--to make sure it remains free
+software for all its users.
+
+  When we speak of free software, we are referring to freedom, not
+price.  Our General Public Licenses are designed to make sure that you
+have the freedom to distribute copies of free software (and charge for
+them if you wish), that you receive source code or can get it if you
+want it, that you can change the software or use pieces of it in new
+free programs, and that you know you can do these things.
+
+  Developers that use our General Public Licenses protect your rights
+with two steps: (1) assert copyright on the software, and (2) offer
+you this License which gives you legal permission to copy, distribute
+and/or modify the software.
+
+  A secondary benefit of defending all users' freedom is that
+improvements made in alternate versions of the program, if they
+receive widespread use, become available for other developers to
+incorporate.  Many developers of free software are heartened and
+encouraged by the resulting cooperation.  However, in the case of
+software used on network servers, this result may fail to come about.
+The GNU General Public License permits making a modified version and
+letting the public access it on a server without ever releasing its
+source code to the public.
+
+  The GNU Affero General Public License is designed specifically to
+ensure that, in such cases, the modified source code becomes available
+to the community.  It requires the operator of a network server to
+provide the source code of the modified version running there to the
+users of that server.  Therefore, public use of a modified version, on
+a publicly accessible server, gives the public access to the source
+code of the modified version.
+
+  An older license, called the Affero General Public License and
+published by Affero, was designed to accomplish similar goals.  This is
+a different license, not a version of the Affero GPL, but Affero has
+released a new version of the Affero GPL which permits relicensing under
+this license.
+
+  The precise terms and conditions for copying, distribution and
+modification follow.
+
+                       TERMS AND CONDITIONS
+
+  0. Definitions.
+
+  "This License" refers to version 3 of the GNU Affero General Public License.
+
+  "Copyright" also means copyright-like laws that apply to other kinds of
+works, such as semiconductor masks.
+
+  "The Program" refers to any copyrightable work licensed under this
+License.  Each licensee is addressed as "you".  "Licensees" and
+"recipients" may be individuals or organizations.
+
+  To "modify" a work means to copy from or adapt all or part of the work
+in a fashion requiring copyright permission, other than the making of an
+exact copy.  The resulting work is called a "modified version" of the
+earlier work or a work "based on" the earlier work.
+
+  A "covered work" means either the unmodified Program or a work based
+on the Program.
+
+  To "propagate" a work means to do anything with it that, without
+permission, would make you directly or secondarily liable for
+infringement under applicable copyright law, except executing it on a
+computer or modifying a private copy.  Propagation includes copying,
+distribution (with or without modification), making available to the
+public, and in some countries other activities as well.
+
+  To "convey" a work means any kind of propagation that enables other
+parties to make or receive copies.  Mere interaction with a user through
+a computer network, with no transfer of a copy, is not conveying.
+
+  An interactive user interface displays "Appropriate Legal Notices"
+to the extent that it includes a convenient and prominently visible
+feature that (1) displays an appropriate copyright notice, and (2)
+tells the user that there is no warranty for the work (except to the
+extent that warranties are provided), that licensees may convey the
+work under this License, and how to view a copy of this License.  If
+the interface presents a list of user commands or options, such as a
+menu, a prominent item in the list meets this criterion.
+
+  1. Source Code.
+
+  The "source code" for a work means the preferred form of the work
+for making modifications to it.  "Object code" means any non-source
+form of a work.
+
+  A "Standard Interface" means an interface that either is an official
+standard defined by a recognized standards body, or, in the case of
+interfaces specified for a particular programming language, one that
+is widely used among developers working in that language.
+
+  The "System Libraries" of an executable work include anything, other
+than the work as a whole, that (a) is included in the normal form of
+packaging a Major Component, but which is not part of that Major
+Component, and (b) serves only to enable use of the work with that
+Major Component, or to implement a Standard Interface for which an
+implementation is available to the public in source code form.  A
+"Major Component", in this context, means a major essential component
+(kernel, window system, and so on) of the specific operating system
+(if any) on which the executable work runs, or a compiler used to
+produce the work, or an object code interpreter used to run it.
+
+  The "Corresponding Source" for a work in object code form means all
+the source code needed to generate, install, and (for an executable
+work) run the object code and to modify the work, including scripts to
+control those activities.  However, it does not include the work's
+System Libraries, or general-purpose tools or generally available free
+programs which are used unmodified in performing those activities but
+which are not part of the work.  For example, Corresponding Source
+includes interface definition files associated with source files for
+the work, and the source code for shared libraries and dynamically
+linked subprograms that the work is specifically designed to require,
+such as by intimate data communication or control flow between those
+subprograms and other parts of the work.
+
+  The Corresponding Source need not include anything that users
+can regenerate automatically from other parts of the Corresponding
+Source.
+
+  The Corresponding Source for a work in source code form is that
+same work.
+
+  2. Basic Permissions.
+
+  All rights granted under this License are granted for the term of
+copyright on the Program, and are irrevocable provided the stated
+conditions are met.  This License explicitly affirms your unlimited
+permission to run the unmodified Program.  The output from running a
+covered work is covered by this License only if the output, given its
+content, constitutes a covered work.  This License acknowledges your
+rights of fair use or other equivalent, as provided by copyright law.
+
+  You may make, run and propagate covered works that you do not
+convey, without conditions so long as your license otherwise remains
+in force.  You may convey covered works to others for the sole purpose
+of having them make modifications exclusively for you, or provide you
+with facilities for running those works, provided that you comply with
+the terms of this License in conveying all material for which you do
+not control copyright.  Those thus making or running the covered works
+for you must do so exclusively on your behalf, under your direction
+and control, on terms that prohibit them from making any copies of
+your copyrighted material outside their relationship with you.
+
+  Conveying under any other circumstances is permitted solely under
+the conditions stated below.  Sublicensing is not allowed; section 10
+makes it unnecessary.
+
+  3. Protecting Users' Legal Rights From Anti-Circumvention Law.
+
+  No covered work shall be deemed part of an effective technological
+measure under any applicable law fulfilling obligations under article
+11 of the WIPO copyright treaty adopted on 20 December 1996, or
+similar laws prohibiting or restricting circumvention of such
+measures.
+
+  When you convey a covered work, you waive any legal power to forbid
+circumvention of technological measures to the extent such circumvention
+is effected by exercising rights under this License with respect to
+the covered work, and you disclaim any intention to limit operation or
+modification of the work as a means of enforcing, against the work's
+users, your or third parties' legal rights to forbid circumvention of
+technological measures.
+
+  4. Conveying Verbatim Copies.
+
+  You may convey verbatim copies of the Program's source code as you
+receive it, in any medium, provided that you conspicuously and
+appropriately publish on each copy an appropriate copyright notice;
+keep intact all notices stating that this License and any
+non-permissive terms added in accord with section 7 apply to the code;
+keep intact all notices of the absence of any warranty; and give all
+recipients a copy of this License along with the Program.
+
+  You may charge any price or no price for each copy that you convey,
+and you may offer support or warranty protection for a fee.
+
+  5. Conveying Modified Source Versions.
+
+  You may convey a work based on the Program, or the modifications to
+produce it from the Program, in the form of source code under the
+terms of section 4, provided that you also meet all of these conditions:
+
+    a) The work must carry prominent notices stating that you modified
+    it, and giving a relevant date.
+
+    b) The work must carry prominent notices stating that it is
+    released under this License and any conditions added under section
+    7.  This requirement modifies the requirement in section 4 to
+    "keep intact all notices".
+
+    c) You must license the entire work, as a whole, under this
+    License to anyone who comes into possession of a copy.  This
+    License will therefore apply, along with any applicable section 7
+    additional terms, to the whole of the work, and all its parts,
+    regardless of how they are packaged.  This License gives no
+    permission to license the work in any other way, but it does not
+    invalidate such permission if you have separately received it.
+
+    d) If the work has interactive user interfaces, each must display
+    Appropriate Legal Notices; however, if the Program has interactive
+    interfaces that do not display Appropriate Legal Notices, your
+    work need not make them do so.
+
+  A compilation of a covered work with other separate and independent
+works, which are not by their nature extensions of the covered work,
+and which are not combined with it such as to form a larger program,
+in or on a volume of a storage or distribution medium, is called an
+"aggregate" if the compilation and its resulting copyright are not
+used to limit the access or legal rights of the compilation's users
+beyond what the individual works permit.  Inclusion of a covered work
+in an aggregate does not cause this License to apply to the other
+parts of the aggregate.
+
+  6. Conveying Non-Source Forms.
+
+  You may convey a covered work in object code form under the terms
+of sections 4 and 5, provided that you also convey the
+machine-readable Corresponding Source under the terms of this License,
+in one of these ways:
+
+    a) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by the
+    Corresponding Source fixed on a durable physical medium
+    customarily used for software interchange.
+
+    b) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by a
+    written offer, valid for at least three years and valid for as
+    long as you offer spare parts or customer support for that product
+    model, to give anyone who possesses the object code either (1) a
+    copy of the Corresponding Source for all the software in the
+    product that is covered by this License, on a durable physical
+    medium customarily used for software interchange, for a price no
+    more than your reasonable cost of physically performing this
+    conveying of source, or (2) access to copy the
+    Corresponding Source from a network server at no charge.
+
+    c) Convey individual copies of the object code with a copy of the
+    written offer to provide the Corresponding Source.  This
+    alternative is allowed only occasionally and noncommercially, and
+    only if you received the object code with such an offer, in accord
+    with subsection 6b.
+
+    d) Convey the object code by offering access from a designated
+    place (gratis or for a charge), and offer equivalent access to the
+    Corresponding Source in the same way through the same place at no
+    further charge.  You need not require recipients to copy the
+    Corresponding Source along with the object code.  If the place to
+    copy the object code is a network server, the Corresponding Source
+    may be on a different server (operated by you or a third party)
+    that supports equivalent copying facilities, provided you maintain
+    clear directions next to the object code saying where to find the
+    Corresponding Source.  Regardless of what server hosts the
+    Corresponding Source, you remain obligated to ensure that it is
+    available for as long as needed to satisfy these requirements.
+
+    e) Convey the object code using peer-to-peer transmission, provided
+    you inform other peers where the object code and Corresponding
+    Source of the work are being offered to the general public at no
+    charge under subsection 6d.
+
+  A separable portion of the object code, whose source code is excluded
+from the Corresponding Source as a System Library, need not be
+included in conveying the object code work.
+
+  A "User Product" is either (1) a "consumer product", which means any
+tangible personal property which is normally used for personal, family,
+or household purposes, or (2) anything designed or sold for incorporation
+into a dwelling.  In determining whether a product is a consumer product,
+doubtful cases shall be resolved in favor of coverage.  For a particular
+product received by a particular user, "normally used" refers to a
+typical or common use of that class of product, regardless of the status
+of the particular user or of the way in which the particular user
+actually uses, or expects or is expected to use, the product.  A product
+is a consumer product regardless of whether the product has substantial
+commercial, industrial or non-consumer uses, unless such uses represent
+the only significant mode of use of the product.
+
+  "Installation Information" for a User Product means any methods,
+procedures, authorization keys, or other information required to install
+and execute modified versions of a covered work in that User Product from
+a modified version of its Corresponding Source.  The information must
+suffice to ensure that the continued functioning of the modified object
+code is in no case prevented or interfered with solely because
+modification has been made.
+
+  If you convey an object code work under this section in, or with, or
+specifically for use in, a User Product, and the conveying occurs as
+part of a transaction in which the right of possession and use of the
+User Product is transferred to the recipient in perpetuity or for a
+fixed term (regardless of how the transaction is characterized), the
+Corresponding Source conveyed under this section must be accompanied
+by the Installation Information.  But this requirement does not apply
+if neither you nor any third party retains the ability to install
+modified object code on the User Product (for example, the work has
+been installed in ROM).
+
+  The requirement to provide Installation Information does not include a
+requirement to continue to provide support service, warranty, or updates
+for a work that has been modified or installed by the recipient, or for
+the User Product in which it has been modified or installed.  Access to a
+network may be denied when the modification itself materially and
+adversely affects the operation of the network or violates the rules and
+protocols for communication across the network.
+
+  Corresponding Source conveyed, and Installation Information provided,
+in accord with this section must be in a format that is publicly
+documented (and with an implementation available to the public in
+source code form), and must require no special password or key for
+unpacking, reading or copying.
+
+  7. Additional Terms.
+
+  "Additional permissions" are terms that supplement the terms of this
+License by making exceptions from one or more of its conditions.
+Additional permissions that are applicable to the entire Program shall
+be treated as though they were included in this License, to the extent
+that they are valid under applicable law.  If additional permissions
+apply only to part of the Program, that part may be used separately
+under those permissions, but the entire Program remains governed by
+this License without regard to the additional permissions.
+
+  When you convey a copy of a covered work, you may at your option
+remove any additional permissions from that copy, or from any part of
+it.  (Additional permissions may be written to require their own
+removal in certain cases when you modify the work.)  You may place
+additional permissions on material, added by you to a covered work,
+for which you have or can give appropriate copyright permission.
+
+  Notwithstanding any other provision of this License, for material you
+add to a covered work, you may (if authorized by the copyright holders of
+that material) supplement the terms of this License with terms:
+
+    a) Disclaiming warranty or limiting liability differently from the
+    terms of sections 15 and 16 of this License; or
+
+    b) Requiring preservation of specified reasonable legal notices or
+    author attributions in that material or in the Appropriate Legal
+    Notices displayed by works containing it; or
+
+    c) Prohibiting misrepresentation of the origin of that material, or
+    requiring that modified versions of such material be marked in
+    reasonable ways as different from the original version; or
+
+    d) Limiting the use for publicity purposes of names of licensors or
+    authors of the material; or
+
+    e) Declining to grant rights under trademark law for use of some
+    trade names, trademarks, or service marks; or
+
+    f) Requiring indemnification of licensors and authors of that
+    material by anyone who conveys the material (or modified versions of
+    it) with contractual assumptions of liability to the recipient, for
+    any liability that these contractual assumptions directly impose on
+    those licensors and authors.
+
+  All other non-permissive additional terms are considered "further
+restrictions" within the meaning of section 10.  If the Program as you
+received it, or any part of it, contains a notice stating that it is
+governed by this License along with a term that is a further
+restriction, you may remove that term.  If a license document contains
+a further restriction but permits relicensing or conveying under this
+License, you may add to a covered work material governed by the terms
+of that license document, provided that the further restriction does
+not survive such relicensing or conveying.
+
+  If you add terms to a covered work in accord with this section, you
+must place, in the relevant source files, a statement of the
+additional terms that apply to those files, or a notice indicating
+where to find the applicable terms.
+
+  Additional terms, permissive or non-permissive, may be stated in the
+form of a separately written license, or stated as exceptions;
+the above requirements apply either way.
+
+  8. Termination.
+
+  You may not propagate or modify a covered work except as expressly
+provided under this License.  Any attempt otherwise to propagate or
+modify it is void, and will automatically terminate your rights under
+this License (including any patent licenses granted under the third
+paragraph of section 11).
+
+  However, if you cease all violation of this License, then your
+license from a particular copyright holder is reinstated (a)
+provisionally, unless and until the copyright holder explicitly and
+finally terminates your license, and (b) permanently, if the copyright
+holder fails to notify you of the violation by some reasonable means
+prior to 60 days after the cessation.
+
+  Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+  Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, you do not qualify to receive new licenses for the same
+material under section 10.
+
+  9. Acceptance Not Required for Having Copies.
+
+  You are not required to accept this License in order to receive or
+run a copy of the Program.  Ancillary propagation of a covered work
+occurring solely as a consequence of using peer-to-peer transmission
+to receive a copy likewise does not require acceptance.  However,
+nothing other than this License grants you permission to propagate or
+modify any covered work.  These actions infringe copyright if you do
+not accept this License.  Therefore, by modifying or propagating a
+covered work, you indicate your acceptance of this License to do so.
+
+  10. Automatic Licensing of Downstream Recipients.
+
+  Each time you convey a covered work, the recipient automatically
+receives a license from the original licensors, to run, modify and
+propagate that work, subject to this License.  You are not responsible
+for enforcing compliance by third parties with this License.
+
+  An "entity transaction" is a transaction transferring control of an
+organization, or substantially all assets of one, or subdividing an
+organization, or merging organizations.  If propagation of a covered
+work results from an entity transaction, each party to that
+transaction who receives a copy of the work also receives whatever
+licenses to the work the party's predecessor in interest had or could
+give under the previous paragraph, plus a right to possession of the
+Corresponding Source of the work from the predecessor in interest, if
+the predecessor has it or can get it with reasonable efforts.
+
+  You may not impose any further restrictions on the exercise of the
+rights granted or affirmed under this License.  For example, you may
+not impose a license fee, royalty, or other charge for exercise of
+rights granted under this License, and you may not initiate litigation
+(including a cross-claim or counterclaim in a lawsuit) alleging that
+any patent claim is infringed by making, using, selling, offering for
+sale, or importing the Program or any portion of it.
+
+  11. Patents.
+
+  A "contributor" is a copyright holder who authorizes use under this
+License of the Program or a work on which the Program is based.  The
+work thus licensed is called the contributor's "contributor version".
+
+  A contributor's "essential patent claims" are all patent claims
+owned or controlled by the contributor, whether already acquired or
+hereafter acquired, that would be infringed by some manner, permitted
+by this License, of making, using, or selling its contributor version,
+but do not include claims that would be infringed only as a
+consequence of further modification of the contributor version.  For
+purposes of this definition, "control" includes the right to grant
+patent sublicenses in a manner consistent with the requirements of
+this License.
+
+  Each contributor grants you a non-exclusive, worldwide, royalty-free
+patent license under the contributor's essential patent claims, to
+make, use, sell, offer for sale, import and otherwise run, modify and
+propagate the contents of its contributor version.
+
+  In the following three paragraphs, a "patent license" is any express
+agreement or commitment, however denominated, not to enforce a patent
+(such as an express permission to practice a patent or covenant not to
+sue for patent infringement).  To "grant" such a patent license to a
+party means to make such an agreement or commitment not to enforce a
+patent against the party.
+
+  If you convey a covered work, knowingly relying on a patent license,
+and the Corresponding Source of the work is not available for anyone
+to copy, free of charge and under the terms of this License, through a
+publicly available network server or other readily accessible means,
+then you must either (1) cause the Corresponding Source to be so
+available, or (2) arrange to deprive yourself of the benefit of the
+patent license for this particular work, or (3) arrange, in a manner
+consistent with the requirements of this License, to extend the patent
+license to downstream recipients.  "Knowingly relying" means you have
+actual knowledge that, but for the patent license, your conveying the
+covered work in a country, or your recipient's use of the covered work
+in a country, would infringe one or more identifiable patents in that
+country that you have reason to believe are valid.
+
+  If, pursuant to or in connection with a single transaction or
+arrangement, you convey, or propagate by procuring conveyance of, a
+covered work, and grant a patent license to some of the parties
+receiving the covered work authorizing them to use, propagate, modify
+or convey a specific copy of the covered work, then the patent license
+you grant is automatically extended to all recipients of the covered
+work and works based on it.
+
+  A patent license is "discriminatory" if it does not include within
+the scope of its coverage, prohibits the exercise of, or is
+conditioned on the non-exercise of one or more of the rights that are
+specifically granted under this License.  You may not convey a covered
+work if you are a party to an arrangement with a third party that is
+in the business of distributing software, under which you make payment
+to the third party based on the extent of your activity of conveying
+the work, and under which the third party grants, to any of the
+parties who would receive the covered work from you, a discriminatory
+patent license (a) in connection with copies of the covered work
+conveyed by you (or copies made from those copies), or (b) primarily
+for and in connection with specific products or compilations that
+contain the covered work, unless you entered into that arrangement,
+or that patent license was granted, prior to 28 March 2007.
+
+  Nothing in this License shall be construed as excluding or limiting
+any implied license or other defenses to infringement that may
+otherwise be available to you under applicable patent law.
+
+  12. No Surrender of Others' Freedom.
+
+  If conditions are imposed on you (whether by court order, agreement or
+otherwise) that contradict the conditions of this License, they do not
+excuse you from the conditions of this License.  If you cannot convey a
+covered work so as to satisfy simultaneously your obligations under this
+License and any other pertinent obligations, then as a consequence you may
+not convey it at all.  For example, if you agree to terms that obligate you
+to collect a royalty for further conveying from those to whom you convey
+the Program, the only way you could satisfy both those terms and this
+License would be to refrain entirely from conveying the Program.
+
+  13. Remote Network Interaction; Use with the GNU General Public License.
+
+  Notwithstanding any other provision of this License, if you modify the
+Program, your modified version must prominently offer all users
+interacting with it remotely through a computer network (if your version
+supports such interaction) an opportunity to receive the Corresponding
+Source of your version by providing access to the Corresponding Source
+from a network server at no charge, through some standard or customary
+means of facilitating copying of software.  This Corresponding Source
+shall include the Corresponding Source for any work covered by version 3
+of the GNU General Public License that is incorporated pursuant to the
+following paragraph.
+
+  Notwithstanding any other provision of this License, you have
+permission to link or combine any covered work with a work licensed
+under version 3 of the GNU General Public License into a single
+combined work, and to convey the resulting work.  The terms of this
+License will continue to apply to the part which is the covered work,
+but the work with which it is combined will remain governed by version
+3 of the GNU General Public License.
+
+  14. Revised Versions of this License.
+
+  The Free Software Foundation may publish revised and/or new versions of
+the GNU Affero General Public License from time to time.  Such new versions
+will be similar in spirit to the present version, but may differ in detail to
+address new problems or concerns.
+
+  Each version is given a distinguishing version number.  If the
+Program specifies that a certain numbered version of the GNU Affero General
+Public License "or any later version" applies to it, you have the
+option of following the terms and conditions either of that numbered
+version or of any later version published by the Free Software
+Foundation.  If the Program does not specify a version number of the
+GNU Affero General Public License, you may choose any version ever published
+by the Free Software Foundation.
+
+  If the Program specifies that a proxy can decide which future
+versions of the GNU Affero General Public License can be used, that proxy's
+public statement of acceptance of a version permanently authorizes you
+to choose that version for the Program.
+
+  Later license versions may give you additional or different
+permissions.  However, no additional obligations are imposed on any
+author or copyright holder as a result of your choosing to follow a
+later version.
+
+  15. Disclaimer of Warranty.
+
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+  16. Limitation of Liability.
+
+  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
+
+  17. Interpretation of Sections 15 and 16.
+
+  If the disclaimer of warranty and limitation of liability provided
+above cannot be given local legal effect according to their terms,
+reviewing courts shall apply local law that most closely approximates
+an absolute waiver of all civil liability in connection with the
+Program, unless a warranty or assumption of liability accompanies a
+copy of the Program in return for a fee.
+
+                     END OF TERMS AND CONDITIONS
+
+            How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+state the exclusion of warranty; and each file should have at least
+the "copyright" line and a pointer to where the full notice is found.
+
+    ONLYOFFICE Plugins
+    Copyright (C) 2010- Ascensio System SIA
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+    street, Riga, Latvia, EU, LV-1050
+
+    The  interactive user interfaces in modified source and object code
+    version of the Program must display Appropriate Legal Notices, as required
+    under Section 5 of the GNU AGPL version 3.
+
+    Pursuant to Section 7(b) of the License you must retain the original 
+    Product logo when distributing the program. Pursuant to Section 7(e) we
+    decline to grant you any rights under trademark law for use of our
+    trademarks.
+
+Also add information on how to contact you by electronic and paper mail.
+
+  If your software can interact with users remotely through a computer
+network, you should also make sure that it provides a way for users to
+get its source.  For example, if your program is a web application, its
+interface could display a "Source" link that leads users to an archive
+of the code.  There are many ways you could offer source, and different
+solutions will be better for different programs; see section 13 for the
+specific requirements.
+
+  You should also get your employer (if you work as a programmer) or school,
+if any, to sign a "copyright disclaimer" for the program, if necessary.
+For more information on this, and how to apply and follow the GNU AGPL, see
+<http://www.gnu.org/licenses/>.
+
 (function(or){typeof define=="function"&&define.amd?define(or):or()})((function(){"use strict";function or(t,e){(e==null||e>t.length)&&(e=t.length);for(var r=0,n=Array(e);r<e;r++)n[r]=t[r];return n}function $(t,e,r){if(typeof t=="function"?t===e:t.has(e))return arguments.length<3?e:r;throw new TypeError("Private element is not present on this object")}function qa(t,e,r,n,i,o,a){try{var u=t[o](a),s=u.value}catch(c){return void r(c)}u.done?e(s):Promise.resolve(s).then(n,i)}function Pf(t){return function(){var e=this,r=arguments;return new Promise(function(n,i){var o=t.apply(e,r);function a(s){qa(o,n,i,a,u,"next",s)}function u(s){qa(o,n,i,a,u,"throw",s)}a(void 0)})}}function qf(t,e){if(e.has(t))throw new TypeError("Cannot initialize the same private elements twice on an object")}function Na(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function Nf(t,e){qf(t,e),e.add(t)}function Af(t,e){for(var r=0;r<e.length;r++){var n=e[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,Lf(n.key),n)}}function Aa(t,e,r){return e&&Af(t.prototype,e),Object.defineProperty(t,"prototype",{writable:!1}),t}function kf(t,e){var r=typeof Symbol<"u"&&t[Symbol.iterator]||t["@@iterator"];if(!r){if(Array.isArray(t)||(r=Df(t))||e){r&&(t=r);var n=0,i=function(){};return{s:i,n:function(){return n>=t.length?{done:!0}:{done:!1,value:t[n++]}},e:function(s){throw s},f:i}}throw new TypeError(`Invalid attempt to iterate non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`)}var o,a=!0,u=!1;return{s:function(){r=r.call(t)},n:function(){var s=r.next();return a=s.done,s},e:function(s){u=!0,o=s},f:function(){try{a||r.return==null||r.return()}finally{if(u)throw o}}}}function Ur(){/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */var t,e,r=typeof Symbol=="function"?Symbol:{},n=r.iterator||"@@iterator",i=r.toStringTag||"@@toStringTag";function o(h,p,E,w){var S=p&&p.prototype instanceof u?p:u,b=Object.create(S.prototype);return Re(b,"_invoke",(function(y,g,m){var I,_,d,O=0,x=m||[],T=!1,C={p:0,n:0,v:t,a:R,f:R.bind(t,4),d:function(P,N){return I=P,_=0,d=t,C.n=N,a}};function R(P,N){for(_=P,d=N,e=0;!T&&O&&!q&&e<x.length;e++){var q,A=x[e],L=C.p,j=A[2];P>3?(q=j===N)&&(d=A[(_=A[4])?5:(_=3,3)],A[4]=A[5]=t):A[0]<=L&&((q=P<2&&L<A[1])?(_=0,C.v=N,C.n=A[1]):L<j&&(q=P<3||A[0]>N||N>j)&&(A[4]=P,A[5]=N,C.n=j,_=0))}if(q||P>1)return a;throw T=!0,N}return function(P,N,q){if(O>1)throw TypeError("Generator is already running");for(T&&N===1&&R(N,q),_=N,d=q;(e=_<2?t:d)||!T;){I||(_?_<3?(_>1&&(C.n=-1),R(_,d)):C.n=d:C.v=d);try{if(O=2,I){if(_||(P="next"),e=I[P]){if(!(e=e.call(I,d)))throw TypeError("iterator result is not an object");if(!e.done)return e;d=e.value,_<2&&(_=0)}else _===1&&(e=I.return)&&e.call(I),_<2&&(d=TypeError("The iterator does not provide a '"+P+"' method"),_=1);I=t}else if((e=(T=C.n<0)?d:y.call(g,C))!==a)break}catch(A){I=t,_=1,d=A}finally{O=1}}return{value:e,done:T}}})(h,E,w),!0),b}var a={};function u(){}function s(){}function c(){}e=Object.getPrototypeOf;var l=[][n]?e(e([][n]())):(Re(e={},n,function(){return this}),e),f=c.prototype=u.prototype=Object.create(l);function v(h){return Object.setPrototypeOf?Object.setPrototypeOf(h,c):(h.__proto__=c,Re(h,i,"GeneratorFunction")),h.prototype=Object.create(f),h}return s.prototype=c,Re(f,"constructor",c),Re(c,"constructor",s),s.displayName="GeneratorFunction",Re(c,i,"GeneratorFunction"),Re(f),Re(f,i,"Generator"),Re(f,n,function(){return this}),Re(f,"toString",function(){return"[object Generator]"}),(Ur=function(){return{w:o,m:v}})()}function Re(t,e,r,n){var i=Object.defineProperty;try{i({},"",{})}catch{i=0}Re=function(o,a,u,s){function c(l,f){Re(o,l,function(v){return this._invoke(l,f,v)})}a?i?i(o,a,{value:u,enumerable:!s,configurable:!s,writable:!s}):o[a]=u:(c("next",0),c("throw",1),c("return",2))},Re(t,e,r,n)}function jf(t,e){if(typeof t!="object"||!t)return t;var r=t[Symbol.toPrimitive];if(r!==void 0){var n=r.call(t,e);if(typeof n!="object")return n;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(t)}function Lf(t){var e=jf(t,"string");return typeof e=="symbol"?e:e+""}function Df(t,e){if(t){if(typeof t=="string")return or(t,e);var r={}.toString.call(t).slice(8,-1);return r==="Object"&&t.constructor&&(r=t.constructor.name),r==="Map"||r==="Set"?Array.from(t):r==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?or(t,e):void 0}}var ka=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},ja={},sr,La;function ne(){if(La)return sr;La=1;var t=function(e){return e&&e.Math===Math&&e};return sr=t(typeof globalThis=="object"&&globalThis)||t(typeof window=="object"&&window)||t(typeof self=="object"&&self)||t(typeof ka=="object"&&ka)||t(typeof sr=="object"&&sr)||(function(){return this})()||Function("return this")(),sr}var Vr={},Gr,Da;function Y(){return Da||(Da=1,Gr=function(t){try{return!!t()}catch{return!0}}),Gr}var Hr,Ma;function ye(){if(Ma)return Hr;Ma=1;var t=Y();return Hr=!t(function(){return Object.defineProperty({},1,{get:function(){return 7}})[1]!==7}),Hr}var $r,Fa;function Cr(){if(Fa)return $r;Fa=1;var t=Y();return $r=!t(function(){var e=(function(){}).bind();return typeof e!="function"||e.hasOwnProperty("prototype")}),$r}var Kr,Ba;function _e(){if(Ba)return Kr;Ba=1;var t=Cr(),e=Function.prototype.call;return Kr=t?e.bind(e):function(){return e.apply(e,arguments)},Kr}var Wr={},Ua;function zr(){if(Ua)return Wr;Ua=1;var t={}.propertyIsEnumerable,e=Object.getOwnPropertyDescriptor,r=e&&!t.call({1:2},1);return Wr.f=r?function(i){var o=e(this,i);return!!o&&o.enumerable}:t,Wr}var Jr,Va;function ur(){return Va||(Va=1,Jr=function(t,e){return{enumerable:!(t&1),configurable:!(t&2),writable:!(t&4),value:e}}),Jr}var Yr,Ga;function Z(){if(Ga)return Yr;Ga=1;var t=Cr(),e=Function.prototype,r=e.call,n=t&&e.bind.bind(r,r);return Yr=t?n:function(i){return function(){return r.apply(i,arguments)}},Yr}var Xr,Ha;function Ne(){if(Ha)return Xr;Ha=1;var t=Z(),e=t({}.toString),r=t("".slice);return Xr=function(n){return r(e(n),8,-1)},Xr}var Qr,$a;function Tr(){if($a)return Qr;$a=1;var t=Z(),e=Y(),r=Ne(),n=Object,i=t("".split);return Qr=e(function(){return!n("z").propertyIsEnumerable(0)})?function(o){return r(o)==="String"?i(o,""):n(o)}:n,Qr}var Zr,Ka;function Ke(){return Ka||(Ka=1,Zr=function(t){return t==null}),Zr}var et,Wa;function We(){if(Wa)return et;Wa=1;var t=Ke(),e=TypeError;return et=function(r){if(t(r))throw new e("Can't call method on "+r);return r},et}var rt,za;function Fe(){if(za)return rt;za=1;var t=Tr(),e=We();return rt=function(r){return t(e(r))},rt}var tt,Ja;function ve(){if(Ja)return tt;Ja=1;var t=typeof document=="object"&&document.all;return tt=typeof t>"u"&&t!==void 0?function(e){return typeof e=="function"||e===t}:function(e){return typeof e=="function"},tt}var nt,Ya;function be(){if(Ya)return nt;Ya=1;var t=ve();return nt=function(e){return typeof e=="object"?e!==null:t(e)},nt}var it,Xa;function Ae(){if(Xa)return it;Xa=1;var t=ne(),e=ve(),r=function(n){return e(n)?n:void 0};return it=function(n,i){return arguments.length<2?r(t[n]):t[n]&&t[n][i]},it}var at,Qa;function Ve(){if(Qa)return at;Qa=1;var t=Z();return at=t({}.isPrototypeOf),at}var ot,Za;function Ge(){if(Za)return ot;Za=1;var t=ne(),e=t.navigator,r=e&&e.userAgent;return ot=r?String(r):"",ot}var st,eo;function cr(){if(eo)return st;eo=1;var t=ne(),e=Ge(),r=t.process,n=t.Deno,i=r&&r.versions||n&&n.version,o=i&&i.v8,a,u;return o&&(a=o.split("."),u=a[0]>0&&a[0]<4?1:+(a[0]+a[1])),!u&&e&&(a=e.match(/Edge\/(\d+)/),(!a||a[1]>=74)&&(a=e.match(/Chrome\/(\d+)/),a&&(u=+a[1]))),st=u,st}var ut,ro;function Qe(){if(ro)return ut;ro=1;var t=cr(),e=Y(),r=ne(),n=r.String;return ut=!!Object.getOwnPropertySymbols&&!e(function(){var i=Symbol("symbol detection");return!n(i)||!(Object(i)instanceof Symbol)||!Symbol.sham&&t&&t<41}),ut}var ct,to;function no(){if(to)return ct;to=1;var t=Qe();return ct=t&&!Symbol.sham&&typeof Symbol.iterator=="symbol",ct}var lt,io;function lr(){if(io)return lt;io=1;var t=Ae(),e=ve(),r=Ve(),n=no(),i=Object;return lt=n?function(o){return typeof o=="symbol"}:function(o){var a=t("Symbol");return e(a)&&r(a.prototype,i(o))},lt}var ft,ao;function Ze(){if(ao)return ft;ao=1;var t=String;return ft=function(e){try{return t(e)}catch{return"Object"}},ft}var vt,oo;function Be(){if(oo)return vt;oo=1;var t=ve(),e=Ze(),r=TypeError;return vt=function(n){if(t(n))return n;throw new r(e(n)+" is not a function")},vt}var dt,so;function fr(){if(so)return dt;so=1;var t=Be(),e=Ke();return dt=function(r,n){var i=r[n];return e(i)?void 0:t(i)},dt}var ht,uo;function Mf(){if(uo)return ht;uo=1;var t=_e(),e=ve(),r=be(),n=TypeError;return ht=function(i,o){var a,u;if(o==="string"&&e(a=i.toString)&&!r(u=t(a,i))||e(a=i.valueOf)&&!r(u=t(a,i))||o!=="string"&&e(a=i.toString)&&!r(u=t(a,i)))return u;throw new n("Can't convert object to primitive value")},ht}var pt={exports:{}},bt,co;function ke(){return co||(co=1,bt=!1),bt}var _t,lo;function gt(){if(lo)return _t;lo=1;var t=ne(),e=Object.defineProperty;return _t=function(r,n){try{e(t,r,{value:n,configurable:!0,writable:!0})}catch{t[r]=n}return n},_t}var fo;function mt(){if(fo)return pt.exports;fo=1;var t=ke(),e=ne(),r=gt(),n="__core-js_shared__",i=pt.exports=e[n]||r(n,{});return(i.versions||(i.versions=[])).push({version:"3.49.0",mode:t?"pure":"global",copyright:"© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.",license:"https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE",source:"https://github.com/zloirock/core-js"}),pt.exports}var yt,vo;function er(){if(vo)return yt;vo=1;var t=mt();return yt=function(e,r){return t[e]||(t[e]=r||{})},yt}var Et,ho;function je(){if(ho)return Et;ho=1;var t=We(),e=Object;return Et=function(r){return e(t(r))},Et}var St,po;function ge(){if(po)return St;po=1;var t=Z(),e=je(),r=t({}.hasOwnProperty);return St=Object.hasOwn||function(i,o){return r(e(i),o)},St}var It,bo;function vr(){if(bo)return It;bo=1;var t=Z(),e=0,r=Math.random(),n=t(1.1.toString);return It=function(i){return"Symbol("+(i===void 0?"":i)+")_"+n(++e+r,36)},It}var Ot,_o;function de(){if(_o)return Ot;_o=1;var t=ne(),e=er(),r=ge(),n=vr(),i=Qe(),o=no(),a=t.Symbol,u=e("wks"),s=o?a.for||a:a&&a.withoutSetter||n;return Ot=function(c){return r(u,c)||(u[c]=i&&r(a,c)?a[c]:s("Symbol."+c)),u[c]},Ot}var wt,go;function mo(){if(go)return wt;go=1;var t=_e(),e=be(),r=lr(),n=fr(),i=Mf(),o=de(),a=TypeError,u=o("toPrimitive");return wt=function(s,c){if(!e(s)||r(s))return s;var l=n(s,u),f;if(l){if(c===void 0&&(c="default"),f=t(l,s,c),!e(f)||r(f))return f;throw new a("Can't convert object to primitive value")}return c===void 0&&(c="number"),i(s,c)},wt}var Rt,yo;function xt(){if(yo)return Rt;yo=1;var t=mo(),e=lr();return Rt=function(r){var n=t(r,"string");return e(n)?n:n+""},Rt}var Ct,Eo;function Pr(){if(Eo)return Ct;Eo=1;var t=ne(),e=be(),r=t.document,n=e(r)&&e(r.createElement);return Ct=function(i){return n?r.createElement(i):{}},Ct}var Tt,So;function Io(){if(So)return Tt;So=1;var t=ye(),e=Y(),r=Pr();return Tt=!t&&!e(function(){return Object.defineProperty(r("div"),"a",{get:function(){return 7}}).a!==7}),Tt}var Oo;function qr(){if(Oo)return Vr;Oo=1;var t=ye(),e=_e(),r=zr(),n=ur(),i=Fe(),o=xt(),a=ge(),u=Io(),s=Object.getOwnPropertyDescriptor;return Vr.f=t?s:function(l,f){if(l=i(l),f=o(f),u)try{return s(l,f)}catch{}if(a(l,f))return n(!e(r.f,l,f),l[f])},Vr}var Pt={},qt,wo;function Ro(){if(wo)return qt;wo=1;var t=ye(),e=Y();return qt=t&&e(function(){return Object.defineProperty(function(){},"prototype",{value:42,writable:!1}).prototype!==42}),qt}var Nt,xo;function Ie(){if(xo)return Nt;xo=1;var t=be(),e=String,r=TypeError;return Nt=function(n){if(t(n))return n;throw new r(e(n)+" is not an object")},Nt}var Co;function Oe(){if(Co)return Pt;Co=1;var t=ye(),e=Io(),r=Ro(),n=Ie(),i=xt(),o=TypeError,a=Object.defineProperty,u=Object.getOwnPropertyDescriptor,s="enumerable",c="configurable",l="writable";return Pt.f=t?r?function(v,h,p){if(n(v),h=i(h),n(p),typeof v=="function"&&h==="prototype"&&"value"in p&&l in p&&!p[l]){var E=u(v,h);E&&E[l]&&(v[h]=p.value,p={configurable:c in p?p[c]:E[c],enumerable:s in p?p[s]:E[s],writable:!1})}return a(v,h,p)}:a:function(v,h,p){if(n(v),h=i(h),n(p),e)try{return a(v,h,p)}catch{}if("get"in p||"set"in p)throw new o("Accessors not supported");return"value"in p&&(v[h]=p.value),v},Pt}var At,To;function ze(){if(To)return At;To=1;var t=ye(),e=Oe(),r=ur();return At=t?function(n,i,o){return e.f(n,i,r(1,o))}:function(n,i,o){return n[i]=o,n},At}var kt={exports:{}},jt,Po;function dr(){if(Po)return jt;Po=1;var t=ye(),e=ge(),r=Function.prototype,n=t&&Object.getOwnPropertyDescriptor,i=e(r,"name"),o=i&&(function(){}).name==="something",a=i&&(!t||t&&n(r,"name").configurable);return jt={EXISTS:i,PROPER:o,CONFIGURABLE:a},jt}var Lt,qo;function Dt(){if(qo)return Lt;qo=1;var t=Z(),e=ve(),r=mt(),n=t(Function.toString);return e(r.inspectSource)||(r.inspectSource=function(i){return n(i)}),Lt=r.inspectSource,Lt}var Mt,No;function Ao(){if(No)return Mt;No=1;var t=ne(),e=ve(),r=t.WeakMap;return Mt=e(r)&&/native code/.test(String(r)),Mt}var Ft,ko;function Nr(){if(ko)return Ft;ko=1;var t=er(),e=vr(),r=t("keys");return Ft=function(n){return r[n]||(r[n]=e(n))},Ft}var Bt,jo;function hr(){return jo||(jo=1,Bt={}),Bt}var Ut,Lo;function qe(){if(Lo)return Ut;Lo=1;var t=Ao(),e=ne(),r=be(),n=ze(),i=ge(),o=mt(),a=Nr(),u=hr(),s="Object already initialized",c=e.TypeError,l=e.WeakMap,f,v,h,p=function(b){return h(b)?v(b):f(b,{})},E=function(b){return function(y){var g;if(!r(y)||(g=v(y)).type!==b)throw new c("Incompatible receiver, "+b+" required");return g}};if(t||o.state){var w=o.state||(o.state=new l);w.get=w.get,w.has=w.has,w.set=w.set,f=function(b,y){if(w.has(b))throw new c(s);return y.facade=b,w.set(b,y),y},v=function(b){return w.get(b)||{}},h=function(b){return w.has(b)}}else{var S=a("state");u[S]=!0,f=function(b,y){if(i(b,S))throw new c(s);return y.facade=b,n(b,S,y),y},v=function(b){return i(b,S)?b[S]:{}},h=function(b){return i(b,S)}}return Ut={set:f,get:v,has:h,enforce:p,getterFor:E},Ut}var Do;function Mo(){if(Do)return kt.exports;Do=1;var t=Z(),e=Y(),r=ve(),n=ge(),i=ye(),o=dr().CONFIGURABLE,a=Dt(),u=qe(),s=u.enforce,c=u.get,l=String,f=Object.defineProperty,v=t("".slice),h=t("".replace),p=t([].join),E=i&&!e(function(){return f(function(){},"length",{value:8}).length!==8}),w=String(String).split("String"),S=kt.exports=function(b,y,g){v(l(y),0,7)==="Symbol("&&(y="["+h(l(y),/^Symbol\(([^)]*)\).*$/,"$1")+"]"),g&&g.getter&&(y="get "+y),g&&g.setter&&(y="set "+y),(!n(b,"name")||o&&b.name!==y)&&(i?f(b,"name",{value:y,configurable:!0}):b.name=y),E&&g&&n(g,"arity")&&b.length!==g.arity&&f(b,"length",{value:g.arity});try{g&&n(g,"constructor")&&g.constructor?i&&f(b,"prototype",{writable:!1}):b.prototype&&(b.prototype=void 0)}catch{}var m=s(b);return n(m,"source")||(m.source=p(w,typeof y=="string"?y:"")),b};return Function.prototype.toString=S(function(){return r(this)&&c(this).source||a(this)},"toString"),kt.exports}var Vt,Fo;function xe(){if(Fo)return Vt;Fo=1;var t=ve(),e=Oe(),r=Mo(),n=gt();return Vt=function(i,o,a,u){u||(u={});var s=u.enumerable,c=u.name!==void 0?u.name:o;if(t(a)&&r(a,c,u),u.global)s?i[o]=a:n(o,a);else{try{u.unsafe?i[o]&&(s=!0):delete i[o]}catch{}s?i[o]=a:e.f(i,o,{value:a,enumerable:!1,configurable:!u.nonConfigurable,writable:!u.nonWritable})}return i},Vt}var Gt={},Ht,Bo;function Ff(){if(Bo)return Ht;Bo=1;var t=Math.ceil,e=Math.floor;return Ht=Math.trunc||function(n){var i=+n;return(i>0?e:t)(i)},Ht}var $t,Uo;function pr(){if(Uo)return $t;Uo=1;var t=Ff();return $t=function(e){var r=+e;return r!==r||r===0?0:t(r)},$t}var Kt,Vo;function Wt(){if(Vo)return Kt;Vo=1;var t=pr(),e=Math.max,r=Math.min;return Kt=function(n,i){var o=t(n);return o<0?e(o+i,0):r(o,i)},Kt}var zt,Go;function Ho(){if(Go)return zt;Go=1;var t=pr(),e=Math.min;return zt=function(r){var n=t(r);return n>0?e(n,9007199254740991):0},zt}var Jt,$o;function He(){if($o)return Jt;$o=1;var t=Ho();return Jt=function(e){return t(e.length)},Jt}var Yt,Ko;function Bf(){if(Ko)return Yt;Ko=1;var t=Fe(),e=Wt(),r=He(),n=function(i){return function(o,a,u){var s=t(o),c=r(s);if(c===0)return!i&&-1;var l=e(u,c),f;if(i&&a!==a){for(;c>l;)if(f=s[l++],f!==f)return!0}else for(;c>l;l++)if((i||l in s)&&s[l]===a)return i||l||0;return!i&&-1}};return Yt={includes:n(!0),indexOf:n(!1)},Yt}var Xt,Wo;function zo(){if(Wo)return Xt;Wo=1;var t=Z(),e=ge(),r=Fe(),n=Bf().indexOf,i=hr(),o=t([].push);return Xt=function(a,u){var s=r(a),c=0,l=[],f;for(f in s)!e(i,f)&&e(s,f)&&o(l,f);for(;u.length>c;)e(s,f=u[c++])&&(~n(l,f)||o(l,f));return l},Xt}var Qt,Jo;function Zt(){return Jo||(Jo=1,Qt=["constructor","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","toLocaleString","toString","valueOf"]),Qt}var Yo;function rr(){if(Yo)return Gt;Yo=1;var t=zo(),e=Zt(),r=e.concat("length","prototype");return Gt.f=Object.getOwnPropertyNames||function(i){return t(i,r)},Gt}var en={},Xo;function Ar(){return Xo||(Xo=1,en.f=Object.getOwnPropertySymbols),en}var rn,Qo;function Uf(){if(Qo)return rn;Qo=1;var t=Ae(),e=Z(),r=rr(),n=Ar(),i=Ie(),o=e([].concat);return rn=t("Reflect","ownKeys")||function(u){var s=r.f(i(u)),c=n.f;return c?o(s,c(u)):s},rn}var tn,Zo;function es(){if(Zo)return tn;Zo=1;var t=ge(),e=Uf(),r=qr(),n=Oe();return tn=function(i,o,a){for(var u=e(o),s=n.f,c=r.f,l=0;l<u.length;l++){var f=u[l];!t(i,f)&&!(a&&t(a,f))&&s(i,f,c(o,f))}},tn}var nn,rs;function br(){if(rs)return nn;rs=1;var t=Y(),e=ve(),r=/#|\.prototype\./,n=function(s,c){var l=o[i(s)];return l===u?!0:l===a?!1:e(c)?t(c):!!c},i=n.normalize=function(s){return String(s).replace(r,".").toLowerCase()},o=n.data={},a=n.NATIVE="N",u=n.POLYFILL="P";return nn=n,nn}var an,ts;function oe(){if(ts)return an;ts=1;var t=ne(),e=qr().f,r=ze(),n=xe(),i=gt(),o=es(),a=br();return an=function(u,s){var c=u.target,l=u.global,f=u.stat,v,h,p,E,w,S;if(l?h=t:f?h=t[c]||i(c,{}):h=t[c]&&t[c].prototype,h)for(p in s){if(w=s[p],u.dontCallGetSet?(S=e(h,p),E=S&&S.value):E=h[p],v=a(l?p:c+(f?".":"#")+p,u.forced),!v&&E!==void 0){if(typeof w==typeof E)continue;o(w,E)}(u.sham||E&&E.sham)&&r(w,"sham",!0),n(h,p,w,u)}},an}var on,ns;function Vf(){if(ns)return on;ns=1;var t=Ne(),e=Z();return on=function(r){if(t(r)==="Function")return e(r)},on}var sn,is;function tr(){if(is)return sn;is=1;var t=Vf(),e=Be(),r=Cr(),n=t(t.bind);return sn=function(i,o){return e(i),o===void 0?i:r?n(i,o):function(){return i.apply(o,arguments)}},sn}var un,as;function _r(){if(as)return un;as=1;var t=Ne();return un=Array.isArray||function(r){return t(r)==="Array"},un}var cn,os;function ln(){if(os)return cn;os=1;var t=de(),e=t("toStringTag"),r={};return r[e]="z",cn=String(r)==="[object z]",cn}var fn,ss;function kr(){if(ss)return fn;ss=1;var t=ln(),e=ve(),r=Ne(),n=de(),i=n("toStringTag"),o=Object,a=r((function(){return arguments})())==="Arguments",u=function(s,c){try{return s[c]}catch{}};return fn=t?r:function(s){var c,l,f;return s===void 0?"Undefined":s===null?"Null":typeof(l=u(c=o(s),i))=="string"?l:a?r(c):(f=r(c))==="Object"&&e(c.callee)?"Arguments":f},fn}var vn,us;function jr(){if(us)return vn;us=1;var t=Z(),e=Y(),r=ve(),n=kr(),i=Ae(),o=Dt(),a=function(){},u=i("Reflect","construct"),s=/^\s*(?:class|function)\b/,c=t(s.exec),l=!s.test(a),f=function(p){if(!r(p))return!1;try{return u(a,[],p),!0}catch{return!1}},v=function(p){if(!r(p))return!1;switch(n(p)){case"AsyncFunction":case"GeneratorFunction":case"AsyncGeneratorFunction":return!1}try{return l||!!c(s,o(p))}catch{return!0}};return v.sham=!0,vn=!u||e(function(){var h;return f(f.call)||!f(Object)||!f(function(){h=!0})||h})?v:f,vn}var dn,cs;function Gf(){if(cs)return dn;cs=1;var t=_r(),e=jr(),r=be(),n=de(),i=n("species"),o=Array;return dn=function(a){var u;return t(a)&&(u=a.constructor,e(u)&&(u===o||t(u.prototype))?u=void 0:r(u)&&(u=u[i],u===null&&(u=void 0))),u===void 0?o:u},dn}var hn,ls;function pn(){if(ls)return hn;ls=1;var t=Gf();return hn=function(e,r){return new(t(e))(r===0?0:r)},hn}var bn,fs;function gr(){if(fs)return bn;fs=1;var t=ye(),e=Oe(),r=ur();return bn=function(n,i,o){t?e.f(n,i,r(0,o)):n[i]=o},bn}var _n,vs;function nr(){if(vs)return _n;vs=1;var t=tr(),e=Tr(),r=je(),n=He(),i=pn(),o=gr(),a=function(u){var s=u===1,c=u===2,l=u===3,f=u===4,v=u===6,h=u===7,p=u===5||v;return function(E,w,S){for(var b=r(E),y=e(b),g=n(y),m=t(w,S),I=0,_=0,d=s?i(E,g):c||h?i(E,0):void 0,O,x;g>I;I++)if((p||I in y)&&(O=y[I],x=m(O,I,b),u))if(s)o(d,I,x);else if(x)switch(u){case 3:return!0;case 5:return O;case 6:return I;case 2:o(d,_++,O)}else switch(u){case 4:return!1;case 7:o(d,_++,O)}return v?-1:l||f?f:d}};return _n={forEach:a(0),map:a(1),filter:a(2),some:a(3),every:a(4),find:a(5),findIndex:a(6),filterReject:a(7)},_n}var gn,ds;function mr(){if(ds)return gn;ds=1;var t=Y(),e=de(),r=cr(),n=e("species");return gn=function(i){return r>=51||!t(function(){var o=[],a=o.constructor={};return a[n]=function(){return{foo:1}},o[i](Boolean).foo!==1})},gn}var hs;function Hf(){if(hs)return ja;hs=1;var t=oe(),e=nr().filter,r=mr(),n=r("filter");return t({target:"Array",proto:!0,forced:!n},{filter:function(o){return e(this,o,arguments.length>1?arguments[1]:void 0)}}),ja}Hf();var ps={},bs;function $f(){if(bs)return ps;bs=1;var t=oe();return t({target:"Number",stat:!0,nonConfigurable:!0,nonWritable:!0},{MAX_SAFE_INTEGER:9007199254740991}),ps}$f();var _s={},mn,gs;function Kf(){if(gs)return mn;gs=1;var t=ln(),e=kr();return mn=t?{}.toString:function(){return"[object "+e(this)+"]"},mn}var ms;function Wf(){if(ms)return _s;ms=1;var t=ln(),e=xe(),r=Kf();return t||e(Object.prototype,"toString",r,{unsafe:!0}),_s}Wf();var ys={},Es={},yn,Ss;function Is(){if(Ss)return yn;Ss=1;var t=ne(),e=Ge(),r=Ne(),n=function(i){return e.slice(0,i.length)===i};return yn=(function(){return n("Bun/")?"BUN":n("Cloudflare-Workers")?"CLOUDFLARE":n("Deno/")?"DENO":n("Node.js/")?"NODE":t.Bun&&typeof Bun.version=="string"?"BUN":t.Deno&&typeof Deno.version=="object"?"DENO":r(t.process)==="process"?"NODE":t.window&&t.document?"BROWSER":"REST"})(),yn}var En,Os;function Sn(){if(Os)return En;Os=1;var t=Is();return En=t==="NODE",En}var In,ws;function On(){if(ws)return In;ws=1;var t=ne();return In=t,In}var wn,Rs;function zf(){if(Rs)return wn;Rs=1;var t=Z(),e=Be();return wn=function(r,n,i){try{return t(e(Object.getOwnPropertyDescriptor(r,n)[i]))}catch{}},wn}var Rn,xs;function Jf(){if(xs)return Rn;xs=1;var t=be();return Rn=function(e){return t(e)||e===null},Rn}var xn,Cs;function Yf(){if(Cs)return xn;Cs=1;var t=Jf(),e=String,r=TypeError;return xn=function(n){if(t(n))return n;throw new r("Can't set "+e(n)+" as a prototype")},xn}var Cn,Ts;function Tn(){if(Ts)return Cn;Ts=1;var t=zf(),e=be(),r=We(),n=Yf();return Cn=Object.setPrototypeOf||("__proto__"in{}?(function(){var i=!1,o={},a;try{a=t(Object.prototype,"__proto__","set"),a(o,[]),i=o instanceof Array}catch{}return function(s,c){return r(s),n(c),e(s)&&(i?a(s,c):s.__proto__=c),s}})():void 0),Cn}var Pn,Ps;function ir(){if(Ps)return Pn;Ps=1;var t=Oe().f,e=ge(),r=de(),n=r("toStringTag");return Pn=function(i,o,a){i&&!a&&(i=i.prototype),i&&!e(i,n)&&t(i,n,{configurable:!0,value:o})},Pn}var qn,qs;function yr(){if(qs)return qn;qs=1;var t=Mo(),e=Oe();return qn=function(r,n,i){return i.get&&t(i.get,n,{getter:!0}),i.set&&t(i.set,n,{setter:!0}),e.f(r,n,i)},qn}var Nn,Ns;function An(){if(Ns)return Nn;Ns=1;var t=Ae(),e=yr(),r=de(),n=ye(),i=r("species");return Nn=function(o){var a=t(o);n&&a&&!a[i]&&e(a,i,{configurable:!0,get:function(){return this}})},Nn}var kn,As;function Lr(){if(As)return kn;As=1;var t=Ve(),e=TypeError;return kn=function(r,n){if(t(n,r))return r;throw new e("Incorrect invocation")},kn}var jn,ks;function Xf(){if(ks)return jn;ks=1;var t=jr(),e=Ze(),r=TypeError;return jn=function(n){if(t(n))return n;throw new r(e(n)+" is not a constructor")},jn}var Ln,js;function Qf(){if(js)return Ln;js=1;var t=Ie(),e=Xf(),r=Ke(),n=de(),i=n("species");return Ln=function(o,a){var u=t(o).constructor,s;return u===void 0||r(s=t(u)[i])?a:e(s)},Ln}var Dn,Ls;function Mn(){if(Ls)return Dn;Ls=1;var t=Cr(),e=Function.prototype,r=e.apply,n=e.call;return Dn=typeof Reflect=="object"&&Reflect.apply||(t?n.bind(r):function(){return n.apply(r,arguments)}),Dn}var Fn,Ds;function Ms(){if(Ds)return Fn;Ds=1;var t=Ae();return Fn=t("document","documentElement"),Fn}var Bn,Fs;function Er(){if(Fs)return Bn;Fs=1;var t=Z();return Bn=t([].slice),Bn}var Un,Bs;function Zf(){if(Bs)return Un;Bs=1;var t=TypeError;return Un=function(e,r){if(e<r)throw new t("Not enough arguments");return e},Un}var Vn,Us;function Vs(){if(Us)return Vn;Us=1;var t=Ge();return Vn=/ipad|iphone|ipod/i.test(t)&&/applewebkit/i.test(t),Vn}var Gn,Gs;function Hs(){if(Gs)return Gn;Gs=1;var t=ne(),e=Mn(),r=tr(),n=ve(),i=ge(),o=Y(),a=Ms(),u=Er(),s=Pr(),c=Zf(),l=Vs(),f=Sn(),v=t.setImmediate,h=t.clearImmediate,p=t.process,E=t.Dispatch,w=t.Function,S=t.MessageChannel,b=t.String,y=0,g={},m="onreadystatechange",I,_,d,O;o(function(){I=t.location});var x=function(P){if(i(g,P)){var N=g[P];delete g[P],N()}},T=function(P){return function(){x(P)}},C=function(P){x(P.data)},R=function(P){t.postMessage(b(P),I.protocol+"//"+I.host)};return(!v||!h)&&(v=function(N){c(arguments.length,1);var q=n(N)?N:w(N),A=u(arguments,1);return g[++y]=function(){e(q,void 0,A)},_(y),y},h=function(N){delete g[N]},f?_=function(P){p.nextTick(T(P))}:E&&E.now?_=function(P){E.now(T(P))}:S&&!l?(d=new S,O=d.port2,d.port1.onmessage=C,_=r(O.postMessage,O)):t.addEventListener&&n(t.postMessage)&&!t.importScripts&&I&&I.protocol!=="file:"&&!o(R)?(_=R,t.addEventListener("message",C,!1)):m in s("script")?_=function(P){a.appendChild(s("script"))[m]=function(){a.removeChild(this),x(P)}}:_=function(P){setTimeout(T(P),0)}),Gn={set:v,clear:h},Gn}var Hn,$s;function ev(){if($s)return Hn;$s=1;var t=ne(),e=ye(),r=Object.getOwnPropertyDescriptor;return Hn=function(n){if(!e)return t[n];var i=r(t,n);return i&&i.value},Hn}var $n,Ks;function Ws(){if(Ks)return $n;Ks=1;var t=function(){this.head=null,this.tail=null};return t.prototype={add:function(e){var r={item:e,next:null},n=this.tail;n?n.next=r:this.head=r,this.tail=r},get:function(){var e=this.head;if(e){var r=this.head=e.next;return r===null&&(this.tail=null),e.item}}},$n=t,$n}var Kn,zs;function rv(){if(zs)return Kn;zs=1;var t=Ge();return Kn=/ipad|iphone|ipod/i.test(t)&&typeof Pebble<"u",Kn}var Wn,Js;function tv(){if(Js)return Wn;Js=1;var t=Ge();return Wn=/web0s(?!.*chrome)/i.test(t),Wn}var zn,Ys;function nv(){if(Ys)return zn;Ys=1;var t=ne(),e=ev(),r=tr(),n=Hs().set,i=Ws(),o=Vs(),a=rv(),u=tv(),s=Sn(),c=t.MutationObserver||t.WebKitMutationObserver,l=t.document,f=t.process,v=t.Promise,h=e("queueMicrotask"),p,E,w,S,b;if(!h){var y=new i,g=function(){var m,I;for(s&&(m=f.domain)&&m.exit();I=y.get();)try{I()}catch(_){throw y.head&&p(),_}m&&m.enter()};!o&&!s&&!u&&c&&l?(E=!0,w=l.createTextNode(""),new c(g).observe(w,{characterData:!0}),p=function(){w.data=E=!E}):!a&&v&&v.resolve?(S=v.resolve(void 0),S.constructor=v,b=r(S.then,S),p=function(){b(g)}):s?p=function(){f.nextTick(g)}:(n=r(n,t),p=function(){n(g)}),h=function(m){y.head||p(),y.add(m)}}return zn=h,zn}var Jn,Xs;function iv(){return Xs||(Xs=1,Jn=function(t,e){try{arguments.length===1?console.error(t):console.error(t,e)}catch{}}),Jn}var Yn,Qs;function Xn(){return Qs||(Qs=1,Yn=function(t){try{return{error:!1,value:t()}}catch(e){return{error:!0,value:e}}}),Yn}var Qn,Zs;function Sr(){if(Zs)return Qn;Zs=1;var t=ne();return Qn=t.Promise,Qn}var Zn,eu;function Ir(){if(eu)return Zn;eu=1;var t=ne(),e=Sr(),r=ve(),n=br(),i=Dt(),o=de(),a=Is(),u=ke(),s=cr(),c=e&&e.prototype,l=o("species"),f=!1,v=r(t.PromiseRejectionEvent),h=n("Promise",function(){var p=i(e),E=p!==String(e);if(!E&&s===66||u&&!(c.catch&&c.finally))return!0;if(!s||s<51||!/native code/.test(p)){var w=new e(function(y){y(1)}),S=function(y){y(function(){},function(){})},b=w.constructor={};if(b[l]=S,f=w.then(function(){})instanceof S,!f)return!0}return!E&&(a==="BROWSER"||a==="DENO")&&!v});return Zn={CONSTRUCTOR:h,REJECTION_EVENT:v,SUBCLASSING:f},Zn}var ei={},ru;function Or(){if(ru)return ei;ru=1;var t=Be(),e=TypeError,r=function(n){var i,o;this.promise=new n(function(a,u){if(i!==void 0||o!==void 0)throw new e("Bad Promise constructor");i=a,o=u}),this.resolve=t(i),this.reject=t(o)};return ei.f=function(n){return new r(n)},ei}var tu;function av(){if(tu)return Es;tu=1;var t=oe(),e=ke(),r=Sn(),n=ne(),i=On(),o=_e(),a=xe(),u=Tn(),s=ir(),c=An(),l=Be(),f=ve(),v=be(),h=Lr(),p=Qf(),E=Hs().set,w=nv(),S=iv(),b=Xn(),y=Ws(),g=qe(),m=Sr(),I=Ir(),_=Or(),d="Promise",O=I.CONSTRUCTOR,x=I.REJECTION_EVENT,T=I.SUBCLASSING,C=g.getterFor(d),R=g.set,P=m&&m.prototype,N=m,q=P,A=n.TypeError,L=n.document,j=n.process,D=_.f,M=D,F=!!(L&&L.createEvent&&n.dispatchEvent),K="unhandledrejection",H="rejectionhandled",he=0,Q=1,z=2,W=1,B=2,ae,ce,le,fe,pe=function(k){var V;return v(k)&&f(V=k.then)?V:!1},Ee=function(k,V){var ie=V.value,re=V.state===Q,ue=re?k.ok:k.fail,Ue=k.resolve,Xe=k.reject,te=k.domain,U,X,J;try{ue?(re||(V.rejection===B&&Te(V),V.rejection=W),ue===!0?U=ie:(te&&te.enter(),U=ue(ie),te&&(te.exit(),J=!0)),U===k.promise?Xe(new A("Promise-chain cycle")):(X=pe(U))?o(X,U,Ue,Xe):Ue(U)):Xe(ie)}catch(se){te&&!J&&te.exit(),Xe(se)}},me=function(k,V){k.notified||(k.notified=!0,w(function(){for(var ie=k.reactions,re;re=ie.get();)Ee(re,k);k.notified=!1,V&&!k.rejection&&Se(k)}))},ee=function(k,V,ie){var re,ue;F?(re=L.createEvent("Event"),re.promise=V,re.reason=ie,re.initEvent(k,!1,!0),n.dispatchEvent(re)):re={promise:V,reason:ie},!x&&(ue=n["on"+k])?ue(re):k===K&&S("Unhandled promise rejection",ie)},Se=function(k){o(E,n,function(){var V=k.facade,ie=k.value,re=Pe(k),ue;if(re&&(ue=b(function(){r?j.emit("unhandledRejection",ie,V):ee(K,V,ie)}),k.rejection=r||Pe(k)?B:W,ue.error))throw ue.value})},Pe=function(k){return k.rejection!==W&&!k.parent},Te=function(k){o(E,n,function(){var V=k.facade;r?j.emit("rejectionHandled",V):ee(H,V,k.value)})},De=function(k,V,ie){return function(re){k(V,re,ie)}},Me=function(k,V,ie){k.done||(k.done=!0,ie&&(k=ie),k.value=V,k.state=z,me(k,!0))},Ye=function(k,V,ie){if(!k.done){k.done=!0,ie&&(k=ie);try{if(k.facade===V)throw new A("Promise can't be resolved itself");var re=pe(V);re?w(function(){var ue={done:!1};try{o(re,V,De(Ye,ue,k),De(Me,ue,k))}catch(Ue){Me(ue,Ue,k)}}):(k.value=V,k.state=Q,me(k,!1))}catch(ue){Me({done:!1},ue,k)}}};if(O&&(N=function(V){h(this,q),l(V),o(ae,this);var ie=C(this);try{V(De(Ye,ie),De(Me,ie))}catch(re){Me(ie,re)}},q=N.prototype,ae=function(V){R(this,{type:d,done:!1,notified:!1,parent:!1,reactions:new y,rejection:!1,state:he,value:null})},ae.prototype=a(q,"then",function(V,ie){var re=C(this),ue=D(p(this,N));return re.parent=!0,ue.ok=f(V)?V:!0,ue.fail=f(ie)&&ie,ue.domain=r?j.domain:void 0,re.state===he?re.reactions.add(ue):w(function(){Ee(ue,re)}),ue.promise}),ce=function(){var k=new ae,V=C(k);this.promise=k,this.resolve=De(Ye,V),this.reject=De(Me,V)},_.f=D=function(k){return k===N||k===le?new ce(k):M(k)},!e&&f(m)&&P!==Object.prototype)){fe=P.then,T||a(P,"then",function(V,ie){var re=this;return new N(function(ue,Ue){o(fe,re,ue,Ue)}).then(V,ie)},{unsafe:!0});try{delete P.constructor}catch{}u&&u(P,q)}return t({global:!0,constructor:!0,wrap:!0,forced:O},{Promise:N}),le=i.Promise,s(N,d,!1,!0),c(d),Es}var nu={},ri,iu;function wr(){return iu||(iu=1,ri={}),ri}var ti,au;function ou(){if(au)return ti;au=1;var t=de(),e=wr(),r=t("iterator"),n=Array.prototype;return ti=function(i){return i!==void 0&&(e.Array===i||n[r]===i)},ti}var ni,su;function ii(){if(su)return ni;su=1;var t=kr(),e=fr(),r=Ke(),n=wr(),i=de(),o=i("iterator");return ni=function(a){if(!r(a))return e(a,o)||e(a,"@@iterator")||n[t(a)]},ni}var ai,uu;function cu(){if(uu)return ai;uu=1;var t=_e(),e=Be(),r=Ie(),n=Ze(),i=ii(),o=TypeError;return ai=function(a,u){var s=arguments.length<2?i(a):u;if(e(s))return r(t(s,a));throw new o(n(a)+" is not iterable")},ai}var oi,lu;function si(){if(lu)return oi;lu=1;var t=_e(),e=Ie(),r=fr();return oi=function(n,i,o){var a,u;e(n);try{if(a=r(n,"return"),!a){if(i==="throw")throw o;return o}a=t(a,n)}catch(s){u=!0,a=s}if(i==="throw")throw o;if(u)throw a;return e(a),o},oi}var ui,fu;function Rr(){if(fu)return ui;fu=1;var t=tr(),e=_e(),r=Ie(),n=Ze(),i=ou(),o=He(),a=Ve(),u=cu(),s=ii(),c=si(),l=TypeError,f=function(h,p){this.stopped=h,this.result=p},v=f.prototype;return ui=function(h,p,E){var w=E&&E.that,S=!!(E&&E.AS_ENTRIES),b=!!(E&&E.IS_RECORD),y=!!(E&&E.IS_ITERATOR),g=!!(E&&E.INTERRUPTED),m=t(p,w),I,_,d,O,x,T,C,R=function(q){var A=I;return I=void 0,A&&c(A,"normal"),new f(!0,q)},P=function(q){return S?(r(q),g?m(q[0],q[1],R):m(q[0],q[1])):g?m(q,R):m(q)};if(b)I=h.iterator;else if(y)I=h;else{if(_=s(h),!_)throw new l(n(h)+" is not iterable");if(i(_)){for(d=0,O=o(h);O>d;d++)if(x=P(h[d]),x&&a(v,x))return x;return new f(!1)}I=u(h,_)}for(T=b?h.next:I.next;!(C=e(T,I)).done;){var N=C.value;try{x=P(N)}catch(q){if(I)c(I,"throw",q);else throw q}if(typeof x=="object"&&x&&a(v,x))return x}return new f(!1)},ui}var ci,vu;function li(){if(vu)return ci;vu=1;var t=de(),e=t("iterator"),r=!1;try{var n=0,i={next:function(){return{done:!!n++}},return:function(){r=!0}};i[e]=function(){return this},Array.from(i,function(){throw 2})}catch{}return ci=function(o,a){try{if(!a&&!r)return!1}catch{return!1}var u=!1;try{var s={};s[e]=function(){return{next:function(){return{done:u=!0}}}},o(s)}catch{}return u},ci}var fi,du;function hu(){if(du)return fi;du=1;var t=Sr(),e=li(),r=Ir().CONSTRUCTOR;return fi=r||!e(function(n){t.all(n).then(void 0,function(){})}),fi}var pu;function ov(){if(pu)return nu;pu=1;var t=oe(),e=_e(),r=Be(),n=Or(),i=Xn(),o=Rr(),a=hu();return t({target:"Promise",stat:!0,forced:a},{all:function(s){var c=this,l=n.f(c),f=l.resolve,v=l.reject,h=i(function(){var p=r(c.resolve),E=[],w=0,S=1;o(s,function(b){var y=w++,g=!1;S++,e(p,c,b).then(function(m){g||(g=!0,E[y]=m,--S||f(E))},v)}),--S||f(E)});return h.error&&v(h.value),l.promise}}),nu}var bu={},_u;function sv(){if(_u)return bu;_u=1;var t=oe(),e=ke(),r=Ir().CONSTRUCTOR,n=Sr(),i=Ae(),o=ve(),a=xe(),u=n&&n.prototype;if(t({target:"Promise",proto:!0,forced:r,real:!0},{catch:function(c){return this.then(void 0,c)}}),!e&&o(n)){var s=i("Promise").prototype.catch;u.catch!==s&&a(u,"catch",s,{unsafe:!0})}return bu}var gu={},mu;function uv(){if(mu)return gu;mu=1;var t=oe(),e=_e(),r=Be(),n=Or(),i=Xn(),o=Rr(),a=hu();return t({target:"Promise",stat:!0,forced:a},{race:function(s){var c=this,l=n.f(c),f=l.reject,v=i(function(){var h=r(c.resolve);o(s,function(p){e(h,c,p).then(l.resolve,f)})});return v.error&&f(v.value),l.promise}}),gu}var yu={},Eu;function cv(){if(Eu)return yu;Eu=1;var t=oe(),e=Or(),r=Ir().CONSTRUCTOR;return t({target:"Promise",stat:!0,forced:r},{reject:function(i){var o=e.f(this),a=o.reject;return a(i),o.promise}}),yu}var Su={},vi,Iu;function lv(){if(Iu)return vi;Iu=1;var t=Ie(),e=be(),r=Or();return vi=function(n,i){if(t(n),e(i)&&i.constructor===n)return i;var o=r.f(n),a=o.resolve;return a(i),o.promise},vi}var Ou;function fv(){if(Ou)return Su;Ou=1;var t=oe(),e=Ae(),r=ke(),n=Sr(),i=Ir().CONSTRUCTOR,o=lv(),a=e("Promise"),u=r&&!i;return t({target:"Promise",stat:!0,forced:r||i},{resolve:function(c){return o(u&&this===a?n:this,c)}}),Su}var wu;function vv(){return wu||(wu=1,av(),ov(),sv(),uv(),cv(),fv()),ys}vv();var Ru={},di,xu;function Ce(){if(xu)return di;xu=1;var t=kr(),e=String;return di=function(r){if(t(r)==="Symbol")throw new TypeError("Cannot convert a Symbol value to a string");return e(r)},di}var hi,Cu;function Tu(){if(Cu)return hi;Cu=1;var t=Ie();return hi=function(){var e=t(this),r="";return e.hasIndices&&(r+="d"),e.global&&(r+="g"),e.ignoreCase&&(r+="i"),e.multiline&&(r+="m"),e.dotAll&&(r+="s"),e.unicode&&(r+="u"),e.unicodeSets&&(r+="v"),e.sticky&&(r+="y"),r},hi}var pi,Pu;function qu(){if(Pu)return pi;Pu=1;var t=Y(),e=ne(),r=e.RegExp,n=t(function(){var a=r("a","y");return a.lastIndex=2,a.exec("abcd")!==null}),i=n||t(function(){return!r("a","y").sticky}),o=n||t(function(){var a=r("^r","gy");return a.lastIndex=2,a.exec("str")!==null});return pi={BROKEN_CARET:o,MISSED_STICKY:i,UNSUPPORTED_Y:n},pi}var bi={},_i,Nu;function gi(){if(Nu)return _i;Nu=1;var t=zo(),e=Zt();return _i=Object.keys||function(n){return t(n,e)},_i}var Au;function ku(){if(Au)return bi;Au=1;var t=ye(),e=Ro(),r=Oe(),n=Ie(),i=Fe(),o=gi();return bi.f=t&&!e?Object.defineProperties:function(u,s){n(u);for(var c=i(s),l=o(s),f=l.length,v=0,h;f>v;)r.f(u,h=l[v++],c[h]);return u},bi}var mi,ju;function Je(){if(ju)return mi;ju=1;var t=Ie(),e=ku(),r=Zt(),n=hr(),i=Ms(),o=Pr(),a=Nr(),u=">",s="<",c="prototype",l="script",f=a("IE_PROTO"),v=function(){},h=function(b){return s+l+u+b+s+"/"+l+u},p=function(b){b.write(h("")),b.close();var y=b.parentWindow.Object;return b=null,y},E=function(){var b=o("iframe"),y="java"+l+":",g;return b.style.display="none",i.appendChild(b),b.src=String(y),g=b.contentWindow.document,g.open(),g.write(h("document.F=Object")),g.close(),g.F},w,S=function(){try{w=new ActiveXObject("htmlfile")}catch{}S=typeof document<"u"?document.domain&&w?p(w):E():p(w);for(var b=r.length;b--;)delete S[c][r[b]];return S()};return n[f]=!0,mi=Object.create||function(y,g){var m;return y!==null?(v[c]=t(y),m=new v,v[c]=null,m[f]=y):m=S(),g===void 0?m:e.f(m,g)},mi}var yi,Lu;function Du(){if(Lu)return yi;Lu=1;var t=Y(),e=ne(),r=e.RegExp;return yi=t(function(){var n=r(".","s");return!(n.dotAll&&n.test(`
 `)&&n.flags==="s")}),yi}var Ei,Mu;function Fu(){if(Mu)return Ei;Mu=1;var t=Y(),e=ne(),r=e.RegExp;return Ei=t(function(){var n=r("(?<a>b)","g");return n.exec("b").groups.a!=="b"||"b".replace(n,"$<a>c")!=="bc"}),Ei}var Si,Bu;function Ii(){if(Bu)return Si;Bu=1;var t=_e(),e=Z(),r=Ce(),n=Tu(),i=qu(),o=er(),a=Je(),u=qe().get,s=Du(),c=Fu(),l=o("native-string-replace",String.prototype.replace),f=RegExp.prototype.exec,v=f,h=e("".charAt),p=e("".indexOf),E=e("".replace),w=e("".slice),S=(function(){var I=/a/,_=/b*/g;return t(f,I,"a"),t(f,_,"a"),I.lastIndex!==0||_.lastIndex!==0})(),b=i.BROKEN_CARET,y=/()??/.exec("")[1]!==void 0,g=S||y||b||s||c,m=function(I,_){for(var d=I.groups=a(null),O=0;O<_.length;O++){var x=_[O];d[x[0]]=I[x[1]]}};return g&&(v=function(_){var d=this,O=u(d),x=r(_),T=O.raw,C,R,P;if(T)return T.lastIndex=d.lastIndex,C=t(v,T,x),d.lastIndex=T.lastIndex,C&&O.groups&&m(C,O.groups),C;var N=O.groups,q=b&&d.sticky,A=t(n,d),L=d.source,j=0,D=x;if(q){A=E(A,"y",""),p(A,"g")===-1&&(A+="g"),D=w(x,d.lastIndex);var M=d.lastIndex>0&&h(x,d.lastIndex-1);d.lastIndex>0&&(!d.multiline||d.multiline&&M!==`

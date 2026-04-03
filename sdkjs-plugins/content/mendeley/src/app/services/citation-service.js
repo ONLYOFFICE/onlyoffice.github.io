@@ -538,7 +538,7 @@ class CitationService {
     /** @returns {Promise<string | "INCORRECT_CONTROL" | null>} */
     async getCurrentContentControlTag() {
         const contentControl = await this.citationDocService.getCurrentContentControlPr();
-        if (typeof contentControl !== 'object') {
+        if (typeof contentControl !== 'object' || contentControl === null) {
             return null;
         }
         if (!Object.hasOwn(contentControl, 'Tag')) {
