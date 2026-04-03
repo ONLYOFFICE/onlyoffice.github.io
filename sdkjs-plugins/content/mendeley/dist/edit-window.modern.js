@@ -1,3 +1,4 @@
+/*
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
@@ -671,7 +672,7 @@ specific requirements.
 if any, to sign a "copyright disclaimer" for the program, if necessary.
 For more information on this, and how to apply and follow the GNU AGPL, see
 <http://www.gnu.org/licenses/>.
-
+*/
 function u(s, t, e) {
   if (typeof s == "function" ? s === t : s.has(t)) return arguments.length < 3 ? t : e;
   throw new TypeError("Private element is not present on this object");

@@ -66,7 +66,7 @@ export default defineConfig({
         {
             name: "license-banner",
             generateBundle(_, bundle) {
-                const banner = readFileSync(resolve(__dirname, "LICENSE"), "utf-8") + "\n";
+                const banner = "/*\n" + readFileSync(resolve(__dirname, "LICENSE"), "utf-8") + "*/\n";
                 for (const chunk of Object.values(bundle)) {
                     if (chunk.type === "chunk") {
                         chunk.code = banner + chunk.code;
