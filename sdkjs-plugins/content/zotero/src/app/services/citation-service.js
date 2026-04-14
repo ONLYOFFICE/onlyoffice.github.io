@@ -81,6 +81,148 @@ class CitationService {
     }
 
     /**
+     * Persist abstracts only for CSL styles that explicitly reference them.
+     * When the style does not use the variable, storing it only bloats field payloads.
+     * @returns {boolean}
+     */
+    #shouldPersistAbstract() {
+        const styleId = this._cslStylesManager.getLastUsedStyleIdOrDefault();
+        const styleContent = this._cslStylesManager.cached(styleId);
+
+        if (typeof styleContent !== "string" || styleContent === "") {
+            return true;
+        }
+
+        return /\bvariable\s*=\s*"[^"]*\babstract\b[^"]*"/.test(
+            styleContent,
+        );
+    }
+
+    /**
+     * @param {any} citationObject
+     * @returns {void}
+     */
+    #stripAbstractFromCitation(citationObject) {
+        if (!citationObject || !Array.isArray(citationObject.citationItems)) {
+            return;
+        }
+
+        citationObject.citationItems.forEach(function (citationItem) {
+            if (
+                citationItem &&
+                citationItem.itemData &&
+                Object.hasOwnProperty.call(citationItem.itemData, "abstract")
+            ) {
+                delete citationItem.itemData.abstract;
+            }
+        });
+    }
+
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {any}
+     */
+    #serializeCitation(cslCitation) {
+        const citationObject = cslCitation.toJSON();
+
+        if (!this.#shouldPersistAbstract()) {
+            this.#stripAbstractFromCitation(citationObject);
+        }
+
+        return citationObject;
+    }
+
+    /**
+     * @param {CitationItem} item
+     * @param {string} id
+     * @returns {{id: string, userID?: string|number, groupID?: string|number}|null}
+     */
+    #getLibraryContext(item, id) {
+        const userID = item.getProperty("userID");
+        const groupID = item.getProperty("groupID");
+
+        if (userID) {
+            return { id: id, userID: userID };
+        }
+        if (groupID) {
+            return { id: id, groupID: groupID };
+        }
+
+        const itemObject = item.toJSON();
+        if (!Array.isArray(itemObject.uris)) {
+            return null;
+        }
+
+        for (let i = 0; i < itemObject.uris.length; i++) {
+            const uri = itemObject.uris[i];
+            const match = uri.match(
+                /zotero\.org\/(users|groups)\/([^/]+)\/items\/([^/?#]+)/i,
+            );
+
+            if (!match || match[3] !== id) {
+                continue;
+            }
+
+            if (match[1] === "users") {
+                return { id: id, userID: match[2] };
+            }
+
+            return { id: id, groupID: match[2] };
+        }
+
+        return null;
+    }
+
+    /** @returns {Promise<void>} */
+    async #hydrateMissingAbstracts() {
+        if (!this.#shouldPersistAbstract()) {
+            return;
+        }
+
+        /** @type {Record<string, {id: string, userID?: string|number, groupID?: string|number}>} */
+        const itemsToRefresh = {};
+
+        this._storage.forEachItem((item, id) => {
+            const flatItem = item.toFlatJSON(this._storage.getItemIndex(id));
+            if (
+                Object.hasOwnProperty.call(flatItem, "abstract") &&
+                flatItem.abstract !== ""
+            ) {
+                return;
+            }
+
+            const libraryContext = this.#getLibraryContext(item, id);
+            if (libraryContext) {
+                itemsToRefresh[id] = libraryContext;
+            }
+        });
+
+        if (Object.keys(itemsToRefresh).length === 0) {
+            return;
+        }
+
+        const refreshedItems = await this.#getSelectedInJsonFormat(itemsToRefresh);
+
+        refreshedItems.forEach((item) => {
+            const itemId = item.key || (item.data && item.data.key) || item.id;
+            if (!itemId) {
+                return;
+            }
+
+            const storedItem = this._storage.getItem(itemId);
+            if (storedItem) {
+                storedItem.fillFromObject(item);
+            }
+        });
+    }
+
+    /** @returns {Promise<void>} */
+    async #prepareStorageForCurrentStyle() {
+        await this.#hydrateMissingAbstracts();
+        this.#updateFormatter();
+    }
+
+    /**
      * @param {CSLCitation} cslCitation
      * @returns {Promise<boolean>}
      */
@@ -132,9 +274,10 @@ class CitationService {
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
+                const serializedCitation = self.#serializeCitation(cslCitation);
                 return self.citationDocService.addCitation(
                     htmlCitation,
-                    JSON.stringify(cslCitation.toJSON()),
+                    JSON.stringify(serializedCitation),
                     notesStyle,
                 );
             });
@@ -464,7 +607,12 @@ class CitationService {
             }
 
             if (cslCitation) {
-                const newValue = this._citPrefixNew + " " + this._citSuffixNew + " " + JSON.stringify(cslCitation.toJSON());
+                const newValue =
+                    this._citPrefixNew +
+                    " " +
+                    this._citSuffixNew +
+                    " " +
+                    JSON.stringify(this.#serializeCitation(cslCitation));
                 if (field["Value"] !== newValue) {
                     bHasChanges = true;
                 }
@@ -559,7 +707,7 @@ class CitationService {
 
         try {
             await this.#synchronizeStorageWithDocItems();
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
         } catch (e) {
             throw e;
         }
@@ -588,7 +736,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             if (bibField) {
                 const updatedFields = [
@@ -639,7 +787,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = [];
@@ -681,7 +829,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -718,7 +866,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems(updatedField);
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -758,7 +906,7 @@ class CitationService {
                 await this.#synchronizeStorageWithDocItems();
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
@@ -799,7 +947,7 @@ class CitationService {
             const { fieldsWithCitations } =
                 await this.#synchronizeStorageWithDocItems();
 
-            this.#updateFormatter();
+            await this.#prepareStorageForCurrentStyle();
 
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
