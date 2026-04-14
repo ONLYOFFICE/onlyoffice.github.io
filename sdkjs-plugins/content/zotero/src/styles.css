@@ -115,10 +115,10 @@ div::-moz-selection {
 
 #selectedWrapper:not(.hidden) {
     display: flex;
-    flex-direction: row;
-    overflow-y: hidden;
+    flex-direction: column;
+    overflow-y: auto;
     font-size: 10px;
-    max-height: 33px;
+    max-height: 90px;
     margin-top: 14px;
 }
 
@@ -344,9 +344,10 @@ div::-moz-selection {
 }
 
 .selDoc {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     margin-right: 6px;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
 .selDoc > span {
@@ -377,13 +378,7 @@ div::-moz-selection {
 /* Edit mode styles for selectedWrapper */
 #selectedWrapper.edit-mode:not(.hidden) {
     max-height: none;
-    flex-direction: column;
     overflow-y: auto;
-}
-#selectedWrapper.edit-mode .selDoc {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2px;
 }
 .selDoc-move {
     cursor: pointer;

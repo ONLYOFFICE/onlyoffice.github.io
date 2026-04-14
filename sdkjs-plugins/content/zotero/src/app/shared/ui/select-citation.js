@@ -451,25 +451,23 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
     span.setAttribute("title", span.textContent);
     root.appendChild(span);
 
-    if (this._editMode) {
-        var moveUp = document.createElement("span");
-        moveUp.className = "selDoc-move";
-        moveUp.textContent = "▲";
-        moveUp.title = translate("Move up");
-        moveUp.onclick = function () {
-            self._moveItem(item.id, -1);
-        };
-        root.appendChild(moveUp);
+    var moveUp = document.createElement("span");
+    moveUp.className = "selDoc-move";
+    moveUp.textContent = "▲";
+    moveUp.title = translate("Move up");
+    moveUp.onclick = function () {
+        self._moveItem(item.id, -1);
+    };
+    root.appendChild(moveUp);
 
-        var moveDown = document.createElement("span");
-        moveDown.className = "selDoc-move";
-        moveDown.textContent = "▼";
-        moveDown.title = translate("Move down");
-        moveDown.onclick = function () {
-            self._moveItem(item.id, 1);
-        };
-        root.appendChild(moveDown);
-    }
+    var moveDown = document.createElement("span");
+    moveDown.className = "selDoc-move";
+    moveDown.textContent = "▼";
+    moveDown.title = translate("Move down");
+    moveDown.onclick = function () {
+        self._moveItem(item.id, 1);
+    };
+    root.appendChild(moveDown);
 
     var remove = document.createElement("span");
     remove.onclick = function () {
