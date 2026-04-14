@@ -98,6 +98,8 @@ function SelectCitationsComponent(
     this._fLoadMore = fLoadMore;
     /** @type {number} */
     this._loadTimeout;
+    /** @type {boolean} */
+    this._editMode = false;
     this._init();
 }
 
@@ -218,6 +220,10 @@ SelectCitationsComponent.prototype.subscribe = function (callback) {
  */
 SelectCitationsComponent.prototype._buildDocElement = function (item) {
     const self = this;
+    // If item already selected, use the existing reference so param edits apply to the right object
+    if (this._items[item.id]) {
+        item = this._items[item.id];
+    }
     var root = document.createElement("div");
     root.classList.add("doc");
     var docInfo = document.createElement("div");
@@ -321,7 +327,7 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
  * @returns {DocumentFragment}
  */
 SelectCitationsComponent.prototype._buildCitationParams = function (item) {
-    const locatorLabel = localStorage.getItem("selectedLocator") || "page";
+    const locatorLabel = item.label || localStorage.getItem("selectedLocator") || "page";
     item.label = locatorLabel;
 
     const params = document.createDocumentFragment();
@@ -349,10 +355,12 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const prefixInput = new InputField(prefix, {
         type: "text",
         placeholder: translate("Prefix"),
+        value: item.prefix || "",
     });
     const suffixInput = new InputField(suffix, {
         type: "text",
         placeholder: translate("Suffix"),
+        value: item.suffix || "",
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: translate("Locator"),
@@ -368,9 +376,11 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     const locatorInput = new InputField(locator, {
         type: "text",
         placeholder: translate(locatorPlaceholder),
+        value: item.locator || "",
     });
     const omitAuthorInput = new Checkbox(omitAuthor, {
         label: translate("Omit Author"),
+        checked: !!item["suppress-author"],
     });
 
     prefixInput.subscribe(function (event) {
@@ -422,6 +432,7 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
     const self = this;
     var root = document.createElement("div");
     root.classList.add("selDoc");
+    root.setAttribute("data-id", String(item.id));
 
     const span = document.createElement("span");
     if (item.author && item.author.length > 0) {
@@ -439,6 +450,26 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
     }
     span.setAttribute("title", span.textContent);
     root.appendChild(span);
+
+    if (this._editMode) {
+        var moveUp = document.createElement("span");
+        moveUp.className = "selDoc-move";
+        moveUp.textContent = "▲";
+        moveUp.title = translate("Move up");
+        moveUp.onclick = function () {
+            self._moveItem(item.id, -1);
+        };
+        root.appendChild(moveUp);
+
+        var moveDown = document.createElement("span");
+        moveDown.className = "selDoc-move";
+        moveDown.textContent = "▼";
+        moveDown.title = translate("Move down");
+        moveDown.onclick = function () {
+            self._moveItem(item.id, 1);
+        };
+        root.appendChild(moveDown);
+    }
 
     var remove = document.createElement("span");
     remove.onclick = function () {
@@ -634,6 +665,81 @@ SelectCitationsComponent.prototype.count = function () {
     var k = 0;
     for (var i in this._items) k++;
     return k;
+};
+
+/**
+ * @param {boolean} enabled
+ */
+SelectCitationsComponent.prototype.setEditMode = function (enabled) {
+    this._editMode = enabled;
+    if (this._selectedWrapper) {
+        if (enabled) {
+            this._selectedWrapper.classList.add("edit-mode");
+        } else {
+            this._selectedWrapper.classList.remove("edit-mode");
+        }
+    }
+};
+
+/**
+ * Add an item as pre-selected (for edit mode). Shows it as a checked card in docsHolder
+ * and as a pill in selectedHolder.
+ * @param {SearchResultItem} item
+ */
+SelectCitationsComponent.prototype.addPreselectedItem = function (item) {
+    // Add to _items first so _buildDocElement sees it as already selected
+    this._items[item.id] = item;
+
+    // Build pill in selectedHolder
+    var el = this._buildSelectedElement(item);
+    this._html[item.id] = el;
+    if (this._selectedHolder) {
+        this._selectedHolder.appendChild(el);
+    }
+
+    // Build doc card (checkbox will be pre-checked since item is in _items)
+    var docEl = this._buildDocElement(item);
+    if (this._docsHolder) {
+        this._docsHolder.appendChild(docEl);
+    }
+
+    this._docsScroller.onscroll();
+    this._selectedScroller.onscroll();
+    this._checkSelected();
+};
+
+/**
+ * Move item up or down in the selected holder.
+ * @param {string|number} id
+ * @param {number} direction  -1 = up, 1 = down
+ */
+SelectCitationsComponent.prototype._moveItem = function (id, direction) {
+    var el = this._html[id];
+    if (!el || !this._selectedHolder) return;
+    if (direction === -1 && el.previousElementSibling) {
+        this._selectedHolder.insertBefore(el, el.previousElementSibling);
+    } else if (direction === 1 && el.nextElementSibling) {
+        el.nextElementSibling.after(el);
+    }
+    this._selectedScroller.onscroll();
+};
+
+/**
+ * Get selected items in DOM order (for preserving reorder).
+ * @returns {SearchResultItem[]}
+ */
+SelectCitationsComponent.prototype.getSelectedItemsOrdered = function () {
+    var items = [];
+    var holder = this._selectedHolder;
+    if (!holder) return items;
+    for (var i = 0; i < holder.children.length; i++) {
+        var el = holder.children[i];
+        var id = el.getAttribute("data-id");
+        if (id && this._items[id]) {
+            items.push(this._items[id]);
+        }
+    }
+    return items;
 };
 
 export { SelectCitationsComponent };

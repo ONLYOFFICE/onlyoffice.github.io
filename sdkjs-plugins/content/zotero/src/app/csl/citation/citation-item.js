@@ -266,11 +266,25 @@ CitationItem.prototype.toJSON = function (bCompressed) {
         result["suppress-author"] = this._suppressAuthor;
     if (this._authorOnly !== undefined)
         result["author-only"] = this._authorOnly;
-    if (this._uris.length) {
-        var filteredUris = this._uris.filter(function (uri) {
-            return uri.indexOf('localhost') === -1;
-        });
-        if (filteredUris.length) result.uris = filteredUris;
+    var filteredUris = this._uris.filter(function (uri) {
+        return uri.indexOf('localhost') === -1 && uri.indexOf('api.zotero.org') === -1;
+    });
+    if (filteredUris.length) {
+        result.uris = filteredUris;
+    } else {
+        // Construct URI from library context if available - required for Word Zotero compatibility
+        var userID = this._itemData && this._itemData.getCustomProperty
+            ? this._itemData.getCustomProperty("userID") : null;
+        var groupID = this._itemData && this._itemData.getCustomProperty
+            ? this._itemData.getCustomProperty("groupID") : null;
+        var key = typeof this.id === "string" ? this.id : "";
+        if (key && userID) {
+            result.uris = ["http://zotero.org/users/" + userID + "/items/" + key];
+        } else if (key && groupID) {
+            result.uris = ["http://zotero.org/groups/" + groupID + "/items/" + key];
+        } else {
+            result.uris = [];
+        }
     }
 
     return result;

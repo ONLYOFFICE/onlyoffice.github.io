@@ -290,6 +290,7 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
+
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -304,10 +305,15 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
-            await this.#removeSuperscript();
-            await this.#removeSelectedContent();
+
+            const isInNote = await this.#isInNote();
+            if (isInNote) {
+                // Field is already in a footnote/endnote - update in place
+                editedFields.push(field);
+                continue;
+            }
+
+            // Field is inline - needs to be moved into a note
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
@@ -322,6 +328,17 @@ class CitationDocService {
                     resolve,
                 );
             });
+            // Apply formatting (italic, bold, etc.) after updating fields
+            for (const field of editedFields) {
+                const formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                const selectFieldResult = await this.#selectField(field.FieldId);
+                if (!selectFieldResult) continue;
+                await CslDocFormatter.formatAfterUpdate(
+                    field.FieldId,
+                    formatting,
+                );
+            }
         }
     }
 
@@ -438,6 +455,22 @@ class CitationDocService {
     #pasteHtml(html) {
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
+        });
+    }
+
+    /** @returns {Promise<boolean>} */
+    #isInNote() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const note = doc.GetCurrentFootEndnote();
+                    return !!note;
+                },
+                false,
+                true,
+                (result) => resolve(!!result),
+            );
         });
     }
 
