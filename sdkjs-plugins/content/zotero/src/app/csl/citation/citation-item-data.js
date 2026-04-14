@@ -488,29 +488,62 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
 
     if (Object.hasOwnProperty.call(itemDataObject, "creators")) {
         const self = this;
+        /** @type {Object<string, string>} Zotero creatorType → internal field name */
+        const creatorTypeMap = {
+            "author": "_author",
+            "editor": "_editor",
+            "translator": "_translator",
+            "contributor": "_contributor",
+            "composer": "_composer",
+            "director": "_director",
+            "producer": "_producer",
+            "performer": "_performer",
+            "recipient": "_recipient",
+            "narrator": "_narrator",
+            "illustrator": "_illustrator",
+            "interviewer": "_author",
+            "interviewee": "_contributor",
+            "seriesEditor": "_collectionEditor",
+            "bookAuthor": "_containerAuthor",
+            "reviewedAuthor": "_reviewedAuthor",
+            "scriptwriter": "_scriptwriter",
+            "guest": "_guest",
+            "host": "_host",
+            "organizer": "_organizer",
+            "curator": "_curator",
+            "compiler": "_compiler",
+        };
         itemDataObject.creators.forEach(function (
-            /** @type {{firstName: string, lastName: string}}} */ creator
+            /** @type {{firstName: string, lastName: string, name?: string, creatorType?: string}} */ creator
         ) {
-            let author = {};
+            let name = {};
             if (creator.firstName) {
-                author.given = creator.firstName;
+                name.given = creator.firstName;
             }
             if (creator.lastName) {
-                author.family = creator.lastName;
+                name.family = creator.lastName;
             }
-            let bHasAuthor = self._author.some(function (a) {
-                if (a.family !== author.family && (a.family || author.family)) {
+            if (creator.name) {
+                name.literal = creator.name;
+            }
+            var fieldName = creatorTypeMap[creator.creatorType || "author"] || "_author";
+            var targetList = self[fieldName];
+            if (!Array.isArray(targetList)) {
+                targetList = self._author;
+            }
+            let bHas = targetList.some(function (a) {
+                if (a.family !== name.family && (a.family || name.family)) {
                     return false;
                 }
-                if (a.given !== author.given && (a.given || author.given)) {
+                if (a.given !== name.given && (a.given || name.given)) {
                     return false;
                 }
                 return true;
             });
-            if (bHasAuthor) {
+            if (bHas) {
                 return;
             }
-            self._author.push(author);
+            targetList.push(name);
         },
         this);
     }
@@ -536,6 +569,76 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
     }
     if (Object.hasOwnProperty.call(itemDataObject, "bookTitle")) {
         this._containerTitle = itemDataObject.bookTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "publicationTitle")) {
+        this._containerTitle = itemDataObject.publicationTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "proceedingsTitle")) {
+        this._containerTitle = itemDataObject.proceedingsTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "encyclopediaTitle")) {
+        this._containerTitle = itemDataObject.encyclopediaTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "dictionaryTitle")) {
+        this._containerTitle = itemDataObject.dictionaryTitle;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "pages")) {
+        this._page = itemDataObject.pages;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "date") && !Object.hasOwnProperty.call(itemDataObject, "issued")) {
+        var dateStr = itemDataObject.date;
+        if (typeof dateStr === "string" && dateStr) {
+            var parts = dateStr.replace(/\//g, "-").split("-").map(Number).filter(function (n) { return !isNaN(n); });
+            if (parts.length) {
+                this._issued = { "date-parts": [parts] };
+            }
+        }
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "url") && !Object.hasOwnProperty.call(itemDataObject, "URL")) {
+        this._URL = itemDataObject.url;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "numPages")) {
+        this._numberOfPages = itemDataObject.numPages;
+    }
+    if (Object.hasOwnProperty.call(itemDataObject, "itemType") && !Object.hasOwnProperty.call(itemDataObject, "type")) {
+        /** @type {Object<string, string>} */
+        var zoteroTypeMap = {
+            "artwork": "graphic",
+            "audioRecording": "song",
+            "bill": "bill",
+            "blogPost": "post-weblog",
+            "book": "book",
+            "bookSection": "chapter",
+            "case": "legal_case",
+            "computerProgram": "software",
+            "conferencePaper": "paper-conference",
+            "dictionaryEntry": "entry-dictionary",
+            "document": "document",
+            "email": "personal_communication",
+            "encyclopediaEntry": "entry-encyclopedia",
+            "film": "motion_picture",
+            "forumPost": "post",
+            "hearing": "hearing",
+            "instantMessage": "personal_communication",
+            "interview": "interview",
+            "journalArticle": "article-journal",
+            "letter": "personal_communication",
+            "magazineArticle": "article-magazine",
+            "manuscript": "manuscript",
+            "map": "map",
+            "newspaperArticle": "article-newspaper",
+            "patent": "patent",
+            "podcast": "song",
+            "presentation": "speech",
+            "radioBroadcast": "broadcast",
+            "report": "report",
+            "statute": "legislation",
+            "thesis": "thesis",
+            "tvBroadcast": "broadcast",
+            "videoRecording": "motion_picture",
+            "webpage": "webpage",
+        };
+        this._type = zoteroTypeMap[itemDataObject.itemType] || itemDataObject.itemType;
     }
     if (Object.hasOwnProperty.call(itemDataObject, "extra")) {
         this._note = itemDataObject.extra;
