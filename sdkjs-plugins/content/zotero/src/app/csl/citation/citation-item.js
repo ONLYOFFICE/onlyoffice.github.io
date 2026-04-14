@@ -266,7 +266,12 @@ CitationItem.prototype.toJSON = function (bCompressed) {
         result["suppress-author"] = this._suppressAuthor;
     if (this._authorOnly !== undefined)
         result["author-only"] = this._authorOnly;
-    if (this._uris.length) result.uris = this._uris;
+    if (this._uris.length) {
+        var filteredUris = this._uris.filter(function (uri) {
+            return uri.indexOf('localhost') === -1;
+        });
+        if (filteredUris.length) result.uris = filteredUris;
+    }
 
     return result;
 };

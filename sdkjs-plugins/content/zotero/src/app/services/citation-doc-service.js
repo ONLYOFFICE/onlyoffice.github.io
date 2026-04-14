@@ -77,7 +77,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: fieldId,
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: formattingPositions.text,
             };
 
@@ -95,7 +95,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: " ",
             };
 
@@ -114,7 +114,7 @@ class CitationDocService {
         /** @type {AddinFieldData} */
         const field = {
             FieldId: "",
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
         const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)

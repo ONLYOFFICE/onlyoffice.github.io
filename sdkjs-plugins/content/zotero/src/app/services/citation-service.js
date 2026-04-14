@@ -127,6 +127,7 @@ class CitationService {
                 fragment.appendChild(tempElement);
                 tempElement.innerHTML = htmlCitation;
                 cslCitation.setPlainCitation(tempElement.innerText);
+                cslCitation.setFormattedCitation(htmlCitation);
                 let notesStyle = null;
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
@@ -401,6 +402,7 @@ class CitationService {
 
             let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
             tempElement.innerHTML = htmlCitation;
+            cslCitation.setFormattedCitation(htmlCitation);
             let oldContentInCit = cslCitation.getPlainCitation();
             const oldContentInDoc = field["Content"];
             if (oldContentInCit === "") {
@@ -462,7 +464,7 @@ class CitationService {
             }
 
             if (cslCitation) {
-                const newValue = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                const newValue = this._citPrefixNew + " " + this._citSuffixNew + " " + JSON.stringify(cslCitation.toJSON());
                 if (field["Value"] !== newValue) {
                     bHasChanges = true;
                 }

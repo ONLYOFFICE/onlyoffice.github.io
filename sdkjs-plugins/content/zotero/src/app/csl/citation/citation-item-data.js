@@ -1579,7 +1579,12 @@ CitationItemData.prototype.toJSON = function (bCompressed) {
         result["volume-title-short"] = this._volumeTitleShort;
     if (this._yearSuffix !== undefined && this._yearSuffix !== "")
         result["year-suffix"] = this._yearSuffix;
-    if (Object.keys(this._custom).length !== 0) result.custom = this._custom;
+    if (Object.keys(this._custom).length !== 0) {
+        const { userID, groupID, ...restCustom } = this._custom;
+        if (Object.keys(restCustom).length > 0) {
+            result.custom = restCustom;
+        }
+    }
     if (this._license !== undefined && this._license !== "")
         result.license = this._license;
 
