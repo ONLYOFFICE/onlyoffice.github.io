@@ -522,6 +522,7 @@ import "../styles.css";
                     })
                     .finally(function () {
                         onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                        saveStyleToDocument();
                         if (field) {
                             citationService.moveCursorOutsideField(field.FieldId);
                         }
@@ -558,6 +559,7 @@ import "../styles.css";
                 })
                 .finally(async () => {
                     onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    saveStyleToDocument();
                     if (bHasNotes) {
                         await citationService.moveCursorRight();
                     } else if (addedField) {
@@ -635,6 +637,7 @@ import "../styles.css";
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
+                    saveStyleToDocument();
                 });
         });
     }
@@ -1178,7 +1181,6 @@ import "../styles.css";
      * @returns {Promise<void>}
      */
     async function loadStyleFromDocument(styleManager) {
-        if (styleManager.getLastUsedStyleId()) return;
 
         const prefXml = await new Promise((resolve) => {
             Asc.plugin.callCommand(
@@ -1233,6 +1235,66 @@ import "../styles.css";
         } catch (e) {
             console.error("Failed to parse ZOTERO_PREF XML:", e);
         }
+    }
+
+    /**
+     * Writes ZOTERO_PREF_{n} to document custom properties so that Word/Zotero
+     * can read the chosen citation style when the file is opened there.
+     * The XML is chunked into 255-char segments across multiple properties
+     * to respect the OOXML custom property value length limit.
+     * @returns {Promise<void>}
+     */
+    function saveStyleToDocument() {
+        const styleManager = settings.getStyleManager();
+        const styleId = styleManager.getLastUsedStyleId();
+        if (!styleId) return Promise.resolve();
+
+        const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+        const format = styleManager.getLastUsedFormat();
+        const notesStyle = styleManager.getLastUsedNotesStyle();
+
+        let noteTypeValue = "0";
+        if (format === "note") {
+            noteTypeValue = notesStyle === "endnotes" ? "2" : "1";
+        }
+
+        const hasBib = styleManager.isLastUsedStyleContainBibliography() ? "1" : "0";
+
+        const prefXml =
+            '<data data-version="3" zotero-version="5.0.96">' +
+            '<style id="http://www.zotero.org/styles/' + styleId + '"' +
+            ' locale="' + locale + '"' +
+            ' hasBibliography="' + hasBib + '"' +
+            ' bibliographyStyleHasBeenSet="1"/>' +
+            '<prefs>' +
+            '<pref name="fieldType" value="Field"/>' +
+            '<pref name="automaticJournalAbbreviations" value="true"/>' +
+            '<pref name="noteType" value="' + noteTypeValue + '"/>' +
+            '</prefs>' +
+            '</data>';
+
+        // Chunk into 255-char segments (OOXML custom property value limit)
+        var chunks = [];
+        for (var i = 0; i < prefXml.length; i += 255) {
+            chunks.push(prefXml.substring(i, i + 255));
+        }
+
+        return new Promise(function (resolve) {
+            Asc.scope.prefChunks = chunks;
+            Asc.plugin.callCommand(
+                function () {
+                    var doc = Api.GetDocument();
+                    var props = doc.GetCustomProperties();
+                    var chunks = Asc.scope.prefChunks;
+                    for (var i = 0; i < chunks.length; i++) {
+                        props.Add("ZOTERO_PREF_" + (i + 1), chunks[i]);
+                    }
+                },
+                false,
+                false,
+                function () { resolve(); },
+            );
+        });
     }
 
     async function getEditorVersion() {
