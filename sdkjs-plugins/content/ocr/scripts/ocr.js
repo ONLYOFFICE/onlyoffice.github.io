@@ -190,7 +190,8 @@
                 document.getElementById('recognize-button').setAttribute('disabled', '');
                 document.getElementById('lang-select').setAttribute('disabled', '');
                 document.getElementById('load-file-button-id').setAttribute('disabled', '');
-				
+				window.Asc.plugin.executeMethod('SetButtonDisabled', [0, true]);
+
 				const fTesseractCall = async function () {
 					const langSelect = document.getElementById('lang-select');
 					const sLang = langSelect.options[langSelect.selectedIndex].value;
@@ -223,6 +224,7 @@
 						document.getElementById('recognize-button').removeAttribute('disabled');
 						document.getElementById('lang-select').removeAttribute('disabled');
 						document.getElementById('load-file-button-id').removeAttribute('disabled', '');
+						window.Asc.plugin.executeMethod('SetButtonDisabled', [0, false]);
 					}
 				};
 
