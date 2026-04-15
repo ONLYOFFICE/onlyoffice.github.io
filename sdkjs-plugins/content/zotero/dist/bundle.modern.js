@@ -4101,7 +4101,7 @@ function Ie(e) {
       var g = c(P, t, Ft).call(t, u), v = "";
       u.Value.indexOf(t._citPrefix) === -1 && (v = g.citationID);
       var y = new Nt(v);
-      return e ? n += y.fillFromObject(e) : n += y.fillFromObject(g), t._storage.addCslCitation(y), {
+      return e && y.citationID === e.citationID ? n += y.fillFromObject(e) : n += y.fillFromObject(g), t._storage.addCslCitation(y), {
         field: ai({}, u),
         cslCitation: y
       };

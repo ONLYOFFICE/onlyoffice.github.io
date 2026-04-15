@@ -445,7 +445,7 @@ class CitationService {
                     }
 
                     let cslCitation = new CSLCitation(citationID);
-                    if (updatedField) {
+                    if (updatedField && cslCitation.citationID === updatedField.citationID) {
                         numOfItems += cslCitation.fillFromObject(updatedField);
                     } else {
                         numOfItems +=
