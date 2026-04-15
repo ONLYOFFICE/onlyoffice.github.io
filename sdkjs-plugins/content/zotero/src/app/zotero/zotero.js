@@ -478,4 +478,12 @@ ZoteroSdk.prototype.setIsOnlineAvailable = function (isOnline) {
     this._isOnlineAvailable = isOnline;
 };
 
+/**
+ * Check if using online API
+ * @returns {boolean}
+ */
+ZoteroSdk.prototype.getIsOnlineAvailable = function () {
+    return this._isOnlineAvailable;
+};
+
 export { ZoteroSdk };

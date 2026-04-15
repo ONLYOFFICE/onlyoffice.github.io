@@ -151,7 +151,7 @@ import "../styles.css";
         router = new Router();
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
-        settings = new SettingsPage(router, displayNoneClass);
+        settings = new SettingsPage(router, displayNoneClass, sdk);
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
@@ -160,6 +160,14 @@ import "../styles.css";
         let isInit = false;
 
         addEventListeners();
+
+        settings.onReconnect(function () {
+            // Reload groups and citations after switching connection
+            loadGroups().catch(function (e) {
+                console.error(e);
+            });
+            showCitationsAtTheStartFromMyLibrary();
+        });
 
         loginPage
             .init()
@@ -495,7 +503,7 @@ import "../styles.css";
                 const field = editField;
                 exitEditMode();
 
-                await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
+                await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
 
                 let updateFn = citationService.updateItem.bind(
                     citationService,
@@ -520,11 +528,16 @@ import "../styles.css";
                         }
                         showError(message);
                     })
-                    .finally(function () {
-                        onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
+                    .finally(async function () {
                         saveStyleToDocument();
+                        const isNote = styleManager.getLastUsedFormat() === "note";
+                        await onEndAction(false, "Zotero (" + translate("Updating citations") + ")", isNote);
                         if (field) {
-                            citationService.moveCursorOutsideField(field.FieldId);
+                            if (isNote) {
+                                await citationService.moveCursorToField(field.FieldId, false);
+                            } else {
+                                await citationService.moveCursorOutsideField(field.FieldId);
+                            }
                         }
                     });
                 return;
@@ -535,6 +548,7 @@ import "../styles.css";
             /** @type {AddinFieldData | null} */
             let addedField = null;
             let bHasNotes = false;
+            const isNoteStyle = settings.getStyleManager().getLastUsedFormat() === "note";
 
             return citationService.insertSelectedCitations(items)
                 .then(function (hasNotes) {
@@ -544,10 +558,21 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     addedField = field;
-                    if (bHasNotes) {
-                        return citationService.updateCslItems(false);
+                    // If inserting into an existing footnote (note style but
+                    // addCitation detected we were already inside a note),
+                    // skip the bulk update entirely — it uses SelectAddinField
+                    // which moves the viewport to unrelated pages.
+                    if (isNoteStyle && !bHasNotes) {
+                        return;
                     }
-                    return citationService.updateCslItems();
+                    const skipOpts = {
+                        skipCitations: !settings.getAutoUpdateCitations(),
+                        skipBibliography: !settings.getAutoUpdateBibliography(),
+                    };
+                    if (bHasNotes) {
+                        return citationService.updateCslItems(false, skipOpts);
+                    }
+                    return citationService.updateCslItems(undefined, skipOpts);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -558,7 +583,8 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async () => {
-                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    const isInsertInExistingNote = isNoteStyle && !bHasNotes;
+                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")", isInsertInExistingNote);
                     saveStyleToDocument();
                     if (bHasNotes) {
                         await citationService.moveCursorRight();
@@ -770,8 +796,9 @@ import "../styles.css";
     /**
      * @param {boolean} scrollToTarget
      * @param {string} [preloaderMessage]
+     * @param {boolean} [skipCursorRestore] - skip restoring cursor (old editor path) when caller handles it
      */
-    async function onEndAction(scrollToTarget, preloaderMessage) {
+    async function onEndAction(scrollToTarget, preloaderMessage, skipCursorRestore) {
         insertBibBtn.enable();
         refreshBtn.enable();
         editCitationBtn.enable();
@@ -779,8 +806,10 @@ import "../styles.css";
         
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
-            // @ts-ignore
-            CursorService.setCursorPosition(window._cursorPosition || 0);
+            if (!skipCursorRestore) {
+                // @ts-ignore
+                await CursorService.setCursorPosition(window._cursorPosition || 0);
+            }
         } else {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);

@@ -61,6 +61,12 @@ function SelectCitationsComponent(
     this._html = {};
     /** @type {Object<string|number, Checkbox>} */
     this._checks = {};
+    /** @type {Array<string|number>} */
+    this._orderedIds = [];
+    /** @type {Object<string|number, HTMLElement>} */
+    this._docRoots = {};
+    /** @type {Object<string|number, HTMLElement>} */
+    this._reorderBtns = {};
 
     this._cancelSelectBtn = document.getElementById("cancelSelectBtn");
 
@@ -136,6 +142,8 @@ SelectCitationsComponent.prototype.clearLibrary = function () {
         holder.removeChild(holder.lastChild);
     }
     if (holder) holder.scrollTop = 0;
+    this._docRoots = {};
+    this._reorderBtns = {};
     this._docsScroller.onscroll();
 };
 
@@ -247,8 +255,8 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
             .join("; ");
     }
     const arrow = document.createElement("div");
-    arrow.classList.add("selectbox-arrow");
-    arrow.innerHTML = "<b></b>";
+    arrow.classList.add("doc-expand-btn");
+    arrow.innerHTML = '\u2022\u2022\u2022';
 
     var title = document.createElement("div");
     title.textContent = item.title.trim();
@@ -292,9 +300,38 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
         this._checks[item.id] = checkInput;
     }
 
+    // Reorder buttons (hidden until item is selected)
+    var reorderBtns = document.createElement("div");
+    reorderBtns.classList.add("doc-reorder-btns");
+    reorderBtns.style.display = this._items[item.id] ? "flex" : "none";
+    var moveUp = document.createElement("span");
+    moveUp.className = "doc-reorder-btn";
+    moveUp.textContent = "\u25B2";
+    moveUp.title = translate("Move up");
+    moveUp.onclick = function (e) {
+        e.stopPropagation();
+        self._moveItem(item.id, -1);
+    };
+    var moveDown = document.createElement("span");
+    moveDown.className = "doc-reorder-btn";
+    moveDown.textContent = "\u25BC";
+    moveDown.title = translate("Move down");
+    moveDown.onclick = function (e) {
+        e.stopPropagation();
+        self._moveItem(item.id, 1);
+    };
+    reorderBtns.appendChild(moveUp);
+    reorderBtns.appendChild(moveDown);
+    this._reorderBtns[item.id] = reorderBtns;
+
+    checkHolder.appendChild(reorderBtns);
     checkHolder.appendChild(arrow);
     root.appendChild(checkHolder);
     root.appendChild(docInfo);
+
+    // Store doc root for reordering
+    root.setAttribute("data-id", String(item.id));
+    this._docRoots[item.id] = root;
 
     /** @type {DocumentFragment} */
     let params;
@@ -307,13 +344,47 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
         }
     }
 
-    arrow.onclick = toggleItem;
+    arrow.onclick = function (e) {
+        e.stopPropagation();
+        toggleItem();
+    };
+
+    // Restrict checkbox toggling to only the visual checkbox element.
+    // The Checkbox component attaches a click handler on its container that
+    // toggles on any click. We intercept at the container level and only
+    // allow the toggle when the click target is the visual checkbox or input.
+    var checkContainer = checkHolder.querySelector(".checkbox-container");
+    if (checkContainer) {
+        checkContainer.addEventListener("click", function (e) {
+            var target = /** @type {HTMLElement} */ (e.target);
+            // Allow clicks on the visual checkbox square, the input, or SVG parts
+            var isCheckboxClick = target.classList.contains("checkbox-visual")
+                || target.classList.contains("checkbox-checkmark")
+                || target.closest(".checkbox-visual")
+                || target === checkInput._input;
+            if (!isCheckboxClick) {
+                // Prevent the Checkbox component from toggling
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                // Instead, expand/collapse
+                toggleItem();
+            }
+        }, true); // use capture to fire before the Checkbox's handler
+    }
+
+    // Make docInfo click expand/collapse
+    docInfo.style.cursor = "pointer";
+    docInfo.onclick = function (e) {
+        e.stopPropagation();
+        toggleItem();
+    };
+
     checkInput.subscribe(function (event) {
         if (event.type !== "checkbox:change") {
             return;
         }
         if (event.detail.checked) {
-            self._addSelected(item, checkInput);
+            self._addSelected(item, checkInput, root);
         } else {
             self._removeSelected(item.id);
         }
@@ -489,18 +560,17 @@ SelectCitationsComponent.prototype._buildSelectedElement = function (item) {
 /**
  * @param {SearchResultItem} item
  * @param {Checkbox} checkbox
+ * @param {HTMLElement} [docRoot]
  */
-SelectCitationsComponent.prototype._addSelected = function (item, checkbox) {
-    /** @type {HTMLElement} */
-    var el = this._buildSelectedElement(item);
+SelectCitationsComponent.prototype._addSelected = function (item, checkbox, docRoot) {
     this._items[item.id] = item;
-    this._html[item.id] = el;
     this._checks[item.id] = checkbox;
-    if (this._selectedHolder) {
-        this._selectedHolder.appendChild(el);
+    this._orderedIds.push(item.id);
+    // Show reorder buttons on the doc card
+    if (this._reorderBtns[item.id]) {
+        this._reorderBtns[item.id].style.display = "";
     }
     this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
     this._checkSelected();
 };
 
@@ -623,36 +693,34 @@ SelectCitationsComponent.prototype._checkScroll = function (
 
 /** @param {string|number} id */
 SelectCitationsComponent.prototype._removeSelected = function (id) {
-    var el = this._html[id];
-    if (this._selectedHolder) {
-        this._selectedHolder.removeChild(el);
-    }
-
     delete this._items[id];
     delete this._html[id];
     if (this._checks[id]) {
         this._checks[id].uncheck(true);
         delete this._checks[id];
     }
+    // Remove from ordered list
+    var idx = this._orderedIds.indexOf(id);
+    if (idx !== -1) {
+        this._orderedIds.splice(idx, 1);
+    }
+    // Hide reorder buttons on the doc card
+    if (this._reorderBtns[id]) {
+        this._reorderBtns[id].style.display = "none";
+    }
 
     this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
     this._checkSelected();
 };
 
 SelectCitationsComponent.prototype._checkSelected = function () {
     const numOfSelected = this.count();
-    if (!this._selectedInfo || !this._selectedCount || !this._selectedWrapper) {
-        return;
-    }
-    if (numOfSelected <= 0) {
+    // Keep selectedWrapper and selectedInfo always hidden (consolidated into top list)
+    if (this._selectedWrapper) {
         this._selectedWrapper.classList.add(this._displayNoneClass);
+    }
+    if (this._selectedInfo) {
         this._selectedInfo.classList.add(this._displayNoneClass);
-    } else {
-        this._selectedWrapper.classList.remove(this._displayNoneClass);
-        this._selectedInfo.classList.remove(this._displayNoneClass);
-        this._selectedCount.textContent =
-            numOfSelected + " " + translate("selected");
     }
     this._subscribers.forEach(function (cb) {
         cb(numOfSelected);
@@ -687,13 +755,7 @@ SelectCitationsComponent.prototype.setEditMode = function (enabled) {
 SelectCitationsComponent.prototype.addPreselectedItem = function (item) {
     // Add to _items first so _buildDocElement sees it as already selected
     this._items[item.id] = item;
-
-    // Build pill in selectedHolder
-    var el = this._buildSelectedElement(item);
-    this._html[item.id] = el;
-    if (this._selectedHolder) {
-        this._selectedHolder.appendChild(el);
-    }
+    this._orderedIds.push(item.id);
 
     // Build doc card (checkbox will be pre-checked since item is in _items)
     var docEl = this._buildDocElement(item);
@@ -702,7 +764,6 @@ SelectCitationsComponent.prototype.addPreselectedItem = function (item) {
     }
 
     this._docsScroller.onscroll();
-    this._selectedScroller.onscroll();
     this._checkSelected();
 };
 
@@ -712,14 +773,27 @@ SelectCitationsComponent.prototype.addPreselectedItem = function (item) {
  * @param {number} direction  -1 = up, 1 = down
  */
 SelectCitationsComponent.prototype._moveItem = function (id, direction) {
-    var el = this._html[id];
-    if (!el || !this._selectedHolder) return;
-    if (direction === -1 && el.previousElementSibling) {
-        this._selectedHolder.insertBefore(el, el.previousElementSibling);
-    } else if (direction === 1 && el.nextElementSibling) {
-        el.nextElementSibling.after(el);
+    var idx = this._orderedIds.indexOf(id);
+    if (idx === -1) return;
+    var newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= this._orderedIds.length) return;
+    // Swap in _orderedIds
+    var temp = this._orderedIds[newIdx];
+    this._orderedIds[newIdx] = this._orderedIds[idx];
+    this._orderedIds[idx] = temp;
+
+    // Swap DOM positions of the two doc cards
+    var thisRoot = this._docRoots[id];
+    var otherRoot = this._docRoots[temp];
+    if (thisRoot && otherRoot && thisRoot.parentNode) {
+        // Create a placeholder to perform the swap
+        var placeholder = document.createElement("div");
+        thisRoot.parentNode.insertBefore(placeholder, thisRoot);
+        otherRoot.parentNode.insertBefore(thisRoot, otherRoot);
+        placeholder.parentNode.insertBefore(otherRoot, placeholder);
+        placeholder.parentNode.removeChild(placeholder);
     }
-    this._selectedScroller.onscroll();
+    this._docsScroller.onscroll();
 };
 
 /**
@@ -728,12 +802,9 @@ SelectCitationsComponent.prototype._moveItem = function (id, direction) {
  */
 SelectCitationsComponent.prototype.getSelectedItemsOrdered = function () {
     var items = [];
-    var holder = this._selectedHolder;
-    if (!holder) return items;
-    for (var i = 0; i < holder.children.length; i++) {
-        var el = holder.children[i];
-        var id = el.getAttribute("data-id");
-        if (id && this._items[id]) {
+    for (var i = 0; i < this._orderedIds.length; i++) {
+        var id = this._orderedIds[i];
+        if (this._items[id]) {
             items.push(this._items[id]);
         }
     }

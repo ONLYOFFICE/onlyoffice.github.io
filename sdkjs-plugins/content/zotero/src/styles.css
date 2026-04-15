@@ -217,6 +217,13 @@ div::-moz-selection {
     }
 }
 
+.connection-section {
+    margin-top: 14px;
+    button {
+        width: 100%;
+    }
+}
+
 .scrollThumb {
     width: 8px;
     border-radius: 4px;
@@ -251,45 +258,29 @@ div::-moz-selection {
         margin-top: 0;
     }
     & > div:first-child .checkbox-container {
-        width: calc(100% - 27px);
+        width: auto;
+        flex: 1;
+        min-width: 0;
     }
     & > div:first-child label {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    & .selectbox-arrow {
-        transition: transform 0.3s ease;
+    & .doc-expand-btn {
         width: 24px;
         height: 22px;
         text-align: center;
         line-height: 20px;
         cursor: pointer;
-        position: relative;
-        b {
-            width: 4px;
-            height: 4px;
-            margin: -1px 1px;
-            border-left-style: solid;
-            border-top-style: solid;
-            border-top-width: 1px;
-            border-left-width: 1px;
-            box-sizing: border-box;
-            transform: rotate(-135deg) translate(1px, 1px);
-            display: inline-block;
-            position: absolute;
-            top: 10px;
-            right: 9px;
-        }
+        font-size: 10px;
+        letter-spacing: 1px;
+        opacity: 0.6;
+        user-select: none;
+        flex-shrink: 0;
     }
-    & .selectbox-arrow::after {
-        content: "";
-        display: inline-block;
-        width: 34px;
-        height: 36px;
-        position: absolute;
-        top: -7px;
-        left: -6px;
+    & .doc-expand-btn:hover {
+        opacity: 1;
     }
 
     &:not(.doc-open) > div:nth-child(n + 3) {
@@ -301,8 +292,8 @@ div::-moz-selection {
         overflow: visible;
     }
 
-    &.doc-open > div:first-child .selectbox-arrow {
-        transform: rotate(180deg);
+    &.doc-open > div:first-child .doc-expand-btn {
+        opacity: 1;
     }
     &.doc-open > div:not(:first-child) {
         margin-top: 6px;
@@ -390,5 +381,26 @@ div::-moz-selection {
     user-select: none;
 }
 .selDoc-move:hover {
+    opacity: 1;
+}
+
+/* Reorder buttons on doc cards */
+.doc-reorder-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+.doc-reorder-btn {
+    cursor: pointer;
+    font-size: 10px;
+    opacity: 0.5;
+    user-select: none;
+    padding: 2px 4px;
+    line-height: 1;
+}
+.doc-reorder-btn:hover {
     opacity: 1;
 }

@@ -123,7 +123,9 @@ class CitationDocService {
             Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
+        const wantsNote = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1);
+        const alreadyInNote = wantsNote ? await this.#isInNote() : false;
+        const bHasNotes = wantsNote && !alreadyInNote;
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
@@ -240,6 +242,34 @@ class CitationDocService {
         for (const [fieldId, formattingPositions] of formats) {
             const selectFieldResult = await this.#selectField(fieldId);
             if (!selectFieldResult) continue;
+            await CslDocFormatter.formatAfterUpdate(
+                fieldId,
+                formattingPositions,
+            );
+        }
+        return fieldIds;
+    }
+
+    /**
+     * Update fields that are already inside notes without re-selecting addin fields.
+     * SelectAddinField is unreliable for notes and can move the viewport unexpectedly.
+     * @param {Array<AddinFieldData>} fields
+     * @returns {Promise<string[]>}
+     */
+    async updateAddinFieldsInNotes(fields) {
+        const fieldIds = fields.map(field => field.FieldId);
+        const formats = this.#makeFormattingPositions(fields);
+
+        await new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+
+        if (!formats.size) return fieldIds;
+        for (const [fieldId, formattingPositions] of formats) {
             await CslDocFormatter.formatAfterUpdate(
                 fieldId,
                 formattingPositions,

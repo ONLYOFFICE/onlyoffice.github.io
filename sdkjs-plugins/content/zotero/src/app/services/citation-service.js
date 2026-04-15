@@ -779,9 +779,10 @@ class CitationService {
 
     /**
      * @param {boolean} [bHardRefresh]
+     * @param {{skipCitations?: boolean, skipBibliography?: boolean}} [skipOptions]
      * @returns {Promise<void>}
      */
-    async updateCslItems(bHardRefresh) {
+    async updateCslItems(bHardRefresh, skipOptions) {
         try {
             const { fieldsWithCitations, bibField } =
                 await this.#synchronizeStorageWithDocItems();
@@ -798,14 +799,17 @@ class CitationService {
                     bHardRefresh = true;
                 }
             }
-            if (typeof bHardRefresh === "boolean") {
+            const bSkipCitations = !!(skipOptions && skipOptions.skipCitations);
+            const bSkipBib = !!(skipOptions && skipOptions.skipBibliography);
+
+            if (!bSkipCitations && typeof bHardRefresh === "boolean") {
                 updatedFields = await this.#getUpdatedFields(
                     fieldsWithCitations,
                     bHardRefresh,
                 );
             }
 
-            if (bibField) {
+            if (!bSkipBib && bibField) {
                 updatedFields.push(
                     await this.#updateBibliography(bNoHaveFields, bibField),
                 );
@@ -875,11 +879,12 @@ class CitationService {
             );
 
             if (notesStyle && updatedFields && updatedFields.length) {
-                await this.citationDocService.convertNotesStyle(
+                // Editing an existing note citation should update that note in place.
+                // The note conversion path uses SelectAddinField, which is unreliable
+                // for notes and can move the viewport to unrelated pages.
+                return this.citationDocService.updateAddinFieldsInNotes(
                     updatedFields,
-                    notesStyle,
                 );
-                updatedFields = [];
             }
 
             /*if (bibField) {
