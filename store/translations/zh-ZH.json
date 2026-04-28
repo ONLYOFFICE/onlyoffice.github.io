@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "管理插件",
-	"Available plugins": "可用的插件",
+	"Installed": "已安装",
 	"Marketplace": "市场",
 	"Submit your own plugin": "提交您自己的插件",
 	"Install plugin manually": "手动安装插件",
@@ -41,8 +41,8 @@
 	"Chinese": "中文",
 	"Update All": "全部更新",
 	"Categories": "类目",
-	"Search plugins": "搜索插件",
-	"All": "全部",
+	"Search plugins…": "搜索插件…",
+	"All plugins": "全部插件",
 	"Recommended": "推荐的",
 	"Developer tools": "开发者工具",
 	"Work": "工作",

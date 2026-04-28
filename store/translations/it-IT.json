@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "Gestisci plugin",
-	"Available plugins": "Plugin disponibili",
+	"Installed": "Installati",
 	"Marketplace": "Marketplace",
 	"Submit your own plugin": "Invia il tuo plugin",
 	"Install plugin manually": "Installa il plugin manualmente",
@@ -41,8 +41,8 @@
 	"Chinese": "Cinese",
 	"Update All": "Aggiorna tutto",
 	"Categories": "Categorie",
-	"Search plugins": "Cerca plugin",
-	"All": "Tutti",
+	"Search plugins…": "Cerca plugin…",
+	"All plugins": "Tutti i plugin",
 	"Recommended": "Consigliati",
 	"Developer tools": "Strumenti di sviluppo",
 	"Work": "Lavoro",

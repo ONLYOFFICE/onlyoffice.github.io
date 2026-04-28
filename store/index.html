@@ -35,61 +35,180 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="./resources/css/styles.css">
-	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
-	<script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
-	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-	<script type="text/javascript" src="scripts/polyfill.js"></script>
-	<script type="text/javascript" src="scripts/code.js"></script>
-	<script src="vendor/select2-4.0.13/js/select2.js"></script>
-	<script src="vendor/marked/marked.min.js"></script>
+
+<style>
+  html, body {background: #f2f3f5;
+    font-family: 'Inter', system-ui, sans-serif; color: #1a1d21; }
+  body.dark { background: #15171a; }
+  *, *::before, *::after { box-sizing: border-box; }
+</style>
+	<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="scripts/polyfill.js" defer></script>
+	<script src="vendor/marked/marked.min.js" defer></script>
+	<script src="scripts/storage.js" defer></script>
+	<script src="scripts/ui.js" defer></script>
+	<script src="scripts/code.js" defer></script>
 </head>
 	<body class="noselect">
 		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./resources/img/stars/rating-stars.svg"/>
-		<div id="div_header" class="header hidden">
-			<!-- <span id="arrow" class="arrow hidden">&#8592;</span> -->
-			<label id="lbl_header" class="aboutlable header">Manage plugins</label>
-			<!-- <span id="close" class="close">&times;</span> -->
-		</div>
-		<div id="div_body" class="div_body transparent">
-			<div id="toolbar" class="toolbar">
-				<div class="toolbar_top">
-					<div class="toolbar_buttons">
-						<button id="btn_AvailablePlugins" class="btn_menu btn_menu_left btn-text-default">Available plugins</button>
-						<button id="btn_marketplace" class="btn_menu btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
-					</div>
-					<div class="toolbar_link">
-						<!-- TODO think about how to open the form for uploading -->
-						<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+		<div id="plugins" class="plugin-store transparent">
+			<aside>
+				<div class="filter-by filter-by-installed">
+					<label>
+						<input type="radio" name="main-filter" id="btn_marketplace" value="marketplace" checked>
+						<span>◎</span>
+						<span class="i18n">Marketplace</span>
+						<span>21</span>
+					</label>
+					<label>
+						<input type="radio" name="main-filter" value="installed">
+						<span>✓</span>
+						<span class="i18n">Installed</span>
+						<span>6</span>
+					</label>
+					<label>
+						<input type="radio" name="main-filter" value="updates">
+						<span>↑</span>
+						<span class="i18n">Updates</span>
+						<span class="mark">2</span>
+					</label>
+				</div>
+				<div>
+					<div class="categories-header i18n">Categories</div>
+					<div class="filter-by filter-by-category">
+						<label>
+							<input type="radio" name="category-filter" value="all" checked>
+							<span>◎</span>
+							<span class="i18n">All plugins</span>
+							<span>21</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="onlyoffice">
+							<span><span class="onlyoffice">✓</span></span>
+							<span class="i18n">By ONLYOFFICE</span>
+							<span>10</span>
+						</label>
+						<div style="height: 8px;">
+						</div>
+						<label>
+							<input type="radio" name="category-filter" value="recommended">
+							<span>★</span>
+							<span class="i18n">Recommended</span>
+							<span>9</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="ai">
+							<span>✦</span>
+							<span class="i18n">AI &amp; Automation</span>
+							<span>9</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="work">
+							<span>⚒</span>
+							<span class="i18n">Work</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="entertainment">
+							<span>▶</span>
+							<span class="i18n">Entertainment</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="communication">
+							<span>✉</span>
+							<span class="i18n">Communication</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="specAbilities">
+							<span>❖</span>
+							<span class="i18n">Special abilities</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="translation">
+							<span>⇄</span>
+							<span class="i18n">Translation</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="writing">
+							<span>¶</span>
+							<span class="i18n">Writing tools</span>
+							<span>7</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="productivity">
+							<span>▤</span>
+							<span class="i18n">Productivity</span>
+							<span>11</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="devTools">
+							<span>&lt;&gt;</span>
+							<span class="i18n">Developer tools</span>
+							<span>5</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="integrations">
+							<span>◈</span>
+							<span class="i18n">Integrations</span>
+							<span>8</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="media">
+							<span>▦</span>
+							<span class="i18n">Media &amp; Design</span>
+							<span>4</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="utilities">
+							<span>⚙</span>
+							<span class="i18n">Utilities</span>
+							<span>6</span>
+						</label>
+						<label>
+							<input type="radio" name="category-filter" value="games">
+							<span>♞</span>
+							<span class="i18n">Games</span>
+							<span>2</span>
+						</label>
 					</div>
 				</div>
-				<div id="toolbar_tools" class="toolbar_tools">
-					<div class="flex">
-						<div style="display: flex; justify-content: center; align-items: center;">
-							<span id="span_categories" style="margin-right: 4px; margin-top: 1px;">Categories</span>
-							<select id="select_categories">
-								<option id="opt_all" value="all">All</option>
-								<option id="opt_rec" value="recommended">Recommended</option>
-								<option id="opt_dev" value="devTools">Developer tools</option>
-								<option id="opt_work" value="work">Work</option>
-								<option id="opt_enter" value="entertainment">Entertainment</option>
-								<option id="opt_com" value="communication">Communication</option>
-								<option id="opt_spec" value="specAbilities">Special abilities</option>
+				<div class="submit-own-plugin">
+					<!-- TODO think about how to open the form for uploading -->
+					<a id="link_newPlugin" class="i18n" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+				</div>
+			</aside>
+			<main>
+				<div class="toolbar">
+					<div>
+						<div class="place-name">Marketplace</div>
+						<h1>All plugins</h1>
+					</div>
+					<div id="toolbar_tools" class="toolbar_tools">
+						<button id="btn_updateAll" class="btn-text-default btn_update btn_install i18n hidden" onclick="onClickUpdateAll()">Update All</button>
+						<div class="hidden">
+							<span id="span_sort">Sort by</span>
+							<select id="select_sortBy">
+								<option value="name">Name</option>
+								<option value="raiting">Raiting</option>
+								<option value="instalations">Instalations</option>
 							</select>
 						</div>
-						<button id="btn_updateAll" class="btn-text-default btn_update btn_install hidden" onclick="onClickUpdateAll()">Update All</button>
 					</div>
-					<div class="hidden">
-						<span id="span_sort">Sort by</span>
-						<select id="select_sortBy">
-							<option value="name">Name</option>
-							<option value="raiting">Raiting</option>
-							<option value="instalations">Instalations</option>
-						</select>
+					<div>
+						<div class="search">
+							<span>⌕</span>
+							<input id="inp_search" class="i18n" type="text" spellcheck="false" placeholder="Search plugins…" value="">
+						</div>
 					</div>
-					<input id="inp_search" type="text" spellcheck="false" class="form-control" placeholder="Search plugins...">
 				</div>
-			</div>
-			<div id="div_main" class="main_content"></div>
+				<div id="plugins_container" class="plugins-container">
+					<div id="div_main" class="plugins-list"></div>
+				</div>
+			</main>
 		</div>
 		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
 			<!-- TODO temporarily, I added an arrow here so that I could go back -->
@@ -97,7 +216,7 @@
 			<div class="div_selected_description">
 				<span id="span_name" class="span_name_selected"></span>
 				<div class="div_offered_votes">
-					<span id="span_offered_caption" class="span_offered">Offered by</span>
+					<span class="span_offered i18n">Offered by</span>
 					<span id="span_offered" class="span_offered"></span>
 				</div>
 				<div class="div_rating_general">
@@ -113,14 +232,14 @@
 						<div id="div_votes" class="div_votes div_offered_votes hidden">
 							<span id="total_votes"></span>
 						</div>
-						<a id="discussion_link" class="aboutlink link_submit" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
+						<a id="discussion_link" class="aboutlink link_submit i18n" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
 					</div>
 					<div style="height: 18px;"></div>
 				</div>
 				<div>
-					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
-					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
-					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
+					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="onClickUpdate(event.target)">Update</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
 				</div>
 			</div>
 			<div class="div_info_column">
@@ -132,8 +251,8 @@
 		<div id="div_selected_main" class="div_selected_main hidden">
 			<div style="width:100%; height:100%">
 				<div>
-					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, 1)">Overview</span>
-					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
+					<span id="span_overview" class="span_caption span_selected i18n" onclick="onSelectPreview(event.target, 1)">Overview</span>
+					<span class="span_caption i18n" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
 					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
 					<hr>
 				</div>
@@ -153,34 +272,43 @@
 				<div id="div_selected_info" class="div_selected_preview hidden">
 					<div id="div_plugin_info" class="div_plugin_info">
 						<div id="div_version" class="div_selected_info margin_0 hidden">
-							<span id="span_ver_caption" class="font_bold">Version: </span>
+							<span class="font_bold i18n">Version</span>
+							<span>: </span>
 							<span id="span_ver"></span>
 						</div>
 						<div id="div_min_version" class="div_selected_info hidden">
-							<span id="span_min_ver_caption" class="font_bold">The minimum supported editors version: </span>
+							<span class="font_bold i18n">The minimum supported editors version</span>
+							<span>: </span>
 							<span id="span_min_ver"></span>
 						</div>
 						<div id="div_languages" class="div_selected_info hidden">
-							<span id="span_langs_caption" class="font_bold">Languges: </span>
+							<span class="font_bold i18n">Languges</span>
+							<span>: </span>
 							<span id="span_langs"></span>
 						</div>
 					</div>
 					<div id="div_readme_link" class="div_selected_info">
-						<span id="span_lern" class="font_bold">Learn how to use </span>
-						<span id="span_lern_plugin">the plugin in </span>
+						<span class="i18n" class="font_bold">Learn how to use</span>
+						<span> </span>
+						<span class="i18n">the plugin in</span>
+						<span> </span>
 						<a id="link_readme" class="aboutlink link_info" target="blank" href="">README.</a>
 					</div>
 					<div id="div_github_link" class="div_selected_info">
-						<span id="span_contribute" class="font_bold">Contribute </span>
-						<span id="span_contribute_end">to the plugin development or report an issue on </span>
+						<span class="font_bold i18n">Contribute</span>
+						<span> </span>
+						<span class="i18n">to the plugin development or report an issue on</span>
+						<span> </span>
 						<a id="link_plugin" class="aboutlink link_info" target="blank">Github.</a>
 					</div>
 					<div class="div_selected_info">
-						<span id="span_help" class="font_bold">Get help </span>
-						<span id="span_help_end">with the plugin functionality on our forum.</span>
+						<span class="i18n font_bold">Get help</span>
+						<span> </span>
+						<span class="i18n">with the plugin functionality on our forum.</span>
 					</div>
 					<div class="div_selected_info">
-						<span id="span_create">Create a new plugin using </span>
+						<span class="i18n">Create a new plugin using</span>
+						<span> </span>
 						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/">ONLYOFFICE API.</a>
 					</div>
 				</div>

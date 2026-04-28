@@ -27,3 +27,7 @@
 ## 1.0.5
 
 * Fix problem into desktop with deletting manually installed plugins.
+
+## 1.0.6
+
+* New UI for plugin manager.

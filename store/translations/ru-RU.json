@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "Управление плагинами",
-	"Available plugins": "Мои плагины",
+	"Installed": "Установленные",
 	"Marketplace": "Магазин",
 	"Submit your own plugin": "Отправить свой плагин",
 	"Install plugin manually": "Установить плагин вручную",
@@ -41,8 +41,8 @@
 	"Chinese": "Китайский",
 	"Update All": "Обновить все",
 	"Categories": "Категории",
-	"Search plugins": "Поиск плагинов",
-	"All": "Все",
+	"Search plugins…": "Поиск плагинов…",
+	"All plugins": "Все плагины",
 	"Recommended": "Рекомендованные",
 	"Developer tools": "Инструменты разработчика",
 	"Work": "Для работы",
