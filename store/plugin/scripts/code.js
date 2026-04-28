@@ -57,7 +57,7 @@
 	window.Asc.plugin.init = function() {
 		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
 		// resize window
-		window.Asc.plugin.resizeWindow(608, 600, 608, 600, 0, 0);
+		window.Asc.plugin.resizeWindow(1200, 776, 1200, 776, 0, 0);
 		if (!isLocal) {
 			checkInternet(true);
 			loaderTimeout = setTimeout(createLoader, 500);

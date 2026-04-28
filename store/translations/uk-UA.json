@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "Керування плаґінами",
-	"Available plugins": "Доступні плагіни",
+	"Installed": "Встановлені",
 	"My plugins": "Мої плаґіни",
 	"Marketplace": "Крамниця",
 	"Submit your own plugin": "Надіслати власний плаґін",
@@ -42,8 +42,8 @@
 	"Chinese": "Китайська",
 	"Update All": "Оновіть все",
 	"Categories": "Категорія",
-	"Search plugins": "Пошукові плагіни",
-	"All": "Весь",
+	"Search plugins…": "Пошукові плагіни…",
+	"All plugins": "Всі плагіни",
 	"Recommended": "Рекомендований",
 	"Developer tools": "Інструменти розробника",
 	"Work": "Робота",

@@ -1,6 +1,6 @@
 {
 	"Manage plugins": "プラグインを管理する",
-	"Available plugins": "利用可能なプラグイン",
+	"Installed": "インストール済み",
 	"Marketplace": "マーケットプレイス",
 	"Submit your own plugin": "自作のプラグインを提出する",
 	"Install plugin manually": "手動でプラグインをインストールする",
@@ -41,8 +41,8 @@
 	"Chinese": "中国語",
 	"Update All": "すべてをアップデートする",
 	"Categories": "カテゴリー",
-	"Search plugins": "プラグインの検索",
-	"All": "すべて",
+	"Search plugins…": "プラグインの検索…",
+	"All plugins": "すべてのプラグイン",
 	"Recommended": "おすすめ",
 	"Developer tools": "開発者ツール",
 	"Work": "仕事",
