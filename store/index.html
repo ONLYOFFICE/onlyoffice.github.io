@@ -40,7 +40,6 @@
   html, body {background: #f2f3f5;
     font-family: 'Inter', system-ui, sans-serif; color: #1a1d21; }
   body.dark { background: #15171a; }
-  *, *::before, *::after { box-sizing: border-box; }
 </style>
 	<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
 	<script src="scripts/polyfill.js" defer></script>
@@ -128,7 +127,7 @@
 						</label>
 						<label>
 							<input type="radio" name="category-filter" value="translation">
-							<span>⇄</span>
+							<span>文</span>
 							<span class="i18n">Translation</span>
 							<span>6</span>
 						</label>
@@ -140,7 +139,7 @@
 						</label>
 						<label>
 							<input type="radio" name="category-filter" value="productivity">
-							<span>▤</span>
+							<span>☑</span>
 							<span class="i18n">Productivity</span>
 							<span>11</span>
 						</label>
@@ -257,7 +256,7 @@
 					<hr>
 				</div>
 				<div id="div_selected_preview" class="div_selected_preview">
-					<div class="div_description_selected">
+					<div id="div_description_selected" class="div_description_selected">
 						<span id="span_selected_description"></span>
 					</div>
 					<div id="div_selected_image">

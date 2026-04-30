@@ -42,8 +42,6 @@
 	let warningWindow = null;
 	let developerWindow = null;
 	let removeGuid = null;
-	let BFrameReady = false;
-	let BPluginReady = false;
 	let editorVersion = null;
 	let marketplaceURl = null;
 	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
@@ -76,20 +74,19 @@
 			document.getElementById('notification').classList.remove('hidden');
 
 		// send message that plugin is ready
-		window.Asc.plugin.executeMethod('GetVersion', null, function(version) {
+		const pluginVersionPromise = new Promise(function(fResolve) {
+			window.Asc.plugin.executeMethod('GetVersion', null, fResolve);
+		}).then(function(version) {
 			editorVersion = version;
-			BPluginReady = true;
-			if (BFrameReady)
-				postMessage( { type: 'PluginReady', version: editorVersion } );
 		});
+
 
 		let divNoInt = document.getElementById('div_noIternet');
 		let style = document.getElementsByTagName('head')[0].lastChild;
 		let pageUrl = marketplaceURl;
 		iframe.src = pageUrl + window.location.search;
 		iframe.onload = function() {
-			BFrameReady = true;
-			if (BPluginReady) {
+			pluginVersionPromise.then(function() {
 				if (!divNoInt.classList.contains('hidden')) {
 					divNoInt.classList.add('hidden');
 					clearInterval(interval);
@@ -97,7 +94,10 @@
 				}
 				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
 				postMessage( { type: 'PluginReady', version: editorVersion } );
-			}
+			});
+
+				
+
 		};
 	};
 
