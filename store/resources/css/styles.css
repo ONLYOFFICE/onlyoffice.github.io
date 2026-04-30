@@ -14,6 +14,8 @@
   --pm-star: #c49a2a;
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+
 html,body {
 	margin: 0px !important;
 	width: 100%;
@@ -744,12 +746,14 @@ label.header {
 	display: none;
 	height: 100%;
 	width: 100%;
+	text-align: center;
 }
 
 .screen {
 	vertical-align: middle;
-	width: 100%;
 	height: 100%;
+	width: 100%;
+	object-fit: contain;
 }
 
 .slideshow-container {
@@ -769,10 +773,10 @@ label.header {
 	user-select: none;
 	background: rgba(210,210,215,.64);
 	color: rgba(0,0,0,.56);
-	width: 10px;
-	height: 10px;
+	width: 34px;
+	height: 34px;
 	border-radius: 50%;
-	line-height: 10px;
+	line-height: 8px;
 	font-weight: 300;
 	font-size: 25px;
 	text-align: center;
@@ -824,7 +828,7 @@ label.header {
 	transition: background-color 0.6s ease;
 }
 
-.dot:hover {
+.dot.active, .dot:hover {
 	background-color: #111111;
 }
 

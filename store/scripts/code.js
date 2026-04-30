@@ -38,7 +38,6 @@
 const version = '1.0.8';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
-let isPluginLoading = false;                                         // flag plugins loading
 let isOnline = true;                                                 // flag internet connection
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to official store (for local version store in desktop)
 const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to official github repository (for links and discussions)
@@ -52,15 +51,14 @@ let allPlugins = [];                                                 // list of 
 let installedPlugins = [];                                           // list of installed plugins
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
-/** @type {null | number} */
-let editorVersion = null;                                            // editor current version
-/** @type {HTMLDivElement} */
+/** @type {number} */
+let editorVersion;                                            // editor current version
+/** @type {HTMLDivElement | undefined} */
 let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
 const lang = detectLanguage();                                       // current language
 const shortLang = lang.split('-')[0];                                // short language
 let bTranslate = false;                                              // flag translate or not
-let isTranslationLoading = false;                                    // flag translation loading
 /** @type {Object<string, string>} */
 let translate = {'Loading': 'Loading'};                              // translations for current language (thouse will necessary if we don't get translation file)
 /** @type {number} */
@@ -154,34 +152,43 @@ const ioUrl = location.href.substring(0, pos);         // real IO URL
 const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
 // get translation file
+
+const installedPluginsPromise = getMarketplaceVersion()
+	.then(function(version) {
+		console.error('------- PLUGIN READY -------');
+		editorVersion = version;
+		return getInstalledPlugins();
+	}).then(function(plugins) {
+		installedPlugins = plugins;
+	});
 const translationsPromise = getTranslation();
-let loadPluginsPromise = Promise.resolve();
+/** @type {Promise<PluginInfo[]>} */
+let allPluginsPromise = Promise.resolve([]);
 console.log('is local: ', isLocal);
 if (isLocal) {
 	// check internet connection (only for desktop)
-	loadPluginsPromise = checkInternet(true);                                          
+	allPluginsPromise = checkInternet(true);                                          
 } else if (!isLocal) {
 	// fetch all plugins from config
-	loadPluginsPromise = fetchAllPlugins(true, false);
+	allPluginsPromise = fetchAllPlugins(true, false);
 }
+
+const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
+	.then(function() {
+		return loadAllPluginsData(true, false);
+	})
 
 window.onload = function() {
 	UI.init(themeType);
-	if (isPluginLoading || isTranslationLoading) {
-		toggleLoader(true, "Loading");
-		console.log('show loader');
-	} else {
-		console.log('without loader');
-	}
+	toggleLoader(true, "Loading");
 
-	onTranslate();
-	translationsPromise.then(function() {
-
-	});
-	if (shortLang == "en" || (!isPluginLoading && !isTranslationLoading)) {
-		// if nothing to translate
+	Promise.all([translationsPromise, pluginsPromise]).then(function() {
 		showMarketplace();
-	}
+	}).catch(function(err) {
+		console.error('Error loading marketplace: ', err);
+	}).finally(function() {
+		onTranslate();
+	});
 
 	UI.onChangeMainFilter = function(value) {
 		STORAGE.mainFilter = value;
@@ -196,6 +203,107 @@ window.onload = function() {
 		showListOfPlugins('filtered');
 	}
 };
+
+/**
+ * @returns {Promise<number>}
+ */
+function getMarketplaceVersion() {
+	return new Promise(function(fResolve) {
+		/**
+		 * @param {MessageEvent} event
+		 */
+		let onLoad = function(event) {
+			/** @type {{type: string, version?: string}} */
+			let message;
+			try {
+				message = JSON.parse(event.data);
+			} catch (error) {
+				return;
+			}
+			if (message.type === 'PluginReady') {
+				window.removeEventListener('message', onLoad);
+				const editorVersion = ( message.version && message.version.includes('.') ? convertPluginVersionToNumber(message.version) : 1e8 );
+				fResolve(editorVersion);
+			}
+		};
+		window.addEventListener('message', onLoad);
+	});
+}
+
+/**
+ * Get all installed plugins
+ * @returns {Promise<InstalledPluginInfo[]>}
+ */
+function getInstalledPlugins() {
+	return new Promise(function(fResolve) {
+		/**
+		 * @param {MessageEvent} event
+		 */
+		let onGetInstalled = function(event) {
+			/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
+			let message;
+			try {
+				message = JSON.parse(event.data);
+			} catch (error) {
+				return;
+			}
+			if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
+				window.removeEventListener('message', onGetInstalled);
+				console.log('installed plugins', message);
+				/** @type {InstalledPluginInfo[]} */
+				let plugins = [];
+				if (message.data) {
+					// filter installed plugins (delete removed, that are in store and some system plugins)
+					plugins = message.data.filter(function(el) {
+						return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
+					});
+					sortPlugins(false, true, 'start');
+				} 
+				fResolve(plugins);
+			}
+		};
+		window.addEventListener('message', onGetInstalled);
+		sendMessage({type: 'getInstalled'});
+	});
+}
+
+/**
+ * @returns {Promise<InstalledPluginInfo[]>}
+ */
+function updateInstalledPlugins() {
+	return new Promise(function(fResolve) {
+		/**
+		 * @param {MessageEvent} event
+		 */
+		let onGetInstalled = function(event) {
+			/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
+			let message;
+			try {
+				message = JSON.parse(event.data);
+			} catch (error) {
+				return;
+			}
+			if (message.type === 'InstalledPlugins' && message.updateInstalled) {
+				window.removeEventListener('message', onGetInstalled);
+				console.log('installed plugins', message);
+				if (message.data) {
+					// filter installed plugins (delete removed, that are in store and some system plugins)
+					installedPlugins = message.data.filter(function(el) {
+						return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
+					});
+					sortPlugins(false, true, 'start');
+				} else {
+					installedPlugins = [];
+				}
+
+				showListOfPlugins('installed'); // need show installed
+				fResolve(installedPlugins);
+			}	
+		};
+		window.addEventListener('message', onGetInstalled);
+		sendMessage({type: 'getInstalled', updateInstalled: true});
+	});
+}
 
 window.addEventListener('message', function(message) {
 	// getting messages from editor or plugin
@@ -213,26 +321,6 @@ window.addEventListener('message', function(message) {
 	/** @type {InstalledPluginInfo | undefined} */
 	let installed;
 	switch (message.type) {
-		case 'InstalledPlugins':
-			console.log('installed plugins', message);
-			if (message.data) {
-				// filter installed plugins (delete removed, that are in store and some system plugins)
-				installedPlugins = message.data.filter(function(el) {
-					return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
-				});
-				sortPlugins(false, true, 'start');
-			} else {
-				installedPlugins = [];
-			}
-
-			// console.log('get installed plugins: ' + (Date.now() - start));
-
-			if (message.updateInstalled)
-				showListOfPlugins('installed'); // need show installed
-			else if ( allPlugins.length || (isLocal && !isOnline) )
-				loadAllPluginsData(true, false);
-			
-			break;
 		case 'Installed':
 			console.error('------- INSTALLED -------');
 			if (!message.guid) {
@@ -256,7 +344,7 @@ window.addEventListener('message', function(message) {
 			} else if (installed) {
 				if (installed.obj.backup) {
 					// need to update the list of installed plugins so that resource links are correct
-					sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+					updateInstalledPlugins();
 				}
 				else
 					installed.removed = false;
@@ -287,10 +375,10 @@ window.addEventListener('message', function(message) {
 			plugin.bHasUpdate = false;
 
 			if (!UI.divSelected.classList.contains('hidden')) {
-				UI.hideUpdateButton();
+				UI.btnUpdate.classList.add('hidden');
 			}
 
-			UI.spanVersion.innerText = plugin.version;
+			UI.spanVersion.textContent = String(plugin.version);
 			UI.removeUpdateButton(message.guid);
 
 			if (!updateCount) {
@@ -323,7 +411,7 @@ window.addEventListener('message', function(message) {
 
 					// need to update the list of installed plugins so that resource links are correct
 					if (isLocal)
-						sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+						updateInstalledPlugins();
 				}
 			}
 
@@ -387,12 +475,6 @@ window.addEventListener('message', function(message) {
 			evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 			document.dispatchEvent(evt);
 			break;
-		case 'PluginReady':
-			// get all installed plugins
-			console.error('------- PLUGIN READY -------');
-			editorVersion = ( message.version && message.version.includes('.') ? getPluginVersion(message.version) : 1e8 );
-			sendMessage({type: 'getInstalled'}, '*');
-			break;
 		case 'onClickBack':
 			onClickBack();
 			break;
@@ -402,7 +484,7 @@ window.addEventListener('message', function(message) {
 /**
  * @param {boolean} bFirstRender 
  * @param {boolean} bShowMarketplace 
- * @returns {Promise<>}
+ * @returns {Promise<PluginInfo[]>}
  */
 function fetchAllPlugins(bFirstRender, bShowMarketplace) {
 	// function for fetching all plugins from config
@@ -411,12 +493,13 @@ function fetchAllPlugins(bFirstRender, bShowMarketplace) {
 		.then(function(response) {
 			console.warn(response);
 			allPlugins = JSON.parse(response);
-			if (installedPlugins)
-				return loadAllPluginsData(bFirstRender, bShowMarketplace);
+			return allPlugins;
 		}).catch(function(err) {
 			createError( new Error('Problem with loading marketplace config.') );
-			isPluginLoading = false;
 			showMarketplace();
+			return allPlugins;
+		}).finally(function() {
+			isPluginLoading = false;
 		});
 };
 
@@ -497,6 +580,7 @@ function makeDesktopRequest(_url) {
 	});
 };
 
+/** @param {Object} message */
 function sendMessage(message) {
 	// this function sends message to editor
 	parent.postMessage(JSON.stringify(message), '*');
@@ -531,10 +615,9 @@ function toggleLoader(show, text) {
 		loaderContainer.classList.add('hidden');
 		loader && (loader.remove ? loader.remove() : loaderContainer.removeChild(loader));
 		loader = undefined;	
-	} else if(!loader) {
+	} else if (!loader) {
 		loaderContainer.classList.remove('hidden');
-		loader && (loader.remove ? loader.remove() : loaderContainer.removeChild(loader));
-		loader = showLoader(loaderContainer, ( getTranslated(text) ) + '...');
+		loader = showLoader(loaderContainer, ( getTranslated(text || '') ) + '...');
 		console.log('Show loader ...')
 	}
 };
@@ -542,7 +625,7 @@ function toggleLoader(show, text) {
 /**
  * @param {boolean} bFirstRender 
  * @param {boolean} bShowMarketplace 
- * @returns {Promise<PluginInfo>}
+ * @returns {Promise<PluginInfo[]>}
  */
 function loadAllPluginsData(bFirstRender, bShowMarketplace) {
 	// get config file for each item in config.json
@@ -620,21 +703,21 @@ function loadAllPluginsData(bFirstRender, bShowMarketplace) {
 		pluginsPromises.push(promise);	
 	});
 
-	Promise.all(pluginsPromises).then(function(arr) {
+	if (isLocal && !isOnline) {
 		isPluginLoading = false;
-		allPlugins = arr;
+		getInstalledLanguages();
+		showMarketplace();
+	}
+
+	return Promise.all(pluginsPromises).then(function(arr) {
+		isPluginLoading = false;
 		endPluginsDataLoading(bFirstRender, bShowMarketplace, Unloaded);
 	}).then(function() {
 		return Promise.all(discussionsPromises);
 	}).then(function() {
 		showRating();
+		return allPlugins;
 	});
-
-	if (isLocal && installedPlugins && bFirstRender && !isOnline) {
-		isPluginLoading = false;
-		getInstalledLanguages();
-		showMarketplace();
-	}
 };
 
 /**
@@ -713,7 +796,7 @@ function getInstalledLanguages() {
  * @returns {number}
  */
 function showListOfPlugins(typeOfOperation) {
-	let arr = filterPlugins();
+	let arr = getFilteredPlugins();
 	if (arr.length && isSamePlugins(founded, arr)) {
 		console.log('Same plugins');
 		return arr.length;
@@ -755,7 +838,7 @@ function showListOfPlugins(typeOfOperation) {
 		setTimeout(function(){if (PsMain) PsMain.update(); toggleLoader(false);});
 	} else {
 		// if no installed plugins and available plugins button was clicked
-		let notification = typeOfOperation === 'filter' ? 'Nothing was found for this query.' : typeOfOperation === 'loading' ? 'Problem with loading plugins.' : 'No installed plugins.';
+		let notification = typeOfOperation === 'filtered' ? 'Nothing was found for this query.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
 		toggleLoader(false);
 	}
@@ -794,7 +877,11 @@ function isSamePlugins(pluginsOld, pluginsNew) {
     return true;
 }
 
-function getPluginVersion(text) {
+/**
+ * @param {string} text 
+ * @returns {number}
+ */
+function convertPluginVersionToNumber(text) {
 	let factor = 1000;
 	let major = 1;
 	let minor = 0;
@@ -812,14 +899,15 @@ function getPluginVersion(text) {
 };
 
 /**
- * @param {InstalledPluginInfo | PluginInfo} plugin
+ * This function creates div (preview) for plugins
+ * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
  */
-function createPluginPlate(plugin) {
-	// this function creates div (preview) for plugins
+function createPluginPlate(pluginOrInstalledPlugin) {
+	const guid = pluginOrInstalledPlugin.guid;
 	const bInstalled = STORAGE.mainFilter === 'installed';
 	const pluginPlate = document.createElement('div');
-	pluginPlate.id = plugin.guid;
-	pluginPlate.setAttribute('data-guid', plugin.guid);
+	pluginPlate.id = guid;
+	pluginPlate.setAttribute('data-guid', guid);
 	pluginPlate.className = 'plugin-plate form-control noselect';
 	/** @type {number} */
 	let zoom;
@@ -829,13 +917,13 @@ function createPluginPlate(plugin) {
 		zoom = (1 / devicePixelRatio) * 2;
 	pluginPlate.style.border = ((zoom > 1 ? 1 : zoom)) +'px solid ' + (themeType == 'light' ? '#c0c0c0' : '#666666');
 
-	pluginPlate.onclick = onClickPluginPlate;
+	pluginPlate.onclick = onClickPluginPlate.bind(pluginPlate, guid);
 
 	/** @type {InstalledPluginInfo} */
-	let installed = bInstalled ? plugin : findInstalledPlugin(plugin.guid);
-	if (bInstalled) {
-		plugin = findPlugin(plugin.guid);
-	}
+	let installed = bInstalled ? pluginOrInstalledPlugin : findInstalledPlugin(guid);
+	/** @type {PluginInfo} */
+	let plugin = bInstalled ? findPlugin(guid) : pluginOrInstalledPlugin;
+
 
 	let bCheckUpdate = true;
 	if (!plugin) {
@@ -844,7 +932,7 @@ function createPluginPlate(plugin) {
 	}
 
 	let bNotAvailable = false;
-	const minV = (plugin.minVersion ? getPluginVersion(plugin.minVersion) : -1);
+	const minV = (plugin.minVersion ? convertPluginVersionToNumber(plugin.minVersion) : -1);
 	if (minV > editorVersion) {
 		bCheckUpdate = false;
 		bNotAvailable = true;
@@ -853,8 +941,8 @@ function createPluginPlate(plugin) {
 	let bHasUpdate = false;
 	let bRemoved = (installed && installed.removed);
 	if (bCheckUpdate && installed && plugin) {
-		const installedV = getPluginVersion(installed.obj.version);
-		const lastV = getPluginVersion(plugin.version);
+		const installedV = convertPluginVersionToNumber(installed.obj.version);
+		const lastV = convertPluginVersionToNumber(plugin.version);
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			plugin.bHasUpdate = true;
@@ -870,11 +958,13 @@ function createPluginPlate(plugin) {
 	let additional = bNotAvailable ? 'disabled title="' + getTranslated(MESSAGES.versionWarning) + '"'  : '';
 	let offered = plugin.offered || "ONLYOFFICE";
 
-
+	const bNeedUpdateButton = bHasUpdate && !bRemoved;
+	const bNeedRemoveButton = installed && !bRemoved && installed.canRemoved;
+	const bNeedInstallButton = !installed || bRemoved;
 
 	let template = '<div class="introduction">' +
 		'<div class="image" style="background: ' + bg + '">' +
-			'<img id="img_'+plugin.guid+'" class="plugin_icon" style="display:none" data-guid="' + plugin.guid + '" src="' + getImageUrl(plugin.guid, false, true, ('img_' + plugin.guid) ) + '">' +
+			'<img id="img_' + guid + '" class="plugin_icon" style="display:none" data-guid="' + guid + '" src="' + getImageUrl(guid, false, true, ('img_' + guid) ) + '">' +
 		'</div>' +
 		'<div class="name">' +
 			'<div>' +
@@ -890,39 +980,41 @@ function createPluginPlate(plugin) {
 			'<div class="rating">' +
 				(makeRatingElements(plugin.rating)) +
 			'</div>' +
-			makeActionButtons(plugin.guid, bHasUpdate, bRemoved, !!installed, bNotAvailable, additional) +
+			makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) +
 		'</div>' +
 	'</div>';
 	pluginPlate.innerHTML = template;
-	UI.addPlugin(plugin.guid, pluginPlate);
+	UI.addPlugin(guid, pluginPlate);
 	if (PsMain) PsMain.update();
 };
 
 /**
  * @param {string} guid 
- * @param {boolean} bHasUpdate 
- * @param {boolean} bRemoved 
- * @param {boolean} installed 
- * @param {boolean} bNotAvailable 
- * @param {*} additional 
+ * @param {boolean} bNeedUpdateButton 
+ * @param {boolean} bNeedRemoveButton 
+ * @param {boolean} bNeedInstallButton
+ * @param {boolean} [bNotAvailable] 
+ * @param {string} [additional] 
  * @returns {string}
  */
-function makeActionButtons(guid, bHasUpdate, bRemoved, installed, bNotAvailable, additional) {
-	let result = '';
-	if (bHasUpdate && !bRemoved) {
-		result += '<button class="btn-text-default update">' + getTranslated("Update") + '</button>';
-	} else if (installed && !bRemoved && installed.canRemoved) {
-		result += '<button class="btn-text-default remove" onclick="onClickRemove(guid, event)" ' + (bNotAvailable ? "dataDisabled=\"disabled\" disabled" : "") +'>' + getTranslated("Remove") + '</button>';
-	} else if (!installed || bRemoved) {
-		result += '<button onclick="onClickInstall(guid, event)"' + additional + '>'  + getTranslated("Install") + '</button>';
+function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) {
+	let result = '<button class="btn-text-default ';
+	if (bNeedUpdateButton) {
+		result += 'update" onclick="onClickUpdate(guid, event)">' + getTranslated("Update");
+	} else if (bNeedRemoveButton) {
+		result += 'remove" onclick="onClickRemove(guid, event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+		result += getTranslated("Remove");
+	} else if (bNeedInstallButton) {
+		result += 'install" onclick="onClickInstall(guid, event)" ' + (additional || "") + '>'  + getTranslated("Install");
 	} else {
-
+		return '';
 	}
+	result += '</button>';
 	return result;
 }
 
 /**
- * @param {Rating | null} rating
+ * @param {Rating} [rating]
  * @returns {string}
  */
 function makeRatingElements(rating) {
@@ -961,15 +1053,16 @@ function showRating() {
 			return;
 		}
 		const div = pluginPlate.querySelector('.rating');
+		if (!div) return;
 		div.innerHTML = makeRatingElements(plugin.rating);
 	});
 
 	if (UI.divSelected && !UI.divSelected.classList.contains('hidden')) {
 		let guid = UI.divSelected.getAttribute('data-guid');
 		let plugin = findPlugin(guid);
-		if (plugin) {
-			UI.totalVotes.innerText = plugin.rating.total;
-			document.getElementById('stars_colored').style.width = plugin.rating.percent + '%';
+		if (plugin && plugin.rating) {
+			UI.totalVotes.textContent = String(plugin.rating.total);
+			UI.divStarsColored.style.width = plugin.rating.percent + '%';
 			// UI.divRatingLink.classList.remove('hidden');
 			UI.divRatingLink.removeAttribute('title');
 			UI.divVotes.classList.remove('hidden');
@@ -1019,7 +1112,11 @@ function onClickInstall(guid, event) {
 	}
 };
 
-function onClickUpdate(target) {
+/**
+ * @param {string} guid 
+ * @param {Event} event 
+ */
+function onClickUpdate(guid, event) {
 	// click update button
 	// we should do that because we have some problem when desktop is loading plugin
 	if (isLocal) {
@@ -1028,8 +1125,11 @@ function onClickUpdate(target) {
 		clearTimeout(timeout);
 		timeout = setTimeout(toggleLoader, 200, true, "Updating");
 	}
-	let guid = target.parentElement.parentElement.parentElement.getAttribute('data-guid');
 	let plugin = findPlugin(guid);
+	if (!plugin) {
+		console.error('Plugin not found for update: ' + guid);
+		return;
+	}
 	updateCount++;
 	let message = {
 		type : 'update',
@@ -1094,12 +1194,16 @@ function onClickUpdateAll() {
 	});
 };
 
-function onClickPluginPlate() {
+/** @param {string} guid */
+function onClickPluginPlate(guid) {
 	// There we will make preview for selected plugin
 	let offered = "Ascensio System SIA";
 	let hiddenCounter = 0;
-	let guid = this.getAttribute('data-guid');
-	let pluginDiv = document.getElementById(guid);
+	let pluginPlate = UI.getPlugin(guid);
+	if (!pluginPlate) {
+		console.error('Plugin not found: ' + guid);
+		return;
+	}
 	let divPreview = document.createElement('div');
 	divPreview.id = 'div_preview';
 	divPreview.className = 'div_preview';
@@ -1112,12 +1216,12 @@ function onClickPluginPlate() {
 	
 	if (plugin && plugin.rating) {
 		UI.divRatingLink.removeAttribute('title');
-		UI.totalVotes.innerText = plugin.rating.total;
-		document.getElementById('stars_colored').style.width = plugin.rating.percent + '%';
+		UI.totalVotes.textContent = String(plugin.rating.total);
+		UI.divStarsColored.style.width = plugin.rating.percent + '%';
 		UI.discussionLink.classList.remove('hidden');
 		UI.divVotes.classList.remove('hidden');
 	} else {
-		document.getElementById('stars_colored').style.width = 0;
+		UI.divStarsColored.style.width = "0";
 		UI.divVotes.classList.add('hidden');
 		UI.discussionLink.classList.add('hidden');
 	}
@@ -1163,31 +1267,32 @@ function onClickPluginPlate() {
 		UI.arrowNext.classList.add('hidden');
 	}
 
-	let bHasUpdate = (pluginDiv.lastChild.firstChild.lastChild.tagName === 'SPAN' && !pluginDiv.lastChild.firstChild.lastChild.classList.contains('hidden'));
+	const actionButton = UI.getPluginButton(guid);
+	let bHasUpdate = actionButton && actionButton.classList.contains('update');
 	
 	if ( (installed && installed.obj.version) || plugin.version ) {
-		UI.spanVersion.innerText = (installed && installed.obj.version ? installed.obj.version : plugin.version);
+		UI.spanVersion.textContent = String(installed && installed.obj.version ? installed.obj.version : plugin.version);
 		UI.divVersion.classList.remove('hidden');
 	} else {
-		UI.spanVersion.innerText = '';
+		UI.spanVersion.textContent = '';
 		UI.divVersion.classList.add('hidden');
 		hiddenCounter++;
 	}
 
 	if ( (installed && installed.obj.minVersion) || plugin.minVersion ) {
-		UI.spanMinVersion.innerText = (installed && installed.obj.minVersion ? installed.obj.minVersion : plugin.minVersion);
+		UI.spanMinVersion.textContent = String(installed && installed.obj.minVersion ? installed.obj.minVersion : plugin.minVersion);
 		UI.divMinVersion.classList.remove('hidden');
 	} else {
-		UI.spanMinVersion.innerText = '';
+		UI.spanMinVersion.textContent = '';
 		UI.divMinVersion.classList.add('hidden');
 		hiddenCounter++;
 	}	
 
 	if (plugin.languages) {
-		UI.spanLanguages.innerText = plugin.languages.join(', ') + '.';
+		UI.spanLanguages.textContent = plugin.languages.join(', ') + '.';
 		UI.divLanguages.classList.remove('hidden');
 	} else {
-		UI.spanLanguages.innerText = '';
+		UI.spanLanguages.textContent = '';
 		UI.divLanguages.classList.add('hidden');
 		hiddenCounter++;
 	}
@@ -1197,7 +1302,7 @@ function onClickPluginPlate() {
 		document.getElementById('div_changelog_preview').innerHTML = plugin.changelog;
 	} else {
 		document.getElementById('span_changelog').classList.add('hidden');
-		document.getElementById('div_changelog_preview').innerHTML = '';
+		document.getElementById('div_changelog_preview').textContent = '';
 	}
 
 	let pluginUrl = plugin.baseUrl.replace(OOMarketplaceUrl, (OOIO + 'tree/master/') );
@@ -1206,7 +1311,7 @@ function onClickPluginPlate() {
 	UI.divSelected.setAttribute('data-guid', guid);
 	// we do this, because new icons for store are too big for use it in this window.
 	let tmp = getImageUrl(guid, false, true, 'img_icon');
-	document.getElementById('div_icon_info').style.background = this.firstChild.style.background;
+	document.getElementById('div_icon_info').style.background = pluginPlate.querySelector('.image').style.background;
 	UI.imgIcon.setAttribute('src', tmp);
 	UI.spanName.textContent = plugin.name;
 	UI.spanOffered.textContent = plugin.offered || offered;
@@ -1229,7 +1334,7 @@ function onClickPluginPlate() {
 	if (bHasUpdate) {
 		UI.btnUpdate.classList.remove('hidden');
 	} else {
-		UI.hideUpdateButton();
+		UI.btnUpdate.classList.add('hidden');
 	}
 
 	if (installed && !installed.removed) {
@@ -1244,7 +1349,7 @@ function onClickPluginPlate() {
 		UI.btnInstall.classList.remove('hidden');
 	}
 
-	if (pluginDiv.lastChild.lastChild.hasAttribute('disabled')) {
+	if (actionButton && actionButton.hasAttribute('disabled')) {
 		UI.btnInstall.setAttribute('disabled','');
 		UI.btnInstall.setAttribute('title', getTranslated(MESSAGES.versionWarning));
 	} else {
@@ -1290,7 +1395,7 @@ function onSelectPreview(target, type) {
 
 		// type: 1 - Overview; 2 - Info; 3 - Changelog;
 		if (type === 1) {
-			document.getElementById('div_selected_preview').classList.remove('hidden');
+			UI.divSelectedPreview.classList.remove('hidden');
 			setDivHeight();
 		} else if (type === 2) {
 			document.getElementById('div_selected_info').classList.remove('hidden');
@@ -1315,12 +1420,12 @@ function createNotification(text, err) {
 		div.appendChild(icon);
 		let spanErr = document.createElement('span');
 		spanErr.className = 'error_caption';
-		spanErr.innerHTML = getTranslated(err);
+		spanErr.textContent = getTranslated(err);
 		div.appendChild(spanErr);
 	}
 	let spanNot = document.createElement('span');
 	spanNot.className = 'span_notification text-secondary';
-	spanNot.innerHTML = getTranslated(text);
+	spanNot.textContent = getTranslated(text);
 	div.appendChild(spanNot);
 	UI.divMain.appendChild(div);
 };
@@ -1345,7 +1450,7 @@ function createError(err, bDontShow) {
 	let span = document.createElement('span');
 	span.className = 'error_caption';
 	let message = err.message || 'Problem with loading some resources';
-	span.innerHTML = getTranslated(message);
+	span.textContent = getTranslated(message);
 	background.appendChild(span);
 	divErr.appendChild(background);
 	divErr.classList.remove('hidden');
@@ -1360,10 +1465,10 @@ function setDivHeight() {
 	// set height for div with image in preview mode
 	if (PsMain) PsMain.update();
 	// console.log(Math.round(window.devicePixelRatio * 100));
-	if (UI.divScreen) {
-		let height = UI.divScreen.parentNode.clientHeight - UI.divScreen.previousElementSibling.clientHeight - 70 + 'px';
-		UI.divScreen.style.height = height;
-		UI.divScreen.style.maxHeight = height;
+	if (UI.divSelectedImage) {
+		let height = UI.divSelectedPreview.clientHeight - UI.divDescriptionSelected.clientHeight - 70 + 'px';
+		UI.divSelectedImage.style.height = height;
+		UI.divSelectedImage.style.maxHeight = height;
 	}
 };
 
@@ -1443,10 +1548,8 @@ function changeIcons() {
 function getTranslation() {
 	// gets translation for current language
 	if (shortLang === "en") {
-		isTranslationLoading = false;
 		return Promise.resolve(true);
 	}
-	isTranslationLoading = true;
 	let errorMessage = 'Cannot load translations list file.';
 	return makeRequest('./translations/langs.json', 'GET', null, null, true)
 		.then(function(response) {
@@ -1473,21 +1576,15 @@ function getTranslation() {
 			}
 			// console.log('get translation: ' + (Date.now() - start));
 			translate = JSON.parse(res);
-			onTranslate();
 			return true;
 		}).catch(function(err) {
 			createError( new Error(errorMessage));
 			return false;
-		}).finally(function() {
-			isTranslationLoading = false;
 		});
 
 };
 
 function onTranslate() {
-	if (isTranslationLoading)
-		return;
-
 	document.querySelectorAll(".i18n").forEach((el) => {
 		if (el instanceof HTMLElement === false) return;
 
@@ -1511,7 +1608,7 @@ function onTranslate() {
 
 function showMarketplace() {
 	// show main window to user
-	if (!isPluginLoading && !isTranslationLoading && installedPlugins) {
+	if (installedPlugins) {
 		if (isOnline) {
 			showListOfPlugins('all');
 		} else {
@@ -1722,7 +1819,7 @@ function installPluginManually() {
 		let result = window["AscDesktopEditor"]["PluginInstall"](file);
 		if (result) {
 			// need to update the list of installed plugins
-			sendMessage({ type: 'getInstalled', updateInstalled: true }, '*');
+			updateInstalledPlugins();
 		} else {
 			createError(new Error('Problem with plugin installation.'), false);
 		}
@@ -1779,7 +1876,7 @@ function sortPlugins(bAll, bInst, type) {
 };
 
 /** @returns {Plugins} */
-function filterPlugins() {
+function getFilteredPlugins() {
 	const category = STORAGE.categoryFilter;
 	const mainFilter = STORAGE.mainFilter;
 	const searchQuery = STORAGE.searchQuery;
@@ -1792,9 +1889,15 @@ function filterPlugins() {
 		plugins = allPlugins.filter(plugin => plugin.bHasUpdate);
 	}
 
-	if (category != "all") {
+	if (category === "onlyoffice") {
 		plugins = plugins.filter(function(plugin) {
-			console.log(plugin);
+			if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
+				return plugin.obj.onlyofficeScheme;
+			}
+			return plugin.onlyofficeScheme;
+		});
+	} else if (category != "all") {
+		plugins = plugins.filter(function(plugin) {
 			let variations = plugin.variations;
 			if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
 				variations = plugin.obj.variations;
@@ -1838,37 +1941,57 @@ function findInstalledPlugin(guid) {
 	return installedPlugins.find(function(el){return el.guid === guid});
 };
 
+/**
+ * @param {boolean} bInstall 
+ * @param {string} guid 
+ * @param {boolean} [bHasLocal] 
+ */
 function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
-	let btn = this.document.getElementById(guid).lastChild.lastChild;
-	btn.innerHTML = getTranslated( ( bInstall ? 'Remove' : 'Install' ) );
-	btn.classList.add( ( bInstall ? 'btn_remove' : 'btn_install' ) );
-	btn.classList.remove( ( bInstall ? 'btn_install' : 'btn_remove' ) );
-	btn.onclick = function(e) {
-		if (bInstall)
+	console.warn('change after install or remove');
+	let btn = UI.getPluginButton(guid);
+	if (!btn) return;
+	let bHasUpdate = btn.classList.contains('update');
+
+	if (bInstall && bHasUpdate) {
+		btn.textContent = getTranslated('Update');
+		btn.classList.add('update');
+		btn.classList.remove('install');
+		btn.onclick = function(e) {
+			onClickUpdate(guid, e);
+		};
+	} else if (bInstall) {
+		btn.textContent = getTranslated('Remove');
+		btn.classList.add('remove');
+		btn.classList.remove('install');
+		btn.onclick = function(e) {
 			onClickRemove(guid, e);
-		else
+		};
+	} else {
+		btn.textContent = getTranslated('Install');
+		btn.classList.add('install');
+		btn.classList.remove('remove');
+		btn.onclick = function(e) {
 			onClickInstall(guid, e);
-	};
+		};
+	}
+
 	// We need to keep the ability to install the local version that has been removed (maybe we should change the button)
 	if ( !bInstall && btn.hasAttribute('dataDisabled') && !bHasLocal ) {
 		btn.setAttribute('title', getTranslated(MESSAGES.versionWarning));
 	}
 
-	let bHasUpdate = (btn.parentNode.firstChild.lastChild.tagName === 'SPAN');
-	if (bHasUpdate) {
-		if (bInstall)
-			btn.parentNode.firstChild.lastChild.classList.remove('hidden');
-		else
-			btn.parentNode.firstChild.lastChild.classList.add('hidden');
-	}
-
 	if (!UI.divSelected.classList.contains('hidden')) {
-		this.document.getElementById( ( bInstall ? 'btn_install' : 'btn_remove' ) ).classList.add('hidden');
-		this.document.getElementById( ( bInstall ? 'btn_remove' : 'btn_install' ) ).classList.remove('hidden');
+		if (bInstall) {
+			UI.btnInstall.classList.add('hidden');
+			UI.btnRemove.classList.remove('hidden');
+		} else {
+			UI.btnInstall.classList.remove('hidden');
+			UI.btnRemove.classList.add('hidden');
+		}
 		if (bInstall && bHasUpdate)
-			this.document.getElementById('btn_update').classList.remove('hidden');
+			UI.btnUpdate.classList.remove('hidden');
 		else
-			this.document.getElementById('btn_update').classList.add('hidden');
+			UI.btnUpdate.classList.add('hidden');
 	}
 	checkNoUpdated(!bInstall);
 };
@@ -1886,7 +2009,7 @@ function checkInternet(bFirstRender) {
 			let bShowSelected = UI.divSelected && !UI.divSelected.classList.contains('hidden');
 			let bShowMarketplace = bShowSelected ? false : ( ( STORAGE.mainFilter === 'marketplace' ) ? true : false );
 			if (!allPlugins.length) {
-				fetchAllPlugins(bFirstRender, bShowMarketplace);
+				return fetchAllPlugins(bFirstRender, bShowMarketplace);
 			} else if (bShowSelected) {
 				let div = UI.getSelectedPlugin();
 				if (div)
@@ -1947,11 +2070,11 @@ function parseRatingPage(data) {
 			let parser = new DOMParser();
 			let doc = parser.parseFromString(data, "text/html");
 			// we will have a problem if github change their page
-			let first = Number(doc.getElementById('result-row-1').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-			let second = Number(doc.getElementById('result-row-2').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-			let third = Number(doc.getElementById('result-row-3').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-			let fourth = Number(doc.getElementById('result-row-4').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
-			let fifth = Number(doc.getElementById('result-row-5').childNodes[1].childNodes[3].innerText.replace(/[\n\s%]/g,''));
+			let first = Number(doc.getElementById('result-row-1').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
+			let second = Number(doc.getElementById('result-row-2').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
+			let third = Number(doc.getElementById('result-row-3').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
+			let fourth = Number(doc.getElementById('result-row-4').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
+			let fifth = Number(doc.getElementById('result-row-5').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
 			let total = Number(doc.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
 			first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
 			second = Math.ceil(total * second / 100) * 4; // it's 4 stars
@@ -1973,6 +2096,7 @@ function parseRatingPage(data) {
 	return result;
 };
 
+/** @param {string} data */
 function parseChangelog(data) {
 	let arr = data.replace('# Change Log', '').split('\n\n## ');
 	if (arr[0] == '')
@@ -1980,15 +2104,16 @@ function parseChangelog(data) {
 
 	let indLast = arr.length - 1;
 	let end = arr[0].indexOf('\n\n');
-	let firstVersion = getPluginVersion( arr[0].slice(0, end) );
+	let firstVersion = convertPluginVersionToNumber( arr[0].slice(0, end) );
 	end = arr[indLast].indexOf('\n\n');
-	let lastVersion = getPluginVersion( arr[indLast].slice(0, end) );
+	let lastVersion = convertPluginVersionToNumber( arr[indLast].slice(0, end) );
 	if (lastVersion > firstVersion)
 		arr = arr.reverse();
 
 	return ( '## ' + arr.join('\n\n## ') );
 };
 
+/** @param {boolean} bRemove */
 function checkNoUpdated(bRemove) {
 	// todo it's a temp solution. We will change a work with updation in the feature.
 	if ( (!UI.btnUpdateAll.classList.contains('hidden') && bRemove) || (UI.btnUpdateAll.classList.contains('hidden') && !bRemove) ) {
@@ -2018,6 +2143,7 @@ function currentSlide(n) {
 
 function showSlides(n) {
 	let i;
+	/** @type {HTMLCollectionOf<HTMLDivElement>} */
 	let slides = document.getElementsByClassName('mySlides');
 	let dots = document.getElementsByClassName('dot');
 	if (n > slides.length) {slideIndex = 1}    

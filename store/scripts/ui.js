@@ -61,44 +61,50 @@ const UI = {
     spanSelectedDescr: document.getElementById('span_selected_description'),
     /** @type {HTMLAnchorElement} */
     linkPlugin: document.getElementById('link_plugin'),
-    /** @type {HTMLDivElement} */
-    divScreen: document.getElementById("div_selected_image"),
-    /** @type {HTMLDivElement} */
-    divGitLink: document.getElementById('div_github_link'),
     /** @type {HTMLSpanElement} */
-    spanVersion: document.getElementById('span_ver'),
-    /** @type {HTMLDivElement} */
-    divVersion: document.getElementById('div_version'),
+    arrowNext: document.getElementById('next_arrow'),
     /** @type {HTMLSpanElement} */
-    spanMinVersion: document.getElementById('span_min_ver'),
-    /** @type {HTMLDivElement} */
-    divMinVersion: document.getElementById('div_min_version'),
-    /** @type {HTMLSpanElement} */
-    spanLanguages: document.getElementById('span_langs'),
-    /** @type {HTMLDivElement} */
-    divLanguages: document.getElementById('div_languages'),
-    /** @type {HTMLInputElement} */
-    inpSearch: document.getElementById('inp_search'),
+    arrowPrev: document.getElementById('prev_arrow'),
     /** @type {HTMLButtonElement} */
     btnUpdateAll: document.getElementById('btn_updateAll'),
-    /** @type {HTMLDivElement} */
-    divRatingLink: document.getElementById('div_rating_link'),
     /** @type {HTMLAnchorElement} */
     discussionLink: document.getElementById('discussion_link'),
     /** @type {HTMLDivElement} */
-    ratingStars: document.getElementById('div_rating_stars'),
-    /** @type {HTMLSpanElement} */
-    totalVotes: document.getElementById('total_votes'),
+    divDescriptionSelected: document.getElementById('div_description_selected'),
     /** @type {HTMLDivElement} */
-    divVotes: document.getElementById('div_votes'),
-    /** @type {HTMLSpanElement} */
-    arrowPrev: document.getElementById('prev_arrow'),
-    /** @type {HTMLSpanElement} */
-    arrowNext: document.getElementById('next_arrow'),
+    divGitLink: document.getElementById('div_github_link'),
+    /** @type {HTMLDivElement} */
+    divLanguages: document.getElementById('div_languages'),
+    /** @type {HTMLDivElement} */
+    divMinVersion: document.getElementById('div_min_version'),
+    /** @type {HTMLDivElement} */
+    divRatingLink: document.getElementById('div_rating_link'),
     /** @type {HTMLDivElement} */
     divReadme: document.getElementById('div_readme_link'),
+    /** @type {HTMLDivElement} */
+    divSelectedImage: document.getElementById("div_selected_image"),
+    /** @type {HTMLDivElement} */
+    divSelectedPreview: document.getElementById("div_selected_preview"),
+    /** @type {HTMLDivElement} */
+    divStarsColored: document.getElementById("stars_colored"),
+    /** @type {HTMLDivElement} */
+    divVersion: document.getElementById('div_version'),
+    /** @type {HTMLDivElement} */
+    divVotes: document.getElementById('div_votes'),
+    /** @type {HTMLInputElement} */
+    inpSearch: document.getElementById('inp_search'),
     /** @type {HTMLAnchorElement} */
     linkReadme: document.getElementById('link_readme'),
+    /** @type {HTMLDivElement} */
+    ratingStars: document.getElementById('div_rating_stars'),
+    /** @type {HTMLSpanElement} */
+    spanLanguages: document.getElementById('span_langs'),
+    /** @type {HTMLSpanElement} */
+    spanMinVersion: document.getElementById('span_min_ver'),
+    /** @type {HTMLSpanElement} */
+    spanVersion: document.getElementById('span_ver'),
+    /** @type {HTMLSpanElement} */
+    totalVotes: document.getElementById('total_votes'),
     /** @type {Object<string, HTMLDivElement>} */
     _plugins: {},
 
@@ -117,6 +123,18 @@ const UI = {
     getPlugin(guid) {
         return this._plugins[guid];
     },
+    /**
+     * @param {string} guid 
+     * @returns {HTMLButtonElement | undefined}
+     */
+    getPluginButton(guid) {
+        const pluginPlate = this._plugins[guid];
+	    if (!pluginPlate) return;
+        const button = this._plugins[guid].querySelector('.management button');
+        if (button instanceof HTMLButtonElement) {
+            return button;
+        }
+    },
     /** @returns {HTMLDivElement | null} */
     getSelectedPlugin() {
         let guid = this.divSelected.getAttribute('data-guid');
@@ -125,10 +143,6 @@ const UI = {
         }
 		const div = this._plugins[guid];
 		return div;
-    },
-
-    hideUpdateButton() {
-        this.btnUpdate.classList.add('hidden');
     },
     /** @param {'light' | string} themeType */
     init(themeType) {
