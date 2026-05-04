@@ -5,7 +5,6 @@
 	"English": "Inglés",
 	"Chinese": "Chino",
 	"Russian": "Ruso",
-	"Meme": "Meme",
 	"Thai": "Tailandés",
 	"German": "Alemán",
 	"Japanese": "Japonés",
@@ -65,6 +64,6 @@
 	"Slovak": "Eslovaco",
 	"Recognize": "Reconocer",
 	"Tesseract.js Add-on": "Complemento Tesseract.js",
-	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.": "Tesseract.js es una versión pura de javascript del <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> que reconoce Inglés, Chino, Ruso, Meme y 60 otros idiomas.",
+	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian and 60 other languages.": "Tesseract.js es una versión pura de javascript del <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> que reconoce Inglés, Chino, Ruso y 60 otros idiomas.",
 	"Source code": "Código fuente"
 }
