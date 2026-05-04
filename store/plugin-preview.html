@@ -1,0 +1,164 @@
+<!--
+ (c) Copyright Ascensio System SIA 2010
+
+ This program is a free software product. You can redistribute it and/or
+ modify it under the terms of the GNU Affero General Public License (AGPL)
+ version 3 as published by the Free Software Foundation. In accordance with
+ Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ that Ascensio System SIA expressly excludes the warranty of non-infringement
+ of any third-party rights.
+
+ This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+
+ You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ street, Riga, Latvia, EU, LV-1050.
+
+ The  interactive user interfaces in modified source and object code versions
+ of the Program must display Appropriate Legal Notices, as required under
+ Section 5 of the GNU AGPL version 3.
+
+ Pursuant to Section 7(b) of the License you must retain the original Product
+ logo when distributing the program. Pursuant to Section 7(e) we decline to
+ grant you any rights under trademark law for use of our trademarks.
+
+ All the Product's GUI elements, including illustrations and icon sets, as
+ well as technical writing content are licensed under the terms of the
+ Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../../../sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="./resources/css/styles.css">
+
+<style>
+  html, body {background: #f2f3f5;
+    font-family: 'Inter', system-ui, sans-serif; color: #1a1d21; }
+  body.dark { background: #15171a; }
+</style>
+	<script src="../../../sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="scripts/polyfill.js" defer></script>
+	<script src="vendor/marked/marked.min.js" defer></script>
+	<script src="scripts/storage.js" defer></script>
+	<script src="scripts/ui.js" defer></script>
+	<script src="scripts/code.js" defer></script>
+</head>
+	<body class="noselect">
+		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./resources/img/stars/rating-stars.svg"/>
+		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
+			<!-- TODO temporarily, I added an arrow here so that I could go back -->
+			<span id="arrow" class="arrow hidden">&#8592;</span>
+			<div class="div_selected_description">
+				<span id="span_name" class="span_name_selected"></span>
+				<div class="div_offered_votes">
+					<span class="span_offered i18n">Offered by</span>
+					<span id="span_offered" class="span_offered"></span>
+				</div>
+				<div class="div_rating_general">
+					<div id="div_rating_link" class="div_rating_general">
+						<div class="div_info_column">
+							<div id="div_rating_stars" >
+								<div class="div_rating">
+									<div class="stars_grey"></div>
+									<div id="stars_colored" class="stars_orange"></div>
+								</div>
+							</div>
+						</div>
+						<div id="div_votes" class="div_votes div_offered_votes hidden">
+							<span id="total_votes"></span>
+						</div>
+						<a id="discussion_link" class="aboutlink link_submit i18n" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
+					</div>
+					<div style="height: 18px;"></div>
+				</div>
+				<div>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
+					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="onClickUpdate(event.target)">Update</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
+				</div>
+			</div>
+			<div class="div_info_column">
+				<div id="div_icon_info" class="div_icon_info">
+					<img id="img_icon">
+				</div>
+			</div>
+		</div>
+		<div id="div_selected_main" class="div_selected_main hidden">
+			<div style="width:100%; height:100%">
+				<div>
+					<span id="span_overview" class="span_caption span_selected i18n" onclick="onSelectPreview(event.target, 1)">Overview</span>
+					<span class="span_caption i18n" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
+					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
+					<hr>
+				</div>
+				<div id="div_selected_preview" class="div_selected_preview">
+					<div id="div_description_selected" class="div_description_selected">
+						<span id="span_selected_description"></span>
+					</div>
+					<div id="div_selected_image">
+						<div id="div_selected_container" class="slideshow-container">
+							<span id="prev_arrow" class="prev hidden" onclick="plusSlides(-1)"></span>
+							<span id="next_arrow" class="next hidden" onclick="plusSlides(1)"></span>
+						</div>
+						<br>
+						<div id="points_container" style="text-align:center"></div>
+					</div>
+				</div>
+				<div id="div_selected_info" class="div_selected_preview hidden">
+					<div id="div_plugin_info" class="div_plugin_info">
+						<div id="div_version" class="div_selected_info margin_0 hidden">
+							<span class="font_bold i18n">Version</span>
+							<span>: </span>
+							<span id="span_ver"></span>
+						</div>
+						<div id="div_min_version" class="div_selected_info hidden">
+							<span class="font_bold i18n">The minimum supported editors version</span>
+							<span>: </span>
+							<span id="span_min_ver"></span>
+						</div>
+						<div id="div_languages" class="div_selected_info hidden">
+							<span class="font_bold i18n">Languges</span>
+							<span>: </span>
+							<span id="span_langs"></span>
+						</div>
+					</div>
+					<div id="div_readme_link" class="div_selected_info">
+						<span class="i18n" class="font_bold">Learn how to use</span>
+						<span> </span>
+						<span class="i18n">the plugin in</span>
+						<span> </span>
+						<a id="link_readme" class="aboutlink link_info" target="blank" href="">README.</a>
+					</div>
+					<div id="div_github_link" class="div_selected_info">
+						<span class="font_bold i18n">Contribute</span>
+						<span> </span>
+						<span class="i18n">to the plugin development or report an issue on</span>
+						<span> </span>
+						<a id="link_plugin" class="aboutlink link_info" target="blank">Github.</a>
+					</div>
+					<div class="div_selected_info">
+						<span class="i18n font_bold">Get help</span>
+						<span> </span>
+						<span class="i18n">with the plugin functionality on our forum.</span>
+					</div>
+					<div class="div_selected_info">
+						<span class="i18n">Create a new plugin using</span>
+						<span> </span>
+						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/">ONLYOFFICE API.</a>
+					</div>
+				</div>
+				<div id="div_selected_changelog" class="div_selected_preview div_selected_preview_chanelog hidden">
+					<div id="div_changelog_preview"></div>
+				</div>
+			</div>
+		</div>
+		<div id="div_error" class="error_main hidden"><div class="loader_background"></div></div>
+		<div id="loader-container" class="asc-loader-container div_loader"><div class="loader_background"></div></div>
+		<div id="div_rating_git" class="hidden"></div>
+	</body>	
+</html>
