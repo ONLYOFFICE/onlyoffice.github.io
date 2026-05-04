@@ -154,11 +154,12 @@ const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos)
 
 const installedPluginsPromise = getMarketplaceVersion()
 	.then(function(version) {
-		console.error('------- PLUGIN READY -------');
+		console.log('------- PLUGIN READY -------');
 		editorVersion = version;
 		return getInstalledPlugins();
 	}).then(function(plugins) {
 		installedPlugins = plugins;
+		return plugins;
 	});
 const translationsPromise = getTranslation();
 /** @type {Promise<PluginInfo[]>} */
@@ -166,15 +167,33 @@ let allPluginsPromise = Promise.resolve([]);
 console.log('is local: ', isLocal);
 if (isLocal) {
 	// check internet connection (only for desktop)
-	allPluginsPromise = checkInternet(true);                                          
-} else if (!isLocal) {
+	allPluginsPromise = checkInternet()
+		.then(function(bOnline) {
+			if (bOnline) {
+				return fetchAllPlugins();
+			} else {
+				return loadInstalledLanguages()
+					.finally(function() {
+						return [];
+					});
+			}
+		});
+} else {
 	// fetch all plugins from config
-	allPluginsPromise = fetchAllPlugins(true, false);
+	allPluginsPromise = fetchAllPlugins();
 }
 
 const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
-	.then(function() {
-		return loadAllPluginsData(true, false);
+	.then(function(plugins) {
+		console.log('installed', plugins[0]);
+		console.log('all', plugins[1]);
+		return loadAllPluginsData();
+		/*
+		if (bFirstRender)
+			showMarketplace();
+		else if (bShowMarketplace)
+			toggleView("marketplace", true);
+		*/
 	})
 
 window.onload = function() {
@@ -182,16 +201,25 @@ window.onload = function() {
 	toggleLoader(true, "Loading");
 
 	Promise.all([translationsPromise, pluginsPromise]).then(function() {
+		onTranslate();
 		showMarketplace();
 	}).catch(function(err) {
 		console.error('Error loading marketplace: ', err);
+		onTranslate();
+		showMarketplace();
 	}).finally(function() {
 		onTranslate();
+		showMarketplace();
+		loadDiscussions();
+		loadChangelogs();
+		loadAllPluginsLanguages();
+		updateCategories();
 	});
 
 	UI.onChangeMainFilter = function(value) {
 		STORAGE.mainFilter = value;
 		showListOfPlugins('filtered');
+		updateCategories();
 	}
 	UI.onChangeCategoryFilter = function(category) {
 		STORAGE.categoryFilter = category;
@@ -248,7 +276,6 @@ function getInstalledPlugins() {
 			}
 			if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
 				window.removeEventListener('message', onGetInstalled);
-				console.log('installed plugins', message);
 				/** @type {InstalledPluginInfo[]} */
 				let plugins = [];
 				if (message.data) {
@@ -339,7 +366,6 @@ window.addEventListener('message', function(message) {
 						removed: false
 					}
 				);
-				// sortPlugins(false, true, 'name');
 			} else if (installed) {
 				if (installed.obj.backup) {
 					// need to update the list of installed plugins so that resource links are correct
@@ -386,7 +412,7 @@ window.addEventListener('message', function(message) {
 			}
 			break;
 		case 'Removed':
-			console.log('removed');
+			console.error('------- REMOVED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
 				toggleLoader(false);
@@ -481,24 +507,18 @@ window.addEventListener('message', function(message) {
 }, false);
 
 /**
- * @param {boolean} bFirstRender 
- * @param {boolean} bShowMarketplace 
+ * function for fetching all plugins from config
  * @returns {Promise<PluginInfo[]>}
  */
-function fetchAllPlugins(bFirstRender, bShowMarketplace) {
-	// function for fetching all plugins from config
-	isPluginLoading = true;
+function fetchAllPlugins() {
 	return makeRequest(configUrl, 'GET', null, null, true)
 		.then(function(response) {
-			console.warn(response);
 			allPlugins = JSON.parse(response);
 			return allPlugins;
 		}).catch(function(err) {
 			createError( new Error('Problem with loading marketplace config.') );
 			showMarketplace();
 			return allPlugins;
-		}).finally(function() {
-			isPluginLoading = false;
 		});
 };
 
@@ -622,21 +642,15 @@ function toggleLoader(show, text) {
 };
 
 /**
- * @param {boolean} bFirstRender 
- * @param {boolean} bShowMarketplace 
  * @returns {Promise<PluginInfo[]>}
  */
-function loadAllPluginsData(bFirstRender, bShowMarketplace) {
+function loadAllPluginsData() {
 	// get config file for each item in config.json
-	isPluginLoading = true;
 	/** @type {Array<number>} */
 	let Unloaded = [];
 	let url = isLocal ? OOMarketplaceUrl : ioUrl;
 	/** @type {Promise<any>[]} */
-	const pluginsPromises = [];
-	/** @type {Promise<any>[]} */
-	const discussionsPromises = [];
-	allPlugins.forEach(function(/** @type {PluginInfo} */ plugin, i, arr) {
+	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
 		if (typeof plugin !== 'object') {
 			plugin.name = plugin;
 		}
@@ -652,72 +666,69 @@ function loadAllPluginsData(bFirstRender, bShowMarketplace) {
 			baseUrl: pluginUrl,
 			languages: [ getTranslated('English') ]
 		};
-		const promise = makeRequest(confUrl, 'GET', null, null, true)
+		return makeRequest(confUrl, 'GET', null, null, true)
 			.then(function(response) {
 				config = Object.assign(JSON.parse(response), config);
 				arr[i] = config;
 			})
 			.catch(function(err) {
 				Unloaded.push(i);
-				console.log(plugin.name);
+				console.error(plugin.name);
 				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
-			}).then(function() {
-				return makeRequest(pluginUrl + 'translations/langs.json', 'GET', null, null, false);
-			}).then(function(response) {
-					/** @type {Array<string>} */
-					let langs = JSON.parse(response);
-					langs.forEach(function(full) {
-						let short = full.split('-')[0];
-						for (let i = 0; i < LANGUAGES.length; i++) {
-							// detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
-							if (LANGUAGES[i][0] == full /*|| LANGUAGES[i][1] == short*/) {
-								config.languages.push( getTranslated( LANGUAGES[i][2] ) );
-							}
-						}
-					});
-				}
-			).catch(function() {
-				console.error('Failed to load languages.json');
-			}).then(function() {
-				return makeRequest(pluginUrl + 'CHANGELOG.md', 'GET', null, null, false);
-			}).then(function(response) {
-				let settings = getMarkedSetting();
-				let value = parseChangelog(response);
-				let lexed = marked.lexer(value, settings);
-				config.changelog = marked.parser(lexed, settings);
-			}).catch(function() {
-				console.error('Failed to load changelog');
 			}).then(function() {
 				if (plugin.discussion) {
 					config.discussionUrl = discussionsUrl + plugin.discussion;
-					const discussionPromise = getRating(config.discussionUrl)
-						.then(function(rating) {
-							if (!rating) return;
-							config.rating = rating;
-						}); 
-					discussionsPromises.push(discussionPromise);
 				}
 				return config;
 			});
-		pluginsPromises.push(promise);	
 	});
 
-	if (isLocal && !isOnline) {
-		isPluginLoading = false;
-		getInstalledLanguages();
-		showMarketplace();
-	}
-
 	return Promise.all(pluginsPromises).then(function(arr) {
-		isPluginLoading = false;
-		endPluginsDataLoading(bFirstRender, bShowMarketplace, Unloaded);
-	}).then(function() {
-		return Promise.all(discussionsPromises);
-	}).then(function() {
-		showRating();
+		removeUnloaded(Unloaded);
+		sortPlugins(true, false, 'name');
 		return allPlugins;
 	});
 };
+
+/**
+ * @returns {Promise<void>}
+ */
+function loadDiscussions() {
+	/** @type {Promise<any>[]} */
+	const discussionsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
+		if (plugin.discussionUrl) {
+			return getRating(plugin.discussionUrl)
+				.then(function(rating) {
+					if (!rating) return;
+					plugin.rating = rating;
+				});
+		} else {
+			return Promise.resolve();
+		}
+	});
+
+	return Promise.all(discussionsPromises).then(function() {
+		showRating();
+	});
+};
+
+/** @returns {Promise<any[]>} */
+function loadChangelogs() {
+	/** @type {Promise<any>[]} */
+	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin) {
+		return makeRequest(plugin.baseUrl + 'CHANGELOG.md', 'GET', null, null, false)
+			.then(function(response) {
+				let settings = getMarkedSetting();
+				let value = parseChangelog(response);
+				let lexed = marked.lexer(value, settings);
+				plugin.changelog = marked.parser(lexed, settings);
+			}).catch(function() {
+				console.error('Failed to load changelog', plugin.name);
+			});
+	});
+
+	return Promise.all(pluginsPromises);
+}
 
 /**
  * @param {string} discussionUrl 
@@ -751,24 +762,38 @@ function getRating(discussionUrl) {
 	}
 };
 
-/**
- * @param {boolean} bFirstRender 
- * @param {boolean} bShowMarketplace 
- * @param {Array<number>} Unloaded 
- */
-function endPluginsDataLoading(bFirstRender, bShowMarketplace, Unloaded) {
-	// console.log('get all plugins data: ' + (Date.now() - start));
-	removeUnloaded(Unloaded);
-	sortPlugins(true, false, 'name');
-	if (bFirstRender)
-		showMarketplace();
-	else if (bShowMarketplace)
-		toggleView("marketplace", true);
-};
+/** @returns {Promise<void[]>} */
+function loadAllPluginsLanguages() {
+	let url = isLocal ? OOMarketplaceUrl : ioUrl;
+	/** @type {Promise<any>[]} */
+	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
+		return makeRequest(plugin.baseUrl + 'translations/langs.json', 'GET', null, null, false)
+			.then(function(response) {
+					/** @type {Array<string>} */
+					let langs = JSON.parse(response);
+					langs.forEach(function(full) {
+						let short = full.split('-')[0];
+						for (let i = 0; i < LANGUAGES.length; i++) {
+							// detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
+							if (LANGUAGES[i][0] == full /*|| LANGUAGES[i][1] == short*/) {
+								plugin.languages.push( getTranslated( LANGUAGES[i][2] ) );
+							}
+						}
+					});
+				}
+			).catch(function() {
+				console.error('Failed to load languages.json', plugin.name);
+			});
+	});
 
-function getInstalledLanguages() {
-	installedPlugins.forEach(function(pl) {
-		makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null, true).then(
+	return Promise.all(pluginsPromises);
+}
+
+/** @returns {Promise<void[]>} */
+function loadInstalledLanguages() {
+	const promises = installedPlugins.map(function(pl) {
+		console.warn('get installed languages', pl);
+		return makeRequest(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null, true).then(
 			function(response) {
 				let supportedLangs = [ getTranslated('English') ];
 				let arr = JSON.parse(response);
@@ -786,18 +811,81 @@ function getInstalledLanguages() {
 			function(error) {
 				pl.obj.languages = [ getTranslated('English') ];
 			}
-		)
+		);
 	});
+	return Promise.all(promises);
 };
+
+function updateCategories() {
+	STORAGE.categories = new Map();
+	STORAGE.categories.set('all', 0);
+	STORAGE.categories.set('onlyoffice', 0);
+	/** @param {PluginInfo} plugin */
+	const addCategoryToStorage = function(plugin) {
+		let num = Number(STORAGE.categories.get('all'));
+		STORAGE.categories.set('all', num + 1);
+		if (!plugin.variations) {
+			return;
+		}
+		if (plugin.onlyofficeScheme) {
+			let category = 'onlyoffice';
+			if (STORAGE.categories.has(category)) {
+				let num = Number(STORAGE.categories.get(category));
+				STORAGE.categories.set(category, num + 1);
+			}
+		}
+		plugin.variations.forEach(function(variation) {
+			if (!variation.store || !variation.store.categories) {
+				return;
+			}
+			variation.store.categories.forEach(function(/** @type {string} */category) {
+				if (STORAGE.categories.has(category)) {
+					let num = Number(STORAGE.categories.get(category));
+					STORAGE.categories.set(category, num + 1);
+				} else {
+					STORAGE.categories.set(category, 1);
+				}
+			})
+		});
+	}
+	if (STORAGE.mainFilter === 'marketplace') {
+		allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+			addCategoryToStorage(plugin);
+		});
+	} else if (STORAGE.mainFilter === 'installed') {
+		installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
+			if (!plugin.obj) {
+				return;
+			}
+			addCategoryToStorage(plugin.obj);
+		});
+	} else {
+		allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+			if (!plugin.bHasUpdate) {
+				return;
+			}
+			addCategoryToStorage(plugin);
+		});
+	}
+	let numOfAllPlugins = allPlugins.length;
+	let numOfInstalledPlugins = installedPlugins.length;
+	let numOfPluginsToUpdate = allPlugins.reduce(function(acc, plugin) {
+		return plugin.bHasUpdate ? acc + 1 : acc;
+	}, 0);
+	UI.updateCategories(STORAGE.categories);
+	UI.updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
+}
 
 /**
  * @param {'filtered'|'all'|'installed'} typeOfOperation
  * @returns {number}
  */
 function showListOfPlugins(typeOfOperation) {
+	console.log('show list of plugins', typeOfOperation);
 	let arr = getFilteredPlugins();
 	if (arr.length && isSamePlugins(founded, arr)) {
 		console.log('Same plugins');
+		toggleLoader(false);
 		return arr.length;
 	}
 	founded = arr;
@@ -999,12 +1087,12 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) {
 	let result = '<button class="btn-text-default ';
 	if (bNeedUpdateButton) {
-		result += 'update" onclick="onClickUpdate(guid, event)">' + getTranslated("Update");
+		result += 'update" onclick="onClickUpdate(' + guid + ', event)">' + getTranslated("Update");
 	} else if (bNeedRemoveButton) {
-		result += 'remove" onclick="onClickRemove(guid, event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+		result += 'remove" onclick="onClickRemove(' + guid + ', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
 		result += getTranslated("Remove");
 	} else if (bNeedInstallButton) {
-		result += 'install" onclick="onClickInstall(guid, event)" ' + (additional || "") + '>'  + getTranslated("Install");
+		result += 'install" onclick="onClickInstall(\'' + guid + '\', event)" ' + (additional || "") + '>'  + getTranslated("Install");
 	} else {
 		return '';
 	}
@@ -1044,20 +1132,47 @@ function makeRatingElements(rating) {
 }
 
 function showRating() {
-	// console.log('show rating: ' + (Date.now() - start));
-	allPlugins.forEach(function(plugin) {
-		const pluginPlate = UI.getPlugin(plugin.guid);
-		if (!pluginPlate) {
-			console.error('Failed to find plugin plate for guid: ' + plugin.guid);
-			return;
+	let showRatingHandle = 0;
+	const SHOW_RATING_CHUNK = 25;
+
+	// cancel previous unfinished pass, so repeated calls don't pile up
+	if (showRatingHandle) {
+		cancelAnimationFrame(showRatingHandle);
+		showRatingHandle = 0;
+	}
+
+	// snapshot the list so it can't change mid-iteration
+	const plugins = allPlugins.slice();
+	let i = 0;
+
+	function processChunk() {
+		showRatingHandle = 0;
+		const end = Math.min(i + SHOW_RATING_CHUNK, plugins.length);
+		for (; i < end; i++) {
+			const plugin = plugins[i];
+			const pluginPlate = UI.getPlugin(plugin.guid);
+			if (!pluginPlate) {
+				console.error('Failed to find plugin plate for guid: ' + plugin.guid);
+				continue;
+			}
+			const div = pluginPlate.querySelector('.rating');
+			if (!div) continue;
+			div.innerHTML = makeRatingElements(plugin.rating);
 		}
-		const div = pluginPlate.querySelector('.rating');
-		if (!div) return;
-		div.innerHTML = makeRatingElements(plugin.rating);
-	});
+		if (i < plugins.length) {
+			// yield back to the browser so it can paint / handle input
+			showRatingHandle = requestAnimationFrame(processChunk);
+		}
+	}
+
+	showRatingHandle = requestAnimationFrame(processChunk);
 
 	if (UI.divSelected && !UI.divSelected.classList.contains('hidden')) {
 		let guid = UI.divSelected.getAttribute('data-guid');
+		if (!guid) {
+			console.error('Failed to find guid for selected plugin');
+			return;
+		}
 		let plugin = findPlugin(guid);
 		if (plugin && plugin.rating) {
 			UI.totalVotes.textContent = String(plugin.rating.total);
@@ -1087,7 +1202,9 @@ function onClickInstall(guid, event) {
 		clearTimeout(timeout);
 		timeout = setTimeout(toggleLoader, 200, true, "Installation");
 	}
+	/** @type {PluginInfo | undefined} */
 	let plugin = findPlugin(guid);
+	/** @type {InstalledPluginInfo | undefined} */
 	let installed = findInstalledPlugin(guid);
 	if (!plugin && !installed) {
 		// if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
@@ -1095,6 +1212,8 @@ function onClickInstall(guid, event) {
 		onClickBack();
 		toggleLoader(false);
 	}
+	console.warn(event, guid, plugin);
+	console.log(plugin);
 	let message = {
 		type : 'install',
 		url : (installed ? installed.obj.baseUrl : plugin.url),
@@ -1601,8 +1720,6 @@ function onTranslate() {
 		);
 		if (translated) el.textContent = translated;
 	});
-
-	showMarketplace();
 };
 
 function showMarketplace() {
@@ -1616,7 +1733,7 @@ function showMarketplace() {
 		}
 		UI.pluginsList.classList.remove('transparent');
 
-		// console.log('show marketplace');
+		console.log('show marketplace');
 	}
 };
 
@@ -1766,6 +1883,7 @@ function getUrlSearchValue(key) {
  * @param {boolean} [bForce]
  */
 function toggleView(currentValue, bForce) {
+	console.log('toggle view', currentValue);
 	if (STORAGE.mainFilter === currentValue && !bForce) {
 		return;
 	}
@@ -1783,7 +1901,7 @@ function toggleView(currentValue, bForce) {
 	}
 
 	let flag = !isLocal && !isOnline;
-	if ( ( bAll && (!isOnline || isPluginLoading) ) || flag) {
+	if ( ( bAll && (!isOnline) ) || flag) {
 		console.warn(1);
 		UI.divMain.textContent = '';
 		setTimeout(function(){if (PsMain) PsMain.update()});
@@ -1996,39 +2114,44 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 };
 
 /**
- * @param {boolean} bFirstRender
- * @returns 
+ * @returns {Promise<boolean>}
  */
-function checkInternet(bFirstRender) {
+function checkInternet() {
 	// url for check internet connection
 	let url = 'https://onlyoffice.github.io/store/translations/langs.json';
-	return makeRequest(url, 'GET', null, null, true)
+	return makeRequest(url, 'GET', null, null, false)
 		.then(function(res) {
 			isOnline = true;
-			let bShowSelected = UI.divSelected && !UI.divSelected.classList.contains('hidden');
-			let bShowMarketplace = bShowSelected ? false : ( ( STORAGE.mainFilter === 'marketplace' ) ? true : false );
-			if (!allPlugins.length) {
-				return fetchAllPlugins(bFirstRender, bShowMarketplace);
-			} else if (bShowSelected) {
-				let div = UI.getSelectedPlugin();
-				if (div)
-					div.click();
-			} else if (bShowMarketplace) {
-				toggleView("marketplace", true);
-			} else if (!isLocal) {
-				toggleView("installed", true);
-			}
+			return true;
+		}).catch(function(error) {
+			isOnline = false;
+			return false;
 		});
 };
 
 function handleNoInternet() {
-	isOnline = false;
-
 	(function checkInternetRecursion() {
 		setTimeout(function() {
-			checkInternet(false)
-				.catch(function(err) {
-					checkInternetRecursion();
+			checkInternet()
+				.then(function(bOnline) {
+					if (!bOnline) {
+						return checkInternetRecursion();
+					}
+
+					let bShowSelected = UI.divSelected && !UI.divSelected.classList.contains('hidden');
+					let bShowMarketplace = bShowSelected ? false : ( ( STORAGE.mainFilter === 'marketplace' ) ? true : false );
+					if (!allPlugins.length) {
+						return fetchAllPlugins();
+					} else if (bShowSelected) {
+						let div = UI.getSelectedPlugin();
+						if (div)
+							div.click();
+					} else if (bShowMarketplace) {
+						toggleView("marketplace", true);
+					} else if (!isLocal) {
+						toggleView("installed", true);
+					}
+					return bOnline;
 				});
 		}, 3000);
 	})();
