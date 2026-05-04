@@ -53,126 +53,126 @@
 		<div id="plugins" class="plugin-store transparent">
 			<aside>
 				<div class="filter-by filter-by-installed">
-					<label>
+					<label class="marketplace">
 						<input type="radio" name="main-filter" id="btn_marketplace" value="marketplace" checked>
 						<span>◎</span>
 						<span class="i18n">Marketplace</span>
-						<span>21</span>
+						<span class="amount">21</span>
 					</label>
-					<label>
+					<label class="installed">
 						<input type="radio" name="main-filter" value="installed">
 						<span>✓</span>
 						<span class="i18n">Installed</span>
-						<span>6</span>
+						<span class="amount">6</span>
 					</label>
-					<label>
+					<label class="updates">
 						<input type="radio" name="main-filter" value="updates">
 						<span>↑</span>
 						<span class="i18n">Updates</span>
-						<span class="mark">2</span>
+						<span class="amount mark">2</span>
 					</label>
 				</div>
 				<div>
 					<div class="categories-header i18n">Categories</div>
 					<div class="filter-by filter-by-category">
-						<label>
+						<label class="all">
 							<input type="radio" name="category-filter" value="all" checked>
 							<span>◎</span>
 							<span class="i18n">All plugins</span>
-							<span>21</span>
+							<span class="amount">21</span>
 						</label>
-						<label>
+						<label class="onlyoffice">
 							<input type="radio" name="category-filter" value="onlyoffice">
 							<span><span class="onlyoffice">✓</span></span>
 							<span class="i18n">By ONLYOFFICE</span>
-							<span>10</span>
+							<span class="amount">10</span>
 						</label>
 						<div style="height: 8px;">
 						</div>
-						<label>
+						<label class="recommended">
 							<input type="radio" name="category-filter" value="recommended">
 							<span>★</span>
 							<span class="i18n">Recommended</span>
-							<span>9</span>
+							<span class="amount">9</span>
 						</label>
-						<label>
+						<!--label class="ai">
 							<input type="radio" name="category-filter" value="ai">
 							<span>✦</span>
 							<span class="i18n">AI &amp; Automation</span>
-							<span>9</span>
-						</label>
-						<label>
+							<span class="amount">9</span>
+						</label-->
+						<label class="work">
 							<input type="radio" name="category-filter" value="work">
 							<span>⚒</span>
 							<span class="i18n">Work</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<label class="entertainment">
 							<input type="radio" name="category-filter" value="entertainment">
 							<span>▶</span>
 							<span class="i18n">Entertainment</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<label class="communication">
 							<input type="radio" name="category-filter" value="communication">
 							<span>✉</span>
 							<span class="i18n">Communication</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<label class="specAbilities">
 							<input type="radio" name="category-filter" value="specAbilities">
 							<span>❖</span>
 							<span class="i18n">Special abilities</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<!--label class="translation">
 							<input type="radio" name="category-filter" value="translation">
 							<span>文</span>
 							<span class="i18n">Translation</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<label class="writing">
 							<input type="radio" name="category-filter" value="writing">
 							<span>¶</span>
 							<span class="i18n">Writing tools</span>
-							<span>7</span>
+							<span class="amount">7</span>
 						</label>
-						<label>
+						<label class="productivity">
 							<input type="radio" name="category-filter" value="productivity">
 							<span>☑</span>
 							<span class="i18n">Productivity</span>
-							<span>11</span>
-						</label>
-						<label>
+							<span class="amount">11</span>
+						</label-->
+						<label class="devTools">
 							<input type="radio" name="category-filter" value="devTools">
 							<span>&lt;&gt;</span>
 							<span class="i18n">Developer tools</span>
-							<span>5</span>
+							<span class="amount">5</span>
 						</label>
-						<label>
+						<!--label class="integrations">
 							<input type="radio" name="category-filter" value="integrations">
 							<span>◈</span>
 							<span class="i18n">Integrations</span>
-							<span>8</span>
+							<span class="amount">8</span>
 						</label>
-						<label>
+						<label class="media">
 							<input type="radio" name="category-filter" value="media">
 							<span>▦</span>
 							<span class="i18n">Media &amp; Design</span>
-							<span>4</span>
+							<span class="amount">4</span>
 						</label>
-						<label>
+						<label class="utilities">
 							<input type="radio" name="category-filter" value="utilities">
 							<span>⚙</span>
 							<span class="i18n">Utilities</span>
-							<span>6</span>
+							<span class="amount">6</span>
 						</label>
-						<label>
+						<label class="games">
 							<input type="radio" name="category-filter" value="games">
 							<span>♞</span>
 							<span class="i18n">Games</span>
-							<span>2</span>
-						</label>
+							<span class="amount">2</span>
+						</label-->
 					</div>
 				</div>
 				<div class="submit-own-plugin">
@@ -183,8 +183,8 @@
 			<main>
 				<div class="toolbar">
 					<div>
-						<div class="place-name">Marketplace</div>
-						<h1>All plugins</h1>
+						<div class="place-name i18n">Marketplace</div>
+						<h1 class="i18n">All plugins</h1>
 					</div>
 					<div id="toolbar_tools" class="toolbar_tools">
 						<button id="btn_updateAll" class="btn-text-default btn_update btn_install i18n hidden" onclick="onClickUpdateAll()">Update All</button>

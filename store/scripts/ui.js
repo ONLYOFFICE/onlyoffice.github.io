@@ -272,7 +272,55 @@ const UI = {
             image.setAttribute('src', src);
         }
     },
+    /**
+     * @param {number} numOfAllPlugins 
+     * @param {number} numOfInstalledPlugins 
+     * @param {number} numOfPluginsToUpdate 
+     */
+    updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
+        const mainCounter = this.pluginsList.querySelector('.filter-by-installed .marketplace .amount');
+        const installedCounter = this.pluginsList.querySelector('.filter-by-installed .installed .amount');
+        const updatesCounter = this.pluginsList.querySelector('.filter-by-installed .updates .amount');
+        if (mainCounter) {
+            mainCounter.textContent = numOfAllPlugins.toString();
+        }
+        if (installedCounter) {
+            installedCounter.textContent = numOfInstalledPlugins.toString();
+        }
+        if (updatesCounter) {
+            updatesCounter.textContent = numOfPluginsToUpdate.toString();
+        }
+    },
+    /**
+     * @param {Map<string, number>} categories
+     */
+    updateCategories(categories) {
+        const self = this;
+        this.pluginsList.querySelectorAll('.filter-by-category .amount').forEach(element => {
+            element.textContent = '0';
+        });
+        /**
+         * @param {number} value 
+         * @param {string} key 
+         * @returns 
+         */    
+        const makeCategoryItem = function(value, key) {
+            let cat = self.pluginsList.querySelector('.filter-by-category .' + key);
+            if (!cat) {
+                return;
+            }
+            let span = cat.querySelector('.amount');
+            if (span) {
+                span.textContent = String(value);
+            }
 
+        };
+        if (categories.size) {
+            categories.forEach((value, key) => {
+                makeCategoryItem(value, key);
+            });
+        }
+    },
     /**
      * @param {Function} fn
      * @param {number} delay

@@ -39,5 +39,7 @@ const STORAGE = {
     /** @type {CategoryFilter} */
     categoryFilter: "all",
     /** @type {string} */
-    searchQuery: ""
+    searchQuery: "",
+    /** @type {Map<string, number>} */
+    categories: new Map(),
 };
