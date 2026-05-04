@@ -1,5 +1,5 @@
 {
-	"Tesseract.js lets recognize text in pictures (png, jpg)": "Tesseract.js プラグインは、画像(png, jpg)のテキスト認識ができるようにします。",
+	"Tesseract.js lets recognize text in pictures (bmp, jpg, png, webp, gif)": "Tesseract.js プラグインは、画像(bmp, jpg, png, webp, gif)のテキスト認識ができるようにします。",
 	"Choose language": "言語を選択してください",
 	"Load File": "ファイルのアップロード",
 	"English": "英語",

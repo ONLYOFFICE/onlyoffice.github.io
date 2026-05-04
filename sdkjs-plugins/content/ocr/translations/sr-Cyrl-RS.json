@@ -1,5 +1,5 @@
 {
-	"Tesseract.js lets recognize text in pictures (png, jpg)": "Tesseract.js омогућава препознавање текста на сликама (png, jpg)",
+	"Tesseract.js lets recognize text in pictures (bmp, jpg, png, webp, gif)": "Tesseract.js омогућава препознавање текста на сликама (bmp, jpg, png, webp, gif)",
 	"Choose language": "Одабери језик",
 	"Load File": "Учитај датотеку",
 	"English": "Енглески",
