@@ -355,7 +355,7 @@
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("label1");
 		if (elem){
-			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets recognize text in pictures (png, jpg)");
+			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets recognize text in pictures (bmp, jpg, png, webp, gif)");
 		}
 		elem = document.getElementById("load-file-button-id");
 		if (elem){
