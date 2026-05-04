@@ -203,7 +203,21 @@
 							statusLabel.textContent = 'Recognizing: ' + percent + '%';
 						}
 					};
-					const worker = await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, { logger: showProgress });
+
+					const langsWithoutBestInt = {
+						'tgl': true,
+						'equ': true
+					};
+
+					const worker = langsWithoutBestInt[sLang]
+						? await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, {
+							logger: showProgress,
+							langPath: 'https://cdn.jsdelivr.net/npm/@tesseract.js-data/' + sLang + '/4.0.0/',
+						})
+						: await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, {
+							logger: showProgress
+							// uses '/4.0.0_best_int/' langPath by default
+						});
 
 					const image = arrImagesCopy.splice(0, 1)[0];
 					const recognitionParams = { tessedit_pageseg_mode: Tesseract.PSM.AUTO };
@@ -229,7 +243,17 @@
 				};
 
                 $('#status-label').text('Recognizing: 0%');
-                fTesseractCall();
+                // fTesseractCall();
+
+				fTesseractCall()
+					.catch(function (err) {
+						document.getElementById('status-label').textContent = '';
+						document.getElementById('recognize-button').removeAttribute('disabled');
+						document.getElementById('lang-select').removeAttribute('disabled');
+						document.getElementById('load-file-button-id').removeAttribute('disabled');
+						window.Asc.plugin.executeMethod('SetButtonDisabled', [0, false]);
+						console.error(err);
+					});
             }
         );
     
