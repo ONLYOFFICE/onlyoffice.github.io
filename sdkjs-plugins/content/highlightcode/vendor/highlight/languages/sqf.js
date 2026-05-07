@@ -16,11 +16,11 @@
   /*
   ////////////////////////////////////////////////////////////////////////////////////////////
     * Author: Leopard20
-    
+
     * Description:
     This script can be used to dump all commands to the clipboard.
     Make sure you're using the Diag EXE to dump all of the commands.
-    
+
     * How to use:
     Simply replace the _KEYWORDS and _LITERAL arrays with the one from this sqf.js file.
     Execute the script from the debug console.
@@ -2607,7 +2607,7 @@
       'worldToModelVisual',
       'worldToScreen'
     ];
-    
+
     // list of keywords from:
     // https://community.bistudio.com/wiki/PreProcessor_Commands
     const PREPROCESSOR = {
@@ -2630,7 +2630,7 @@
         hljs.C_BLOCK_COMMENT_MODE
       ]
     };
-    
+
     return {
       name: 'SQF',
       case_insensitive: true,
@@ -2650,7 +2650,7 @@
       ],
       illegal: [
         //$ is only valid when used with Hex numbers (e.g. $FF)
-        /\$[^a-fA-F0-9]/, 
+        /\$[^a-fA-F0-9]/,
         /\w\$/,
         /\?/,      //There's no ? in SQF
         /@/,       //There's no @ in SQF

@@ -93,10 +93,10 @@
           excludeBegin: true,
           excludeEnd: true,
           relevance: 0,
-          contains: [ 
-            TYPE, 
-            hljs.C_LINE_COMMENT_MODE, 
-            hljs.C_BLOCK_COMMENT_MODE, 
+          contains: [
+            TYPE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
           ]
         },
         {
@@ -106,10 +106,10 @@
           excludeBegin: true,
           excludeEnd: true,
           relevance: 0,
-          contains: [ 
-            TYPE, 
-            hljs.C_LINE_COMMENT_MODE, 
-            hljs.C_BLOCK_COMMENT_MODE, 
+          contains: [
+            TYPE,
+            hljs.C_LINE_COMMENT_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
           ]
         },
         NAME

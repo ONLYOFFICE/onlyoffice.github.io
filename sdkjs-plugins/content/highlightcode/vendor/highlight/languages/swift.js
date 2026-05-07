@@ -860,11 +860,11 @@
 
     const CLASS_FUNC_DECLARATION = {
       match: [
-        /class\b/,          
+        /class\b/,
         /\s+/,
         /func\b/,
         /\s+/,
-        /\b[A-Za-z_][A-Za-z0-9_]*\b/ 
+        /\b[A-Za-z_][A-Za-z0-9_]*\b/
       ],
       scope: {
         1: "keyword",
@@ -876,8 +876,8 @@
     const CLASS_VAR_DECLARATION = {
       match: [
         /class\b/,
-        /\s+/,          
-        /var\b/, 
+        /\s+/,
+        /var\b/,
       ],
       scope: {
         1: "keyword",
