@@ -30,7 +30,7 @@ NOTE_2:	Color names provided in comments were derived using "Name that Color" on
 */
 .hljs {
   background: #FFFFDF/* Half and Half (approx.) */
-  
+
 }
 /* --- used for PureBASIC base color --- */
 /* --- used for PureBASIC Procedures return type --- */
@@ -44,7 +44,7 @@ NOTE_2:	Color names provided in comments were derived using "Name that Color" on
 .hljs-params,
 .hljs-subst {
   color: #000000/* Black */
-  
+
 }
 /* --- used for PureBASIC Comments --- */
 .hljs-comment,
@@ -53,7 +53,7 @@ NOTE_2:	Color names provided in comments were derived using "Name that Color" on
 .hljs-selector-pseudo,
 .hljs-addition {
   color: #00AAAA/* Persian Green (approx.) */
-  
+
 }
 /* --- used for PureBASIC Keywords --- */
 .hljs-keyword,
@@ -71,13 +71,13 @@ NOTE_2:	Color names provided in comments were derived using "Name that Color" on
 .hljs-variable,
 .hljs-code {
   color: #006666/* Blue Stone (approx.) */
-  
+
 }
 /* --- used for PureBASIC Strings --- */
 .hljs-string,
 .hljs-selector-attr {
   color: #0080FF/* Azure Radiance (approx.) */
-  
+
 }
 /* --- used for PureBASIC Constants --- */
 .hljs-symbol,
@@ -85,7 +85,7 @@ NOTE_2:	Color names provided in comments were derived using "Name that Color" on
 .hljs-deletion,
 .hljs-attribute {
   color: #924B72/* Cannon Pink (approx.) */
-  
+
 }
 .hljs-meta,
 .hljs-literal,

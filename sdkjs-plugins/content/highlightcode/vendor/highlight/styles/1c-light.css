@@ -23,13 +23,13 @@ code.hljs {
 /* Base color: saturation 0; */
 .hljs-subst {
   /* default */
-  
+
 }
 /* purposely ignored */
 .hljs-formula,
 .hljs-attr,
 .hljs-property {
-  
+
 }
 .hljs-comment {
   color: #008000
