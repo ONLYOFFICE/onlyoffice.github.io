@@ -159,3 +159,6 @@
 
 ## 3.2.1
 * Update storage version.
+
+## 3.2.2
+* Add support 9.4.0+ server settings.
