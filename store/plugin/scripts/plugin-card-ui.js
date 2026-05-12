@@ -1,4 +1,3 @@
-
 /*
  * (c) Copyright Ascensio System SIA 2010
  *
@@ -32,17 +31,17 @@
  */
 
 // @ts-check
-/// <reference path="./types.js" />
+/// <reference path="../../scripts/types.js" />
 
-const UI = {
-    /** @type {HTMLAnchorElement} */
-    linkNewPlugin: document.getElementById('link_newPlugin'),
-    /** @type {HTMLDivElement} */
-    pluginsList: document.getElementById('plugins'),
-    /** @type {HTMLDivElement} */
-    divMain: document.getElementById('div_main'),
-    /** @type {HTMLDivElement} */
-    divSelectedMain: document.getElementById('div_selected_main'),
+const PluginCardUI = {
+    /** @type {HTMLImageElement} */
+    imgIcon: document.getElementById('img_icon'),
+    /** @type {HTMLSpanElement} */
+    spanName: document.getElementById('span_name'),
+    /** @type {HTMLSpanElement} */
+    spanOffered: document.getElementById('span_offered'),
+    /** @type {HTMLButtonElement} */
+    btnUpdate: document.getElementById('btn_update'),
     /** @type {HTMLButtonElement} */
     btnRemove: document.getElementById('btn_remove'),
     /** @type {HTMLButtonElement} */
@@ -55,12 +54,12 @@ const UI = {
     arrowNext: document.getElementById('next_arrow'),
     /** @type {HTMLSpanElement} */
     arrowPrev: document.getElementById('prev_arrow'),
-    /** @type {HTMLButtonElement} */
-    btnUpdateAll: document.getElementById('btn_updateAll'),
     /** @type {HTMLAnchorElement} */
     discussionLink: document.getElementById('discussion_link'),
     /** @type {HTMLDivElement} */
     divDescriptionSelected: document.getElementById('div_description_selected'),
+    /** @type {HTMLDivElement} */
+    divGitLink: document.getElementById('div_github_link'),
     /** @type {HTMLDivElement} */
     divLanguages: document.getElementById('div_languages'),
     /** @type {HTMLDivElement} */
@@ -89,46 +88,13 @@ const UI = {
     spanLanguages: document.getElementById('span_langs'),
     /** @type {HTMLSpanElement} */
     spanMinVersion: document.getElementById('span_min_ver'),
+    /** @type {HTMLSpanElement} */
+    spanVersion: document.getElementById('span_ver'),
+    /** @type {HTMLSpanElement} */
+    totalVotes: document.getElementById('total_votes'),
     /** @type {Object<string, HTMLDivElement>} */
-    _plugins: {},
 
-    /**
-     * @param {string} guid
-     * @param {HTMLDivElement} element
-     */
-    addPlugin(guid, element) {
-	    this.divMain.appendChild(element);
-        this._plugins[guid] = element;
-    },
-    /**
-     * @param {string} guid 
-     * @returns {HTMLDivElement | undefined}
-     */
-    getPlugin(guid) {
-        return this._plugins[guid];
-    },
-    /**
-     * @param {string} guid 
-     * @returns {HTMLButtonElement | undefined}
-     */
-    getPluginButton(guid) {
-        const pluginPlate = this._plugins[guid];
-	    if (!pluginPlate) return;
-        const button = this._plugins[guid].querySelector('.management button');
-        if (button instanceof HTMLButtonElement) {
-            return button;
-        }
-    },
-    /**
-     * @param {string} guid
-     * @returns {HTMLDivElement | null} */
-    getSelectedPlugin(guid) {
-        if (!guid) {
-            return null;
-        }
-		const div = this._plugins[guid];
-		return div;
-    },
+
     /** @param {'light' | string} themeType */
     init(themeType) {
         const self = this;
@@ -137,39 +103,8 @@ const UI = {
         let styleTheme = document.createElement('style');
         styleTheme.innerHTML = rule;
         document.head.appendChild(styleTheme);
-
-        this.pluginsList.querySelectorAll('input[name="main-filter"]').forEach(function(input) {
-            input.onchange = function(event) {
-                if (!event.currentTarget || event.currentTarget instanceof HTMLInputElement === false) {
-                    return;
-                }
-
-                /** @type {InstalledFilter} */
-                const installedFilter = event.currentTarget.value;
-                self.onChangeMainFilter(installedFilter);
-            }
-        });
-
-        document.querySelectorAll('input[name="category-filter"]').forEach(function(input) {
-            input.onchange = function(event) {
-                const value = event.currentTarget.value;
-                self.onChangeCategoryFilter(value);
-            };
-        });
-
-        this.inpSearch.addEventListener('input', this._debounce(function(/** @type {Event} */ event) {
-            if (!event.target || event.target instanceof HTMLInputElement === false) {
-                return;
-            }
-            self.onChangeSearchInput(event.target.value.trim().toLowerCase());
-        }, 500));
     },
-    /** @param {InstalledFilter} installedFilter */
-    onChangeMainFilter: function(installedFilter) {},
-    /** @param {CategoryFilter} value */
-    onChangeCategoryFilter: function(value) {},
-    /** @param {string} searchInput */
-    onChangeSearchInput: function(searchInput) {},
+
     /**
      * @param {*} theme
      * @param {'light'|string} themeType
@@ -213,116 +148,4 @@ const UI = {
             return defaultBG;
         }
     },
-    /** @param {string} guid */
-    removePlugin(guid) {
-        const pluginDiv = this._plugins[guid];
-        if (pluginDiv) {
-            pluginDiv.remove();
-        }
-    },
-
-    /** @param {string} guid */
-    removeUpdateButton(guid) {
-        const pluginDiv = this._plugins[guid];
-        const updateBtn = pluginDiv.querySelector('button.update');
-        if (updateBtn) {
-            updateBtn.remove();
-        }
-    },
-    /** @param {string} value */
-    setCheckedInstalledFilter(value) {
-        const current = this.pluginsList.querySelector('input[value="' + value + '"]');
-        if (!current || current instanceof HTMLInputElement === false) {
-            return;
-        }
-        current.checked = true;
-    },
-    /**
-     * @param {string} guid 
-     * @param {string} src 
-     * @param {string} bg 
-     */
-    setPluginImage(guid, bg, src) {
-        const pluginDiv = this._plugins[guid];
-        if (!pluginDiv) {
-            return;
-        }
-        const imgDiv = pluginDiv.querySelector('.image');
-        if (!imgDiv) {
-            return;
-        }
-        imgDiv.setAttribute('style', ('background:' + bg) );
-        const image = imgDiv.firstChild;
-        if (src && image && image instanceof HTMLImageElement) {
-            image.setAttribute('src', src);
-        }
-    },
-    /**
-     * @param {number} numOfAllPlugins 
-     * @param {number} numOfInstalledPlugins 
-     * @param {number} numOfPluginsToUpdate 
-     */
-    updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
-        const mainCounter = this.pluginsList.querySelector('.filter-by-installed .marketplace .amount');
-        const installedCounter = this.pluginsList.querySelector('.filter-by-installed .installed .amount');
-        const updatesCounter = this.pluginsList.querySelector('.filter-by-installed .updates .amount');
-        if (mainCounter) {
-            mainCounter.textContent = numOfAllPlugins.toString();
-        }
-        if (installedCounter) {
-            installedCounter.textContent = numOfInstalledPlugins.toString();
-        }
-        if (updatesCounter) {
-            updatesCounter.textContent = numOfPluginsToUpdate.toString();
-        }
-    },
-    /**
-     * @param {Map<string, number>} categories
-     */
-    updateCategories(categories) {
-        const self = this;
-        this.pluginsList.querySelectorAll('.filter-by-category .amount').forEach(element => {
-            element.textContent = '0';
-        });
-        /**
-         * @param {number} value 
-         * @param {string} key 
-         * @returns 
-         */    
-        const makeCategoryItem = function(value, key) {
-            let cat = self.pluginsList.querySelector('.filter-by-category .' + key);
-            if (!cat) {
-                return;
-            }
-            let span = cat.querySelector('.amount');
-            if (span) {
-                span.textContent = String(value);
-            }
-
-        };
-        if (categories.size) {
-            categories.forEach((value, key) => {
-                makeCategoryItem(value, key);
-            });
-        }
-    },
-    /**
-     * @param {Function} fn
-     * @param {number} delay
-     * @returns {(...args: any[]) => void}
-     */
-    _debounce(fn, delay) {
-        /** @type {ReturnType<typeof setTimeout> | null} */
-        let timeoutId = null;
-        return function(/** @type {any[]} */ ...args) {
-            if (timeoutId !== null) {
-                clearTimeout(timeoutId);
-            }
-            timeoutId = setTimeout(function() {
-                timeoutId = null;
-                fn.apply(null, args);
-            }, delay);
-        };
-    },
-
 }

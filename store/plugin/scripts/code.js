@@ -41,6 +41,7 @@
 
 	let warningWindow = null;
 	let developerWindow = null;
+	let pluginCardWindow = null;
 	let removeGuid = null;
 	let editorVersion = null;
 	let marketplaceURl = null;
@@ -112,6 +113,9 @@
 					break;
 				default:
 					postMessage( {type: 'Removed', guid: ''} );
+					if (pluginCardWindow) {
+						pluginCardWindow.command("Removed", null);
+					}
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
@@ -120,6 +124,8 @@
 				developerWindow.command('onClickBtn');
 			else
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		} else if (pluginCardWindow && pluginCardWindow.id == windowID) {
+			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
 			if (iframe && iframe.contentWindow)
@@ -147,6 +153,9 @@
 			case 'install':
 				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], function(result) {
 					postMessage(result);
+					if (pluginCardWindow) {
+						pluginCardWindow.command(result.type, result);
+					}
 				});
 				break;
 			case 'remove':
@@ -161,10 +170,38 @@
 			case 'update':
 				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], function(result) {
 					postMessage(result);
+					if (pluginCardWindow) {
+						pluginCardWindow.command(result.type, result);
+					}
 				});
 				break;
 			case 'showButton' :
 				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
+				break;
+			case 'showPluginCard':
+				let variation = {
+					url : 'plugin-card.html',
+					buttons : [],
+					isVisual : true,
+					isModal : true,
+					isViewer: true,
+					description: 'plugin.variations.description',
+					EditorsSupport : ["word", "cell", "slide", "pdf"],
+					size : [608, 600],
+					fixedSize : true,
+					isTargeted : false
+				};
+				if (!pluginCardWindow) {
+					pluginCardWindow = new window.Asc.PluginWindow();
+					pluginCardWindow.attachEvent('onWindowReady', function() {
+						pluginCardWindow.command("onShowPluginCard", data);
+						postMessage( { type: 'onShowPluginCard' } );
+					});
+				}
+				pluginCardWindow.show(variation);
+				break;
+			case 'showPluginRating':
+
 				break;
 		}
 		
@@ -191,11 +228,11 @@
 	window.Asc.plugin.onTranslate = function() {
 		let label = document.getElementById('lb_notification');
 		if (label)
-			label.innerHTML = window.Asc.plugin.tr(label.innerHTML);
+			label.textContent = window.Asc.plugin.tr(label.textContent);
 		
 		label = document.getElementById('lb_noInternet');
 		if (label)
-			label.innerHTML = window.Asc.plugin.tr(label.innerHTML);
+			label.textContent = window.Asc.plugin.tr(label.textContent);
 	};
 
 	function checkInternet(bSetTimeout) {
@@ -321,6 +358,9 @@
 		if (removeGuid)
 			window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, backup], function(result) {
 				postMessage(result);
+				if (pluginCardWindow) {
+					pluginCardWindow.command(result.type, result);
+				}
 			});
 		
 		removeGuid = null;
