@@ -42,4 +42,10 @@ const STORAGE = {
     searchQuery: "",
     /** @type {Map<string, number>} */
     categories: new Map(),
+    /** @type {string} */
+    selectedCategory: "",
+    /** @type {string} */
+    selectedPluginGuid: "",
+    /** @type {boolean} */
+    bPluginCardShown: false,
 };

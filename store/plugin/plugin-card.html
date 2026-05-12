@@ -33,7 +33,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../../../sdkjs-plugins/v1/plugins.css">
+	<link rel="stylesheet" href="../../sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="./resources/css/styles.css">
 
 <style>
@@ -41,16 +41,18 @@
     font-family: 'Inter', system-ui, sans-serif; color: #1a1d21; }
   body.dark { background: #15171a; }
 </style>
-	<script src="../../../sdkjs-plugins/v1/plugins-ui.js"></script>
-	<script src="scripts/polyfill.js" defer></script>
-	<script src="vendor/marked/marked.min.js" defer></script>
-	<script src="scripts/storage.js" defer></script>
-	<script src="scripts/ui.js" defer></script>
-	<script src="scripts/code.js" defer></script>
+	<script src="../../sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="../../sdkjs-plugins/v1/plugins.js"></script>
+	<script src="./store/scripts/polyfill.js" defer></script>
+	<script src="./store/scripts/utils.js" defer></script>
+	<script src="./store/scripts/data-fetcher.js" defer></script>
+	<script src="./store/vendor/marked/marked.min.js" defer></script>
+	<script src="./scripts/plugin-card-ui.js" defer></script>
+	<script src="./scripts/plugin-card.js" defer></script>
 </head>
 	<body class="noselect">
-		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./resources/img/stars/rating-stars.svg"/>
-		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
+		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./store/resources/img/stars/rating-stars.svg"/>
+		<div id="div_selected_toolbar" class="div_selected_toolbar">
 			<!-- TODO temporarily, I added an arrow here so that I could go back -->
 			<span id="arrow" class="arrow hidden">&#8592;</span>
 			<div class="div_selected_description">
@@ -88,7 +90,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="div_selected_main" class="div_selected_main hidden">
+		<div id="div_selected_main" class="div_selected_main">
 			<div style="width:100%; height:100%">
 				<div>
 					<span id="span_overview" class="span_caption span_selected i18n" onclick="onSelectPreview(event.target, 1)">Overview</span>
