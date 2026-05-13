@@ -55,8 +55,6 @@ const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid ma
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
 let editorVersion;                                            // editor current version
-/** @type {HTMLDivElement | undefined} */
-let loader;                                                          // loader
 let themeType = detectThemeType();                                   // current theme
 const lang = detectLanguage();                                       // current language
 const shortLang = lang.split('-')[0];                                // short language
@@ -65,11 +63,8 @@ let bTranslate = false;                                              // flag tra
 let timeout;                                                 		 // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
-let slideIndex = 1;                                                  // index for slides
 /** @type {any} */
 let PsMain = null;                                                   // scroll for list of plugins
-/** @type {any} */
-let PsChangelog = null;                                              // scroll for changelog preview
 const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
@@ -198,7 +193,7 @@ const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
 
 window.onload = function() {
 	UI.init(themeType);
-	toggleLoader(true, "Loading");
+	UI.toggleLoader(true, "Loading");
 
 	Promise.all([translationsPromise, pluginsPromise]).then(function() {
 		onTranslate();
@@ -353,7 +348,7 @@ window.addEventListener('message', function(message) {
 			console.error('------- INSTALLED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
-				toggleLoader(false);
+				UI.toggleLoader(false);
 				return;
 			}
 			plugin = findPlugin(message.guid);
@@ -378,7 +373,7 @@ window.addEventListener('message', function(message) {
 			}
 
 			changeAfterInstallOrRemove(true, message.guid);
-			toggleLoader(false);
+			UI.toggleLoader(false);
 			break;
 		case 'Updated':
 			console.error('------- UPDATED -------');
@@ -387,7 +382,7 @@ window.addEventListener('message', function(message) {
 				// somethimes we can receive such message
 				if (!updateCount) {
 					checkNoUpdated(true);
-					toggleLoader(false);
+					UI.toggleLoader(false);
 				}
 				return;
 			}
@@ -410,14 +405,14 @@ window.addEventListener('message', function(message) {
 
 			if (!updateCount) {
 				checkNoUpdated(true);
-				toggleLoader(false);
+				UI.toggleLoader(false);
 			}
 			break;
 		case 'Removed':
 			console.error('------- REMOVED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
-				toggleLoader(false);
+				UI.toggleLoader(false);
 				return;
 			}
 
@@ -457,12 +452,12 @@ window.addEventListener('message', function(message) {
 				changeAfterInstallOrRemove(false, message.guid, bHasLocal);				
 			}
 
-			toggleLoader(false);
+			UI.toggleLoader(false);
 			break;
 		case 'Error':
 			console.log('error');
 			createError(message.error);
-			toggleLoader(false);
+			UI.toggleLoader(false);
 			break;
 		case 'Theme':
 			console.log('theme');
@@ -560,27 +555,6 @@ function detectThemeType() {
 	return type || 'light';
 };
 
-/**
- * @param {boolean} show 
- * @param {string} [text]
- */
-function toggleLoader(show, text) {
-	// show or hide loader (don't use UI for this function)
-	let loaderContainer = document.getElementById('loader-container');
-	if (!loaderContainer) {
-		return;
-	}
-	if (!show) {
-		clearTimeout(timeout);
-		loaderContainer.classList.add('hidden');
-		loader && (loader.remove ? loader.remove() : loaderContainer.removeChild(loader));
-		loader = undefined;	
-	} else if (!loader) {
-		loaderContainer.classList.remove('hidden');
-		loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
-		console.log('Show loader ...')
-	}
-};
 
 /**
  * @returns {Promise<PluginInfo[]>}
@@ -798,7 +772,7 @@ function showListOfPlugins(typeOfOperation) {
 	let arr = getFilteredPlugins();
 	if (arr.length && isSamePlugins(founded, arr)) {
 		console.log('Same plugins');
-		toggleLoader(false);
+		UI.toggleLoader(false);
 		return arr.length;
 	}
 	founded = arr;
@@ -835,12 +809,12 @@ function showListOfPlugins(typeOfOperation) {
 			if (plugin && plugin.guid)
 				createPluginPlate(plugin);
 		});
-		setTimeout(function(){if (PsMain) PsMain.update(); toggleLoader(false);});
+		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
 		// if no installed plugins and available plugins button was clicked
 		let notification = typeOfOperation === 'filtered' ? 'Nothing was found for this query.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification(notification);
-		toggleLoader(false);
+		UI.toggleLoader(false);
 	}
 	// scroll for list of plugins
 	if (!PsMain) {
@@ -848,11 +822,6 @@ function showListOfPlugins(typeOfOperation) {
 		PsMain.update();
 	} else {
 		PsMain.update();
-	}
-	// scroll for changelog preview
-	if (!PsChangelog) {
-		PsChangelog = new PerfectScrollbar('#div_selected_changelog', {});
-		PsChangelog.update();
 	}
 
 	return arr.length;
@@ -1070,10 +1039,10 @@ function onClickInstall(guid, event) {
 	// click install button
 	// we should do that because we have some problem when desktop is loading plugin
 	if (isLocal) {
-		toggleLoader(true, 'Installation');
+		UI.toggleLoader(true, 'Installation');
 	} else {
 		clearTimeout(timeout);
-		timeout = setTimeout(toggleLoader, 200, true, "Installation");
+		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Installation");
 	}
 	/** @type {PluginInfo | undefined} */
 	let plugin = findPlugin(guid);
@@ -1081,9 +1050,9 @@ function onClickInstall(guid, event) {
 	let installed = findInstalledPlugin(guid);
 	if (!plugin && !installed) {
 		// if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
-		sendMessage( { type : "showButton", show : false } );
+		//sendMessage( { type : "showButton", show : false } );
 		onClickBack();
-		toggleLoader(false);
+		UI.toggleLoader(false);
 	}
 	console.warn(event, guid, plugin);
 	console.log(plugin);
@@ -1111,10 +1080,10 @@ function onClickUpdate(guid, event) {
 	// click update button
 	// we should do that because we have some problem when desktop is loading plugin
 	if (isLocal) {
-		toggleLoader(true, 'Updating');
+		UI.toggleLoader(true, 'Updating');
 	} else {
 		clearTimeout(timeout);
-		timeout = setTimeout(toggleLoader, 200, true, "Updating");
+		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Updating");
 	}
 	let plugin = findPlugin(guid);
 	if (!plugin) {
@@ -1145,10 +1114,10 @@ function onClickRemove(guid, event) {
 	event.stopImmediatePropagation();
 	// click remove button
 	if (isLocal) {
-		toggleLoader(true, 'Removal');
+		UI.toggleLoader(true, 'Removal');
 	} else {
 		clearTimeout(timeout);
-		timeout = setTimeout(toggleLoader, 200, true, "Removal");
+		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Removal");
 	}
 	let message = {
 		type : 'remove',
@@ -1168,7 +1137,7 @@ function needBackupPlugin(guid) {
 
 function onClickUpdateAll() {
 	clearTimeout(timeout);
-	timeout = setTimeout(toggleLoader, 200, true, "Updating");
+	timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Updating");
 	UI.btnUpdateAll.classList.add('hidden');
 	let arr = allPlugins.filter(function(el) {
 		return el.bHasUpdate;
@@ -1206,6 +1175,7 @@ function openPluginCard(guid) {
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('update');
+	/** @type {PluginCardMessage} */
 	let message = {
 		type : 'showPluginCard',
 		guid : guid,
@@ -1215,8 +1185,10 @@ function openPluginCard(guid) {
 		iconUrl: iconUrl,
 		isLocal: isLocal,
 		editorVersion: editorVersion,
-		bHasUpdate: bHasUpdate,
-		bActionDisabled: actionButton && actionButton.hasAttribute('disabled')
+		bHasUpdate: !!bHasUpdate,
+		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
+		OOMarketplaceUrl: OOMarketplaceUrl,
+		OOIO: OOIO
 	};
 	sendMessage(message);
 	return new Promise(function(fResolve, fReject) {
@@ -1251,26 +1223,6 @@ function onClickBack() {
 	document.getElementById('span_overview').click();
 	STORAGE.bPluginCardShown = false;
 	if(PsMain) PsMain.update();
-};
-
-function onSelectPreview(target, type) {
-	// change mode of preview
-	if ( !target.classList.contains('span_selected') ) {
-		document.querySelectorAll(".span_selected").forEach(function(el) { el.classList.remove("span_selected"); });
-		target.classList.add("span_selected");
-		document.querySelectorAll(".div_selected_preview").forEach(function(el) { el.classList.add("hidden"); });
-
-		// type: 1 - Overview; 2 - Info; 3 - Changelog;
-		if (type === 1) {
-			UI.divSelectedPreview.classList.remove('hidden');
-			setDivHeight();
-		} else if (type === 2) {
-			document.getElementById('div_selected_info').classList.remove('hidden');
-		} else {
-			document.getElementById('div_selected_changelog').classList.remove('hidden');
-			PsChangelog.update();
-		}
-	}
 };
 
 /**
@@ -1328,17 +1280,6 @@ function createError(err, bDontShow) {
 	}, 5000);
 };
 
-function setDivHeight() {
-	// set height for div with image in preview mode
-	if (PsMain) PsMain.update();
-	// console.log(Math.round(window.devicePixelRatio * 100));
-	if (UI.divSelectedImage) {
-		let height = UI.divSelectedPreview.clientHeight - UI.divDescriptionSelected.clientHeight - 70 + 'px';
-		UI.divSelectedImage.style.height = height;
-		UI.divSelectedImage.style.maxHeight = height;
-	}
-};
-
 window.onresize = function(bForce) {
 	if (scale.devicePR !== window.devicePixelRatio || bForce) {
 		let html = document.getElementsByTagName('html')[0];
@@ -1348,7 +1289,8 @@ window.onresize = function(bForce) {
 			revZoom *= 2;
 
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
-			setDivHeight();
+			// set height for div with image in preview mode
+			if (PsMain) PsMain.update();
 			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
@@ -1366,7 +1308,6 @@ window.onresize = function(bForce) {
 		let borderValue = ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'light' ? '#c0c0c0' : '#666666'));
 		document.querySelectorAll('.plugin-plate').forEach(function(el) { el.style.border = borderValue; });
 	}
-	if (PsChangelog) PsChangelog.update();
 };
 
 // zoom on start if we start with a non 100% zoom
@@ -1475,7 +1416,7 @@ function showMarketplace() {
 			showListOfPlugins('all');
 		} else {
 			toggleView("installed");
-			toggleLoader(false);
+			UI.toggleLoader(false);
 		}
 		UI.pluginsList.classList.remove('transparent');
 
@@ -1908,7 +1849,7 @@ function handleNoInternet() {
 	}
 
 	if ( (bShowMarketplace || !isLocal) && STORAGE.bPluginCardShown) {
-		sendMessage( { type : "showButton", show : false } );
+		//sendMessage( { type : "showButton", show : false } );
 		onClickBack();
 	}
 
@@ -1935,32 +1876,4 @@ function checkNoUpdated(bRemove) {
 			UI.btnUpdateAll.classList.add('hidden');
 		}
 	}
-};
-
-function plusSlides(n) {
-	showSlides(slideIndex += n);
-};
-
-function currentSlide(n) {
-	showSlides(slideIndex = n);
-};
-
-function showSlides(n) {
-	let i;
-	/** @type {HTMLCollectionOf<HTMLDivElement>} */
-	let slides = document.getElementsByClassName('mySlides');
-	let dots = document.getElementsByClassName('dot');
-	if (n > slides.length) {slideIndex = 1}    
-	if (n < 1) {slideIndex = slides.length}
-	for (i = 0; i < slides.length; i++) {
-		slides[i].style.display = "none";  
-	}
-	for (i = 0; i < dots.length; i++) {
-		dots[i].className = dots[i].className.replace(' active', '');
-	}
-	if (slides.length)
-		slides[slideIndex-1].style.display = "block";
-
-	if(dots.length)
-		dots[slideIndex-1].className += ' active';
 };

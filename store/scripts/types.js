@@ -7,6 +7,32 @@
  */
 
 /**
+ * @typedef {Object} PluginCardMessage
+ * @property {'showPluginCard'} type
+ * @property {string} guid
+ * @property {string} OOMarketplaceUrl
+ * @property {string} OOIO
+ * @property {InstalledPluginInfo | null} installed
+ * @property {PluginInfo | null} plugin
+ * @property {string} iconBackground
+ * @property {string} iconUrl
+ * @property {boolean} isLocal
+ * @property {number} editorVersion
+ * @property {boolean} bHasUpdate
+ * @property {boolean} bActionDisabled
+ */
+
+/**
+ * @typedef {Object} IframeMessage
+ * @property {PluginInfo} config
+ * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard'} type
+ * @property {string} guid
+ * @property {string} [url]
+ * @property {boolean} [updateInstalled]
+ * @property {boolean} [backup]
+ */
+
+/**
  * @typedef {Object} PluginInfo
  * @property {string} name
  * @property {string} guid
