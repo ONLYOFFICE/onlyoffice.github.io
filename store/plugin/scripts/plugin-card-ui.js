@@ -34,6 +34,8 @@
 /// <reference path="../../scripts/types.js" />
 
 const PluginCardUI = {
+    /** @type {HTMLDivElement | undefined} */
+    loader: undefined,
     /** @type {HTMLImageElement} */
     imgIcon: document.getElementById('img_icon'),
     /** @type {HTMLSpanElement} */
@@ -146,6 +148,26 @@ const PluginCardUI = {
             styleTheme.innerHTML = style + rule;
             defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
             return defaultBG;
+        }
+    },
+    
+    /**
+     * @param {boolean} show 
+     * @param {string} [text]
+     */
+    toggleLoader: function(show, text) {
+        // show or hide loader (don't use UI for this function)
+        let loaderContainer = document.getElementById('loader-container');
+        if (!loaderContainer) {
+            return;
+        }
+        if (!show) {
+            loaderContainer.classList.add('hidden');
+            this.loader && (this.loader.remove ? this.loader.remove() : loaderContainer.removeChild(this.loader));
+            this.loader = undefined;	
+        } else if (!this.loader) {
+            loaderContainer.classList.remove('hidden');
+            this.loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
         }
     },
 }

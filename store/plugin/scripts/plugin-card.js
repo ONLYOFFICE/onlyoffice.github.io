@@ -41,14 +41,28 @@ const PluginCard = {
     plugin: null,
 	/** @type {InstalledPluginInfo | null} */
     installed: null,
+    /** @type {any} */
+    PsChangelog: null,
+    slideIndex: 1,                                                  // index for slides
     init() {
+        const self = this;
         console.warn("plugin card init");
+        return new Promise(function(fResolve) {
+            window.Asc.plugin.attachEvent("onShowPluginCard", fResolve);
+            window.Asc.plugin.sendToPlugin("onWindowReady", {});
+        }).then(function (data) {
+            console.log("onShowPluginCard", data);
+            self.plugin = data.plugin;
+            self.installed = data.installed;
+            self.editorVersion = data.editorVersion;
+            self._show(data);
+        });
     },
 
     /**
-     * @param {{guid: string, plugin: PluginInfo | null, installed: InstalledPluginInfo | null, iconBackground: string, iconUrl: string, bHasUpdate: boolean, bActionDisabled: boolean, isLocal: boolean}} data
+     * @param {PluginCardMessage} data
      */
-    showPluginPlate: function (data) {
+    _show: function (data) {
         console.log(window);
 		const self = this;
         const guid = data.guid;
@@ -117,7 +131,7 @@ const PluginCard = {
             !this.plugin.baseUrl.includes("http://") &&
             !this.plugin.baseUrl.includes("file:") &&
             !this.plugin.baseUrl.includes("../");
-        let bCorrectUrl = isLocal || bWebUrl;
+        let bCorrectUrl = data.isLocal || bWebUrl;
 
         if (
             bCorrectUrl &&
@@ -127,7 +141,7 @@ const PluginCard = {
         ) {
             let arrScreens = this.plugin.variations[0].store.screenshots;
             arrScreens.forEach(function (screenUrl, ind) {
-                let url = this.plugin.baseUrl + screenUrl;
+                let url = self.plugin.baseUrl + screenUrl;
                 let container = document.createElement("div");
                 container.className = "mySlides fade";
                 let screen = document.createElement("img");
@@ -141,7 +155,7 @@ const PluginCard = {
                     let point = document.createElement("span");
                     point.className = "dot";
                     point.onclick = function () {
-                        currentSlide(ind + 1);
+                        self._currentSlide(ind + 1);
                     };
                     document
                         .getElementById("points_container")
@@ -152,8 +166,8 @@ const PluginCard = {
                 PluginCardUI.arrowPrev.classList.remove("hidden");
                 PluginCardUI.arrowNext.classList.remove("hidden");
             }
-            slideIndex = 1;
-            showSlides(1);
+            this.slideIndex = 1;
+            this._showSlides(1);
         } else {
             PluginCardUI.arrowPrev.classList.add("hidden");
             PluginCardUI.arrowNext.classList.add("hidden");
@@ -210,8 +224,8 @@ const PluginCard = {
         }
 
         let pluginUrl = this.plugin.baseUrl.replace(
-            OOMarketplaceUrl,
-            OOIO + "tree/master/",
+            data.OOMarketplaceUrl,
+            data.OOIO + "tree/master/",
         );
 
         // TODO problem with plugins icons (different margin from top)
@@ -280,12 +294,14 @@ const PluginCard = {
                 .classList.remove("hidden");
         }
 
-        setDivHeight();
-        sendMessage({ type: "showButton", show: true });
+        this._setDivHeight();
+        //sendMessage({ type: "showButton", show: true });
         // PluginCardUI.arrow.classList.remove('hidden');
+        this._updateScroll();
+        PluginCardUI.toggleLoader(false);
     },
 
-	changeAfterInstallOrRemove() {
+	_changeAfterInstallOrRemove(guid) {
 		let bCheckUpdate = true;
 		if (!this.plugin && this.installed) {
 			this.plugin = this.installed.obj;
@@ -313,6 +329,14 @@ const PluginCard = {
 		const bNeedRemoveButton = this.installed && !bRemoved && this.installed.canRemoved;
 		const bNeedInstallButton = !this.installed || bRemoved;
 	},
+
+    _updateScroll: function() {
+        // scroll for changelog preview
+        if (!this.PsChangelog) {
+            this.PsChangelog = new PerfectScrollbar('#div_selected_changelog', {});
+            this.PsChangelog.update();
+        }
+    },
 
     /**
      * @param {string} discussionUrl
@@ -345,13 +369,200 @@ const PluginCard = {
             return Promise.resolve(null);
         }
     },
+    
+    onSelectPreview: function(target, type) {
+        // change mode of preview
+        if ( !target.classList.contains('span_selected') ) {
+            document.querySelectorAll(".span_selected").forEach(function(el) { el.classList.remove("span_selected"); });
+            target.classList.add("span_selected");
+            document.querySelectorAll(".div_selected_preview").forEach(function(el) { el.classList.add("hidden"); });
+
+            // type: 1 - Overview; 2 - Info; 3 - Changelog;
+            if (type === 1) {
+                PluginCardUI.divSelectedPreview.classList.remove('hidden');
+                this._setDivHeight();
+            } else if (type === 2) {
+                document.getElementById('div_selected_info').classList.remove('hidden');
+            } else {
+                document.getElementById('div_selected_changelog').classList.remove('hidden');
+                this.PsChangelog.update();
+            }
+        }
+    },
+
+    onClickClose: function() {
+        window.Asc.plugin.sendToPlugin("onClose", {});
+    },
+    
+    /**
+     * @param {string} guid 
+     * @param {Event} event 
+     */
+    onClickInstall: function(guid, event) {
+        event.stopImmediatePropagation();
+        const self = this;
+        PluginCardUI.toggleLoader(true, 'Installation');
+
+        if (!this.plugin && !this.installed) {
+            // if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
+            //sendMessage( { type : "showButton", show : false } );
+            this.onClickClose();
+        }
+        console.warn(event, guid);
+        console.log(this.plugin);
+        /** @type {IframeMessage} */
+        let message = {
+            type : 'install',
+            url : (this.installed ? this.installed.obj.baseUrl : this.plugin.url),
+            guid : guid,
+            config : (this.installed ? this.installed.obj : this.plugin)
+        };
+
+        return new Promise(function(fResolve) {
+            window.Asc.plugin.attachEvent("Installed", fResolve);
+            window.Asc.plugin.sendToPlugin("onInstall", message);
+        }).then(function (message) {
+            console.error("------- INSTALLED -------");
+            console.log(message);
+            try {
+                message = JSON.parse(message.data);
+            } catch (error) {
+                // if we have a problem, don't process this message
+                console.error("Failed to parse message");
+                return;
+            }
+            if (!message.guid) {
+                // somethimes we can receive such message
+                PluginCardUI.toggleLoader(false);
+                return;
+            }
+
+            self._changeAfterInstallOrRemove(true, message.guid);
+            PluginCardUI.toggleLoader(false);
+        });
+        
+    },
+
+    /**
+     * @param {string} guid 
+     * @param {Event} event 
+     */
+    onClickUpdate: function(guid, event) {
+        event.stopImmediatePropagation();
+        PluginCardUI.toggleLoader(true, 'Updating');
+
+        updateCount++;
+        /** @type {IframeMessage} */
+        let message = {
+            type : 'update',
+            url : this.plugin.url,
+            guid : guid,
+            config : this.plugin
+        };
+        return new Promise(function(fResolve) {
+            window.Asc.plugin.attachEvent("Updated", fResolve);
+            window.Asc.plugin.sendToPlugin("onUpdate", message);
+        }).then(function (message) {
+            try {
+                message = JSON.parse(message.data);
+            } catch (error) {
+                // if we have a problem, don't process this message
+                console.error("Failed to parse message");
+                return;
+            }
+            console.error("------- INSTALLED -------");
+            if (!message.guid) {
+                // somethimes we can receive such message
+                PluginCardUI.toggleLoader(false);
+                return;
+            }
+        });
+    },
+    /**
+     * @param {string} guid 
+     * @param {Event} event 
+     */
+    onClickRemove: function(guid, event) {
+        event.stopImmediatePropagation();
+        const self = this;
+        PluginCardUI.toggleLoader(true, 'Removal');
+
+        /** @type {IframeMessage} */
+        let message = {
+            type : 'remove',
+            guid : guid,
+            backup : needBackupPlugin(guid),
+            config : this.plugin
+        };
+
+        
+        return new Promise(function(fResolve) {
+            window.Asc.plugin.attachEvent("Removed", fResolve);
+            window.Asc.plugin.sendToPlugin("onRemove", message);
+        }).then(function (message) {
+            try {
+                message = JSON.parse(message.data);
+            } catch (error) {
+                // if we have a problem, don't process this message
+                console.error("Failed to parse message");
+                return;
+            }
+            console.error("------- INSTALLED -------");
+            if (!message.guid) {
+                // somethimes we can receive such message
+                PluginCardUI.toggleLoader(false);
+                return;
+            }
+
+            self._changeAfterInstallOrRemove(true, message.guid);
+            PluginCardUI.toggleLoader(false);
+        });
+        
+    },
+
+    /** @param {number} n */
+    plusSlides: function(n) {
+        this._showSlides(this.slideIndex += n);
+    },
+
+    /** @param {number} n */
+    _currentSlide: function(n) {
+        this._showSlides(this.slideIndex = n);
+    },
+
+    /** @param {number} n */
+    _showSlides: function(n) {
+        let i;
+        /** @type {HTMLCollectionOf<HTMLDivElement>} */
+        let slides = document.getElementsByClassName('mySlides');
+        let dots = document.getElementsByClassName('dot');
+        if (n > slides.length) {this.slideIndex = 1}    
+        if (n < 1) {this.slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(' active', '');
+        }
+        if (slides.length)
+            slides[this.slideIndex-1].style.display = "block";
+
+        if(dots.length)
+            dots[this.slideIndex-1].className += ' active';
+    },
+    
+    _setDivHeight() {
+        // console.log(Math.round(window.devicePixelRatio * 100));
+        if (PluginCardUI.divSelectedImage) {
+            let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 70 + 'px';
+            PluginCardUI.divSelectedImage.style.height = height;
+            PluginCardUI.divSelectedImage.style.maxHeight = height;
+        }
+    }
+
 };
 
-window.Asc.plugin.init = function () {
-    window.Asc.plugin.sendToPlugin("onWindowReady", {});
-    //PluginCardUI.init();
-    PluginCard.init();
-};
+window.Asc.plugin.init = PluginCard.init.bind(PluginCard);
 
 window.Asc.plugin.onThemeChanged = function (theme) {
     window.Asc.plugin.onThemeChangedBase(theme);
@@ -366,66 +577,4 @@ window.Asc.plugin.onTranslate = function () {
     }
 };
 
-window.Asc.plugin.attachEvent("onShowPluginCard", function (data) {
-    console.log("onShowPluginCard", data);
-    PluginCard.plugin = data.plugin;
-    PluginCard.installed = data.installed;
-	PluginCard.editorVersion = data.editorVersion;
-    PluginCard.showPluginPlate(data);
-});
 
-window.Asc.plugin.attachEvent("Installed", function (message) {
-    try {
-        message = JSON.parse(message.data);
-    } catch (error) {
-        // if we have a problem, don't process this message
-        console.error("Failed to parse message");
-        return;
-    }
-    console.error("------- INSTALLED -------");
-    if (!message.guid) {
-        // somethimes we can receive such message
-        toggleLoader(false);
-        return;
-    }
-
-    changeAfterInstallOrRemove(true, message.guid);
-    toggleLoader(false);
-});
-
-window.Asc.plugin.attachEvent("Updated", function (message) {
-    try {
-        message = JSON.parse(message.data);
-    } catch (error) {
-        // if we have a problem, don't process this message
-        console.error("Failed to parse message");
-        return;
-    }
-    console.error("------- INSTALLED -------");
-    if (!message.guid) {
-        // somethimes we can receive such message
-        toggleLoader(false);
-        return;
-    }
-
-    
-});
-
-window.Asc.plugin.attachEvent("Removed", function (message) {
-    try {
-        message = JSON.parse(message.data);
-    } catch (error) {
-        // if we have a problem, don't process this message
-        console.error("Failed to parse message");
-        return;
-    }
-    console.error("------- INSTALLED -------");
-    if (!message.guid) {
-        // somethimes we can receive such message
-        toggleLoader(false);
-        return;
-    }
-
-    changeAfterInstallOrRemove(true, message.guid);
-    toggleLoader(false);
-});

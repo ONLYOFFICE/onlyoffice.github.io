@@ -34,7 +34,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../../sdkjs-plugins/v1/plugins.css">
-	<link rel="stylesheet" href="./resources/css/styles.css">
+	<link rel="stylesheet" href="./store/resources/css/styles.css">
 
 <style>
   html, body {background: #f2f3f5;
@@ -79,9 +79,9 @@
 					<div style="height: 18px;"></div>
 				</div>
 				<div>
-					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
-					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="onClickUpdate(event.target)">Update</button>
-					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="PluginCard.onClickRemove(event.target.parentNode, event)">Remove</button>
+					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickUpdate(event.target)">Update</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickInstall(event.target.parentNode, event)">Install</button>
 				</div>
 			</div>
 			<div class="div_info_column">
@@ -93,9 +93,9 @@
 		<div id="div_selected_main" class="div_selected_main">
 			<div style="width:100%; height:100%">
 				<div>
-					<span id="span_overview" class="span_caption span_selected i18n" onclick="onSelectPreview(event.target, 1)">Overview</span>
-					<span class="span_caption i18n" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
-					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
+					<span id="span_overview" class="span_caption span_selected i18n" onclick="PluginCard.onSelectPreview(event.target, 1)">Overview</span>
+					<span class="span_caption i18n" onclick="PluginCard.onSelectPreview(event.target, 2)">Info & Support</span>
+					<span id="span_changelog" class="span_caption" onclick="PluginCard.onSelectPreview(event.target, 3)">Changelog</span>
 					<hr>
 				</div>
 				<div id="div_selected_preview" class="div_selected_preview">
@@ -104,8 +104,8 @@
 					</div>
 					<div id="div_selected_image">
 						<div id="div_selected_container" class="slideshow-container">
-							<span id="prev_arrow" class="prev hidden" onclick="plusSlides(-1)"></span>
-							<span id="next_arrow" class="next hidden" onclick="plusSlides(1)"></span>
+							<span id="prev_arrow" class="prev hidden" onclick="PluginCard.plusSlides(-1)"></span>
+							<span id="next_arrow" class="next hidden" onclick="PluginCard.plusSlides(1)"></span>
 						</div>
 						<br>
 						<div id="points_container" style="text-align:center"></div>

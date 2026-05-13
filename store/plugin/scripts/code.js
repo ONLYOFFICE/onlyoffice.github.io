@@ -29,6 +29,10 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
+// @ts-check
+/// <reference path="../../scripts/types.js" />
+
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
 	let interval = null;
@@ -41,10 +45,9 @@
 
 	let warningWindow = null;
 	let developerWindow = null;
-	let pluginCardWindow = null;
-	let removeGuid = null;
-	let editorVersion = null;
-	let marketplaceURl = null;
+	let removeGuid = '';
+	let editorVersion = '';
+	let marketplaceURl = '';
 	const OOMarketplaceUrl = isLocal ? './store/index.html' : 'https://onlyoffice.github.io/store/index.html';
 	try {
 		// for incognito mode
@@ -65,6 +68,109 @@
 		}
 	};
 
+	const PluginCard = {
+		data: {},
+		/** @type {window.Asc.PluginWindow | null} */
+		window: null,
+		/** @param {IframeMessage} data */
+		show: function(data) {
+			this.data = data;
+			let variation = {
+				url : 'plugin-card.html',
+				buttons : [],
+				isVisual : true,
+				isModal : true,
+				isViewer: true,
+				description: 'plugin.variations.description',
+				EditorsSupport : ["word", "cell", "slide", "pdf"],
+				size : [608, 600],
+				fixedSize : true,
+				isTargeted : false
+			};
+			if (!this.window) {
+				this.window = new window.Asc.PluginWindow();
+				this.window.attachEvent('onWindowReady', this._onReady.bind(this));
+				this.window.attachEvent('onInstall', this._onInstall.bind(this));
+				this.window.attachEvent('onUpdate', this._onUpdate.bind(this));
+				this.window.attachEvent('onRemove', this._onRemove.bind(this));
+				this.window.attachEvent('onClose', this._onClose.bind(this));
+			}
+			this.window.show(variation);
+		},
+		/**
+		 * @param {*} type 
+		 * @param {*} result 
+		 */
+		sendCommand: function(type, result) {
+			if (this.window) {
+				this.window.command(type, result);
+			}
+		},
+		_onReady: function() {
+			this.window.command("onShowPluginCard", this.data);
+			postMessage( { type: 'onShowPluginCard' } );
+		},
+		/** @param {IframeMessage} data*/
+		_onInstall: function(data) {
+			return PluginManager.install(data);
+		},
+		/** @param {IframeMessage} data*/
+		_onUpdate: function(data) {
+			return PluginManager.update(data);
+		},
+		/** @param {IframeMessage} data*/
+		_onRemove: function(data) {
+			return PluginManager.remove(data);
+		},
+		_onClose: function() {
+			if (this.window) {
+				this.window.close();
+				this.window = null;
+			}
+		},
+	};
+
+	const PluginManager = {
+		/** @param {IframeMessage} data*/
+		getInstalled: function(data) {
+			return new Promise(function(fResolve) {
+				window.Asc.plugin.executeMethod('GetInstalledPlugins', null, function(result) {
+					fResolve(result);
+				});
+			}).then(function(result) {
+				postMessage({ type: 'InstalledPlugins', data: result, updateInstalled: data.updateInstalled } );
+			});
+		},
+		/** @param {IframeMessage} data*/
+		install: function(data) {
+			return new Promise(function(fResolve) {
+				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], fResolve);
+			}).then(function(result) {
+				postMessage(result);
+				PluginCard.sendCommand(result.type, result);
+			});
+		},
+		/** @param {IframeMessage} data*/
+		remove: function(data) {
+			removeGuid = data.guid;
+			if ( Number( editorVersion.split('.').join('')) < 740 )
+				removePlugin(true);
+			else if ( !data.backup )
+				removePlugin(data.backup);
+			else
+				createWindow('warning');
+		},
+		/** @param {IframeMessage} data*/
+		update: function(data) {
+			return new Promise(function(fResolve) {
+				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], fResolve);
+			}).then(function(result) {
+				postMessage(result);
+				PluginCard.sendCommand(result.type, result);
+			});
+		}
+	};
+
 	function postMessage(message) {
 		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
 	};
@@ -81,7 +187,6 @@
 			editorVersion = version;
 		});
 
-
 		let divNoInt = document.getElementById('div_noIternet');
 		let style = document.getElementsByTagName('head')[0].lastChild;
 		let pageUrl = marketplaceURl;
@@ -96,9 +201,6 @@
 				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
 				postMessage( { type: 'PluginReady', version: editorVersion } );
 			});
-
-				
-
 		};
 	};
 
@@ -113,9 +215,7 @@
 					break;
 				default:
 					postMessage( {type: 'Removed', guid: ''} );
-					if (pluginCardWindow) {
-						pluginCardWindow.command("Removed", null);
-					}
+					PluginCard.sendCommand("Removed", null);
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
@@ -124,7 +224,7 @@
 				developerWindow.command('onClickBtn');
 			else
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
-		} else if (pluginCardWindow && pluginCardWindow.id == windowID) {
+		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (id == 'back') {
 			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
@@ -139,69 +239,26 @@
 
 	window.addEventListener('message', function(message) {
 		// getting messages from marketplace
+		/** @type {IframeMessage} */
 		let data = JSON.parse(message.data);
 			
 		switch (data.type) {
 			case 'getInstalled':
 				// this message is used only during plugin initialization, by default plugins from the store are parsed and rendered
 				// added updateInstalled flag - in this case we don't load plugins from the store again, we only work with installed ones
-
-				window.Asc.plugin.executeMethod('GetInstalledPlugins', null, function(result) {
-					postMessage({ type: 'InstalledPlugins', data: result, updateInstalled: data.updateInstalled } );
-				});
+				PluginManager.getInstalled(data);
 				break;
 			case 'install':
-				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], function(result) {
-					postMessage(result);
-					if (pluginCardWindow) {
-						pluginCardWindow.command(result.type, result);
-					}
-				});
+				PluginManager.install(data);
 				break;
 			case 'remove':
-				removeGuid = data.guid;
-				if ( Number( editorVersion.split('.').join('') < 740) )
-					removePlugin(true);
-				else if ( !data.backup )
-					removePlugin(data.backup);
-				else
-					createWindow('warning');
+				PluginManager.remove(data);
 				break;
 			case 'update':
-				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], function(result) {
-					postMessage(result);
-					if (pluginCardWindow) {
-						pluginCardWindow.command(result.type, result);
-					}
-				});
-				break;
-			case 'showButton' :
-				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
+				PluginManager.update(data);
 				break;
 			case 'showPluginCard':
-				let variation = {
-					url : 'plugin-card.html',
-					buttons : [],
-					isVisual : true,
-					isModal : true,
-					isViewer: true,
-					description: 'plugin.variations.description',
-					EditorsSupport : ["word", "cell", "slide", "pdf"],
-					size : [608, 600],
-					fixedSize : true,
-					isTargeted : false
-				};
-				if (!pluginCardWindow) {
-					pluginCardWindow = new window.Asc.PluginWindow();
-					pluginCardWindow.attachEvent('onWindowReady', function() {
-						pluginCardWindow.command("onShowPluginCard", data);
-						postMessage( { type: 'onShowPluginCard' } );
-					});
-				}
-				pluginCardWindow.show(variation);
-				break;
-			case 'showPluginRating':
-
+				PluginCard.show(data);
 				break;
 		}
 		
@@ -355,15 +412,16 @@
 	};
 
 	function removePlugin(backup) {
-		if (removeGuid)
-			window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, backup], function(result) {
+		if (removeGuid) {
+			return new Promise(function(fResolve) {
+				window.Asc.plugin.executeMethod('RemovePlugin', [removeGuid, backup], fResolve);
+			}).then(function(result) {
+				removeGuid = '';
 				postMessage(result);
-				if (pluginCardWindow) {
-					pluginCardWindow.command(result.type, result);
-				}
+				PluginCard.sendCommand(result.type, result);
 			});
-		
-		removeGuid = null;
+		}
+		return Promise.resolve();
 	};
 
 	window.onresize = function() {

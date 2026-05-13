@@ -35,6 +35,8 @@
 /// <reference path="./types.js" />
 
 const UI = {
+    /** @type {HTMLDivElement | undefined} */
+    loader: undefined,
     /** @type {HTMLAnchorElement} */
     linkNewPlugin: document.getElementById('link_newPlugin'),
     /** @type {HTMLDivElement} */
@@ -60,8 +62,6 @@ const UI = {
     /** @type {HTMLAnchorElement} */
     discussionLink: document.getElementById('discussion_link'),
     /** @type {HTMLDivElement} */
-    divDescriptionSelected: document.getElementById('div_description_selected'),
-    /** @type {HTMLDivElement} */
     divLanguages: document.getElementById('div_languages'),
     /** @type {HTMLDivElement} */
     divMinVersion: document.getElementById('div_min_version'),
@@ -69,10 +69,6 @@ const UI = {
     divRatingLink: document.getElementById('div_rating_link'),
     /** @type {HTMLDivElement} */
     divReadme: document.getElementById('div_readme_link'),
-    /** @type {HTMLDivElement} */
-    divSelectedImage: document.getElementById("div_selected_image"),
-    /** @type {HTMLDivElement} */
-    divSelectedPreview: document.getElementById("div_selected_preview"),
     /** @type {HTMLDivElement} */
     divStarsColored: document.getElementById("stars_colored"),
     /** @type {HTMLDivElement} */
@@ -304,6 +300,27 @@ const UI = {
             categories.forEach((value, key) => {
                 makeCategoryItem(value, key);
             });
+        }
+    },
+    
+    /**
+     * @param {boolean} show 
+     * @param {string} [text]
+     */
+    toggleLoader: function(show, text) {
+        // show or hide loader (don't use UI for this function)
+        let loaderContainer = document.getElementById('loader-container');
+        if (!loaderContainer) {
+            return;
+        }
+        if (!show) {
+            clearTimeout(timeout);
+            loaderContainer.classList.add('hidden');
+            this.loader && (this.loader.remove ? this.loader.remove() : loaderContainer.removeChild(this.loader));
+            this.loader = undefined;	
+        } else if (!this.loader) {
+            loaderContainer.classList.remove('hidden');
+            this.loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
         }
     },
     /**
