@@ -787,18 +787,9 @@ label.header {
 	right: 5px;
 }
 
-.next::after {
-	content: "❯";
-	margin-right: -0.1em;
-}
-
 .prev {
 	left: 5px;
-}
-
-.prev:after {
-	content: "❮";
-	margin-left: -0.1em;
+    text-indent: -3px;
 }
 
 /* arrow hovered*/

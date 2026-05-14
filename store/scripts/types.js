@@ -10,6 +10,8 @@
  * @typedef {Object} PluginCardMessage
  * @property {'showPluginCard'} type
  * @property {string} guid
+ * @property {string} pluginName
+ * @property {'light' | string} themeType
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
  * @property {InstalledPluginInfo | null} installed

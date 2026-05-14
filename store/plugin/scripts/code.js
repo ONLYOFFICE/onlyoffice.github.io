@@ -43,7 +43,9 @@
 	// create iframe
 	const iframe = document.createElement('iframe');
 
+	/** @type {window.Asc.PluginWindow | null} */
 	let warningWindow = null;
+	/** @type {window.Asc.PluginWindow | null} */
 	let developerWindow = null;
 	let removeGuid = '';
 	let editorVersion = '';
@@ -72,20 +74,19 @@
 		data: {},
 		/** @type {window.Asc.PluginWindow | null} */
 		window: null,
-		/** @param {IframeMessage} data */
+		/** @param {PluginCardMessage} data */
 		show: function(data) {
 			this.data = data;
+			console.warn('data', data);
 			let variation = {
 				url : 'plugin-card.html',
+				description: data.pluginName,
 				buttons : [],
 				isVisual : true,
 				isModal : true,
-				isViewer: true,
-				description: 'plugin.variations.description',
 				EditorsSupport : ["word", "cell", "slide", "pdf"],
 				size : [608, 600],
 				fixedSize : true,
-				isTargeted : false
 			};
 			if (!this.window) {
 				this.window = new window.Asc.PluginWindow();
@@ -93,7 +94,7 @@
 				this.window.attachEvent('onInstall', this._onInstall.bind(this));
 				this.window.attachEvent('onUpdate', this._onUpdate.bind(this));
 				this.window.attachEvent('onRemove', this._onRemove.bind(this));
-				this.window.attachEvent('onClose', this._onClose.bind(this));
+				this.window.attachEvent('onClose', this._hide.bind(this));
 			}
 			this.window.show(variation);
 		},
@@ -107,8 +108,7 @@
 			}
 		},
 		_onReady: function() {
-			this.window.command("onShowPluginCard", this.data);
-			postMessage( { type: 'onShowPluginCard' } );
+			postMessage( Object.assign({}, this.data, { type: 'onShowPluginCard' }) );
 		},
 		/** @param {IframeMessage} data*/
 		_onInstall: function(data) {
@@ -122,7 +122,7 @@
 		_onRemove: function(data) {
 			return PluginManager.remove(data);
 		},
-		_onClose: function() {
+		_hide: function() {
 			if (this.window) {
 				this.window.close();
 				this.window = null;
@@ -147,7 +147,6 @@
 				window.Asc.plugin.executeMethod('InstallPlugin', [data.config, data.guid], fResolve);
 			}).then(function(result) {
 				postMessage(result);
-				PluginCard.sendCommand(result.type, result);
 			});
 		},
 		/** @param {IframeMessage} data*/
@@ -166,13 +165,13 @@
 				window.Asc.plugin.executeMethod('UpdatePlugin', [data.config, data.guid], fResolve);
 			}).then(function(result) {
 				postMessage(result);
-				PluginCard.sendCommand(result.type, result);
 			});
 		}
 	};
 
 	function postMessage(message) {
 		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
+		PluginCard.sendCommand(message.type, message);
 	};
 
 	function initPlugin() {
@@ -188,12 +187,12 @@
 		});
 
 		let divNoInt = document.getElementById('div_noIternet');
-		let style = document.getElementsByTagName('head')[0].lastChild;
+		let style = document.head.lastChild;
 		let pageUrl = marketplaceURl;
 		iframe.src = pageUrl + window.location.search;
 		iframe.onload = function() {
 			pluginVersionPromise.then(function() {
-				if (!divNoInt.classList.contains('hidden')) {
+				if (divNoInt && !divNoInt.classList.contains('hidden')) {
 					divNoInt.classList.add('hidden');
 					clearInterval(interval);
 					interval = null;
@@ -215,7 +214,6 @@
 					break;
 				default:
 					postMessage( {type: 'Removed', guid: ''} );
-					PluginCard.sendCommand("Removed", null);
 					break;
 			}
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
@@ -226,10 +224,6 @@
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
-		} else if (id == 'back') {
-			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
-			if (iframe && iframe.contentWindow)
-				postMessage( { type: 'onClickBack' } );
 		} else if (id == 'developer') {
 			createWindow('developer');
 		} else {
@@ -277,7 +271,7 @@
 			theme['background-toolbar'] = '#fff';
 		}
 		window.Asc.plugin.onThemeChangedBase(theme);
-		let style = document.getElementsByTagName('head')[0].lastChild;
+		let style = document.head.lastChild;
 		if (iframe && iframe.contentWindow)
 			postMessage( { type: 'Theme', theme: theme, style : style.innerHTML } );
 	};
@@ -418,7 +412,6 @@
 			}).then(function(result) {
 				removeGuid = '';
 				postMessage(result);
-				PluginCard.sendCommand(result.type, result);
 			});
 		}
 		return Promise.resolve();

@@ -348,6 +348,7 @@ window.addEventListener('message', function(message) {
 			console.error('------- INSTALLED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
+				console.error('No guid in message');
 				UI.toggleLoader(false);
 				return;
 			}
@@ -372,7 +373,7 @@ window.addEventListener('message', function(message) {
 					installed.removed = false;
 			}
 
-			changeAfterInstallOrRemove(true, message.guid);
+			changeAfterInstallUpdateRemove(true, message.guid);
 			UI.toggleLoader(false);
 			break;
 		case 'Updated':
@@ -380,7 +381,7 @@ window.addEventListener('message', function(message) {
 			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
-				if (!updateCount) {
+				if (updateCount <= 0) {
 					checkNoUpdated(true);
 					UI.toggleLoader(false);
 				}
@@ -396,20 +397,14 @@ window.addEventListener('message', function(message) {
 			installed.obj.version = plugin.version;
 			plugin.bHasUpdate = false;
 
-			if (STORAGE.bPluginCardShown) {
-				UI.btnUpdate.classList.add('hidden');
-			}
-
-			UI.spanVersion.textContent = String(plugin.version);
-			UI.removeUpdateButton(message.guid);
-
-			if (!updateCount) {
+			if (updateCount <= 0) {
 				checkNoUpdated(true);
 				UI.toggleLoader(false);
 			}
+			changeAfterInstallUpdateRemove(true, message.guid);
 			break;
 		case 'Removed':
-			console.error('------- REMOVED -------');
+			console.log('------- REMOVED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
 				UI.toggleLoader(false);
@@ -446,10 +441,10 @@ window.addEventListener('message', function(message) {
 						PsMain.update();
 					}
 				} else {
-					changeAfterInstallOrRemove(false, message.guid, bHasLocal);
+					changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
 				}
 			} else {
-				changeAfterInstallOrRemove(false, message.guid, bHasLocal);				
+				changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);				
 			}
 
 			UI.toggleLoader(false);
@@ -900,8 +895,8 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	}
 
 	let variation = plugin.variations[0];
-	let name = ( bTranslate && plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) ) ? ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) : plugin.name;
-	let description = ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) ) ? ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) : variation.description;
+	let name = getTranslatedName(plugin);
+	let description = getTranslatedDescription(variation);
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
 	let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslated(MESSAGES.versionWarning) + '"'  : '';
 	let offered = plugin.offered || "ONLYOFFICE";
@@ -948,9 +943,9 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) {
 	let result = '<button class="btn-text-default ';
 	if (bNeedUpdateButton) {
-		result += 'update" onclick="onClickUpdate(' + guid + ', event)">' + Utils.getTranslated("Update");
+		result += 'update" onclick="onClickUpdate(\'' + guid + '\', event)">' + Utils.getTranslated("Update");
 	} else if (bNeedRemoveButton) {
-		result += 'remove" onclick="onClickRemove(' + guid + ', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+		result += 'remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
 		result += Utils.getTranslated("Remove");
 	} else if (bNeedInstallButton) {
 		result += 'install" onclick="onClickInstall(\'' + guid + '\', event)" ' + (additional || "") + '>'  + Utils.getTranslated("Install");
@@ -990,6 +985,22 @@ function makeRatingElements(rating) {
 	}
 
 	return result;
+}
+
+/** @param {PluginInfo} plugin */
+function getTranslatedName(plugin) {
+	if (bTranslate && plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] )) {
+		return ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] );
+	}
+	return plugin.name;
+}
+
+/** @param {any} variation */
+function getTranslatedDescription(variation) {
+	if ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) ) {
+		return ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] )
+	}
+	return variation.description;
 }
 
 function showRating() {
@@ -1090,7 +1101,6 @@ function onClickUpdate(guid, event) {
 		console.error('Plugin not found for update: ' + guid);
 		return;
 	}
-	updateCount++;
 	let message = {
 		type : 'update',
 		url : plugin.url,
@@ -1111,6 +1121,7 @@ function onClickUpdate(guid, event) {
  * @param {Event} event 
  */
 function onClickRemove(guid, event) {
+	console.log(guid, event);
 	event.stopImmediatePropagation();
 	// click remove button
 	if (isLocal) {
@@ -1183,12 +1194,14 @@ function openPluginCard(guid) {
 		plugin: plugin || null,
 		iconBackground: iconBackground,
 		iconUrl: iconUrl,
+		themeType: themeType,
 		isLocal: isLocal,
 		editorVersion: editorVersion,
 		bHasUpdate: !!bHasUpdate,
 		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
 		OOMarketplaceUrl: OOMarketplaceUrl,
-		OOIO: OOIO
+		OOIO: OOIO,
+		pluginName: plugin ? getTranslatedName(plugin) : getTranslatedName(installed.obj)
 	};
 	sendMessage(message);
 	return new Promise(function(fResolve, fReject) {
@@ -1218,8 +1231,6 @@ function onClickBack() {
 	// click on left arrow in preview mode
 	document.querySelectorAll('.dot').forEach(function(el) { el.remove(); });
 	document.querySelectorAll('.mySlides').forEach(function(el) { el.remove(); });
-	UI.arrowPrev.classList.add('hidden');
-	UI.arrowNext.classList.add('hidden');
 	document.getElementById('span_overview').click();
 	STORAGE.bPluginCardShown = false;
 	if(PsMain) PsMain.update();
@@ -1750,23 +1761,28 @@ function findInstalledPlugin(guid) {
  * @param {string} guid 
  * @param {boolean} [bHasLocal] 
  */
-function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
+function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 	console.warn('change after install or remove');
 	let btn = UI.getPluginButton(guid);
-	if (!btn) return;
+	if (!btn) {
+		console.error('Button not found for guid: ' + guid);
+		return;
+	}
 	let bHasUpdate = btn.classList.contains('update');
 
-	if (bInstall && bHasUpdate) {
+	/*if (bInstall && bHasUpdate) {
 		btn.textContent = Utils.getTranslated('Update');
 		btn.classList.add('update');
 		btn.classList.remove('install');
+		btn.classList.remove('remove');
 		btn.onclick = function(e) {
 			onClickUpdate(guid, e);
 		};
-	} else if (bInstall) {
+	} else */if (bInstall) {
 		btn.textContent = Utils.getTranslated('Remove');
 		btn.classList.add('remove');
 		btn.classList.remove('install');
+		btn.classList.remove('update');
 		btn.onclick = function(e) {
 			onClickRemove(guid, e);
 		};
@@ -1774,6 +1790,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		btn.textContent = Utils.getTranslated('Install');
 		btn.classList.add('install');
 		btn.classList.remove('remove');
+		btn.classList.remove('update');
 		btn.onclick = function(e) {
 			onClickInstall(guid, e);
 		};
@@ -1784,7 +1801,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 		btn.setAttribute('title', Utils.getTranslated(MESSAGES.versionWarning));
 	}
 
-	if (STORAGE.bPluginCardShown) {
+	/*if (STORAGE.bPluginCardShown) {
 		if (bInstall) {
 			UI.btnInstall.classList.add('hidden');
 			UI.btnRemove.classList.remove('hidden');
@@ -1796,7 +1813,7 @@ function changeAfterInstallOrRemove(bInstall, guid, bHasLocal) {
 			UI.btnUpdate.classList.remove('hidden');
 		else
 			UI.btnUpdate.classList.add('hidden');
-	}
+	}*/
 	checkNoUpdated(!bInstall);
 };
 

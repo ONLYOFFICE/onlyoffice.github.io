@@ -43,48 +43,10 @@ const UI = {
     pluginsList: document.getElementById('plugins'),
     /** @type {HTMLDivElement} */
     divMain: document.getElementById('div_main'),
-    /** @type {HTMLDivElement} */
-    divSelectedMain: document.getElementById('div_selected_main'),
-    /** @type {HTMLButtonElement} */
-    btnRemove: document.getElementById('btn_remove'),
-    /** @type {HTMLButtonElement} */
-    btnInstall: document.getElementById('btn_install'),
-    /** @type {HTMLSpanElement} */
-    spanSelectedDescr: document.getElementById('span_selected_description'),
-    /** @type {HTMLAnchorElement} */
-    linkPlugin: document.getElementById('link_plugin'),
-    /** @type {HTMLSpanElement} */
-    arrowNext: document.getElementById('next_arrow'),
-    /** @type {HTMLSpanElement} */
-    arrowPrev: document.getElementById('prev_arrow'),
     /** @type {HTMLButtonElement} */
     btnUpdateAll: document.getElementById('btn_updateAll'),
-    /** @type {HTMLAnchorElement} */
-    discussionLink: document.getElementById('discussion_link'),
-    /** @type {HTMLDivElement} */
-    divLanguages: document.getElementById('div_languages'),
-    /** @type {HTMLDivElement} */
-    divMinVersion: document.getElementById('div_min_version'),
-    /** @type {HTMLDivElement} */
-    divRatingLink: document.getElementById('div_rating_link'),
-    /** @type {HTMLDivElement} */
-    divReadme: document.getElementById('div_readme_link'),
-    /** @type {HTMLDivElement} */
-    divStarsColored: document.getElementById("stars_colored"),
-    /** @type {HTMLDivElement} */
-    divVersion: document.getElementById('div_version'),
-    /** @type {HTMLDivElement} */
-    divVotes: document.getElementById('div_votes'),
     /** @type {HTMLInputElement} */
     inpSearch: document.getElementById('inp_search'),
-    /** @type {HTMLAnchorElement} */
-    linkReadme: document.getElementById('link_readme'),
-    /** @type {HTMLDivElement} */
-    ratingStars: document.getElementById('div_rating_stars'),
-    /** @type {HTMLSpanElement} */
-    spanLanguages: document.getElementById('span_langs'),
-    /** @type {HTMLSpanElement} */
-    spanMinVersion: document.getElementById('span_min_ver'),
     /** @type {Object<string, HTMLDivElement>} */
     _plugins: {},
 
@@ -182,7 +144,6 @@ const UI = {
             rule += '.btn_install:active{background-color: #1c1c1c !important;}\n';
             rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
-            rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
         } else {
             document.body.classList.remove('white_bg');
@@ -191,8 +152,6 @@ const UI = {
             rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
             rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
-            rule += '.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}';
-            style = style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}');
             style = style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
         }
 
@@ -217,14 +176,6 @@ const UI = {
         }
     },
 
-    /** @param {string} guid */
-    removeUpdateButton(guid) {
-        const pluginDiv = this._plugins[guid];
-        const updateBtn = pluginDiv.querySelector('button.update');
-        if (updateBtn) {
-            updateBtn.remove();
-        }
-    },
     /** @param {string} value */
     setCheckedInstalledFilter(value) {
         const current = this.pluginsList.querySelector('input[value="' + value + '"]');
