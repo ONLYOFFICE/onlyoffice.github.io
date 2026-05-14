@@ -79,9 +79,9 @@
 					<div style="height: 18px;"></div>
 				</div>
 				<div>
-					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="PluginCard.onClickRemove(event.target.parentNode, event)">Remove</button>
-					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickUpdate(event.target)">Update</button>
-					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickInstall(event.target.parentNode, event)">Install</button>
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove i18n" onclick="PluginCard.onClickRemove(event)">Remove</button>
+					<button id="btn_update" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickUpdate(event)">Update</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install i18n" onclick="PluginCard.onClickInstall(event)">Install</button>
 				</div>
 			</div>
 			<div class="div_info_column">
@@ -104,8 +104,8 @@
 					</div>
 					<div id="div_selected_image">
 						<div id="div_selected_container" class="slideshow-container">
-							<span id="prev_arrow" class="prev hidden" onclick="PluginCard.plusSlides(-1)"></span>
-							<span id="next_arrow" class="next hidden" onclick="PluginCard.plusSlides(1)"></span>
+							<span id="prev_arrow" class="prev hidden" onclick="PluginCard.plusSlides(-1)">❮</span>
+							<span id="next_arrow" class="next hidden" onclick="PluginCard.plusSlides(1)">❯</span>
 						</div>
 						<br>
 						<div id="points_container" style="text-align:center"></div>

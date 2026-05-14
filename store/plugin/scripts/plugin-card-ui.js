@@ -80,12 +80,8 @@ const PluginCardUI = {
     divVersion: document.getElementById('div_version'),
     /** @type {HTMLDivElement} */
     divVotes: document.getElementById('div_votes'),
-    /** @type {HTMLInputElement} */
-    inpSearch: document.getElementById('inp_search'),
     /** @type {HTMLAnchorElement} */
     linkReadme: document.getElementById('link_readme'),
-    /** @type {HTMLDivElement} */
-    ratingStars: document.getElementById('div_rating_stars'),
     /** @type {HTMLSpanElement} */
     spanLanguages: document.getElementById('span_langs'),
     /** @type {HTMLSpanElement} */
@@ -99,7 +95,6 @@ const PluginCardUI = {
 
     /** @param {'light' | string} themeType */
     init(themeType) {
-        const self = this;
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
         rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
         let styleTheme = document.createElement('style');
@@ -113,7 +108,6 @@ const PluginCardUI = {
      * @param {string} style
      */
     onChangeTheme: function(theme, themeType, style) {
-
         let rule = '.text-secondary{color:'+theme["text-secondary"]+';}\n';
 
         if (themeType.includes('light')) {
@@ -123,7 +117,6 @@ const PluginCardUI = {
             rule += '.btn_install:active{background-color: #1c1c1c !important;}\n';
             rule += '.div_offered_votes{color: rgba(0,0,0,0.45) !important;}\n';
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
-            rule += '.select2-container--default .select2-results__option[aria-selected=true] { color: black;}\n'
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
         } else {
             document.body.classList.remove('white_bg');
@@ -132,8 +125,6 @@ const PluginCardUI = {
             rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
             rule += '.div_offered_votes{color: rgba(255,255,255,0.8) !important;}\n';
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
-            rule += '.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}';
-            style = style.replace('.select2-container--default .select2-results__option--highlighted[aria-selected] {background-color : #555 !important; }','.select2-container--default .select2-results__option--highlighted[aria-selected] { background-color : #555 !important; color: white !important;}');
             style = style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
         }
 

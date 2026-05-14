@@ -37,25 +37,34 @@
 const PluginCard = {
 	/** @type {number} */
 	editorVersion: 0,
-	/** @type {PluginInfo} */
+	/** @type {PluginInfo | null} */
     plugin: null,
 	/** @type {InstalledPluginInfo | null} */
     installed: null,
     /** @type {any} */
     PsChangelog: null,
-    slideIndex: 1,                                                  // index for slides
+    themeType: 'light',
+    slideIndex: 1,  // index for slides
+    backup: false,
     init() {
         const self = this;
         console.warn("plugin card init");
         return new Promise(function(fResolve) {
             window.Asc.plugin.attachEvent("onShowPluginCard", fResolve);
             window.Asc.plugin.sendToPlugin("onWindowReady", {});
-        }).then(function (data) {
+        }).then(/** @param {PluginCardMessage} data */function (data) {
             console.log("onShowPluginCard", data);
             self.plugin = data.plugin;
             self.installed = data.installed;
             self.editorVersion = data.editorVersion;
-            self._show(data);
+            self.themeType = data.themeType;
+            self.backup = data.isLocal && !data.plugin;
+            PluginCardUI.init(data.themeType);
+            PluginCardUI.toggleLoader(true, 'Loading');
+            return waitForRepaint().then(function() {
+                self._show(data);
+                PluginCardUI.toggleLoader(false);
+            });
         });
     },
 
@@ -298,9 +307,9 @@ const PluginCard = {
         //sendMessage({ type: "showButton", show: true });
         // PluginCardUI.arrow.classList.remove('hidden');
         this._updateScroll();
-        PluginCardUI.toggleLoader(false);
     },
 
+    /** @param {string} guid */
 	_changeAfterInstallOrRemove(guid) {
 		let bCheckUpdate = true;
 		if (!this.plugin && this.installed) {
@@ -356,6 +365,7 @@ const PluginCard = {
                 })
                 .catch(function (err) {
                     if (bDesktopRequest) {
+                        // TODO: 
                         createError(err.response, false);
                     } else {
                         createError(
@@ -378,37 +388,37 @@ const PluginCard = {
             document.querySelectorAll(".div_selected_preview").forEach(function(el) { el.classList.add("hidden"); });
 
             // type: 1 - Overview; 2 - Info; 3 - Changelog;
+            let element = PluginCardUI.divSelectedPreview;
             if (type === 1) {
-                PluginCardUI.divSelectedPreview.classList.remove('hidden');
                 this._setDivHeight();
             } else if (type === 2) {
-                document.getElementById('div_selected_info').classList.remove('hidden');
+                element = document.getElementById('div_selected_info');
             } else {
-                document.getElementById('div_selected_changelog').classList.remove('hidden');
+                element = document.getElementById('div_selected_changelog');
                 this.PsChangelog.update();
             }
+            element.classList.remove('hidden');
         }
     },
 
     onClickClose: function() {
         window.Asc.plugin.sendToPlugin("onClose", {});
     },
-    
-    /**
-     * @param {string} guid 
-     * @param {Event} event 
-     */
-    onClickInstall: function(guid, event) {
-        event.stopImmediatePropagation();
-        const self = this;
+
+    onClickInstall: function() {
         PluginCardUI.toggleLoader(true, 'Installation');
+        return waitForRepaint().then(() => this._doInstall());
+    },
+
+    _doInstall: function() {
+        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
 
         if (!this.plugin && !this.installed) {
             // if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
             //sendMessage( { type : "showButton", show : false } );
             this.onClickClose();
         }
-        console.warn(event, guid);
+        console.warn(guid);
         console.log(this.plugin);
         /** @type {IframeMessage} */
         let message = {
@@ -422,36 +432,23 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Installed", fResolve);
             window.Asc.plugin.sendToPlugin("onInstall", message);
         }).then(function (message) {
-            console.error("------- INSTALLED -------");
+            console.log("------- INSTALL -------");
             console.log(message);
-            try {
-                message = JSON.parse(message.data);
-            } catch (error) {
-                // if we have a problem, don't process this message
-                console.error("Failed to parse message");
-                return;
-            }
-            if (!message.guid) {
-                // somethimes we can receive such message
-                PluginCardUI.toggleLoader(false);
-                return;
-            }
-
-            self._changeAfterInstallOrRemove(true, message.guid);
+            PluginCardUI.btnRemove.classList.remove('hidden');
+            PluginCardUI.btnInstall.classList.add('hidden');
             PluginCardUI.toggleLoader(false);
         });
         
     },
 
-    /**
-     * @param {string} guid 
-     * @param {Event} event 
-     */
-    onClickUpdate: function(guid, event) {
-        event.stopImmediatePropagation();
+    onClickUpdate: function() {
         PluginCardUI.toggleLoader(true, 'Updating');
+        return waitForRepaint().then(() => this._doUpdate());
+    },
 
-        updateCount++;
+    _doUpdate: function() {
+        const self = this;
+        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
         /** @type {IframeMessage} */
         let message = {
             type : 'update',
@@ -463,35 +460,30 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Updated", fResolve);
             window.Asc.plugin.sendToPlugin("onUpdate", message);
         }).then(function (message) {
-            try {
-                message = JSON.parse(message.data);
-            } catch (error) {
-                // if we have a problem, don't process this message
-                console.error("Failed to parse message");
-                return;
-            }
-            console.error("------- INSTALLED -------");
-            if (!message.guid) {
-                // somethimes we can receive such message
-                PluginCardUI.toggleLoader(false);
-                return;
-            }
+            console.log('--UPDATE--');
+            console.log(message);
+            PluginCardUI.btnUpdate.classList.add('hidden');
+            PluginCardUI.btnRemove.classList.remove('hidden');
+            
+			PluginCardUI.spanVersion.textContent = String(self.plugin.version);
+            PluginCardUI.toggleLoader(false);
         });
     },
-    /**
-     * @param {string} guid 
-     * @param {Event} event 
-     */
-    onClickRemove: function(guid, event) {
-        event.stopImmediatePropagation();
-        const self = this;
+
+    onClickRemove: function() {
         PluginCardUI.toggleLoader(true, 'Removal');
+        return waitForRepaint().then(() => this._doRemove());
+    },
+
+    _doRemove: function() {
+        const self = this;
+        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
 
         /** @type {IframeMessage} */
         let message = {
             type : 'remove',
             guid : guid,
-            backup : needBackupPlugin(guid),
+            backup : this.backup,
             config : this.plugin
         };
 
@@ -500,21 +492,14 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Removed", fResolve);
             window.Asc.plugin.sendToPlugin("onRemove", message);
         }).then(function (message) {
-            try {
-                message = JSON.parse(message.data);
-            } catch (error) {
-                // if we have a problem, don't process this message
-                console.error("Failed to parse message");
-                return;
+            console.log('-- REMOVE from plugin card --');
+            console.log(message);
+            PluginCardUI.btnRemove.classList.add('hidden');
+            PluginCardUI.btnUpdate.classList.add('hidden');
+            PluginCardUI.btnInstall.classList.remove('hidden');
+            if (self.plugin) {
+                PluginCardUI.spanVersion.textContent = String(self.plugin.version);
             }
-            console.error("------- INSTALLED -------");
-            if (!message.guid) {
-                // somethimes we can receive such message
-                PluginCardUI.toggleLoader(false);
-                return;
-            }
-
-            self._changeAfterInstallOrRemove(true, message.guid);
             PluginCardUI.toggleLoader(false);
         });
         
@@ -562,10 +547,25 @@ const PluginCard = {
 
 };
 
+/**
+ * Resolves after the browser has had a chance to paint a frame.
+ * Uses double rAF so DOM mutations made just before the call are visually applied.
+ * @returns {Promise<void>}
+ */
+function waitForRepaint() {
+    return new Promise(function(resolve) {
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() { resolve(); });
+        });
+    });
+}
+
 window.Asc.plugin.init = PluginCard.init.bind(PluginCard);
 
 window.Asc.plugin.onThemeChanged = function (theme) {
     window.Asc.plugin.onThemeChangedBase(theme);
+    let style = document.head.lastChild.innerHTML || '';
+    PluginCardUI.onChangeTheme(theme, PluginCard.themeType, style);
 };
 
 window.Asc.plugin.onTranslate = function () {
