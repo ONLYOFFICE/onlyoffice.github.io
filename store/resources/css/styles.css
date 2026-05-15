@@ -250,8 +250,10 @@ main {
 	position: absolute;
 	left: 12px;
 	color: var(--pm-ink-3);
-	font-size: 14px;
 	pointer-events: none;
+}
+.toolbar .search span svg {
+	vertical-align: middle;
 }
 .toolbar .search input {
 	width: 100%;

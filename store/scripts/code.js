@@ -37,7 +37,7 @@
 /// <reference path="./utils.js" />
 /// <reference path="./data-fetcher.js" />
 
-const version = '1.0.8';                                             // version of store (will change it when update something in store)
+const version = '1.0.9';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 let isOnline = true;                                                 // flag internet connection
@@ -73,21 +73,7 @@ let scale = {                                                        // current 
 	devicePR : 1                                                     // device pixel ratio
 };
 calculateScale();
-const LANGUAGES = [                                                  // list of languages
-	['cs-CZ', 'cs', 'Czech'],
-	['de-DE', 'de', 'German'],
-	['es-ES', 'es', 'Spanish'],
-	['fr-FR', 'fr', 'French'],
-	['it-IT', 'it', 'Italian'],
-	['ja-JA', 'ja', 'Japanese'],
-	['nl-NL', 'nl', 'Dutch'],
-	['pt-PT', 'pt', 'Portuguese'],
-	['pt-BR', 'pt', 'Brazilian'],
-	['ru-RU', 'ru', 'Russian'],
-	['si-SI', 'si', 'Sinhala'],
-	['uk-UA', 'uk', 'Ukrainian'],
-	['zh-ZH', 'zh', 'Chinese']
-];
+
 const MESSAGES = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
 	installed: 'Install plugin manually',
@@ -96,41 +82,7 @@ const MESSAGES = {
 };
 
 // it's necessary because we show loader before all (and getting translations too)
-switch (shortLang) {
-	case 'ru':
-		Utils.translate["Loading"] = "Загрузка"
-		break;
-	case 'fr':
-		Utils.translate["Loading"] = "Chargement"
-		break;
-	case 'es':
-		Utils.translate["Loading"] = "Carga"
-		break;
-	case 'de':
-		Utils.translate["Loading"] = "Laden"
-		break;
-	case 'cs':
-		Utils.translate["Loading"] = "Načítání"
-		break;
-	case 'it':
-		Utils.translate["Loading"] = "Caricamento"
-		break;
-	case 'ja':
-		translate["Loading"] = "積み込み"
-		break;
-	case 'pt':
-		Utils.translate["Loading"] = "Carregamento"
-		break;
-	case 'si':
-		translate["Loading"] = "පැටවීම"
-		break;
-	case 'uk':
-		Utils.translate["Loading"] = "Вантаження"
-		break;
-	case 'zh':
-		Utils.translate["Loading"] = "装载量"
-		break;
-}
+Utils.init(shortLang);
 
 // it's necessary for loader (because it detects theme by this object)
 window.Asc = {
@@ -167,12 +119,8 @@ if (isLocal) {
 		.then(function(bOnline) {
 			if (bOnline) {
 				return fetchAllPlugins();
-			} else {
-				return loadInstalledLanguages()
-					.finally(function() {
-						return [];
-					});
 			}
+			return [];
 		});
 } else {
 	// fetch all plugins from config
@@ -196,21 +144,14 @@ window.onload = function() {
 	UI.init(themeType);
 	UI.toggleLoader(true, "Loading");
 
-	Promise.all([translationsPromise, pluginsPromise]).then(function() {
-		onTranslate();
-		showMarketplace();
-	}).catch(function(err) {
+	Promise.all([translationsPromise, pluginsPromise]).catch(function(err) {
 		console.error('Error loading marketplace: ', err);
-		onTranslate();
-		showMarketplace();
 	}).finally(function() {
-		onTranslate();
+		Utils.translateAll();
 		showMarketplace();
 		loadDiscussions().then(function() {
 			showRating();
 		});
-		loadChangelogs();
-		loadAllPluginsLanguages();
 		updateCategories();
 	});
 
@@ -574,8 +515,7 @@ function loadAllPluginsData() {
 		/** @type {PluginInfo} */
 		let config = {
 			url: confUrl,
-			baseUrl: pluginUrl,
-			languages: [ Utils.getTranslated('English') ]
+			baseUrl: pluginUrl
 		};
 		return makeRequestWithNoInternetHandler(confUrl, 'GET', null, null)
 			.then(function(response) {
@@ -628,75 +568,6 @@ function loadDiscussions() {
 	});
 
 	return Promise.all(discussionsPromises);
-};
-
-/** @returns {Promise<any[]>} */
-function loadChangelogs() {
-	/** @type {Promise<any>[]} */
-	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin) {
-		return DataFetcher.getChangelog(plugin.baseUrl)
-			.then(function(changelog) {
-				plugin.changelog = changelog;
-			}).catch(function() {
-				console.error('Failed to load changelog', plugin.name);
-			});
-	});
-
-	return Promise.all(pluginsPromises);
-}
-
-/** @returns {Promise<void[]>} */
-function loadAllPluginsLanguages() {
-	let url = isLocal ? OOMarketplaceUrl : ioUrl;
-	/** @type {Promise<any>[]} */
-	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
-		return DataFetcher.makeRequest(plugin.baseUrl + 'translations/langs.json', 'GET', null, null)
-			.then(function(response) {
-					/** @type {Array<string>} */
-					let langs = JSON.parse(response);
-					langs.forEach(function(full) {
-						let short = full.split('-')[0];
-						for (let i = 0; i < LANGUAGES.length; i++) {
-							// detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
-							if (LANGUAGES[i][0] == full /*|| LANGUAGES[i][1] == short*/) {
-								plugin.languages.push( Utils.getTranslated( LANGUAGES[i][2] ) );
-							}
-						}
-					});
-				}
-			).catch(function() {
-				console.error('Failed to load languages.json', plugin.name);
-			});
-	});
-
-	return Promise.all(pluginsPromises);
-}
-
-/** @returns {Promise<void[]>} */
-function loadInstalledLanguages() {
-	const promises = installedPlugins.map(function(pl) {
-		console.warn('get installed languages', pl);
-		return makeRequestWithNoInternetHandler(pl.obj.baseUrl + 'translations/langs.json', 'GET', null, null).then(
-			function(response) {
-				let supportedLangs = [ Utils.getTranslated('English') ];
-				let arr = JSON.parse(response);
-				arr.forEach(function(full) {
-					let short = full.split('-')[0];
-					for (let i = 0; i < LANGUAGES.length; i++) {
-						if (LANGUAGES[i][0] == short || LANGUAGES[i][1] == short) {
-							supportedLangs.push( Utils.getTranslated( LANGUAGES[i][2] ) );
-						}
-					}
-				});
-				if (supportedLangs.length > 1)
-					pl.obj.languages = supportedLangs;
-			},
-			function(error) {
-				pl.obj.languages = [ Utils.getTranslated('English') ];
-			}
-		);
-	});
-	return Promise.all(promises);
 };
 
 function updateCategories() {
@@ -1187,12 +1058,14 @@ function openPluginCard(guid) {
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('update');
+	localStorage.setItem('test', JSON.stringify(Utils.translate));
 	/** @type {PluginCardMessage} */
 	let message = {
 		type : 'showPluginCard',
 		guid : guid,
 		installed: installed || null,
 		plugin: plugin || null,
+		shortLang: shortLang,
 		iconBackground: iconBackground,
 		iconUrl: iconUrl,
 		themeType: themeType,
@@ -1202,7 +1075,9 @@ function openPluginCard(guid) {
 		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
 		OOMarketplaceUrl: OOMarketplaceUrl,
 		OOIO: OOIO,
-		pluginName: plugin ? getTranslatedName(plugin) : getTranslatedName(installed.obj)
+		pluginName: plugin ? getTranslatedName(plugin) : getTranslatedName(installed.obj),
+		pluginDescription: plugin ? getTranslatedDescription(plugin.variations[0]) : getTranslatedDescription(installed.obj.variations[0]),
+		translate: Utils.translate
 	};
 	sendMessage(message);
 	return new Promise(function(fResolve, fReject) {
@@ -1392,33 +1267,13 @@ function getTranslation() {
 				return false;
 			}
 			// console.log('get translation: ' + (Date.now() - start));
-			Utils.translate = JSON.parse(res);
+			Utils.setTranslations(JSON.parse(res));
 			return true;
 		}).catch(function(err) {
 			createError( new Error(errorMessage));
 			return false;
 		});
 
-};
-
-function onTranslate() {
-	document.querySelectorAll(".i18n").forEach((el) => {
-		if (el instanceof HTMLElement === false) return;
-
-		["placeholder", "title"].forEach((attr) => {
-			if (el.hasAttribute(attr)) {
-				el.setAttribute(
-					attr,
-					Utils.getTranslated(el.getAttribute(attr) || ""),
-				);
-			}
-		});
-
-		const translated = Utils.getTranslated(
-			el.textContent.trim().replace(/\s+/g, " "),
-		);
-		if (translated) el.textContent = translated;
-	});
 };
 
 function showMarketplace() {
@@ -1702,7 +1557,7 @@ function getFilteredPlugins() {
 	if (mainFilter === 'installed') {
 		plugins = installedPlugins;
 	} else if (mainFilter === 'updates') {
-		plugins = allPlugins.filter(plugin => plugin.bHasUpdate);
+		plugins = allPlugins.filter(function(plugin) { return plugin.bHasUpdate; });
 	}
 
 	if (category === "onlyoffice") {
@@ -1726,7 +1581,7 @@ function getFilteredPlugins() {
 
 	plugins = plugins.filter(function(el) {
 		let plugin = el.obj || el;
-		let name = (plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) ) ? ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] ) : plugin.name;
+		let name = getTranslatedName(plugin);
 		return name.toLowerCase().includes(searchQuery);
 	});
 

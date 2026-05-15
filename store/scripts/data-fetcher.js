@@ -124,6 +124,89 @@ const DataFetcher = {
         });
     },
     /**
+     * @param {string} url 
+     * @param {'GET' | 'POST'} method 
+     * @param {*} responseType 
+     * @param {*} body 
+     * @returns 
+     */
+    makeRequestWithRetryStrategy: function(url, method, responseType, body) {
+        /** @type {Function} */
+        let successCallback = function() {};
+        /** @param {unknown} err */
+        let failureCallback = function(err) {
+            console.error('Request failed:', err);
+        };
+
+        // maybe use fetch to in this function
+        if (!method)
+            method = 'GET';
+        
+        if (body)
+            body = JSON.stringify(body);
+
+        let numOfRetries = 0;
+
+        let makeRequest = function() {
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+            if (responseType)
+                xhr.responseType = responseType;
+            
+            xhr.onload = function () {
+                if (this.readyState == 4) {
+                    if (this.status !== 404 && (this.status == 200 || location.href.indexOf("file:") == 0)) {
+                        successCallback(this.response);
+                    }
+                    if (this.status >= 400) {
+                        let errorText = this.status === 404 ? 'File not found.' : 'Network problem.';
+                        failureCallback( new Error(errorText) );
+                    }
+                }
+            };
+
+            xhr.onerror = function (err) {
+                if (numOfRetries === 0) {
+                    failureCallback(err);
+                }
+                let timeout = 3000;
+                if (numOfRetries > 3 && numOfRetries < 10) {
+                    timeout = 5000;
+                } else if (numOfRetries > 9) {
+                    timeout = 10000;
+                }
+                if (url.includes('https') && numOfRetries < 3) {
+                    numOfRetries++;
+                    setTimeout(function() {
+                        makeRequest();
+                    }, timeout);
+                }
+            };
+
+            xhr.send(body);
+        }
+        try {
+            makeRequest();
+        } catch (error) {
+            failureCallback(error);
+        }
+
+        const result = {
+            /** @param {Function} callback */
+            onSuccess: function(callback) {
+                successCallback = callback;
+                return result;
+            },
+            /** @param {(err: unknown) => void} callback */
+            onFailure: function(callback) {
+                failureCallback = callback;
+                return result;
+            }
+        };
+          
+        return result;
+    },    
+    /**
      * @param {string} _url 
      * @returns 
      */

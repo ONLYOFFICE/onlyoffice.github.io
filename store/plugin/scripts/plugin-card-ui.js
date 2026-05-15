@@ -90,8 +90,16 @@ const PluginCardUI = {
     spanVersion: document.getElementById('span_ver'),
     /** @type {HTMLSpanElement} */
     totalVotes: document.getElementById('total_votes'),
-    /** @type {Object<string, HTMLDivElement>} */
-
+    /** @type {HTMLSpanElement} */
+    spanChangelog: document.getElementById("span_changelog"),
+    /** @type {HTMLDivElement} */
+    divChangelogPreview: document.getElementById("div_changelog_preview"),
+    /** @type {HTMLDivElement} */
+    divIconInfo: document.getElementById("div_icon_info"),
+    /** @type {HTMLDivElement} */
+    divSelectedChangelog: document.getElementById('div_selected_changelog'),
+    /** @type {HTMLDivElement} */
+    divSelectedInfo: document.getElementById('div_selected_info'),
 
     /** @param {'light' | string} themeType */
     init(themeType) {

@@ -34,21 +34,35 @@
 /// <reference path="../../scripts/types.js" />
 /// <reference path="./plugin-card-ui.js" />
 
+const LANGUAGES = [
+	['cs-CZ', 'cs', 'Czech'],
+	['de-DE', 'de', 'German'],
+	['es-ES', 'es', 'Spanish'],
+	['fr-FR', 'fr', 'French'],
+	['it-IT', 'it', 'Italian'],
+	['ja-JA', 'ja', 'Japanese'],
+	['nl-NL', 'nl', 'Dutch'],
+	['pt-PT', 'pt', 'Portuguese'],
+	['pt-BR', 'pt', 'Brazilian'],
+	['ru-RU', 'ru', 'Russian'],
+	['si-SI', 'si', 'Sinhala'],
+	['uk-UA', 'uk', 'Ukrainian'],
+	['zh-ZH', 'zh', 'Chinese']
+];
+
 const PluginCard = {
 	/** @type {number} */
 	editorVersion: 0,
-	/** @type {PluginInfo | null} */
+	/** @type {PluginInfo} */
     plugin: null,
 	/** @type {InstalledPluginInfo | null} */
     installed: null,
     /** @type {any} */
     PsChangelog: null,
-    themeType: 'light',
     slideIndex: 1,  // index for slides
     backup: false,
     init() {
         const self = this;
-        console.warn("plugin card init");
         return new Promise(function(fResolve) {
             window.Asc.plugin.attachEvent("onShowPluginCard", fResolve);
             window.Asc.plugin.sendToPlugin("onWindowReady", {});
@@ -57,8 +71,10 @@ const PluginCard = {
             self.plugin = data.plugin;
             self.installed = data.installed;
             self.editorVersion = data.editorVersion;
-            self.themeType = data.themeType;
             self.backup = data.isLocal && !data.plugin;
+            Utils.init(data.shortLang);
+            Utils.setTranslations(data.translate);
+            Utils.translateAll();
             PluginCardUI.init(data.themeType);
             PluginCardUI.toggleLoader(true, 'Loading');
             return waitForRepaint().then(function() {
@@ -72,7 +88,6 @@ const PluginCard = {
      * @param {PluginCardMessage} data
      */
     _show: function (data) {
-        console.log(window);
 		const self = this;
         const guid = data.guid;
 
@@ -83,9 +98,27 @@ const PluginCard = {
         let divPreview = document.createElement("div");
         divPreview.id = "div_preview";
         divPreview.className = "div_preview";
-        if (!this.plugin) {
-            console.error("Failed to load plugin");
-            return;
+        /** @type {string} */
+        let baseUrl = "";
+        if (this.plugin && this.plugin.baseUrl) {
+            baseUrl = this.plugin.baseUrl;
+        } else if (this.installed && this.installed.baseUrl) {
+            baseUrl = this.installed.baseUrl;
+        }
+        this._loadAndShowLanguages(baseUrl, !!this.plugin);
+        
+        if (
+            this.installed &&
+            (!this.plugin ||
+                (data.isLocal && this.plugin.baseUrl.includes("file:")))
+        ) {
+            PluginCardUI.divGitLink.classList.add("hidden");
+            this.plugin = this.installed.obj;
+        } else {
+            PluginCardUI.divGitLink.classList.remove("hidden");
+            if (!this.plugin && this.installed) {
+                this.plugin = this.installed.obj;
+            }
         }
 
         let discussionUrl = this.plugin.discussionUrl || "";
@@ -121,25 +154,10 @@ const PluginCard = {
             });
         }
 
-        if (
-            this.installed &&
-            (!this.plugin ||
-                (data.isLocal && this.plugin.baseUrl.includes("file:")))
-        ) {
-            PluginCardUI.divGitLink.classList.add("hidden");
-            this.plugin = this.installed.obj;
-        } else {
-            PluginCardUI.divGitLink.classList.remove("hidden");
-        }
-        console.warn(this.plugin);
-        if (!this.plugin) {
-            console.error("Plugin is null");
-            return;
-        }
         let bWebUrl =
-            !this.plugin.baseUrl.includes("http://") &&
-            !this.plugin.baseUrl.includes("file:") &&
-            !this.plugin.baseUrl.includes("../");
+            !baseUrl.includes("http://") &&
+            !baseUrl.includes("file:") &&
+            !baseUrl.includes("../");
         let bCorrectUrl = data.isLocal || bWebUrl;
 
         if (
@@ -192,7 +210,6 @@ const PluginCard = {
         } else {
             PluginCardUI.spanVersion.textContent = "";
             PluginCardUI.divVersion.classList.add("hidden");
-            hiddenCounter++;
         }
 
         if (
@@ -208,31 +225,11 @@ const PluginCard = {
         } else {
             PluginCardUI.spanMinVersion.textContent = "";
             PluginCardUI.divMinVersion.classList.add("hidden");
-            hiddenCounter++;
         }
 
-        if (this.plugin.languages) {
-            PluginCardUI.spanLanguages.textContent =
-                this.plugin.languages.join(", ") + ".";
-            PluginCardUI.divLanguages.classList.remove("hidden");
-        } else {
-            PluginCardUI.spanLanguages.textContent = "";
-            PluginCardUI.divLanguages.classList.add("hidden");
-            hiddenCounter++;
-        }
+        this._loadAndShowChangelog(baseUrl);
 
-        if (this.plugin.changelog) {
-            document
-                .getElementById("span_changelog")
-                .classList.remove("hidden");
-            document.getElementById("div_changelog_preview").innerHTML =
-                this.plugin.changelog;
-        } else {
-            document.getElementById("span_changelog").classList.add("hidden");
-            document.getElementById("div_changelog_preview").textContent = "";
-        }
-
-        let pluginUrl = this.plugin.baseUrl.replace(
+        let pluginUrl = baseUrl.replace(
             data.OOMarketplaceUrl,
             data.OOIO + "tree/master/",
         );
@@ -240,14 +237,12 @@ const PluginCard = {
         // TODO problem with plugins icons (different margin from top)
         // we do this, because new icons for store are too big for use it in this window.
 
-        document.getElementById("div_icon_info").style.background =
-            data.iconBackground;
+        PluginCardUI.divIconInfo.style.background = data.iconBackground;
         PluginCardUI.imgIcon.setAttribute("src", data.iconUrl);
-        PluginCardUI.spanName.textContent = this.plugin.name;
+        PluginCardUI.spanName.textContent = data.pluginName;
         PluginCardUI.spanOffered.textContent =
             this.plugin.offered || offered;
-        PluginCardUI.spanSelectedDescr.textContent =
-            this.plugin.variations[0].description;
+        PluginCardUI.spanSelectedDescr.textContent = data.pluginDescription;
         if (bWebUrl) {
             PluginCardUI.linkPlugin.setAttribute("href", pluginUrl);
             PluginCardUI.linkReadme.setAttribute(
@@ -294,23 +289,62 @@ const PluginCard = {
             PluginCardUI.btnInstall.removeAttribute("title");
         }
 
-        if (hiddenCounter == 3) {
-            // if versions and languages fields are hidden, we should hide this div
-            document.getElementById("div_plugin_info").classList.add("hidden");
-        } else {
-            document
-                .getElementById("div_plugin_info")
-                .classList.remove("hidden");
-        }
-
         this._setDivHeight();
         //sendMessage({ type: "showButton", show: true });
         // PluginCardUI.arrow.classList.remove('hidden');
-        this._updateScroll();
+        
+    },
+
+    /** @param {string} baseUrl */
+    _loadAndShowChangelog: function(baseUrl) {
+        const self = this;
+        return DataFetcher.getChangelog(baseUrl)
+			.then(function(changelog) {
+				PluginCardUI.spanChangelog.classList.remove("hidden");
+				PluginCardUI.divChangelogPreview.innerHTML = changelog;
+			}).catch(function() {
+				console.error('Failed to load changelog', baseUrl);
+				PluginCardUI.spanChangelog.classList.add("hidden");
+				PluginCardUI.divChangelogPreview.textContent = "";
+			}).finally(function() {
+                self._updateScroll();
+            });
+    },
+    /**
+     * @param {string} baseUrl
+     * @param {boolean} bStrict
+     */
+    _loadAndShowLanguages(baseUrl, bStrict) {
+        let supportedLangs = [ Utils.getTranslated('English') ];
+        PluginCardUI.spanLanguages.textContent = supportedLangs.join(", ") + ".";
+        PluginCardUI.divLanguages.classList.remove("hidden");
+        return DataFetcher.makeRequestWithRetryStrategy(baseUrl + 'translations/langs.json', 'GET', null, null)
+			.onSuccess(function(/** @type {string} */response) {
+                /** @type {Array<string>} */
+                let langs = JSON.parse(response);
+                langs.forEach(function(full) {
+                    let short = full.split('-')[0];
+                    for (let i = 0; i < LANGUAGES.length; i++) {
+                        const lang = Utils.getTranslated( LANGUAGES[i][2] );
+                        if (supportedLangs.indexOf(lang) !== -1) {
+                            continue;
+                        }
+                        // detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
+                        if (bStrict && (LANGUAGES[i][0] == full /*|| LANGUAGES[i][1] == short*/)) {
+                            supportedLangs.push( lang );
+                        } else if (!bStrict && (LANGUAGES[i][0] == short || LANGUAGES[i][1] == short)) {
+                            supportedLangs.push( lang );
+                        }
+                    }
+                });
+                PluginCardUI.spanLanguages.textContent = supportedLangs.join(", ") + ".";
+            }).onFailure(function() {
+				console.error('Failed to load languages.json');
+			});
     },
 
     /** @param {string} guid */
-	_changeAfterInstallOrRemove(guid) {
+	/*_changeAfterInstallOrRemove(guid) {
 		let bCheckUpdate = true;
 		if (!this.plugin && this.installed) {
 			this.plugin = this.installed.obj;
@@ -337,7 +371,7 @@ const PluginCard = {
 		const bNeedUpdateButton = bHasUpdate && !bRemoved;
 		const bNeedRemoveButton = this.installed && !bRemoved && this.installed.canRemoved;
 		const bNeedInstallButton = !this.installed || bRemoved;
-	},
+	},*/
 
     _updateScroll: function() {
         // scroll for changelog preview
@@ -380,6 +414,10 @@ const PluginCard = {
         }
     },
     
+    /** 
+     * @param {HTMLSpanElement} target 
+     * @param {number} type 
+     */
     onSelectPreview: function(target, type) {
         // change mode of preview
         if ( !target.classList.contains('span_selected') ) {
@@ -392,9 +430,9 @@ const PluginCard = {
             if (type === 1) {
                 this._setDivHeight();
             } else if (type === 2) {
-                element = document.getElementById('div_selected_info');
+                element = PluginCardUI.divSelectedInfo;
             } else {
-                element = document.getElementById('div_selected_changelog');
+                element = PluginCardUI.divSelectedChangelog;
                 this.PsChangelog.update();
             }
             element.classList.remove('hidden');
@@ -406,8 +444,9 @@ const PluginCard = {
     },
 
     onClickInstall: function() {
+        const self = this;
         PluginCardUI.toggleLoader(true, 'Installation');
-        return waitForRepaint().then(() => this._doInstall());
+        return waitForRepaint().then(function() { self._doInstall() });
     },
 
     _doInstall: function() {
@@ -418,8 +457,7 @@ const PluginCard = {
             //sendMessage( { type : "showButton", show : false } );
             this.onClickClose();
         }
-        console.warn(guid);
-        console.log(this.plugin);
+
         /** @type {IframeMessage} */
         let message = {
             type : 'install',
@@ -432,8 +470,6 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Installed", fResolve);
             window.Asc.plugin.sendToPlugin("onInstall", message);
         }).then(function (message) {
-            console.log("------- INSTALL -------");
-            console.log(message);
             PluginCardUI.btnRemove.classList.remove('hidden');
             PluginCardUI.btnInstall.classList.add('hidden');
             PluginCardUI.toggleLoader(false);
@@ -442,8 +478,9 @@ const PluginCard = {
     },
 
     onClickUpdate: function() {
+        const self = this;
         PluginCardUI.toggleLoader(true, 'Updating');
-        return waitForRepaint().then(() => this._doUpdate());
+        return waitForRepaint().then(function() { self._doUpdate() });
     },
 
     _doUpdate: function() {
@@ -460,19 +497,17 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Updated", fResolve);
             window.Asc.plugin.sendToPlugin("onUpdate", message);
         }).then(function (message) {
-            console.log('--UPDATE--');
-            console.log(message);
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnRemove.classList.remove('hidden');
-            
 			PluginCardUI.spanVersion.textContent = String(self.plugin.version);
             PluginCardUI.toggleLoader(false);
         });
     },
 
     onClickRemove: function() {
+        const self = this;
         PluginCardUI.toggleLoader(true, 'Removal');
-        return waitForRepaint().then(() => this._doRemove());
+        return waitForRepaint().then(function() { self._doRemove() });
     },
 
     _doRemove: function() {
@@ -492,8 +527,6 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Removed", fResolve);
             window.Asc.plugin.sendToPlugin("onRemove", message);
         }).then(function (message) {
-            console.log('-- REMOVE from plugin card --');
-            console.log(message);
             PluginCardUI.btnRemove.classList.add('hidden');
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnInstall.classList.remove('hidden');
@@ -565,16 +598,7 @@ window.Asc.plugin.init = PluginCard.init.bind(PluginCard);
 window.Asc.plugin.onThemeChanged = function (theme) {
     window.Asc.plugin.onThemeChangedBase(theme);
     let style = document.head.lastChild.innerHTML || '';
-    PluginCardUI.onChangeTheme(theme, PluginCard.themeType, style);
+    PluginCardUI.onChangeTheme(theme, theme.type, style);
 };
 
-window.Asc.plugin.onTranslate = function () {
-    let elements = document.getElementsByClassName("i18n");
-
-    for (let index = 0; index < elements.length; index++) {
-        const element = elements[index];
-        element.innerHTML = window.Asc.plugin.tr(element.innerHTML);
-    }
-};
-
-
+window.Asc.plugin.onTranslate = Utils.translateAll.bind(Utils);

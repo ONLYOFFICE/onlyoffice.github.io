@@ -35,19 +35,83 @@
 
 const Utils = {
     /** @type {Object<string, string>} */
-    translate: {'Loading': 'Loading'},                              // translations for current language (thouse will necessary if we don't get translation file)
-    init: function() {
-
+    translate: {'Loading': 'Loading'}, // translations for current language (thouse will necessary if we don't get translation file)
+    /** @param {string} shortLang */
+    init: function(shortLang) {
+        switch (shortLang) {
+            case 'ru':
+                this.translate["Loading"] = "Загрузка"
+                break;
+            case 'fr':
+                this.translate["Loading"] = "Chargement"
+                break;
+            case 'es':
+                this.translate["Loading"] = "Carga"
+                break;
+            case 'de':
+                this.translate["Loading"] = "Laden"
+                break;
+            case 'cs':
+                this.translate["Loading"] = "Načítání"
+                break;
+            case 'it':
+                this.translate["Loading"] = "Caricamento"
+                break;
+            case 'ja':
+                this.translate["Loading"] = "積み込み"
+                break;
+            case 'pt':
+                this.translate["Loading"] = "Carregamento"
+                break;
+            case 'si':
+                this.translate["Loading"] = "පැටවීම"
+                break;
+            case 'uk':
+                this.translate["Loading"] = "Вантаження"
+                break;
+            case 'zh':
+                this.translate["Loading"] = "装载量"
+                break;
+        }
     },
     /**
      * @param {string} text
      * @returns {string}
      */
     getTranslated: function(text) {
-        if (window.Asc && window.Asc.plugin && window.Asc.plugin.tr) {
-            return window.Asc.plugin.tr(text) || text;
+        text = text.trim().replace(/\s+/g, " ");
+        if (this.translate[text]) {
+            return this.translate[text];
         }
-        return this.translate[text.trim()] || text;
+        if (window.Asc && window.Asc.plugin && window.Asc.plugin.tr) {
+            const translated = window.Asc.plugin.tr(text);
+            return translated || text;
+        }
+        return text;
+    },
+    translateAll: function() {
+        const self = this;
+        document.querySelectorAll(".i18n").forEach(function(el) {
+            if (el instanceof HTMLElement === false) return;
+
+            ["placeholder", "title"].forEach(function(attr) {
+                if (el.hasAttribute(attr)) {
+                    el.setAttribute(
+                        attr,
+                        self.getTranslated(el.getAttribute(attr) || ""),
+                    );
+                }
+            });
+
+            const translated = self.getTranslated(
+                el.textContent.trim().replace(/\s+/g, " "),
+            );
+            if (translated) el.textContent = translated;
+        });
+    },
+    /** @param {Object<string, string>} translations */
+    setTranslations: function(translations) {
+        this.translate = translations;
     },
     /**
      * @param {string} text 
@@ -125,9 +189,9 @@ const Utils = {
 
         let indLast = arr.length - 1;
         let end = arr[0].indexOf('\n\n');
-        let firstVersion = Utils.convertPluginVersionToNumber( arr[0].slice(0, end) );
+        let firstVersion = this.convertPluginVersionToNumber( arr[0].slice(0, end) );
         end = arr[indLast].indexOf('\n\n');
-        let lastVersion = Utils.convertPluginVersionToNumber( arr[indLast].slice(0, end) );
+        let lastVersion = this.convertPluginVersionToNumber( arr[indLast].slice(0, end) );
         if (lastVersion > firstVersion)
             arr = arr.reverse();
 
