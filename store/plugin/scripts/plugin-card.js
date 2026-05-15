@@ -32,6 +32,7 @@
 
 // @ts-check
 /// <reference path="../../scripts/types.js" />
+/// <reference path="../../scripts/common.js" />
 /// <reference path="./plugin-card-ui.js" />
 
 const LANGUAGES = [
@@ -238,7 +239,12 @@ const PluginCard = {
         // we do this, because new icons for store are too big for use it in this window.
 
         PluginCardUI.divIconInfo.style.background = data.iconBackground;
-        PluginCardUI.imgIcon.setAttribute("src", data.iconUrl);
+        PluginCardUI.imgIcon.setAttribute("src", data.iconSrc.src);
+        if (data.iconSrc.srcset) {
+            PluginCardUI.imgIcon.setAttribute("srcset", data.iconSrc.srcset);
+        } else {
+            PluginCardUI.imgIcon.removeAttribute("srcset");
+        }
         PluginCardUI.spanName.textContent = data.pluginName;
         PluginCardUI.spanOffered.textContent =
             this.plugin.offered || offered;
@@ -298,17 +304,19 @@ const PluginCard = {
     /** @param {string} baseUrl */
     _loadAndShowChangelog: function(baseUrl) {
         const self = this;
-        return DataFetcher.getChangelog(baseUrl)
-			.then(function(changelog) {
+        return DataFetcher.makeRequestWithRetryStrategy(baseUrl + 'CHANGELOG.md', 'GET', null, null)
+            .onSuccess(function(/** @type {String} */response) {
+                const changelog = Utils.makeChangeLogHtml(response);
 				PluginCardUI.spanChangelog.classList.remove("hidden");
 				PluginCardUI.divChangelogPreview.innerHTML = changelog;
-			}).catch(function() {
+                self._updateScroll();
+			})
+            .onFailure(function() {
 				console.error('Failed to load changelog', baseUrl);
 				PluginCardUI.spanChangelog.classList.add("hidden");
 				PluginCardUI.divChangelogPreview.textContent = "";
-			}).finally(function() {
                 self._updateScroll();
-            });
+			});
     },
     /**
      * @param {string} baseUrl
@@ -342,36 +350,6 @@ const PluginCard = {
 				console.error('Failed to load languages.json');
 			});
     },
-
-    /** @param {string} guid */
-	/*_changeAfterInstallOrRemove(guid) {
-		let bCheckUpdate = true;
-		if (!this.plugin && this.installed) {
-			this.plugin = this.installed.obj;
-			bCheckUpdate = false;
-		}
-
-		let bNotAvailable = false;
-		const minV = (this.plugin.minVersion ? Utils.convertPluginVersionToNumber(this.plugin.minVersion) : -1);
-		if (minV > editorVersion) {
-			bCheckUpdate = false;
-			bNotAvailable = true;
-		}
-
-		let bHasUpdate = false;
-		let bRemoved = (this.installed && this.installed.removed);
-		if (bCheckUpdate && this.installed && this.plugin) {
-			const installedV = Utils.convertPluginVersionToNumber(this.installed.obj.version || "0.0.0");
-			const lastV = Utils.convertPluginVersionToNumber(this.plugin.version || "0.0.0");
-			if (lastV > installedV) {
-				bHasUpdate = true;
-				this.plugin.bHasUpdate = true;
-			}
-		}
-		const bNeedUpdateButton = bHasUpdate && !bRemoved;
-		const bNeedRemoveButton = this.installed && !bRemoved && this.installed.canRemoved;
-		const bNeedInstallButton = !this.installed || bRemoved;
-	},*/
 
     _updateScroll: function() {
         // scroll for changelog preview
@@ -448,13 +426,11 @@ const PluginCard = {
         PluginCardUI.toggleLoader(true, 'Installation');
         return waitForRepaint().then(function() { self._doInstall() });
     },
-
     _doInstall: function() {
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
 
         if (!this.plugin && !this.installed) {
             // if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
-            //sendMessage( { type : "showButton", show : false } );
             this.onClickClose();
         }
 
@@ -482,7 +458,6 @@ const PluginCard = {
         PluginCardUI.toggleLoader(true, 'Updating');
         return waitForRepaint().then(function() { self._doUpdate() });
     },
-
     _doUpdate: function() {
         const self = this;
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
@@ -509,7 +484,6 @@ const PluginCard = {
         PluginCardUI.toggleLoader(true, 'Removal');
         return waitForRepaint().then(function() { self._doRemove() });
     },
-
     _doRemove: function() {
         const self = this;
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;

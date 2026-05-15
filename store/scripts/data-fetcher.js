@@ -40,6 +40,7 @@
  * @property {() => Promise<any>} loadChangelogs
  */
 const DataFetcher = {
+    proxyUrl: 'https://plugins-services.onlyoffice.com/proxy',// url to proxy for getting rating
     /**
      * @param {string} discussionUrl 
      * @param {boolean} bDesktopRequest 
@@ -58,25 +59,13 @@ const DataFetcher = {
                 });
         } else {
             let body = { target: discussionUrl };
-            return this.makeRequest(proxyUrl, 'POST', null, body)
+            return this.makeRequest(this.proxyUrl, 'POST', null, body)
                 .then(function(data) {
                     data = JSON.parse(data);
                     return Utils.parseRatingPage(data);
                 });
         }
     },
-    /**
-     * @param {string} baseUrl
-     * @returns {Promise<string>}
-     */
-    getChangelog: function(baseUrl) {
-        const self = this;
-        return this.makeRequest(baseUrl + 'CHANGELOG.md', 'GET', null, null)
-            .then(function(response) {
-				return Utils.makeChangeLogHtml(response);
-			})
-    },
-
     /**
      * @param {string} url 
      * @param {'GET' | 'POST'} method 
@@ -128,7 +117,7 @@ const DataFetcher = {
      * @param {'GET' | 'POST'} method 
      * @param {*} responseType 
      * @param {*} body 
-     * @returns 
+     * @returns {{onSuccess: Function, onFailure: Function}}
      */
     makeRequestWithRetryStrategy: function(url, method, responseType, body) {
         /** @type {Function} */

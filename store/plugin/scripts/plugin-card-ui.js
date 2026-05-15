@@ -114,6 +114,7 @@ const PluginCardUI = {
      * @param {*} theme
      * @param {'light'|string} themeType
      * @param {string} style
+     * @returns {string|false} returns default background color or false if theme is not changed
      */
     onChangeTheme: function(theme, themeType, style) {
         let rule = '.text-secondary{color:'+theme["text-secondary"]+';}\n';
@@ -145,8 +146,7 @@ const PluginCardUI = {
             return false;
         } else {
             styleTheme.innerHTML = style + rule;
-            defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
-            return defaultBG;
+            return themeType == 'light' ? "#F5F5F5" : '#555555';
         }
     },
     

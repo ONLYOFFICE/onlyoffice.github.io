@@ -36,6 +36,7 @@
 /// <reference path="./storage.js" />
 /// <reference path="./utils.js" />
 /// <reference path="./data-fetcher.js" />
+/// <reference path="./common.js" />
 
 const version = '1.0.9';                                             // version of store (will change it when update something in store)
 let start = Date.now();
@@ -54,18 +55,15 @@ let installedPlugins = [];                                           // list of 
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
-let editorVersion;                                            // editor current version
+let editorVersion;                                            		 // editor current version
 let themeType = detectThemeType();                                   // current theme
 const lang = detectLanguage();                                       // current language
 const shortLang = lang.split('-')[0];                                // short language
 let bTranslate = false;                                              // flag translate or not
-/** @type {number} */
-let timeout;                                                 		 // delay for loader
 let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 /** @type {any} */
 let PsMain = null;                                                   // scroll for list of plugins
-const proxyUrl = 'https://plugins-services.onlyoffice.com/proxy';    // url to proxy for getting rating
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
 let scale = {                                                        // current scale
 	percent  : "100%",                                               // current scale in percent
@@ -73,13 +71,6 @@ let scale = {                                                        // current 
 	devicePR : 1                                                     // device pixel ratio
 };
 calculateScale();
-
-const MESSAGES = {
-	versionWarning: 'This plugin will only work in a newer version of the editor.',
-	installed: 'Install plugin manually',
-	updates: 'Install plugin manually',
-	marketplace: 'Submit your own plugin'
-};
 
 // it's necessary because we show loader before all (and getting translations too)
 Utils.init(shortLang);
@@ -108,7 +99,7 @@ const installedPluginsPromise = getMarketplaceVersion()
 		installedPlugins = plugins;
 		return plugins;
 	});
-const translationsPromise = getTranslation();
+const translationsPromise = loadAndApplyTranslations();
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Promise.resolve([]);
 console.log('is local: ', isLocal);
@@ -146,7 +137,6 @@ window.onload = function() {
 	Promise.all([translationsPromise, pluginsPromise]).catch(function(err) {
 		console.error('Error loading marketplace: ', err);
 	}).finally(function() {
-		Utils.translateAll();
 		showMarketplace();
 		loadDiscussions().then(function() {
 			showRating();
@@ -400,26 +390,26 @@ window.addEventListener('message', function(message) {
 			if (message.theme.type)
 				themeType = message.theme.type;
 
-			let defaultBG = UI.onChangeTheme(message.theme, themeType, message.style);
-			if (defaultBG) {
+			let bg = UI.onChangeTheme(message.theme, themeType, message.style);
+			if (bg) {
+				defaultBG = bg;
 				let bShowMarketplace = STORAGE.mainFilter === "marketplace";
 				/** @type {Plugins} */
 				let arrPl = bShowMarketplace ? allPlugins : installedPlugins;
 				arrPl.forEach(function(pl) {
 
 					let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
-					let bg = defaultBG;
-					let imgUrl = '';
+					let imgSrc = null;
 					if (variation.store) {
 						if (variation.store.background)
 							bg = variation.store.background[themeType]
 					} else {
 						// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
 						// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
-						imgUrl = getImageUrl( pl.guid, false, false, ('img_' + pl.guid) );
+						imgSrc = getImageUrl(pl.guid);
 					}
 					
-					UI.setPluginImage(pl.guid, bg, imgUrl);
+					UI.setPluginImage(pl.guid, bg, imgSrc);
 				});
 
 				// todo change header background color and change icons for plugin cards and for plugin window
@@ -775,10 +765,11 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	const bNeedUpdateButton = bHasUpdate && !bRemoved;
 	const bNeedRemoveButton = installed && !bRemoved && installed.canRemoved;
 	const bNeedInstallButton = !installed || bRemoved;
+	const imgSrc = getImageUrl(guid);
 
 	let template = '<div class="introduction">' +
 		'<div class="image" style="background: ' + bg + '">' +
-			'<img id="img_' + guid + '" class="plugin_icon" style="display:none" data-guid="' + guid + '" src="' + getImageUrl(guid, false, true, ('img_' + guid) ) + '">' +
+			'<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
 		'</div>' +
 		'<div class="name">' +
 			'<div>' +
@@ -909,34 +900,30 @@ function showRating() {
 	}
 
 	showRatingHandle = requestAnimationFrame(processChunk);
-};
+}
 
 /**
  * @param {string} guid 
  * @param {Event} event 
  */
 function onClickInstall(guid, event) {
-	// click install button
 	event.stopImmediatePropagation();
-	// click install button
-	// we should do that because we have some problem when desktop is loading plugin
-	if (isLocal) {
-		UI.toggleLoader(true, 'Installation');
-	} else {
-		clearTimeout(timeout);
-		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Installation");
-	}
+	UI.toggleLoader(true, 'Installation');
+	return waitForRepaint().then(function() { _doInstall(guid) });
+}
+/**
+ * @param {string} guid 
+ */
+function _doInstall(guid) {
 	/** @type {PluginInfo | undefined} */
 	let plugin = findPlugin(guid);
 	/** @type {InstalledPluginInfo | undefined} */
 	let installed = findInstalledPlugin(guid);
 	if (!plugin && !installed) {
-		// if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
-		//sendMessage( { type : "showButton", show : false } );
-		onClickBack();
+		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
 	}
-	console.warn(event, guid, plugin);
+
 	console.log(plugin);
 	let message = {
 		type : 'install',
@@ -944,32 +931,26 @@ function onClickInstall(guid, event) {
 		guid : guid,
 		config : (installed ? installed.obj : plugin)
 	};
-	// we should do that because we have some problem when desktop is loading plugin
-	if (isLocal) {
-		setTimeout(function() {
-			sendMessage(message);
-		}, 200);
-	} else {
-		sendMessage(message);
-	}
-};
 
+	sendMessage(message);
+}
 /**
  * @param {string} guid 
  * @param {Event} event 
  */
 function onClickUpdate(guid, event) {
-	// click update button
-	// we should do that because we have some problem when desktop is loading plugin
-	if (isLocal) {
-		UI.toggleLoader(true, 'Updating');
-	} else {
-		clearTimeout(timeout);
-		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Updating");
-	}
+	event.stopImmediatePropagation();
+	UI.toggleLoader(true, 'Updating');
+	return waitForRepaint().then(function() { _doUpdate(guid) });
+}
+/**
+ * @param {string} guid 
+ */
+function _doUpdate(guid) {
 	let plugin = findPlugin(guid);
 	if (!plugin) {
 		console.error('Plugin not found for update: ' + guid);
+		UI.toggleLoader(false);
 		return;
 	}
 	let message = {
@@ -978,15 +959,10 @@ function onClickUpdate(guid, event) {
 		guid : guid,
 		config : plugin
 	};
-	// we should do that because we have some problem when desktop is loading plugin
-	if (isLocal) {
-		setTimeout(function() {
-			sendMessage(message);
-		}, 200);
-	} else {
-		sendMessage(message);
-	}
-};
+
+	sendMessage(message);
+}
+
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -994,13 +970,13 @@ function onClickUpdate(guid, event) {
 function onClickRemove(guid, event) {
 	console.log(guid, event);
 	event.stopImmediatePropagation();
-	// click remove button
-	if (isLocal) {
-		UI.toggleLoader(true, 'Removal');
-	} else {
-		clearTimeout(timeout);
-		timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Removal");
-	}
+	UI.toggleLoader(true, 'Removal');
+	return waitForRepaint().then(function() { _doRemove(guid) });
+}
+/**
+ * @param {string} guid 
+ */
+function _doRemove(guid) {
 	let message = {
 		type : 'remove',
 		guid : guid,
@@ -1016,10 +992,11 @@ function needBackupPlugin(guid) {
 
 	return isLocal ? findPlugin(guid) == undefined : false;
 }
-
 function onClickUpdateAll() {
-	clearTimeout(timeout);
-	timeout = setTimeout(UI.toggleLoader.bind(UI), 200, true, "Updating");
+	UI.toggleLoader(true, 'Updating');
+	return waitForRepaint().then(function() { _doUpdateAll() });
+}
+function _doUpdateAll() {
 	UI.btnUpdateAll.classList.add('hidden');
 	let arr = allPlugins.filter(function(el) {
 		return el.bHasUpdate;
@@ -1053,7 +1030,7 @@ function openPluginCard(guid) {
 	let plugin = findPlugin(guid);
 	STORAGE.bPluginCardShown = true;
 	STORAGE.selectedPluginGuid = guid;
-	let iconUrl = getImageUrl(guid, false, true, 'img_icon');
+	let iconSrc = getImageUrl(guid);
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('update');
@@ -1066,7 +1043,7 @@ function openPluginCard(guid) {
 		plugin: plugin || null,
 		shortLang: shortLang,
 		iconBackground: iconBackground,
-		iconUrl: iconUrl,
+		iconSrc: iconSrc,
 		themeType: themeType,
 		isLocal: isLocal,
 		editorVersion: editorVersion,
@@ -1103,10 +1080,6 @@ function openPluginCard(guid) {
 }
 
 function onClickBack() {
-	// click on left arrow in preview mode
-	document.querySelectorAll('.dot').forEach(function(el) { el.remove(); });
-	document.querySelectorAll('.mySlides').forEach(function(el) { el.remove(); });
-	document.getElementById('span_overview').click();
 	STORAGE.bPluginCardShown = false;
 	if(PsMain) PsMain.update();
 };
@@ -1177,16 +1150,12 @@ window.onresize = function(bForce) {
 		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
 			// set height for div with image in preview mode
 			if (PsMain) PsMain.update();
-			let oldScale = scale.value;
 			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
 
 			calculateScale();
 			html.setAttribute('style', '');
-
-			if (scale.value !== oldScale)
-				changeIcons();
 		} else if (scale.devicePR < 1) {
 			html.style.zoom = revZoom;
 			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
@@ -1226,52 +1195,55 @@ function calculateScale() {
 	scale.value = supportedScaleValues[bestIndex];
 };
 
-function changeIcons() {
-	let arr = document.getElementsByClassName('plugin_icon');
-	for (let i = 0; i < arr.length; i++) {
-		let guid = arr[i].getAttribute('data-guid');
-		if (!guid) continue;
-		arr[i].setAttribute( 'src', getImageUrl( guid, false, true, ('img_' + guid) ) );
-	}
-};
-
 /** @returns {Promise<boolean>} */
-function getTranslation() {
+function loadAndApplyTranslations() {
 	// gets translation for current language
 	if (shortLang === "en") {
 		return Promise.resolve(true);
 	}
-	let errorMessage = 'Cannot load translations list file.';
-	return makeRequestWithNoInternetHandler('./translations/langs.json', 'GET', null, null)
-		.then(function(response) {
-			let arr = JSON.parse(response);
-			let name = '';
-			for (let i = 0; i < arr.length; i++) {
-				let file = arr[i];
-				if (file == lang) {
-					name = file;
-					break;
-				} else if (file.split('-')[0] == shortLang) {
-					name = file;
+	return new Promise(function(fResolve, fReject) {
+		DataFetcher.makeRequestWithRetryStrategy('./translations/langs.json', 'GET', null, null)
+			.onSuccess(function(/** @type {string} */response) {
+				let arr = JSON.parse(response);
+				let name = '';
+				for (let i = 0; i < arr.length; i++) {
+					let file = arr[i];
+					if (file == lang) {
+						name = file;
+						break;
+					} else if (file.split('-')[0] == shortLang) {
+						name = file;
+					}
 				}
-			}
-			errorMessage = 'Cannot load translation for current language.';
-			if (!name) {
-				return;
-			}
-			bTranslate = true;
-			return makeRequestWithNoInternetHandler('./translations/' + name + '.json', 'GET', null, null);
-		}).then(function(res) {
-			if (!res) {
-				return false;
-			}
-			// console.log('get translation: ' + (Date.now() - start));
-			Utils.setTranslations(JSON.parse(res));
-			return true;
-		}).catch(function(err) {
-			createError( new Error(errorMessage));
-			return false;
-		});
+
+				if (!name) {
+					fResolve(false);
+					return;
+				}
+				bTranslate = true;
+				DataFetcher.makeRequestWithRetryStrategy('./translations/' + name + '.json', 'GET', null, null)
+					.onSuccess(function(res) {
+						if (!res) {
+							return false;
+						}
+						Utils.setTranslations(JSON.parse(res));
+						Utils.translateAll();
+						fResolve(true);
+					})
+					.onFailure(function(err) {
+						createError(new Error('Cannot load translation for current language.'));
+						fReject(err);
+					});
+			})
+			.onFailure(function(err) {
+				createError( new Error('Cannot load translations list file.'));
+				fReject(err);
+			});
+	}).then(function(/** @type {boolean} */res) {
+		return res;
+	}).catch(function() {
+		return false;
+	});
 
 };
 
@@ -1290,128 +1262,114 @@ function showMarketplace() {
 	}
 };
 
+// supported icon scales: [percent, suffix, descriptor]
+const ICON_SCALES = [
+	['100%', '/icon.png',       '1x'],
+	['125%', '/icon@1.25x.png', '1.25x'],
+	['150%', '/icon@1.5x.png',  '1.5x'],
+	['175%', '/icon@1.75x.png', '1.75x'],
+	['200%', '/icon@2x.png',    '2x'],
+];
+
 /**
- * @param {string} guid 
- * @param {boolean} bNotForStore 
- * @param {boolean} bSetSize 
- * @param {string} id 
- * @returns 
+ * @param {string[]} urls 5 URLs in ICON_SCALES order
+ * @returns {{src: string, srcset: string}}
  */
-function getImageUrl(guid, bNotForStore, bSetSize, id) {
-	// get icon url for current plugin (according to theme and scale)
-	let iconScale = '/icon.png';
-	switch (scale.percent) {
-		case '125%':
-			iconScale = '/icon@1.25x.png'
-			break;
-		case '150%':
-			iconScale = '/icon@1.5x.png'
-			break;
-		case '175%':
-			iconScale = '/icon@1.75x.png'
-			break;
-		case '200%':
-			iconScale = '/icon@2x.png'
-			break;
+function buildImgAttrs(urls) {
+	const parts = [];
+	for (let i = 0; i < urls.length; i++) {
+		if (urls[i]) parts.push(urls[i] + ' ' + ICON_SCALES[i][2]);
 	}
-	let curIcon = './resources/img/defaults/' + (bNotForStore ? ('info/' + themeType) : 'card') + iconScale;
+	return { src: urls[0], srcset: parts.join(', ') };
+}
+
+/**
+ * Returns icon `src` (1x) and `srcset` covering all supported scales for use on <img>.
+ * @param {string} guid
+ * @returns {{src: string, srcset: string}}
+ */
+function getImageUrl(guid) {
+	const defaults = ICON_SCALES.map(function(s) { return './resources/img/defaults/card' + s[1]; });
+
+	/** @type {any} */
 	let plugin;
+	let baseUrl;
 	// We have a problem with "http" and "file" routes.
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
-	let baseUrl;
-
 	if (installedPlugins && isLocal) {
 		// it doesn't work when we use icons from other resource (cors problems)
 		// it's why we use local icons only for desktop
-		plugin = findInstalledPlugin(guid);
-		if (plugin) {
-			plugin = plugin.obj;
+		const inst = findInstalledPlugin(guid);
+		if (inst) {
+			plugin = inst.obj;
 			baseUrl = plugin.baseUrl;
 		}
 	}
-
-	if ( ( !plugin || !isLocal ) && allPlugins) {
-		plugin = findPlugin(guid);
-		if (plugin)
-			baseUrl = plugin.baseUrl;
+	if ((!plugin || !isLocal) && allPlugins) {
+		const found = findPlugin(guid);
+		if (found) {
+			plugin = found;
+			baseUrl = found.baseUrl;
+		}
 	}
 	// github doesn't allow to use "http" or "file" as the URL for an image
-	if ( plugin && ( baseUrl.includes('https://') || isLocal) ) {
-		let variation = plugin.variations[0];
-		
-		if (!bNotForStore && variation.store && variation.store.icons) {
-			// icons are in config of store field (work only with new scheme)
-			// it's an object with 2 fields (for dark and light theme), which contain route to icons folder
-			curIcon = baseUrl + variation.store.icons[themeType] + iconScale;
-		} else if (variation.icons2) {
-			// it's old scheme. There could be an array with objects which have theme field or an array from one object without theme field
-			let icon = variation.icons2[0];
-			for (let i = 1; i < variation.icons2.length; i++) {
-				if ( themeType.includes(variation.icons2[i].style) ) {
-					icon = variation.icons2[i];
-					break;
-				}
-			}
-			curIcon = baseUrl + icon[scale.percent].normal;
-		} else if (variation.icons) {
-			// there could be old and new scheme
-			// there will be a string array or object like icons2 above (old scheme)
-			// there will be a object with 2 fields (for dark and light theme), which contain route to icons folder (new scheme)
-			if (!Array.isArray(variation.icons)) {
-				// new scheme
-				curIcon = baseUrl + variation.icons[themeType] + iconScale;
-			} else {
-				// old scheme
-				if (typeof(variation.icons[0]) == 'object' ) {
-					// old scheme and icons like icons2 above
-					let icon = variation.icons[0];
-					for (let i = 1; i < variation.icons.length; i++) {
-						if ( themeType.includes(variation.icons[i].style) ) {
-							icon = variation.icons[i];
-							break;
-						}
-					}
-					curIcon = baseUrl + icon[scale.percent].normal;
-				} else {
-					// old scheme and icons is a string array
-					curIcon = baseUrl + (scale.value >= 1.2 ? variation.icons[1] : variation.icons[0]);
-				}
-			}
-		}	
+	if (!plugin || !(baseUrl.includes('https://') || isLocal)) {
+		return buildImgAttrs(defaults);
 	}
 
-	if (bSetSize) {
-		makeRequestWithNoInternetHandler(curIcon, 'GET', 'blob', null).then(
-			function (res) {
-				let reader = new FileReader();
-				reader.onloadend = function() {
-					if (typeof reader.result !== "string") {
-						return;
-					}
-					/** @type {string} */
-					let imageUrl = reader.result;
-					let img = document.createElement('img');
-					img.setAttribute('src', imageUrl);
-					img.onload = function () {
-						let icon = document.getElementById(id);
-						if (!icon) return;
-						icon.style.width = ( (img.width/scale.value) >> 0 ) + 'px';
-						icon.style.height = ( (img.height/scale.value) >> 0 ) + 'px';
-						icon.style.display = '';
-					}
-					
-				}
-				reader.readAsDataURL(res);
-			},
-			function(error) {
-				// it's because we have a new maket for error messages
-				createError(error, true);
-			}
-		);
+	const variation = plugin.variations[0];
+
+	if (variation.store && variation.store.icons) {
+		// new scheme: folder per theme + scale suffix
+		const folder = baseUrl + variation.store.icons[themeType];
+		return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
 	}
-	
-	return curIcon;
+
+	if (variation.icons2) {
+		// old scheme: array of theme-tagged objects, each with all scale percents
+		return buildImgAttrs(resolveOldThemedIcons(variation.icons2, baseUrl));
+	}
+
+	if (variation.icons) {
+		if (!Array.isArray(variation.icons)) {
+			// new scheme: object { light, dark } with folder paths
+			const folder = baseUrl + variation.icons[themeType];
+			return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
+		}
+		if (typeof variation.icons[0] === 'object') {
+			// old scheme like icons2
+			return buildImgAttrs(resolveOldThemedIcons(variation.icons, baseUrl));
+		}
+		// old scheme: plain string array [normal, retina]
+		const normal = baseUrl + variation.icons[0];
+		const retina = baseUrl + (variation.icons[1] || variation.icons[0]);
+		// follow legacy threshold: scale.value >= 1.2 → retina
+		return buildImgAttrs([normal, retina, retina, retina, retina]);
+	}
+
+	return buildImgAttrs(defaults);
 };
+
+/**
+ * Picks the icon object matching current theme and returns urls for all 5 scales.
+ * @param {Array<{style?: string, [scalePercent: string]: any}>} icons
+ * @param {string} baseUrl
+ * @returns {string[]}
+ */
+function resolveOldThemedIcons(icons, baseUrl) {
+	let icon = icons[0];
+	for (let i = 1; i < icons.length; i++) {
+		const style = icons[i].style;
+		if (style && themeType.includes(style)) {
+			icon = icons[i];
+			break;
+		}
+	}
+	return ICON_SCALES.map(function(s) {
+		const entry = icon[s[0]];
+		return entry && entry.normal ? baseUrl + entry.normal : '';
+	});
+}
 
 /**
  * @param {string} key 
@@ -1718,11 +1676,6 @@ function handleNoInternet() {
 	let bShowMarketplace = false;
 	if (STORAGE.mainFilter === 'marketplace') {
 		bShowMarketplace = true;
-	}
-
-	if ( (bShowMarketplace || !isLocal) && STORAGE.bPluginCardShown) {
-		//sendMessage( { type : "showButton", show : false } );
-		onClickBack();
 	}
 
 	if (!document.getElementsByClassName('div_notification')[0] && (bShowMarketplace || !isLocal)) {

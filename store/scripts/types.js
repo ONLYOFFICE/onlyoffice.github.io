@@ -19,7 +19,7 @@
  * @property {InstalledPluginInfo | null} installed
  * @property {PluginInfo | null} plugin
  * @property {string} iconBackground
- * @property {string} iconUrl
+ * @property {{src: string, srcset: string}} iconSrc
  * @property {boolean} isLocal
  * @property {number} editorVersion
  * @property {boolean} bHasUpdate
