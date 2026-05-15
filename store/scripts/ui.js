@@ -134,7 +134,6 @@ const UI = {
      * @param {string} style
      */
     onChangeTheme: function(theme, themeType, style) {
-
         let rule = '.text-secondary{color:'+theme["text-secondary"]+';}\n';
 
         if (themeType.includes('light')) {
@@ -164,8 +163,7 @@ const UI = {
             return false;
         } else {
             styleTheme.innerHTML = style + rule;
-            defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';
-            return defaultBG;
+            return themeType == 'light' ? "#F5F5F5" : '#555555';
         }
     },
     /** @param {string} guid */
@@ -186,8 +184,8 @@ const UI = {
     },
     /**
      * @param {string} guid 
-     * @param {string} src 
      * @param {string} bg 
+     * @param {{src: string, srcset: string} | null} src 
      */
     setPluginImage(guid, bg, src) {
         const pluginDiv = this._plugins[guid];
@@ -201,7 +199,12 @@ const UI = {
         imgDiv.setAttribute('style', ('background:' + bg) );
         const image = imgDiv.firstChild;
         if (src && image && image instanceof HTMLImageElement) {
-            image.setAttribute('src', src);
+            image.setAttribute('src', src.src);
+            if (src.srcset) {
+                image.setAttribute('srcset', src.srcset);
+            } else {
+                image.removeAttribute('srcset');
+            }
         }
     },
     /**
@@ -265,7 +268,6 @@ const UI = {
             return;
         }
         if (!show) {
-            clearTimeout(timeout);
             loaderContainer.classList.add('hidden');
             this.loader && (this.loader.remove ? this.loader.remove() : loaderContainer.removeChild(this.loader));
             this.loader = undefined;	
