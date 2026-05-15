@@ -61,12 +61,24 @@ function SearchFilterComponents() {
 
 SearchFilterComponents.prototype._addEventListeners = function () {
     const self = this;
+    /** @type {ReturnType<typeof setTimeout>|null} */
+    var debounceTimer = null;
     this._searchField.subscribe(function (e) {
         if (e.type === "inputfield:blur" || e.type === "inputfield:submit") {
+            if (debounceTimer) { clearTimeout(debounceTimer); debounceTimer = null; }
             const selectedGroups = self._getSelectedGroups();
             self._subscribers.forEach(function (cb) {
                 cb(e.detail.value, selectedGroups);
             });
+        } else if (e.type === "inputfield:input") {
+            if (debounceTimer) clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(function () {
+                debounceTimer = null;
+                const selectedGroups = self._getSelectedGroups();
+                self._subscribers.forEach(function (cb) {
+                    cb(e.detail.value, selectedGroups);
+                });
+            }, 350);
         }
     });
     this._filterButton.subscribe(function (e) {

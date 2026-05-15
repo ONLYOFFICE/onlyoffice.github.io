@@ -34,6 +34,7 @@
 
 /**
  * @typedef {import('../router').Router} Router
+ * @typedef {import('../zotero').ZoteroSdk} ZoteroSdk
  */
 
 import {
@@ -41,11 +42,13 @@ import {
     SelectBox,
     Radio,
     Message,
+    InputField,
     Loader,
 } from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
 import { LocalesManager } from "../csl/locales";
+import { ZoteroApiChecker } from "../zotero";
 
 /**
  * @typedef {Object} Settings
@@ -58,10 +61,12 @@ import { LocalesManager } from "../csl/locales";
 /**
  * @param {Router} router
  * @param {string} displayNoneClass
+ * @param {ZoteroSdk} [sdk]
  */
-function SettingsPage(router, displayNoneClass) {
+function SettingsPage(router, displayNoneClass, sdk) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
+    this._sdk = sdk || null;
 
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
@@ -172,12 +177,47 @@ function SettingsPage(router, displayNoneClass) {
 
     this._bNumFormat = false;
 
+    // Connection UI elements
+    this._connectionStatus = document.getElementById("connectionStatus");
+    this._switchToApiBtn = new Button("switchToApiBtn", { variant: "secondary" });
+    this._switchToLocalBtn = new Button("switchToLocalBtn", { variant: "secondary" });
+    this._settingsApiKeyWrapper = document.getElementById("settingsApiKeyWrapper");
+    this._settingsApiKeyField = new InputField("settingsApiKeyField", { type: "text" });
+    this._settingsSaveApiKeyBtn = new Button("settingsSaveApiKeyBtn", { variant: "secondary" });
+    this._settingsApiKeyMessage = new Message("settingsApiKeyMessage", { type: "error" });
+    this._settingsLocalMessage = new Message("settingsLocalMessage", { type: "error" });
+    /** @type {function(): void} */
+    this._onReconnect = function () {};
+    /** @type {boolean} */
+    this._desktopAvailable = false;
+    /** @type {boolean} */
+    this._onlineAvailable = false;
+
     /** @type {Settings} */
     this._stateSettings = {
         style: "",
         notesStyle: "footnotes",
         styleFormat: "numeric",
     };
+
+    // Auto-update toggles (persisted in localStorage)
+    this._autoUpdateCitationsCheckbox = document.getElementById("autoUpdateCitations");
+    this._autoUpdateBibCheckbox = document.getElementById("autoUpdateBibliography");
+    var _self = this;
+    if (this._autoUpdateCitationsCheckbox) {
+        this._autoUpdateCitationsCheckbox.checked = localStorage.getItem("zoteroAutoUpdateCitations") !== "false";
+        this._autoUpdateCitationsCheckbox.addEventListener("change", function () {
+            localStorage.setItem("zoteroAutoUpdateCitations", String(this.checked));
+            _self._somethingWasChanged();
+        });
+    }
+    if (this._autoUpdateBibCheckbox) {
+        this._autoUpdateBibCheckbox.checked = localStorage.getItem("zoteroAutoUpdateBib") !== "false";
+        this._autoUpdateBibCheckbox.addEventListener("change", function () {
+            localStorage.setItem("zoteroAutoUpdateBib", String(this.checked));
+            _self._somethingWasChanged();
+        });
+    }
 }
 
 /**
@@ -192,6 +232,20 @@ SettingsPage.prototype.getLocalesManager = function () {
  */
 SettingsPage.prototype.getStyleManager = function () {
     return this._cslStylesManager;
+};
+
+/**
+ * @returns {boolean}
+ */
+SettingsPage.prototype.getAutoUpdateCitations = function () {
+    return localStorage.getItem("zoteroAutoUpdateCitations") !== "false";
+};
+
+/**
+ * @returns {boolean}
+ */
+SettingsPage.prototype.getAutoUpdateBibliography = function () {
+    return localStorage.getItem("zoteroAutoUpdateBib") !== "false";
 };
 
 /**
@@ -238,6 +292,7 @@ SettingsPage.prototype.onChangeState = function (callbackFn) {
  * @param {boolean} isAvailable
  */
 SettingsPage.prototype.setDesktopApiAvailable = function (isAvailable) {
+    this._desktopAvailable = isAvailable;
     this._localesManager.setDesktopApiAvailable(isAvailable);
     this._cslStylesManager.setDesktopApiAvailable(isAvailable);
 };
@@ -246,6 +301,7 @@ SettingsPage.prototype.setDesktopApiAvailable = function (isAvailable) {
  * @param {boolean} isAvailable
  */
 SettingsPage.prototype.setRestApiAvailable = function (isAvailable) {
+    this._onlineAvailable = isAvailable;
     this._localesManager.setRestApiAvailable(isAvailable);
     this._cslStylesManager.setRestApiAvailable(isAvailable);
 };
@@ -426,6 +482,89 @@ SettingsPage.prototype._addEventListeners = function () {
     this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
+
+    // Connection switching
+    this._switchToApiBtn.subscribe(function (event) {
+        if (event.type !== "button:click") return;
+
+        // If already connected via API, this is a logout action
+        if (self._sdk && self._sdk.getIsOnlineAvailable()) {
+            self._sdk.clearSettings();
+            self._router.openLogin();
+            return;
+        }
+
+        // Otherwise, show the API key input
+        if (self._settingsApiKeyWrapper) {
+            self._settingsApiKeyWrapper.classList.remove("hidden");
+        }
+        self._settingsLocalMessage.close();
+    });
+    this._switchToLocalBtn.subscribe(function (event) {
+        if (event.type !== "button:click") return;
+        if (!self._sdk) return;
+        self._settingsApiKeyMessage.close();
+        if (self._settingsApiKeyWrapper) {
+            self._settingsApiKeyWrapper.classList.add("hidden");
+        }
+
+        // If already connected locally, this is a logout action
+        if (!self._sdk.getIsOnlineAvailable()) {
+            self._sdk.clearSettings();
+            self._router.openLogin();
+            return;
+        }
+
+        // Otherwise, try to connect to local Zotero
+        self._switchToLocalBtn.disable();
+        ZoteroApiChecker.checkStatus(self._sdk)
+            .then(function (/** @type {AvailableApis} */ apis) {
+                if (apis.desktop && apis.hasPermission) {
+                    self._sdk.clearSettings();
+                    self._sdk.setIsOnlineAvailable(false);
+                    self._hide();
+                    self._onReconnect();
+                } else if (apis.desktop && !apis.hasPermission) {
+                    self._settingsLocalMessage.show(translate(
+                        "Connection to Zotero failed. Please enable external connections in Zotero: " +
+                        "Edit \u2192 Settings \u2192 Advanced \u2192 Check 'Allow other applications on this computer to communicate with Zotero'"
+                    ));
+                } else {
+                    self._settingsLocalMessage.show(translate(
+                        "Connection to Zotero failed. Make sure Zotero is running."
+                    ));
+                }
+            })
+            .finally(function () {
+                self._switchToLocalBtn.enable();
+            });
+    });
+    this._settingsSaveApiKeyBtn.subscribe(function (event) {
+        if (event.type !== "button:click") return;
+        if (!self._sdk) return;
+        var apiKey = self._settingsApiKeyField.getValue();
+        if (!apiKey) return;
+        self._settingsSaveApiKeyBtn.disable();
+        self._sdk
+            .setApiKey(apiKey)
+            .then(function () {
+                ZoteroApiChecker.successfullyLoggedInUsingApiKey();
+                self._sdk.setIsOnlineAvailable(true);
+                if (self._settingsApiKeyWrapper) {
+                    self._settingsApiKeyWrapper.classList.add("hidden");
+                }
+                self._settingsApiKeyMessage.close();
+                self._hide();
+                self._onReconnect();
+            })
+            .catch(function (err) {
+                console.error(err);
+                self._settingsApiKeyMessage.show(translate("Invalid API key"));
+            })
+            .finally(function () {
+                self._settingsSaveApiKeyBtn.enable();
+            });
+    });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -451,6 +590,7 @@ SettingsPage.prototype.show = function () {
     } else {
         this._footNotes.check();
     }
+    this._updateConnectionUI();
 };
 
 /** @returns {Promise<void>} */
@@ -548,6 +688,64 @@ SettingsPage.prototype._hideLoader = function () {
     this._styleSelect.enable();
     this._languageSelect.enable();
     //Loader.hide();
+};
+
+/**
+ * Update the connection section UI based on current state.
+ */
+SettingsPage.prototype._updateConnectionUI = function () {
+    // Hide API key input and messages by default
+    if (this._settingsApiKeyWrapper) {
+        this._settingsApiKeyWrapper.classList.add("hidden");
+    }
+    this._settingsApiKeyMessage.close();
+    this._settingsLocalMessage.close();
+
+    var isOnline = this._sdk && this._sdk.getIsOnlineAvailable();
+
+    if (this._connectionStatus) {
+        if (isOnline) {
+            this._connectionStatus.textContent = translate("Connected via API Key");
+        } else {
+            this._connectionStatus.textContent = translate("Connected to Local Zotero");
+        }
+    }
+
+    var switchToApiBtnEl = document.getElementById("switchToApiBtn");
+    var switchToLocalBtnEl = document.getElementById("switchToLocalBtn");
+
+    if (isOnline) {
+        // Currently using API: show logout from API + offer local
+        if (switchToApiBtnEl) {
+            switchToApiBtnEl.classList.remove("hidden");
+            switchToApiBtnEl.textContent = translate("Log out from API Key");
+        }
+        if (switchToLocalBtnEl && this._desktopAvailable) {
+            switchToLocalBtnEl.classList.remove("hidden");
+            switchToLocalBtnEl.textContent = translate("Connect to Local Zotero");
+        } else if (switchToLocalBtnEl) {
+            switchToLocalBtnEl.classList.add("hidden");
+        }
+    } else {
+        // Currently using local: show logout from local + offer API
+        if (switchToLocalBtnEl) {
+            switchToLocalBtnEl.classList.remove("hidden");
+            switchToLocalBtnEl.textContent = translate("Log out from Local Zotero");
+        }
+        if (switchToApiBtnEl && this._onlineAvailable) {
+            switchToApiBtnEl.classList.remove("hidden");
+            switchToApiBtnEl.textContent = translate("Connect with API Key");
+        } else if (switchToApiBtnEl) {
+            switchToApiBtnEl.classList.add("hidden");
+        }
+    }
+};
+
+/**
+ * @param {function(): void} callbackFn
+ */
+SettingsPage.prototype.onReconnect = function (callbackFn) {
+    this._onReconnect = callbackFn;
 };
 
 export { SettingsPage };

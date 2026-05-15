@@ -29,28 +29,28 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-function u(s, t, e) {
+function d(s, t, e) {
   if (typeof s == "function" ? s === t : s.has(t)) return arguments.length < 3 ? t : e;
   throw new TypeError("Private element is not present on this object");
 }
-function S(s, t, e, i, n, a, o) {
+function V(s, t, e, i, n, a, o) {
   try {
-    var r = s[a](o), l = r.value;
-  } catch (d) {
-    return void e(d);
+    var r = s[a](o), c = r.value;
+  } catch (l) {
+    return void e(l);
   }
-  r.done ? t(l) : Promise.resolve(l).then(i, n);
+  r.done ? t(c) : Promise.resolve(c).then(i, n);
 }
 function q(s) {
   return function() {
     var t = this, e = arguments;
     return new Promise(function(i, n) {
       var a = s.apply(t, e);
-      function o(l) {
-        S(a, i, n, o, r, "next", l);
+      function o(c) {
+        V(a, i, n, o, r, "next", c);
       }
-      function r(l) {
-        S(a, i, n, o, r, "throw", l);
+      function r(c) {
+        V(a, i, n, o, r, "throw", c);
       }
       o(void 0);
     });
@@ -62,7 +62,7 @@ function z(s, t) {
 function R(s, t) {
   z(s, t), t.add(s);
 }
-function L(s, t) {
+function N(s, t) {
   var e = this;
   if (t = t || {}, typeof s == "string") {
     var i = document.getElementById(s);
@@ -111,8 +111,8 @@ function L(s, t) {
     };
   })(this), 100);
 }
-L.prototype = {
-  constructor: L,
+N.prototype = {
+  constructor: N,
   /** @type {HTMLInputElement} */
   // @ts-ignore
   input: null,
@@ -404,7 +404,7 @@ L.prototype = {
     }).join(" ");
   }
 };
-function M(s, t) {
+function O(s, t) {
   if (typeof s == "string") {
     var e = document.getElementById(s);
     e instanceof HTMLElement && (s = e);
@@ -415,8 +415,8 @@ function M(s, t) {
     throw new Error("Invalid container element");
   this._options = Object.assign(this._options, t), this._isShow = !1;
 }
-M.prototype = {
-  constructor: M,
+O.prototype = {
+  constructor: O,
   _options: {
     type: "info",
     text: "",
@@ -516,7 +516,7 @@ M.prototype = {
     }
   }
 };
-function V(s, t) {
+function B(s, t) {
   var e = this;
   if (typeof s == "string") {
     var i = document.getElementById(s);
@@ -547,9 +547,9 @@ function V(s, t) {
     }
   }, this._createDOM(), this._bindEvents(), this.updateState();
 }
-V.prototype = /** @lends Button.prototype */
+B.prototype = /** @lends Button.prototype */
 {
-  constructor: V,
+  constructor: B,
   /**
    * @type {HTMLButtonElement}
    */
@@ -740,7 +740,7 @@ V.prototype = /** @lends Button.prototype */
     this._container.className = t;
   }
 };
-function H(s, t) {
+function S(s, t) {
   if (typeof s == "string") {
     var e = document.getElementById(s);
     e instanceof HTMLInputElement && (s = e);
@@ -757,8 +757,8 @@ function H(s, t) {
     value: "on"
   }, t), this._options.disabled = t.disabled || !1, this._handlers = /* @__PURE__ */ new Map(), this._createDOM(s), this._setupEventListeners(), this._updateVisualState(), this._subscribers = [];
 }
-H.prototype = {
-  constructor: H,
+S.prototype = {
+  constructor: S,
   /**
    * @type {HTMLDivElement | null}
    * @private
@@ -792,12 +792,12 @@ H.prototype = {
     o.setAttribute("viewBox", "0 0 10 8"), o.setAttribute("class", "checkbox-checkmark");
     var r = document.createElementNS(a, "path");
     r.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), r.setAttribute("fill", "none"), r.setAttribute("stroke", "currentColor"), r.setAttribute("stroke-width", "2"), o.appendChild(r), this._visualCheckbox.appendChild(o);
-    var l = document.createElement("span");
-    if (l.className = "checkbox-indeterminate", this._visualCheckbox.appendChild(l), this._options.label)
+    var c = document.createElement("span");
+    if (c.className = "checkbox-indeterminate", this._visualCheckbox.appendChild(c), this._options.label)
       this._labelElement = document.createElement("label"), this._labelElement.className = "checkbox-label i18n", this._options.id && (this._labelElement.htmlFor = this._options.id), this._labelElement.textContent = this._options.label, this._options.title && this._labelElement.setAttribute("title", this._options.label);
     else {
-      var d = document.querySelector("label[for='" + this._options.id + "']");
-      d instanceof HTMLLabelElement && (this._labelElement = d);
+      var l = document.querySelector("label[for='" + this._options.id + "']");
+      l instanceof HTMLLabelElement && (this._labelElement = l);
     }
     this._options.disabled && this._container.classList.add("checkbox--disabled"), e && e.insertBefore(i, t), this._container.appendChild(this._input), this._container.appendChild(this._visualCheckbox), this._labelElement && this._container.appendChild(this._labelElement);
   },
@@ -939,14 +939,14 @@ H.prototype = {
     }), this._handlers.clear(), this._container && this._container.parentNode && this._container.parentNode.removeChild(this._container), this._container = null, this._input = null, this._visualCheckbox = null, this._labelElement = null;
   }
 };
-var c = /* @__PURE__ */ new WeakSet();
+var u = /* @__PURE__ */ new WeakSet();
 class K {
   /**
    * @param {string | HTMLSelectElement | HTMLElement} selectbox
    * @param {SelectboxOptionsType} options
    */
   constructor(t, e) {
-    if (R(this, c), typeof t == "string") {
+    if (R(this, u), typeof t == "string") {
       var i = document.getElementById(t);
       if (i instanceof HTMLSelectElement)
         t = i;
@@ -968,28 +968,28 @@ class K {
       description: e.description || ""
     }), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
       toggle: (n) => {
-        u(c, this, F).call(this, n);
+        d(u, this, P).call(this, n);
       },
       search: (n) => {
-        u(c, this, Y).call(this, n);
+        d(u, this, Y).call(this, n);
       },
       close: (n) => {
-        n.target instanceof HTMLElement && !this._container.contains(n.target) && !n.target.classList.contains("selectbox-option") && u(c, this, f).call(this);
+        n.target instanceof HTMLElement && !this._container.contains(n.target) && !n.target.classList.contains("selectbox-option") && d(u, this, f).call(this);
       },
       keydown: (n) => {
-        u(c, this, Z).call(this, n);
+        d(u, this, Z).call(this, n);
       },
       dropdownClick: (n) => {
-        u(c, this, G).call(this, n);
+        d(u, this, G).call(this, n);
       }
-    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), u(c, this, U).call(this), u(c, this, W).call(this), u(c, this, k).call(this), I._.add(this);
+    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), d(u, this, U).call(this), d(u, this, W).call(this), d(u, this, C).call(this), M._.add(this);
   }
   openDropdown() {
     this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(/* @__PURE__ */ (function(t) {
       return function() {
         t.searchInput && t.searchInput.focus();
       };
-    })(this), 100), u(c, this, k).call(this);
+    })(this), 100), d(u, this, C).call(this);
   }
   /**
    * @param {function(SelectboxEventType): void} callback
@@ -1022,7 +1022,7 @@ class K {
         text: e,
         selected: i
       }), this._options.sortable && this._items.sort((o, r) => o && r ? o.text.localeCompare(r.text) : o ? -1 : r ? 1 : 0);
-    i && (this._options.multiple ? this._selectedValues.add(t) : (this._selectedValues.clear(), this._selectedValues.add(t))), u(c, this, x).call(this);
+    i && (this._options.multiple ? this._selectedValues.add(t) : (this._selectedValues.clear(), this._selectedValues.add(t))), d(u, this, v).call(this);
   }
   /**
    * @param {Array<[string,string]>} values
@@ -1031,7 +1031,7 @@ class K {
   addItems(t, e) {
     var i = this;
     t.forEach(function(n, a) {
-      var o = i._items.some((l) => l && l.value === n[0]);
+      var o = i._items.some((c) => c && c.value === n[0]);
       if (!o) {
         var r = e ? n[0] === e : a === 0;
         r && (i._options.multiple || i._selectedValues.clear(), i._selectedValues.add(n[0])), i._items.push({
@@ -1040,7 +1040,7 @@ class K {
           selected: r
         });
       }
-    }, this), this.isOpen && u(c, this, k).call(this), u(c, this, x).call(this);
+    }, this), this.isOpen && d(u, this, C).call(this), d(u, this, v).call(this);
   }
   /**
    * @param {string} value
@@ -1064,7 +1064,7 @@ class K {
       return e === null || e.value !== t;
     }), this._customItems = this._customItems.filter(function(e) {
       return e === null || e.value !== t;
-    }), this._selectedValues.delete(t), u(c, this, x).call(this);
+    }), this._selectedValues.delete(t), d(u, this, v).call(this);
   }
   /**
    * @return {null | string}
@@ -1113,15 +1113,15 @@ class K {
     } else if (!Array.isArray(t)) {
       if (n = t, this._selectedValues.clear(), this._selectedValues.add(n), this._optionsContainer) {
         var r = this._optionsContainer.querySelectorAll('.selectbox-option-selected[data-value="' + n + '"]');
-        r.forEach(function(d) {
-          d.classList.remove("selectbox-option-selected"), d.classList.remove("checkbox--checked");
+        r.forEach(function(l) {
+          l.classList.remove("selectbox-option-selected"), l.classList.remove("checkbox--checked");
         });
-        var l = this._optionsContainer.querySelector('[data-value="' + n + '"]');
-        l && (l.classList.add("selectbox-option-selected"), l.classList.add("checkbox--checked"));
+        var c = this._optionsContainer.querySelector('[data-value="' + n + '"]');
+        c && (c.classList.add("selectbox-option-selected"), c.classList.add("checkbox--checked"));
       }
-      u(c, this, f).call(this);
+      d(u, this, f).call(this);
     }
-    u(c, this, x).call(this), !e && u(c, this, T).call(this, n, !0);
+    d(u, this, v).call(this), !e && d(u, this, I).call(this, n, !0);
   }
   /**
    * @param {string | Array<string>} values
@@ -1133,12 +1133,12 @@ class K {
       console.error("Method unselectItem is only available for multi-select boxes.");
       return;
     }
-    var n = "", a = function(l) {
+    var n = "", a = function(c) {
       if (i._optionsContainer) {
-        var d = i._optionsContainer.querySelector('[data-value="' + l + '"]');
-        if (d) {
-          var p = d.querySelector('input[type="checkbox"]');
-          p && p instanceof HTMLInputElement && (p.checked = !1), d.classList.remove("selectbox-option-selected"), d.classList.remove("checkbox--checked");
+        var l = i._optionsContainer.querySelector('[data-value="' + c + '"]');
+        if (l) {
+          var p = l.querySelector('input[type="checkbox"]');
+          p && p instanceof HTMLInputElement && (p.checked = !1), l.classList.remove("selectbox-option-selected"), l.classList.remove("checkbox--checked");
         }
       }
     };
@@ -1147,7 +1147,7 @@ class K {
         n = t[o], this._selectedValues.has(n) && (this._selectedValues.delete(n), a(n));
     else
       n = t, this._selectedValues.has(n) && (this._selectedValues.delete(n), a(n));
-    u(c, this, x).call(this), !e && u(c, this, T).call(this, n, !0);
+    d(u, this, v).call(this), !e && d(u, this, I).call(this, n, !0);
   }
   disable() {
     this._select.classList.add("selectbox-disabled");
@@ -1163,10 +1163,10 @@ class K {
       var e = this._items[0];
       e && this._selectedValues.add(e.value);
     }
-    u(c, this, x).call(this), u(c, this, k).call(this);
+    d(u, this, v).call(this), d(u, this, C).call(this);
   }
   destroy() {
-    this._subscribers = [], I._.delete(this);
+    this._subscribers = [], M._.delete(this);
     try {
       this._header && this._boundHandles && this._header.removeEventListener("click", this._boundHandles.toggle), this.searchInput && this._boundHandles && this.searchInput.removeEventListener("input", this._boundHandles.search), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("click", this._boundHandles.dropdownClick), document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this._header && this._boundHandles && this._header.removeEventListener("keydown", this._boundHandles.keydown), this._dropdown && this._boundHandles && this._dropdown.removeEventListener("keydown", this._boundHandles.keydown);
     } catch (n) {
@@ -1193,7 +1193,7 @@ function U() {
     var i = this._selectbox.parentNode;
     if (i) {
       i.insertBefore(this._container, this._selectbox);
-      var n = u(c, this, X).call(this, this._selectbox);
+      var n = d(u, this, X).call(this, this._selectbox);
       this.addItems(n.values, n.selectedValue), this._selectbox.remove();
     }
   }
@@ -1203,10 +1203,10 @@ function W() {
     s.stopPropagation();
   }), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 }
-function F(s) {
-  if (s && s.stopPropagation(), this.isOpen ? u(c, this, f).call(this) : this.openDropdown(), s && s.type === "click")
-    for (var t of I._)
-      t.isOpen && t !== this && u(c, t, f).call(t);
+function P(s) {
+  if (s && s.stopPropagation(), this.isOpen ? d(u, this, f).call(this) : this.openDropdown(), s && s.type === "click")
+    for (var t of M._)
+      t.isOpen && t !== this && d(u, t, f).call(t);
 }
 function f() {
   this.isOpen && document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this.isOpen = !1, this._dropdown.style.display = "none";
@@ -1221,15 +1221,15 @@ function Y(s) {
   var t = s.target;
   if (t instanceof HTMLInputElement) {
     var e = t.value.toLowerCase();
-    u(c, this, k).call(this, e);
+    d(u, this, C).call(this, e);
   }
 }
-function O(s) {
-  var t = this.searchInput ? this.searchInput.value.toLowerCase() : "", e, i = this._items.filter(function(d) {
-    return d !== null;
+function D(s) {
+  var t = this.searchInput ? this.searchInput.value.toLowerCase() : "", e, i = this._items.filter(function(l) {
+    return l !== null;
   });
-  if (t && (i = i.filter(function(d) {
-    return d.text.toLowerCase().indexOf(t) !== -1;
+  if (t && (i = i.filter(function(l) {
+    return l.text.toLowerCase().indexOf(t) !== -1;
   })), i.length !== 0) {
     if (s === "up")
       if (this._selectedValues.size === 0 && i.length > 0)
@@ -1251,10 +1251,10 @@ function O(s) {
           a = o;
           break;
         }
-      var l = (a + 1) % i.length;
-      l === i.length && (l = 0), this._selectedValues.clear(), e = i[l], this._selectedValues.add(e.value);
+      var c = (a + 1) % i.length;
+      c === i.length && (c = 0), this._selectedValues.clear(), e = i[c], this._selectedValues.add(e.value);
     }
-    u(c, this, x).call(this), u(c, this, k).call(this, t, !0), u(c, this, T).call(this, e.value, !0);
+    d(u, this, v).call(this), d(u, this, C).call(this, t, !0), d(u, this, I).call(this, e.value, !0);
   }
 }
 function Z(s) {
@@ -1262,73 +1262,80 @@ function Z(s) {
   switch (t) {
     case "Enter":
     case 13:
-      s.preventDefault(), u(c, this, F).call(this, s);
+      s.preventDefault(), d(u, this, P).call(this, s);
       break;
     case "Escape":
     case 27:
-      u(c, this, f).call(this);
+      d(u, this, f).call(this);
       break;
     case "ArrowDown":
     case 40:
-      s.preventDefault(), u(c, this, O).call(this, "down");
+      s.preventDefault(), d(u, this, D).call(this, "down");
       break;
     case "ArrowUp":
     case 38:
-      s.preventDefault(), u(c, this, O).call(this, "up");
+      s.preventDefault(), d(u, this, D).call(this, "up");
       break;
     case "Tab":
     case 9:
-      u(c, this, f).call(this);
+      d(u, this, f).call(this);
       break;
   }
 }
-function k(s, t) {
+function C(s, t) {
   if (s = s || "", !!this._optionsContainer) {
     this._optionsContainer.innerHTML = "";
     var e = null, i = this._items;
-    s && (i = i.filter(function(v) {
-      return v !== null && v.text.toLowerCase().indexOf(s) !== -1;
-    }));
-    for (var n = document.createDocumentFragment(), a = 0; a < i.length; a++) {
-      var o = i[a];
-      if (!o) {
-        var r = document.createElement("hr");
-        r.className += " selectbox-option-divider", n.appendChild(r);
+    if (s) {
+      var n = s.split(/\s+/).filter(Boolean);
+      i = i.filter(function(k) {
+        if (k === null) return !1;
+        var T = k.text.toLowerCase();
+        return n.every(function(A) {
+          return T.indexOf(A) !== -1;
+        });
+      });
+    }
+    for (var a = document.createDocumentFragment(), o = 0; o < i.length; o++) {
+      var r = i[o];
+      if (!r) {
+        var c = document.createElement("hr");
+        c.className += " selectbox-option-divider", a.appendChild(c);
         continue;
       }
       var l = document.createElement("div");
-      l.className += " selectbox-option", this._selectedValues.has(o.value) && (l.className += " selectbox-option-selected checkbox--checked", e = l), l.setAttribute("data-value", o.value);
-      var d = document.createElement("label");
-      if (d.className += " selectbox-option-text i18n", this._options.translate && (o.text = this._options.translate(o.text)), d.textContent = o.text, this._options.multiple) {
+      l.className += " selectbox-option", this._selectedValues.has(r.value) && (l.className += " selectbox-option-selected checkbox--checked", e = l), l.setAttribute("data-value", r.value);
+      var p = document.createElement("label");
+      if (p.className += " selectbox-option-text i18n", this._options.translate && (r.text = this._options.translate(r.text)), p.textContent = r.text, this._options.multiple) {
         l.className += " selectbox-option-checkbox";
-        var p = document.createElement("input");
-        p.type = "checkbox", p.id = "checkbox-" + o.value, p.className += " selectbox-checkbox", p.checked = this._selectedValues.has(o.value), l.appendChild(p);
-        var h = document.createElement("span");
-        h.className = "checkbox-visual", h.setAttribute("aria-hidden", "true");
-        var _ = "http://www.w3.org/2000/svg", y = document.createElementNS(_, "svg");
-        y.setAttribute("viewBox", "0 0 10 8"), y.setAttribute("class", "checkbox-checkmark");
-        var b = document.createElementNS(_, "path");
-        b.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), b.setAttribute("fill", "none"), b.setAttribute("stroke", "currentColor"), b.setAttribute("stroke-width", "2"), y.appendChild(b), h.appendChild(y), l.appendChild(h);
+        var h = document.createElement("input");
+        h.type = "checkbox", h.id = "checkbox-" + r.value, h.className += " selectbox-checkbox", h.checked = this._selectedValues.has(r.value), l.appendChild(h);
+        var _ = document.createElement("span");
+        _.className = "checkbox-visual", _.setAttribute("aria-hidden", "true");
+        var w = "http://www.w3.org/2000/svg", g = document.createElementNS(w, "svg");
+        g.setAttribute("viewBox", "0 0 10 8"), g.setAttribute("class", "checkbox-checkmark");
+        var b = document.createElementNS(w, "path");
+        b.setAttribute("d", "M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116"), b.setAttribute("fill", "none"), b.setAttribute("stroke", "currentColor"), b.setAttribute("stroke-width", "2"), g.appendChild(b), _.appendChild(g), l.appendChild(_);
       }
-      l.appendChild(d), n.appendChild(l);
+      l.appendChild(p), a.appendChild(l);
     }
     if (this._customItems.length) {
-      var C = document.createElement("hr");
-      C.className += " selectbox-option-divider", n.appendChild(C);
+      var L = document.createElement("hr");
+      L.className += " selectbox-option-divider", a.appendChild(L);
     }
-    for (var a = 0; a < this._customItems.length; a++) {
-      var m = this._customItems[a], E = document.createElement("label");
-      E.className += " selectbox-custom-option", E.setAttribute("data-value", m.value), E.setAttribute("for", m.value);
-      var w = document.createElement("span");
-      w.className += " selectbox-option-text i18n", this._options.translate && (m.text = this._options.translate(m.text)), w.textContent = m.text, E.appendChild(w), n.appendChild(E);
+    for (var o = 0; o < this._customItems.length; o++) {
+      var x = this._customItems[o], y = document.createElement("label");
+      y.className += " selectbox-custom-option", y.setAttribute("data-value", x.value), y.setAttribute("for", x.value);
+      var E = document.createElement("span");
+      E.className += " selectbox-option-text i18n", this._options.translate && (x.text = this._options.translate(x.text)), E.textContent = x.text, y.appendChild(E), a.appendChild(y);
     }
-    if (this._optionsContainer.appendChild(n), t && this.isOpen && this._optionsContainer && e)
+    if (this._optionsContainer.appendChild(a), t && this.isOpen && this._optionsContainer && e)
       try {
         e.scrollIntoView && e.scrollIntoView({
           block: "nearest"
         });
-      } catch (v) {
-        console.error(v);
+      } catch (k) {
+        console.error(k);
       }
   }
 }
@@ -1342,7 +1349,7 @@ function G(s) {
       } else if (n[o] === "selectbox-custom-option") {
         var r = t.getAttribute("data-value");
         if (r) {
-          s.stopPropagation(), u(c, this, B).call(this, r), u(c, this, f).call(this);
+          s.stopPropagation(), d(u, this, F).call(this, r), d(u, this, f).call(this);
           return;
         }
         break;
@@ -1350,19 +1357,19 @@ function G(s) {
     if (a)
       i = t;
     else if (t.parentNode && t.parentNode instanceof HTMLElement) {
-      for (var l = t.parentNode.className.split(" "), d = !1, o = 0; o < l.length; o++)
-        if (l[o] === "selectbox-option") {
-          d = !0;
+      for (var c = t.parentNode.className.split(" "), l = !1, o = 0; o < c.length; o++)
+        if (c[o] === "selectbox-option") {
+          l = !0;
           break;
-        } else if (l[o] === "selectbox-custom-option") {
+        } else if (c[o] === "selectbox-custom-option") {
           var p = t.parentNode.getAttribute("data-value");
           if (p) {
-            s.stopPropagation(), u(c, this, B).call(this, p), u(c, this, f).call(this);
+            s.stopPropagation(), d(u, this, F).call(this, p), d(u, this, f).call(this);
             return;
           }
           break;
         }
-      d && (i = t.parentNode);
+      l && (i = t.parentNode);
     }
     if (i instanceof HTMLDivElement)
       e = i;
@@ -1373,10 +1380,10 @@ function G(s) {
   var h = e.getAttribute("data-value");
   if (h !== null) {
     var _ = !0;
-    this._options.multiple ? this._selectedValues.has(h) ? (this.unselectItems(h, !0), _ = !1) : this.selectItems(h, !0) : (this.selectItems(h, !0), u(c, this, f).call(this)), u(c, this, x).call(this), u(c, this, T).call(this, h, _);
+    this._options.multiple ? this._selectedValues.has(h) ? (this.unselectItems(h, !0), _ = !1) : this.selectItems(h, !0) : (this.selectItems(h, !0), d(u, this, f).call(this)), d(u, this, v).call(this), d(u, this, I).call(this, h, _);
   }
 }
-function x() {
+function v() {
   if (this._selectedValues.size === 0) {
     this._selectedText.textContent = this._options.placeholder;
     return;
@@ -1398,7 +1405,7 @@ function x() {
     this._selectedText.textContent = i ? i.text : this._options.placeholder;
   }
 }
-function T(s, t) {
+function I(s, t) {
   for (var e = Array.from(this._selectedValues), i = [], n = 0; n < this._items.length; n++) {
     var a = this._items[n];
     a && this._selectedValues.has(a.value) && i.push(a);
@@ -1416,7 +1423,7 @@ function T(s, t) {
     });
   });
 }
-function B(s) {
+function F(s) {
   var t = {
     values: [],
     current: s,
@@ -1435,11 +1442,11 @@ function X(s) {
   }, i = s.value;
   return i && (e.selectedValue = i), e;
 }
-var I = {
+var M = {
   _: /* @__PURE__ */ new Set()
 };
 document.getElementById("loader");
-var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]], D = {
+var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]], j = {
   /**
    * @param {AscTheme} theme
    */
@@ -1573,48 +1580,48 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       a.className = "message-close i18n", a.textContent = "×", a.setAttribute("aria-label", "Close"), a.setAttribute("title", "Remove"), a.setAttribute("type", "button"), a.onclick = this.removeItem.bind(this, n, i.id), n.appendChild(a);
       var o = document.createElement("div");
       o.classList.add("title"), o.textContent = i.itemData.title, n.appendChild(o);
-      var r = document.createDocumentFragment(), l = document.createElement("div"), d = document.createElement("input"), p = document.createElement("input"), h = document.createElement("div"), _ = document.createElement("div"), y = document.createElement("input"), b = document.createElement("div"), C = document.createElement("input");
-      r.appendChild(h), h.appendChild(_), h.appendChild(y);
-      var m = "";
-      r.appendChild(l), l.appendChild(d), l.appendChild(p), r.appendChild(b), b.appendChild(C);
-      var E = new L(d, {
+      var r = document.createDocumentFragment(), c = document.createElement("div"), l = document.createElement("input"), p = document.createElement("input"), h = document.createElement("div"), _ = document.createElement("div"), w = document.createElement("input"), g = document.createElement("div"), b = document.createElement("input");
+      r.appendChild(h), h.appendChild(_), h.appendChild(w);
+      var L = "";
+      r.appendChild(c), c.appendChild(l), c.appendChild(p), r.appendChild(g), g.appendChild(b);
+      var x = new N(l, {
         type: "text",
         placeholder: "Prefix",
         value: i.prefix,
         showClear: !1
-      }), w = new L(p, {
+      }), y = new N(p, {
         type: "text",
         placeholder: "Suffix",
         value: i.suffix,
         showClear: !1
-      }), v = new K(_, {
+      }), E = new K(_, {
         placeholder: "Locator",
         translate: Asc.plugin.tr
-      }), j = i.label || "page";
-      J.forEach(function(g) {
-        var N = g[0] === j;
-        v.addItem(g[0], g[1], N), N && (m = g[1]);
+      }), k = i.label || "page";
+      J.forEach(function(m) {
+        var H = m[0] === k;
+        E.addItem(m[0], m[1], H), H && (L = m[1]);
       });
-      var A = new L(y, {
+      var T = new N(w, {
         type: "text",
-        placeholder: m,
+        placeholder: L,
         value: i.locator,
         showClear: !1
-      }), P = new H(C, {
+      }), A = new S(b, {
         label: "Omit Author",
         checked: !!i["suppress-author"]
       });
-      v.subscribe(function(g) {
-        if (!(g.type !== "selectbox:change" || !g.detail.items)) {
-          var N = g.detail.items[0];
-          A.setPlaceholder(N.text);
+      E.subscribe(function(m) {
+        if (!(m.type !== "selectbox:change" || !m.detail.items)) {
+          var H = m.detail.items[0];
+          T.setPlaceholder(H.text);
         }
       }), this.forms.push({
-        omitAuthorInput: P,
-        prefixInput: E,
-        suffixInput: w,
-        locatorInput: A,
-        locatorSelectbox: v
+        omitAuthorInput: A,
+        prefixInput: x,
+        suffixInput: y,
+        locatorInput: T,
+        locatorSelectbox: E
       }), n.appendChild(r);
     }
     updateRemoveButtonsVisibility() {
@@ -1637,17 +1644,17 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       for (var i = document.getElementsByClassName("i18n"), n = function() {
         var r = i[a];
         if (!(r instanceof HTMLElement)) return 1;
-        ["placeholder", "title"].forEach((d) => {
-          r.hasAttribute(d) && r.setAttribute(d, window.Asc.plugin.tr(r.getAttribute(d) || ""));
+        ["placeholder", "title"].forEach((l) => {
+          r.hasAttribute(l) && r.setAttribute(l, window.Asc.plugin.tr(r.getAttribute(l) || ""));
         });
-        var l = window.Asc.plugin.tr(r.innerText.trim().replace(/\s+/g, " "));
-        l && (r.innerText = l);
+        var c = window.Asc.plugin.tr(r.innerText.trim().replace(/\s+/g, " "));
+        c && (r.innerText = c);
       }, a = 0; a < i.length; a++)
         n();
     }
     /** @param {AscTheme} theme */
     onThemeChanged(i) {
-      window.Asc.plugin.onThemeChangedBase(i), D.fixThemeForIE(i), D.addStylesForComponents(i);
+      window.Asc.plugin.onThemeChangedBase(i), j.fixThemeForIE(i), j.addStylesForComponents(i);
       var n = "";
       n += "body { background-color: " + i["background-normal"] + ` !important;}
 `;
@@ -1676,8 +1683,8 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       for (var i = !1, n = 0; n < this.forms.length; n++) {
         var a, o = this.forms[n], r = (a = this.citationObject) === null || a === void 0 ? void 0 : a.citationItems[n];
         if (r) {
-          var l = o.prefixInput.getValue(), d = o.suffixInput.getValue(), p = o.locatorSelectbox.getSelectedValue(), h = o.locatorInput.getValue(), _ = o.omitAuthorInput.getState().checked;
-          (r.prefix || l) && r.prefix !== l && (r.prefix = l, i = !0), (r.suffix || d) && r.suffix !== d && (r.suffix = d, i = !0), (r.label || p) && r.label !== p && p && (r.label = p, i = !0), (r.locator || h) && r.locator !== h && (r.locator = h, i = !0), !!r["suppress-author"] !== _ && (r["suppress-author"] = _, i = !0);
+          var c = o.prefixInput.getValue(), l = o.suffixInput.getValue(), p = o.locatorSelectbox.getSelectedValue(), h = o.locatorInput.getValue(), _ = o.omitAuthorInput.getState().checked;
+          (r.prefix || c) && r.prefix !== c && (r.prefix = c, i = !0), (r.suffix || l) && r.suffix !== l && (r.suffix = l, i = !0), (r.label || p) && r.label !== p && p && (r.label = p, i = !0), (r.locator || h) && r.locator !== h && (r.locator = h, i = !0), !!r["suppress-author"] !== _ && (r["suppress-author"] = _, i = !0);
         }
       }
       return i;

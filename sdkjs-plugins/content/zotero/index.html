@@ -143,6 +143,7 @@
                 <div class="flexCol controls-holder">
                     <div id="buttonsWrapper" class="flex" style="justify-content: space-between;">
                         <button id="insertLinkBtn" class="i18n" disabled>Insert Citation</button>
+                        <button id="editCitationBtn" class="i18n" title="Edit the citation at the cursor position in the document.">Edit Citation</button>
                         <button id="settingsBtn" class="i18n"
                             title="Configure how citations will be formatted in your document.">
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="currentcolor"
@@ -158,6 +159,7 @@
                     </div>
                     <button id="insertBibBtn" class="i18n">Insert Bibliography</button>
                     <button id="refreshBtn" class="i18n">Refresh</button>
+                    <button id="cancelEditBtn" class="i18n hidden">Cancel Edit</button>
                 </div>
             </div>
             <div id="settingsState" class="hidden flexCol flexSize">
@@ -183,6 +185,30 @@
                         <input type="radio" id="footNotes" value="footnotes" name="notesAs" />
                         <input type="radio" id="endNotes" value="endnotes" name="notesAs" />
                     </div>
+                </div>
+
+                <div id="connectionSection" class="connection-section">
+                    <label class="i18n" style="font-weight: bold; display: block; margin-bottom: 4px;">Connection</label>
+                    <div id="connectionStatus" class="secondary-text" style="margin-bottom: 8px;"></div>
+                    <button id="switchToApiBtn" class="i18n hidden">Connect with API Key</button>
+                    <button id="switchToLocalBtn" class="i18n hidden">Connect to Local Zotero</button>
+                    <div id="settingsApiKeyWrapper" class="hidden" style="margin-top: 8px;">
+                        <input id="settingsApiKeyField" type="text" placeholder="API Key" style="width: 100%; box-sizing: border-box;" />
+                        <button id="settingsSaveApiKeyBtn" class="i18n" style="margin-top: 4px; width: 100%;">Save API Key</button>
+                        <div id="settingsApiKeyMessage"></div>
+                    </div>
+                    <div id="settingsLocalMessage"></div>
+                </div>
+
+                <div id="autoUpdateSection" class="connection-section">
+                    <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px; cursor: pointer;">
+                        <input type="checkbox" id="autoUpdateCitations" checked />
+                        <span class="i18n">Auto-update citations on insert</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="autoUpdateBibliography" checked />
+                        <span class="i18n">Auto-update bibliography on insert</span>
+                    </label>
                 </div>
 
                 <div class="flexCol flexSize"></div>
