@@ -228,7 +228,7 @@ const UI = {
      */
     updateCategories(categories) {
         const self = this;
-        this.pluginsList.querySelectorAll('.filter-by-category .amount').forEach(element => {
+        this.pluginsList.querySelectorAll('.filter-by-category .amount').forEach(function(element) {
             element.textContent = '0';
         });
         /**
@@ -248,7 +248,7 @@ const UI = {
 
         };
         if (categories.size) {
-            categories.forEach((value, key) => {
+            categories.forEach(function(value, key) {
                 makeCategoryItem(value, key);
             });
         }

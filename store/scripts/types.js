@@ -11,6 +11,8 @@
  * @property {'showPluginCard'} type
  * @property {string} guid
  * @property {string} pluginName
+ * @property {string} pluginDescription
+ * @property {string} shortLang
  * @property {'light' | string} themeType
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
@@ -22,6 +24,7 @@
  * @property {number} editorVersion
  * @property {boolean} bHasUpdate
  * @property {boolean} bActionDisabled
+ * @property {Object<string, string>} translate
  */
 
 /**
@@ -52,7 +55,6 @@
  * @property {string} [discussionUrl]
  * @property {string} [version]
  * @property {any} [variations]
- * @property {Array<string>} languages
  */
 
 /**
