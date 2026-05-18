@@ -308,7 +308,11 @@ const Marketplace = {
 	_onInternetConnectionRestored: function() {
 		let bShowMarketplace = ( STORAGE.mainFilter === 'marketplace' ) ? true : false;
 		if (!Marketplace.allPlugins.length) {
-
+			Marketplace.fetchAllPlugins()
+				.then(function(allPlugins) {
+					Marketplace.allPlugins = allPlugins;
+					updateCategories();
+				});
 		} else if (bShowMarketplace) {
 			toggleView("marketplace", true);
 		} else if (!isLocal) {
@@ -351,6 +355,7 @@ const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
 window.onload = function() {
 	UI.init(themeType);
 	UI.toggleLoader(true, "Loading");
+	Marketplace.init();
 
 	Promise.all([translationsPromise, pluginsPromise])
 		.then(function(result) {
@@ -365,6 +370,22 @@ window.onload = function() {
 		STORAGE.mainFilter = value;
 		showListOfPlugins('filtered');
 		updateCategories();
+		
+		if (value === 'marketplace') {
+			UI.linkNewPlugin.href = (OOIO + "pulls");
+		} else {
+			UI.linkNewPlugin.href = "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
+		}
+		
+		if (isLocal && value === 'installed') {
+			UI.linkNewPlugin.href = "#";
+			UI.linkNewPlugin.onclick = function (e) {
+				e.preventDefault();
+				installPluginManually();
+			}
+		} else {
+			UI.linkNewPlugin.onclick = null;
+		}
 	}
 	UI.onChangeCategoryFilter = function(category) {
 		STORAGE.categoryFilter = category;
@@ -651,6 +672,21 @@ function updateCategories() {
 	}, 0);
 	UI.updateCategories(STORAGE.categories);
 	UI.updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
+	if (STORAGE.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
+		UI.clickMainFilter('installed');
+	}
+	updateToolbar(numOfPluginsToUpdate);
+}
+
+/**
+ * @param {number} numOfPluginsToUpdate 
+ */
+function updateToolbar(numOfPluginsToUpdate) {
+	if (numOfPluginsToUpdate && STORAGE.mainFilter === 'updates') {
+		UI.toolbar.classList.remove('hidden');
+	} else {
+		UI.toolbar.classList.add('hidden');
+	}
 }
 
 /**
@@ -661,7 +697,6 @@ function showListOfPlugins(typeOfOperation) {
 	console.log('show list of plugins', typeOfOperation);
 	let arr = getFilteredPlugins();
 	if (arr.length && isSamePlugins(founded, arr)) {
-		console.log('Same plugins');
 		UI.toggleLoader(false);
 		return arr.length;
 	}
@@ -701,7 +736,6 @@ function showListOfPlugins(typeOfOperation) {
 		});
 		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
-		const divNothingFound = document.createElement('div');
 		// if no installed plugins and available plugins button was clicked
 		let notification = typeOfOperation === 'filtered' ? 'Nothing was found for this query.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
 		createNotification('Try a different category or search term', notification);
@@ -1396,43 +1430,19 @@ function toggleView(currentValue, bForce) {
 	if (STORAGE.mainFilter === currentValue && !bForce) {
 		return;
 	}
-	STORAGE.mainFilter = currentValue;
+	UI.clickMainFilter(currentValue);
 	UI.inpSearch.value = '';
-	UI.setCheckedInstalledFilter(currentValue);
 	UI.linkNewPlugin.textContent = Utils.getTranslated(MESSAGES[currentValue]);
 	founded = [];
 
 	const bAll = currentValue === 'marketplace';
-	let toolbar = document.getElementById('toolbar_tools');
-	if (!toolbar) {
-		console.error('Failed to get toolbar');
-		return;
-	}
 
 	let flag = !isLocal && !DataFetcher.isOnline;
 	if ( ( bAll && (!DataFetcher.isOnline) ) || flag) {
-		console.warn(1);
 		UI.divMain.textContent = '';
 		setTimeout(function(){if (PsMain) PsMain.update()});
-		toolbar.classList.add('hidden');
+		UI.toolbar.classList.add('hidden');
 		createNotification('No Internet Connection.', 'Problem with loading some resources', true);
-	} else {
-		console.warn(2);
-		toolbar.classList.remove('hidden');
-		showListOfPlugins(bAll ? 'all' : 'installed');
-	}
-	UI.linkNewPlugin.href = bAll ? (OOIO + "pulls") : "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
-
-	if (isLocal && !bAll) {
-		console.warn(3);
-		UI.linkNewPlugin.href = "#";
-		UI.linkNewPlugin.onclick = function (e) {
-			e.preventDefault();
-			installPluginManually();
-		}
-	} else {
-		console.warn(4);
-		UI.linkNewPlugin.onclick = null;
 	}
 };
 

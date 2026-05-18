@@ -42,6 +42,12 @@ const UI = {
     /** @type {HTMLDivElement} */
     pluginsList: document.getElementById('plugins'),
     /** @type {HTMLDivElement} */
+    toolbar: document.getElementById('toolbar_tools'),
+    /** @type {HTMLDivElement} */
+    toolbarMainText: document.querySelector('.toolbar .place-name'),
+    /** @type {HTMLElement} */
+    toolbarSecondaryText: document.querySelector('.toolbar h1'),
+    /** @type {HTMLDivElement} */
     divMain: document.getElementById('div_main'),
     /** @type {HTMLButtonElement} */
     btnUpdateAll: document.getElementById('btn_updateAll'),
@@ -105,6 +111,8 @@ const UI = {
                 /** @type {InstalledFilter} */
                 const installedFilter = event.currentTarget.value;
                 self.onChangeMainFilter(installedFilter);
+                const text = input.parentElement.querySelector('.main-filter-category').textContent;
+                self.toolbarMainText.textContent = text;
             }
         });
 
@@ -112,6 +120,8 @@ const UI = {
             input.onchange = function(event) {
                 const value = event.currentTarget.value;
                 self.onChangeCategoryFilter(value);
+                const text = input.parentElement.querySelector('.category-name').textContent;
+                self.toolbarSecondaryText.textContent = text;
             };
         });
 
@@ -158,7 +168,6 @@ const UI = {
         //rule += 'main{background-color: ' + theme["background-pane"] + ';}\n';
 
         rule += '.plugin-plate{border-color: ' + theme["border-regular-control"] + ';}\n';
-        rule += '.btn_update{color: ' + theme["text-contrast-background"] + ';}\n';
 
         rule += '.filter-by label:hover{background-color: ' + theme["highlight-button-hover"] + ';}\n';
         rule += '.filter-by label:has(:checked){background-color: ' + theme["highlight-button-pressed"] + ';}\n';
@@ -167,6 +176,8 @@ const UI = {
             '.plugin-plate .management,\n' +
             '.toolbar{border-color: ' + theme["border-divider"] + ';}\n';
 
+        rule += 'button.btn_update{color: ' + theme["text-contrast-background"] + ';}\n' +
+            'button.btn_update:active{color: ' + theme["text-contrast-background"] + ';}\n';
         if (themeType.includes('light')) {
             document.body.classList.add('white_bg');
             rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
@@ -205,13 +216,13 @@ const UI = {
         }
     },
 
-    /** @param {string} value */
-    setCheckedInstalledFilter(value) {
+    /** @param {InstalledFilter} value */
+    clickMainFilter(value) {
         const current = this.pluginsList.querySelector('input[value="' + value + '"]');
         if (!current || current instanceof HTMLInputElement === false) {
             return;
         }
-        current.checked = true;
+        current.click();
     },
     /**
      * @param {string} guid 
@@ -247,14 +258,23 @@ const UI = {
         const mainCounter = this.pluginsList.querySelector('.filter-by-installed .marketplace .amount');
         const installedCounter = this.pluginsList.querySelector('.filter-by-installed .installed .amount');
         const updatesCounter = this.pluginsList.querySelector('.filter-by-installed .updates .amount');
+        const updates = this.pluginsList.querySelector('.filter-by-installed .updates');
         if (mainCounter) {
             mainCounter.textContent = numOfAllPlugins.toString();
         }
         if (installedCounter) {
             installedCounter.textContent = numOfInstalledPlugins.toString();
         }
-        if (updatesCounter) {
-            updatesCounter.textContent = numOfPluginsToUpdate.toString();
+        if (updatesCounter && updates) {
+            if (numOfPluginsToUpdate) {
+                updates.classList.remove('hidden');
+                updatesCounter.textContent = numOfPluginsToUpdate.toString();
+            } else {
+                updates.classList.add('hidden');
+                if (updates.querySelector('input:checked')) {
+
+                }
+            }
         }
     },
     /**

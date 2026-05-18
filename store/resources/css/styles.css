@@ -439,6 +439,9 @@ button.btn_update {
 button.btn_update:hover {
 	background: var(--pm-accent-2);
 }
+button.btn_update:active {
+	background: var(--pm-accent-ink) !important;
+}
 
 .arrow {
 	position: absolute;
@@ -456,7 +459,9 @@ button.btn_update:hover {
 .toolbar_tools {
 	display: flex;
 	justify-content: space-between;
-	margin: 15px 0px;
+}
+.toolbar_tools button {
+	height: 34px;
 }
 
 .span_name_selected {
@@ -538,6 +543,7 @@ button.btn_update:hover {
 .link_submit {
 	text-decoration: underline dotted !important;
 	text-underline-offset: 4px;
+	margin-left: 10px;
 }
 
 .link_submit:hover {
@@ -678,7 +684,7 @@ button.btn_update:hover {
 .div_votes {
 	display: flex;
 	align-items: center;
-	margin: 0px 10px 0px 5px;
+	margin: 0 0 0 5px;
 }
 
 .div_info_column {
