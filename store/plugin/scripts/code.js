@@ -74,7 +74,7 @@
 		data: {},
 		/** @type {window.Asc.PluginWindow | null} */
 		window: null,
-		/** @param {PluginCardMessage} data */
+		/** @param {PluginCardWindowParams} data */
 		show: function(data) {
 			this.data = data;
 			console.warn('data', data);

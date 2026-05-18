@@ -75,6 +75,18 @@ const Utils = {
         }
     },
     /**
+     * Resolves after the browser has had a chance to paint a frame.
+     * Uses double rAF so DOM mutations made just before the call are visually applied.
+     * @returns {Promise<void>}
+     */
+    waitForRepaint: function() {
+        return new Promise(function(resolve) {
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() { resolve(); });
+            });
+        });
+    },
+    /**
      * @param {string} text
      * @returns {string}
      */

@@ -41,17 +41,12 @@
 const version = '1.0.9';                                             // version of store (will change it when update something in store)
 let start = Date.now();
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
-let isOnline = true;                                                 // flag internet connection
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to official store (for local version store in desktop)
 const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to official github repository (for links and discussions)
 const discussionsUrl = OOIO + 'discussions/';                        // discussions url
 /** @type {Plugins} */
 let founded = [];                                                    // last founded elements (for not to redraw if a result is the same)
 let updateCount = 0;                                                 // counter for plugins in updating process
-/** @type {Array<PluginInfo>} */
-let allPlugins = [];                                                 // list of all plugins from config
-/** @type {Array<InstalledPluginInfo>} */
-let installedPlugins = [];                                           // list of installed plugins
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
@@ -89,61 +84,282 @@ if (pos === -1) pos = location.href.indexOf('store/');  // fallback for Cloudfla
 const ioUrl = location.href.substring(0, pos);         // real IO URL
 const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
-// get translation file
 
-const installedPluginsPromise = getMarketplaceVersion()
+const Marketplace = {
+	/** @type {Array<InstalledPluginInfo>} */
+	installedPlugins: [], // list of installed plugins
+	/** @type {Array<PluginInfo>} */
+	allPlugins: [], // list of all plugins from config
+	/** maximum number of rating requests in flight at once */
+	_ratingConcurrency: 4,
+
+	init: function() {
+		const self = this;
+		DataFetcher.subscribeToTheAppearanceOfALostInternetConnection(function(isOnline) {
+			console.log('Internet connection status:', isOnline);
+			if (isOnline) {
+				self._onInternetConnectionRestored();
+			} else {
+				self._onInternetConnectionInterrupted();
+			}
+			
+		});
+	},
+
+	/**
+	 * Get all installed plugins
+	 * @returns {Promise<InstalledPluginInfo[]>}
+	 */
+	getInstalledPlugins: function() {
+		return new Promise(function(fResolve) {
+			/**
+			 * @param {MessageEvent} event
+			 */
+			let onGetInstalled = function(event) {
+				/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
+				let message;
+				try {
+					message = JSON.parse(event.data);
+				} catch (error) {
+					return;
+				}
+				if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
+					window.removeEventListener('message', onGetInstalled);
+					/** @type {InstalledPluginInfo[]} */
+					let plugins = [];
+					if (message.data) {
+						// filter installed plugins (delete removed, that are in store and some system plugins)
+						plugins = message.data.filter(function(el) {
+							return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
+						});
+						sortPlugins(plugins, 'start');
+					} 
+					fResolve(plugins);
+				}
+			};
+			window.addEventListener('message', onGetInstalled);
+			sendMessage({type: 'getInstalled'});
+		});
+	},
+
+	
+	/**
+	 * function for fetching all plugins from config
+	 * @returns {Promise<PluginInfo[]>}
+	 */
+	fetchAllPlugins: function() {
+		const self = this;
+		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
+			.then(function(/** @type {string} */response) {
+				return JSON.parse(response);
+			}).then(function(plugins) {
+				return self._loadPluginsData(plugins);
+			})
+	},
+	
+	/**
+	 * The function consumes a lot of resources.ц
+	 * @param {Array<PluginInfo>} plugins
+	 * @returns {Promise<Array<Rating | null>>}
+	 */
+	loadAndShowRating: function(plugins) {
+		const self = this;
+		const bDesktopRequest = isLocal && window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
+
+		/**
+		 * @param {PluginInfo} plugin
+		 * @returns {Promise<Rating | null>}
+		 */
+		function loadOne(plugin) {
+			if (!plugin.discussionUrl) return Promise.resolve(null);
+			return DataFetcher.getRating(plugin.discussionUrl, bDesktopRequest)
+				.then(function(rating) {
+					if (!rating) return null;
+					plugin.rating = rating;
+					self._showRating(plugin);
+					return rating;
+				}).catch(function(err) {
+					if (bDesktopRequest) {
+						console.error('Problem with loading rating:', plugin.name);
+						createError(err.response, false);
+					} else {
+						createError(new Error('Problem with loading rating'), true);
+					}
+					return null;
+				});
+		}
+
+		/** @type {Array<Rating | null>} */
+		const results = new Array(plugins.length);
+		let cursor = 0;
+
+		/** @returns {Promise<void>} */
+		function next() {
+			if (cursor >= plugins.length) return Promise.resolve();
+			const idx = cursor++;
+			return loadOne(plugins[idx]).then(function(rating) {
+				results[idx] = rating;
+				return next();
+			});
+		}
+
+		const workers = [];
+		const limit = Math.min(self._ratingConcurrency, plugins.length);
+		for (let w = 0; w < limit; w++) {
+			workers.push(next());
+		}
+		return Promise.all(workers).then(function() { return results; });
+	},
+	/**
+	 * @param {PluginInfo} plugin
+	 */
+	_showRating: function(plugin) {
+		if (!plugin.rating) return;
+		const pluginPlate = UI.getPlugin(plugin.guid);
+		if (!pluginPlate) {
+			console.error('Failed to find plugin plate for guid: ' + plugin.guid);
+			return;
+		}
+		const div = pluginPlate.querySelector('.rating');
+		if (!div) return;
+		div.innerHTML = makeRatingElements(plugin.rating);
+	},
+	/**
+	 * @param {Array<PluginInfo>} plugins
+	 * @returns {Promise<PluginInfo[]>}
+	 */
+	_loadPluginsData: function(plugins) {
+		// get config file for each item in config.json
+		/** @type {Array<number>} */
+		let Unloaded = [];
+		let url = isLocal ? OOMarketplaceUrl : ioUrl;
+		
+		/** @type {Promise<any>[]} */
+		const pluginsPromises = plugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
+			if (typeof plugin !== 'object') {
+				plugin.name = plugin;
+			}
+			let pluginUrl = plugin.baseUrl;
+			let confUrl = plugin.url;
+			if (!pluginUrl || !confUrl) {
+				pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
+				confUrl = pluginUrl + 'config.json';
+			}
+
+			return DataFetcher.makeRequest(confUrl, 'GET', null, null)
+				.then(function(response) {
+					/** @type {PluginInfo} */
+					let config = JSON.parse(response);
+					config.url = confUrl;
+					config.baseUrl = pluginUrl;
+					arr[i] = config;
+					return config;
+				})
+				.catch(function(err) {
+					Unloaded.push(i);
+					createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
+					return arr[i];
+				}).then(/** @param {PluginInfo} config */function(config) {
+					if (plugin.discussion) {
+						config.discussionUrl = discussionsUrl + plugin.discussion;
+					}
+					return config;
+				});
+		});
+
+		return Promise.all(pluginsPromises).then(function(arr) {
+			removeUnloaded(plugins, Unloaded);
+			sortPlugins(plugins, 'name');
+			return plugins;
+		});
+	},
+
+	/** @returns {Promise<number>} */
+	getVersion: function() {
+		return new Promise(function(fResolve) {
+			/**
+			 * @param {MessageEvent} event
+			 */
+			let onLoad = function(event) {
+				/** @type {{type: string, version?: string}} */
+				let message;
+				try {
+					message = JSON.parse(event.data);
+				} catch (error) {
+					return;
+				}
+				if (message.type === 'PluginReady') {
+					window.removeEventListener('message', onLoad);
+					const editorVersion = ( message.version && message.version.includes('.') ? Utils.convertPluginVersionToNumber(message.version) : 1e8 );
+					fResolve(editorVersion);
+				}
+			};
+			window.addEventListener('message', onLoad);
+		});
+	},
+
+	_onInternetConnectionInterrupted: function() {
+		let bShowMarketplace = ( STORAGE.mainFilter === 'marketplace' ) ? true : false;
+		if (!document.getElementsByClassName('div_notification')[0] && (bShowMarketplace || !isLocal)) {
+			toggleView(STORAGE.mainFilter, true);
+		}
+	},
+
+	_onInternetConnectionRestored: function() {
+		let bShowMarketplace = ( STORAGE.mainFilter === 'marketplace' ) ? true : false;
+		if (!Marketplace.allPlugins.length) {
+
+		} else if (bShowMarketplace) {
+			toggleView("marketplace", true);
+		} else if (!isLocal) {
+			toggleView("installed", true);
+		}
+	}
+
+};
+
+const installedPluginsPromise = Marketplace.getVersion()
 	.then(function(version) {
-		console.log('------- PLUGIN READY -------');
 		editorVersion = version;
-		return getInstalledPlugins();
-	}).then(function(plugins) {
-		installedPlugins = plugins;
-		return plugins;
+		return Marketplace.getInstalledPlugins();
+	}).catch(function(error) {
+		console.error('Failed to load installed plugins:', error);
+		return [];
 	});
 const translationsPromise = loadAndApplyTranslations();
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Promise.resolve([]);
 console.log('is local: ', isLocal);
-if (isLocal) {
-	// check internet connection (only for desktop)
-	allPluginsPromise = checkInternet()
-		.then(function(bOnline) {
-			if (bOnline) {
-				return fetchAllPlugins();
-			}
-			return [];
-		});
-} else {
-	// fetch all plugins from config
-	allPluginsPromise = fetchAllPlugins();
-}
+
+// fetch all plugins from config
+allPluginsPromise = Marketplace.fetchAllPlugins()
+	.catch(function(err) {
+		if (!isLocal) {
+			createError( new Error('Problem with loading marketplace config.') );
+		}
+		return [];
+	});
 
 const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
 	.then(function(plugins) {
 		console.log('installed', plugins[0]);
 		console.log('all', plugins[1]);
-		return loadAllPluginsData();
-		/*
-		if (bFirstRender)
-			showMarketplace();
-		else if (bShowMarketplace)
-			toggleView("marketplace", true);
-		*/
+		Marketplace.installedPlugins = plugins[0];
+		return plugins[1];
 	})
 
 window.onload = function() {
 	UI.init(themeType);
 	UI.toggleLoader(true, "Loading");
 
-	Promise.all([translationsPromise, pluginsPromise]).catch(function(err) {
-		console.error('Error loading marketplace: ', err);
-	}).finally(function() {
-		showMarketplace();
-		loadDiscussions().then(function() {
-			showRating();
+	Promise.all([translationsPromise, pluginsPromise])
+		.then(function(result) {
+			const allPlugins = result[1];
+			Marketplace.allPlugins = allPlugins;
+			showMarketplace();
+			Marketplace.loadAndShowRating(allPlugins);
+			updateCategories();
 		});
-		updateCategories();
-	});
 
 	UI.onChangeMainFilter = function(value) {
 		STORAGE.mainFilter = value;
@@ -159,68 +375,6 @@ window.onload = function() {
 		showListOfPlugins('filtered');
 	}
 };
-
-/**
- * @returns {Promise<number>}
- */
-function getMarketplaceVersion() {
-	return new Promise(function(fResolve) {
-		/**
-		 * @param {MessageEvent} event
-		 */
-		let onLoad = function(event) {
-			/** @type {{type: string, version?: string}} */
-			let message;
-			try {
-				message = JSON.parse(event.data);
-			} catch (error) {
-				return;
-			}
-			if (message.type === 'PluginReady') {
-				window.removeEventListener('message', onLoad);
-				const editorVersion = ( message.version && message.version.includes('.') ? Utils.convertPluginVersionToNumber(message.version) : 1e8 );
-				fResolve(editorVersion);
-			}
-		};
-		window.addEventListener('message', onLoad);
-	});
-}
-
-/**
- * Get all installed plugins
- * @returns {Promise<InstalledPluginInfo[]>}
- */
-function getInstalledPlugins() {
-	return new Promise(function(fResolve) {
-		/**
-		 * @param {MessageEvent} event
-		 */
-		let onGetInstalled = function(event) {
-			/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
-			let message;
-			try {
-				message = JSON.parse(event.data);
-			} catch (error) {
-				return;
-			}
-			if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
-				window.removeEventListener('message', onGetInstalled);
-				/** @type {InstalledPluginInfo[]} */
-				let plugins = [];
-				if (message.data) {
-					// filter installed plugins (delete removed, that are in store and some system plugins)
-					plugins = message.data.filter(function(el) {
-						return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
-					});
-					sortPlugins(false, true, 'start');
-				} 
-				fResolve(plugins);
-			}
-		};
-		window.addEventListener('message', onGetInstalled);
-		sendMessage({type: 'getInstalled'});
-	});
-}
 
 /**
  * @returns {Promise<InstalledPluginInfo[]>}
@@ -243,16 +397,16 @@ function updateInstalledPlugins() {
 				console.log('installed plugins', message);
 				if (message.data) {
 					// filter installed plugins (delete removed, that are in store and some system plugins)
-					installedPlugins = message.data.filter(function(el) {
+					Marketplace.installedPlugins = message.data.filter(function(el) {
 						return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
 					});
-					sortPlugins(false, true, 'start');
+					sortPlugins(Marketplace.installedPlugins, 'start');
 				} else {
-					installedPlugins = [];
+					Marketplace.installedPlugins = [];
 				}
 
 				showListOfPlugins('installed'); // need show installed
-				fResolve(installedPlugins);
+				fResolve(Marketplace.installedPlugins);
 			}	
 		};
 		window.addEventListener('message', onGetInstalled);
@@ -287,7 +441,7 @@ window.addEventListener('message', function(message) {
 			plugin = findPlugin(message.guid);
 			installed = findInstalledPlugin(message.guid);
 			if (!installed && plugin) {
-				installedPlugins.push(
+				Marketplace.installedPlugins.push(
 					{
 						baseUrl: plugin.url,
 						guid: message.guid,
@@ -353,7 +507,7 @@ window.addEventListener('message', function(message) {
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
 				if (plugin && (!bHasLocal || (isLocal && !needBackup) ) ) {
-					installedPlugins = installedPlugins.filter(function(el){return el.guid !== message.guid});
+					Marketplace.installedPlugins = Marketplace.installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
 					installed.removed = true;
@@ -364,20 +518,15 @@ window.addEventListener('message', function(message) {
 				}
 			}
 
-			if (STORAGE.mainFilter === 'installed') {
-				if (bUpdate) {
-					if (STORAGE.searchQuery !== '') {
-						showListOfPlugins('filtered');
-					} else {
-						UI.removePlugin(message.guid);
-						PsMain.update();
-					}
+			if (bUpdate && STORAGE.mainFilter === 'installed') {
+				if (STORAGE.searchQuery !== '') {
+					showListOfPlugins('filtered');
 				} else {
-					changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
+					UI.removePlugin(message.guid);
+					PsMain.update();
 				}
-			} else {
-				changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);				
 			}
+			changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);		
 
 			UI.toggleLoader(false);
 			break;
@@ -396,7 +545,7 @@ window.addEventListener('message', function(message) {
 				defaultBG = bg;
 				let bShowMarketplace = STORAGE.mainFilter === "marketplace";
 				/** @type {Plugins} */
-				let arrPl = bShowMarketplace ? allPlugins : installedPlugins;
+				let arrPl = bShowMarketplace ? Marketplace.allPlugins : Marketplace.installedPlugins;
 				arrPl.forEach(function(pl) {
 
 					let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
@@ -421,46 +570,8 @@ window.addEventListener('message', function(message) {
 			evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 			document.dispatchEvent(evt);
 			break;
-		case 'onClickBack':
-			onClickBack();
-			break;
 	};
 }, false);
-
-/**
- * function for fetching all plugins from config
- * @returns {Promise<PluginInfo[]>}
- */
-function fetchAllPlugins() {
-	return makeRequestWithNoInternetHandler(configUrl, 'GET', null, null)
-		.then(function(response) {
-			allPlugins = JSON.parse(response);
-			return allPlugins;
-		}).catch(function(err) {
-			createError( new Error('Problem with loading marketplace config.') );
-			showMarketplace();
-			return allPlugins;
-		});
-};
-
-/**
- * @param {string} url 
- * @param {'GET' | 'POST'} method 
- * @param {*} responseType 
- * @param {*} body 
- * @param {*} bHandleNoInternet 
- * @returns 
- */
-function makeRequestWithNoInternetHandler(url, method, responseType, body) {
-	return DataFetcher.makeRequest(url, method, responseType, body)
-		.catch(function(err) {
-			if (typeof err === 'string' && url.includes('https')) {
-				handleNoInternet();
-			} else {
-				throw err;
-			}
-		});
-};
 
 /** @param {Object} message */
 function sendMessage(message) {
@@ -482,83 +593,6 @@ function detectThemeType() {
 	return type || 'light';
 };
 
-
-/**
- * @returns {Promise<PluginInfo[]>}
- */
-function loadAllPluginsData() {
-	// get config file for each item in config.json
-	/** @type {Array<number>} */
-	let Unloaded = [];
-	let url = isLocal ? OOMarketplaceUrl : ioUrl;
-	/** @type {Promise<any>[]} */
-	const pluginsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
-		if (typeof plugin !== 'object') {
-			plugin.name = plugin;
-		}
-		let pluginUrl = plugin.baseUrl;
-		let confUrl = plugin.url;
-		if (!pluginUrl || !confUrl) {
-			pluginUrl = (plugin.name.indexOf(":/\/") == -1) ? url + 'sdkjs-plugins/content/' + plugin.name + '/' : plugin.name;
-			confUrl = pluginUrl + 'config.json';
-		}
-		/** @type {PluginInfo} */
-		let config = {
-			url: confUrl,
-			baseUrl: pluginUrl
-		};
-		return makeRequestWithNoInternetHandler(confUrl, 'GET', null, null)
-			.then(function(response) {
-				config = Object.assign(JSON.parse(response), config);
-				arr[i] = config;
-			})
-			.catch(function(err) {
-				Unloaded.push(i);
-				console.error(plugin.name);
-				createError(new Error('Problem with loading plugin config.\nConfig: ' + confUrl));
-			}).then(function() {
-				if (plugin.discussion) {
-					config.discussionUrl = discussionsUrl + plugin.discussion;
-				}
-				return config;
-			});
-	});
-
-	return Promise.all(pluginsPromises).then(function(arr) {
-		removeUnloaded(Unloaded);
-		sortPlugins(true, false, 'name');
-		return allPlugins;
-	});
-};
-
-/**
- * @returns {Promise<Array<Rating | null>>}
- */
-function loadDiscussions() {
-	/** @type {Promise<any>[]} */
-	const discussionsPromises = allPlugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
-		if (plugin.discussionUrl) {
-			const bDesktopRequest = isLocal && window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
-			return DataFetcher.getRating(plugin.discussionUrl, bDesktopRequest)
-				.then(function(rating) {
-					if (!rating) return null;
-					plugin.rating = rating;
-					return rating;
-				}).catch(function(err) {
-					if (bDesktopRequest) {
-						createError(err.response, false);
-					} else {
-						createError( new Error('Problem with loading rating'), true);
-					}
-					return null;
-				});
-		} else {
-			return Promise.resolve(null);
-		}
-	});
-
-	return Promise.all(discussionsPromises);
-};
 
 function updateCategories() {
 	STORAGE.categories = new Map();
@@ -593,27 +627,27 @@ function updateCategories() {
 		});
 	}
 	if (STORAGE.mainFilter === 'marketplace') {
-		allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+		Marketplace.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
 			addCategoryToStorage(plugin);
 		});
 	} else if (STORAGE.mainFilter === 'installed') {
-		installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
+		Marketplace.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
 			if (!plugin.obj) {
 				return;
 			}
 			addCategoryToStorage(plugin.obj);
 		});
 	} else {
-		allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+		Marketplace.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
 			if (!plugin.bHasUpdate) {
 				return;
 			}
 			addCategoryToStorage(plugin);
 		});
 	}
-	let numOfAllPlugins = allPlugins.length;
-	let numOfInstalledPlugins = installedPlugins.length;
-	let numOfPluginsToUpdate = allPlugins.reduce(function(acc, plugin) {
+	let numOfAllPlugins = Marketplace.allPlugins.length;
+	let numOfInstalledPlugins = Marketplace.installedPlugins.length;
+	let numOfPluginsToUpdate = Marketplace.allPlugins.reduce(function(acc, plugin) {
 		return plugin.bHasUpdate ? acc + 1 : acc;
 	}, 0);
 	UI.updateCategories(STORAGE.categories);
@@ -649,7 +683,7 @@ function showListOfPlugins(typeOfOperation) {
 				const installed = findInstalledPlugin(plugin.guid);
 
 				if (!installed) {
-					installedPlugins.push({
+					Marketplace.installedPlugins.push({
 						"baseUrl": _pluginsTmp[0]["url"],
 						"guid": plugin.guid,
 						"canRemoved": true,
@@ -668,9 +702,10 @@ function showListOfPlugins(typeOfOperation) {
 		});
 		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
+		const divNothingFound = document.createElement('div');
 		// if no installed plugins and available plugins button was clicked
 		let notification = typeOfOperation === 'filtered' ? 'Nothing was found for this query.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
-		createNotification(notification);
+		createNotification('Try a different category or search term', notification);
 		UI.toggleLoader(false);
 	}
 	// scroll for list of plugins
@@ -866,43 +901,6 @@ function getTranslatedDescription(variation) {
 	return variation.description;
 }
 
-function showRating() {
-	let showRatingHandle = 0;
-	const SHOW_RATING_CHUNK = 25;
-
-	// cancel previous unfinished pass, so repeated calls don't pile up
-	if (showRatingHandle) {
-		cancelAnimationFrame(showRatingHandle);
-		showRatingHandle = 0;
-	}
-
-	// snapshot the list so it can't change mid-iteration
-	const plugins = allPlugins.slice();
-	let i = 0;
-
-	function processChunk() {
-		showRatingHandle = 0;
-		const end = Math.min(i + SHOW_RATING_CHUNK, plugins.length);
-		for (; i < end; i++) {
-			const plugin = plugins[i];
-			const pluginPlate = UI.getPlugin(plugin.guid);
-			if (!pluginPlate) {
-				console.error('Failed to find plugin plate for guid: ' + plugin.guid);
-				continue;
-			}
-			const div = pluginPlate.querySelector('.rating');
-			if (!div) continue;
-			div.innerHTML = makeRatingElements(plugin.rating);
-		}
-		if (i < plugins.length) {
-			// yield back to the browser so it can paint / handle input
-			showRatingHandle = requestAnimationFrame(processChunk);
-		}
-	}
-
-	showRatingHandle = requestAnimationFrame(processChunk);
-}
-
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -910,7 +908,7 @@ function showRating() {
 function onClickInstall(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Installation');
-	return waitForRepaint().then(function() { _doInstall(guid) });
+	return Utils.waitForRepaint().then(function() { _doInstall(guid) });
 }
 /**
  * @param {string} guid 
@@ -942,7 +940,7 @@ function _doInstall(guid) {
 function onClickUpdate(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Updating');
-	return waitForRepaint().then(function() { _doUpdate(guid) });
+	return Utils.waitForRepaint().then(function() { _doUpdate(guid) });
 }
 /**
  * @param {string} guid 
@@ -972,7 +970,7 @@ function onClickRemove(guid, event) {
 	console.log(guid, event);
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Removal');
-	return waitForRepaint().then(function() { _doRemove(guid) });
+	return Utils.waitForRepaint().then(function() { _doRemove(guid) });
 }
 /**
  * @param {string} guid 
@@ -995,11 +993,11 @@ function needBackupPlugin(guid) {
 }
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
-	return waitForRepaint().then(function() { _doUpdateAll() });
+	return Utils.waitForRepaint().then(function() { _doUpdateAll() });
 }
 function _doUpdateAll() {
 	UI.btnUpdateAll.classList.add('hidden');
-	let arr = allPlugins.filter(function(el) {
+	let arr = Marketplace.allPlugins.filter(function(el) {
 		return el.bHasUpdate;
 	});
 	updateCount = arr.length;
@@ -1029,14 +1027,13 @@ function openPluginCard(guid) {
 	let installed = findInstalledPlugin(guid);
 	/** @type {PluginInfo} */
 	let plugin = findPlugin(guid);
-	STORAGE.bPluginCardShown = true;
 	STORAGE.selectedPluginGuid = guid;
 	let iconSrc = getImageUrl(guid);
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('update');
 	localStorage.setItem('test', JSON.stringify(Utils.translate));
-	/** @type {PluginCardMessage} */
+	/** @type {PluginCardWindowParams} */
 	let message = {
 		type : 'showPluginCard',
 		guid : guid,
@@ -1080,32 +1077,37 @@ function openPluginCard(guid) {
 	
 }
 
-function onClickBack() {
-	STORAGE.bPluginCardShown = false;
-	if(PsMain) PsMain.update();
-};
-
 /**
- * @param {string} text 
- * @param {string} [err] 
+ * @param {string} header 
+ * @param {string} caption
+ * @param {boolean} [bWarning] 
  */
-function createNotification(text, err) {
+function createNotification(header, caption, bWarning) {
 	// creates any notification for user inside UI.divMain window (you should clear this element before making notification)
 	let div = document.createElement('div');
+	UI.divMain.appendChild(div);
+	div = document.createElement('div');
 	div.className = 'div_notification';
-	if (err) {
+	if (bWarning) {
 		let icon = document.createElement('div');
+		icon.className = 'icon_warning';
+		div.appendChild(icon);
+	} else {
+		let icon = document.createElement('div');
+		icon.textContent = '◌';
 		icon.className = 'icon_notification';
 		div.appendChild(icon);
-		let spanErr = document.createElement('span');
-		spanErr.className = 'error_caption';
-		spanErr.textContent = Utils.getTranslated(err);
-		div.appendChild(spanErr);
 	}
+	let spanMessage = document.createElement('span');
+	spanMessage.className = 'message_caption';
+	spanMessage.textContent = Utils.getTranslated(caption);
+	div.appendChild(spanMessage);
 	let spanNot = document.createElement('span');
 	spanNot.className = 'span_notification text-secondary';
-	spanNot.textContent = Utils.getTranslated(text);
+	spanNot.textContent = Utils.getTranslated(header);
 	div.appendChild(spanNot);
+	UI.divMain.appendChild(div);
+	div = document.createElement('div');
 	UI.divMain.appendChild(div);
 };
 
@@ -1203,7 +1205,7 @@ function loadAndApplyTranslations() {
 		return Promise.resolve(true);
 	}
 	return new Promise(function(fResolve, fReject) {
-		DataFetcher.makeRequestWithRetryStrategy('./translations/langs.json', 'GET', null, null)
+		DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/langs.json', 'GET', null, null)
 			.onSuccess(function(/** @type {string} */response) {
 				let arr = JSON.parse(response);
 				let name = '';
@@ -1222,7 +1224,7 @@ function loadAndApplyTranslations() {
 					return;
 				}
 				bTranslate = true;
-				DataFetcher.makeRequestWithRetryStrategy('./translations/' + name + '.json', 'GET', null, null)
+				DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/' + name + '.json', 'GET', null, null)
 					.onSuccess(function(res) {
 						if (!res) {
 							return false;
@@ -1240,8 +1242,6 @@ function loadAndApplyTranslations() {
 				createError( new Error('Cannot load translations list file.'));
 				fReject(err);
 			});
-	}).then(function(/** @type {boolean} */res) {
-		return res;
 	}).catch(function() {
 		return false;
 	});
@@ -1250,16 +1250,14 @@ function loadAndApplyTranslations() {
 
 function showMarketplace() {
 	// show main window to user
-	if (installedPlugins) {
-		if (isOnline) {
+	if (Marketplace.installedPlugins) {
+		if (DataFetcher.isOnline) {
 			showListOfPlugins('all');
 		} else {
 			toggleView("installed");
 			UI.toggleLoader(false);
 		}
 		UI.pluginsList.classList.remove('transparent');
-
-		console.log('show marketplace');
 	}
 };
 
@@ -1297,7 +1295,7 @@ function getImageUrl(guid) {
 	let baseUrl;
 	// We have a problem with "http" and "file" routes.
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
-	if (installedPlugins && isLocal) {
+	if (Marketplace.installedPlugins && isLocal) {
 		// it doesn't work when we use icons from other resource (cors problems)
 		// it's why we use local icons only for desktop
 		const inst = findInstalledPlugin(guid);
@@ -1306,7 +1304,7 @@ function getImageUrl(guid) {
 			baseUrl = plugin.baseUrl;
 		}
 	}
-	if ((!plugin || !isLocal) && allPlugins) {
+	if ((!plugin || !isLocal) && Marketplace.allPlugins.length) {
 		const found = findPlugin(guid);
 		if (found) {
 			plugin = found;
@@ -1412,13 +1410,13 @@ function toggleView(currentValue, bForce) {
 		return;
 	}
 
-	let flag = !isLocal && !isOnline;
-	if ( ( bAll && (!isOnline) ) || flag) {
+	let flag = !isLocal && !DataFetcher.isOnline;
+	if ( ( bAll && (!DataFetcher.isOnline) ) || flag) {
 		console.warn(1);
 		UI.divMain.textContent = '';
 		setTimeout(function(){if (PsMain) PsMain.update()});
 		toolbar.classList.add('hidden');
-		createNotification('No Internet Connection.', 'Problem with loading some resources');
+		createNotification('No Internet Connection.', 'Problem with loading some resources', true);
 	} else {
 		console.warn(2);
 		toolbar.classList.remove('hidden');
@@ -1456,11 +1454,22 @@ function installPluginManually() {
 };
 
 /**
- * @param {boolean} bAll 
- * @param {boolean} bInst 
+ * @param {PluginInfo[] | InstalledPluginInfo[]} arrPlugins 
  * @param {"rating" | "installations" | "start" | "name"} type 
  */
-function sortPlugins(bAll, bInst, type) {
+function sortPlugins(arrPlugins, type) {
+	if (!arrPlugins || !arrPlugins.length) {
+		return arrPlugins;
+	}
+	/** @type {Array<InstalledPluginInfo>} */
+	let installedPluginsToSort = [];
+	/** @type {Array<PluginInfo>} */
+	let allPluginsToSort = [];
+	if (arrPlugins[0].obj) {
+		installedPluginsToSort = arrPlugins;
+	} else {
+		allPluginsToSort = arrPlugins;
+	}
 	switch (type) {
 		case 'rating':
 			// todo
@@ -1469,14 +1478,14 @@ function sortPlugins(bAll, bInst, type) {
 			// todo
 			break;
 		case 'start':
-			if (bInst) {
+			if (installedPluginsToSort.length) {
 				/** @type {Array<InstalledPluginInfo>} */
 				let guarded = [];
 				/** @type {Array<InstalledPluginInfo>} */
 				let removed = [];
 				/** @type {Array<InstalledPluginInfo>} */
 				let arr = [];
-				installedPlugins.forEach(function(pl) {
+				installedPluginsToSort.forEach(function(pl) {
 					if (!pl.canRemoved)
 						guarded.push(pl);
 					else if (pl.removed)
@@ -1484,17 +1493,16 @@ function sortPlugins(bAll, bInst, type) {
 					else
 						arr.push(pl);
 				});
-				installedPlugins = guarded.concat(arr, removed);
+				return guarded.concat(arr, removed);
 			}
 			break;
 		case 'name':
-			if (bAll) {
-				allPlugins.sort(function(a, b) {
+			if (allPluginsToSort.length) {
+				return allPluginsToSort.sort(function(a, b) {
 					return a.name.localeCompare(b.name);
 				});
-			}
-			if (bInst) {
-				installedPlugins.sort(function(a, b) {
+			} else {
+				return installedPluginsToSort.sort(function(a, b) {
 					return a.obj.name.localeCompare(b.obj.name);
 				});
 			}
@@ -1511,11 +1519,11 @@ function getFilteredPlugins() {
 	const searchQuery = STORAGE.searchQuery;
 
 	/** @type {Plugins} */
-	let plugins = allPlugins;
+	let plugins = Marketplace.allPlugins;
 	if (mainFilter === 'installed') {
-		plugins = installedPlugins;
+		plugins = Marketplace.installedPlugins;
 	} else if (mainFilter === 'updates') {
-		plugins = allPlugins.filter(function(plugin) { return plugin.bHasUpdate; });
+		plugins = Marketplace.allPlugins.filter(function(plugin) { return plugin.bHasUpdate; });
 	}
 
 	if (category === "onlyoffice") {
@@ -1546,10 +1554,13 @@ function getFilteredPlugins() {
 	return plugins;
 };
 
-/** @param {Array<number>} unloaded */
-function removeUnloaded(unloaded) {
+/**
+ * @param {Array<PluginInfo>} plugins
+ * @param {Array<number>} unloaded
+ */
+function removeUnloaded(plugins, unloaded) {
 	for (let i = unloaded.length - 1; i >= 0; i--) {
-		allPlugins.splice(unloaded[i], 1);
+		plugins.splice(unloaded[i], 1);
 	}
 };
 
@@ -1558,7 +1569,7 @@ function removeUnloaded(unloaded) {
  * @returns {PluginInfo | undefined}
  */
 function findPlugin(guid) {
-	let res = allPlugins.find(function(el){return el.guid === guid});
+	let res = Marketplace.allPlugins.find(function(el){return el.guid === guid});
 	return res;
 };
 
@@ -1567,7 +1578,7 @@ function findPlugin(guid) {
  * @returns {InstalledPluginInfo | undefined}
  */
 function findInstalledPlugin(guid) {
-	return installedPlugins.find(function(el){return el.guid === guid});
+	return Marketplace.installedPlugins.find(function(el){return el.guid === guid});
 };
 
 /**
@@ -1615,73 +1626,22 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 		btn.setAttribute('title', Utils.getTranslated(MESSAGES.versionWarning));
 	}
 
-	/*if (STORAGE.bPluginCardShown) {
-		if (bInstall) {
-			UI.btnInstall.classList.add('hidden');
-			UI.btnRemove.classList.remove('hidden');
-		} else {
-			UI.btnInstall.classList.remove('hidden');
-			UI.btnRemove.classList.add('hidden');
-		}
-		if (bInstall && bHasUpdate)
-			UI.btnUpdate.classList.remove('hidden');
-		else
-			UI.btnUpdate.classList.add('hidden');
-	}*/
 	checkNoUpdated(!bInstall);
+	updateCategories();
 };
 
 /**
- * @returns {Promise<boolean>}
+ * @param {string} url 
+ * @param {'GET' | 'POST'} method 
+ * @param {*} responseType 
+ * @param {*} body
+ * @returns 
  */
-function checkInternet() {
-	// url for check internet connection
-	let url = 'https://onlyoffice.github.io/store/translations/langs.json';
-	return DataFetcher.makeRequest(url, 'GET', null, null)
-		.then(function(res) {
-			isOnline = true;
-			return true;
-		}).catch(function(error) {
-			isOnline = false;
-			return false;
+function makeRequestWithNoInternetHandler(url, method, responseType, body) {
+	return DataFetcher.makeRequest(url, method, responseType, body)
+		.catch(function(err) {
+			
 		});
-};
-
-function handleNoInternet() {
-	(function checkInternetRecursion() {
-		setTimeout(function() {
-			checkInternet()
-				.then(function(bOnline) {
-					if (!bOnline) {
-						return checkInternetRecursion();
-					}
-
-					let bShowSelected = STORAGE.bPluginCardShown;
-					let bShowMarketplace = bShowSelected ? false : ( ( STORAGE.mainFilter === 'marketplace' ) ? true : false );
-					if (!allPlugins.length) {
-						return fetchAllPlugins();
-					} else if (bShowSelected) {
-						let div = UI.getSelectedPlugin(STORAGE.selectedPluginGuid);
-						if (div)
-							div.click();
-					} else if (bShowMarketplace) {
-						toggleView("marketplace", true);
-					} else if (!isLocal) {
-						toggleView("installed", true);
-					}
-					return bOnline;
-				});
-		}, 3000);
-	})();
-	
-	let bShowMarketplace = false;
-	if (STORAGE.mainFilter === 'marketplace') {
-		bShowMarketplace = true;
-	}
-
-	if (!document.getElementsByClassName('div_notification')[0] && (bShowMarketplace || !isLocal)) {
-		toggleView(STORAGE.mainFilter, true);
-	}
 };
 
 /** @param {boolean} bRemove */
