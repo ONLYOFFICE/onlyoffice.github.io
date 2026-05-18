@@ -180,7 +180,10 @@
 				</div>
 				<div class="submit-own-plugin">
 					<!-- TODO think about how to open the form for uploading -->
-					<a id="link_newPlugin" class="i18n" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
+					<a id="link_newPlugin" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">
+						<span class="i18n">Submit your own plugin</span>
+						<span> →</span>
+					</a>
 				</div>
 			</aside>
 			<main>
@@ -189,17 +192,6 @@
 						<div class="place-name i18n">Marketplace</div>
 						<h1 class="i18n">All plugins</h1>
 					</div>
-					<div id="toolbar_tools" class="toolbar_tools">
-						<button id="btn_updateAll" class="btn-text-default btn_update btn_install i18n hidden" onclick="onClickUpdateAll()">Update All</button>
-						<div class="hidden">
-							<span id="span_sort">Sort by</span>
-							<select id="select_sortBy">
-								<option value="name">Name</option>
-								<option value="raiting">Raiting</option>
-								<option value="instalations">Instalations</option>
-							</select>
-						</div>
-					</div>
 					<div>
 						<div class="search">
 							<span>
@@ -207,7 +199,18 @@
 									<path fill-rule="evenodd" clip-rule="evenodd" d="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" fill="currentColor" fill-opacity="0.8"/>
 								</svg>
 							</span>
-							<input id="inp_search" class="i18n" type="text" spellcheck="false" placeholder="Search plugins…" value="">
+							<input id="inp_search" class="i18n form-control" type="text" spellcheck="false" placeholder="Search plugins…" value="">
+						</div>
+					</div>
+					<div id="toolbar_tools" class="toolbar_tools">
+						<button id="btn_updateAll" class="btn-text-default btn_update i18n hidden" onclick="onClickUpdateAll()">Update All</button>
+						<div class="hidden">
+							<span id="span_sort">Sort by</span>
+							<select id="select_sortBy">
+								<option value="name">Name</option>
+								<option value="raiting">Raiting</option>
+								<option value="instalations">Instalations</option>
+							</select>
 						</div>
 					</div>
 				</div>
