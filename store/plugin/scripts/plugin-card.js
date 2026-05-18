@@ -67,7 +67,7 @@ const PluginCard = {
         return new Promise(function(fResolve) {
             window.Asc.plugin.attachEvent("onShowPluginCard", fResolve);
             window.Asc.plugin.sendToPlugin("onWindowReady", {});
-        }).then(/** @param {PluginCardMessage} data */function (data) {
+        }).then(/** @param {PluginCardWindowParams} data */function (data) {
             console.log("onShowPluginCard", data);
             self.plugin = data.plugin;
             self.installed = data.installed;
@@ -78,7 +78,7 @@ const PluginCard = {
             Utils.translateAll();
             PluginCardUI.init(data.themeType);
             PluginCardUI.toggleLoader(true, 'Loading');
-            return waitForRepaint().then(function() {
+            return Utils.waitForRepaint().then(function() {
                 self._show(data);
                 PluginCardUI.toggleLoader(false);
             });
@@ -86,7 +86,7 @@ const PluginCard = {
     },
 
     /**
-     * @param {PluginCardMessage} data
+     * @param {PluginCardWindowParams} data
      */
     _show: function (data) {
 		const self = this;
@@ -304,7 +304,7 @@ const PluginCard = {
     /** @param {string} baseUrl */
     _loadAndShowChangelog: function(baseUrl) {
         const self = this;
-        return DataFetcher.makeRequestWithRetryStrategy(baseUrl + 'CHANGELOG.md', 'GET', null, null)
+        return DataFetcher.makeRequestWithWaitConnectionStrategy(baseUrl + 'CHANGELOG.md', 'GET', null, null)
             .onSuccess(function(/** @type {String} */response) {
                 const changelog = Utils.makeChangeLogHtml(response);
 				PluginCardUI.spanChangelog.classList.remove("hidden");
@@ -326,7 +326,7 @@ const PluginCard = {
         let supportedLangs = [ Utils.getTranslated('English') ];
         PluginCardUI.spanLanguages.textContent = supportedLangs.join(", ") + ".";
         PluginCardUI.divLanguages.classList.remove("hidden");
-        return DataFetcher.makeRequestWithRetryStrategy(baseUrl + 'translations/langs.json', 'GET', null, null)
+        return DataFetcher.makeRequestWithWaitConnectionStrategy(baseUrl + 'translations/langs.json', 'GET', null, null)
 			.onSuccess(function(/** @type {string} */response) {
                 /** @type {Array<string>} */
                 let langs = JSON.parse(response);
@@ -424,7 +424,7 @@ const PluginCard = {
     onClickInstall: function() {
         const self = this;
         PluginCardUI.toggleLoader(true, 'Installation');
-        return waitForRepaint().then(function() { self._doInstall() });
+        return Utils.waitForRepaint().then(function() { self._doInstall() });
     },
     _doInstall: function() {
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
@@ -456,7 +456,7 @@ const PluginCard = {
     onClickUpdate: function() {
         const self = this;
         PluginCardUI.toggleLoader(true, 'Updating');
-        return waitForRepaint().then(function() { self._doUpdate() });
+        return Utils.waitForRepaint().then(function() { self._doUpdate() });
     },
     _doUpdate: function() {
         const self = this;
@@ -482,7 +482,7 @@ const PluginCard = {
     onClickRemove: function() {
         const self = this;
         PluginCardUI.toggleLoader(true, 'Removal');
-        return waitForRepaint().then(function() { self._doRemove() });
+        return Utils.waitForRepaint().then(function() { self._doRemove() });
     },
     _doRemove: function() {
         const self = this;
@@ -553,19 +553,6 @@ const PluginCard = {
     }
 
 };
-
-/**
- * Resolves after the browser has had a chance to paint a frame.
- * Uses double rAF so DOM mutations made just before the call are visually applied.
- * @returns {Promise<void>}
- */
-function waitForRepaint() {
-    return new Promise(function(resolve) {
-        requestAnimationFrame(function() {
-            requestAnimationFrame(function() { resolve(); });
-        });
-    });
-}
 
 window.Asc.plugin.init = PluginCard.init.bind(PluginCard);
 

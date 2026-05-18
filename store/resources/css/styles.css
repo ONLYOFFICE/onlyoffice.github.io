@@ -521,16 +521,21 @@ label.header {
 
 .div_notification {
 	display: flex;
+	padding-top: 60px;
 	justify-content: center;
 	align-items: center;
 	width: 100%;
 	flex-flow: column;
+	gap: 8px;
 }
-
-.icon_notification {
+.icon_warning {
 	background: url(../img/warnings/warnings_s.svg) no-repeat center;
 	width: 40px;
 	height: 40px;
+}
+.icon_notification {
+	font-size: 32px;
+    opacity: 0.4;
 }
 
 .span_notification {
@@ -650,6 +655,9 @@ label.header {
 	border: 1px solid #009900;
 	border-radius: 2px;
 	/* margin: 0px 10px 5px 10px; */
+}
+.message_caption {
+	font-size: 14px;
 }
 
 .error_main {

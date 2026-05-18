@@ -34,13 +34,14 @@
 /// <reference path="./types.js" />
 /// <reference path="./utils.js" />
 
-/**
- * @typedef {Object} DataFetcher
- * @property {() => Promise<any>} getRating
- * @property {() => Promise<any>} loadChangelogs
- */
 const DataFetcher = {
-    proxyUrl: 'https://plugins-services.onlyoffice.com/proxy',// url to proxy for getting rating
+    _urlToCheckConnection: 'https://onlyoffice.github.io/store/translations/langs.json',
+    proxyUrl: 'https://plugins-services.onlyoffice.com/proxy',  // url to proxy for getting rating
+    isOnline: true,                                             // flag internet connection
+    /** @type {Array<(isOnline: boolean) => void>} */
+    _subscribers: [],
+    _bMonitoringConnection: false,
+
     /**
      * @param {string} discussionUrl 
      * @param {boolean} bDesktopRequest 
@@ -67,6 +68,8 @@ const DataFetcher = {
         }
     },
     /**
+     * this function makes GET request and return promise
+     * maybe use fetch to in this function
      * @param {string} url 
      * @param {'GET' | 'POST'} method 
      * @param {*} responseType 
@@ -74,8 +77,7 @@ const DataFetcher = {
      * @returns 
      */
     makeRequest: function(url, method, responseType, body) {
-        // this function makes GET request and return promise
-        // maybe use fetch to in this function
+        const self = this;
         if (!method)
             method = 'GET';
         
@@ -103,6 +105,11 @@ const DataFetcher = {
 
                 xhr.onerror = function (err) {
                     reject(err);
+                    if (!url.includes('https')) {
+                        return
+                    }
+                    self.isOnline = false;
+                    self._checkInternet();
                 };
 
                 xhr.send(body);
@@ -113,13 +120,17 @@ const DataFetcher = {
         });
     },
     /**
+     * Either onSuccess or onFailure will be triggered,
+     * but if onFailure is triggered, then onSuccess will 
+     * be additionally called when an Internet connection appears.
      * @param {string} url 
      * @param {'GET' | 'POST'} method 
      * @param {*} responseType 
      * @param {*} body 
      * @returns {{onSuccess: Function, onFailure: Function}}
      */
-    makeRequestWithRetryStrategy: function(url, method, responseType, body) {
+    makeRequestWithWaitConnectionStrategy: function(url, method, responseType, body) {
+        const self = this;
         /** @type {Function} */
         let successCallback = function() {};
         /** @param {unknown} err */
@@ -136,7 +147,11 @@ const DataFetcher = {
 
         let numOfRetries = 0;
 
-        let makeRequest = function() {
+        /** @param {boolean} bIsOnline */
+        let makeRequest = function(bIsOnline) {
+            if (!bIsOnline) {
+                return;
+            }
             let xhr = new XMLHttpRequest();
             xhr.open(method, url, true);
             if (responseType)
@@ -146,8 +161,9 @@ const DataFetcher = {
                 if (this.readyState == 4) {
                     if (this.status !== 404 && (this.status == 200 || location.href.indexOf("file:") == 0)) {
                         successCallback(this.response);
+                        self._unsubscribeFromAppearanceOfALostInternetConnection(makeRequest)
                     }
-                    if (this.status >= 400) {
+                    if (this.status >= 400 && numOfRetries === 0) {
                         let errorText = this.status === 404 ? 'File not found.' : 'Network problem.';
                         failureCallback( new Error(errorText) );
                     }
@@ -158,24 +174,18 @@ const DataFetcher = {
                 if (numOfRetries === 0) {
                     failureCallback(err);
                 }
-                let timeout = 3000;
-                if (numOfRetries > 3 && numOfRetries < 10) {
-                    timeout = 5000;
-                } else if (numOfRetries > 9) {
-                    timeout = 10000;
+                if (!url.includes('https')) {
+                    return
                 }
-                if (url.includes('https') && numOfRetries < 3) {
-                    numOfRetries++;
-                    setTimeout(function() {
-                        makeRequest();
-                    }, timeout);
-                }
+                self.isOnline = false;
+                numOfRetries++;
+                self.subscribeToTheAppearanceOfALostInternetConnection(makeRequest);
             };
 
             xhr.send(body);
         }
         try {
-            makeRequest();
+            makeRequest(this.isOnline);
         } catch (error) {
             failureCallback(error);
         }
@@ -194,13 +204,26 @@ const DataFetcher = {
         };
           
         return result;
-    },    
+    },   
+    
+    /** @param {(isOnline: boolean) => void} callback */
+    subscribeToTheAppearanceOfALostInternetConnection: function(callback) {
+        this._subscribers.push(callback);
+        this._checkInternet();
+    },
+    /** @param {(isOnline: boolean) => void} callback */
+    _unsubscribeFromAppearanceOfALostInternetConnection: function(callback) {
+        const index = this._subscribers.indexOf(callback);
+        if (index > -1) {
+            this._subscribers.splice(index, 1);
+        }
+    },
+ 
     /**
      * @param {string} _url 
-     * @returns 
      */
     _makeDesktopRequest: function(_url) {
-	// function for getting rating page in desktop
+	    // function for getting rating page in desktop
         return new Promise(function(resolve, reject) {
             if ( !_url.startsWith('http') ) {
                 resolve({status:'skipped', response: {statusText: _url}});
@@ -226,6 +249,37 @@ const DataFetcher = {
         });
     },
     
+    _checkInternet: function() {
+        const self = this;
+        if (this._bMonitoringConnection || this.isOnline) {
+            return;
+        }
+        self._subscribers.forEach(function(subscriber) {
+            subscriber(false);
+        });
+        this._bMonitoringConnection = true;
+        (function checkInternetRecursion() {
+            setTimeout(function() {
+                self.makeRequest(self._urlToCheckConnection, 'GET', null, null)
+                    .then(function() {
+                        return true;
+                    }).catch(function() {
+                        return false;
+                    })
+                    .then(function(bOnline) {
+                        self.isOnline = bOnline;
+                        if (bOnline) {
+                            self._subscribers.forEach(function(subscriber) {
+                                subscriber(bOnline);
+                            });
+                            self._bMonitoringConnection = false;
+                        } else {
+                            return checkInternetRecursion();
+                        }
+                    });
+            }, 3000);
+        })();
+    },
 
 
 };

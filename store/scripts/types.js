@@ -7,7 +7,7 @@
  */
 
 /**
- * @typedef {Object} PluginCardMessage
+ * @typedef {Object} PluginCardWindowParams
  * @property {'showPluginCard'} type
  * @property {string} guid
  * @property {string} pluginName

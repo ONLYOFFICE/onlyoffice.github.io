@@ -46,6 +46,4 @@ const STORAGE = {
     selectedCategory: "",
     /** @type {string} */
     selectedPluginGuid: "",
-    /** @type {boolean} */
-    bPluginCardShown: false,
 };
