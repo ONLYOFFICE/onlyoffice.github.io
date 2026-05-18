@@ -535,10 +535,9 @@ window.addEventListener('message', function(message) {
 			UI.toggleLoader(false);
 			break;
 		case 'Theme':
-			console.log('theme');
 			if (message.theme.type)
 				themeType = message.theme.type;
-
+			console.log(message.theme);
 			let bg = UI.onChangeTheme(message.theme, themeType, message.style);
 			if (bg) {
 				defaultBG = bg;
@@ -840,12 +839,12 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) {
 	let result = '<button class="btn-text-default ';
 	if (bNeedUpdateButton) {
-		result += 'update" onclick="onClickUpdate(\'' + guid + '\', event)">' + Utils.getTranslated("Update");
+		result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)">' + Utils.getTranslated("Update");
 	} else if (bNeedRemoveButton) {
-		result += 'remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+		result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
 		result += Utils.getTranslated("Remove");
 	} else if (bNeedInstallButton) {
-		result += 'install" onclick="onClickInstall(\'' + guid + '\', event)" ' + (additional || "") + '>'  + Utils.getTranslated("Install");
+		result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + (additional || "") + '>'  + Utils.getTranslated("Install");
 	} else {
 		return '';
 	}
@@ -1030,7 +1029,7 @@ function openPluginCard(guid) {
 	let iconSrc = getImageUrl(guid);
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
-	let bHasUpdate = actionButton && actionButton.classList.contains('update');
+	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
 	localStorage.setItem('test', JSON.stringify(Utils.translate));
 	/** @type {PluginCardWindowParams} */
 	let message = {
@@ -1102,7 +1101,7 @@ function createNotification(header, caption, bWarning) {
 	spanMessage.textContent = Utils.getTranslated(caption);
 	div.appendChild(spanMessage);
 	let spanNot = document.createElement('span');
-	spanNot.className = 'span_notification text-secondary';
+	spanNot.className = 'span_notification';
 	spanNot.textContent = Utils.getTranslated(header);
 	div.appendChild(spanNot);
 	UI.divMain.appendChild(div);
@@ -1592,29 +1591,29 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 		console.error('Button not found for guid: ' + guid);
 		return;
 	}
-	let bHasUpdate = btn.classList.contains('update');
+	let bHasUpdate = btn.classList.contains('btn_update');
 
 	/*if (bInstall && bHasUpdate) {
 		btn.textContent = Utils.getTranslated('Update');
-		btn.classList.add('update');
-		btn.classList.remove('install');
-		btn.classList.remove('remove');
+		btn.classList.add('btn_update');
+		btn.classList.remove('btn_install');
+		btn.classList.remove('btn_remove');
 		btn.onclick = function(e) {
 			onClickUpdate(guid, e);
 		};
 	} else */if (bInstall) {
 		btn.textContent = Utils.getTranslated('Remove');
-		btn.classList.add('remove');
-		btn.classList.remove('install');
-		btn.classList.remove('update');
+		btn.classList.add('btn_remove');
+		btn.classList.remove('btn_install');
+		btn.classList.remove('btn_update');
 		btn.onclick = function(e) {
 			onClickRemove(guid, e);
 		};
 	} else {
 		btn.textContent = Utils.getTranslated('Install');
-		btn.classList.add('install');
-		btn.classList.remove('remove');
-		btn.classList.remove('update');
+		btn.classList.add('btn_install');
+		btn.classList.remove('btn_remove');
+		btn.classList.remove('btn_update');
 		btn.onclick = function(e) {
 			onClickInstall(guid, e);
 		};

@@ -103,6 +103,8 @@ const PluginCard = {
         let baseUrl = "";
         if (this.plugin && this.plugin.baseUrl) {
             baseUrl = this.plugin.baseUrl;
+        } else if (this.installed && this.installed.obj && this.installed.obj.baseUrl) {
+            baseUrl = this.installed.obj.baseUrl;
         } else if (this.installed && this.installed.baseUrl) {
             baseUrl = this.installed.baseUrl;
         }
@@ -446,9 +448,13 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Installed", fResolve);
             window.Asc.plugin.sendToPlugin("onInstall", message);
         }).then(function (message) {
+            PluginCardUI.toggleLoader(false);
+            if (!message || !message.guid) {
+                return;
+            }
             PluginCardUI.btnRemove.classList.remove('hidden');
             PluginCardUI.btnInstall.classList.add('hidden');
-            PluginCardUI.toggleLoader(false);
+            
         });
         
     },
@@ -472,10 +478,13 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Updated", fResolve);
             window.Asc.plugin.sendToPlugin("onUpdate", message);
         }).then(function (message) {
+            PluginCardUI.toggleLoader(false);
+            if (!message || !message.guid) {
+                return;
+            }
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnRemove.classList.remove('hidden');
 			PluginCardUI.spanVersion.textContent = String(self.plugin.version);
-            PluginCardUI.toggleLoader(false);
         });
     },
 
@@ -501,13 +510,16 @@ const PluginCard = {
             window.Asc.plugin.attachEvent("Removed", fResolve);
             window.Asc.plugin.sendToPlugin("onRemove", message);
         }).then(function (message) {
+            PluginCardUI.toggleLoader(false);
+            if (!message || !message.guid) {
+                return;
+            }
             PluginCardUI.btnRemove.classList.add('hidden');
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnInstall.classList.remove('hidden');
             if (self.plugin) {
                 PluginCardUI.spanVersion.textContent = String(self.plugin.version);
             }
-            PluginCardUI.toggleLoader(false);
         });
         
     },

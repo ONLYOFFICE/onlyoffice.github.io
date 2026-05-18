@@ -134,7 +134,38 @@ const UI = {
      * @param {string} style
      */
     onChangeTheme: function(theme, themeType, style) {
-        let rule = '.text-secondary{color:'+theme["text-secondary"]+';}\n';
+        let rule = '';
+
+        Object.keys(theme).forEach(function(key) {
+            if (typeof theme[key] === 'string' && (theme[key].indexOf('#') === 0 || theme[key].indexOf('rgb') === 0)) {
+                console.log(key + ": %c" + theme[key], 'color: ' + theme[key]);
+            }
+        });
+
+        rule += '.plugin-plate .name span:first-child,\n' +
+            '.filter-by label{color: ' + theme["text-normal"] + ';}\n';
+        rule += '.plugin-plate .description,\n' +
+            '.filter-by label > span:last-of-type{color: ' + theme["text-secondary"] + ';}\n';
+        rule += '.categories-header,\n' +
+            '.toolbar .place-name,\n' +
+            '.toolbar .search span,\n' +
+            '.plugin-plate .manufacturer,\n' +
+            '.toolbar .search input::placeholder,\n' +
+            '.filter-by label>span:first-of-type,\n' +
+            '.plugin-plate .rating{color: ' + theme["text-tertiary"] + ';}\n';
+
+        rule += '.plugin-plate{background-color: ' + theme["background-normal"] + ';}\n';
+        //rule += 'main{background-color: ' + theme["background-pane"] + ';}\n';
+
+        rule += '.plugin-plate{border-color: ' + theme["border-regular-control"] + ';}\n';
+        rule += '.btn_update{color: ' + theme["text-contrast-background"] + ';}\n';
+
+        rule += '.filter-by label:hover{background-color: ' + theme["highlight-button-hover"] + ';}\n';
+        rule += '.filter-by label:has(:checked){background-color: ' + theme["highlight-button-pressed"] + ';}\n';
+        rule += '.filter-by label > span.mark{color: ' + theme["text-inverse"] + ';}\n';
+        rule += 'aside,\n' +
+            '.plugin-plate .management,\n' +
+            '.toolbar{border-color: ' + theme["border-divider"] + ';}\n';
 
         if (themeType.includes('light')) {
             document.body.classList.add('white_bg');

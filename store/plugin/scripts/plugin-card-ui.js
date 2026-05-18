@@ -117,7 +117,7 @@ const PluginCardUI = {
      * @returns {string|false} returns default background color or false if theme is not changed
      */
     onChangeTheme: function(theme, themeType, style) {
-        let rule = '.text-secondary{color:'+theme["text-secondary"]+';}\n';
+        let rule = '.span_notification{color:'+theme["text-secondary"]+';}\n';
 
         if (themeType.includes('light')) {
             document.body.classList.add('white_bg');
