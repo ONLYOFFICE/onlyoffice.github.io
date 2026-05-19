@@ -39,6 +39,8 @@ const UI = {
     loader: undefined,
     /** @type {HTMLAnchorElement} */
     linkNewPlugin: document.getElementById('link_newPlugin'),
+    /** @type {HTMLSpanElement} */
+    linkNewPluginText: document.querySelector('#link_newPlugin .link-text'),
     /** @type {HTMLDivElement} */
     pluginsList: document.getElementById('plugins'),
     /** @type {HTMLDivElement} */
@@ -108,7 +110,7 @@ const UI = {
                     return;
                 }
 
-                /** @type {InstalledFilter} */
+                /** @type {MainFilter} */
                 const installedFilter = event.currentTarget.value;
                 self.onChangeMainFilter(installedFilter);
                 const text = input.parentElement.querySelector('.main-filter-category').textContent;
@@ -132,7 +134,7 @@ const UI = {
             self.onChangeSearchInput(event.target.value.trim().toLowerCase());
         }, 500));
     },
-    /** @param {InstalledFilter} installedFilter */
+    /** @param {MainFilter} installedFilter */
     onChangeMainFilter: function(installedFilter) {},
     /** @param {CategoryFilter} value */
     onChangeCategoryFilter: function(value) {},
@@ -146,18 +148,18 @@ const UI = {
     onChangeTheme: function(theme, themeType, style) {
         let rule = '';
 
-        Object.keys(theme).forEach(function(key) {
+        /*Object.keys(theme).forEach(function(key) {
             if (typeof theme[key] === 'string' && (theme[key].indexOf('#') === 0 || theme[key].indexOf('rgb') === 0)) {
                 console.log(key + ": %c" + theme[key], 'color: ' + theme[key]);
             }
-        });
+        });*/
 
         rule += '.plugin-plate .name span:first-child,\n' +
             '.filter-by label{color: ' + theme["text-normal"] + ';}\n';
         rule += '.plugin-plate .description,\n' +
+            '.toolbar .place-name,\n' +
             '.filter-by label > span:last-of-type{color: ' + theme["text-secondary"] + ';}\n';
         rule += '.categories-header,\n' +
-            '.toolbar .place-name,\n' +
             '.toolbar .search span,\n' +
             '.plugin-plate .manufacturer,\n' +
             '.toolbar .search input::placeholder,\n' +
@@ -216,7 +218,7 @@ const UI = {
         }
     },
 
-    /** @param {InstalledFilter} value */
+    /** @param {MainFilter} value */
     clickMainFilter(value) {
         const current = this.pluginsList.querySelector('input[value="' + value + '"]');
         if (!current || current instanceof HTMLInputElement === false) {

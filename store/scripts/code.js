@@ -140,13 +140,30 @@ const Marketplace = {
 			sendMessage({type: 'getInstalled'});
 		});
 	},
+	/**
+	 * Load all plugins and their ratings
+	 * @returns {Promise<Array<PluginInfo>>}
+	 */
+	loadAllPluginsAndRating: function() {
+		return Marketplace._fetchAllPlugins()
+			.catch(function(err) {
+				if (!isLocal) {
+					createError( new Error('Problem with loading marketplace config.') );
+				}
+				return [];
+			}).then(function(result) {
+				const allPlugins = result;
+				Marketplace.loadAndShowRating(allPlugins);
+				return result;
+			});
+	},
 
 	
 	/**
 	 * function for fetching all plugins from config
 	 * @returns {Promise<PluginInfo[]>}
 	 */
-	fetchAllPlugins: function() {
+	_fetchAllPlugins: function() {
 		const self = this;
 		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
 			.then(function(/** @type {string} */response) {
@@ -163,8 +180,7 @@ const Marketplace = {
 	 */
 	loadAndShowRating: function(plugins) {
 		const self = this;
-		const bDesktopRequest = isLocal && window.AscSimpleRequest && window.AscSimpleRequest.createRequest;
-
+		const bDesktopRequest = isLocal && !!window.AscSimpleRequest && !!window.AscSimpleRequest.createRequest;
 		/**
 		 * @param {PluginInfo} plugin
 		 * @returns {Promise<Rating | null>}
@@ -298,85 +314,90 @@ const Marketplace = {
 	},
 
 	_onInternetConnectionInterrupted: function() {
-		let bShowMarketplace = ( STORAGE.mainFilter === 'marketplace' ) ? true : false;
-		if (!document.getElementsByClassName('div_notification')[0] && (bShowMarketplace || !isLocal)) {
-			toggleView(STORAGE.mainFilter, true);
-		}
+		console.error('Internet connection interrupted');
 	},
 
 	_onInternetConnectionRestored: function() {
-		let bShowMarketplace = ( STORAGE.mainFilter === 'marketplace' ) ? true : false;
 		if (!Marketplace.allPlugins.length) {
-			Marketplace.fetchAllPlugins()
+			Marketplace.loadAllPluginsAndRating()
 				.then(function(allPlugins) {
 					Marketplace.allPlugins = allPlugins;
 					updateCategories();
+					if (STORAGE.mainFilter === 'marketplace') {
+						showListOfPlugins('all');
+					}
 				});
-		} else if (bShowMarketplace) {
-			toggleView("marketplace", true);
-		} else if (!isLocal) {
-			toggleView("installed", true);
 		}
 	}
 
 };
 
-const installedPluginsPromise = Marketplace.getVersion()
-	.then(function(version) {
-		editorVersion = version;
-		return Marketplace.getInstalledPlugins();
-	}).catch(function(error) {
+const editorVersionPromise = Marketplace.getVersion().then(function(version) {
+	editorVersion = version;
+});
+
+/** @type {Promise<InstalledPluginInfo[]>} */
+const installedPluginsPromise = Marketplace.getInstalledPlugins()
+	.catch(function(error) {
 		console.error('Failed to load installed plugins:', error);
 		return [];
+	}).then(function(plugins) {
+		Marketplace.installedPlugins = plugins;
+		return plugins;
 	});
 const translationsPromise = loadAndApplyTranslations();
+
 /** @type {Promise<PluginInfo[]>} */
-let allPluginsPromise = Promise.resolve([]);
-console.log('is local: ', isLocal);
-
-// fetch all plugins from config
-allPluginsPromise = Marketplace.fetchAllPlugins()
-	.catch(function(err) {
-		if (!isLocal) {
-			createError( new Error('Problem with loading marketplace config.') );
-		}
-		return [];
-	});
-
-const pluginsPromise = Promise.all([installedPluginsPromise, allPluginsPromise])
+let allPluginsPromise = Marketplace.loadAllPluginsAndRating()
 	.then(function(plugins) {
-		console.log('installed', plugins[0]);
-		console.log('all', plugins[1]);
-		Marketplace.installedPlugins = plugins[0];
-		return plugins[1];
-	})
+		Marketplace.allPlugins = plugins;
+		return plugins;
+	});
 
 window.onload = function() {
 	UI.init(themeType);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 
-	Promise.all([translationsPromise, pluginsPromise])
-		.then(function(result) {
-			const allPlugins = result[1];
-			Marketplace.allPlugins = allPlugins;
-			showMarketplace();
-			Marketplace.loadAndShowRating(allPlugins);
-			updateCategories();
-		});
+	Promise.all([
+		editorVersionPromise,
+		translationsPromise,
+		installedPluginsPromise,
+		allPluginsPromise
+	])
+	.then(function(result) {
+		if (Marketplace.installedPlugins) {
+			if (DataFetcher.isOnline) {
+				showListOfPlugins('all');
+			} else {
+				UI.clickMainFilter("installed");
+				if (!isLocal && !DataFetcher.isOnline) {
+					UI.divMain.textContent = '';
+					setTimeout(function(){if (PsMain) PsMain.update()});
+					createNotification('No Internet Connection.', 'Problem with loading some resources', true);
+				}
+				UI.toggleLoader(false);
+			}
+			UI.pluginsList.classList.remove('transparent');
+		}
+		updateCategories();
+	});
 
 	UI.onChangeMainFilter = function(value) {
 		STORAGE.mainFilter = value;
-		showListOfPlugins('filtered');
+		UI.inpSearch.value = '';
+		founded = [];
 		updateCategories();
+		showListOfPlugins('filtered');
 		
+		UI.linkNewPluginText.textContent = Utils.getTranslated(MESSAGES[value]);
 		if (value === 'marketplace') {
 			UI.linkNewPlugin.href = (OOIO + "pulls");
 		} else {
 			UI.linkNewPlugin.href = "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
 		}
 		
-		if (isLocal && value === 'installed') {
+		if (isLocal && value !== 'marketplace') {
 			UI.linkNewPlugin.href = "#";
 			UI.linkNewPlugin.onclick = function (e) {
 				e.preventDefault();
@@ -388,6 +409,8 @@ window.onload = function() {
 	}
 	UI.onChangeCategoryFilter = function(category) {
 		STORAGE.categoryFilter = category;
+		UI.inpSearch.value = '';
+		founded = [];
 		showListOfPlugins('filtered');
 	}
 	UI.onChangeSearchInput = function(query) {
@@ -414,7 +437,6 @@ function updateInstalledPlugins() {
 			}
 			if (message.type === 'InstalledPlugins' && message.updateInstalled) {
 				window.removeEventListener('message', onGetInstalled);
-				console.log('installed plugins', message);
 				if (message.data) {
 					// filter installed plugins (delete removed, that are in store and some system plugins)
 					Marketplace.installedPlugins = message.data.filter(function(el) {
@@ -451,7 +473,6 @@ window.addEventListener('message', function(message) {
 	let installed;
 	switch (message.type) {
 		case 'Installed':
-			console.error('------- INSTALLED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
 				console.error('No guid in message');
@@ -483,12 +504,10 @@ window.addEventListener('message', function(message) {
 			UI.toggleLoader(false);
 			break;
 		case 'Updated':
-			console.error('------- UPDATED -------');
 			updateCount--;
 			if (!message.guid) {
 				// somethimes we can receive such message
 				if (updateCount <= 0) {
-					checkNoUpdated(true);
 					UI.toggleLoader(false);
 				}
 				return;
@@ -504,13 +523,11 @@ window.addEventListener('message', function(message) {
 			plugin.bHasUpdate = false;
 
 			if (updateCount <= 0) {
-				checkNoUpdated(true);
 				UI.toggleLoader(false);
 			}
 			changeAfterInstallUpdateRemove(true, message.guid);
 			break;
 		case 'Removed':
-			console.log('------- REMOVED -------');
 			if (!message.guid) {
 				// somethimes we can receive such message
 				UI.toggleLoader(false);
@@ -551,14 +568,12 @@ window.addEventListener('message', function(message) {
 			UI.toggleLoader(false);
 			break;
 		case 'Error':
-			console.log('error');
 			createError(message.error);
 			UI.toggleLoader(false);
 			break;
 		case 'Theme':
 			if (message.theme.type)
 				themeType = message.theme.type;
-			console.log(message.theme);
 			let bg = UI.onChangeTheme(message.theme, themeType, message.style);
 			if (bg) {
 				defaultBG = bg;
@@ -674,6 +689,7 @@ function updateCategories() {
 	if (STORAGE.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
 		UI.clickMainFilter('installed');
 	}
+
 	updateToolbar(numOfPluginsToUpdate);
 }
 
@@ -681,10 +697,10 @@ function updateCategories() {
  * @param {number} numOfPluginsToUpdate 
  */
 function updateToolbar(numOfPluginsToUpdate) {
-	if (numOfPluginsToUpdate && STORAGE.mainFilter === 'updates') {
-		UI.toolbar.classList.remove('hidden');
+	if (!!numOfPluginsToUpdate && STORAGE.mainFilter === 'updates') {
+		UI.btnUpdateAll.classList.remove('hidden');
 	} else {
-		UI.toolbar.classList.add('hidden');
+		UI.btnUpdateAll.classList.add('hidden');
 	}
 }
 
@@ -693,7 +709,6 @@ function updateToolbar(numOfPluginsToUpdate) {
  * @returns {number}
  */
 function showListOfPlugins(typeOfOperation) {
-	console.log('show list of plugins', typeOfOperation);
 	let arr = getFilteredPlugins();
 	if (arr.length && isSamePlugins(founded, arr)) {
 		UI.toggleLoader(false);
@@ -736,8 +751,8 @@ function showListOfPlugins(typeOfOperation) {
 		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
 		// if no installed plugins and available plugins button was clicked
-		let notification = typeOfOperation === 'filtered' ? 'Nothing was found for this query.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
-		createNotification('Try a different category or search term', notification);
+		let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
+		createNotification('Try a different category or search term.', notification);
 		UI.toggleLoader(false);
 	}
 	// scroll for list of plugins
@@ -796,7 +811,6 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	/** @type {PluginInfo} */
 	let plugin = bInstalled ? findPlugin(guid) : pluginOrInstalledPlugin;
 
-
 	let bCheckUpdate = true;
 	if (!plugin) {
 		plugin = installed.obj;
@@ -805,6 +819,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 
 	let bNotAvailable = false;
 	const minV = (plugin.minVersion ? Utils.convertPluginVersionToNumber(plugin.minVersion) : -1);
+
 	if (minV > editorVersion) {
 		bCheckUpdate = false;
 		bNotAvailable = true;
@@ -818,8 +833,6 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			plugin.bHasUpdate = true;
-			if (!bRemoved)
-				UI.btnUpdateAll.classList.remove('hidden');
 		}
 	}
 
@@ -827,7 +840,6 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	let name = getTranslatedName(plugin);
 	let description = getTranslatedDescription(variation);
 	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
-	let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslated(MESSAGES.versionWarning) + '"'  : '';
 	let offered = plugin.offered || "ONLYOFFICE";
 
 	const bNeedUpdateButton = bHasUpdate && !bRemoved;
@@ -853,7 +865,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 			'<div class="rating">' +
 				(makeRatingElements(plugin.rating)) +
 			'</div>' +
-			makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) +
+			makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) +
 		'</div>' +
 	'</div>';
 	pluginPlate.innerHTML = template;
@@ -867,18 +879,18 @@ function createPluginPlate(pluginOrInstalledPlugin) {
  * @param {boolean} bNeedRemoveButton 
  * @param {boolean} bNeedInstallButton
  * @param {boolean} [bNotAvailable] 
- * @param {string} [additional] 
  * @returns {string}
  */
-function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable, additional) {
+function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
+	let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslated(MESSAGES.versionWarning) + '"'  : '';
 	let result = '<button class="btn-text-default ';
 	if (bNeedUpdateButton) {
-		result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)">' + Utils.getTranslated("Update");
+		result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)" ' + additional + '>' + Utils.getTranslated("Update");
 	} else if (bNeedRemoveButton) {
 		result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
 		result += Utils.getTranslated("Remove");
 	} else if (bNeedInstallButton) {
-		result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + (additional || "") + '>'  + Utils.getTranslated("Install");
+		result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + additional + '>'  + Utils.getTranslated("Install");
 	} else {
 		return '';
 	}
@@ -955,7 +967,6 @@ function _doInstall(guid) {
 		UI.toggleLoader(false);
 	}
 
-	console.log(plugin);
 	let message = {
 		type : 'install',
 		url : (installed ? installed.obj.baseUrl : plugin.url),
@@ -999,7 +1010,6 @@ function _doUpdate(guid) {
  * @param {Event} event 
  */
 function onClickRemove(guid, event) {
-	console.log(guid, event);
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Removal');
 	return Utils.waitForRepaint().then(function() { _doRemove(guid) });
@@ -1280,19 +1290,6 @@ function loadAndApplyTranslations() {
 
 };
 
-function showMarketplace() {
-	// show main window to user
-	if (Marketplace.installedPlugins) {
-		if (DataFetcher.isOnline) {
-			showListOfPlugins('all');
-		} else {
-			toggleView("installed");
-			UI.toggleLoader(false);
-		}
-		UI.pluginsList.classList.remove('transparent');
-	}
-};
-
 // supported icon scales: [percent, suffix, descriptor]
 const ICON_SCALES = [
 	['100%', '/icon.png',       '1x'],
@@ -1418,31 +1415,6 @@ function getUrlSearchValue(key) {
 		}
 	}
 	return res;
-};
-
-/**
- * @param {InstalledFilter} currentValue
- * @param {boolean} [bForce]
- */
-function toggleView(currentValue, bForce) {
-	console.log('toggle view', currentValue);
-	if (STORAGE.mainFilter === currentValue && !bForce) {
-		return;
-	}
-	UI.clickMainFilter(currentValue);
-	UI.inpSearch.value = '';
-	UI.linkNewPlugin.textContent = Utils.getTranslated(MESSAGES[currentValue]);
-	founded = [];
-
-	const bAll = currentValue === 'marketplace';
-
-	let flag = !isLocal && !DataFetcher.isOnline;
-	if ( ( bAll && (!DataFetcher.isOnline) ) || flag) {
-		UI.divMain.textContent = '';
-		setTimeout(function(){if (PsMain) PsMain.update()});
-		UI.toolbar.classList.add('hidden');
-		createNotification('No Internet Connection.', 'Problem with loading some resources', true);
-	}
 };
 
 function installPluginManually() {
@@ -1595,7 +1567,7 @@ function findInstalledPlugin(guid) {
  * @param {boolean} [bHasLocal] 
  */
 function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
-	console.warn('change after install or remove');
+
 	let btn = UI.getPluginButton(guid);
 	if (!btn) {
 		console.error('Button not found for guid: ' + guid);
@@ -1634,7 +1606,6 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 		btn.setAttribute('title', Utils.getTranslated(MESSAGES.versionWarning));
 	}
 
-	checkNoUpdated(!bInstall);
 	updateCategories();
 };
 
@@ -1652,22 +1623,3 @@ function makeRequestWithNoInternetHandler(url, method, responseType, body) {
 		});
 };
 
-/** @param {boolean} bRemove */
-function checkNoUpdated(bRemove) {
-	// todo it's a temp solution. We will change a work with updation in the feature.
-	if ( (!UI.btnUpdateAll.classList.contains('hidden') && bRemove) || (UI.btnUpdateAll.classList.contains('hidden') && !bRemove) ) {
-		let arr = document.getElementsByClassName('span_update');
-		let bHasNoUpdated = false;
-		for (let index = 0; index < arr.length; index++) {
-			if (!arr[index].classList.contains('hidden')) {
-				bHasNoUpdated = true;
-				break;
-			}
-		}
-		if (bHasNoUpdated) {
-			UI.btnUpdateAll.classList.remove('hidden');
-		} else {
-			UI.btnUpdateAll.classList.add('hidden');
-		}
-	}
-};

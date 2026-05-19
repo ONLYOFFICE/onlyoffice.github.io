@@ -71,7 +71,7 @@
  */ 
 
 /**
- * @typedef { "marketplace" | "installed" | "updates" } InstalledFilter
+ * @typedef { "marketplace" | "installed" | "updates" } MainFilter
  */
 /**
  * @typedef { "all" | "onlyoffice" | "ai" | "integrations" | "devTools" | "productivity" | "writing" | "translation" | "media" | "utilities"} CategoryFilter

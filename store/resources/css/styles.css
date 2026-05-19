@@ -269,7 +269,7 @@ main {
 }
 .plugin-plate {
 	display: flex;
-	min-height: 185px;
+	min-height: 178px;
 	flex-direction: column;
 	gap: 12px;
 	padding: 16px;
@@ -354,6 +354,7 @@ main {
 	align-items: center;
 	justify-content: space-between;
 	gap: 8px;
+	min-height: 32px;
 	padding-top: 8px;
 	border-top-width: 1px;
 	border-top-style: solid;
@@ -495,7 +496,7 @@ button.btn_update:active {
 	padding-top: 60px;
 	justify-content: center;
 	align-items: center;
-	width: 100%;
+	width: max-content;
 	flex-flow: column;
 	gap: 8px;
 }
