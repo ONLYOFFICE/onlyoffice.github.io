@@ -34,7 +34,7 @@
 /// <reference path="./types.js" />
 
 const STORAGE = {
-    /** @type {InstalledFilter} */
+    /** @type {MainFilter} */
     mainFilter: "marketplace",
     /** @type {CategoryFilter} */
     categoryFilter: "all",

@@ -77,7 +77,6 @@
 		/** @param {PluginCardWindowParams} data */
 		show: function(data) {
 			this.data = data;
-			console.warn('data', data);
 			let variation = {
 				url : 'plugin-card.html',
 				description: data.pluginName,
