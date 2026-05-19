@@ -60,5 +60,8 @@
 	"Problem with loading some resources" : "Problème de chargement de certaines ressources",
 	"Click to rate" : "Cliquez pour évaluer",
 	"No disscussion page for this plugin." : "Pas de page de discussion pour ce plugin.",
-	"Problem with plugin installation." : "Problème avec l'installation du plugin."
+	"Problem with plugin installation." : "Problème avec l'installation du plugin.",
+	"By ONLYOFFICE": "Par ONLYOFFICE",
+	"No plugins match your filters.": "Aucun plugin ne correspond à vos filtres.",
+	"Try a different category or search term." : "Essayez une catégorie ou un terme de recherche différent."
 }

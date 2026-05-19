@@ -60,5 +60,8 @@
 	"Problem with loading some resources" : "ඇතැම් සම්පත් පූරණයට අසමත් විය",
 	"Click to rate" : "ඇගැයීමට ඔබන්න",
 	"No disscussion page for this plugin." : "මෙම පේනුව පිළිබඳව සාකච්ඡා නැත.",
-	"Problem with plugin installation." : "ප්ලගින ස්ථාපනය කිරීමේ ගැටළුව."
+	"Problem with plugin installation." : "ප්ලගින ස්ථාපනය කිරීමේ ගැටළුව.",
+	"By ONLYOFFICE": "ONLYOFFICE වෙතින්",
+	"No plugins match your filters.": "ඔබගේ පෙරහන් අනුව ප්ලගින නොමැත.",
+	"Try a different category or search term." : "වෙනත් වර්ගය හෝ සෙවුම් පදයක් උත්සාහ කරන්න."
 }
