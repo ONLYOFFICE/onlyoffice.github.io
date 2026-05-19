@@ -60,5 +60,8 @@
 	"Problem with loading some resources" : "Problem sa učitavanjem nekih resursa",
 	"Click to rate" : "Klikni da oceniš",
 	"No disscussion page for this plugin." : "Nema stranice za diskusiju za ovaj dodatak.",
-	"Problem with plugin installation." : "Problem sa instalacijom dodatka."
+	"Problem with plugin installation." : "Problem sa instalacijom dodatka.",
+	"By ONLYOFFICE": "Od ONLYOFFICE",
+	"No plugins match your filters.": "Nema dodataka koji odgovaraju vašim filterima.",
+	"Try a different category or search term." : "Pokušajte drugu kategoriju ili termin pretrage."
 }
