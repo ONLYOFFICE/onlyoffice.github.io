@@ -48,7 +48,6 @@
  * @property {boolean} [isConnector]
  * @property {Rating} [rating]
  * @property {string} [offered]
- * @property {unknown} [onlyofficeScheme]
  * @property {string} [minVersion]
  * @property {string} [changelog]
  * @property {string} [discussion]

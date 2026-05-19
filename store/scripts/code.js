@@ -639,7 +639,7 @@ function updateCategories() {
 		if (!plugin.variations) {
 			return;
 		}
-		if (plugin.onlyofficeScheme) {
+		if (!plugin.offered) {
 			let category = 'onlyoffice';
 			if (STORAGE.categories.has(category)) {
 				let num = Number(STORAGE.categories.get(category));
@@ -854,7 +854,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 		'<div class="name">' +
 			'<div>' +
 				'<span>' + name + '</span>' +
-				(!!plugin.onlyofficeScheme ? '<span class="by-onlyoffice">✓</span>' : '') +
+				(!plugin.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
 			'</div>' +
 			'<div class="manufacturer">' + offered + '</div>' +
 		'</div>' +
@@ -1509,9 +1509,9 @@ function getFilteredPlugins() {
 	if (category === "onlyoffice") {
 		plugins = plugins.filter(function(plugin) {
 			if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-				return plugin.obj.onlyofficeScheme;
+				return !plugin.obj.offered;
 			}
-			return plugin.onlyofficeScheme;
+			return !plugin.offered;
 		});
 	} else if (category != "all") {
 		plugins = plugins.filter(function(plugin) {
