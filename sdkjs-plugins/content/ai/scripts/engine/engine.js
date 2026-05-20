@@ -128,6 +128,31 @@ function fetchExternal(url, options, isStreaming) {
 
 (function(window, undefined)
 {
+	function buildProxyRequest(message, request, signal) {
+		let proxied = {
+			"method" : request.method,
+			"body" : JSON.stringify({
+				"target" : message.url,
+				"method" : request.method,
+				"headers" : request.headers,
+				"data" : request.body
+			})
+		};
+
+		if (signal !== undefined)
+			proxied["signal"] = signal;
+
+		let requestUrl;
+		if (AI.serverSettings) {
+			requestUrl = AI.serverSettings.proxy;
+			proxied["headers"] = { "Authorization" : "Bearer " + Asc.plugin.info.jwt };
+		} else {
+			requestUrl = AI.PROXY_URL;
+		}
+
+		return { request : proxied, requestUrl : requestUrl };
+	}
+
 	async function requestWrapper(message) {
 		return new Promise(function (resolve, reject) {
 			if (AI.isLocalDesktopForNotStreamedRequests && (AI.isLocalUrl(message.url) || message.isUseProxy)) {
@@ -155,23 +180,9 @@ function fetchExternal(url, options, isStreaming) {
 					request.body = message.isBlob ? message.body : (message.body ? JSON.stringify(message.body) : "");
 
 					if (message.isUseProxy) {
-						request = {
-							"method" : request.method,
-							"body" : JSON.stringify({
-								"target" : message.url,
-								"method" : request.method,
-								"headers" : request.headers,
-								"data" : request.body
-							})
-						}
-						if (AI.serverSettings){
-							requestUrl = AI.serverSettings.proxy;
-							request["headers"] = {
-								"Authorization" : "Bearer " + Asc.plugin.info.jwt,
-							}
-						} else {
-							requestUrl = AI.PROXY_URL;
-						}
+						let proxy = buildProxyRequest(message, request);
+						request = proxy.request;
+						requestUrl = proxy.requestUrl;
 					}
 				}
 				
@@ -262,6 +273,7 @@ function fetchExternal(url, options, isStreaming) {
 
 		let abortController = new AbortController();
 
+		let requestUrl = message.url;
 		let request = {
 			method: message.method,
 			headers: message.headers,
@@ -272,12 +284,18 @@ function fetchExternal(url, options, isStreaming) {
 			request.body = message.isBlob
 				? message.body
 				: (message.body ? JSON.stringify(message.body) : "");
+
+			if (message.isUseProxy) {
+				let proxy = buildProxyRequest(message, request, abortController.signal);
+				request = proxy.request;
+				requestUrl = proxy.requestUrl;
+			}
 		}
 
 		try {
-			let response = !message.url.startsWith("[external]")
-				? await fetch(message.url, request)
-				: await fetchExternal(message.url, request, true);
+			let response = !requestUrl.startsWith("[external]")
+				? await fetch(requestUrl, request)
+				: await fetchExternal(requestUrl, request, true);
 
 			return response.body
 				? new FetchReader(response.body.getReader(), abortController)
