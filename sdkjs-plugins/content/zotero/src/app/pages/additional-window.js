@@ -1,8 +1,13 @@
 // @ts-check
 
 /// <reference path="../types-global.js" />
+/// <reference path="../../../../../v1/onlyoffice-types/index.d.ts" /> 
+
+/** @typedef {import("../../../../../v1/onlyoffice-types").PluginWindow} PluginWindow */
+/** @typedef {import("../../../../../v1/onlyoffice-types").VariationConfig} VariationConfig */
 
 class AdditionalWindow {
+    /** @type {PluginWindow | null} */
     #window;
     #defaultButtonFn;
     #defaultThemeChangedFn;
@@ -24,22 +29,20 @@ class AdditionalWindow {
             this.#hide();
         }
         this.#window = new window.Asc.PluginWindow();
-        this.#defaultButtonFn = window.Asc.plugin.button;
-        this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
-        this.#defaultTranslateFn = Asc.plugin.onTranslate;
+        /** @type {VariationConfig} */
         const variation = {
             name: "Zotero",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
-            /*buttons: [
+            buttons: [
                 {
                     text: window.Asc.plugin.tr("Yes"),
                     primary: true,
                     isViewer: false,
                 },
                 { text: window.Asc.plugin.tr("No"), primary: false },
-            ],*/
+            ],
             isModal: false,
             EditorsSupport: ["word"],
             size: [380, 240],
@@ -71,6 +74,7 @@ class AdditionalWindow {
             this.#hide();
         }
         this.#window = new window.Asc.PluginWindow();
+        /** @type {VariationConfig} */
         const variation = {
             name: "Zotero",
             url: "edit-window.html",
@@ -98,9 +102,13 @@ class AdditionalWindow {
         return new Promise((resolve, reject) => {
             window.Asc.plugin.button = async (buttonId, windowId) => {
                 const element = await new Promise(resolve => {
-					this.#window.attachEvent("onSaveFields", resolve);
-					this.#window.command('onClickSave');
-				});
+                    if (!this.#window) {
+                        resolve(null);
+                        return;
+                    }
+                    this.#window.attachEvent("onSaveFields", resolve);
+                    this.#window.command('onClickSave');
+                });
                 if (buttonId === 0) {
                     resolve(element);
                 } else {
@@ -115,6 +123,7 @@ class AdditionalWindow {
     /**
      * @param {string} description
      * @param {string} text
+     * @param {"default" | "warning" | "success"} [type]
      */
     showInfoWindow(description, text, type) {
         if (this.#window) {
@@ -124,8 +133,9 @@ class AdditionalWindow {
             type = "warning";
         }
         this.#window = new window.Asc.PluginWindow();
+        /** @type {VariationConfig} */
         const variation = {
-            name: "Zotero",
+            name: "Mendeley",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
@@ -144,7 +154,7 @@ class AdditionalWindow {
             isInsideMode: false,
         };
 
-        this.#onShow(variation, window.Asc.plugin.tr(text), "warning");
+        this.#onShow(variation, window.Asc.plugin.tr(text), type);
         this.#window.show(variation);
 
         return new Promise((resolve, reject) => {
@@ -161,28 +171,31 @@ class AdditionalWindow {
     }  
 
     /**
-     * @param {Object} variation
+     * @param {VariationConfig} variation
      * @param {any} content
      * @param {"default" | "warning" | "success"} type
      */
     #onShow(variation, content, type) {
+        if (!this.#window) return;
         this.#defaultButtonFn = window.Asc.plugin.button;
         this.#defaultThemeChangedFn = Asc.plugin.onThemeChanged;
         this.#defaultTranslateFn = Asc.plugin.onTranslate;
         window.Asc.plugin.onThemeChanged = (theme) => {
-            this.#window.command("onThemeChanged", theme);
+            this.#window?.command("onThemeChanged", theme);
             this.#defaultThemeChangedFn(theme);
         };
         window.Asc.plugin.onTranslate = () => {
-            this.#window.command("onTranslate");
+            this.#window?.command("onTranslate");
             this.#defaultTranslateFn();
         };
 
         this.#window.attachEvent("onWindowReady", () => {
             if (type === "warning") {
-                this.#window.command("onWarning", content);
+                this.#window?.command("onWarning", content);
+            } else if (type === "success") {
+                this.#window?.command("onSuccess", content);
             } else {
-                this.#window.command("onAttachedContent", content);
+                this.#window?.command("onAttachedContent", content);
             }
         });
 
@@ -191,23 +204,11 @@ class AdditionalWindow {
             (/** @type {number} */ height) => {
                 Asc.plugin.executeMethod(
                     "ResizeWindow",
-                    [this.#window.id, [variation.size[0] - 2, height]],
+                    [this.#window?.id, [variation.size[0] - 2, height]],
                     () => {}
                 ); // 2 is the border-width at the window
             }
         );
-
-        return new Promise((resolve, reject) => {
-            window.Asc.plugin.button = (buttonId, windowId) => {
-                if (buttonId === 0) {
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-
-                this.#hide();
-            };
-        });
     }
 
     #hide() {

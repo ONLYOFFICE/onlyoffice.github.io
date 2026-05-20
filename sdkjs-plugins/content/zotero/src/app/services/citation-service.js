@@ -33,12 +33,12 @@
 // @ts-check
 
 /// <reference path="../zotero/types.js" />
-/// <reference path="../../../scripts/citeproc/citeproc_commonjs.js" />
+/// <reference path="../../../vendor/citeproc/citeproc_commonjs.js" />
 
 /**
- * @typedef {import('../csl/styles/styles-manager').CslStylesManager} CslStylesManager
+ * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
- * @typedef {import('../csl/locales/locales-manager').LocalesManager} LocalesManager
+ * @typedef {import('../csl/locales').LocalesManager} LocalesManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  */
 
@@ -48,6 +48,7 @@ import { CSLCitation, CSLCitationStorage } from "../csl/citation";
 import { AdditionalWindow } from "../pages/additional-window";
 
 class CitationService {
+    /** @type {AdditionalWindow} */
     #additionalWindow;
 
     /**
@@ -114,7 +115,7 @@ class CitationService {
                 }
 
                 return self.citationDocService.addCitation(
-                    tempElement.innerText,
+                    htmlCitation,
                     JSON.stringify(cslCitation.toJSON()),
                     notesStyle,
                 );
@@ -307,11 +308,11 @@ class CitationService {
         CSLCitation.resetUsedIDs();
         return this.citationDocService
             .getAddinZoteroFields()
-            .then(function (/** @type {CustomField[]} */ arrFields) {
+            .then(function (/** @type {AddinFieldData[]} */ arrFields) {
                 let numOfItems = 0;
                 let bibFieldValue = " ";
 
-                /** @type {CustomField | undefined} */
+                /** @type {AddinFieldData | undefined} */
                 const bibField = arrFields.find(function (field) {
                     return (
                         field.Value.indexOf(self._bibPrefixNew) !== -1 ||
@@ -384,8 +385,8 @@ class CitationService {
 
     /**
      * @param {boolean} bNoHaveFields
-     * @param {CustomField} bibField
-     * @returns {CustomField}
+     * @param {AddinFieldData} bibField
+     * @returns {AddinFieldData}
      */
     #updateBibliography(bNoHaveFields, bibField) {
         if (bNoHaveFields) {
@@ -399,17 +400,17 @@ class CitationService {
     }
 
     /**
-     * @param {{field: CustomField, cslCitation: CSLCitation}[]} fieldsWithCitations
+     * @param {{field: AddinFieldData, cslCitation: CSLCitation}[]} fieldsWithCitations
      * @param {boolean} bHardRefresh
      * @param {boolean} [bChangePosition]
-     * @returns {Promise<CustomField[]>}
+     * @returns {Promise<AddinFieldData[]>}
      */
     async #getUpdatedFields(fieldsWithCitations, bHardRefresh, bChangePosition) {
         const fragment = document.createDocumentFragment();
         const tempElement = document.createElement("div");
         fragment.appendChild(tempElement);
 
-        /** @type {CustomField[]} */
+        /** @type {AddinFieldData[]} */
         const updatedFields = [];
 
         for (let i = fieldsWithCitations.length - 1; i >= 0; i--) {
@@ -697,7 +698,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = [];
 
             if (typeof bHardRefresh === "undefined") {
@@ -739,7 +740,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,
@@ -753,7 +754,9 @@ class CitationService {
             }
 
             if (bibField) {
-                const bibFields = [await this.#updateBibliography(bNoHaveFields, bibField)];
+                const bibFields = [
+                    await this.#updateBibliography(bNoHaveFields, bibField),
+                ];
                 await this.citationDocService.updateAddinFields(bibFields);
             }
         } catch (e) {
@@ -827,7 +830,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 true,
@@ -844,7 +847,6 @@ class CitationService {
                         updatedFields,
                     );
                 }
-                
             }
 
             if (bibField) {
@@ -869,7 +871,7 @@ class CitationService {
 
             this.#updateFormatter();
 
-            /** @type {CustomField[]} */
+            /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
                 false,

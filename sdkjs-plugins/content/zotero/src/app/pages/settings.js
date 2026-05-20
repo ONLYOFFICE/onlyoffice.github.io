@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -33,13 +33,19 @@
 // @ts-check
 
 /**
- * @typedef {import('./router').Router} Router
+ * @typedef {import('../router').Router} Router
  */
 
-import { Button, SelectBox, Radio, Message } from "./shared/components";
-import { translate } from "./services";
-import { CslStylesManager } from "./csl/styles/styles-manager";
-import { LocalesManager } from "./csl/locales/locales-manager";
+import {
+    Button,
+    SelectBox,
+    Radio,
+    Message,
+    Loader,
+} from "../shared/components";
+import { translate } from "../services";
+import { CslStylesManager } from "../csl/styles";
+import { LocalesManager } from "../csl/locales";
 
 /**
  * @typedef {Object} Settings
@@ -57,10 +63,6 @@ function SettingsPage(router, displayNoneClass) {
     this._router = router;
     this._displayNoneClass = displayNoneClass;
 
-    this._openSettingsBtn = new Button("settingsBtn", {
-        variant: "icon-only",
-        size: "small",
-    });
     this._saveBtn = new Button("saveSettingsBtn", {
         variant: "primary",
     });
@@ -70,6 +72,7 @@ function SettingsPage(router, displayNoneClass) {
 
     this._styleSelect = new SelectBox("styleSelectList", {
         placeholder: "Enter style name",
+        sortable: true
     });
     this._styleSelectListOther = new SelectBox("styleSelectedListOther", {
         placeholder: "Enter style name",
@@ -97,15 +100,17 @@ function SettingsPage(router, displayNoneClass) {
         placeholder: "Select language",
     });
 
-    this._cslStylesManager = new CslStylesManager();
+    this._cslStylesManager = new CslStylesManager("zoteroStyleId");
     this._localesManager = new LocalesManager();
 
     /** @type {HTMLElement[]} */
     this._selectLists = [];
     /**
-     * @param {Settings} settings
+     * @param {Settings} newSettings
+     * @param {Settings} oldSettings 
+     * @returns {void}
      */
-    this._onChangeState = function (settings) {};
+    this._onChangeState = function (newSettings, oldSettings) {};
     this._styleMessage = new Message("styleMessage", { type: "error" });
     this._langMessage = new Message("langMessage", { type: "error" });
     /** @type {Array<[string, string]>} */
@@ -170,8 +175,8 @@ function SettingsPage(router, displayNoneClass) {
     /** @type {Settings} */
     this._stateSettings = {
         style: "",
-        notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
-        styleFormat: this._cslStylesManager.getLastUsedFormat(),
+        notesStyle: "footnotes",
+        styleFormat: "numeric",
     };
 }
 
@@ -223,7 +228,7 @@ SettingsPage.prototype.init = function () {
 };
 
 /**
- * @param {function(Settings): void} callbackFn
+ * @param {function(Settings, Settings): void} callbackFn
  */
 SettingsPage.prototype.onChangeState = function (callbackFn) {
     this._onChangeState = callbackFn;
@@ -248,12 +253,6 @@ SettingsPage.prototype.setRestApiAvailable = function (isAvailable) {
 SettingsPage.prototype._addEventListeners = function () {
     const self = this;
 
-    this._openSettingsBtn.subscribe(function (event) {
-        if (event.type !== "button:click") {
-            return;
-        }
-        self._show();
-    });
     this._saveBtn.subscribe(function (event) {
         if (event.type !== "button:click") {
             return;
@@ -263,6 +262,10 @@ SettingsPage.prototype._addEventListeners = function () {
             console.error("No language selected");
             return;
         }
+
+        /** @type {Settings} */
+        const oldState = {...self._stateSettings};
+
         const promises = [];
         if (self._stateSettings.language !== selectedLang) {
             self._localesManager.saveLastUsedLanguage(selectedLang);
@@ -279,16 +282,16 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
 
+        /** @type {NoteStyle} */
         let noteValue = "footnotes";
         if (self._endNotes.getState().checked) {
             noteValue = "endnotes";
         }
-        if (
-            (self._stateSettings.notesStyle !== noteValue &&
-                noteValue === "footnotes") ||
-            noteValue === "endnotes"
-        ) {
+        if (self._stateSettings.notesStyle !== noteValue) {
             self._cslStylesManager.saveLastUsedNotesStyle(noteValue);
+            if (self._cslStylesManager.getLastUsedFormat() === "note") {
+                promises.push(Promise.resolve());
+            }
         }
 
         const selectedStyleId = self._styleSelect.getSelectedValue();
@@ -306,13 +309,14 @@ SettingsPage.prototype._addEventListeners = function () {
                     self._hide();
                     self._hideLoader();
 
-                    self._onChangeState({
+                    const newState = {
                         language: selectedLang,
-                        style: self._cslStylesManager.getLastUsedStyleIdOrDefault(),
-                        notesStyle:
-                            self._cslStylesManager.getLastUsedNotesStyle(),
+                        style: selectedStyleId || "ieee",
+                        notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
-                    });
+                    };
+
+                    self._onChangeState(newState, oldState);
                 })
                 .catch(function (err) {
                     self._hideLoader();
@@ -433,7 +437,7 @@ SettingsPage.prototype._hide = function () {
     this._router.openMain();
 };
 
-SettingsPage.prototype._show = function () {
+SettingsPage.prototype.show = function () {
     this._stateSettings = {
         language: this._localesManager.getLastUsedLanguage(),
         style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
@@ -507,9 +511,9 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
     isClick && self._showLoader();
 
     return self._cslStylesManager
-        .getStyle(styleName)
-        .then(function (style) {
-            let styleFormat = self._cslStylesManager.getLastUsedFormat();
+        .getStyle(styleName, !isClick)
+        .then(function (styleInfo) {
+            let styleFormat = styleInfo.styleFormat;
             self._bNumFormat = styleFormat == "numeric";
             if ("note" === styleFormat) {
                 self._notesStyleWrapper.classList.remove(
@@ -519,13 +523,6 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
             }
 
-            let notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
-            const notesAs = self._notesStyleWrapper.querySelector(
-                'input[name="notesAs"][value="' + notesStyle + '"]'
-            );
-            if (notesAs && notesAs instanceof HTMLInputElement) {
-                notesAs.checked = true;
-            }
             isClick && self._hideLoader();
         })
         .catch(function (err) {
@@ -534,6 +531,7 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._styleMessage.show(translate(err));
             }
             isClick && self._hideLoader();
+            throw err;
         });
 };
 
@@ -542,12 +540,14 @@ SettingsPage.prototype._showLoader = function () {
     this._saveBtn.disable();
     this._styleSelect.disable();
     this._languageSelect.disable();
+    //Loader.show();
 };
 SettingsPage.prototype._hideLoader = function () {
     this._cancelBtn.enable();
     this._saveBtn.enable();
     this._styleSelect.enable();
     this._languageSelect.enable();
+    //Loader.hide();
 };
 
 export { SettingsPage };

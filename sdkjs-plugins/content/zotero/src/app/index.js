@@ -34,6 +34,8 @@
 /// <reference path="./types-global.js" />
 /// <reference path="./zotero/types.js" />
 
+/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+
 import { Theme } from "./theme";
 import { Router } from "./router";
 import { ZoteroSdk } from "./zotero";
@@ -108,6 +110,10 @@ import "../styles.css";
         });
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
+        });
+        openSettingsBtn = new Button("settingsBtn", {
+            variant: "icon-only",
+            size: "small",
         });
         insertBibBtn = new Button("insertBibBtn", {
             variant: "secondary",
@@ -220,22 +226,11 @@ import "../styles.css";
         /**
          * @param {string} text
          * @param {Array<string|"my_library"|"group_libraries">} selectedGroups
-         * @returns {Promise<Array<Promise<number>>}
+         * @param {string} groupsHash
+         * @returns {Promise<Array<Promise<number>>>}
          */
-        function searchFor(text, selectedGroups) {
-            text = text.trim();
-            const groupsHash = selectedGroups.join(",");
-            if (
-                elements.mainState.classList.contains(displayNoneClass) ||
-                !text ||
-                (text == lastSearch.text &&
-                    groupsHash === lastSearch.groupsHash) ||
-                selectedGroups.length === 0
-            )
-                return Promise.resolve([]);
-
+        function searchFor(text, selectedGroups, groupsHash) {
             selectCitation.clearLibrary();
-
             /** @type {Array<Promise<number>>} */
             const promises = [];
 
@@ -274,7 +269,18 @@ import "../styles.css";
                 });
         }
         searchFilter.subscribe(function (text, selectedGroups) {
-            searchFor(text, selectedGroups)
+            text = text.trim();
+            const groupsHash = selectedGroups.join(",");
+            if (
+                elements.mainState.classList.contains(displayNoneClass) ||
+                !text ||
+                (text == lastSearch.text &&
+                    groupsHash === lastSearch.groupsHash) ||
+                selectedGroups.length === 0
+            )
+                return;
+
+            searchFor(text, selectedGroups, groupsHash)
                 .catch(() => {
                     return [];
                 })
@@ -531,7 +537,7 @@ import "../styles.css";
     }
 
     /**
-     * @param {ThemeColors} theme - The new theme of the SDK.
+     * @param {AscTheme} theme - The new theme of the SDK.
      */
     Asc.plugin.onThemeChanged = function (theme) {
         window.Asc.plugin.onThemeChangedBase(theme);
@@ -647,11 +653,11 @@ import "../styles.css";
             });
         }
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
@@ -675,11 +681,11 @@ import "../styles.css";
             });
         }
         /*if (preloaderMessage) {
-            await new Promise(resolve => (function(){
+            await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
                     resolve(returnValue);
                 });
-            })());
+            });
         }*/
     }
 
@@ -934,7 +940,7 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            /** @type {CustomField | null} */
+            /** @type {AddinFieldData | null} */
             const field = await new Promise((resolve) => {
                 window.Asc.plugin.executeMethod(
                     "GetCurrentAddinField",

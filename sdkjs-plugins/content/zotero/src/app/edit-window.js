@@ -29,9 +29,13 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
 // @ts-check
 
 /// <reference path="../app/types-global.js" />
+
+/** @typedef {import("../../../../v1/onlyoffice-types").AscTheme} AscTheme */
+
 
 import { InputField, Checkbox, SelectBox } from "./shared/components";
 import LOCATOR_VALUES from "./shared/constants/locator-values";
