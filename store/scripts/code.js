@@ -469,7 +469,7 @@ window.addEventListener('message', function(message) {
 		message = JSON.parse(message.data);
 	} catch (error) {
 		// if we have a problem, don't process this message
-		console.error('Failed to parse message')
+		console.error('Failed to parse message', message);
 		return;
 	}
 
@@ -1212,7 +1212,12 @@ window.onresize = function(bForce) {
 			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
 		let borderValue = ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'light' ? '#c0c0c0' : '#666666'));
-		document.querySelectorAll('.plugin-plate').forEach(function(el) { el.style.border = borderValue; });
+		const pluginPlates = document.querySelectorAll('.plugin-plate');
+		for (let i = 0; i < pluginPlates.length; i++) {
+			/** @type {HTMLElement} */
+			const element = pluginPlates[i];
+			element.style.border = borderValue;
+		}
 	}
 };
 

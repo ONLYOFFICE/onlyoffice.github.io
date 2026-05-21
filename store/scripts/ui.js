@@ -62,7 +62,7 @@ const UI = {
      * @param {string} guid
      * @param {HTMLDivElement} element
      */
-    addPlugin(guid, element) {
+    addPlugin: function(guid, element) {
 	    this.divMain.appendChild(element);
         this._plugins[guid] = element;
     },
@@ -70,14 +70,14 @@ const UI = {
      * @param {string} guid 
      * @returns {HTMLDivElement | undefined}
      */
-    getPlugin(guid) {
+    getPlugin: function(guid) {
         return this._plugins[guid];
     },
     /**
      * @param {string} guid 
      * @returns {HTMLButtonElement | undefined}
      */
-    getPluginButton(guid) {
+    getPluginButton: function(guid) {
         const pluginPlate = this._plugins[guid];
 	    if (!pluginPlate) return;
         const button = this._plugins[guid].querySelector('.management button');
@@ -88,7 +88,7 @@ const UI = {
     /**
      * @param {string} guid
      * @returns {HTMLDivElement | null} */
-    getSelectedPlugin(guid) {
+    getSelectedPlugin: function(guid) {
         if (!guid) {
             return null;
         }
@@ -96,7 +96,7 @@ const UI = {
 		return div;
     },
     /** @param {'light' | string} themeType */
-    init(themeType) {
+    init: function(themeType) {
         const self = this;
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
         rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
@@ -104,7 +104,12 @@ const UI = {
         styleTheme.innerHTML = rule;
         document.head.appendChild(styleTheme);
 
-        this.pluginsList.querySelectorAll('input[name="main-filter"]').forEach(function(input) {
+        let inputNodes = this.pluginsList.querySelectorAll('input[name="main-filter"]');
+        for (let i = 0; i < inputNodes.length; i++) {
+            const input = inputNodes[i];
+            if (input instanceof HTMLInputElement === false) {
+                continue;
+            }
             input.onchange = function(event) {
                 if (!event.currentTarget || event.currentTarget instanceof HTMLInputElement === false) {
                     return;
@@ -116,16 +121,21 @@ const UI = {
                 const text = input.parentElement.querySelector('.main-filter-category').textContent;
                 self.toolbarMainText.textContent = text;
             }
-        });
+        }
 
-        document.querySelectorAll('input[name="category-filter"]').forEach(function(input) {
+        inputNodes = document.querySelectorAll('input[name="category-filter"]');
+        for (let i = 0; i < inputNodes.length; i++) {
+            const input = inputNodes[i];
+            if (input instanceof HTMLInputElement === false) {
+                continue;
+            }
             input.onchange = function(event) {
                 const value = event.currentTarget.value;
                 self.onChangeCategoryFilter(value);
                 const text = input.parentElement.querySelector('.category-name').textContent;
                 self.toolbarSecondaryText.textContent = text;
             };
-        });
+        }
 
         this.inpSearch.addEventListener('input', this._debounce(function(/** @type {Event} */ event) {
             if (!event.target || event.target instanceof HTMLInputElement === false) {
@@ -211,7 +221,7 @@ const UI = {
         }
     },
     /** @param {string} guid */
-    removePlugin(guid) {
+    removePlugin: function(guid) {
         const pluginDiv = this._plugins[guid];
         if (pluginDiv) {
             pluginDiv.remove();
@@ -219,7 +229,7 @@ const UI = {
     },
 
     /** @param {MainFilter} value */
-    clickMainFilter(value) {
+    clickMainFilter: function(value) {
         const current = this.pluginsList.querySelector('input[value="' + value + '"]');
         if (!current || current instanceof HTMLInputElement === false) {
             return;
@@ -231,7 +241,7 @@ const UI = {
      * @param {string} bg 
      * @param {{src: string, srcset: string} | null} src 
      */
-    setPluginImage(guid, bg, src) {
+    setPluginImage: function(guid, bg, src) {
         const pluginDiv = this._plugins[guid];
         if (!pluginDiv) {
             return;
@@ -256,7 +266,7 @@ const UI = {
      * @param {number} numOfInstalledPlugins 
      * @param {number} numOfPluginsToUpdate 
      */
-    updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
+    updateMainCategories: function(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
         const mainCounter = this.pluginsList.querySelector('.filter-by-installed .marketplace .amount');
         const installedCounter = this.pluginsList.querySelector('.filter-by-installed .installed .amount');
         const updatesCounter = this.pluginsList.querySelector('.filter-by-installed .updates .amount');
@@ -282,11 +292,12 @@ const UI = {
     /**
      * @param {Map<string, number>} categories
      */
-    updateCategories(categories) {
+    updateCategories: function(categories) {
         const self = this;
-        this.pluginsList.querySelectorAll('.filter-by-category .amount').forEach(function(element) {
-            element.textContent = '0';
-        });
+        const amountNodes = this.pluginsList.querySelectorAll('.filter-by-category .amount');
+        for (let i = 0; i < amountNodes.length; i++) {
+            amountNodes[i].textContent = '0';
+        }
         /**
          * @param {number} value 
          * @param {string} key 
@@ -334,16 +345,19 @@ const UI = {
      * @param {number} delay
      * @returns {(...args: any[]) => void}
      */
-    _debounce(fn, delay) {
+    _debounce: function(fn, delay) {
         /** @type {ReturnType<typeof setTimeout> | null} */
         let timeoutId = null;
-        return function(/** @type {any[]} */ ...args) {
+        /** @this {any} */
+        return function() {
+            const args = Array.prototype.slice.call(arguments);
+            const ctx = this;
             if (timeoutId !== null) {
                 clearTimeout(timeoutId);
             }
             timeoutId = setTimeout(function() {
                 timeoutId = null;
-                fn.apply(null, args);
+                fn.apply(ctx, args);
             }, delay);
         };
     },
