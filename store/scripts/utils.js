@@ -103,23 +103,27 @@ const Utils = {
     },
     translateAll: function() {
         const self = this;
-        document.querySelectorAll(".i18n").forEach(function(el) {
-            if (el instanceof HTMLElement === false) return;
+        const nodes = document.querySelectorAll(".i18n");
+        const attrs = ["placeholder", "title"];
+        for (let i = 0; i < nodes.length; i++) {
+            const el = nodes[i];
+            if (el instanceof HTMLElement === false) continue;
 
-            ["placeholder", "title"].forEach(function(attr) {
+            for (let j = 0; j < attrs.length; j++) {
+                const attr = attrs[j];
                 if (el.hasAttribute(attr)) {
                     el.setAttribute(
                         attr,
-                        self.getTranslated(el.getAttribute(attr) || ""),
+                        self.getTranslated(el.getAttribute(attr) || "")
                     );
                 }
-            });
+            }
 
             const translated = self.getTranslated(
-                el.textContent.trim().replace(/\s+/g, " "),
+                (el.textContent || "").trim().replace(/\s+/g, " ")
             );
             if (translated) el.textContent = translated;
-        });
+        }
     },
     /** @param {Object<string, string>} translations */
     setTranslations: function(translations) {
@@ -187,7 +191,7 @@ const Utils = {
      * @param {string} changelog 
      * @returns {string}
      */
-    makeChangeLogHtml(changelog) {
+    makeChangeLogHtml: function(changelog) {
         const settings = this._getMarkedSetting();
         let value = this._parseChangelog(changelog);
         let lexed = marked.lexer(value, settings);

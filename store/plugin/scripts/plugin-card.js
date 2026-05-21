@@ -62,7 +62,7 @@ const PluginCard = {
     PsChangelog: null,
     slideIndex: 1,  // index for slides
     backup: false,
-    init() {
+    init: function() {
         const self = this;
         return new Promise(function(fResolve) {
             window.Asc.plugin.attachEvent("onShowPluginCard", fResolve);
@@ -88,7 +88,7 @@ const PluginCard = {
     /**
      * @param {PluginCardWindowParams} data
      */
-    _show: function (data) {
+    _show: function(data) {
 		const self = this;
         const guid = data.guid;
 
@@ -129,7 +129,7 @@ const PluginCard = {
         if (this.plugin.rating) {
             PluginCardUI.divRatingLink.removeAttribute("title");
             PluginCardUI.totalVotes.textContent = String(
-                this.plugin.rating.total,
+                this.plugin.rating.total
             );
             PluginCardUI.divStarsColored.style.width =
                 this.plugin.rating.percent + "%";
@@ -148,7 +148,7 @@ const PluginCard = {
                 } else {
                     PluginCardUI.divRatingLink.setAttribute(
                         "title",
-                        Utils.getTranslated("No disscussion page for this plugin."),
+                        Utils.getTranslated("No disscussion page for this plugin.")
                     );
                     PluginCardUI.divStarsColored.style.width = "0";
                     PluginCardUI.divVotes.classList.add("hidden");
@@ -207,7 +207,7 @@ const PluginCard = {
             PluginCardUI.spanVersion.textContent = String(
                 this.installed && this.installed.obj.version ?
                     this.installed.obj.version
-                :   this.plugin.version,
+                :   this.plugin.version
             );
             PluginCardUI.divVersion.classList.remove("hidden");
         } else {
@@ -222,7 +222,7 @@ const PluginCard = {
             PluginCardUI.spanMinVersion.textContent = String(
                 this.installed && this.installed.obj.minVersion ?
                     this.installed.obj.minVersion
-                :   this.plugin.minVersion,
+                :   this.plugin.minVersion
             );
             PluginCardUI.divMinVersion.classList.remove("hidden");
         } else {
@@ -234,7 +234,7 @@ const PluginCard = {
 
         let pluginUrl = baseUrl.replace(
             data.OOMarketplaceUrl,
-            data.OOIO + "tree/master/",
+            data.OOIO + "tree/master/"
         );
 
         // TODO problem with plugins icons (different margin from top)
@@ -255,7 +255,7 @@ const PluginCard = {
             PluginCardUI.linkPlugin.setAttribute("href", pluginUrl);
             PluginCardUI.linkReadme.setAttribute(
                 "href",
-                pluginUrl + "README.md",
+                pluginUrl + "README.md"
             );
             PluginCardUI.divReadme.classList.remove("hidden");
         } else {
@@ -290,7 +290,7 @@ const PluginCard = {
             PluginCardUI.btnInstall.setAttribute("disabled", "");
             PluginCardUI.btnInstall.setAttribute(
                 "title",
-                Utils.getTranslated(MESSAGES.versionWarning),
+                Utils.getTranslated(MESSAGES.versionWarning)
             );
         } else {
             PluginCardUI.btnInstall.removeAttribute("disabled");
@@ -324,7 +324,7 @@ const PluginCard = {
      * @param {string} baseUrl
      * @param {boolean} bStrict
      */
-    _loadAndShowLanguages(baseUrl, bStrict) {
+    _loadAndShowLanguages: function(baseUrl, bStrict) {
         let supportedLangs = [ Utils.getTranslated('English') ];
         PluginCardUI.spanLanguages.textContent = supportedLangs.join(", ") + ".";
         PluginCardUI.divLanguages.classList.remove("hidden");
@@ -366,7 +366,7 @@ const PluginCard = {
      * @param {boolean} isLocal
      * @returns {Promise<Rating | null>}
      */
-    _loadDiscussion: function (discussionUrl, isLocal) {
+    _loadDiscussion: function(discussionUrl, isLocal) {
         if (discussionUrl) {
             const bDesktopRequest =
                 isLocal &&
@@ -384,7 +384,7 @@ const PluginCard = {
                     } else {
                         createError(
                             new Error("Problem with loading rating"),
-                            true,
+                            true
                         );
                     }
                     return null;
@@ -401,9 +401,15 @@ const PluginCard = {
     onSelectPreview: function(target, type) {
         // change mode of preview
         if ( !target.classList.contains('span_selected') ) {
-            document.querySelectorAll(".span_selected").forEach(function(el) { el.classList.remove("span_selected"); });
+            const selectedSpans = document.querySelectorAll(".span_selected");
+            for (let i = 0; i < selectedSpans.length; i++) {
+                selectedSpans[i].classList.remove("span_selected");
+            }
             target.classList.add("span_selected");
-            document.querySelectorAll(".div_selected_preview").forEach(function(el) { el.classList.add("hidden"); });
+            const selectedPreviews = document.querySelectorAll(".div_selected_preview");
+            for (let i = 0; i < selectedPreviews.length; i++) {
+                selectedPreviews[i].classList.add("hidden");
+            }
 
             // type: 1 - Overview; 2 - Info; 3 - Changelog;
             let element = PluginCardUI.divSelectedPreview;
@@ -555,7 +561,7 @@ const PluginCard = {
             dots[this.slideIndex-1].className += ' active';
     },
     
-    _setDivHeight() {
+    _setDivHeight: function() {
         // console.log(Math.round(window.devicePixelRatio * 100));
         if (PluginCardUI.divSelectedImage) {
             let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 70 + 'px';

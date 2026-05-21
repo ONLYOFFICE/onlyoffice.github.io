@@ -107,7 +107,8 @@
 			}
 		},
 		_onReady: function() {
-			postMessage( Object.assign({}, this.data, { type: 'onShowPluginCard' }) );
+			this.data.type = 'onShowPluginCard';
+			postMessage(this.data);
 		},
 		/** @param {IframeMessage} data*/
 		_onInstall: function(data) {
@@ -233,7 +234,14 @@
 	window.addEventListener('message', function(message) {
 		// getting messages from marketplace
 		/** @type {IframeMessage} */
-		let data = JSON.parse(message.data);
+		let data;
+		try {
+			data = JSON.parse(message.data);
+		} catch (error) {
+			// if we have a problem, don't process this message
+			console.error('Failed to parse message', message);
+			return;
+		}
 			
 		switch (data.type) {
 			case 'getInstalled':
