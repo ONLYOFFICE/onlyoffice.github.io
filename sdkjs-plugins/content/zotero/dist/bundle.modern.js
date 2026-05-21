@@ -3467,7 +3467,7 @@ class Ti {
   showInfoWindow(e, i, n) {
     a(R, this) && c(Q, this, Ct).call(this), typeof n != "string" && (n = "warning"), x(R, this, new window.Asc.PluginWindow());
     var s = {
-      name: "Mendeley",
+      name: "Zotero",
       url: "info-window.html",
       description: window.Asc.plugin.tr(e),
       isVisual: !0,
@@ -3541,7 +3541,7 @@ class Mi {
     var e = this;
     return I(function* () {
       var i = yield e.citationDocService.saveAsText();
-      return i && e.showSuccessMessage("All active Mendeley citations and Bibliography have been replaced."), i;
+      return i && e.showSuccessMessage("All active Zotero citations and Bibliography have been replaced."), i;
     })();
   }
   /**

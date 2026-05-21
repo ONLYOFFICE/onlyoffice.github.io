@@ -570,7 +570,7 @@ class CitationService {
         const isOk = await this.citationDocService.saveAsText();
         if (isOk) {
             this.showSuccessMessage(
-                "All active Mendeley citations and Bibliography have been replaced."
+                "All active Zotero citations and Bibliography have been replaced."
             );
         }
         return isOk;

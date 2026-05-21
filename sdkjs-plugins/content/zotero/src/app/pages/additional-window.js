@@ -135,7 +135,7 @@ class AdditionalWindow {
         this.#window = new window.Asc.PluginWindow();
         /** @type {VariationConfig} */
         const variation = {
-            name: "Mendeley",
+            name: "Zotero",
             url: "info-window.html",
             description: window.Asc.plugin.tr(description),
             isVisual: true,
