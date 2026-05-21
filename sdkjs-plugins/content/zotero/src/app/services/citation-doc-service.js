@@ -505,10 +505,11 @@ class CitationDocService {
 
     /**
      * @param {AddinFieldData} field 
-     * @param {string} html 
+     * @param {string} html - HTML string with formatting
      * @returns {Promise<string>}
      */
     async #pasteBibliographyWithHtml(field, html) {
+        html = CslHtmlParser.purifyHtml(html);
         await this.#addAddinField(field);
         await new Promise((resolve) => {
             const isCalc = true;
