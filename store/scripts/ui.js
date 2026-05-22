@@ -157,40 +157,53 @@ const UI = {
      */
     onChangeTheme: function(theme, themeType, style) {
         let rule = '';
-
-        /*Object.keys(theme).forEach(function(key) {
+        //console.log(theme);
+        Object.keys(theme).forEach(function(key) {
             if (typeof theme[key] === 'string' && (theme[key].indexOf('#') === 0 || theme[key].indexOf('rgb') === 0)) {
                 console.log(key + ": %c" + theme[key], 'color: ' + theme[key]);
             }
-        });*/
+        });
 
         rule += '.plugin-plate .name span:first-child,\n' +
-            '.filter-by label{color: ' + theme["text-normal"] + ';}\n';
+            '.filter-by label{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.plugin-plate .description,\n' +
             '.toolbar .place-name,\n' +
-            '.filter-by label > span:last-of-type{color: ' + theme["text-secondary"] + ';}\n';
+            '.filter-by label > span:last-of-type{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
         rule += '.categories-header,\n' +
             '.toolbar .search span,\n' +
             '.plugin-plate .manufacturer,\n' +
             '.toolbar .search input::placeholder,\n' +
             '.filter-by label>span:first-of-type,\n' +
-            '.plugin-plate .rating{color: ' + theme["text-tertiary"] + ';}\n';
+            '.plugin-plate .rating{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
 
-        rule += '.plugin-plate{background-color: ' + theme["background-normal"] + ';}\n';
+        rule += '.plugin-plate{background-color: ' + (theme["background-normal"] || '#fff') + ';}\n';
         //rule += 'main{background-color: ' + theme["background-pane"] + ';}\n';
 
-        rule += '.plugin-plate{border-color: ' + theme["border-regular-control"] + ';}\n';
+        rule += '.plugin-plate{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
 
-        rule += '.filter-by label:hover{background-color: ' + theme["highlight-button-hover"] + ';}\n';
-        rule += '.filter-by label:has(:checked){background-color: ' + theme["highlight-button-pressed"] + ';}\n';
-        rule += '.filter-by label > span.mark{color: ' + theme["text-inverse"] + ';}\n';
+        rule += '.plugin-plate .stars{color: ' + (theme["canvas-anim-pane-effect-bar-emphasis-outline"] || '#c49a2a') + ';}\n';
+        rule += '.filter-by label:hover{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
+        rule += '.filter-by input:checked + label{background-color: ' + (theme["highlight-button-pressed"] || '#DCDBDB') + ';}\n';
+        rule += '.filter-by label > span.mark{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
         rule += 'aside,\n' +
             '.plugin-plate .management,\n' +
-            '.toolbar{border-color: ' + theme["border-divider"] + ';}\n';
+            '.toolbar{border-color: ' + (theme["border-divider"] || '#dfdfdf') + ';}\n';
 
-        rule += 'button.btn_update{color: ' + theme["text-contrast-background"] + ';}\n' +
-            'button.btn_update:active{color: ' + theme["text-contrast-background"] + ';}\n';
+        rule += 'button.btn_update,\n' +
+            'button.btn_update:active{color: ' + (theme["text-contrast-background"] || '#fff') + ';}\n';
         if (themeType.includes('light')) {
+            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';    
+            rule += '.submit-own-plugin a:visited,\n';
+            rule += '.submit-own-plugin a{color: ' + ('#00645b') + ' !important;}\n';    
+            rule += '.submit-own-plugin a:hover{color: ' + ('#0e8a7e') + ' !important;}\n';    
+            rule += 'button.btn_update:active{background-color: ' + ('#00645b') + ' !important;}\n';    
+            rule += 'button.btn_update{border-color: ' + ('#0e8a7e') + ';}\n';    
+            rule += 'button.btn_update:hover{background-color: ' + ('#007a6f') + ';}\n';    
+            rule += 'button.btn_update,\n';    
+            rule += '.plugin-plate .by-onlyoffice,\n';    
+            rule += '.filter-by input:checked + label span.onlyoffice,\n';    
+            rule += '.filter-by label span.mark{background-color: ' + ('#0e8a7e') + ' !important;}\n';    
+
             document.body.classList.add('white_bg');
             rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
             rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
@@ -200,6 +213,18 @@ const UI = {
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
         } else {
             document.body.classList.remove('white_bg');
+            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#60ddc0' + ' !important;}\n';    
+            rule += '.submit-own-plugin a:visited,\n';
+            rule += '.submit-own-plugin a{color: ' + ('#60ddc0') + ' !important;}\n';    
+            rule += '.submit-own-plugin a:hover{color: ' + ('#39bda0') + ' !important;}\n';    
+            rule += 'button.btn_update:active{background-color: ' + ('#60ddc0') + ' !important;}\n';    
+            rule += 'button.btn_update{border-color: ' + ('#39bda0') + ';}\n';    
+            rule += 'button.btn_update:hover{background-color: ' + ('#26b094') + ';}\n';    
+            rule += 'button.btn_update,\n';    
+            rule += '.plugin-plate .by-onlyoffice,\n';    
+            rule += '.filter-by input:checked + label span.onlyoffice,\n';    
+            rule += '.filter-by label span.mark{background-color: ' + ('#39bda0') + ' !important;}\n';    
+
             rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
             rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
             rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
