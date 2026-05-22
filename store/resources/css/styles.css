@@ -241,13 +241,17 @@ main {
 @supports (display: grid) {
 	.plugins-container .plugins-list {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		/* minmax(0, 1fr) instead of plain 1fr so columns can shrink past
+		   content min-size — otherwise a single wide card unevens the grid. */
+		grid-template-columns: repeat(3, minmax(0, 1fr));
 		gap: 14px;
 		margin: 0;
 	}
 	.plugins-container .plugins-list > .plugin-plate {
 		flex: initial;
 		margin: 0;
+		width: auto;
+		max-width: none;
 	}
 }
 .plugin-plate {

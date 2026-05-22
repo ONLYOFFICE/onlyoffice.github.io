@@ -808,7 +808,8 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 		zoom = (1 / devicePixelRatio);
 	if (scale.devicePR > 2)
 		zoom = (1 / devicePixelRatio) * 2;
-	pluginPlate.style.border = ((zoom > 1 ? 1 : zoom)) +'px solid ' + (themeType == 'light' ? '#c0c0c0' : '#666666');
+	pluginPlate.style.borderStyle = 'solid';
+	pluginPlate.style.borderWidth = ((zoom > 1 ? 1 : zoom)) +'px';
 
 	pluginPlate.onclick = openPluginCard.bind(pluginPlate, guid);
 
@@ -1211,12 +1212,12 @@ window.onresize = function(bForce) {
 			html.style.zoom = revZoom;
 			// html.style['-moz-transform'] = 'scale('+ revZoom +')';
 		}
-		let borderValue = ((revZoom > 1 ? 1 : revZoom) +'px solid ' + (themeType == 'light' ? '#c0c0c0' : '#666666'));
+		let borderWidth = (revZoom > 1 ? 1 : revZoom);
 		const pluginPlates = document.querySelectorAll('.plugin-plate');
 		for (let i = 0; i < pluginPlates.length; i++) {
 			/** @type {HTMLElement} */
 			const element = pluginPlates[i];
-			element.style.border = borderValue;
+			element.style.borderWidth = borderWidth + 'px';
 		}
 	}
 };

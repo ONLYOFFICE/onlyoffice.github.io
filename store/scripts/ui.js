@@ -176,7 +176,7 @@ const UI = {
             '.filter-by label>span:first-of-type,\n' +
             '.plugin-plate .rating{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
 
-        rule += '.plugin-plate{background-color: ' + (theme["background-normal"] || '#fff') + ';}\n';
+        rule += '.plugin-plate{background-color: ' + (theme["background-normal"] || '#fff') + '; border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         //rule += 'main{background-color: ' + theme["background-pane"] + ';}\n';
 
         rule += '.plugin-plate{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
