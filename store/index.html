@@ -50,20 +50,20 @@
 		<div id="plugins" class="plugin-store transparent">
 			<aside>
 				<div class="filter-by filter-by-installed">
-					<label class="marketplace">
-						<input type="radio" name="main-filter" id="btn_marketplace" value="marketplace" checked>
+					<input type="radio" name="main-filter" id="main-filter-marketplace" value="marketplace" checked>
+					<label class="marketplace" for="main-filter-marketplace">
 						<span>◎</span>
 						<span class="main-filter-category i18n">Marketplace</span>
 						<span class="amount">21</span>
 					</label>
-					<label class="installed">
-						<input type="radio" name="main-filter" value="installed">
+					<input type="radio" id="main-filter-installed" name="main-filter" value="installed">
+					<label class="installed" for="main-filter-installed">
 						<span>✓</span>
 						<span class="main-filter-category i18n">Installed</span>
 						<span class="amount">6</span>
 					</label>
-					<label class="updates">
-						<input type="radio" name="main-filter" value="updates">
+					<input type="radio" id="main-filter-updates" name="main-filter" value="updates">
+					<label class="updates" for="main-filter-updates">
 						<span>↑</span>
 						<span class="main-filter-category i18n">Updates</span>
 						<span class="amount mark">2</span>
@@ -72,52 +72,52 @@
 				<div>
 					<div class="categories-header i18n">Categories</div>
 					<div class="filter-by filter-by-category">
-						<label class="all">
-							<input type="radio" name="category-filter" value="all" checked>
+						<input type="radio" id="category-filter-all" name="category-filter" value="all" checked>
+						<label for="category-filter-all" class="all">
 							<span>◎</span>
 							<span class="category-name i18n">All plugins</span>
 							<span class="amount">21</span>
 						</label>
-						<label class="onlyoffice">
-							<input type="radio" name="category-filter" value="onlyoffice">
+						<input type="radio" id="category-filter-onlyoffice" name="category-filter" value="onlyoffice">
+						<label class="onlyoffice" for="category-filter-onlyoffice">
 							<span><span class="onlyoffice">✓</span></span>
 							<span class="category-name i18n">By ONLYOFFICE</span>
 							<span class="amount">10</span>
 						</label>
 						<div style="height: 8px;">
 						</div>
-						<label class="recommended">
-							<input type="radio" name="category-filter" value="recommended">
+						<input type="radio" id="category-filter-recommended" name="category-filter" value="recommended">
+						<label class="recommended" for="category-filter-recommended">
 							<span>★</span>
 							<span class="category-name i18n">Recommended</span>
 							<span class="amount">9</span>
 						</label>
-						<!--label class="ai">
-							<input type="radio" name="category-filter" value="ai">
+						<!--input type="radio" name="category-filter" value="ai">
+						<label class="ai">
 							<span>✦</span>
 							<span class="category-name i18n">AI &amp; Automation</span>
 							<span class="amount">9</span>
 						</label-->
-						<label class="work">
-							<input type="radio" name="category-filter" value="work">
+						<input type="radio" id="category-filter-work" name="category-filter" value="work">
+						<label class="work" for="category-filter-work">
 							<span>⚒</span>
 							<span class="category-name i18n">Work</span>
 							<span class="amount">6</span>
 						</label>
-						<label class="entertainment">
-							<input type="radio" name="category-filter" value="entertainment">
+						<input type="radio" id="category-filter-entertainment" name="category-filter" value="entertainment">
+						<label class="entertainment" for="category-filter-entertainment">
 							<span>▶</span>
 							<span class="category-name i18n">Entertainment</span>
 							<span class="amount">6</span>
 						</label>
-						<label class="communication">
-							<input type="radio" name="category-filter" value="communication">
+						<input type="radio" id="category-filter-communication" name="category-filter" value="communication">
+						<label class="communication" for="category-filter-communication">
 							<span>✉</span>
 							<span class="category-name i18n">Communication</span>
 							<span class="amount">6</span>
 						</label>
-						<label class="specAbilities">
-							<input type="radio" name="category-filter" value="specAbilities">
+						<input type="radio" id="category-filter-specAbilities" name="category-filter" value="specAbilities">
+						<label class="specAbilities" for="category-filter-specAbilities">
 							<span>❖</span>
 							<span class="category-name i18n">Special abilities</span>
 							<span class="amount">6</span>
@@ -140,8 +140,8 @@
 							<span class="category-name i18n">Productivity</span>
 							<span class="amount">11</span>
 						</label-->
-						<label class="devTools">
-							<input type="radio" name="category-filter" value="devTools">
+						<input type="radio" id="category-filter-devTools" name="category-filter" value="devTools">
+						<label class="devTools" for="category-filter-devTools">
 							<span>&lt;&gt;</span>
 							<span class="category-name i18n">Developer tools</span>
 							<span class="amount">5</span>
