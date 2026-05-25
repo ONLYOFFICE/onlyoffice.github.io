@@ -550,6 +550,10 @@
 		else
 			item.disabled = false;
 
+		if ('pressed' in this) {
+			item.pressed = !!this.pressed;
+		}
+
 		if (this.removed)
 			item.removed = true;
 
