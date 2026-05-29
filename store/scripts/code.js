@@ -324,16 +324,15 @@ const Marketplace = {
 	},
 
 	_onInternetConnectionRestored: function() {
-		if (!Marketplace.allPlugins.length) {
-			Marketplace.loadAllPluginsAndRating()
-				.then(function(allPlugins) {
-					Marketplace.allPlugins = allPlugins;
-					updateCategories();
-					if (STORAGE.mainFilter === 'marketplace') {
-						showListOfPlugins('all');
-					}
-				});
+		if (Marketplace.allPlugins.length) {
+			return;
 		}
+		Marketplace.loadAllPluginsAndRating()
+			.then(function(allPlugins) {
+				Marketplace.allPlugins = allPlugins;
+				showListOfPlugins('all');
+				updateCategories();
+			});
 	}
 
 };
@@ -716,7 +715,7 @@ function updateToolbar(numOfPluginsToUpdate) {
  */
 function showListOfPlugins(typeOfOperation) {
 	let arr = getFilteredPlugins();
-	if (arr.length && isSamePlugins(founded, arr)) {
+	if (arr.length && isSamePlugins(founded, arr) && typeOfOperation !== 'all') {
 		UI.toggleLoader(false);
 		return arr.length;
 	}

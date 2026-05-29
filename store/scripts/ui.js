@@ -158,11 +158,11 @@ const UI = {
     onChangeTheme: function(theme, themeType, style) {
         let rule = '';
         //console.log(theme);
-        Object.keys(theme).forEach(function(key) {
+        /*Object.keys(theme).forEach(function(key) {
             if (typeof theme[key] === 'string' && (theme[key].indexOf('#') === 0 || theme[key].indexOf('rgb') === 0)) {
                 console.log(key + ": %c" + theme[key], 'color: ' + theme[key]);
             }
-        });
+        });*/
 
         rule += '.plugin-plate .name span:first-child,\n' +
             '.filter-by label{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
@@ -191,6 +191,13 @@ const UI = {
 
         rule += 'button.btn_update,\n' +
             'button.btn_update:active{color: ' + (theme["text-contrast-background"] || '#fff') + ';}\n';
+        
+        if (theme.name === 'theme-classic-light') {
+            rule += '.filter-by input:checked + label .category-name,\n' +
+                '.filter-by input:checked + label .main-filter-category{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+            rule += '.filter-by input:checked + label > span:last-of-type{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+        }
+
         if (themeType.includes('light')) {
             rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';    
             rule += '.submit-own-plugin a:visited,\n';
@@ -323,6 +330,11 @@ const UI = {
         for (let i = 0; i < amountNodes.length; i++) {
             amountNodes[i].textContent = '0';
         }
+        /** @type {NodeListOf<HTMLInputElement>} */
+        const inputs = this.pluginsList.querySelectorAll('.filter-by-category input[name="category-filter"]');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = true;
+        }
         /**
          * @param {number} value 
          * @param {string} key 
@@ -338,6 +350,15 @@ const UI = {
                 span.textContent = String(value);
             }
 
+            const labelFor = cat.getAttribute('for');
+            if (!labelFor) {
+                return;
+            }
+
+            let input = document.getElementById(labelFor);
+            if (input) {
+                input.removeAttribute('disabled');
+            }
         };
         if (categories.size) {
             categories.forEach(function(value, key) {
