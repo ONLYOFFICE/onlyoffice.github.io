@@ -33,7 +33,7 @@ function c(e, t, i) {
   if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : i;
   throw new TypeError("Private element is not present on this object");
 }
-function Dt(e, t, i, n, s, r, o) {
+function Zt(e, t, i, n, s, r, o) {
   try {
     var a = e[r](o), h = a.value;
   } catch (u) {
@@ -47,10 +47,10 @@ function P(e) {
     return new Promise(function(n, s) {
       var r = e.apply(t, i);
       function o(h) {
-        Dt(r, n, s, o, a, "next", h);
+        Zt(r, n, s, o, a, "next", h);
       }
       function a(h) {
-        Dt(r, n, s, o, a, "throw", h);
+        Zt(r, n, s, o, a, "throw", h);
       }
       o(void 0);
     });
@@ -79,7 +79,7 @@ function ki(e, t, i) {
     writable: !0
   }) : e[t] = i, e;
 }
-function Zt(e, t) {
+function qt(e, t) {
   var i = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
@@ -92,9 +92,9 @@ function Zt(e, t) {
 function ci(e) {
   for (var t = 1; t < arguments.length; t++) {
     var i = arguments[t] != null ? arguments[t] : {};
-    t % 2 ? Zt(Object(i), !0).forEach(function(n) {
+    t % 2 ? qt(Object(i), !0).forEach(function(n) {
       ki(e, n, i[n]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(i)) : Zt(Object(i)).forEach(function(n) {
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(i)) : qt(Object(i)).forEach(function(n) {
       Object.defineProperty(e, n, Object.getOwnPropertyDescriptor(i, n));
     });
   }
@@ -132,7 +132,7 @@ function Pi(e) {
   var t = Ei(e, "string");
   return typeof t == "symbol" ? t : t + "";
 }
-var qt = {
+var Dt = {
   /**
    * @param {AscTheme} theme
    */
@@ -333,35 +333,30 @@ var hi = {
    */
   _checkApiAvailable: function(t) {
     var i = this;
-    return i._sendDesktopRequest(hi.desktopApiUrl).then(function(n) {
-      i._hasPermission = n.hasPermission, i._desktop = n.isZoteroRunning;
-    }).catch(function() {
-      return i._desktop = !1, i._hasPermission = !1, !1;
-    }).then(function() {
-      return i._hasKey = t.hasSettings(), i._desktop || !i._hasKey ? (i._online = !1, Promise.resolve(i._getApiCheckResult())) : fetch(Oi, {
+    return Promise.all([
+      // Always check online availability for resource loading (styles, locales).
+      fetch(Oi, {
         method: "GET",
         cache: "no-cache"
       }).then(function(n) {
-        i._online = n.status === 200;
+        return n.status === 200;
       }).catch(function() {
-        i._online = !1;
-      }).then(function() {
-        return i._getApiCheckResult();
-      });
+        return !1;
+      }),
+      i._sendDesktopRequest(hi.desktopApiUrl).then(function(n) {
+        return i._hasPermission = n.hasPermission, n.isZoteroRunning;
+      }).catch(function() {
+        return !1;
+      })
+    ]).then(function(n) {
+      return i._online = n[0], i._desktop = n[1], i._hasKey = t.hasSettings(), {
+        online: i._online,
+        hasKey: i._hasKey,
+        desktop: i._desktop,
+        hasPermission: i._hasPermission,
+        desktopVersion: i._desktopVersion
+      };
     });
-  },
-  /**
-   * Build and return the API check result object.
-   * @returns {AvailableApis}
-   */
-  _getApiCheckResult: function() {
-    return {
-      online: this._online,
-      hasKey: this._hasKey,
-      desktop: this._desktop,
-      hasPermission: this._hasPermission,
-      desktopVersion: this._desktopVersion
-    };
   },
   /**
    * @param {string} url
@@ -397,14 +392,14 @@ var hi = {
       });
     });
   }
-}, Ae = /* @__PURE__ */ new WeakMap(), Lt = /* @__PURE__ */ new WeakMap(), Et = /* @__PURE__ */ new WeakMap(), Pt = /* @__PURE__ */ new WeakMap(), mt = /* @__PURE__ */ new WeakMap(), ot = /* @__PURE__ */ new WeakMap(), je = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), qe = /* @__PURE__ */ new WeakMap(), He = /* @__PURE__ */ new WeakMap(), he = /* @__PURE__ */ new WeakSet();
+}, Ae = /* @__PURE__ */ new WeakMap(), Lt = /* @__PURE__ */ new WeakMap(), Et = /* @__PURE__ */ new WeakMap(), Pt = /* @__PURE__ */ new WeakMap(), mt = /* @__PURE__ */ new WeakMap(), ot = /* @__PURE__ */ new WeakMap(), je = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), De = /* @__PURE__ */ new WeakMap(), He = /* @__PURE__ */ new WeakMap(), he = /* @__PURE__ */ new WeakSet();
 class Ni {
   /**
    * @param {{maxRetries?: number, initialDelay?: number, maxDelay?: number, backoffFactor?: number, retryOn?: number[]}} options
    */
   constructor() {
     var t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    ve(this, he), U(this, Ae, void 0), U(this, Lt, void 0), U(this, Et, void 0), U(this, Pt, void 0), U(this, mt, void 0), U(this, ot, void 0), U(this, je, void 0), U(this, de, void 0), U(this, qe, void 0), U(this, He, void 0), I(Ae, this, t.maxRetries || 5), I(Lt, this, t.initialDelay || 1e3), I(Et, this, t.maxDelay || 5e3), I(Pt, this, t.backoffFactor || 2), I(mt, this, t.retryOn || [429, 502, 503, 504]), I(ot, this, 10), I(je, this, 5e3), I(de, this, []), I(qe, this, 0), I(He, this, 0);
+    ve(this, he), U(this, Ae, void 0), U(this, Lt, void 0), U(this, Et, void 0), U(this, Pt, void 0), U(this, mt, void 0), U(this, ot, void 0), U(this, je, void 0), U(this, de, void 0), U(this, De, void 0), U(this, He, void 0), I(Ae, this, t.maxRetries || 5), I(Lt, this, t.initialDelay || 1e3), I(Et, this, t.maxDelay || 5e3), I(Pt, this, t.backoffFactor || 2), I(mt, this, t.retryOn || [429, 502, 503, 504]), I(ot, this, 10), I(je, this, 5e3), I(de, this, []), I(De, this, 0), I(He, this, 0);
   }
   /**
    * @param {URL} url
@@ -441,7 +436,7 @@ class Ni {
     })();
   }
   resetCounter() {
-    I(de, this, []), I(qe, this, 0), I(He, this, 0);
+    I(de, this, []), I(De, this, 0), I(He, this, 0);
   }
 }
 function Jt() {
@@ -461,7 +456,7 @@ function Ot() {
         n < 0 && (n = 0, console.warn("Wait time is less than 0")), console.log("Rate limit prevention: ".concat(l(de, this).length, " requests in last ").concat(l(je, this), "ms. Waiting ").concat(n, "ms...")), yield c(he, this, at).call(this, n), c(he, this, Jt).call(this);
       }
     }
-    l(de, this).push(Date.now()), I(qe, this, (e = l(qe, this), e++, e));
+    l(de, this).push(Date.now()), I(De, this, (e = l(De, this), e++, e));
     var s = Date.now(), r = s - l(He, this), o = 100;
     r < o && l(He, this) > 0 && (yield c(he, this, at).call(this, o - r)), I(He, this, Date.now());
   }), Ot.apply(this, arguments);
@@ -1368,7 +1363,7 @@ j.prototype = /** @lends Button.prototype */
     this._container.className = t;
   }
 };
-var B = /* @__PURE__ */ new WeakMap(), q = /* @__PURE__ */ new WeakMap(), Je = /* @__PURE__ */ new WeakMap(), te = /* @__PURE__ */ new WeakMap(), S = /* @__PURE__ */ new WeakMap(), Pe = /* @__PURE__ */ new WeakMap(), Be = /* @__PURE__ */ new WeakMap(), ae = /* @__PURE__ */ new WeakSet();
+var B = /* @__PURE__ */ new WeakMap(), J = /* @__PURE__ */ new WeakMap(), Je = /* @__PURE__ */ new WeakMap(), te = /* @__PURE__ */ new WeakMap(), S = /* @__PURE__ */ new WeakMap(), Pe = /* @__PURE__ */ new WeakMap(), Be = /* @__PURE__ */ new WeakMap(), ae = /* @__PURE__ */ new WeakSet();
 class jt {
   /**
    * Create a Radio instance
@@ -1378,13 +1373,13 @@ class jt {
    * @throws {Error} If invalid input element
    */
   constructor(t, i) {
-    if (ve(this, ae), U(this, B, void 0), U(this, q, void 0), U(this, Je, void 0), U(this, te, null), U(this, S, void 0), U(this, Pe, /* @__PURE__ */ new Map()), U(this, Be, []), typeof t == "string") {
+    if (ve(this, ae), U(this, B, void 0), U(this, J, void 0), U(this, Je, void 0), U(this, te, null), U(this, S, void 0), U(this, Pe, /* @__PURE__ */ new Map()), U(this, Be, []), typeof t == "string") {
       var n = document.getElementById(t);
       n instanceof HTMLInputElement && (t = n);
     }
     if (!(t instanceof HTMLInputElement))
       throw new Error("Invalid input element");
-    if (I(q, this, t), I(S, this, Object.assign({
+    if (I(J, this, t), I(S, this, Object.assign({
       id: "radio_".concat(Date.now(), "_").concat(Math.random().toString(36).slice(2, 11)),
       checked: !1,
       disabled: !1,
@@ -1434,10 +1429,10 @@ class jt {
     l(S, this).disabled || !l(S, this).checked || (l(S, this).checked = !1, c(ae, this, bt).call(this), !t && c(ae, this, $t).call(this));
   }
   enable() {
-    l(S, this).disabled && (l(S, this).disabled = !1, l(q, this).disabled = !1, l(B, this).setAttribute("aria-disabled", "false"), l(S, this).checked ? l(B, this).tabIndex = 0 : c(ae, this, Vt).call(this), l(B, this).classList.remove("radio--disabled"));
+    l(S, this).disabled && (l(S, this).disabled = !1, l(J, this).disabled = !1, l(B, this).setAttribute("aria-disabled", "false"), l(S, this).checked ? l(B, this).tabIndex = 0 : c(ae, this, Vt).call(this), l(B, this).classList.remove("radio--disabled"));
   }
   disable() {
-    l(S, this).disabled || (l(S, this).disabled = !0, l(q, this).disabled = !0, l(B, this).setAttribute("aria-disabled", "true"), l(B, this).tabIndex = -1, l(B, this).classList.add("radio--disabled"));
+    l(S, this).disabled || (l(S, this).disabled = !0, l(J, this).disabled = !0, l(B, this).setAttribute("aria-disabled", "true"), l(B, this).tabIndex = -1, l(B, this).classList.add("radio--disabled"));
   }
   /** @param {string} label */
   setLabel(t) {
@@ -1466,13 +1461,13 @@ class jt {
   }
 }
 function Fi() {
-  l(q, this).type = "radio";
-  var e = l(q, this).getAttribute("id"), t = l(q, this).getAttribute("name"), i = l(q, this).getAttribute("value"), n = l(q, this).getAttribute("checked"), s = l(q, this).getAttribute("disabled");
-  e !== null ? l(S, this).id = e : l(S, this).id && l(q, this).setAttribute("id", l(S, this).id), t !== null ? l(S, this).name = t : l(S, this).name && l(q, this).setAttribute("name", l(S, this).name), i !== null ? l(S, this).value = i : l(S, this).value && l(q, this).setAttribute("value", l(S, this).value), n !== null ? l(S, this).checked = n === "true" : l(S, this).checked && l(q, this).setAttribute("checked", "true"), s !== null ? l(S, this).disabled = s === "true" : l(S, this).disabled && l(q, this).setAttribute("disabled", "true");
+  l(J, this).type = "radio";
+  var e = l(J, this).getAttribute("id"), t = l(J, this).getAttribute("name"), i = l(J, this).getAttribute("value"), n = l(J, this).getAttribute("checked"), s = l(J, this).getAttribute("disabled");
+  e !== null ? l(S, this).id = e : l(S, this).id && l(J, this).setAttribute("id", l(S, this).id), t !== null ? l(S, this).name = t : l(S, this).name && l(J, this).setAttribute("name", l(S, this).name), i !== null ? l(S, this).value = i : l(S, this).value && l(J, this).setAttribute("value", l(S, this).value), n !== null ? l(S, this).checked = n === "true" : l(S, this).checked && l(J, this).setAttribute("checked", "true"), s !== null ? l(S, this).disabled = s === "true" : l(S, this).disabled && l(J, this).setAttribute("disabled", "true");
 }
 function Bi() {
-  var e = l(q, this).parentNode, t = document.createDocumentFragment();
-  t.appendChild(l(B, this)), l(B, this).classList.add("radio-button-container"), l(B, this).setAttribute("role", "radio"), l(B, this).setAttribute("aria-checked", String(!!l(S, this).checked)), l(B, this).setAttribute("aria-disabled", String(!!l(S, this).disabled)), l(B, this).tabIndex = l(S, this).disabled ? -1 : 0, l(Je, this).className = "radio-visual", l(Je, this).setAttribute("aria-hidden", "true"), l(S, this).label && (I(te, this, document.createElement("label")), l(te, this).className = "i18n radio-label", l(te, this).htmlFor = String(l(S, this).id), l(te, this).textContent = l(S, this).label), l(S, this).disabled && l(B, this).classList.add("radio--disabled"), e && e.insertBefore(t, l(q, this)), l(B, this).appendChild(l(q, this)), l(B, this).appendChild(l(Je, this)), l(te, this) && l(B, this).appendChild(l(te, this)), c(ae, this, Vt).call(this);
+  var e = l(J, this).parentNode, t = document.createDocumentFragment();
+  t.appendChild(l(B, this)), l(B, this).classList.add("radio-button-container"), l(B, this).setAttribute("role", "radio"), l(B, this).setAttribute("aria-checked", String(!!l(S, this).checked)), l(B, this).setAttribute("aria-disabled", String(!!l(S, this).disabled)), l(B, this).tabIndex = l(S, this).disabled ? -1 : 0, l(Je, this).className = "radio-visual", l(Je, this).setAttribute("aria-hidden", "true"), l(S, this).label && (I(te, this, document.createElement("label")), l(te, this).className = "i18n radio-label", l(te, this).htmlFor = String(l(S, this).id), l(te, this).textContent = l(S, this).label), l(S, this).disabled && l(B, this).classList.add("radio--disabled"), e && e.insertBefore(t, l(J, this)), l(B, this).appendChild(l(J, this)), l(B, this).appendChild(l(Je, this)), l(te, this) && l(B, this).appendChild(l(te, this)), c(ae, this, Vt).call(this);
 }
 function Vt() {
   if (l(S, this).checked)
@@ -1504,7 +1499,7 @@ function Ri() {
   l(Pe, this).set("click", e), l(Pe, this).set("keydown", t), l(Pe, this).set("focus", i), l(Pe, this).set("blur", n), l(B, this).addEventListener("click", e), l(B, this).addEventListener("keydown", t), l(B, this).addEventListener("focus", i), l(B, this).addEventListener("blur", n);
 }
 function bt() {
-  l(B, this).setAttribute("aria-checked", String(!!l(S, this).checked)), l(B, this).classList.toggle("radio--checked", l(S, this).checked), l(q, this).checked = !!l(S, this).checked, c(ae, this, Vt).call(this);
+  l(B, this).setAttribute("aria-checked", String(!!l(S, this).checked)), l(B, this).classList.toggle("radio--checked", l(S, this).checked), l(J, this).checked = !!l(S, this).checked, c(ae, this, Vt).call(this);
 }
 function $t(e) {
   var t = this.getState(), i = {
@@ -2300,7 +2295,7 @@ class $e {
           continue;
         }
         var v = g;
-        if (h.indexOf("font-variant:small-caps") !== -1 ? v = "sc" : h.indexOf("text-decoration:underline") !== -1 && (v = "u"), c($e, this, Di)._.has(g))
+        if (h.indexOf("font-variant:small-caps") !== -1 ? v = "sc" : h.indexOf("text-decoration:underline") !== -1 && (v = "u"), c($e, this, Zi)._.has(g))
           if (o) {
             for (var b = n.length - 1; b >= 0; b--)
               if (n[b].tag === g) {
@@ -2327,7 +2322,7 @@ class $e {
     return i.formatting.sort((A, E) => A.start === E.start ? E.end - A.end : A.start - E.start), i;
   }
 }
-var Di = {
+var Zi = {
   _: /* @__PURE__ */ new Set(["i", "u", "b", "sc", "sup", "sub", "em", "div", "span"])
 };
 class se {
@@ -2419,7 +2414,7 @@ class se {
   }
 }
 var wt = /* @__PURE__ */ new WeakMap(), it = /* @__PURE__ */ new WeakMap(), St = /* @__PURE__ */ new WeakMap(), xt = /* @__PURE__ */ new WeakMap(), Ie = /* @__PURE__ */ new WeakMap(), nt = /* @__PURE__ */ new WeakMap(), M = /* @__PURE__ */ new WeakSet();
-class Zi {
+class qi {
   /**
    * @param {string} citPrefix
    * @param {string} citSuffix
@@ -2489,7 +2484,7 @@ class Zi {
   getAddinZoteroFields() {
     var t = this;
     return new Promise(function(i, n) {
-      c(M, t, qi).call(t).then(function(s) {
+      c(M, t, Di).call(t).then(function(s) {
         try {
           s.length && (s = s.filter(function(r) {
             return r.Value.indexOf(l(it, t)) !== -1 || r.Value.indexOf(l(Ie, t)) !== -1 || r.Value.indexOf(l(wt, t)) !== -1 || r.Value.indexOf(l(St, t)) !== -1;
@@ -2708,7 +2703,7 @@ function Ct(e) {
     }, !1, !1, t);
   });
 }
-function qi() {
+function Di() {
   return new Promise(function(e, t) {
     window.Asc.plugin.executeMethod("GetAllAddinFields", void 0, e);
   });
@@ -3464,7 +3459,7 @@ class Mt {
    * @returns {CSLCitation}
    */
   setDoNotUpdate() {
-    return c(Y, this, Ze).call(this, {
+    return c(Y, this, qe).call(this, {
       dontUpdate: !0
     }), this;
   }
@@ -3473,7 +3468,7 @@ class Mt {
    * @returns {CSLCitation}
    */
   setNoteIndex(t) {
-    return c(Y, this, Ze).call(this, {
+    return c(Y, this, qe).call(this, {
       noteIndex: t
     }), this;
   }
@@ -3482,7 +3477,7 @@ class Mt {
    * @returns
    */
   setPlainCitation(t) {
-    return c(Y, this, Ze).call(this, {
+    return c(Y, this, qe).call(this, {
       plainCitation: t
     }), this;
   }
@@ -3491,7 +3486,7 @@ class Mt {
    * @returns
    */
   setFormattedCitation(t) {
-    return c(Y, this, Ze).call(this, {
+    return c(Y, this, qe).call(this, {
       formattedCitation: t
     }), this;
   }
@@ -3540,7 +3535,7 @@ class Mt {
 }
 function en(e) {
   var t = this;
-  if (Object.hasOwnProperty.call(e, "schema"), Object.hasOwnProperty.call(e, "properties") && c(Y, this, Ze).call(this, e.properties), Object.hasOwnProperty.call(e, "manualOverride") && (this._manualOverride = e.manualOverride), !Object.hasOwnProperty.call(e, "citationItems"))
+  if (Object.hasOwnProperty.call(e, "schema"), Object.hasOwnProperty.call(e, "properties") && c(Y, this, qe).call(this, e.properties), Object.hasOwnProperty.call(e, "manualOverride") && (this._manualOverride = e.manualOverride), !Object.hasOwnProperty.call(e, "citationItems"))
     return console.error("citationItems is empty"), 0;
   var i = this._citationItems.map(function(n) {
     return n.id;
@@ -3576,7 +3571,7 @@ function Ht(e) {
   });
   return t.indexOf(e.id) >= 0 ? (this._citationItems[t.indexOf(e.id)] = e, this) : (this._citationItems.push(e), this);
 }
-function Ze(e) {
+function qe(e) {
   var t = this;
   return Object.keys(e).forEach(function(i) {
     Object.hasOwnProperty.call(e, i) && (t._properties[i] = e[i]);
@@ -3744,7 +3739,7 @@ class on {
    * @param {ZoteroSdk} sdk
    */
   constructor(t, i, n) {
-    ve(this, O), U(this, Ee, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = t, this._cslStylesManager = i, this._storage = new ji(), this._formatter, this.citationDocService = new Zi(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), I(Ee, this, new rn());
+    ve(this, O), U(this, Ee, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = t, this._cslStylesManager = i, this._storage = new ji(), this._formatter, this.citationDocService = new qi(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), I(Ee, this, new rn());
   }
   /** @returns {Promise<AddinFieldData | null>} */
   getCurrentField() {
@@ -3857,7 +3852,7 @@ class on {
           h === "numeric" && (t = !0);
         }
         var u = !!(i && i.skipCitations), g = !!(i && i.skipBibliography);
-        if (!u && typeof t == "boolean" && (a = yield c(O, n, De).call(n, s, t)), !g && r && a.push(yield c(O, n, rt).call(n, o, r)), a && a.length)
+        if (!u && typeof t == "boolean" && (a = yield c(O, n, Ze).call(n, s, t)), !g && r && a.push(yield c(O, n, rt).call(n, o, r)), a && a.length)
           return n.citationDocService.updateAddinFields(a);
       } catch (v) {
         throw v;
@@ -3878,7 +3873,7 @@ class on {
           bibField: s
         } = yield c(O, i, Le).call(i), r = n.length === 0;
         yield c(O, i, ke).call(i);
-        var o = yield c(O, i, De).call(i, n, !1);
+        var o = yield c(O, i, Ze).call(i, n, !1);
         if (o && o.length && (yield i.citationDocService.convertNotesStyle(o, t)), s) {
           var a = [yield c(O, i, rt).call(i, r, s)];
           yield i.citationDocService.updateAddinFields(a);
@@ -3902,7 +3897,7 @@ class on {
           bibField: r
         } = yield c(O, n, Le).call(n, t), o = s.length === 0;
         yield c(O, n, ke).call(n);
-        var a = yield c(O, n, De).call(n, s, !0);
+        var a = yield c(O, n, Ze).call(n, s, !0);
         if (i && a && a.length)
           return n.citationDocService.updateAddinFieldsInNotes(a);
         if (a && a.length)
@@ -3925,7 +3920,7 @@ class on {
           bibField: s
         } = yield c(O, i, Le).call(i), r = n.length === 0;
         yield c(O, i, ke).call(i);
-        var o = yield c(O, i, De).call(i, n, !0);
+        var o = yield c(O, i, Ze).call(i, n, !0);
         if (o && o.length && (t ? yield i.citationDocService.convertTextToNotes(o, t) : yield i.citationDocService.convertNotesToText(o)), s) {
           var a = [yield c(O, i, rt).call(i, r, s)];
           yield i.citationDocService.updateAddinFields(a);
@@ -3947,7 +3942,7 @@ class on {
           fieldsWithCitations: n
         } = yield c(O, i, Le).call(i);
         yield c(O, i, ke).call(i);
-        var s = yield c(O, i, De).call(i, n, !1, !0);
+        var s = yield c(O, i, Ze).call(i, n, !1, !0);
         if (!s || !s.length) return;
         yield i.citationDocService.convertNotesStyle(s, t);
       } catch (r) {
@@ -4163,7 +4158,7 @@ function rt(e, t) {
   }
   return t;
 }
-function De(e, t, i) {
+function Ze(e, t, i) {
   return Ut.apply(this, arguments);
 }
 function Ut() {
@@ -4347,10 +4342,10 @@ Te.prototype.deleteStyle = function(e) {
   var t = this.getStyleNames(), i = this._getStyles(), n = t.indexOf(e);
   return n === -1 || (t.splice(n, 1), i.splice(n, 1), localStorage.setItem(this._customStyleNamesKey, JSON.stringify(t)), localStorage.setItem(this._customStylesKey, JSON.stringify(i))), e;
 };
-function J(e) {
-  this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new Te(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._defaultStyles = ["american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature"], this._cache = {};
+function D(e) {
+  this._isOnlineAvailable = !1, this._isDesktopAvailable = !1, this._customStylesStorage = new Te(), this._STYLES_JSON_URL = "https://www.zotero.org/styles-files/styles.json", this._STYLES_JSON_LOCAL = "./resources/csl/styles.json", this._STYLES_URL = "https://www.zotero.org/styles/", this._STYLES_LOCAL = "./resources/csl/styles/", this._lastStyleKey = e, this._lastNotesStyleKey = "zoteroNotesStyleId", this._lastFormatKey = "zoteroFormatId", this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography", this._cachedStylePrefix = "zoteroCachedStyle_", this._defaultStyles = ["american-anthropological-association", "american-medical-association", "american-political-science-association", "american-sociological-association", "apa", "chicago-author-date", "chicago-notes-bibliography", "harvard-cite-them-right", "ieee", "modern-language-association", "nature"], this._cache = {};
 }
-J.prototype.addCustomStyle = function(e) {
+D.prototype.addCustomStyle = function(e) {
   var t = this;
   return new Promise(function(i, n) {
     var s = e.name.toLowerCase();
@@ -4361,7 +4356,7 @@ J.prototype.addCustomStyle = function(e) {
     });
   });
 };
-J.prototype.getLastUsedFormat = function() {
+D.prototype.getLastUsedFormat = function() {
   var e = localStorage.getItem(this._lastFormatKey);
   switch (e) {
     case "note":
@@ -4373,19 +4368,19 @@ J.prototype.getLastUsedFormat = function() {
   }
   return "numeric";
 };
-J.prototype.getLastUsedNotesStyle = function() {
+D.prototype.getLastUsedNotesStyle = function() {
   var e = localStorage.getItem(this._lastNotesStyleKey);
   return e === "footnotes" || e === "endnotes" ? e : "footnotes";
 };
-J.prototype.getLastUsedStyleId = function() {
+D.prototype.getLastUsedStyleId = function() {
   var e = localStorage.getItem(this._lastStyleKey);
   return e || null;
 };
-J.prototype.getLastUsedStyleIdOrDefault = function() {
+D.prototype.getLastUsedStyleIdOrDefault = function() {
   var e = localStorage.getItem(this._lastStyleKey);
   return e || "ieee";
 };
-J.prototype.getStyle = function(e) {
+D.prototype.getStyle = function(e) {
   var t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : !0, i = this;
   return Promise.resolve(e).then(function(n) {
     if (i._cache[n])
@@ -4396,10 +4391,14 @@ J.prototype.getStyle = function(e) {
     var r = i._STYLES_LOCAL + n + ".csl";
     if (i._isOnlineAvailable)
       r = i._STYLES_URL + n;
-    else if (i._defaultStyles.indexOf(n) === -1)
-      throw "The style is not available in the local version of the plugin.";
-    return fetch(r).then(function(o) {
-      return o.text();
+    else if (i._defaultStyles.indexOf(n) === -1) {
+      var o = i._getCachedStyle(n);
+      if (!o)
+        throw "The style is not available in the local version of the plugin.";
+      return o;
+    }
+    return fetch(r).then(function(a) {
+      return a.text();
     });
   }).then(function(n) {
     if (n && !i._isValidCSL(n) && i._isOnlineAvailable) {
@@ -4415,42 +4414,46 @@ J.prototype.getStyle = function(e) {
       content: n,
       styleFormat: s
     };
-    return n && t && i._saveLastUsedStyle(e, n, s), r;
+    return n && t && i._saveLastUsedStyle(e, n, s), n && i._isOnlineAvailable && i._defaultStyles.indexOf(e) === -1 && i._saveCachedStyle(e, n), r;
   });
 };
-J.prototype.getStylesInfo = function() {
+D.prototype.getStylesInfo = function() {
   var e = this;
   return Promise.all([this._getStylesJson(), this._customStylesStorage.getStylesInfo()]).then(function(t) {
     var i = e.getLastUsedStyleId() || "ieee", n = [], s = e._customStylesStorage.getStyleNames(), r = t[0], o = t[1];
-    return e._isDesktopAvailable && !e._isOnlineAvailable && (r = r.filter(function(a) {
-      return e._defaultStyles.indexOf(a.name) >= 0 || a.name == i;
-    })), o.forEach(function(a) {
-      n.push(a), e._defaultStyles.indexOf(a.name) === -1 && e._defaultStyles.push(a.name);
-    }), r.forEach(function(a) {
-      s.indexOf(a.name) === -1 && n.push(a);
-    }), n.sort((a, h) => a.name.localeCompare(h.name)), n;
+    if (!e._isOnlineAvailable) {
+      var a = e._getCachedStyleNames();
+      r = r.filter(function(h) {
+        return e._defaultStyles.indexOf(h.name) >= 0 || h.name == i || a.indexOf(h.name) >= 0;
+      });
+    }
+    return o.forEach(function(h) {
+      n.push(h), e._defaultStyles.indexOf(h.name) === -1 && e._defaultStyles.push(h.name);
+    }), r.forEach(function(h) {
+      s.indexOf(h.name) === -1 && n.push(h);
+    }), n.sort((h, u) => h.name.localeCompare(u.name)), n;
   });
 };
-J.prototype._getStylesJson = function() {
+D.prototype._getStylesJson = function() {
   var e = this._STYLES_JSON_LOCAL;
   return this._isOnlineAvailable && (e = this._STYLES_JSON_URL), fetch(e).then(function(t) {
     return t.json();
   });
 };
-J.prototype.cached = function(e) {
+D.prototype.cached = function(e) {
   return Object.hasOwnProperty.call(this._cache, e) ? this._cache[e] : null;
 };
-J.prototype.isLastUsedStyleContainBibliography = function() {
+D.prototype.isLastUsedStyleContainBibliography = function() {
   var e = localStorage.getItem(this._lastUsedStyleContainBibliographyKey);
   return e !== "false";
 };
-J.prototype.isStyleDefault = function(e) {
+D.prototype.isStyleDefault = function(e) {
   return this._defaultStyles.indexOf(e) >= 0;
 };
-J.prototype._isValidCSL = function(e) {
+D.prototype._isValidCSL = function(e) {
   return e.indexOf("<?xml") > -1 && e.indexOf("<style") > -1 && e.indexOf("<macro") > -1 && e.indexOf("citation") > -1;
 };
-J.prototype._readCSLFile = function(e) {
+D.prototype._readCSLFile = function(e) {
   var t = this;
   return new Promise(function(i, n) {
     var s = new FileReader();
@@ -4466,18 +4469,38 @@ J.prototype._readCSLFile = function(e) {
     }, s.readAsText(e);
   });
 };
-J.prototype._saveLastUsedStyle = function(e, t, i) {
+D.prototype._saveCachedStyle = function(e, t) {
+  this._cache[e] = t;
+  try {
+    localStorage.setItem(this._cachedStylePrefix + e, t);
+  } catch {
+  }
+};
+D.prototype._getCachedStyle = function(e) {
+  if (this._cache[e])
+    return this._cache[e];
+  var t = localStorage.getItem(this._cachedStylePrefix + e);
+  return t && (this._cache[e] = t), t;
+};
+D.prototype._getCachedStyleNames = function() {
+  for (var e = [], t = 0; t < localStorage.length; t++) {
+    var i = localStorage.key(t);
+    i && i.indexOf(this._cachedStylePrefix) === 0 && e.push(i.substring(this._cachedStylePrefix.length));
+  }
+  return e;
+};
+D.prototype._saveLastUsedStyle = function(e, t, i) {
   this._cache[e] = t, localStorage.setItem(this._lastStyleKey, e), localStorage.setItem(this._lastFormatKey, i);
   var n = Qe.isStyleContainBibliography(t);
   localStorage.setItem(this._lastUsedStyleContainBibliographyKey, n.toString());
 };
-J.prototype.saveLastUsedNotesStyle = function(e) {
+D.prototype.saveLastUsedNotesStyle = function(e) {
   localStorage.setItem(this._lastNotesStyleKey, e);
 };
-J.prototype.setDesktopApiAvailable = function(e) {
+D.prototype.setDesktopApiAvailable = function(e) {
   this._isDesktopAvailable = e;
 };
-J.prototype.setRestApiAvailable = function(e) {
+D.prototype.setRestApiAvailable = function(e) {
   this._isOnlineAvailable = e;
 };
 function xe() {
@@ -4514,7 +4537,7 @@ xe.prototype.setDesktopApiAvailable = function(e) {
 xe.prototype.setRestApiAvailable = function(e) {
   this._isOnlineAvailable = e;
 };
-function D(e, t, i) {
+function Z(e, t, i) {
   if (this._router = e, this._displayNoneClass = t, this._sdk = i || null, this._saveBtn = new j("saveSettingsBtn", {
     variant: "primary"
   }), this._cancelBtn = new j("cancelBtn", {
@@ -4535,7 +4558,7 @@ function D(e, t, i) {
     throw new Error("cslFileInput not found");
   this._languageSelect = new Ne("styleLangList", {
     placeholder: "Select language"
-  }), this._cslStylesManager = new J("zoteroStyleId"), this._localesManager = new xe(), this._selectLists = [], this._onChangeState = function(s, r) {
+  }), this._cslStylesManager = new D("zoteroStyleId"), this._localesManager = new xe(), this._selectLists = [], this._onChangeState = function(s, r) {
   }, this._styleMessage = new we("styleMessage", {
     type: "error"
   }), this._langMessage = new we("langMessage", {
@@ -4565,40 +4588,40 @@ function D(e, t, i) {
     localStorage.setItem("zoteroAutoUpdateBib", String(this.checked)), n._somethingWasChanged();
   }));
 }
-D.prototype.getLocalesManager = function() {
+Z.prototype.getLocalesManager = function() {
   return this._localesManager;
 };
-D.prototype.getStyleManager = function() {
+Z.prototype.getStyleManager = function() {
   return this._cslStylesManager;
 };
-D.prototype.getAutoUpdateCitations = function() {
+Z.prototype.getAutoUpdateCitations = function() {
   return localStorage.getItem("zoteroAutoUpdateCitations") !== "false";
 };
-D.prototype.getAutoUpdateBibliography = function() {
+Z.prototype.getAutoUpdateBibliography = function() {
   return localStorage.getItem("zoteroAutoUpdateBib") !== "false";
 };
-D.prototype.getLocale = function() {
+Z.prototype.getLocale = function() {
   return this._localesManager.getLocale();
 };
-D.prototype.getLastUsedStyleId = function() {
+Z.prototype.getLastUsedStyleId = function() {
   return this._cslStylesManager.getLastUsedStyleId();
 };
-D.prototype.init = function() {
+Z.prototype.init = function() {
   var e = this._cslStylesManager.getLastUsedStyleId() || "ieee", t = this._localesManager.getLastUsedLanguage();
   this._addEventListeners(), this._languageSelect.addItems(this._LANGUAGES, t);
   var i = [this._onStyleChange(e), this._localesManager.loadLocale(t), this._loadStyles()];
   return Promise.all(i);
 };
-D.prototype.onChangeState = function(e) {
+Z.prototype.onChangeState = function(e) {
   this._onChangeState = e;
 };
-D.prototype.setDesktopApiAvailable = function(e) {
+Z.prototype.setDesktopApiAvailable = function(e) {
   this._desktopAvailable = e, this._localesManager.setDesktopApiAvailable(e), this._cslStylesManager.setDesktopApiAvailable(e);
 };
-D.prototype.setRestApiAvailable = function(e) {
+Z.prototype.setRestApiAvailable = function(e) {
   this._onlineAvailable = e, this._localesManager.setRestApiAvailable(e), this._cslStylesManager.setRestApiAvailable(e);
 };
-D.prototype._addEventListeners = function() {
+Z.prototype._addEventListeners = function() {
   var e = this;
   this._saveBtn.subscribe(function(t) {
     if (t.type === "button:click") {
@@ -4704,13 +4727,13 @@ D.prototype._addEventListeners = function() {
     }
   });
 };
-D.prototype._hideAllMessages = function() {
+Z.prototype._hideAllMessages = function() {
   this._langMessage.close(), this._styleMessage.close();
 };
-D.prototype._hide = function() {
+Z.prototype._hide = function() {
   this._router.openMain();
 };
-D.prototype.show = function() {
+Z.prototype.show = function() {
   this._stateSettings = {
     language: this._localesManager.getLastUsedLanguage(),
     style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
@@ -4718,7 +4741,7 @@ D.prototype.show = function() {
     styleFormat: this._cslStylesManager.getLastUsedFormat()
   }, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check() : this._footNotes.check(), this._updateConnectionUI();
 };
-D.prototype._loadStyles = function() {
+Z.prototype._loadStyles = function() {
   var e = this;
   return this._cslStylesManager.getStylesInfo().then(
     /** @param {Array<StyleInfo>} stylesInfo*/
@@ -4729,7 +4752,7 @@ D.prototype._loadStyles = function() {
     console.error(t);
   });
 };
-D.prototype._addStylesToList = function(e) {
+Z.prototype._addStylesToList = function(e) {
   var t = this, i = this._cslStylesManager.getLastUsedStyleIdOrDefault(), n = e.map(function(r) {
     return [r.name, r.title];
   }), s = n.filter(function(r) {
@@ -4737,10 +4760,10 @@ D.prototype._addStylesToList = function(e) {
   });
   this._styleSelect.addItems(s, i), this._styleSelectListOther.addItems(n, i);
 };
-D.prototype._somethingWasChanged = function() {
+Z.prototype._somethingWasChanged = function() {
   this._saveBtn.enable();
 };
-D.prototype._onStyleChange = function(e, t) {
+Z.prototype._onStyleChange = function(e, t) {
   var i = this;
   return t && i._showLoader(), i._cslStylesManager.getStyle(e, !t).then(function(n) {
     var s = n.styleFormat;
@@ -4749,20 +4772,20 @@ D.prototype._onStyleChange = function(e, t) {
     throw console.error(n), typeof n == "string" && i._styleMessage.show(m(n)), t && i._hideLoader(), n;
   });
 };
-D.prototype._showLoader = function() {
+Z.prototype._showLoader = function() {
   this._cancelBtn.disable(), this._saveBtn.disable(), this._styleSelect.disable(), this._languageSelect.disable();
 };
-D.prototype._hideLoader = function() {
+Z.prototype._hideLoader = function() {
   this._cancelBtn.enable(), this._saveBtn.enable(), this._styleSelect.enable(), this._languageSelect.enable();
 };
-D.prototype._updateConnectionUI = function() {
+Z.prototype._updateConnectionUI = function() {
   this._settingsApiKeyWrapper && this._settingsApiKeyWrapper.classList.add("hidden"), this._settingsApiKeyMessage.close(), this._settingsLocalMessage.close();
   var e = this._sdk && this._sdk.getIsOnlineAvailable();
   this._connectionStatus && (e ? this._connectionStatus.textContent = m("Connected via API Key") : this._connectionStatus.textContent = m("Connected to Local Zotero"));
   var t = document.getElementById("switchToApiBtn"), i = document.getElementById("switchToLocalBtn");
   e ? (t && (t.classList.remove("hidden"), t.textContent = m("Log out from API Key")), i && this._desktopAvailable ? (i.classList.remove("hidden"), i.textContent = m("Connect to Local Zotero")) : i && i.classList.add("hidden")) : (i && (i.classList.remove("hidden"), i.textContent = m("Log out from Local Zotero")), t && this._onlineAvailable ? (t.classList.remove("hidden"), t.textContent = m("Connect with API Key")) : t && t.classList.add("hidden"));
 };
-D.prototype.onReconnect = function(e) {
+Z.prototype.onReconnect = function(e) {
   this._onReconnect = e;
 };
 function ge(e, t) {
@@ -4800,6 +4823,9 @@ ge.prototype.init = function() {
       return;
     } else if (r.desktop && r.hasPermission) {
       e._sdk.setIsOnlineAvailable(!1), e._hide(), e._hideAllMessages(), e._onAuthorized(r);
+      return;
+    } else if (r.hasKey && !r.online && !r.desktop) {
+      e._sdk.setIsOnlineAvailable(!1), e._hide(!0), e._hideAllMessages(), e._onAuthorized(r);
       return;
     }
   });
@@ -4980,10 +5006,10 @@ Ge.prototype._selectedGroupsWatcher = function(e, t) {
   });
 };
 var fn = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]];
-function Z(e, t, i) {
+function q(e, t, i) {
   this._displayNoneClass = e, this._items = {}, this._html = {}, this._checks = {}, this._orderedIds = [], this._docRoots = {}, this._reorderBtns = {}, this._cancelSelectBtn = document.getElementById("cancelSelectBtn"), this._docsHolder = document.getElementById("docsHolder"), this._nothingFound = document.getElementById("nothingFound"), this._docsThumb = document.getElementById("docsThumb"), this._selectedWrapper = document.getElementById("selectedWrapper"), this._selectedHolder = document.getElementById("selectedHolder"), this._selectedInfo = document.getElementById("selectedInfo"), this._selectedCount = document.getElementById("selectedCount"), this._selectedThumb = document.getElementById("selectedThumb"), this._selectedHolder && this._selectedThumb && (this._selectedScroller = this._initScrollBox(this._selectedHolder, this._selectedThumb, 20)), this._docsHolder && this._docsThumb && (this._docsScroller = this._initScrollBox(this._docsHolder, this._docsThumb, 40, this._checkDocsScroll.bind(this))), this._lastSearch = null, this._subscribers = [], this._fShouldLoadMore = i, this._fLoadMore = t, this._loadTimeout, this._editMode = !1, this._init();
 }
-Z.prototype._init = function() {
+q.prototype._init = function() {
   var e = this;
   this._cancelSelectBtn && (this._cancelSelectBtn.onclick = function(t) {
     var i = [];
@@ -5002,16 +5028,16 @@ Z.prototype._init = function() {
     }
   });
 };
-Z.prototype.clearLibrary = function() {
+q.prototype.clearLibrary = function() {
   this._nothingFound && this._nothingFound.classList.add(this._displayNoneClass);
   for (var e = this._docsHolder; e && e.lastChild; )
     e.removeChild(e.lastChild);
   e && (e.scrollTop = 0), this._docRoots = {}, this._reorderBtns = {}, this._docsScroller.onscroll();
 };
-Z.prototype.displayNothingFound = function() {
+q.prototype.displayNothingFound = function() {
   this.clearLibrary(), this._nothingFound && this._nothingFound.classList.remove(this._displayNoneClass);
 };
-Z.prototype.displaySearchItems = function(e, t, i) {
+q.prototype.displaySearchItems = function(e, t, i) {
   var n = this, s = this._docsHolder;
   this._lastSearch = i;
   var r = 0;
@@ -5028,17 +5054,17 @@ Z.prototype.displaySearchItems = function(e, t, i) {
     this._docsScroller.onscroll(), o(r);
   });
 };
-Z.prototype.getSelectedItems = function() {
+q.prototype.getSelectedItems = function() {
   var e = Object.assign({}, this._items || {});
   return e;
 };
-Z.prototype.removeItems = function(e) {
+q.prototype.removeItems = function(e) {
   var t = this;
   e.forEach(function(i) {
     t._removeSelected(i);
   });
 };
-Z.prototype.subscribe = function(e) {
+q.prototype.subscribe = function(e) {
   var t = this;
   return this._subscribers.push(e), {
     unsubscribe: function() {
@@ -5048,7 +5074,7 @@ Z.prototype.subscribe = function(e) {
     }
   };
 };
-Z.prototype._buildDocElement = function(e) {
+q.prototype._buildDocElement = function(e) {
   var t = this;
   this._items[e.id] && (e = this._items[e.id]);
   var i = document.createElement("div");
@@ -5106,7 +5132,7 @@ Z.prototype._buildDocElement = function(e) {
     w.type === "checkbox:change" && (w.detail.checked ? t._addSelected(e, g, i) : t._removeSelected(e.id));
   }), i;
 };
-Z.prototype._buildCitationParams = function(e) {
+q.prototype._buildCitationParams = function(e) {
   var t = e.label || localStorage.getItem("selectedLocator") || "page";
   e.label = t;
   var i = document.createDocumentFragment(), n = document.createElement("div"), s = document.createElement("input"), r = document.createElement("input"), o = document.createElement("div"), a = document.createElement("div"), h = document.createElement("input"), u = document.createElement("div"), g = document.createElement("input");
@@ -5152,7 +5178,7 @@ Z.prototype._buildCitationParams = function(e) {
     w.type === "checkbox:change" && (e["suppress-author"] = w.detail.checked);
   }), i;
 };
-Z.prototype._buildSelectedElement = function(e) {
+q.prototype._buildSelectedElement = function(e) {
   var t = this, i = document.createElement("div");
   i.classList.add("selDoc"), i.setAttribute("data-id", String(e.id));
   var n = document.createElement("span");
@@ -5172,10 +5198,10 @@ Z.prototype._buildSelectedElement = function(e) {
     t._removeSelected(e.id);
   }, o.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0718 4.6333L11.564 5.14404L10.5483 6.1665L8.70459 8.02002L10.3862 9.7124L11.4829 10.8149L12.0308 11.3667L11.3218 12.0718L10.7729 11.52L9.67725 10.4175L7.99951 8.729L6.32275 10.4165L5.22705 11.52L4.67822 12.0718L3.96924 11.3667L4.51709 10.8149L5.61377 9.7124L7.29443 8.02002L5.45166 6.1665L4.43604 5.14404L3.92822 4.6333L4.63721 3.92822L5.14502 4.43896L6.16162 5.46143L7.99951 7.31104L9.83838 5.46143L10.855 4.43896L11.3628 3.92822L12.0718 4.6333Z" fill="currentColor" fill-opacity="0.8"/></svg>', i.appendChild(o), i;
 };
-Z.prototype._addSelected = function(e, t, i) {
+q.prototype._addSelected = function(e, t, i) {
   this._items[e.id] = e, this._checks[e.id] = t, this._orderedIds.push(e.id), this._reorderBtns[e.id] && (this._reorderBtns[e.id].style.display = ""), this._docsScroller.onscroll(), this._checkSelected();
 };
-Z.prototype._checkDocsScroll = function(e, t) {
+q.prototype._checkDocsScroll = function(e, t) {
   var i = this;
   if (this._fShouldLoadMore(e)) {
     if (this._loadTimeout && clearTimeout(this._loadTimeout), !this._lastSearch.obj && !this._lastSearch.text.trim() && !this._lastSearch.groups.length) return;
@@ -5184,7 +5210,7 @@ Z.prototype._checkDocsScroll = function(e, t) {
     }, 500);
   }
 };
-Z.prototype._initScrollBox = function(e, t, i, n) {
+q.prototype._initScrollBox = function(e, t, i, n) {
   var s = {};
   return s.onscroll = this._checkScroll(e, t, i, n), e.onwheel = function(r) {
     e.scrollTop += r.deltaY > 10 || r.deltaY < -10 ? r.deltaY : r.deltaY * 20, s.onscroll();
@@ -5201,7 +5227,7 @@ Z.prototype._initScrollBox = function(e, t, i, n) {
     s.onscroll();
   }), s;
 };
-Z.prototype._checkScroll = function(e, t, i, n) {
+q.prototype._checkScroll = function(e, t, i, n) {
   var s = this._displayNoneClass;
   return function() {
     if (e.scrollHeight <= e.clientHeight)
@@ -5216,31 +5242,31 @@ Z.prototype._checkScroll = function(e, t, i, n) {
     n && n(e, t);
   };
 };
-Z.prototype._removeSelected = function(e) {
+q.prototype._removeSelected = function(e) {
   delete this._items[e], delete this._html[e], this._checks[e] && (this._checks[e].uncheck(!0), delete this._checks[e]);
   var t = this._orderedIds.indexOf(e);
   t !== -1 && this._orderedIds.splice(t, 1), this._reorderBtns[e] && (this._reorderBtns[e].style.display = "none"), this._docsScroller.onscroll(), this._checkSelected();
 };
-Z.prototype._checkSelected = function() {
+q.prototype._checkSelected = function() {
   var e = this.count();
   this._selectedWrapper && this._selectedWrapper.classList.add(this._displayNoneClass), this._selectedInfo && this._selectedInfo.classList.add(this._displayNoneClass), this._subscribers.forEach(function(t) {
     t(e);
   });
 };
-Z.prototype.count = function() {
+q.prototype.count = function() {
   var e = 0;
   for (var t in this._items) e++;
   return e;
 };
-Z.prototype.setEditMode = function(e) {
+q.prototype.setEditMode = function(e) {
   this._editMode = e, this._selectedWrapper && (e ? this._selectedWrapper.classList.add("edit-mode") : this._selectedWrapper.classList.remove("edit-mode"));
 };
-Z.prototype.addPreselectedItem = function(e) {
+q.prototype.addPreselectedItem = function(e) {
   this._items[e.id] = e, this._orderedIds.push(e.id);
   var t = this._buildDocElement(e);
   this._docsHolder && this._docsHolder.appendChild(t), this._docsScroller.onscroll(), this._checkSelected();
 };
-Z.prototype._moveItem = function(e, t) {
+q.prototype._moveItem = function(e, t) {
   var i = this._orderedIds.indexOf(e);
   if (i !== -1) {
     var n = i + t;
@@ -5256,7 +5282,7 @@ Z.prototype._moveItem = function(e, t) {
     }
   }
 };
-Z.prototype.getSelectedItemsOrdered = function() {
+q.prototype.getSelectedItemsOrdered = function() {
   for (var e = [], t = 0; t < this._orderedIds.length; t++) {
     var i = this._orderedIds[t];
     this._items[i] && e.push(this._items[i]);
@@ -5277,7 +5303,7 @@ Z.prototype.getSelectedItemsOrdered = function() {
     var d = document.getElementById("mainState");
     if (!d)
       throw new Error("mainState not found");
-    o = new Ge(), a = new Z(e, bi, wi), b = new j("saveAsTextBtn", {
+    o = new Ge(), a = new q(e, bi, wi), b = new j("saveAsTextBtn", {
       variant: "secondary"
     }), x = new j("insertLinkBtn", {
       disabled: !0
@@ -5300,7 +5326,7 @@ Z.prototype.getSelectedItemsOrdered = function() {
   window.Asc.plugin.init = function() {
     pe.show(), W(), t = new Ke(), i = new V();
     var p = new ge(t, i);
-    n = new D(t, e, i), s = new on(n.getLocalesManager(), n.getStyleManager(), i);
+    n = new Z(t, e, i), s = new on(n.getLocalesManager(), n.getStyleManager(), i);
     var d = !1;
     yi(), n.onReconnect(function() {
       ie().catch(function(f) {
@@ -5537,7 +5563,7 @@ Z.prototype.getSelectedItemsOrdered = function() {
     })());
   }
   Asc.plugin.onThemeChanged = function(p) {
-    window.Asc.plugin.onThemeChangedBase(p), qt.fixThemeForIE(p), qt.addStylesForComponents(p);
+    window.Asc.plugin.onThemeChangedBase(p), Dt.fixThemeForIE(p), Dt.addStylesForComponents(p);
     var d = "";
     d += ".link, .link:visited, .link:hover { color : " + window.Asc.plugin.theme["text-normal"] + ` !important;}
 `, d += ".doc { border-color: " + p["border-regular-control"] + "; background-color: " + p["background-normal"] + `; }
