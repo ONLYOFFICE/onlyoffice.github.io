@@ -143,7 +143,8 @@ window.Asc = {
 	}
 };
 
-const pos = location.href.indexOf('store/index.html'); // position for make substring
+let pos = location.href.indexOf('store/index.html'); // position for make substring
+if (pos === -1) pos = location.href.indexOf('store/');  // fallback for Cloudflare Pages (strips index.html)
 const ioUrl = location.href.substring(0, pos);         // real IO URL
 const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
