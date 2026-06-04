@@ -77,7 +77,7 @@ class CitationDocService {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: fieldId,
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: formattingPositions.text,
             };
 
@@ -87,15 +87,21 @@ class CitationDocService {
                 }).then((addedField) => {
                     fieldId = addedField?.FieldId || "";
                     if (!formattingPositions.formatting.length) return;
+                    if (fieldId) {
+                        return this.#selectField(fieldId).then(() =>
+                            CslDocFormatter.formatAfterUpdate(fieldId, formattingPositions)
+                        );
+                    }
                     return CslDocFormatter.formatAfterInsert(
                         formattingPositions.formatting,
+                        formattingPositions.text,
                     );
                 }).then(() => fieldId);
         } else {
             /** @type {AddinFieldData} */
             const field = {
                 FieldId: "",
-                Value: this.#bibPrefix + value + this.#bibSuffix,
+                Value: this.#bibPrefix + " " + value + " " + this.#bibSuffix,
                 Content: " ",
             };
 
@@ -114,19 +120,31 @@ class CitationDocService {
         /** @type {AddinFieldData} */
         const field = {
             FieldId: "",
-            Value: this.#citPrefix + " " + this.#citSuffix + value,
+            Value: this.#citPrefix + " " + this.#citSuffix + " " + value,
             Content: formattingPositions.text,
         };
-        const bHasNotes = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1)
+        const wantsNote = !!(notesStyle && ["footnotes", "endnotes"].indexOf(notesStyle) !== -1);
+        const alreadyInNote = wantsNote ? await this.#isInNote() : false;
+        const bHasNotes = wantsNote && !alreadyInNote;
         if (bHasNotes) {
             await this.#addNote(notesStyle);
         }
 
         await this.#addAddinField(field);
 
-        if (!formattingPositions.formatting.length) return bHasNotes;
-        await CslDocFormatter.formatAfterInsert(formattingPositions.formatting);
-        
+        if (formattingPositions.formatting.length) {
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(
+                    addedField.FieldId,
+                    formattingPositions,
+                );
+            } else {
+                await CslDocFormatter.formatAfterInsert(formattingPositions.formatting, formattingPositions.text);
+            }
+        }
+
         if (bHasNotes) {
             await this.#selectFieldReference();
         }
@@ -233,6 +251,34 @@ class CitationDocService {
     }
 
     /**
+     * Update fields that are already inside notes without re-selecting addin fields.
+     * SelectAddinField is unreliable for notes and can move the viewport unexpectedly.
+     * @param {Array<AddinFieldData>} fields
+     * @returns {Promise<string[]>}
+     */
+    async updateAddinFieldsInNotes(fields) {
+        const fieldIds = fields.map(field => field.FieldId);
+        const formats = this.#makeFormattingPositions(fields);
+
+        await new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "UpdateAddinFields",
+                [fields],
+                resolve,
+            );
+        });
+
+        if (!formats.size) return fieldIds;
+        for (const [fieldId, formattingPositions] of formats) {
+            await CslDocFormatter.formatAfterUpdate(
+                fieldId,
+                formattingPositions,
+            );
+        }
+        return fieldIds;
+    }
+
+    /**
      * @param {Array<AddinFieldData>} fields
      * @returns {Promise<void>}
      */
@@ -255,7 +301,13 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
     }
 
@@ -278,7 +330,13 @@ class CitationDocService {
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
     }
 
@@ -290,6 +348,7 @@ class CitationDocService {
     async convertNotesStyle(fields, notesStyle) {
         /** @type {Array<AddinFieldData>} */
         const editedFields = [];
+
         const formats = this.#makeFormattingPositions(fields);
 
         for (let i = 0; i < fields.length; i++) {
@@ -304,15 +363,26 @@ class CitationDocService {
 
             const selectFieldResult = await this.#selectField(field.FieldId);
             if (!selectFieldResult) continue;
-            const isReferenceSelected = await this.#selectFieldReference();
-            if (!isReferenceSelected) continue;
-            await this.#removeSuperscript();
-            await this.#removeSelectedContent();
+
+            const isInNote = await this.#isInNote();
+            if (isInNote) {
+                // Field is already in a footnote/endnote - update in place
+                editedFields.push(field);
+                continue;
+            }
+
+            // Field is inline - needs to be moved into a note
             await this.#addNote(notesStyle);
             await this.#addAddinField(field);
             const formatting = formats.get(field.FieldId);
             if (!formatting) continue;
-            await CslDocFormatter.formatAfterInsert(formatting.formatting);
+            const addedField = await this.getCurrentField();
+            if (addedField && addedField.FieldId) {
+                await this.#selectField(addedField.FieldId);
+                await CslDocFormatter.formatAfterUpdate(addedField.FieldId, formatting);
+            } else {
+                await CslDocFormatter.formatAfterInsert(formatting.formatting, formatting.text);
+            }
         }
         if (editedFields.length) {
             await new Promise(function (resolve) {
@@ -322,6 +392,17 @@ class CitationDocService {
                     resolve,
                 );
             });
+            // Apply formatting (italic, bold, etc.) after updating fields
+            for (const field of editedFields) {
+                const formatting = formats.get(field.FieldId);
+                if (!formatting) continue;
+                const selectFieldResult = await this.#selectField(field.FieldId);
+                if (!selectFieldResult) continue;
+                await CslDocFormatter.formatAfterUpdate(
+                    field.FieldId,
+                    formatting,
+                );
+            }
         }
     }
 
@@ -438,6 +519,22 @@ class CitationDocService {
     #pasteHtml(html) {
         return new Promise(function (resolve) {
             window.Asc.plugin.executeMethod("PasteHtml", [html], resolve);
+        });
+    }
+
+    /** @returns {Promise<boolean>} */
+    #isInNote() {
+        return new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const note = doc.GetCurrentFootEndnote();
+                    return !!note;
+                },
+                false,
+                true,
+                (result) => resolve(!!result),
+            );
         });
     }
 

@@ -29,9 +29,3 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
-const zoteroEnvironment = {
-    desktopApiUrl: "http://127.0.0.1:23119/api/",
-};
-
-export { zoteroEnvironment };

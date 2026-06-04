@@ -38,6 +38,9 @@
 import { zoteroEnvironment } from "./zotero-environment";
 import { RateLimitedFetcher } from "./zotero-api-fetcher";
 
+// Online REST API URL - used when user is connected via API key (optional, only needed for online mode)
+var REST_API_URL = "https://api.zotero.org/";
+
 const ZoteroSdk = function () {
     this._apiKey = null;
     this._userId = 0;
@@ -72,7 +75,7 @@ ZoteroSdk.prototype.API_PATHS = {
  */
 ZoteroSdk.prototype._getBaseUrl = function () {
     return this._isOnlineAvailable
-        ? zoteroEnvironment.restApiUrl
+        ? REST_API_URL
         : zoteroEnvironment.desktopApiUrl;
 };
 
@@ -476,6 +479,14 @@ ZoteroSdk.prototype.getUserId = function () {
  */
 ZoteroSdk.prototype.setIsOnlineAvailable = function (isOnline) {
     this._isOnlineAvailable = isOnline;
+};
+
+/**
+ * Check if using online API
+ * @returns {boolean}
+ */
+ZoteroSdk.prototype.getIsOnlineAvailable = function () {
+    return this._isOnlineAvailable;
 };
 
 export { ZoteroSdk };

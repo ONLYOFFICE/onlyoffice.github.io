@@ -406,11 +406,13 @@ class SelectBox {
 
         var filteredItems = this._items;
         if (searchTerm) {
+            var searchWords = searchTerm.split(/\s+/).filter(Boolean);
             filteredItems = filteredItems.filter(function (item) {
-                return (
-                    item !== null &&
-                    item.text.toLowerCase().indexOf(searchTerm) !== -1
-                );
+                if (item === null) return false;
+                var text = item.text.toLowerCase();
+                return searchWords.every(function (word) {
+                    return text.indexOf(word) !== -1;
+                });
             });
         }
 

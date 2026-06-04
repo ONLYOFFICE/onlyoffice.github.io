@@ -41,6 +41,9 @@ import { zoteroEnvironment } from "./zotero-environment";
  * @typedef {import('./zotero').ZoteroSdk} ZoteroSdk
  */
 
+// Online API URL - only used when user has stored credentials and desktop is unavailable
+var REST_API_URL = "https://api.zotero.org/";
+
 var ZoteroApiChecker = {
     _done: false,
     _desktop: false,
@@ -128,10 +131,11 @@ var ZoteroApiChecker = {
     _checkApiAvailable: function (sdk) {
         const self = this;
         return Promise.all([
-            fetch(zoteroEnvironment.restApiUrl, {
-                method: "GET",
-                cache: "no-cache",
-            })
+            // Always check online availability for resource loading (styles, locales).
+            fetch(REST_API_URL, {
+                    method: "GET",
+                    cache: "no-cache",
+                })
                 .then(function (res) {
                     return res.status === 200;
                 })

@@ -75,11 +75,23 @@ import "../styles.css";
     /** @type {SelectCitationsComponent} */
     let selectCitation;
     /** @type {Button} */
+    let cancelEditBtn;
+
+    /** Edit mode state */
+    let editMode = false;
+    /** @type {AddinFieldData | null} */
+    let editField = null;
+    /** @type {Object | null} */
+    let editCitationObject = null;
+
+    /** @type {Button} */
     let saveAsTextBtn;
     /** @type {Button} */
     let insertLinkBtn;
     /** @type {Button} */
     let openSettingsBtn;
+    /** @type {Button} */
+    let editCitationBtn;
     /** @type {Button} */
     let insertBibBtn;
     /** @type {Button} */
@@ -110,6 +122,9 @@ import "../styles.css";
         insertLinkBtn = new Button("insertLinkBtn", {
             disabled: true,
         });
+        editCitationBtn = new Button("editCitationBtn", {
+            variant: "secondary",
+        });
         openSettingsBtn = new Button("settingsBtn", {
             variant: "icon-only",
             size: "small",
@@ -118,6 +133,9 @@ import "../styles.css";
             variant: "secondary",
         });
         refreshBtn = new Button("refreshBtn", {
+            variant: "secondary",
+        });
+        cancelEditBtn = new Button("cancelEditBtn", {
             variant: "secondary",
         });
         elements = {
@@ -133,7 +151,7 @@ import "../styles.css";
         router = new Router();
         sdk = new ZoteroSdk();
         const loginPage = new LoginPage(router, sdk);
-        settings = new SettingsPage(router, displayNoneClass);
+        settings = new SettingsPage(router, displayNoneClass, sdk);
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
@@ -142,6 +160,14 @@ import "../styles.css";
         let isInit = false;
 
         addEventListeners();
+
+        settings.onReconnect(function () {
+            // Reload groups and citations after switching connection
+            loadGroups().catch(function (e) {
+                console.error(e);
+            });
+            showCitationsAtTheStartFromMyLibrary();
+        });
 
         loginPage
             .init()
@@ -161,11 +187,14 @@ import "../styles.css";
                     console.error(e);
                     showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
                 });
-                let initSettingsPromise = settings.init().catch((e) => {
-                    console.error(e);
-                    showError(translate("An error occurred while loading settings. Try restarting the plugin."));
-                    settings.show();
-                });
+                let initSettingsPromise = loadStyleFromDocument(settings.getStyleManager())
+                    .catch((e) => console.error("Failed to read document prefs:", e))
+                    .then(() => settings.init())
+                    .catch((e) => {
+                        console.error(e);
+                        showError(translate("An error occurred while loading settings. Try restarting the plugin."));
+                        settings.show();
+                    });
 
                 Promise.all([loadGroupsPromise, initSettingsPromise]).then(function () {
                     Loader.hide();
@@ -315,6 +344,20 @@ import "../styles.css";
                 );
         });
 
+        editCitationBtn.subscribe(async function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            await enterEditMode();
+        });
+
+        cancelEditBtn.subscribe(function (event) {
+            if (event.type !== "button:click") {
+                return;
+            }
+            exitEditMode();
+        });
+
         refreshBtn.subscribe(async function (event) {
             if (event.type !== "button:click") {
                 return;
@@ -407,11 +450,105 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
+
+            if (editMode) {
+                // Edit mode: build updated citation object and call updateItem
+                const orderedItems = selectCitation.getSelectedItemsOrdered();
+                if (orderedItems.length === 0) {
+                    showError(translate("No citations selected"));
+                    return;
+                }
+
+                // Rebuild citationItems from selected items
+                const newCitationItems = orderedItems.map(function (item) {
+                    // Look for original citationItem by id
+                    const origItem = editCitationObject.citationItems.find(function (ci) {
+                        return ci.id === item.id || (ci.itemData && ci.itemData.id === item.id);
+                    });
+                    if (origItem) {
+                        // Update params from the UI-modified item
+                        origItem.prefix = item.prefix || "";
+                        origItem.suffix = item.suffix || "";
+                        origItem.locator = item.locator || "";
+                        origItem.label = item.label || "page";
+                        origItem["suppress-author"] = !!item["suppress-author"];
+                        return origItem;
+                    } else {
+                        // New item from search — build citationItem structure
+                        const newItem = {
+                            id: item.id,
+                            itemData: Object.assign({}, item),
+                            uris: item.uris || [],
+                        };
+                        // Remove UI-only properties from itemData copy
+                        delete newItem.itemData.prefix;
+                        delete newItem.itemData.suffix;
+                        delete newItem.itemData.locator;
+                        delete newItem.itemData.label;
+                        delete newItem.itemData["suppress-author"];
+                        delete newItem.itemData.uris;
+
+                        newItem.prefix = item.prefix || "";
+                        newItem.suffix = item.suffix || "";
+                        newItem.locator = item.locator || "";
+                        newItem.label = item.label || "page";
+                        newItem["suppress-author"] = !!item["suppress-author"];
+                        return newItem;
+                    }
+                });
+
+                const updatedCitationObject = JSON.parse(JSON.stringify(editCitationObject));
+                updatedCitationObject.citationItems = newCitationItems;
+
+                const field = editField;
+                exitEditMode();
+
+                await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
+
+                let updateFn = citationService.updateItem.bind(
+                    citationService,
+                    updatedCitationObject
+                );
+
+                const styleManager = settings.getStyleManager();
+                if (styleManager.getLastUsedFormat() === "note") {
+                    updateFn = citationService.updateItem.bind(
+                        citationService,
+                        updatedCitationObject,
+                        styleManager.getLastUsedNotesStyle()
+                    );
+                }
+
+                updateFn()
+                    .catch(function (error) {
+                        console.error(error);
+                        let message = translate("Failed to update citation");
+                        if (typeof error === "string") {
+                            message += ". " + translate(error);
+                        }
+                        showError(message);
+                    })
+                    .finally(async function () {
+                        saveStyleToDocument();
+                        const isNote = styleManager.getLastUsedFormat() === "note";
+                        await onEndAction(false, "Zotero (" + translate("Updating citations") + ")", isNote);
+                        if (field) {
+                            if (isNote) {
+                                await citationService.moveCursorToField(field.FieldId, false);
+                            } else {
+                                await citationService.moveCursorOutsideField(field.FieldId);
+                            }
+                        }
+                    });
+                return;
+            }
+
             await onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
             /** @type {AddinFieldData | null} */
             let addedField = null;
             let bHasNotes = false;
+            const isNoteStyle = settings.getStyleManager().getLastUsedFormat() === "note";
 
             return citationService.insertSelectedCitations(items)
                 .then(function (hasNotes) {
@@ -421,10 +558,21 @@ import "../styles.css";
                 })
                 .then(function (field) {
                     addedField = field;
-                    if (bHasNotes) {
-                        return citationService.updateCslItems(false);
+                    // If inserting into an existing footnote (note style but
+                    // addCitation detected we were already inside a note),
+                    // skip the bulk update entirely — it uses SelectAddinField
+                    // which moves the viewport to unrelated pages.
+                    if (isNoteStyle && !bHasNotes) {
+                        return;
                     }
-                    return citationService.updateCslItems();
+                    const skipOpts = {
+                        skipCitations: !settings.getAutoUpdateCitations(),
+                        skipBibliography: !settings.getAutoUpdateBibliography(),
+                    };
+                    if (bHasNotes) {
+                        return citationService.updateCslItems(false, skipOpts);
+                    }
+                    return citationService.updateCslItems(undefined, skipOpts);
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -435,7 +583,9 @@ import "../styles.css";
                     showError(message);
                 })
                 .finally(async () => {
-                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    const isInsertInExistingNote = isNoteStyle && !bHasNotes;
+                    onEndAction(false, "Zotero (" + translate("Inserting citation") + ")", isInsertInExistingNote);
+                    saveStyleToDocument();
                     if (bHasNotes) {
                         await citationService.moveCursorRight();
                     } else if (addedField) {
@@ -513,6 +663,7 @@ import "../styles.css";
                         false,
                         "Zotero (" + translate("Updating citations") + ")",
                     );
+                    saveStyleToDocument();
                 });
         });
     }
@@ -622,6 +773,7 @@ import "../styles.css";
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
+        editCitationBtn.disable();
 
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
@@ -644,16 +796,20 @@ import "../styles.css";
     /**
      * @param {boolean} scrollToTarget
      * @param {string} [preloaderMessage]
+     * @param {boolean} [skipCursorRestore] - skip restoring cursor (old editor path) when caller handles it
      */
-    async function onEndAction(scrollToTarget, preloaderMessage) {
+    async function onEndAction(scrollToTarget, preloaderMessage, skipCursorRestore) {
         insertBibBtn.enable();
         refreshBtn.enable();
+        editCitationBtn.enable();
         checkSelected();
         
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
-            // @ts-ignore
-            CursorService.setCursorPosition(window._cursorPosition || 0);
+            if (!skipCursorRestore) {
+                // @ts-ignore
+                await CursorService.setCursorPosition(window._cursorPosition || 0);
+            }
         } else {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
@@ -822,47 +978,104 @@ import "../styles.css";
         return selectCitation.displaySearchItems(res, err, lastSearch);
     }
 
+    /** @type {Object<string, string>} */
+    const zoteroTypeToCsl = {
+        "artwork": "graphic",
+        "audioRecording": "song",
+        "bill": "bill",
+        "blogPost": "post-weblog",
+        "book": "book",
+        "bookSection": "chapter",
+        "case": "legal_case",
+        "computerProgram": "software",
+        "conferencePaper": "paper-conference",
+        "dictionaryEntry": "entry-dictionary",
+        "document": "document",
+        "email": "personal_communication",
+        "encyclopediaEntry": "entry-encyclopedia",
+        "film": "motion_picture",
+        "forumPost": "post",
+        "hearing": "hearing",
+        "instantMessage": "personal_communication",
+        "interview": "interview",
+        "journalArticle": "article-journal",
+        "letter": "personal_communication",
+        "magazineArticle": "article-magazine",
+        "manuscript": "manuscript",
+        "map": "map",
+        "newspaperArticle": "article-newspaper",
+        "patent": "patent",
+        "podcast": "song",
+        "presentation": "speech",
+        "radioBroadcast": "broadcast",
+        "report": "report",
+        "statute": "legislation",
+        "thesis": "thesis",
+        "tvBroadcast": "broadcast",
+        "videoRecording": "motion_picture",
+        "webpage": "webpage",
+    };
+
     /**
      * @param {any} item 
      * @returns {SearchResultItem}
      */
     function convertJsonToCsl(item) {
         if (item.id || !item.key) return item;
+        var d = item.data || {};
         /** @type {SearchResultItem} */
         const res = {
             id: item.key,
-            title: item.data.title,
-            type: item.data.itemType,
+            title: d.title || "",
+            type: zoteroTypeToCsl[d.itemType] || d.itemType || "",
         };
-        if (Object.hasOwnProperty.call(item, "url")) {
-            res.URL = item.data.url;
+
+        // creators → author / editor / translator
+        if (Array.isArray(d.creators)) {
+            d.creators.forEach(function (/** @type {any} */ c) {
+                var name = {};
+                if (c.firstName) name.given = c.firstName;
+                if (c.lastName) name.family = c.lastName;
+                if (c.name) name.literal = c.name;
+                var cslRole = c.creatorType || "author";
+                if (!res[cslRole]) res[cslRole] = [];
+                res[cslRole].push(name);
+            });
         }
-        if (Object.hasOwnProperty.call(item, "volume")) {
-            res.volume = item.data.volume;
+
+        // date → issued
+        if (d.date) {
+            var parts = d.date.replace(/\//g, "-").split("-").map(Number).filter(function (n) { return !isNaN(n); });
+            if (parts.length) res.issued = { "date-parts": [parts] };
         }
-        if (Object.hasOwnProperty.call(item, "language")) {
-            res.language = item.data.language;
-        }
-        if (Object.hasOwnProperty.call(item, "abstract")) {
-            res.abstract = item.data.abstract;
-        }
-        if (Object.hasOwnProperty.call(item, "note")) {
-            res.note = item.data.note;
-        }
-        if (Object.hasOwnProperty.call(item, "page")) {
-            res.page = item.data.page;
-        }
-        if (Object.hasOwnProperty.call(item, "shortTitle")) {
-            res.shortTitle = item.data.shortTitle;
-        }
-        if (Object.hasOwnProperty.call(item, "links")) {
+
+        // simple 1-to-1 fields (Zotero name → CSL name)
+        if (d.url) res.URL = d.url;
+        if (d.volume) res.volume = d.volume;
+        if (d.issue) res.issue = d.issue;
+        if (d.pages) res.page = d.pages;
+        if (d.edition) res.edition = d.edition;
+        if (d.language) res.language = d.language;
+        if (d.abstractNote) res.abstract = d.abstractNote;
+        if (d.note) res.note = d.note;
+        if (d.shortTitle) res.shortTitle = d.shortTitle;
+        if (d.publisher) res.publisher = d.publisher;
+        if (d.place) res["publisher-place"] = d.place;
+        if (d.DOI) res.DOI = d.DOI;
+        if (d.ISBN) res.ISBN = d.ISBN;
+        if (d.ISSN) res.ISSN = d.ISSN;
+        if (d.publicationTitle) res["container-title"] = d.publicationTitle;
+        if (d.bookTitle) res["container-title"] = d.bookTitle;
+        if (d.series) res["collection-title"] = d.series;
+        if (d.seriesNumber) res["collection-number"] = d.seriesNumber;
+        if (d.numberOfVolumes) res["number-of-volumes"] = d.numberOfVolumes;
+        if (d.numPages) res["number-of-pages"] = d.numPages;
+
+        // uris from links
+        if (item.links) {
             res.uris = [];
-            if (Object.hasOwnProperty.call(item.links, "self")) {
-                res.uris.push(item.links.self.href)
-            }
-            if (Object.hasOwnProperty.call(item.links, "alternate")) {
-                res.uris.push(item.links.alternate.href)
-            }
+            if (item.links.self) res.uris.push(item.links.self.href);
+            if (item.links.alternate) res.uris.push(item.links.alternate.href);
         }
 
         return res;
@@ -874,6 +1087,16 @@ import "../styles.css";
     function checkSelected(numOfSelected) {
         if (typeof numOfSelected === "undefined") {
             numOfSelected = selectCitation.count();
+        }
+        if (editMode) {
+            if (numOfSelected <= 0) {
+                insertLinkBtn.disable();
+                insertLinkBtn.setText(translate("Update Citation"));
+            } else {
+                insertLinkBtn.enable();
+                insertLinkBtn.setText(translate("Update Citation"));
+            }
+            return;
         }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
@@ -891,9 +1114,218 @@ import "../styles.css";
         }
     }
 
+    async function enterEditMode() {
+        /** @type {AddinFieldData | null} */
+        const field = await new Promise((resolve) => {
+            window.Asc.plugin.executeMethod(
+                "GetCurrentAddinField",
+                undefined,
+                resolve,
+            );
+        });
+        if (
+            !field ||
+            !field.Value ||
+            field.Value.toLowerCase().indexOf("zotero_item") === -1
+        ) {
+            citationService.showWarningMessage(translate("No Zotero citation found at the cursor. Please click directly on a citation to edit it."));
+            return;
+        }
+
+        const citationStartIndex = field.Value.indexOf("{");
+        const citationEndIndex = field.Value.lastIndexOf("}");
+        if (citationStartIndex === -1) {
+            citationService.showWarningMessage(translate("Could not parse the citation data."));
+            return;
+        }
+        const citationObject = JSON.parse(
+            field.Value.slice(citationStartIndex, citationEndIndex + 1)
+        );
+
+        // Clear current state
+        selectCitation.removeItems(Object.keys(selectCitation.getSelectedItems()));
+        selectCitation.clearLibrary();
+
+        // Enable edit mode
+        editMode = true;
+        editField = field;
+        editCitationObject = citationObject;
+        selectCitation.setEditMode(true);
+
+        // Pre-populate selected items from citation
+        if (citationObject.citationItems) {
+            citationObject.citationItems.forEach(function (ci) {
+                // Convert citationItem to SearchResultItem format
+                const item = Object.assign({}, ci.itemData || {});
+                if (!item.id && ci.id) item.id = ci.id;
+                if (ci.uris) item.uris = ci.uris;
+                if (ci.prefix) item.prefix = ci.prefix;
+                if (ci.suffix) item.suffix = ci.suffix;
+                if (ci.locator) item.locator = ci.locator;
+                if (ci.label) item.label = ci.label;
+                if (ci["suppress-author"]) item["suppress-author"] = ci["suppress-author"];
+                selectCitation.addPreselectedItem(item);
+            });
+        }
+
+        // Update UI
+        cancelEditBtn._container.classList.remove("hidden");
+        editCitationBtn._container.classList.add("hidden");
+        insertBibBtn._container.classList.add("hidden");
+        refreshBtn._container.classList.add("hidden");
+        insertLinkBtn.setText(translate("Update Citation"));
+        insertLinkBtn.enable();
+        checkSelected();
+    }
+
+    function exitEditMode() {
+        editMode = false;
+        editField = null;
+        editCitationObject = null;
+
+        selectCitation.setEditMode(false);
+        selectCitation.removeItems(Object.keys(selectCitation.getSelectedItems()));
+        selectCitation.clearLibrary();
+
+        cancelEditBtn._container.classList.add("hidden");
+        editCitationBtn._container.classList.remove("hidden");
+        insertBibBtn._container.classList.remove("hidden");
+        refreshBtn._container.classList.remove("hidden");
+        insertLinkBtn.setText(translate("Insert Citation"));
+        insertLinkBtn.disable();
+        checkSelected();
+
+        // Reload initial library
+        showCitationsAtTheStartFromMyLibrary();
+    }
+
     /**
      * @returns {Promise<number>}
      */
+    /**
+     * Reads ZOTERO_PREF from document custom properties and sets localStorage
+     * if no style is currently saved. This preserves the citation style when
+     * opening a DOCX created by the Word Zotero plugin.
+     * @param {import('../csl/styles').CslStylesManager} styleManager
+     * @returns {Promise<void>}
+     */
+    async function loadStyleFromDocument(styleManager) {
+
+        const prefXml = await new Promise((resolve) => {
+            Asc.plugin.callCommand(
+                () => {
+                    const doc = Api.GetDocument();
+                    const props = doc.GetCustomProperties();
+                    if (!props) return "";
+                    let xml = "";
+                    let i = 1;
+                    while (true) {
+                        const val = props.Get("ZOTERO_PREF_" + i);
+                        if (val === null || val === undefined) break;
+                        xml += String(val);
+                        i++;
+                    }
+                    return xml;
+                },
+                false,
+                true,
+                (result) => resolve(result || ""),
+            );
+        });
+
+        if (!prefXml) return;
+
+        try {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(prefXml, "text/xml");
+            const styleEl = xmlDoc.querySelector("style");
+            if (styleEl) {
+                const styleUrl = styleEl.getAttribute("id") || "";
+                const locale = styleEl.getAttribute("locale") || "";
+                if (styleUrl) {
+                    const styleId = styleUrl.replace(/^.*\/styles\//, "");
+                    if (styleId) {
+                        localStorage.setItem("zoteroStyleId", styleId);
+                    }
+                }
+                if (locale) {
+                    localStorage.setItem("zoteroLocale", locale);
+                }
+            }
+            const noteTypePref = xmlDoc.querySelector('pref[name="noteType"]');
+            if (noteTypePref) {
+                const noteType = noteTypePref.getAttribute("value");
+                if (noteType === "1") {
+                    localStorage.setItem("zoteroNotesStyleId", "footnotes");
+                } else if (noteType === "2") {
+                    localStorage.setItem("zoteroNotesStyleId", "endnotes");
+                }
+            }
+        } catch (e) {
+            console.error("Failed to parse ZOTERO_PREF XML:", e);
+        }
+    }
+
+    /**
+     * Writes ZOTERO_PREF_{n} to document custom properties so that Word/Zotero
+     * can read the chosen citation style when the file is opened there.
+     * The XML is chunked into 255-char segments across multiple properties
+     * to respect the OOXML custom property value length limit.
+     * @returns {Promise<void>}
+     */
+    function saveStyleToDocument() {
+        const styleManager = settings.getStyleManager();
+        const styleId = styleManager.getLastUsedStyleId();
+        if (!styleId) return Promise.resolve();
+
+        const locale = settings.getLocalesManager().getLastUsedLanguage() || "en-US";
+        const format = styleManager.getLastUsedFormat();
+        const notesStyle = styleManager.getLastUsedNotesStyle();
+
+        let noteTypeValue = "0";
+        if (format === "note") {
+            noteTypeValue = notesStyle === "endnotes" ? "2" : "1";
+        }
+
+        const hasBib = styleManager.isLastUsedStyleContainBibliography() ? "1" : "0";
+
+        const prefXml =
+            '<data data-version="3" zotero-version="5.0.96">' +
+            '<style id="http://www.zotero.org/styles/' + styleId + '"' +
+            ' locale="' + locale + '"' +
+            ' hasBibliography="' + hasBib + '"' +
+            ' bibliographyStyleHasBeenSet="1"/>' +
+            '<prefs>' +
+            '<pref name="fieldType" value="Field"/>' +
+            '<pref name="automaticJournalAbbreviations" value="true"/>' +
+            '<pref name="noteType" value="' + noteTypeValue + '"/>' +
+            '</prefs>' +
+            '</data>';
+
+        // Chunk into 255-char segments (OOXML custom property value limit)
+        var chunks = [];
+        for (var i = 0; i < prefXml.length; i += 255) {
+            chunks.push(prefXml.substring(i, i + 255));
+        }
+
+        return new Promise(function (resolve) {
+            Asc.scope.prefChunks = chunks;
+            Asc.plugin.callCommand(
+                function () {
+                    var doc = Api.GetDocument();
+                    var props = doc.GetCustomProperties();
+                    var chunks = Asc.scope.prefChunks;
+                    for (var i = 0; i < chunks.length; i++) {
+                        props.Add("ZOTERO_PREF_" + (i + 1), chunks[i]);
+                    }
+                },
+                false,
+                false,
+                function () { resolve(); },
+            );
+        });
+    }
+
     async function getEditorVersion() {
         try {
             let version = await new Promise(resolve => {
@@ -919,58 +1351,8 @@ import "../styles.css";
         buttonMain.text = "Edit citation";
         buttonMain.addCheckers("Target", "Selection");
         buttonMain.attachOnClick(async function () {
-            /** @type {AddinFieldData | null} */
-            const field = await new Promise((resolve) => {
-                window.Asc.plugin.executeMethod(
-                    "GetCurrentAddinField",
-                    undefined,
-                    resolve,
-                );
-            });
-            if (
-                !field ||
-                !field.Value ||
-                field.Value.toLowerCase().indexOf("zotero_item") === -1
-            ) {
-                citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
-                return;
-            }
-            const updatedField = await citationService.showEditCitationWindow(field);
-            if (!updatedField) {
-                return;
-            }
-            await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-
-            let updateFn = citationService.updateItem.bind(
-                citationService,
-                updatedField
-            );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItem.bind(
-                    citationService,
-                    updatedField,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                    if (field) {
-                        citationService.moveCursorOutsideField(field.FieldId);
-                    }
-                });
+            router.openMain();
+            await enterEditMode();
         });
         Asc.Buttons.registerContextMenu();
 
