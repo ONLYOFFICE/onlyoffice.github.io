@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -965,10 +965,11 @@ class K {
       sortable: e.sortable || !1,
       translate: e.translate,
       multiple: e.multiple || !1,
+      usePortal: e.usePortal || !1,
       description: e.description || ""
     }), this._selectedValues = /* @__PURE__ */ new Set(), this.isOpen = !1, this._items = [], this._customItems = [], this._subscribers = [], this._boundHandles = {
       toggle: (n) => {
-        u(c, this, F).call(this, n);
+        u(c, this, P).call(this, n);
       },
       search: (n) => {
         u(c, this, Y).call(this, n);
@@ -981,15 +982,21 @@ class K {
       },
       dropdownClick: (n) => {
         u(c, this, G).call(this, n);
+      },
+      scrollCheck: () => {
+        if (this._headerRectOnOpen) {
+          var n = this._header.getBoundingClientRect();
+          Math.abs(n.top - this._headerRectOnOpen.top) > 1 && u(c, this, f).call(this);
+        }
       }
-    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), u(c, this, U).call(this), u(c, this, W).call(this), u(c, this, k).call(this), I._.add(this);
+    }, this._optionsContainer = null, this.searchInput = null, this._select = document.createElement("div"), this._header = document.createElement("div"), this._selectedText = document.createElement("span"), this._arrow = document.createElement("span"), this._dropdown = document.createElement("div"), u(c, this, U).call(this), u(c, this, W).call(this), u(c, this, E).call(this), I._.add(this);
   }
   openDropdown() {
-    this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(/* @__PURE__ */ (function(t) {
+    this.isOpen || document.addEventListener("click", this._boundHandles.close), this.isOpen = !0, this._dropdown.style.display = "block", this._headerRectOnOpen = this._header.getBoundingClientRect(), document.addEventListener("scroll", this._boundHandles.scrollCheck, !0), this._arrow.className += " selectbox-arrow-open", this._header.className += " selectbox-header-open", this.searchInput && setTimeout(/* @__PURE__ */ (function(t) {
       return function() {
         t.searchInput && t.searchInput.focus();
       };
-    })(this), 100), u(c, this, k).call(this);
+    })(this), 100), u(c, this, E).call(this), u(c, this, X).call(this);
   }
   /**
    * @param {function(SelectboxEventType): void} callback
@@ -1040,7 +1047,7 @@ class K {
           selected: r
         });
       }
-    }, this), this.isOpen && u(c, this, k).call(this), u(c, this, x).call(this);
+    }, this), this.isOpen && u(c, this, E).call(this), u(c, this, x).call(this);
   }
   /**
    * @param {string} value
@@ -1163,7 +1170,7 @@ class K {
       var e = this._items[0];
       e && this._selectedValues.add(e.value);
     }
-    u(c, this, x).call(this), u(c, this, k).call(this);
+    u(c, this, x).call(this), u(c, this, E).call(this);
   }
   destroy() {
     this._subscribers = [], I._.delete(this);
@@ -1181,7 +1188,7 @@ class K {
 function U() {
   this._container.innerHTML = "", this._container.className += " selectbox-container";
   var s = document.createDocumentFragment();
-  if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), s.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._select.appendChild(this._dropdown), this._options.description) {
+  if (this._select.className += " selectbox", this._options.multiple && (this._select.className += " selectbox-multiple"), s.appendChild(this._select), this._header.className += " selectbox-header", this._select.appendChild(this._header), this._header.setAttribute("tabindex", "0"), this._selectedText.className += " selectbox-selected-text i18n", this._selectedText.textContent = this._options.placeholder, this._header.appendChild(this._selectedText), this._arrow.className += " selectbox-arrow", this._arrow.innerHTML = "<b></b>", this._header.appendChild(this._arrow), this._dropdown.className += " selectbox-dropdown", this._options.usePortal && (this._dropdown.className += " selectbox-fixed"), this._select.appendChild(this._dropdown), this._options.description) {
     var t = document.createElement("div");
     t.className += " i18n selectbox-description", t.textContent = this._options.description, this._dropdown.appendChild(t);
   }
@@ -1193,7 +1200,7 @@ function U() {
     var i = this._selectbox.parentNode;
     if (i) {
       i.insertBefore(this._container, this._selectbox);
-      var n = u(c, this, X).call(this, this._selectbox);
+      var n = u(c, this, J).call(this, this._selectbox);
       this.addItems(n.values, n.selectedValue), this._selectbox.remove();
     }
   }
@@ -1203,13 +1210,13 @@ function W() {
     s.stopPropagation();
   }), this._header.addEventListener("keydown", this._boundHandles.keydown), this._dropdown.addEventListener("keydown", this._boundHandles.keydown);
 }
-function F(s) {
+function P(s) {
   if (s && s.stopPropagation(), this.isOpen ? u(c, this, f).call(this) : this.openDropdown(), s && s.type === "click")
     for (var t of I._)
       t.isOpen && t !== this && u(c, t, f).call(t);
 }
 function f() {
-  this.isOpen && document && this._boundHandles && document.removeEventListener("click", this._boundHandles.close), this.isOpen = !1, this._dropdown.style.display = "none";
+  this.isOpen && document && this._boundHandles && (document.removeEventListener("click", this._boundHandles.close), document.removeEventListener("scroll", this._boundHandles.scrollCheck, !0)), this.isOpen = !1, this._dropdown.style.display = "none", this._options.usePortal ? (this._dropdown.style.left = "", this._dropdown.style.width = "", this._dropdown.style.top = "") : this._dropdown.classList.remove("selectbox-dropdown-top");
   for (var s = this._arrow.className.split(" "), t = [], e = 0; e < s.length; e++)
     s[e] !== "selectbox-arrow-open" && t.push(s[e]);
   this._arrow.className = t.join(" ");
@@ -1221,7 +1228,7 @@ function Y(s) {
   var t = s.target;
   if (t instanceof HTMLInputElement) {
     var e = t.value.toLowerCase();
-    u(c, this, k).call(this, e);
+    u(c, this, E).call(this, e);
   }
 }
 function O(s) {
@@ -1254,7 +1261,7 @@ function O(s) {
       var l = (a + 1) % i.length;
       l === i.length && (l = 0), this._selectedValues.clear(), e = i[l], this._selectedValues.add(e.value);
     }
-    u(c, this, x).call(this), u(c, this, k).call(this, t, !0), u(c, this, T).call(this, e.value, !0);
+    u(c, this, x).call(this), u(c, this, E).call(this, t, !0), u(c, this, T).call(this, e.value, !0);
   }
 }
 function Z(s) {
@@ -1262,7 +1269,7 @@ function Z(s) {
   switch (t) {
     case "Enter":
     case 13:
-      s.preventDefault(), u(c, this, F).call(this, s);
+      s.preventDefault(), u(c, this, P).call(this, s);
       break;
     case "Escape":
     case 27:
@@ -1282,7 +1289,7 @@ function Z(s) {
       break;
   }
 }
-function k(s, t) {
+function E(s, t) {
   if (s = s || "", !!this._optionsContainer) {
     this._optionsContainer.innerHTML = "";
     var e = null, i = this._items;
@@ -1317,10 +1324,10 @@ function k(s, t) {
       C.className += " selectbox-option-divider", n.appendChild(C);
     }
     for (var a = 0; a < this._customItems.length; a++) {
-      var m = this._customItems[a], E = document.createElement("label");
-      E.className += " selectbox-custom-option", E.setAttribute("data-value", m.value), E.setAttribute("for", m.value);
+      var m = this._customItems[a], k = document.createElement("label");
+      k.className += " selectbox-custom-option", k.setAttribute("data-value", m.value), k.setAttribute("for", m.value);
       var w = document.createElement("span");
-      w.className += " selectbox-option-text i18n", this._options.translate && (m.text = this._options.translate(m.text)), w.textContent = m.text, E.appendChild(w), n.appendChild(E);
+      w.className += " selectbox-option-text i18n", this._options.translate && (m.text = this._options.translate(m.text)), w.textContent = m.text, k.appendChild(w), n.appendChild(k);
     }
     if (this._optionsContainer.appendChild(n), t && this.isOpen && this._optionsContainer && e)
       try {
@@ -1398,6 +1405,18 @@ function x() {
     this._selectedText.textContent = i ? i.text : this._options.placeholder;
   }
 }
+function X() {
+  var s = window.innerHeight;
+  if (this._options.usePortal) {
+    var t = this._header.getBoundingClientRect(), e = this._dropdown.offsetHeight;
+    this._dropdown.style.left = t.left + "px", this._dropdown.style.width = t.width - 2 + "px";
+    var i = s - t.bottom;
+    i < e && t.top > i ? this._dropdown.style.top = t.top - e - 2 + "px" : this._dropdown.style.top = t.bottom + 2 + "px";
+  } else {
+    var n = this._dropdown.getBoundingClientRect();
+    n.bottom > s && this._dropdown.classList.add("selectbox-dropdown-top");
+  }
+}
 function T(s, t) {
   for (var e = Array.from(this._selectedValues), i = [], n = 0; n < this._items.length; n++) {
     var a = this._items[n];
@@ -1429,7 +1448,7 @@ function B(s) {
     });
   });
 }
-function X(s) {
+function J(s) {
   var t = Array.from(s.options).map((n) => [n.value, n.text]), e = {
     values: t
   }, i = s.value;
@@ -1439,7 +1458,7 @@ var I = {
   _: /* @__PURE__ */ new Set()
 };
 document.getElementById("loader");
-var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]], D = {
+var Q = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["chapter", "Chapter"], ["column", "Column"], ["figure", "Figure"], ["folio", "Folio"], ["issue", "Issue"], ["line", "Line"], ["note", "Note"], ["opus", "Opus"], ["page", "Page"], ["paragraph", "Paragraph"], ["part", "Part"], ["rule", "Rule"], ["section", "Section"], ["sub-verbo", "Sub verbo"], ["table", "Table"], ["title", "Title"], ["verses", "Verses"], ["volume", "Volume"]], D = {
   /**
    * @param {AscTheme} theme
    */
@@ -1577,7 +1596,7 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       r.appendChild(h), h.appendChild(_), h.appendChild(y);
       var m = "";
       r.appendChild(l), l.appendChild(d), l.appendChild(p), r.appendChild(b), b.appendChild(C);
-      var E = new L(d, {
+      var k = new L(d, {
         type: "text",
         placeholder: "Prefix",
         value: i.prefix,
@@ -1590,9 +1609,9 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
       }), v = new K(_, {
         placeholder: "Locator",
         translate: Asc.plugin.tr
-      }), j = i.label || "page";
-      J.forEach(function(g) {
-        var N = g[0] === j;
+      }), F = i.label || "page";
+      Q.forEach(function(g) {
+        var N = g[0] === F;
         v.addItem(g[0], g[1], N), N && (m = g[1]);
       });
       var A = new L(y, {
@@ -1600,7 +1619,7 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
         placeholder: m,
         value: i.locator,
         showClear: !1
-      }), P = new H(C, {
+      }), j = new H(C, {
         label: "Omit Author",
         checked: !!i["suppress-author"]
       });
@@ -1610,8 +1629,8 @@ var J = [["appendix", "Appendix"], ["article", "Article"], ["book", "Book"], ["c
           A.setPlaceholder(N.text);
         }
       }), this.forms.push({
-        omitAuthorInput: P,
-        prefixInput: E,
+        omitAuthorInput: j,
+        prefixInput: k,
         suffixInput: w,
         locatorInput: A,
         locatorSelectbox: v

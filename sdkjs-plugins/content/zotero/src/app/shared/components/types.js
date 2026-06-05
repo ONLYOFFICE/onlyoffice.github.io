@@ -110,6 +110,7 @@
  * @property {string} [description]
  * @property {boolean} [sortable]
  * @property {(string) => string} [translate]
+ * @property {boolean} [usePortal] - Appends the dropdown menu to document.body to prevent it from being clipped by parent containers.
  */
 
 /**
