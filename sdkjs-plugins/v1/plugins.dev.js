@@ -260,6 +260,16 @@
 	{
 		this._onCustomMenuClick("toolbarMenuEvents", id);
 	};
+
+	window.Asc.plugin.attachWindowHeaderMenuClickEvent = function(id, action)
+	{
+		this._attachCustomMenuClickEvent("windowHeaderMenuEvents", id, action);
+	};
+	window.Asc.plugin.event_onWindowHeaderMenuClick = function(id)
+	{
+		this._onCustomMenuClick("windowHeaderMenuEvents", id);
+	};
+
 	window.Asc.plugin.attachEvent = function(id, action)
 	{
 		var pluginObj = window.Asc.plugin;
@@ -345,6 +355,7 @@
 	Asc.Buttons.ButtonsContextMenu = [];
 	Asc.Buttons.ButtonsToolbar = [];
 	Asc.Buttons.ButtonsContentControl = [];
+	Asc.Buttons.ButtonsWindowHeader = [];
 
 	Asc.Buttons.registerContextMenu = function()
 	{
@@ -431,6 +442,41 @@
 			window.Asc.plugin.executeMethod("UpdateToolbarMenuItem", [items]);
 	};
 
+	Asc.Buttons.registerWindowHeader = function(windowId, buttons)
+	{
+		Asc.Buttons.updateWindowHeader(windowId, buttons, true);
+	};
+
+	Asc.Buttons.updateWindowHeader = function(windowId, buttons, isAdd)
+	{
+		let items = {
+			guid : window.Asc.plugin.guid,
+			frames : [{
+				id : windowId,
+				items : []
+			}]
+		};
+
+		for (let i = 0, len = buttons.length; i < len; i++)
+		{
+			let button = buttons[i];
+			button.parent = null;
+			button.toWindowHeader(items.frames[0]);
+
+			if (!!button.menu) {
+				for (let indexItem in button.menu) {
+					let item = button.menu.hasOwnProperty(indexItem) ? button.menu[indexItem] : null;
+					if (item && !!item.onclick) {
+						window.Asc.plugin.attachWindowHeaderMenuClickEvent(item.id, item.onclick);
+					}
+				}
+			}
+		}
+
+		if (items.frames[0].items.length > 0)
+			window.Asc.plugin.executeMethod(!!isAdd ? "AddWindowHeaderItem" : "UpdateWindowHeaderItem", [items]);
+	};
+
 	Asc.Buttons.registerContentControl = function()
 	{
 		window.Asc.plugin.attachEditorEvent("onShowContentControlTrack", function(contentControls) {
@@ -490,7 +536,8 @@
 		None : 0,
 		ContextMenu : 1,
 		Toolbar : 2,
-		ContentControl : 3
+		ContentControl : 3,
+		WindowHeader : 4
 	};
 
 	function Button(parent, id)
@@ -805,8 +852,57 @@
 		return Promise.all(promises);
 	};
 
+	function ButtonWindowHeader(parent, id)
+	{
+		Button.call(this, parent, id);
+
+		this.itemType = ItemType.WindowHeader;
+		this.align = "right";
+		this.isTitle = false;
+
+		Asc.Buttons.ButtonsWindowHeader.push(this);
+	}
+
+	ButtonWindowHeader.prototype = Object.create(Button.prototype);
+	ButtonWindowHeader.prototype.constructor = ButtonWindowHeader;
+
+	ButtonWindowHeader.prototype.attachOnClick = function(handler)
+	{
+		window.Asc.plugin.attachWindowHeaderMenuClickEvent(this.id, handler);
+	};
+
+	ButtonWindowHeader.prototype.toItem = function()
+	{
+		let item = Button.prototype.toItem.call(this);
+		item.type = "button";
+		if (this.align)
+			item.align = this.align;
+		if (this.isTitle)
+			item.isTitle = true;
+		return item;
+	};
+
+	ButtonWindowHeader.prototype.toWindowHeader = function(items)
+	{
+		let currentItem = this.toItem();
+
+		if (!items.items)
+			items.items = [];
+
+		items.items.push(currentItem);
+
+		if (this.childs)
+		{
+			for (let j = 0, childsLen = this.childs.length; j < childsLen; j++)
+			{
+				this.childs[j].toWindowHeader(currentItem);
+			}
+		}
+	};
+
 	Asc.ToolbarButtonType = ToolbarButtonType;
 	Asc.ButtonContextMenu = ButtonContextMenu;
 	Asc.ButtonToolbar = ButtonToolbar;
 	Asc.ButtonContentControl = ButtonContentControl;
+	Asc.ButtonWindowHeader = ButtonWindowHeader;
 })(window);
