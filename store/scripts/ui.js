@@ -196,6 +196,7 @@ const UI = {
             rule += '.filter-by input:checked + label .category-name,\n' +
                 '.filter-by input:checked + label .main-filter-category{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
             rule += '.filter-by input:checked + label > span:last-of-type{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+            rule += '.filter-by input:checked + label{background-color: ' + ('#7d858c') + ';}\n';
         }
 
         if (themeType.includes('light')) {
