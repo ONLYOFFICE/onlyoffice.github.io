@@ -241,13 +241,30 @@ main {
 	max-width: calc(33.333% - 14px);
 	margin: 7px;
 }
+@media (max-width: 1199px) {
+	.plugins-container .plugins-list > .plugin-plate {
+		-ms-flex-preferred-size: calc(50% - 14px);
+		flex-basis: calc(50% - 14px);
+		width: calc(50% - 14px);
+		max-width: calc(50% - 14px);
+	}
+}
+@media (max-width: 892px) {
+	.plugins-container .plugins-list > .plugin-plate {
+		-ms-flex-preferred-size: calc(100% - 14px);
+		flex-basis: calc(100% - 14px);
+		width: calc(100% - 14px);
+		max-width: calc(100% - 14px);
+	}
+}
+/* ↑ IE11 flex fallback above; grid overrides below */
 /* Modern browsers: real CSS grid (IE11 ignores @supports and keeps flex). */
 @supports (display: grid) {
 	.plugins-container .plugins-list {
 		display: grid;
 		/* minmax(0, 1fr) instead of plain 1fr so columns can shrink past
 		   content min-size — otherwise a single wide card unevens the grid. */
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 		gap: 14px;
 		margin: 0;
 	}
@@ -465,8 +482,9 @@ label.header {
 	padding-top: 60px;
 	justify-content: center;
 	align-items: center;
-	width: max-content;
+	width: 100%;
 	flex-flow: column;
+	grid-column: 1 / -1;
 }
 .div_notification > *:not(:last-child) {
 	margin-bottom: 8px;

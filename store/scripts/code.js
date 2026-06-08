@@ -1133,8 +1133,6 @@ function openPluginCard(guid) {
 function createNotification(header, caption, bWarning) {
 	// creates any notification for user inside UI.divMain window (you should clear this element before making notification)
 	let div = document.createElement('div');
-	UI.divMain.appendChild(div);
-	div = document.createElement('div');
 	div.className = 'div_notification';
 	if (bWarning) {
 		let icon = document.createElement('div');
