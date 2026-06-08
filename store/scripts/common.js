@@ -27,11 +27,20 @@
  * well as technical writing content are licensed under the terms of the
  * Creative Commons Attribution-ShareAlike 4.0 International. See the License
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
-*
+ *
  */
 
 // @ts-check
 /// <reference path="./types.js" />
+/// <reference path="./data-fetcher.js" />
+
+const Common = {
+	/** @type {string} */
+	themeType: getUrlSearchValue("theme-type") || 'light', 		// current theme
+	lang: detectLanguage(),                                     // current language
+	shortLang: detectLanguage().split('-')[0],                  // short language
+
+};
 
 const MESSAGES = {
 	versionWarning: 'This plugin will only work in a newer version of the editor.',
@@ -39,3 +48,39 @@ const MESSAGES = {
 	updates: 'Install plugin manually',
 	marketplace: 'Submit your own plugin'
 };
+
+
+function detectLanguage() {
+	// detect language or return default
+	let lang = getUrlSearchValue("lang");
+	if (lang.length == 2)
+		lang = (lang.toLowerCase() + "-" + lang.toUpperCase());
+	return lang || 'en-EN';
+};
+
+/**
+ * @param {string} key 
+ * @returns {string}
+ */
+function getUrlSearchValue(key) {
+	let res = '';
+	if (window.location && window.location.search) {
+		let search = window.location.search;
+		let pos1 = search.indexOf(key + '=');
+		if (-1 != pos1) {
+			pos1 += key.length + 1;
+			let pos2 = search.indexOf("&", pos1);
+			res = search.substring(pos1, (pos2 != -1 ? pos2 : search.length) )
+		}
+	}
+	return res;
+};
+
+/** @param {Object} message */
+function sendMessage(message) {
+	// this function sends message to editor
+	parent.postMessage(JSON.stringify(message), '*');
+};
+
+
+

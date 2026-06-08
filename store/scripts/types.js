@@ -12,8 +12,6 @@
  * @property {string} guid
  * @property {string} pluginName
  * @property {string} pluginDescription
- * @property {string} shortLang
- * @property {'light' | string} themeType
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
  * @property {InstalledPluginInfo | null} installed
@@ -30,7 +28,7 @@
 /**
  * @typedef {Object} IframeMessage
  * @property {PluginInfo} config
- * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard'} type
+ * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard' | 'close'} type
  * @property {string} guid
  * @property {string} [url]
  * @property {boolean} [updateInstalled]

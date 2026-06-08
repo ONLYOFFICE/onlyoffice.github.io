@@ -27,7 +27,7 @@
  * well as technical writing content are licensed under the terms of the
  * Creative Commons Attribution-ShareAlike 4.0 International. See the License
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
-*
+ *
  */
 
 // @ts-check
@@ -51,11 +51,8 @@ const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid ma
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
 let editorVersion;                                            		 // editor current version
-let themeType = detectThemeType();                                   // current theme
-const lang = detectLanguage();                                       // current language
-const shortLang = lang.split('-')[0];                                // short language
 let bTranslate = false;                                              // flag translate or not
-let defaultBG = themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
+let defaultBG = Common.themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 /** @type {any} */
 let PsMain = null;                                                   // scroll for list of plugins
@@ -68,13 +65,13 @@ let scale = {                                                        // current 
 calculateScale();
 
 // it's necessary because we show loader before all (and getting translations too)
-Utils.init(shortLang);
+Utils.init(Common.shortLang);
 
 // it's necessary for loader (because it detects theme by this object)
 window.Asc = {
 	plugin : {
 		theme : {
-			type :  themeType
+			type :  Common.themeType
 		}
 	}
 };
@@ -86,6 +83,8 @@ if (pos === -1 && location.href.slice(-5) !== '.html') { // when marketplace pag
         pos++;
     }
 }
+if (pos === -1) pos = location.href.indexOf('store/');  // fallback for Cloudflare Pages (strips index.html)
+
 const ioUrl = location.href.substring(0, pos);         // real IO URL
 const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
@@ -350,7 +349,7 @@ const installedPluginsPromise = Marketplace.getInstalledPlugins()
 		Marketplace.installedPlugins = plugins;
 		return plugins;
 	});
-const translationsPromise = loadAndApplyTranslations();
+const translationsPromise = loadAndApplyTranslations(Common.lang, Common.shortLang);
 
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Marketplace.loadAllPluginsAndRating()
@@ -360,7 +359,7 @@ let allPluginsPromise = Marketplace.loadAllPluginsAndRating()
 	});
 
 window.onload = function() {
-	UI.init(themeType);
+	UI.init(Common.themeType);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 
@@ -578,8 +577,8 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'Theme':
 			if (message.theme.type)
-				themeType = message.theme.type;
-			let bg = UI.onChangeTheme(message.theme, themeType, message.style);
+				Common.themeType = message.theme.type;
+			let bg = UI.onChangeTheme(message.theme, Common.themeType, message.style);
 			if (bg) {
 				defaultBG = bg;
 				let bShowMarketplace = STORAGE.mainFilter === "marketplace";
@@ -591,7 +590,7 @@ window.addEventListener('message', function(message) {
 					let imgSrc = null;
 					if (variation.store) {
 						if (variation.store.background)
-							bg = variation.store.background[themeType]
+							bg = variation.store.background[Common.themeType]
 					} else {
 						// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
 						// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
@@ -611,27 +610,6 @@ window.addEventListener('message', function(message) {
 			break;
 	};
 }, false);
-
-/** @param {Object} message */
-function sendMessage(message) {
-	// this function sends message to editor
-	parent.postMessage(JSON.stringify(message), '*');
-};
-
-function detectLanguage() {
-	// detect language or return default
-	let lang = getUrlSearchValue("lang");
-	if (lang.length == 2)
-		lang = (lang.toLowerCase() + "-" + lang.toUpperCase());
-	return lang || 'en-EN';
-};
-
-function detectThemeType() {
-	// detect theme or return default
-	let type = getUrlSearchValue("theme-type");
-	return type || 'light';
-};
-
 
 function updateCategories() {
 	STORAGE.categories = new Map();
@@ -845,7 +823,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	let variation = plugin.variations[0];
 	let name = getTranslatedName(plugin);
 	let description = getTranslatedDescription(variation);
-	let bg = variation.store && variation.store.background ? variation.store.background[themeType] : defaultBG;
+	let bg = variation.store && variation.store.background ? variation.store.background[Common.themeType] : defaultBG;
 	let offered = plugin.offered || "ONLYOFFICE";
 
 	const bNeedUpdateButton = bHasUpdate && !bRemoved;
@@ -937,16 +915,16 @@ function makeRatingElements(rating) {
 
 /** @param {PluginInfo} plugin */
 function getTranslatedName(plugin) {
-	if (bTranslate && plugin.nameLocale && ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] )) {
-		return ( plugin.nameLocale[lang] || plugin.nameLocale[shortLang] );
+	if (bTranslate && plugin.nameLocale && ( plugin.nameLocale[Common.lang] || plugin.nameLocale[Common.shortLang] )) {
+		return ( plugin.nameLocale[Common.lang] || plugin.nameLocale[Common.shortLang] );
 	}
 	return plugin.name;
 }
 
 /** @param {any} variation */
 function getTranslatedDescription(variation) {
-	if ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] ) ) {
-		return ( variation.descriptionLocale[lang] || variation.descriptionLocale[shortLang] )
+	if ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[Common.lang] || variation.descriptionLocale[Common.shortLang] ) ) {
+		return ( variation.descriptionLocale[Common.lang] || variation.descriptionLocale[Common.shortLang] )
 	}
 	return variation.description;
 }
@@ -1087,10 +1065,8 @@ function openPluginCard(guid) {
 		guid : guid,
 		installed: installed || null,
 		plugin: plugin || null,
-		shortLang: shortLang,
 		iconBackground: iconBackground,
 		iconSrc: iconSrc,
-		themeType: themeType,
 		isLocal: isLocal,
 		editorVersion: editorVersion,
 		bHasUpdate: !!bHasUpdate,
@@ -1249,8 +1225,12 @@ function calculateScale() {
 	scale.value = supportedScaleValues[bestIndex];
 };
 
-/** @returns {Promise<boolean>} */
-function loadAndApplyTranslations() {
+/**
+ * @param {string} lang
+ * @param {string} shortLang
+ * @returns {Promise<boolean>}
+ */
+function loadAndApplyTranslations(lang, shortLang) {
 	// gets translation for current language
 	if (shortLang === "en") {
 		return Promise.resolve(true);
@@ -1358,7 +1338,7 @@ function getImageUrl(guid) {
 
 	if (variation.store && variation.store.icons) {
 		// new scheme: folder per theme + scale suffix
-		const folder = baseUrl + variation.store.icons[themeType];
+		const folder = baseUrl + variation.store.icons[Common.themeType];
 		return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
 	}
 
@@ -1370,7 +1350,7 @@ function getImageUrl(guid) {
 	if (variation.icons) {
 		if (!Array.isArray(variation.icons)) {
 			// new scheme: object { light, dark } with folder paths
-			const folder = baseUrl + variation.icons[themeType];
+			const folder = baseUrl + variation.icons[Common.themeType];
 			return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
 		}
 		if (typeof variation.icons[0] === 'object') {
@@ -1397,7 +1377,7 @@ function resolveOldThemedIcons(icons, baseUrl) {
 	let icon = icons[0];
 	for (let i = 1; i < icons.length; i++) {
 		const style = icons[i].style;
-		if (style && themeType.includes(style)) {
+		if (style && Common.themeType.includes(style)) {
 			icon = icons[i];
 			break;
 		}
@@ -1407,24 +1387,6 @@ function resolveOldThemedIcons(icons, baseUrl) {
 		return entry && entry.normal ? baseUrl + entry.normal : '';
 	});
 }
-
-/**
- * @param {string} key 
- * @returns {string}
- */
-function getUrlSearchValue(key) {
-	let res = '';
-	if (window.location && window.location.search) {
-		let search = window.location.search;
-		let pos1 = search.indexOf(key + '=');
-		if (-1 != pos1) {
-			pos1 += key.length + 1;
-			let pos2 = search.indexOf("&", pos1);
-			res = search.substring(pos1, (pos2 != -1 ? pos2 : search.length) )
-		}
-	}
-	return res;
-};
 
 function installPluginManually() {
 	window["AscDesktopEditor"]["OpenFilenameDialog"]("plugin", false, function (_file) {

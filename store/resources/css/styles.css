@@ -9,14 +9,6 @@ html,body {
 	flex-flow: column;
 }
 
-#stage {
-	min-height: 100vh; 
-	display: flex; 
-	align-items: center; 
-	justify-content: center;
-	padding: 40px 20px;
-}
-
 .plugin-store {
 	display: flex;
 	width: 100%;
@@ -48,21 +40,21 @@ aside > *:not(:last-child) {
 	display: flex;
 	flex-direction: column;
 }
-.filter-by-installed > *:not(:last-child) {
-	margin-bottom: 2px;
-}
+	.filter-by-installed > *:not(:last-child) {
+		margin-bottom: 2px;
+	}
 .filter-by-category {
 	display: flex;
 	flex-direction: column;
 }
-.filter-by-category > *:not(:last-child) {
-	margin-bottom: 1px;
-}
-.filter-by-category span:nth-of-type(2) {
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0%;
-}
+	.filter-by-category > *:not(:last-child) {
+		margin-bottom: 1px;
+	}
+	.filter-by-category span:nth-of-type(2) {
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: 0%;
+	}
 .filter-by label {
 	display: flex;
 	align-items: center;
@@ -160,55 +152,55 @@ main {
 	display: flex;
 	align-items: center;
 }
-.toolbar > *:not(:last-child) {
-	margin-right: 16px;
-}
-.toolbar>div:first-child {
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0%;
-}
-.toolbar>div:nth-child(2) {
-	width: 280px;
-}
+	.toolbar > *:not(:last-child) {
+		margin-right: 16px;
+	}
+	.toolbar>div:first-child {
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: 0%;
+	}
+	.toolbar>div:nth-child(2) {
+		width: 280px;
+	}
 
-.toolbar .place-name {
-	font-size: 11px;
-	text-transform: uppercase;
-	letter-spacing: 0.6px;
-	margin-bottom: 4px;
-}
-.toolbar h1 {
-	margin: 0px;
-	font-size: 20px;
-	font-weight: 600;
-	letter-spacing: -0.01em;
-}
-.toolbar .search {
-	position: relative;
-	display: flex;
-	align-items: center;
-	width: 100%;
-}
-.toolbar .search span {
-	position: absolute;
-	left: 12px;
-	top: 10px;
-	pointer-events: none;
-}
-.toolbar .search span svg {
-	vertical-align: middle;
-}
-.toolbar .search input {
-	width: 100%;
-	height: 34px;
-	padding: 0px 12px 0px 34px;
-	border-radius: 4px;
-	border-width: 1px;
-	border-style: solid;
-	font-size: 13px;
-	outline: none;
-}
+	.toolbar .place-name {
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.6px;
+		margin-bottom: 4px;
+	}
+	.toolbar h1 {
+		margin: 0px;
+		font-size: 20px;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+	}
+	.toolbar .search {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 100%;
+	}
+	.toolbar .search span {
+		position: absolute;
+		left: 12px;
+		top: 10px;
+		pointer-events: none;
+	}
+	.toolbar .search span svg {
+		vertical-align: middle;
+	}
+	.toolbar .search input {
+		width: 100%;
+		height: 34px;
+		padding: 0px 12px 0px 34px;
+		border-radius: 4px;
+		border-width: 1px;
+		border-style: solid;
+		font-size: 13px;
+		outline: none;
+	}
 
 .plugins-container {
 	position: relative;
@@ -218,63 +210,63 @@ main {
 	overflow: auto;
 	padding: 20px 24px;
 }
-/* IE11 fallback: flex-based 3-column layout. */
-.plugins-container .plugins-list {
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-	-ms-flex-wrap: wrap;
-	    flex-wrap: wrap;
-	margin: -7px; /* compensates for per-item 7px margin */
-}
-.plugins-container .plugins-list > .plugin-plate {
-	/* IE11: split shorthand — `flex: 0 0 calc(...)` is broken when calc() is the basis. */
-	-ms-flex-positive: 0;
-	-ms-flex-negative: 0;
-	-ms-flex-preferred-size: calc(33.333% - 14px);
-	flex-grow: 0;
-	flex-shrink: 0;
-	flex-basis: calc(33.333% - 14px);
-	/* IE11 also needs an explicit width — flex-basis on a column item with min-height
-	   can be ignored, leading to full-row stretching. */
-	width: calc(33.333% - 14px);
-	max-width: calc(33.333% - 14px);
-	margin: 7px;
-}
-@media (max-width: 1199px) {
-	.plugins-container .plugins-list > .plugin-plate {
-		-ms-flex-preferred-size: calc(50% - 14px);
-		flex-basis: calc(50% - 14px);
-		width: calc(50% - 14px);
-		max-width: calc(50% - 14px);
-	}
-}
-@media (max-width: 892px) {
-	.plugins-container .plugins-list > .plugin-plate {
-		-ms-flex-preferred-size: calc(100% - 14px);
-		flex-basis: calc(100% - 14px);
-		width: calc(100% - 14px);
-		max-width: calc(100% - 14px);
-	}
-}
-/* ↑ IE11 flex fallback above; grid overrides below */
-/* Modern browsers: real CSS grid (IE11 ignores @supports and keeps flex). */
-@supports (display: grid) {
+	/* IE11 fallback: flex-based 3-column layout. */
 	.plugins-container .plugins-list {
-		display: grid;
-		/* minmax(0, 1fr) instead of plain 1fr so columns can shrink past
-		   content min-size — otherwise a single wide card unevens the grid. */
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-		gap: 14px;
-		margin: 0;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-ms-flex-wrap: wrap;
+			flex-wrap: wrap;
+		margin: -7px; /* compensates for per-item 7px margin */
 	}
 	.plugins-container .plugins-list > .plugin-plate {
-		flex: initial;
-		margin: 0;
-		width: auto;
-		max-width: none;
+		/* IE11: split shorthand — `flex: 0 0 calc(...)` is broken when calc() is the basis. */
+		-ms-flex-positive: 0;
+		-ms-flex-negative: 0;
+		-ms-flex-preferred-size: calc(33.333% - 14px);
+		flex-grow: 0;
+		flex-shrink: 0;
+		flex-basis: calc(33.333% - 14px);
+		/* IE11 also needs an explicit width — flex-basis on a column item with min-height
+		can be ignored, leading to full-row stretching. */
+		width: calc(33.333% - 14px);
+		max-width: calc(33.333% - 14px);
+		margin: 7px;
 	}
-}
+	@media (max-width: 1199px) {
+		.plugins-container .plugins-list > .plugin-plate {
+			-ms-flex-preferred-size: calc(50% - 14px);
+			flex-basis: calc(50% - 14px);
+			width: calc(50% - 14px);
+			max-width: calc(50% - 14px);
+		}
+	}
+	@media (max-width: 892px) {
+		.plugins-container .plugins-list > .plugin-plate {
+			-ms-flex-preferred-size: calc(100% - 14px);
+			flex-basis: calc(100% - 14px);
+			width: calc(100% - 14px);
+			max-width: calc(100% - 14px);
+		}
+	}
+	/* ↑ IE11 flex fallback above; grid overrides below */
+	/* Modern browsers: real CSS grid (IE11 ignores @supports and keeps flex). */
+	@supports (display: grid) {
+		.plugins-container .plugins-list {
+			display: grid;
+			/* minmax(0, 1fr) instead of plain 1fr so columns can shrink past
+			content min-size — otherwise a single wide card unevens the grid. */
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 14px;
+			margin: 0;
+		}
+		.plugins-container .plugins-list > .plugin-plate {
+			flex: initial;
+			margin: 0;
+			width: auto;
+			max-width: none;
+		}
+	}
 .plugin-plate {
 	display: flex;
 	min-height: 178px;
@@ -287,111 +279,111 @@ main {
 	transition: 150ms;
 	position: relative;
 }
-.plugin-plate > *:not(:last-child) {
-	margin-bottom: 12px;
-}
-.plugin-plate:hover {
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-.plugin-plate .introduction {
-	display: flex;
-	align-items: flex-start;
-	pointer-events: none;
-}
-.plugin-plate .introduction > *:not(:last-child) {
-	margin-right: 12px;
-}
-.plugin-plate .image {
-	width: 120px;
-	height: 52px;
-	border-radius: 4px;
-	font-weight: 600;
-	font-size: 23.4px;
-	display: flex;
-	align-items: center;
-	justify-content: center; 
-	flex-shrink: 0;
-	box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 0px 1px inset; 
-}
-.plugin-plate .manufacturer {
-	font-size: 11.5px;
-}
-.plugin-plate .name {
-	flex: 1 1 0%;
-	min-width: 0px;
-}
-.plugin-plate .name div:first-child {
-	display: flex;
-	align-items: center;
-	margin-bottom: 2px;
-}
-.plugin-plate .name div:first-child > *:not(:last-child) {
-	margin-right: 6px;
-}
-.plugin-plate .name span:first-child {
-	font-weight: 600;
-	font-size: 14px;
-}
-.plugin-plate .by-onlyoffice {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 13px;
-	height: 13px;
-	border-radius: 6.5px;
-	color: rgb(255, 255, 255);
-	font-size: 8.45px;
-	font-weight: 700;
-	line-height: 1;
-	flex-shrink: 0;
-}
-.plugin-plate .description {
-	font-size: 12.5px;
-	line-height: 1.5;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-moz-box-orient: vertical;
-	-webkit-box-orient: vertical;
-	hyphens: auto;
-	overflow: hidden;
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0%;
-	word-break: break-word;
-	pointer-events: none;
-}
-.plugin-plate .management {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	min-height: 32px;
-	padding-top: 8px;
-	border-top-width: 1px;
-	border-top-style: solid;
-}
-.plugin-plate .rating {
-	display: flex;
-	align-items: center;
-	font-size: 11px;
-	pointer-events: none;
-}
-.plugin-plate .rating > *:not(:last-child) {
-	margin-right: 6px;
-}
-.plugin-plate .rating>span:last-child {
-	opacity: 0.6;
-}
-.plugin-plate .stars {
-	display: flex;
-}
-.plugin-plate .stars > *:not(:last-child) {
-	margin-right: 1px;
-}
-.plugin-plate .stars span {
-	font-size: 11px;
-	opacity: 1;
-}
+	.plugin-plate > *:not(:last-child) {
+		margin-bottom: 12px;
+	}
+	.plugin-plate:hover {
+		box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+	}
+	.plugin-plate .introduction {
+		display: flex;
+		align-items: flex-start;
+		pointer-events: none;
+	}
+	.plugin-plate .introduction > *:not(:last-child) {
+		margin-right: 12px;
+	}
+	.plugin-plate .image {
+		width: 120px;
+		height: 52px;
+		border-radius: 4px;
+		font-weight: 600;
+		font-size: 23.4px;
+		display: flex;
+		align-items: center;
+		justify-content: center; 
+		flex-shrink: 0;
+		box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 0px 1px inset; 
+	}
+	.plugin-plate .manufacturer {
+		font-size: 11.5px;
+	}
+	.plugin-plate .name {
+		flex: 1 1 0%;
+		min-width: 0px;
+	}
+	.plugin-plate .name div:first-child {
+		display: flex;
+		align-items: center;
+		margin-bottom: 2px;
+	}
+	.plugin-plate .name div:first-child > *:not(:last-child) {
+		margin-right: 6px;
+	}
+	.plugin-plate .name span:first-child {
+		font-weight: 600;
+		font-size: 14px;
+	}
+	.plugin-plate .by-onlyoffice {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 13px;
+		height: 13px;
+		border-radius: 6.5px;
+		color: rgb(255, 255, 255);
+		font-size: 8.45px;
+		font-weight: 700;
+		line-height: 1;
+		flex-shrink: 0;
+	}
+	.plugin-plate .description {
+		font-size: 12.5px;
+		line-height: 1.5;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-moz-box-orient: vertical;
+		-webkit-box-orient: vertical;
+		hyphens: auto;
+		overflow: hidden;
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-basis: 0%;
+		word-break: break-word;
+		pointer-events: none;
+	}
+	.plugin-plate .management {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		min-height: 32px;
+		padding-top: 8px;
+		border-top-width: 1px;
+		border-top-style: solid;
+	}
+	.plugin-plate .rating {
+		display: flex;
+		align-items: center;
+		font-size: 11px;
+		pointer-events: none;
+	}
+	.plugin-plate .rating > *:not(:last-child) {
+		margin-right: 6px;
+	}
+	.plugin-plate .rating>span:last-child {
+		opacity: 0.6;
+	}
+	.plugin-plate .stars {
+		display: flex;
+	}
+	.plugin-plate .stars > *:not(:last-child) {
+		margin-right: 1px;
+	}
+	.plugin-plate .stars span {
+		font-size: 11px;
+		opacity: 1;
+	}
 button.btn-text-default {
 	height: 24px;
 	min-width: 100px;
@@ -430,52 +422,13 @@ label.header {
 	font-size: 14px !important;
 }
 
-.arrow {
-	position: absolute;
-	/* left: 10px; */
-	top: 0;
-	font-size: 20px;
-	opacity: 0.7;
-	cursor: pointer;
-}
-
-.arrow:hover {
-	opacity: 1;
-}
-
 .toolbar_tools {
 	display: flex;
 	justify-content: space-between;
 }
-.toolbar_tools button {
-	height: 34px;
-}
-
-.span_name_selected {
-	margin-bottom: 5px;
-	font-weight: bold;
-	font-size: 14px;
-}
-
-.span_offered {
-	margin-right: 5px;
-}
-
-.btn_item {
-	margin: 0px 10px 10px;
-	width: calc(100% - 20px);
-	border-radius: 3px !important;
-	font-weight: bold !important;
-	height: 24px !important;
-}
-
-.btn_preview {
-	margin: 10px 10px 0px 0px;
-	width: fit-content;
-	min-width: 109px;
-	height: 24px !important;
-	border-radius: 3px !important;
-}
+	.toolbar_tools button {
+		height: 34px;
+	}
 
 .div_notification {
 	display: flex;
@@ -526,98 +479,11 @@ label.header {
 	display: flex !important;
 }
 
-.div_preview {
-	height: 100%;
-}
-
-.link_submit {
-	text-decoration: underline dotted !important;
-	text-underline-offset: 4px;
-	margin-left: 10px;
-}
-
-.link_submit:hover {
-	text-decoration: underline dotted !important;
-}
-
-.link_info {
-	border-bottom: 1px solid;
-	text-decoration: none !important;
-}
-
-.hidden {
-	display: none !important;
-}
-
 .transparent {
 	opacity: 0;
 	z-index: -1;
 }
 
-.div_selected_toolbar {
-	display: flex;
-	justify-content: space-between;
-	margin: 20px;
-}
-
-.div_selected_description {
-	display: flex;
-	flex-flow: column;
-}
-
-.div_selected_main {
-	margin: 0 20px;
-	position: absolute;
-	top: 130px;
-	right: 0px;
-	left: 0px;
-	bottom: 0px;
-	/* inset: 130px 0px 0px; */
-}
-
-.div_selected_preview {
-	width: 100%;
-	height: calc(100% - 60px);
-	margin-top: 25px;
-	position: absolute;
-}
-
-.div_selected_preview_chanelog {
-	margin-top: 12px !important;
-}
-
-.div_selected_info {
-	margin-top: 10px;
-}
-
-.margin_0 {
-	margin-top: 0 !important;
-}
-
-.span_caption {
-	margin-right: 16px;
-	cursor: pointer;
-}
-
-.span_selected {
-	border-bottom: 3px solid;
-	padding-bottom: 4px;
-}
-
-.font_bold {
-	font-weight: bold;
-}
-
-.span_update {
-	align-self: flex-end;
-	background-color: #009900;
-	color: white;
-	font-size: 10px !important;
-	padding: 1px 5px;
-	border: 1px solid #009900;
-	border-radius: 2px;
-	/* margin: 0px 10px 5px 10px; */
-}
 .message_caption {
 	font-size: 14px;
 }
@@ -639,181 +505,6 @@ label.header {
 	font-weight: bold;
 }
 
-.div_description_selected {
-	max-height: 50px;
-	overflow: auto;
-	overflow-wrap: break-word;
-	/* margin-top: 20px; */
-	margin-bottom: 10px;
-}
-
-.div_plugin_info {
-	margin-bottom: 25px;
-}
-
-.div_icon_info {
-	width: 171px;
-	height: 84px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	border-radius: 3px;
-}
-
-.div_rating_general {
-	display: flex;
-	margin-top: 6px;
-}
-
-.div_rating {
-	position: relative;
-	height: 12px;
-	width: 68px;
-}
-
-.div_votes {
-	display: flex;
-	align-items: center;
-	margin: 0 0 0 5px;
-}
-
-.div_info_column {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-flow: column;
-}
-
-.stars_grey {
-	position: absolute;
-	background-image: url(../img/stars/rating-stars.svg);
-	background-repeat: no-repeat;
-	background-size: 68px;
-	z-index: 1;
-	width: 100%;
-	height: 100%;
-}
-
-.stars_orange {
-	position: absolute;
-	background-image: url(../img/stars/rating-stars-colored.svg);
-	z-index: 2;
-	left: 0;
-	height: 100%;
-	width: 0%;
-	background-repeat: no-repeat;
-	background-size: 68px;
-}
-
-.flex {
-	display: flex;
-}
-
-.div_rating_card {
-	height: 15px;
-	align-items: center;
-}
-
-.mySlides {
-	display: none;
-	height: 100%;
-	width: 100%;
-	text-align: center;
-}
-
-.screen {
-	vertical-align: middle;
-	height: 100%;
-	width: 100%;
-	object-fit: contain;
-}
-
-.slideshow-container {
-	position: relative;
-	margin: auto;
-	width: 100%;
-	height: 100%;
-}
-
-/* buttons next & previous*/
-.prev, .next {
-	cursor: pointer;
-	position: absolute;
-	top: calc(50% - 17px);
-	padding: 12px;
-	transition: 0.3s ease;
-	user-select: none;
-	background: rgba(210,210,215,.64);
-	color: rgba(0,0,0,.56);
-	width: 34px;
-	height: 34px;
-	border-radius: 50%;
-	line-height: 8px;
-	font-weight: 300;
-	font-size: 25px;
-	text-align: center;
-	margin: 0;
-}
-
-.next {
-	right: 5px;
-}
-
-.prev {
-	left: 5px;
-    text-indent: -3px;
-}
-
-/* arrow hovered*/
-.prev:hover, .next:hover {
-	background-color: rgba(223,223,227,.6976);
-	color: rgba(0,0,0,.64);
-	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    -moz-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-/* arrow active*/
-.prev:active, .next:active {
-	background-color: rgba(193,193,198,.6544);
-	color: rgba(0,0,0,.64);
-}
-
-/* points */
-.dot {
-	cursor: pointer;
-	height: 10px;
-	width: 10px;
-	margin: 0 2px;
-	background-color: #999999;
-	border-radius: 50%;
-	display: inline-block;
-	transition: background-color 0.6s ease;
-}
-
-.dot.active, .dot:hover {
-	background-color: #111111;
-}
-
-/* animation */
-.fade {
-	-webkit-animation-name: fade;
-	-webkit-animation-duration: 1.5s;
-	animation-name: fade;
-	animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-	from {opacity: .4} 
-	to {opacity: 1}
-}
-
-@keyframes fade {
-	from {opacity: .4} 
-	to {opacity: 1}
-}
-
-/* For small screens increase font size */
-@media only screen and (max-width: 300px) {
-	.prev, .next {font-size: 11px}
+.hidden {
+	display: none !important;
 }

@@ -31,7 +31,7 @@
  */
 
 // @ts-check
-/// <reference path="../../scripts/types.js" />
+/// <reference path="./types.js" />
 
 const PluginCardUI = {
     /** @type {HTMLDivElement | undefined} */
