@@ -52,6 +52,7 @@
 
     window.Asc.plugin.init = function(){
         this.resizeWindow(592, 100, 592, 100, 592, 100);
+        this.executeMethod('SetButtonDisabled', [0, true]);
         var nStartFilesCount = 0, arrImages;
         $( window ).resize(function(){
             updateScroll();
@@ -256,7 +257,40 @@
 					});
             }
         );
-    
+
+        window.Asc.plugin.executeMethod('GetImageDataFromSelection', [], function(result) {
+            if (result && result.src) {
+                loadSelectedImage(result.src);
+            }
+        });
+
+        function loadSelectedImage(src) {
+            window.Asc.plugin.resizeWindow(800, 571, 800, 571);
+
+            const imagesContainer = document.getElementById('image-container-div');
+            while (imagesContainer.firstChild) {
+                imagesContainer.removeChild(imagesContainer.firstChild);
+            }
+            const textContainer = document.getElementById('text-container-div');
+            while (textContainer.firstChild) {
+                textContainer.removeChild(textContainer.firstChild);
+            }
+            arrParsedData.length = 0;
+
+            const imgElement = document.createElement('img');
+            imgElement.src = src;
+            imgElement.style.width = '100%';
+            arrImages = [imgElement];
+            imagesContainer.appendChild(imgElement);
+
+            document.getElementById('lang-select').removeAttribute('disabled');
+            document.getElementById('recognize-button').removeAttribute('disabled');
+            nStartFilesCount = 1;
+            $('#status-label').text('');
+            $('#scrollable-image-text-div').css('display', 'inline-block');
+            updateScroll();
+        }
+
 		function generateHTMLByData(oData) {
 			let sResult = "<div>";
 			function commitSpan(sLastSpanText, oLastWord) {
