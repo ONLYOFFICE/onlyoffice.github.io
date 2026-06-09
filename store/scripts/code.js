@@ -733,9 +733,14 @@ function showListOfPlugins(typeOfOperation) {
 		});
 		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
-		// if no installed plugins and available plugins button was clicked
-		let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
-		createNotification('Try a different category or search term.', notification);
+		if (STORAGE.mainFilter === 'marketplace' && !DataFetcher.isOnline) {
+			createNotification('No Internet Connection.', 'Problem with loading some resources');
+		} else {
+			// if no installed plugins and available plugins button was clicked
+			let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
+			createNotification('Try a different category or search term.', notification);
+		}
+		
 		UI.toggleLoader(false);
 	}
 	// scroll for list of plugins

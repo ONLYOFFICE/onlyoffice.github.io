@@ -39,16 +39,16 @@
 	// create iframe
 	const iframe = document.createElement('iframe');
 	const OOMarketplaceUrl = isLocal ? './store/plugin-card.html' : 'https://onlyoffice.github.io/store/plugin-card.html';
-	let marketplaceURl = OOMarketplaceUrl;
+	let marketplaceUrl = OOMarketplaceUrl;
 	try {
 		// for incognito mode
 		let developerMarketplaceUrl = localStorage.getItem('DeveloperMarketplaceUrl');
 		if (developerMarketplaceUrl && developerMarketplaceUrl.indexOf('/store/') !== -1) {
 			const storeIndex = developerMarketplaceUrl.indexOf('/store/');
-			marketplaceURl = developerMarketplaceUrl.substring(0, storeIndex) + '/store/plugin-card.html';
+			marketplaceUrl = developerMarketplaceUrl.substring(0, storeIndex) + '/store/plugin-card.html';
 		}
 	} catch (err) {
-		marketplaceURl = OOMarketplaceUrl;
+		marketplaceUrl = OOMarketplaceUrl;
 	}
 	
 	window.Asc.plugin.init = function() {
@@ -72,14 +72,16 @@
 
 		let divNoInt = document.getElementById('div_noIternet');
 		let style = document.head.lastChild;
-		let pageUrl = marketplaceURl;
+		let pageUrl = marketplaceUrl;
 		iframe.src = pageUrl + window.location.search;
 		iframe.onload = function() {
 			pluginDataPromise.then(function(pluginData) {
 				if (divNoInt && !divNoInt.classList.contains('hidden')) {
 					divNoInt.classList.add('hidden');
 				}
-				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
+				if (style && style instanceof HTMLStyleElement) {
+					postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
+				}
 				postMessage( { type: 'PluginReady', data: pluginData } );
 			});
 		};
@@ -147,8 +149,9 @@
 		}
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.head.lastChild;
-		if (iframe && iframe.contentWindow)
+		if (iframe && iframe.contentWindow && style && style instanceof HTMLStyleElement) {
 			postMessage( { type: 'Theme', theme: theme, style : style.innerHTML } );
+		}
 	};
 
 	window.onresize = function() {
