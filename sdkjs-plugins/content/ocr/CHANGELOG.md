@@ -21,3 +21,11 @@
 ## 2.1.0
 
 * Upgrade TesseractJS from v4 to v6.
+
+## 2.1.1
+
+* Automatically load the image selected in the editor when the plugin opens.
+* Disable the "Insert text" button while recognition is in progress and keep it disabled until there is recognized text to insert.
+* Update the list of supported image formats: bmp, jpg, png, webp, gif.
+* Remove the "Meme" language and fix language data loading for Tagalog and Math.
+* Pin the Tesseract.js version to 6.0.1.
