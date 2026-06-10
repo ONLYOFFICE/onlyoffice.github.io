@@ -35,75 +35,111 @@
 /// <reference path="./utils.js" />
 
 const PluginCardUI = {
-    /** @type {HTMLDivElement | undefined} */
+    /** @type {HTMLDivElement} */
     loader: undefined,
     /** @type {HTMLImageElement} */
-    imgIcon: document.getElementById('img_icon'),
+    imgIcon: null,
     /** @type {HTMLSpanElement} */
-    spanName: document.getElementById('span_name'),
+    spanName: null,
     /** @type {HTMLSpanElement} */
-    spanOffered: document.getElementById('span_offered'),
+    spanOffered: null,
     /** @type {HTMLButtonElement} */
-    btnUpdate: document.getElementById('btn_update'),
+    btnUpdate: null,
     /** @type {HTMLButtonElement} */
-    btnRemove: document.getElementById('btn_remove'),
+    btnRemove: null,
     /** @type {HTMLButtonElement} */
-    btnInstall: document.getElementById('btn_install'),
+    btnInstall: null,
     /** @type {HTMLSpanElement} */
-    spanSelectedDescr: document.getElementById('span_selected_description'),
+    spanSelectedDescr: null,
     /** @type {HTMLAnchorElement} */
-    linkPlugin: document.getElementById('link_plugin'),
+    linkPlugin: null,
     /** @type {HTMLSpanElement} */
-    arrowNext: document.getElementById('next_arrow'),
+    arrowNext: null,
     /** @type {HTMLSpanElement} */
-    arrowPrev: document.getElementById('prev_arrow'),
+    arrowPrev: null,
     /** @type {HTMLAnchorElement} */
-    discussionLink: document.getElementById('discussion_link'),
+    discussionLink: null,
     /** @type {HTMLDivElement} */
-    divDescriptionSelected: document.getElementById('div_description_selected'),
+    divDescriptionSelected: null,
     /** @type {HTMLDivElement} */
-    divGitLink: document.getElementById('div_github_link'),
+    divGitLink: null,
     /** @type {HTMLDivElement} */
-    divLanguages: document.getElementById('div_languages'),
+    divLanguages: null,
     /** @type {HTMLDivElement} */
-    divMinVersion: document.getElementById('div_min_version'),
+    divMinVersion: null,
     /** @type {HTMLDivElement} */
-    divRatingLink: document.getElementById('div_rating_link'),
+    divRatingLink: null,
     /** @type {HTMLDivElement} */
-    divReadme: document.getElementById('div_readme_link'),
+    divReadme: null,
     /** @type {HTMLDivElement} */
-    divSelectedImage: document.getElementById("div_selected_image"),
+    divSelectedImage: null,
     /** @type {HTMLDivElement} */
-    divSelectedPreview: document.getElementById("div_selected_preview"),
+    divSelectedPreview: null,
     /** @type {HTMLDivElement} */
-    divStarsColored: document.getElementById("stars_colored"),
+    divStarsColored: null,
     /** @type {HTMLDivElement} */
-    divVersion: document.getElementById('div_version'),
+    divVersion: null,
     /** @type {HTMLDivElement} */
-    divVotes: document.getElementById('div_votes'),
+    divVotes: null,
     /** @type {HTMLAnchorElement} */
-    linkReadme: document.getElementById('link_readme'),
+    linkReadme: null,
     /** @type {HTMLSpanElement} */
-    spanLanguages: document.getElementById('span_langs'),
+    spanLanguages: null,
     /** @type {HTMLSpanElement} */
-    spanMinVersion: document.getElementById('span_min_ver'),
+    spanMinVersion: null,
     /** @type {HTMLSpanElement} */
-    spanVersion: document.getElementById('span_ver'),
+    spanVersion: null,
     /** @type {HTMLSpanElement} */
-    totalVotes: document.getElementById('total_votes'),
+    totalVotes: null,
     /** @type {HTMLSpanElement} */
-    spanChangelog: document.getElementById("span_changelog"),
+    spanChangelog: null,
     /** @type {HTMLDivElement} */
-    divChangelogPreview: document.getElementById("div_changelog_preview"),
+    divChangelogPreview: null,
     /** @type {HTMLDivElement} */
-    divIconInfo: document.getElementById("div_icon_info"),
+    divIconInfo: null,
     /** @type {HTMLDivElement} */
-    divSelectedChangelog: document.getElementById('div_selected_changelog'),
+    divSelectedChangelog: null,
     /** @type {HTMLDivElement} */
-    divSelectedInfo: document.getElementById('div_selected_info'),
+    divSelectedInfo: null,
+
+    _initDom: function() {
+        this.imgIcon              = /** @type {HTMLImageElement} */ (document.getElementById('img_icon'));
+        this.spanName             = document.getElementById('span_name');
+        this.spanOffered          = document.getElementById('span_offered');
+        this.btnUpdate            = /** @type {HTMLButtonElement} */ (document.getElementById('btn_update'));
+        this.btnRemove            = /** @type {HTMLButtonElement} */ (document.getElementById('btn_remove'));
+        this.btnInstall           = /** @type {HTMLButtonElement} */ (document.getElementById('btn_install'));
+        this.spanSelectedDescr    = document.getElementById('span_selected_description');
+        this.linkPlugin           = /** @type {HTMLAnchorElement} */ (document.getElementById('link_plugin'));
+        this.arrowNext            = document.getElementById('next_arrow');
+        this.arrowPrev            = document.getElementById('prev_arrow');
+        this.discussionLink       = /** @type {HTMLAnchorElement} */ (document.getElementById('discussion_link'));
+        this.divDescriptionSelected = /** @type {HTMLDivElement} */ (document.getElementById('div_description_selected'));
+        this.divGitLink           = /** @type {HTMLDivElement} */ (document.getElementById('div_github_link'));
+        this.divLanguages         = /** @type {HTMLDivElement} */ (document.getElementById('div_languages'));
+        this.divMinVersion        = /** @type {HTMLDivElement} */ (document.getElementById('div_min_version'));
+        this.divRatingLink        = /** @type {HTMLDivElement} */ (document.getElementById('div_rating_link'));
+        this.divReadme            = /** @type {HTMLDivElement} */ (document.getElementById('div_readme_link'));
+        this.divSelectedImage     = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_image'));
+        this.divSelectedPreview   = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_preview'));
+        this.divStarsColored      = /** @type {HTMLDivElement} */ (document.getElementById('stars_colored'));
+        this.divVersion           = /** @type {HTMLDivElement} */ (document.getElementById('div_version'));
+        this.divVotes             = /** @type {HTMLDivElement} */ (document.getElementById('div_votes'));
+        this.linkReadme           = /** @type {HTMLAnchorElement} */ (document.getElementById('link_readme'));
+        this.spanLanguages        = document.getElementById('span_langs');
+        this.spanMinVersion       = document.getElementById('span_min_ver');
+        this.spanVersion          = document.getElementById('span_ver');
+        this.totalVotes           = document.getElementById('total_votes');
+        this.spanChangelog        = document.getElementById('span_changelog');
+        this.divChangelogPreview  = /** @type {HTMLDivElement} */ (document.getElementById('div_changelog_preview'));
+        this.divIconInfo          = /** @type {HTMLDivElement} */ (document.getElementById('div_icon_info'));
+        this.divSelectedChangelog = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_changelog'));
+        this.divSelectedInfo      = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_info'));
+    },
 
     /** @param {'light' | string} themeType */
     init: function(themeType) {
+        this._initDom();
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
         rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
         let styleTheme = document.createElement('style');
@@ -167,7 +203,9 @@ const PluginCardUI = {
             this.loader = undefined;	
         } else if (!this.loader) {
             loaderContainer.classList.remove('hidden');
-            this.loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
+            const translatedText = text ? Utils.getTranslated(text) : '';
+            // @ts-ignore
+            this.loader = showLoader(loaderContainer, translatedText + '...');
         }
     },
 }

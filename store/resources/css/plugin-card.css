@@ -32,18 +32,6 @@ button {
 	min-width: 70px;
 }
 
-.arrow {
-	position: absolute;
-	/* left: 10px; */
-	top: 0;
-	font-size: 20px;
-	opacity: 0.7;
-	cursor: pointer;
-}
-    .arrow:hover {
-        opacity: 1;
-    }
-
 .span_name_selected {
 	margin-bottom: 5px;
 	font-weight: bold;

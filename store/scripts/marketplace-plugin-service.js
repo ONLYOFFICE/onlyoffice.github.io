@@ -225,8 +225,9 @@ const MarketplacePluginService = {
         });
         
     },
-    showBackButton: function() {
-        this._sendMessage({ type: "showButton", show: true });
+    /** @param {boolean} bShow */
+    showBackButton: function(bShow) {
+        this._sendMessage({ type: "showButton", show: bShow });
     },
     /**
      * @returns {Promise<InstalledPluginInfo[]>}

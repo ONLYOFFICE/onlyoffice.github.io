@@ -153,17 +153,15 @@ main {
 	display: flex;
 	align-items: center;
 }
-	.toolbar > *:not(:last-child) {
-		margin-right: 16px;
-	}
 	.toolbar>div:first-child {
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-basis: 0%;
 	}
 	.toolbar>div:nth-child(2) {
-		max-width: 280px;
+		max-width: 293px;
 		flex: 1;
+		margin-left: 16px;
 	}
 
 	.toolbar .place-name {
@@ -430,6 +428,7 @@ label.header {
 }
 	.toolbar_tools button {
 		height: 34px;
+		margin-left: 16px;
 	}
 
 .div_notification {

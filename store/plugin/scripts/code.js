@@ -225,6 +225,10 @@
 				window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
 		} else if (PluginCard.window && PluginCard.window.id == windowID) {
 			window.Asc.plugin.executeMethod('CloseWindow', [windowID]);
+		} else if (id == 'back') {
+			window.Asc.plugin.executeMethod('ShowButton',['back', false]);
+			if (iframe && iframe.contentWindow)
+				postMessage( { type: 'onClickBack' } );
 		} else if (id == 'developer') {
 			createWindow('developer');
 		} else {
@@ -258,6 +262,9 @@
 				break;
 			case 'update':
 				PluginManager.update(data);
+				break;
+			case 'showButton' :
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
 				break;
 			case 'showPluginCard':
 				PluginCard.show(data);

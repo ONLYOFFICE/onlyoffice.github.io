@@ -40,6 +40,7 @@
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./common.js" />
 /// <reference path="./marketplace-plugin-service.js" />
+/// <reference path="./plugin-card.js" />
 
 const storeVersion = '1.0.9';                                        // version of store (will change it when update something in store)
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
@@ -53,6 +54,8 @@ const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid ma
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
 let editorVersion;                                            		 // editor current version
+/** @type {number} */
+let pluginVersion;                                            		 // marketplace plugin version
 let defaultBG = Utils.themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 /** @type {any} */
@@ -308,14 +311,12 @@ const Marketplace = {
 		});
 	},
 
-	/** @returns {Promise<number>} */
-	getEditorVersion: function() {
+	/** @returns {Promise<{editorVersion: number, pluginVersion: number}>} */
+	getEditorAndPluginVersions: function() {
 		return new Promise(function(fResolve) {
-			/**
-			 * @param {MessageEvent} event
-			 */
+			/** @param {MessageEvent} event */
 			let onLoad = function(event) {
-				/** @type {{type: string, version?: string}} */
+				/** @type {{type: string, version?: string, pluginVersion?: string}} */
 				let message;
 				try {
 					message = JSON.parse(event.data);
@@ -324,8 +325,15 @@ const Marketplace = {
 				}
 				if (message.type === 'PluginReady') {
 					window.removeEventListener('message', onLoad);
+					let pluginVersion = 1_000_005; // 1.0.5
+					if (message.pluginVersion && message.pluginVersion.includes('.')) {
+						pluginVersion = Utils.convertPluginVersionToNumber(message.pluginVersion);
+					}
 					const editorVersion = ( message.version && message.version.includes('.') ? Utils.convertPluginVersionToNumber(message.version) : 1e8 );
-					fResolve(editorVersion);
+					fResolve({
+						pluginVersion: pluginVersion,
+						editorVersion: editorVersion
+					});
 				}
 			};
 			window.addEventListener('message', onLoad);
@@ -350,8 +358,46 @@ const Marketplace = {
 
 };
 
-const editorVersionPromise = Marketplace.getEditorVersion().then(function(version) {
-	editorVersion = version;
+/**
+ * Dynamically loads CSS and JS assets needed for the inline plugin card.
+ * @returns {Promise<void>}
+ */
+function loadPluginCardAssets() {
+	return new Promise(function(resolve) {
+		var loaded = 0;
+		var scripts = [
+			'vendor/marked/marked.min.js',
+			'scripts/plugin-card-ui.js',
+			'scripts/plugin-card.js'
+		];
+
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = 'resources/css/plugin-card.css';
+		document.head.appendChild(link);
+
+		function onScriptLoad() {
+			loaded++;
+			if (loaded === scripts.length) resolve();
+		}
+
+		scripts.forEach(function(src) {
+			var s = document.createElement('script');
+			s.src = src;
+			s.onload = onScriptLoad;
+			s.onerror = onScriptLoad;
+			document.head.appendChild(s);
+		});
+	});
+}
+
+const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(versions) {
+	editorVersion = versions.editorVersion;
+	pluginVersion = versions.pluginVersion;
+	if (pluginVersion <= 1_000_005) {
+		return loadPluginCardAssets().then(function() { return versions; });
+	}
+	return versions;
 });
 
 /** @type {Promise<InstalledPluginInfo[]>} */
@@ -379,7 +425,7 @@ window.onload = function() {
 	Marketplace.init();
 
 	Promise.all([
-		editorVersionPromise,
+		versionsPromise,
 		translationsPromise,
 		installedPluginsPromise,
 		allPluginsPromise
@@ -600,6 +646,9 @@ window.addEventListener('message', function(message) {
 			evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 			document.dispatchEvent(evt);
 			break;
+		case 'onClickBack':
+			hidePluginCard();
+			break;
 	};
 }, false);
 
@@ -768,7 +817,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	pluginPlate.style.borderStyle = 'solid';
 	pluginPlate.style.borderWidth = ((zoom > 1 ? 1 : zoom)) +'px';
 
-	pluginPlate.onclick = onClickPluginCard.bind(pluginPlate, guid);
+	pluginPlate.onclick = onClickPluginPlate.bind(pluginPlate, guid);
 
 	/** @type {InstalledPluginInfo} */
 	let installed = bInstalled ? pluginOrInstalledPlugin : MarketplaceStorage.findInstalledPlugin(guid);
@@ -837,7 +886,6 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	if (PsMain) PsMain.update();
 };
 
-
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -857,7 +905,6 @@ function onClickInstall(guid, event) {
 	const config = (installed ? installed.obj : plugin);
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
 }
-
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -873,7 +920,6 @@ function onClickUpdate(guid, event) {
 	}
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doUpdate(guid, plugin) });
 }
-
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -887,7 +933,6 @@ function onClickRemove(guid, event) {
 	const needBackup = isLocal ? MarketplaceStorage.findPlugin(guid) == undefined : false;
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doRemove(guid, needBackup) });
 }
-
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
 	UI.btnUpdateAll.classList.add('hidden');
@@ -902,25 +947,23 @@ function onClickUpdateAll() {
  * @param {string} guid 
  * @returns {Promise<boolean>}
  */
-function onClickPluginCard(guid) {
-	//onClickPluginPlate(guid);
+function onClickPluginPlate(guid) {
 	let pluginPlate = UI.getPlugin(guid);
 	if (!pluginPlate) {
 		console.error('Plugin not found: ' + guid);
 		return Promise.resolve(false);
 	}
-	/** @type {InstalledPluginInfo} */
+	/** @type {InstalledPluginInfo | undefined} */
 	let installed = MarketplaceStorage.findInstalledPlugin(guid);
-	/** @type {PluginInfo} */
+	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(guid);
 	MarketplaceStorage.selectedPluginGuid = guid;
 	let iconSrc = getImageUrl(guid);
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
-	localStorage.setItem('test', JSON.stringify(Utils.translate));
 	let config = plugin ? plugin : installed.obj;
-	
+
 	/** @type {PluginCardWindowParams} */
 	let message = {
 		type : 'showPluginCard',
@@ -938,7 +981,34 @@ function onClickPluginCard(guid) {
 		pluginDescription: Utils.getTranslatedDescription(config.variations[0]),
 		translate: Utils.translate
 	};
-	return MarketplacePluginService.openPluginCard(message);
+	if (pluginVersion > 1_000_005) {
+		return MarketplacePluginService.openPluginCard(message);
+	}
+	showPluginCard(message);
+	MarketplacePluginService.showBackButton(true);
+	return Promise.resolve(true);
+}
+
+/**
+ * @param {PluginCardWindowParams} data
+ */
+function showPluginCard(data) {
+	let pluginCardDiv = document.getElementById('plugin_card_panel');
+	let marketplaceDiv = document.getElementById('plugins');
+	if (pluginCardDiv && marketplaceDiv) {
+		pluginCardDiv.classList.remove('hidden');
+		marketplaceDiv.classList.add('hidden');
+	}
+
+	PluginCard.init(data);
+}
+function hidePluginCard() {
+	let pluginCardDiv = document.getElementById('plugin_card_panel');
+	let marketplaceDiv = document.getElementById('plugins');
+	if (pluginCardDiv && marketplaceDiv) {
+		pluginCardDiv.classList.add('hidden');
+		marketplaceDiv.classList.remove('hidden');
+	}
 }
 
 window.onresize = function(bForce) {

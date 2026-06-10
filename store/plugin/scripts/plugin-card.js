@@ -129,6 +129,9 @@
 					postMessage({ type: result.type, data: result });
 				});
 				break;
+			case 'showButton' :
+				window.Asc.plugin.executeMethod('ShowButton',['back', true]);
+				break;
 			case 'close':
 				window.Asc.plugin.sendToPlugin("onClose", {});
 				break;

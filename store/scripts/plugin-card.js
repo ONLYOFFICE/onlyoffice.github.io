@@ -71,6 +71,9 @@ const PluginCard = {
         this.installed = data.installed;
         this.editorVersion = data.editorVersion;
         this.backup = data.isLocal && !data.plugin;
+        this.PsChangelog = null;
+        this.slideIndex = 1;
+        this._resetDom();
         Utils.init();
         Utils.setTranslations(data.translate);
         Utils.translateAll();
@@ -80,6 +83,28 @@ const PluginCard = {
             self._show(data);
             PluginCardUI.toggleLoader(false);
         });
+    },
+
+    _resetDom: function() {
+        let container = document.getElementById('div_selected_container');
+        if (container) {
+            let slides = container.querySelectorAll('.mySlides');
+            slides.forEach(function(el) { if (el.parentNode) el.parentNode.removeChild(el); });
+        }
+        let points = document.getElementById('points_container');
+        if (points) points.innerHTML = '';
+        if (PluginCardUI.divChangelogPreview) PluginCardUI.divChangelogPreview.innerHTML = '';
+        if (PluginCardUI.divStarsColored) PluginCardUI.divStarsColored.style.width = '0';
+        if (PluginCardUI.spanChangelog) PluginCardUI.spanChangelog.classList.add('hidden');
+        let spanOverview = document.getElementById('span_overview');
+        if (spanOverview) {
+            let spans = document.querySelectorAll('.span_caption');
+            spans.forEach(function(el) { el.classList.remove('span_selected'); });
+            spanOverview.classList.add('span_selected');
+        }
+        if (PluginCardUI.divSelectedPreview) PluginCardUI.divSelectedPreview.classList.remove('hidden');
+        if (PluginCardUI.divSelectedInfo) PluginCardUI.divSelectedInfo.classList.add('hidden');
+        if (PluginCardUI.divSelectedChangelog) PluginCardUI.divSelectedChangelog.classList.add('hidden');
     },
 
     /**
@@ -298,9 +323,6 @@ console.log('data', data);
         }
 
         this._setDivHeight();
-        //MarketplacePluginService.showBackButton();
-        // PluginCardUI.arrow.classList.remove('hidden');
-        
     },
 
     /** @param {string} baseUrl */
