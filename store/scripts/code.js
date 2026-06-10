@@ -31,15 +31,17 @@
  */
 
 // @ts-check
+
+/// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 /// <reference path="./types.js" />
-/// <reference path="./ui.js" />
-/// <reference path="./storage.js" />
+/// <reference path="./marketplace-ui.js" />
+/// <reference path="./marketplace-storage.js" />
 /// <reference path="./utils.js" />
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./common.js" />
+/// <reference path="./marketplace-plugin-service.js" />
 
-const version = '1.0.9';                                             // version of store (will change it when update something in store)
-let start = Date.now();
+const storeVersion = '1.0.9';                                        // version of store (will change it when update something in store)
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
 const OOMarketplaceUrl = 'https://onlyoffice.github.io/';            // url to official store (for local version store in desktop)
 const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to official github repository (for links and discussions)
@@ -51,8 +53,7 @@ const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid ma
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 /** @type {number} */
 let editorVersion;                                            		 // editor current version
-let bTranslate = false;                                              // flag translate or not
-let defaultBG = Common.themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
+let defaultBG = Utils.themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
 let isResizeOnStart = false;                                         // flag for firs resize on start
 /** @type {any} */
 let PsMain = null;                                                   // scroll for list of plugins
@@ -65,13 +66,13 @@ let scale = {                                                        // current 
 calculateScale();
 
 // it's necessary because we show loader before all (and getting translations too)
-Utils.init(Common.shortLang);
+Utils.init();
 
 // it's necessary for loader (because it detects theme by this object)
 window.Asc = {
 	plugin : {
 		theme : {
-			type :  Common.themeType
+			type :  Utils.themeType
 		}
 	}
 };
@@ -88,12 +89,7 @@ if (pos === -1) pos = location.href.indexOf('store/');  // fallback for Cloudfla
 const ioUrl = location.href.substring(0, pos);         // real IO URL
 const configUrl = ( isLocal ? OOMarketplaceUrl : location.href.substring(0, pos) ) + 'store/config.json'; // url to config.json (it's for desktop. we should use remote config)
 
-
 const Marketplace = {
-	/** @type {Array<InstalledPluginInfo>} */
-	installedPlugins: [], // list of installed plugins
-	/** @type {Array<PluginInfo>} */
-	allPlugins: [], // list of all plugins from config
 	/** maximum number of rating requests in flight at once */
 	_ratingConcurrency: 4,
 
@@ -110,41 +106,6 @@ const Marketplace = {
 		});
 	},
 
-	/**
-	 * Get all installed plugins
-	 * @returns {Promise<InstalledPluginInfo[]>}
-	 */
-	getInstalledPlugins: function() {
-		return new Promise(function(fResolve) {
-			/**
-			 * @param {MessageEvent} event
-			 */
-			let onGetInstalled = function(event) {
-				/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
-				let message;
-				try {
-					message = JSON.parse(event.data);
-				} catch (error) {
-					return;
-				}
-				if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
-					window.removeEventListener('message', onGetInstalled);
-					/** @type {InstalledPluginInfo[]} */
-					let plugins = [];
-					if (message.data) {
-						// filter installed plugins (delete removed, that are in store and some system plugins)
-						plugins = message.data.filter(function(el) {
-							return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
-						});
-						sortPlugins(plugins, 'start');
-					} 
-					fResolve(plugins);
-				}
-			};
-			window.addEventListener('message', onGetInstalled);
-			sendMessage({type: 'getInstalled'});
-		});
-	},
 	/**
 	 * Load all plugins and their ratings
 	 * @returns {Promise<Array<PluginInfo>>}
@@ -178,6 +139,59 @@ const Marketplace = {
 			})
 	},
 	
+	/**
+	 * @param {string} lang
+	 * @param {string} shortLang
+	 * @returns {Promise<boolean>}
+	 */
+	loadAndApplyTranslations: function(lang, shortLang) {
+		// gets translation for current language
+		if (shortLang === "en") {
+			return Promise.resolve(true);
+		}
+		return new Promise(function(fResolve, fReject) {
+			DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/langs.json', 'GET', null, null)
+				.onSuccess(function(/** @type {string} */response) {
+					let arr = JSON.parse(response);
+					let name = '';
+					for (let i = 0; i < arr.length; i++) {
+						let file = arr[i];
+						if (file == lang) {
+							name = file;
+							break;
+						} else if (file.split('-')[0] == shortLang) {
+							name = file;
+						}
+					}
+
+					if (!name) {
+						fResolve(false);
+						return;
+					}
+					Utils.bTranslate = true;
+					DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/' + name + '.json', 'GET', null, null)
+						.onSuccess(function(res) {
+							if (!res) {
+								return false;
+							}
+							Utils.setTranslations(JSON.parse(res));
+							Utils.translateAll();
+							fResolve(true);
+						})
+						.onFailure(function(err) {
+							createError(new Error('Cannot load translation for current language.'));
+							fReject(err);
+						});
+				})
+				.onFailure(function(err) {
+					createError( new Error('Cannot load translations list file.'));
+					fReject(err);
+				});
+		}).catch(function() {
+			return false;
+		});
+	},
+
 	/**
 	 * The function consumes a lot of resources.ц
 	 * @param {Array<PluginInfo>} plugins
@@ -242,7 +256,7 @@ const Marketplace = {
 		}
 		const div = pluginPlate.querySelector('.rating');
 		if (!div) return;
-		div.innerHTML = makeRatingElements(plugin.rating);
+		div.innerHTML = UI.makeRatingElements(plugin.rating, Utils.getTranslated("Not rated"));
 	},
 	/**
 	 * @param {Array<PluginInfo>} plugins
@@ -288,14 +302,14 @@ const Marketplace = {
 		});
 
 		return Promise.all(pluginsPromises).then(function(arr) {
-			removeUnloaded(plugins, Unloaded);
-			sortPlugins(plugins, 'name');
+			Utils.removeUnloaded(plugins, Unloaded);
+			Utils.sortPlugins(plugins, 'name');
 			return plugins;
 		});
 	},
 
 	/** @returns {Promise<number>} */
-	getVersion: function() {
+	getEditorVersion: function() {
 		return new Promise(function(fResolve) {
 			/**
 			 * @param {MessageEvent} event
@@ -323,12 +337,12 @@ const Marketplace = {
 	},
 
 	_onInternetConnectionRestored: function() {
-		if (Marketplace.allPlugins.length) {
+		if (MarketplaceStorage.allPlugins.length) {
 			return;
 		}
 		Marketplace.loadAllPluginsAndRating()
 			.then(function(allPlugins) {
-				Marketplace.allPlugins = allPlugins;
+				MarketplaceStorage.allPlugins = allPlugins;
 				showListOfPlugins('all');
 				updateCategories();
 			});
@@ -336,30 +350,31 @@ const Marketplace = {
 
 };
 
-const editorVersionPromise = Marketplace.getVersion().then(function(version) {
+const editorVersionPromise = Marketplace.getEditorVersion().then(function(version) {
 	editorVersion = version;
 });
 
 /** @type {Promise<InstalledPluginInfo[]>} */
-const installedPluginsPromise = Marketplace.getInstalledPlugins()
+const installedPluginsPromise = MarketplacePluginService.getInstalledPlugins(guidMarketplace, guidSettings)
 	.catch(function(error) {
 		console.error('Failed to load installed plugins:', error);
 		return [];
 	}).then(function(plugins) {
-		Marketplace.installedPlugins = plugins;
+		Utils.sortPlugins(plugins, 'start');
+		MarketplaceStorage.installedPlugins = plugins;
 		return plugins;
 	});
-const translationsPromise = loadAndApplyTranslations(Common.lang, Common.shortLang);
+const translationsPromise = Marketplace.loadAndApplyTranslations(Utils.lang, Utils.shortLang);
 
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Marketplace.loadAllPluginsAndRating()
 	.then(function(plugins) {
-		Marketplace.allPlugins = plugins;
+		MarketplaceStorage.allPlugins = plugins;
 		return plugins;
 	});
 
 window.onload = function() {
-	UI.init(Common.themeType);
+	UI.init(Utils.themeType);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 
@@ -370,7 +385,7 @@ window.onload = function() {
 		allPluginsPromise
 	])
 	.then(function(result) {
-		if (Marketplace.installedPlugins) {
+		if (MarketplaceStorage.installedPlugins) {
 			if (DataFetcher.isOnline) {
 				showListOfPlugins('all');
 			} else {
@@ -378,7 +393,7 @@ window.onload = function() {
 				if (!isLocal && !DataFetcher.isOnline) {
 					UI.divMain.textContent = '';
 					setTimeout(function(){if (PsMain) PsMain.update()});
-					createNotification('No Internet Connection.', 'Problem with loading some resources', true);
+					UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'), true);
 				}
 				UI.toggleLoader(false);
 			}
@@ -388,13 +403,13 @@ window.onload = function() {
 	});
 
 	UI.onChangeMainFilter = function(value) {
-		STORAGE.mainFilter = value;
+		MarketplaceStorage.mainFilter = value;
 		UI.inpSearch.value = '';
 		founded = [];
 		updateCategories();
 		showListOfPlugins('filtered');
 		
-		UI.linkNewPluginText.textContent = Utils.getTranslated(MESSAGES[value]);
+		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(value);
 		if (value === 'marketplace') {
 			UI.linkNewPlugin.href = (OOIO + "pulls");
 		} else {
@@ -412,13 +427,13 @@ window.onload = function() {
 		}
 	}
 	UI.onChangeCategoryFilter = function(category) {
-		STORAGE.categoryFilter = category;
+		MarketplaceStorage.categoryFilter = category;
 		UI.inpSearch.value = '';
 		founded = [];
 		showListOfPlugins('filtered');
 	}
 	UI.onChangeSearchInput = function(query) {
-		STORAGE.searchQuery = query;
+		MarketplaceStorage.searchQuery = query;
 		showListOfPlugins('filtered');
 	}
 };
@@ -427,36 +442,13 @@ window.onload = function() {
  * @returns {Promise<InstalledPluginInfo[]>}
  */
 function updateInstalledPlugins() {
-	return new Promise(function(fResolve) {
-		/**
-		 * @param {MessageEvent} event
-		 */
-		let onGetInstalled = function(event) {
-			/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
-			let message;
-			try {
-				message = JSON.parse(event.data);
-			} catch (error) {
-				return;
-			}
-			if (message.type === 'InstalledPlugins' && message.updateInstalled) {
-				window.removeEventListener('message', onGetInstalled);
-				if (message.data) {
-					// filter installed plugins (delete removed, that are in store and some system plugins)
-					Marketplace.installedPlugins = message.data.filter(function(el) {
-						return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
-					});
-					sortPlugins(Marketplace.installedPlugins, 'start');
-				} else {
-					Marketplace.installedPlugins = [];
-				}
-
-				showListOfPlugins('installed'); // need show installed
-				fResolve(Marketplace.installedPlugins);
-			}	
-		};
-		window.addEventListener('message', onGetInstalled);
-		sendMessage({type: 'getInstalled', updateInstalled: true});
+	return MarketplacePluginService.updateInstalledPlugins().then(function(plugins) {
+		MarketplaceStorage.installedPlugins = plugins.filter(function(el) {
+			return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
+		});
+		Utils.sortPlugins(MarketplaceStorage.installedPlugins, 'start');
+		showListOfPlugins('installed'); // need show installed
+		return MarketplaceStorage.installedPlugins;
 	});
 }
 
@@ -483,10 +475,10 @@ window.addEventListener('message', function(message) {
 				UI.toggleLoader(false);
 				return;
 			}
-			plugin = findPlugin(message.guid);
-			installed = findInstalledPlugin(message.guid);
+			plugin = MarketplaceStorage.findPlugin(message.guid);
+			installed = MarketplaceStorage.findInstalledPlugin(message.guid);
 			if (!installed && plugin) {
-				Marketplace.installedPlugins.push(
+				MarketplaceStorage.installedPlugins.push(
 					{
 						baseUrl: plugin.url,
 						guid: message.guid,
@@ -516,8 +508,8 @@ window.addEventListener('message', function(message) {
 				}
 				return;
 			}
-			installed = findInstalledPlugin(message.guid);
-			plugin = findPlugin(message.guid);
+			installed = MarketplaceStorage.findInstalledPlugin(message.guid);
+			plugin = MarketplaceStorage.findPlugin(message.guid);
 			if (!plugin || !installed) {
 				console.error('Plugin or installed plugin not found');
 				break;
@@ -542,13 +534,13 @@ window.addEventListener('message', function(message) {
 			let bHasLocal = false;
 			let needBackup = message.backup;
 
-			plugin = findPlugin(message.guid);
-			installed = findInstalledPlugin(message.guid);
+			plugin = MarketplaceStorage.findPlugin(message.guid);
+			installed = MarketplaceStorage.findInstalledPlugin(message.guid);
 			
 			if (installed) {
 				bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
 				if (plugin && (!bHasLocal || (isLocal && !needBackup) ) ) {
-					Marketplace.installedPlugins = Marketplace.installedPlugins.filter(function(el){return el.guid !== message.guid});
+					MarketplaceStorage.installedPlugins = MarketplaceStorage.installedPlugins.filter(function(el){return el.guid !== message.guid});
 					bUpdate = true;
 				} else {
 					installed.removed = true;
@@ -559,8 +551,8 @@ window.addEventListener('message', function(message) {
 				}
 			}
 
-			if (bUpdate && STORAGE.mainFilter === 'installed') {
-				if (STORAGE.searchQuery !== '') {
+			if (bUpdate && MarketplaceStorage.mainFilter === 'installed') {
+				if (MarketplaceStorage.searchQuery !== '') {
 					showListOfPlugins('filtered');
 				} else {
 					UI.removePlugin(message.guid);
@@ -577,20 +569,20 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'Theme':
 			if (message.theme.type)
-				Common.themeType = message.theme.type;
-			let bg = UI.onChangeTheme(message.theme, Common.themeType, message.style);
+				Utils.themeType = message.theme.type;
+			let bg = UI.onChangeTheme(message.theme, Utils.themeType, message.style);
 			if (bg) {
 				defaultBG = bg;
-				let bShowMarketplace = STORAGE.mainFilter === "marketplace";
+				let bShowMarketplace = MarketplaceStorage.mainFilter === "marketplace";
 				/** @type {Plugins} */
-				let arrPl = bShowMarketplace ? Marketplace.allPlugins : Marketplace.installedPlugins;
+				let arrPl = bShowMarketplace ? MarketplaceStorage.allPlugins : MarketplaceStorage.installedPlugins;
 				arrPl.forEach(function(pl) {
 
 					let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
 					let imgSrc = null;
 					if (variation.store) {
 						if (variation.store.background)
-							bg = variation.store.background[Common.themeType]
+							bg = variation.store.background[Utils.themeType]
 					} else {
 						// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
 						// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
@@ -612,21 +604,21 @@ window.addEventListener('message', function(message) {
 }, false);
 
 function updateCategories() {
-	STORAGE.categories = new Map();
-	STORAGE.categories.set('all', 0);
-	STORAGE.categories.set('onlyoffice', 0);
+	MarketplaceStorage.categories = new Map();
+	MarketplaceStorage.categories.set('all', 0);
+	MarketplaceStorage.categories.set('onlyoffice', 0);
 	/** @param {PluginInfo} plugin */
 	const addCategoryToStorage = function(plugin) {
-		let num = Number(STORAGE.categories.get('all'));
-		STORAGE.categories.set('all', num + 1);
+		let num = Number(MarketplaceStorage.categories.get('all'));
+		MarketplaceStorage.categories.set('all', num + 1);
 		if (!plugin.variations) {
 			return;
 		}
 		if (!plugin.offered) {
 			let category = 'onlyoffice';
-			if (STORAGE.categories.has(category)) {
-				let num = Number(STORAGE.categories.get(category));
-				STORAGE.categories.set(category, num + 1);
+			if (MarketplaceStorage.categories.has(category)) {
+				let num = Number(MarketplaceStorage.categories.get(category));
+				MarketplaceStorage.categories.set(category, num + 1);
 			}
 		}
 		plugin.variations.forEach(function(variation) {
@@ -634,53 +626,54 @@ function updateCategories() {
 				return;
 			}
 			variation.store.categories.forEach(function(/** @type {string} */category) {
-				if (STORAGE.categories.has(category)) {
-					let num = Number(STORAGE.categories.get(category));
-					STORAGE.categories.set(category, num + 1);
+				if (MarketplaceStorage.categories.has(category)) {
+					let num = Number(MarketplaceStorage.categories.get(category));
+					MarketplaceStorage.categories.set(category, num + 1);
 				} else {
-					STORAGE.categories.set(category, 1);
+					MarketplaceStorage.categories.set(category, 1);
 				}
 			})
 		});
 	}
-	if (STORAGE.mainFilter === 'marketplace') {
-		Marketplace.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+	if (MarketplaceStorage.mainFilter === 'marketplace') {
+		MarketplaceStorage.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
 			addCategoryToStorage(plugin);
 		});
-	} else if (STORAGE.mainFilter === 'installed') {
-		Marketplace.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
+	} else if (MarketplaceStorage.mainFilter === 'installed') {
+		MarketplaceStorage.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
 			if (!plugin.obj) {
 				return;
 			}
 			addCategoryToStorage(plugin.obj);
 		});
 	} else {
-		Marketplace.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+		MarketplaceStorage.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
 			if (!plugin.bHasUpdate) {
 				return;
 			}
 			addCategoryToStorage(plugin);
 		});
 	}
-	let numOfAllPlugins = Marketplace.allPlugins.length;
-	let numOfInstalledPlugins = Marketplace.installedPlugins.length;
-	let numOfPluginsToUpdate = Marketplace.allPlugins.reduce(function(acc, plugin) {
+	let numOfAllPlugins = MarketplaceStorage.allPlugins.length;
+	let numOfInstalledPlugins = MarketplaceStorage.installedPlugins.length;
+	let numOfPluginsToUpdate = MarketplaceStorage.allPlugins.reduce(function(acc, plugin) {
 		return plugin.bHasUpdate ? acc + 1 : acc;
 	}, 0);
-	UI.updateCategories(STORAGE.categories);
+	UI.updateCategories(MarketplaceStorage.categories);
 	UI.updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
-	if (STORAGE.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
+	if (MarketplaceStorage.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
 		UI.clickMainFilter('installed');
 	}
 
-	updateToolbar(numOfPluginsToUpdate);
+	updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.mainFilter);
 }
 
 /**
  * @param {number} numOfPluginsToUpdate 
+ * @param {MainFilter} mainFilter 
  */
-function updateToolbar(numOfPluginsToUpdate) {
-	if (!!numOfPluginsToUpdate && STORAGE.mainFilter === 'updates') {
+function updateToolbar(numOfPluginsToUpdate, mainFilter) {
+	if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
 		UI.btnUpdateAll.classList.remove('hidden');
 	} else {
 		UI.btnUpdateAll.classList.add('hidden');
@@ -692,8 +685,8 @@ function updateToolbar(numOfPluginsToUpdate) {
  * @returns {number}
  */
 function showListOfPlugins(typeOfOperation) {
-	let arr = getFilteredPlugins();
-	if (arr.length && isSamePlugins(founded, arr) && typeOfOperation !== 'all') {
+	let arr = MarketplaceStorage.getFilteredPlugins(Utils.getTranslatedName.bind(Utils));
+	if (arr.length && Utils.isSamePlugins(founded, arr) && typeOfOperation !== 'all') {
 		UI.toggleLoader(false);
 		return arr.length;
 	}
@@ -702,7 +695,7 @@ function showListOfPlugins(typeOfOperation) {
 	UI.divMain.textContent = '';
 
 	// get list of backup plugins
-	if (STORAGE.mainFilter === 'installed' && isLocal) {
+	if (MarketplaceStorage.mainFilter === 'installed' && isLocal) {
 		var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
 
 		if (_pluginsTmp.length) {
@@ -711,10 +704,10 @@ function showListOfPlugins(typeOfOperation) {
 				let plugin = _pluginsTmp[0]["pluginsData"][i];
 				plugin.baseUrl = _pluginsTmp[0]["url"] + plugin.guid.replace('asc.', '') + '/';
 
-				const installed = findInstalledPlugin(plugin.guid);
+				const installed = MarketplaceStorage.findInstalledPlugin(plugin.guid);
 
 				if (!installed) {
-					Marketplace.installedPlugins.push({
+					MarketplaceStorage.installedPlugins.push({
 						"baseUrl": _pluginsTmp[0]["url"],
 						"guid": plugin.guid,
 						"canRemoved": true,
@@ -733,18 +726,19 @@ function showListOfPlugins(typeOfOperation) {
 		});
 		setTimeout(function(){if (PsMain) PsMain.update(); UI.toggleLoader(false);});
 	} else {
-		if (STORAGE.mainFilter === 'marketplace' && !DataFetcher.isOnline) {
-			createNotification('No Internet Connection.', 'Problem with loading some resources');
+		if (MarketplaceStorage.mainFilter === 'marketplace' && !DataFetcher.isOnline) {
+			UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'));
 		} else {
 			// if no installed plugins and available plugins button was clicked
 			let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
-			createNotification('Try a different category or search term.', notification);
+			UI.createNotification(Utils.getTranslated('Try a different category or search term.'), Utils.getTranslated(notification));
 		}
 		
 		UI.toggleLoader(false);
 	}
 	// scroll for list of plugins
 	if (!PsMain) {
+		// @ts-ignore
 		PsMain = new PerfectScrollbar('.plugins-container', {});
 		PsMain.update();
 	} else {
@@ -755,31 +749,12 @@ function showListOfPlugins(typeOfOperation) {
 };
 
 /**
- * @param {Plugins} pluginsOld 
- * @param {Plugins} pluginsNew 
- * @returns {boolean}
- */
-function isSamePlugins(pluginsOld, pluginsNew) {
-    if (pluginsOld.length !== pluginsNew.length) {
-        return false;
-    }
-    
-    for (let i = 0; i < pluginsOld.length; i++) {
-        if (pluginsOld[i].guid !== pluginsNew[i].guid) {
-            return false;
-        }
-    }
-    
-    return true;
-}
-
-/**
  * This function creates div (preview) for plugins
  * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
  */
 function createPluginPlate(pluginOrInstalledPlugin) {
 	const guid = pluginOrInstalledPlugin.guid;
-	const bInstalled = STORAGE.mainFilter === 'installed';
+	const bInstalled = MarketplaceStorage.mainFilter === 'installed';
 	const pluginPlate = document.createElement('div');
 	pluginPlate.id = guid;
 	pluginPlate.setAttribute('data-guid', guid);
@@ -793,12 +768,12 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	pluginPlate.style.borderStyle = 'solid';
 	pluginPlate.style.borderWidth = ((zoom > 1 ? 1 : zoom)) +'px';
 
-	pluginPlate.onclick = openPluginCard.bind(pluginPlate, guid);
+	pluginPlate.onclick = onClickPluginCard.bind(pluginPlate, guid);
 
 	/** @type {InstalledPluginInfo} */
-	let installed = bInstalled ? pluginOrInstalledPlugin : findInstalledPlugin(guid);
+	let installed = bInstalled ? pluginOrInstalledPlugin : MarketplaceStorage.findInstalledPlugin(guid);
 	/** @type {PluginInfo} */
-	let plugin = bInstalled ? findPlugin(guid) : pluginOrInstalledPlugin;
+	let plugin = bInstalled ? MarketplaceStorage.findPlugin(guid) : pluginOrInstalledPlugin;
 
 	let bCheckUpdate = true;
 	if (!plugin) {
@@ -826,9 +801,9 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	}
 
 	let variation = plugin.variations[0];
-	let name = getTranslatedName(plugin);
-	let description = getTranslatedDescription(variation);
-	let bg = variation.store && variation.store.background ? variation.store.background[Common.themeType] : defaultBG;
+	let name = Utils.getTranslatedName(plugin);
+	let description = Utils.getTranslatedDescription(variation);
+	let bg = variation.store && variation.store.background ? variation.store.background[Utils.themeType] : defaultBG;
 	let offered = plugin.offered || "ONLYOFFICE";
 
 	const bNeedUpdateButton = bHasUpdate && !bRemoved;
@@ -852,9 +827,9 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 		'<div class="description">' + description + '</div>' +
 		'<div class="management">' +
 			'<div class="rating">' +
-				(makeRatingElements(plugin.rating)) +
+				(UI.makeRatingElements(plugin.rating, Utils.getTranslated("Not rated"))) +
 			'</div>' +
-			makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) +
+			UI.makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) +
 		'</div>' +
 	'</div>';
 	pluginPlate.innerHTML = template;
@@ -862,77 +837,6 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	if (PsMain) PsMain.update();
 };
 
-/**
- * @param {string} guid 
- * @param {boolean} bNeedUpdateButton 
- * @param {boolean} bNeedRemoveButton 
- * @param {boolean} bNeedInstallButton
- * @param {boolean} [bNotAvailable] 
- * @returns {string}
- */
-function makeActionButtons(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
-	let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslated(MESSAGES.versionWarning) + '"'  : '';
-	let result = '<button class="btn-text-default ';
-	if (bNeedUpdateButton) {
-		result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)" ' + additional + '>' + Utils.getTranslated("Update");
-	} else if (bNeedRemoveButton) {
-		result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
-		result += Utils.getTranslated("Remove");
-	} else if (bNeedInstallButton) {
-		result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + additional + '>'  + Utils.getTranslated("Install");
-	} else {
-		return '';
-	}
-	result += '</button>';
-	return result;
-}
-
-/**
- * @param {Rating} [rating]
- * @returns {string}
- */
-function makeRatingElements(rating) {
-	let result = '';
-	if (!rating) {
-		result = '<em class="i18n">' + Utils.getTranslated("Not rated") + '</em>';
-	} else {
-		result = '<div class="stars">';
-		let percents = rating.percent;
-		for (let i = 0; i < 5; i++) {
-			let opacity = percents >= 20 ? 1 : percents === 0 ? 0.1 : percents / 20;
-			if (opacity === 1) {
-				result += '<span>★</span>';
-			} else {
-				result += '<span style="opacity: ' + opacity + '">★</span>';
-			}
-			if (percents >= 20) {
-				percents -= 20;
-			} else {
-				percents = 0;
-			}
-		}
-
-		result += '</div> <span>' + rating.average + '</span><span>(' + rating.total + ')</span>'
-	}
-
-	return result;
-}
-
-/** @param {PluginInfo} plugin */
-function getTranslatedName(plugin) {
-	if (bTranslate && plugin.nameLocale && ( plugin.nameLocale[Common.lang] || plugin.nameLocale[Common.shortLang] )) {
-		return ( plugin.nameLocale[Common.lang] || plugin.nameLocale[Common.shortLang] );
-	}
-	return plugin.name;
-}
-
-/** @param {any} variation */
-function getTranslatedDescription(variation) {
-	if ( bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[Common.lang] || variation.descriptionLocale[Common.shortLang] ) ) {
-		return ( variation.descriptionLocale[Common.lang] || variation.descriptionLocale[Common.shortLang] )
-	}
-	return variation.description;
-}
 
 /**
  * @param {string} guid 
@@ -941,30 +845,19 @@ function getTranslatedDescription(variation) {
 function onClickInstall(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Installation');
-	return Utils.waitForRepaint().then(function() { _doInstall(guid) });
-}
-/**
- * @param {string} guid 
- */
-function _doInstall(guid) {
 	/** @type {PluginInfo | undefined} */
-	let plugin = findPlugin(guid);
+	let plugin = MarketplaceStorage.findPlugin(guid);
 	/** @type {InstalledPluginInfo | undefined} */
-	let installed = findInstalledPlugin(guid);
+	let installed = MarketplaceStorage.findInstalledPlugin(guid);
 	if (!plugin && !installed) {
 		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
 	}
-
-	let message = {
-		type : 'install',
-		url : (installed ? installed.obj.baseUrl : plugin.url),
-		guid : guid,
-		config : (installed ? installed.obj : plugin)
-	};
-
-	sendMessage(message);
+	const url = (installed ? installed.obj.baseUrl : plugin.url);
+	const config = (installed ? installed.obj : plugin);
+	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
 }
+
 /**
  * @param {string} guid 
  * @param {Event} event 
@@ -972,26 +865,13 @@ function _doInstall(guid) {
 function onClickUpdate(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Updating');
-	return Utils.waitForRepaint().then(function() { _doUpdate(guid) });
-}
-/**
- * @param {string} guid 
- */
-function _doUpdate(guid) {
-	let plugin = findPlugin(guid);
+	let plugin = MarketplaceStorage.findPlugin(guid);
 	if (!plugin) {
 		console.error('Plugin not found for update: ' + guid);
 		UI.toggleLoader(false);
 		return;
 	}
-	let message = {
-		type : 'update',
-		url : plugin.url,
-		guid : guid,
-		config : plugin
-	};
-
-	sendMessage(message);
+	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doUpdate(guid, plugin) });
 }
 
 /**
@@ -1001,53 +881,28 @@ function _doUpdate(guid) {
 function onClickRemove(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Removal');
-	return Utils.waitForRepaint().then(function() { _doRemove(guid) });
-}
-/**
- * @param {string} guid 
- */
-function _doRemove(guid) {
-	let message = {
-		type : 'remove',
-		guid : guid,
-		backup : needBackupPlugin(guid)
-	};
-	sendMessage(message);
-};
-
-function needBackupPlugin(guid) {
 	// check installed plugin:
 	// if the plugin exists in the store (and its version <= ?), we can delete it, user will be able to install the current version
 	// if the plugin is not in the store, we need to keep it for the user with the ability to restore
-
-	return isLocal ? findPlugin(guid) == undefined : false;
+	const needBackup = isLocal ? MarketplaceStorage.findPlugin(guid) == undefined : false;
+	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doRemove(guid, needBackup) });
 }
+
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
-	return Utils.waitForRepaint().then(function() { _doUpdateAll() });
-}
-function _doUpdateAll() {
 	UI.btnUpdateAll.classList.add('hidden');
-	let arr = Marketplace.allPlugins.filter(function(el) {
+	let arr = MarketplaceStorage.allPlugins.filter(function(el) {
 		return el.bHasUpdate;
 	});
 	updateCount = arr.length;
-	arr.forEach(function(plugin) {
-		let message = {
-			type : 'update',
-			url : plugin.url,
-			guid : plugin.guid,
-			config : plugin
-		};
-		sendMessage(message);
-	});
-};
+	return Utils.waitForRepaint().then(function() { MarketplacePluginService.doUpdateAll(arr) });
+}
 
 /**
  * @param {string} guid 
  * @returns {Promise<boolean>}
  */
-function openPluginCard(guid) {
+function onClickPluginCard(guid) {
 	//onClickPluginPlate(guid);
 	let pluginPlate = UI.getPlugin(guid);
 	if (!pluginPlate) {
@@ -1055,19 +910,20 @@ function openPluginCard(guid) {
 		return Promise.resolve(false);
 	}
 	/** @type {InstalledPluginInfo} */
-	let installed = findInstalledPlugin(guid);
+	let installed = MarketplaceStorage.findInstalledPlugin(guid);
 	/** @type {PluginInfo} */
-	let plugin = findPlugin(guid);
-	STORAGE.selectedPluginGuid = guid;
+	let plugin = MarketplaceStorage.findPlugin(guid);
+	MarketplaceStorage.selectedPluginGuid = guid;
 	let iconSrc = getImageUrl(guid);
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
 	localStorage.setItem('test', JSON.stringify(Utils.translate));
+	let config = plugin ? plugin : installed.obj;
+	
 	/** @type {PluginCardWindowParams} */
 	let message = {
 		type : 'showPluginCard',
-		guid : guid,
 		installed: installed || null,
 		plugin: plugin || null,
 		iconBackground: iconBackground,
@@ -1078,96 +934,12 @@ function openPluginCard(guid) {
 		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
 		OOMarketplaceUrl: OOMarketplaceUrl,
 		OOIO: OOIO,
-		pluginName: plugin ? getTranslatedName(plugin) : getTranslatedName(installed.obj),
-		pluginDescription: plugin ? getTranslatedDescription(plugin.variations[0]) : getTranslatedDescription(installed.obj.variations[0]),
+		pluginName: Utils.getTranslatedName(config),
+		pluginDescription: Utils.getTranslatedDescription(config.variations[0]),
 		translate: Utils.translate
 	};
-	sendMessage(message);
-	return new Promise(function(fResolve, fReject) {
-		/**
-		 * @param {MessageEvent} event
-		 */
-		let onLoad = function(event) {
-			/** @type {{type: string, version?: string}} */
-			let message;
-			try {
-				message = JSON.parse(event.data);
-			} catch (error) {
-				fReject(error);
-				return;
-			}
-			if (message.type === 'onShowPluginCard') {
-				window.removeEventListener('message', onLoad);
-				fResolve(true);
-			}
-		};
-		window.addEventListener('message', onLoad);
-	});
-	
+	return MarketplacePluginService.openPluginCard(message);
 }
-
-/**
- * @param {string} header 
- * @param {string} caption
- * @param {boolean} [bWarning] 
- */
-function createNotification(header, caption, bWarning) {
-	// creates any notification for user inside UI.divMain window (you should clear this element before making notification)
-	let div = document.createElement('div');
-	div.className = 'div_notification';
-	if (bWarning) {
-		let icon = document.createElement('div');
-		icon.className = 'icon_warning';
-		div.appendChild(icon);
-	} else {
-		let icon = document.createElement('div');
-		icon.textContent = '◌';
-		icon.className = 'icon_notification';
-		div.appendChild(icon);
-	}
-	let spanMessage = document.createElement('span');
-	spanMessage.className = 'message_caption';
-	spanMessage.textContent = Utils.getTranslated(caption);
-	div.appendChild(spanMessage);
-	let spanNot = document.createElement('span');
-	spanNot.className = 'span_notification';
-	spanNot.textContent = Utils.getTranslated(header);
-	div.appendChild(spanNot);
-	UI.divMain.appendChild(div);
-	div = document.createElement('div');
-	UI.divMain.appendChild(div);
-};
-
-/**
- * @param {{message: string}} err 
- * @param {boolean} [bDontShow]
- * @returns 
- */
-function createError(err, bDontShow) {
-	// creates a modal window with error message for user and error in console
-	console.error(err);
-	let divErr = document.getElementById('div_error');
-	if (!divErr) {
-		return;
-	}
-	// we don't show a new error if we have previous one
-	if (!divErr.classList.contains('hidden') || bDontShow)
-		return;
-	let background = document.createElement('div');
-	background.className = 'asc-plugin-loader';
-	let span = document.createElement('span');
-	span.className = 'error_caption';
-	let message = err.message || 'Problem with loading some resources';
-	span.textContent = Utils.getTranslated(message);
-	background.appendChild(span);
-	divErr.appendChild(background);
-	divErr.classList.remove('hidden');
-	setTimeout(function() {
-		// remove error after 5 seconds
-		background.remove();
-		divErr.classList.add('hidden');
-	}, 5000);
-};
 
 window.onresize = function(bForce) {
 	if (scale.devicePR !== window.devicePixelRatio || bForce) {
@@ -1230,60 +1002,6 @@ function calculateScale() {
 	scale.value = supportedScaleValues[bestIndex];
 };
 
-/**
- * @param {string} lang
- * @param {string} shortLang
- * @returns {Promise<boolean>}
- */
-function loadAndApplyTranslations(lang, shortLang) {
-	// gets translation for current language
-	if (shortLang === "en") {
-		return Promise.resolve(true);
-	}
-	return new Promise(function(fResolve, fReject) {
-		DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/langs.json', 'GET', null, null)
-			.onSuccess(function(/** @type {string} */response) {
-				let arr = JSON.parse(response);
-				let name = '';
-				for (let i = 0; i < arr.length; i++) {
-					let file = arr[i];
-					if (file == lang) {
-						name = file;
-						break;
-					} else if (file.split('-')[0] == shortLang) {
-						name = file;
-					}
-				}
-
-				if (!name) {
-					fResolve(false);
-					return;
-				}
-				bTranslate = true;
-				DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/' + name + '.json', 'GET', null, null)
-					.onSuccess(function(res) {
-						if (!res) {
-							return false;
-						}
-						Utils.setTranslations(JSON.parse(res));
-						Utils.translateAll();
-						fResolve(true);
-					})
-					.onFailure(function(err) {
-						createError(new Error('Cannot load translation for current language.'));
-						fReject(err);
-					});
-			})
-			.onFailure(function(err) {
-				createError( new Error('Cannot load translations list file.'));
-				fReject(err);
-			});
-	}).catch(function() {
-		return false;
-	});
-
-};
-
 // supported icon scales: [percent, suffix, descriptor]
 const ICON_SCALES = [
 	['100%', '/icon.png',       '1x'],
@@ -1313,22 +1031,23 @@ function buildImgAttrs(urls) {
 function getImageUrl(guid) {
 	const defaults = ICON_SCALES.map(function(s) { return './resources/img/defaults/card' + s[1]; });
 
-	/** @type {any} */
+	/** @type {PluginInfo | undefined} */
 	let plugin;
+	/** @type {InstalledPluginInfo | undefined} */
+	let installedPlugin = MarketplaceStorage.findInstalledPlugin(guid);
 	let baseUrl;
 	// We have a problem with "http" and "file" routes.
 	// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
-	if (Marketplace.installedPlugins && isLocal) {
+	if (MarketplaceStorage.installedPlugins && isLocal) {
 		// it doesn't work when we use icons from other resource (cors problems)
 		// it's why we use local icons only for desktop
-		const inst = findInstalledPlugin(guid);
-		if (inst) {
-			plugin = inst.obj;
+		if (installedPlugin) {
+			plugin = installedPlugin.obj;
 			baseUrl = plugin.baseUrl;
 		}
 	}
-	if ((!plugin || !isLocal) && Marketplace.allPlugins.length) {
-		const found = findPlugin(guid);
+	if ((!plugin || !isLocal) && MarketplaceStorage.allPlugins.length) {
+		const found = MarketplaceStorage.findPlugin(guid);
 		if (found) {
 			plugin = found;
 			baseUrl = found.baseUrl;
@@ -1343,7 +1062,7 @@ function getImageUrl(guid) {
 
 	if (variation.store && variation.store.icons) {
 		// new scheme: folder per theme + scale suffix
-		const folder = baseUrl + variation.store.icons[Common.themeType];
+		const folder = baseUrl + variation.store.icons[Utils.themeType];
 		return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
 	}
 
@@ -1355,7 +1074,7 @@ function getImageUrl(guid) {
 	if (variation.icons) {
 		if (!Array.isArray(variation.icons)) {
 			// new scheme: object { light, dark } with folder paths
-			const folder = baseUrl + variation.icons[Common.themeType];
+			const folder = baseUrl + variation.icons[Utils.themeType];
 			return buildImgAttrs(ICON_SCALES.map(function(s) { return folder + s[1]; }));
 		}
 		if (typeof variation.icons[0] === 'object') {
@@ -1382,7 +1101,7 @@ function resolveOldThemedIcons(icons, baseUrl) {
 	let icon = icons[0];
 	for (let i = 1; i < icons.length; i++) {
 		const style = icons[i].style;
-		if (style && Common.themeType.includes(style)) {
+		if (style && Utils.themeType.includes(style)) {
 			icon = icons[i];
 			break;
 		}
@@ -1407,134 +1126,6 @@ function installPluginManually() {
 			createError(new Error('Problem with plugin installation.'), false);
 		}
 	});
-};
-
-/**
- * @param {PluginInfo[] | InstalledPluginInfo[]} arrPlugins 
- * @param {"rating" | "installations" | "start" | "name"} type 
- */
-function sortPlugins(arrPlugins, type) {
-	if (!arrPlugins || !arrPlugins.length) {
-		return arrPlugins;
-	}
-	/** @type {Array<InstalledPluginInfo>} */
-	let installedPluginsToSort = [];
-	/** @type {Array<PluginInfo>} */
-	let allPluginsToSort = [];
-	if (arrPlugins[0].obj) {
-		installedPluginsToSort = arrPlugins;
-	} else {
-		allPluginsToSort = arrPlugins;
-	}
-	switch (type) {
-		case 'rating':
-			// todo
-			break;
-		case 'installations':
-			// todo
-			break;
-		case 'start':
-			if (installedPluginsToSort.length) {
-				/** @type {Array<InstalledPluginInfo>} */
-				let guarded = [];
-				/** @type {Array<InstalledPluginInfo>} */
-				let removed = [];
-				/** @type {Array<InstalledPluginInfo>} */
-				let arr = [];
-				installedPluginsToSort.forEach(function(pl) {
-					if (!pl.canRemoved)
-						guarded.push(pl);
-					else if (pl.removed)
-						removed.push(pl);
-					else
-						arr.push(pl);
-				});
-				return guarded.concat(arr, removed);
-			}
-			break;
-		case 'name':
-			if (allPluginsToSort.length) {
-				return allPluginsToSort.sort(function(a, b) {
-					return a.name.localeCompare(b.name);
-				});
-			} else {
-				return installedPluginsToSort.sort(function(a, b) {
-					return a.obj.name.localeCompare(b.obj.name);
-				});
-			}
-			break;
-		default:
-			break;
-	}
-};
-
-/** @returns {Plugins} */
-function getFilteredPlugins() {
-	const category = STORAGE.categoryFilter;
-	const mainFilter = STORAGE.mainFilter;
-	const searchQuery = STORAGE.searchQuery;
-
-	/** @type {Plugins} */
-	let plugins = Marketplace.allPlugins;
-	if (mainFilter === 'installed') {
-		plugins = Marketplace.installedPlugins;
-	} else if (mainFilter === 'updates') {
-		plugins = Marketplace.allPlugins.filter(function(plugin) { return plugin.bHasUpdate; });
-	}
-
-	if (category === "onlyoffice") {
-		plugins = plugins.filter(function(plugin) {
-			if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-				return !plugin.obj.offered;
-			}
-			return !plugin.offered;
-		});
-	} else if (category != "all") {
-		plugins = plugins.filter(function(plugin) {
-			let variations = plugin.variations;
-			if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-				variations = plugin.obj.variations;
-			}
-			let variation = variations[0];
-			let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
-			return arrCat.includes(category);
-		});
-	}
-
-	plugins = plugins.filter(function(el) {
-		let plugin = el.obj || el;
-		let name = getTranslatedName(plugin);
-		return name.toLowerCase().includes(searchQuery);
-	});
-
-	return plugins;
-};
-
-/**
- * @param {Array<PluginInfo>} plugins
- * @param {Array<number>} unloaded
- */
-function removeUnloaded(plugins, unloaded) {
-	for (let i = unloaded.length - 1; i >= 0; i--) {
-		plugins.splice(unloaded[i], 1);
-	}
-};
-
-/**
- * @param {string} guid 
- * @returns {PluginInfo | undefined}
- */
-function findPlugin(guid) {
-	let res = Marketplace.allPlugins.find(function(el){return el.guid === guid});
-	return res;
-};
-
-/**
- * @param {string} guid 
- * @returns {InstalledPluginInfo | undefined}
- */
-function findInstalledPlugin(guid) {
-	return Marketplace.installedPlugins.find(function(el){return el.guid === guid});
 };
 
 /**
@@ -1579,23 +1170,9 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 
 	// We need to keep the ability to install the local version that has been removed (maybe we should change the button)
 	if ( !bInstall && btn.hasAttribute('dataDisabled') && !bHasLocal ) {
-		btn.setAttribute('title', Utils.getTranslated(MESSAGES.versionWarning));
+		btn.setAttribute('title', Utils.getTranslatedMessage('versionWarning'));
 	}
 
 	updateCategories();
-};
-
-/**
- * @param {string} url 
- * @param {'GET' | 'POST'} method 
- * @param {*} responseType 
- * @param {*} body
- * @returns 
- */
-function makeRequestWithNoInternetHandler(url, method, responseType, body) {
-	return DataFetcher.makeRequest(url, method, responseType, body)
-		.catch(function(err) {
-			
-		});
 };
 

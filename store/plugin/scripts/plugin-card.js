@@ -32,6 +32,7 @@
 
 // @ts-check
 /// <reference path="../../scripts/types.js" />
+/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
@@ -53,7 +54,7 @@
 	
 	window.Asc.plugin.init = function() {
 		// resize window
-		window.Asc.plugin.resizeWindow(1200, 776, 1200, 776, 0, 0);
+		window.Asc.plugin.resizeWindow(608, 600, 608, 600, 0, 0);
 		initPluginCard();
 	};
 
@@ -130,7 +131,10 @@
 				break;
 			case 'close':
 				window.Asc.plugin.sendToPlugin("onClose", {});
-				break;	
+				break;
+			case 'resize':
+				window.Asc.plugin.resizeWindow(data.width, data.height, data.width, data.height, 0, 0);
+				break;
 		}
 		
 	}, false);

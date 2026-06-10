@@ -33,6 +33,7 @@
 
 // @ts-check
 /// <reference path="./types.js" />
+/// <reference path="./utils.js" />
 
 const UI = {
     /** @type {HTMLDivElement | undefined} */
@@ -118,7 +119,7 @@ const UI = {
                 /** @type {MainFilter} */
                 const installedFilter = event.currentTarget.value;
                 self.onChangeMainFilter(installedFilter);
-                const text = input.parentElement.querySelector('.main-filter-category').textContent;
+                const text = input.nextElementSibling.querySelector('.main-filter-category').textContent;
                 self.toolbarMainText.textContent = text;
             }
         }
@@ -132,7 +133,7 @@ const UI = {
             input.onchange = function(event) {
                 const value = event.currentTarget.value;
                 self.onChangeCategoryFilter(value);
-                const text = input.parentElement.querySelector('.category-name').textContent;
+                const text = input.nextElementSibling.querySelector('.category-name').textContent;
                 self.toolbarSecondaryText.textContent = text;
             };
         }
@@ -366,6 +367,94 @@ const UI = {
                 makeCategoryItem(value, key);
             });
         }
+    },
+    /**
+     * @param {string} header 
+     * @param {string} caption
+     * @param {boolean} [bWarning] 
+     */
+    createNotification: function(header, caption, bWarning) {
+        // creates any notification for user inside UI.divMain window (you should clear this element before making notification)
+        let div = document.createElement('div');
+        div.className = 'div_notification';
+        if (bWarning) {
+            let icon = document.createElement('div');
+            icon.className = 'icon_warning';
+            div.appendChild(icon);
+        } else {
+            let icon = document.createElement('div');
+            icon.textContent = '◌';
+            icon.className = 'icon_notification';
+            div.appendChild(icon);
+        }
+        let spanMessage = document.createElement('span');
+        spanMessage.className = 'message_caption';
+        spanMessage.textContent = caption;
+        div.appendChild(spanMessage);
+        let spanNot = document.createElement('span');
+        spanNot.className = 'span_notification';
+        spanNot.textContent = header;
+        div.appendChild(spanNot);
+        UI.divMain.appendChild(div);
+        div = document.createElement('div');
+        UI.divMain.appendChild(div);
+    },
+    
+    /**
+     * @param {Rating} [rating]
+     * @param {string} [notRatedText]
+     * @returns {string}
+     */
+    makeRatingElements: function(rating, notRatedText) {
+        let result = '';
+        if (!rating) {
+            result = '<em class="i18n">' + notRatedText + '</em>';
+        } else {
+            result = '<div class="stars">';
+            let percents = rating.percent;
+            for (let i = 0; i < 5; i++) {
+                let opacity = percents >= 20 ? 1 : percents === 0 ? 0.1 : percents / 20;
+                if (opacity === 1) {
+                    result += '<span>★</span>';
+                } else {
+                    result += '<span style="opacity: ' + opacity + '">★</span>';
+                }
+                if (percents >= 20) {
+                    percents -= 20;
+                } else {
+                    percents = 0;
+                }
+            }
+
+            result += '</div> <span>' + rating.average + '</span><span>(' + rating.total + ')</span>'
+        }
+
+        return result;
+    },
+    
+    /**
+     * @param {string} guid 
+     * @param {boolean} bNeedUpdateButton 
+     * @param {boolean} bNeedRemoveButton 
+     * @param {boolean} bNeedInstallButton
+     * @param {boolean} [bNotAvailable] 
+     * @returns {string}
+     */
+    makeActionButtons: function(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
+        let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslatedMessage('versionWarning') + '"'  : '';
+        let result = '<button class="btn-text-default ';
+        if (bNeedUpdateButton) {
+            result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)" ' + additional + '>' + Utils.getTranslated("Update");
+        } else if (bNeedRemoveButton) {
+            result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+            result += Utils.getTranslated("Remove");
+        } else if (bNeedInstallButton) {
+            result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + additional + '>'  + Utils.getTranslated("Install");
+        } else {
+            return '';
+        }
+        result += '</button>';
+        return result;
     },
     
     /**

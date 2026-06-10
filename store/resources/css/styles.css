@@ -19,6 +19,7 @@ html,body {
 }
 aside {
 	width: 240px;
+	min-width: 220px;
 	border-right-width: 1px;
 	border-right-style: solid;
 	padding: 18px 12px;
@@ -161,7 +162,8 @@ main {
 		flex-basis: 0%;
 	}
 	.toolbar>div:nth-child(2) {
-		width: 280px;
+		max-width: 280px;
+		flex: 1;
 	}
 
 	.toolbar .place-name {
@@ -507,4 +509,10 @@ label.header {
 
 .hidden {
 	display: none !important;
+}
+
+@media (max-width: 800px) {
+	.toolbar>div:first-child {
+		display: none;
+	}
 }

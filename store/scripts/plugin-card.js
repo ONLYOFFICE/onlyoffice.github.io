@@ -33,28 +33,14 @@
 // @ts-check
 /// <reference path="./types.js" />
 /// <reference path="./common.js" />
+/// <reference path="./utils.js" />
 /// <reference path="./plugin-card-ui.js" />
-
-const LANGUAGES = [
-	['cs-CZ', 'cs', 'Czech'],
-	['de-DE', 'de', 'German'],
-	['es-ES', 'es', 'Spanish'],
-	['fr-FR', 'fr', 'French'],
-	['it-IT', 'it', 'Italian'],
-	['ja-JA', 'ja', 'Japanese'],
-	['nl-NL', 'nl', 'Dutch'],
-	['pt-PT', 'pt', 'Portuguese'],
-	['pt-BR', 'pt', 'Brazilian'],
-	['ru-RU', 'ru', 'Russian'],
-	['si-SI', 'si', 'Sinhala'],
-	['uk-UA', 'uk', 'Ukrainian'],
-	['zh-ZH', 'zh', 'Chinese']
-];
+/// <reference path="./marketplace-plugin-service.js" />
 
 const PluginCard = {
 	/** @type {number} */
 	editorVersion: 0,
-	/** @type {PluginInfo} */
+	/** @type {PluginInfo | null} */
     plugin: null,
 	/** @type {InstalledPluginInfo | null} */
     installed: null,
@@ -62,6 +48,22 @@ const PluginCard = {
     PsChangelog: null,
     slideIndex: 1,  // index for slides
     backup: false,
+    LANGUAGES: [
+        ['cs-CZ', 'cs', 'Czech'],
+        ['de-DE', 'de', 'German'],
+        ['es-ES', 'es', 'Spanish'],
+        ['fr-FR', 'fr', 'French'],
+        ['it-IT', 'it', 'Italian'],
+        ['ja-JA', 'ja', 'Japanese'],
+        ['nl-NL', 'nl', 'Dutch'],
+        ['pt-PT', 'pt', 'Portuguese'],
+        ['pt-BR', 'pt', 'Brazilian'],
+        ['ru-RU', 'ru', 'Russian'],
+        ['si-SI', 'si', 'Sinhala'],
+        ['uk-UA', 'uk', 'Ukrainian'],
+        ['zh-ZH', 'zh', 'Chinese']
+    ],
+
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
@@ -69,10 +71,10 @@ const PluginCard = {
         this.installed = data.installed;
         this.editorVersion = data.editorVersion;
         this.backup = data.isLocal && !data.plugin;
-        Utils.init(Common.shortLang);
+        Utils.init();
         Utils.setTranslations(data.translate);
         Utils.translateAll();
-        PluginCardUI.init(Common.themeType);
+        PluginCardUI.init(Utils.themeType);
         PluginCardUI.toggleLoader(true, 'Loading');
         return Utils.waitForRepaint().then(function() {
             self._show(data);
@@ -85,8 +87,7 @@ const PluginCard = {
      */
     _show: function(data) {
 		const self = this;
-        const guid = data.guid;
-
+console.log('data', data);
         // There we will make preview for selected plugin
         let offered = "Ascensio System SIA";
         let hiddenCounter = 0;
@@ -96,13 +97,17 @@ const PluginCard = {
         divPreview.className = "div_preview";
         /** @type {string} */
         let baseUrl = "";
+        console.log(this.plugin);
+        console.log(this.installed);
         if (this.plugin && this.plugin.baseUrl) {
             baseUrl = this.plugin.baseUrl;
         } else if (this.installed && this.installed.obj && this.installed.obj.baseUrl) {
-            baseUrl = this.installed.obj.baseUrl;
+            baseUrl = this._correctBaseUrl(this.installed.obj.baseUrl);
+            this.plugin = this.installed.obj;
         } else if (this.installed && this.installed.baseUrl) {
             baseUrl = this.installed.baseUrl;
         }
+        console.log('baseUrl from:', baseUrl);
         this._loadAndShowLanguages(baseUrl, !!this.plugin);
 
         if (
@@ -285,7 +290,7 @@ const PluginCard = {
             PluginCardUI.btnInstall.setAttribute("disabled", "");
             PluginCardUI.btnInstall.setAttribute(
                 "title",
-                Utils.getTranslated(MESSAGES.versionWarning)
+                Utils.getTranslatedMessage('versionWarning')
             );
         } else {
             PluginCardUI.btnInstall.removeAttribute("disabled");
@@ -293,7 +298,7 @@ const PluginCard = {
         }
 
         this._setDivHeight();
-        //sendMessage({ type: "showButton", show: true });
+        //MarketplacePluginService.showBackButton();
         // PluginCardUI.arrow.classList.remove('hidden');
         
     },
@@ -320,6 +325,7 @@ const PluginCard = {
      * @param {boolean} bStrict
      */
     _loadAndShowLanguages: function(baseUrl, bStrict) {
+        const self = this;
         let supportedLangs = [ Utils.getTranslated('English') ];
         PluginCardUI.spanLanguages.textContent = supportedLangs.join(", ") + ".";
         PluginCardUI.divLanguages.classList.remove("hidden");
@@ -329,15 +335,15 @@ const PluginCard = {
                 let langs = JSON.parse(response);
                 langs.forEach(function(full) {
                     let short = full.split('-')[0];
-                    for (let i = 0; i < LANGUAGES.length; i++) {
-                        const lang = Utils.getTranslated( LANGUAGES[i][2] );
+                    for (let i = 0; i < self.LANGUAGES.length; i++) {
+                        const lang = Utils.getTranslated( self.LANGUAGES[i][2] );
                         if (supportedLangs.indexOf(lang) !== -1) {
                             continue;
                         }
                         // detect only full language (because we can make mistake with some langs. for instance: "pt-PT" and "pt-BR")
-                        if (bStrict && (LANGUAGES[i][0] == full /*|| LANGUAGES[i][1] == short*/)) {
+                        if (bStrict && (self.LANGUAGES[i][0] == full /*|| self.LANGUAGES[i][1] == short*/)) {
                             supportedLangs.push( lang );
-                        } else if (!bStrict && (LANGUAGES[i][0] == short || LANGUAGES[i][1] == short)) {
+                        } else if (!bStrict && (self.LANGUAGES[i][0] == short || self.LANGUAGES[i][1] == short)) {
                             supportedLangs.push( lang );
                         }
                     }
@@ -351,6 +357,7 @@ const PluginCard = {
     _updateScroll: function() {
         // scroll for changelog preview
         if (!this.PsChangelog) {
+            // @ts-ignore
             this.PsChangelog = new PerfectScrollbar('#div_selected_changelog', {});
             this.PsChangelog.update();
         }
@@ -421,56 +428,36 @@ const PluginCard = {
     },
 
     onClickClose: function() {
-        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
-        /** @type {IframeMessage} */
-        let message = {
-            type : 'close',
-            guid : guid,
-            config : (this.installed ? this.installed.obj : this.plugin)
-        };
-
-        sendMessage(message);
+        let guid = '';
+        if (this.plugin) {
+            guid = this.plugin.guid;
+        } else if (this.installed) {
+            guid = this.installed.obj.guid;
+        }
+        let config = (this.installed ? this.installed.obj : this.plugin);
+        if (!config) return;
+        MarketplacePluginService.close(guid, config);
     },
 
-    onClickInstall: function() {
+    /** @param {Event} event */
+    onClickInstall: function(event) {
         const self = this;
         PluginCardUI.toggleLoader(true, 'Installation');
         return Utils.waitForRepaint().then(function() { self._doInstall() });
     },
     _doInstall: function() {
-        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
-
         if (!this.plugin && !this.installed) {
             // if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
             this.onClickClose();
         }
 
-        /** @type {IframeMessage} */
-        let message = {
-            type : 'install',
-            url : (this.plugin ? this.plugin.url : this.installed.obj.baseUrl),
-            guid : guid,
-            config : (this.plugin ? this.plugin : this.installed.obj)
-        };
+        const url = (this.plugin ? this.plugin.url : this.installed.obj.baseUrl);
+        const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
+        const config = (this.plugin ? this.plugin : this.installed.obj);
 
-        return new Promise(function(fResolve) {
-            /** @param {MessageEvent} event */
-			let onInstalled = function(event) {
-				let message;
-				try {
-					message = JSON.parse(event.data);
-				} catch (error) {
-					return;
-				}
-				if (message.type === 'Installed') {
-					window.removeEventListener('message', onInstalled);
-					fResolve(message.data);
-				}
-			};
-			window.addEventListener('message', onInstalled);
-            sendMessage(message);
-        }).then(function (message) {
+        return MarketplacePluginService.doInstall(url, guid, config).then(function (message) {
             PluginCardUI.toggleLoader(false);
+            console.log(message);
             if (!message || !message.guid) {
                 return;
             }
@@ -489,30 +476,8 @@ const PluginCard = {
     _doUpdate: function() {
         const self = this;
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
-        /** @type {IframeMessage} */
-        let message = {
-            type : 'update',
-            url : this.plugin.url,
-            guid : guid,
-            config : this.plugin
-        };
-        return new Promise(function(fResolve) {
-            /** @param {MessageEvent} event */
-			let onUpdated = function(event) {
-				let message;
-				try {
-					message = JSON.parse(event.data);
-				} catch (error) {
-					return;
-				}
-				if (message.type === 'Updated') {
-					window.removeEventListener('message', onUpdated);
-					fResolve(message.data);
-				}
-			};
-			window.addEventListener('message', onUpdated);
-            sendMessage(message);
-        }).then(function (message) {
+        const config = this.plugin || this.installed.obj;
+        return MarketplacePluginService.doUpdate(guid, config).then(function (message) {
             PluginCardUI.toggleLoader(false);
             if (!message || !message.guid) {
                 return;
@@ -532,31 +497,7 @@ const PluginCard = {
         const self = this;
         const guid = this.plugin ? this.plugin.guid : this.installed.obj.guid;
 
-        /** @type {IframeMessage} */
-        let message = {
-            type : 'remove',
-            guid : guid,
-            backup : this.backup,
-            config : this.plugin
-        };
-        
-        return new Promise(function(fResolve) {
-            /** @param {MessageEvent} event */
-			let onRemoveed = function(event) {
-				let message;
-				try {
-					message = JSON.parse(event.data);
-				} catch (error) {
-					return;
-				}
-				if (message.type === 'Removed') {
-					window.removeEventListener('message', onRemoveed);
-					fResolve(message.data);
-				}
-			};
-			window.addEventListener('message', onRemoveed);
-            sendMessage(message);
-        }).then(function (message) {
+        return MarketplacePluginService.doRemove(guid, this.backup).then(function (message) {
             PluginCardUI.toggleLoader(false);
             if (!message || !message.guid) {
                 return;
@@ -609,39 +550,21 @@ const PluginCard = {
             PluginCardUI.divSelectedImage.style.height = height;
             PluginCardUI.divSelectedImage.style.maxHeight = height;
         }
+    },
+
+    /**
+     * @param {string} baseUrl
+     * @returns {string}
+     */
+    _correctBaseUrl: function(baseUrl) {
+        if (baseUrl.indexOf('../') !== 0) {
+            return baseUrl;
+        }
+        if (!baseUrl.includes("/sdkjs-plugins/content/") && baseUrl.includes('/sdkjs-plugins/')) {
+            baseUrl = baseUrl.replace('/sdkjs-plugins/', '/sdkjs-plugins/content/');
+        }
+        return baseUrl;
     }
-
-};
-
-/**
- * @param {{message: string}} err 
- * @param {boolean} [bDontShow]
- * @returns 
- */
-function createError(err, bDontShow) {
-	// creates a modal window with error message for user and error in console
-	console.error(err);
-	let divErr = document.getElementById('div_error');
-	if (!divErr) {
-		return;
-	}
-	// we don't show a new error if we have previous one
-	if (!divErr.classList.contains('hidden') || bDontShow)
-		return;
-	let background = document.createElement('div');
-	background.className = 'asc-plugin-loader';
-	let span = document.createElement('span');
-	span.className = 'error_caption';
-	let message = err.message || 'Problem with loading some resources';
-	span.textContent = Utils.getTranslated(message);
-	background.appendChild(span);
-	divErr.appendChild(background);
-	divErr.classList.remove('hidden');
-	setTimeout(function() {
-		// remove error after 5 seconds
-		background.remove();
-		divErr.classList.add('hidden');
-	}, 5000);
 };
 
 window.addEventListener('message', function(message) {
@@ -665,8 +588,8 @@ window.addEventListener('message', function(message) {
 			break;
 		case 'Theme':
 			if (message.theme.type)
-				Common.themeType = message.theme.type;
-			PluginCardUI.onChangeTheme(message.theme, Common.themeType, message.style);
+				Utils.themeType = message.theme.type;
+			PluginCardUI.onChangeTheme(message.theme, Utils.themeType, message.style);
 			break;
 		case 'onExternalMouseUp':
 			let evt = document.createEvent("MouseEvents");

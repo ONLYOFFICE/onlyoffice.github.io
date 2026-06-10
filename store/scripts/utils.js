@@ -32,13 +32,36 @@
 
 // @ts-check
 /// <reference path="./types.js" />
+/// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+
+/**
+ * @typedef {Object} Messages
+ * @property {string} versionWarning
+ * @property {string} installed
+ * @property {string} updates
+ * @property {string} marketplace
+ */
 
 const Utils = {
+    bTranslate: false,                                          // flag translate or not
+    /** @type {string} */
+    themeType: getUrlSearchValue("theme-type") || 'light',      // current theme
+    /** @type {string} */
+    lang: detectLanguage(),                                     // current language
+    /** @type {string} */
+    shortLang: detectLanguage().split('-')[0],                  // short language
+    /** @type {Messages} */
+    _MESSAGES: {
+        versionWarning: 'This plugin will only work in a newer version of the editor.',
+        installed: 'Install plugin manually',
+        updates: 'Install plugin manually',
+        marketplace: 'Submit your own plugin'
+    },
+
     /** @type {Object<string, string>} */
     translate: {'Loading': 'Loading'}, // translations for current language (thouse will necessary if we don't get translation file)
-    /** @param {string} shortLang */
-    init: function(shortLang) {
-        switch (shortLang) {
+    init: function() {
+        switch (this.shortLang) {
             case 'ru':
                 this.translate["Loading"] = "Загрузка"
                 break;
@@ -101,6 +124,35 @@ const Utils = {
         }
         return text;
     },
+    /**
+     * @param {keyof Messages} messageKey
+     * @returns {string}
+     */
+    getTranslatedMessage: function(messageKey) {
+        if (Object.hasOwnProperty.call(this._MESSAGES, messageKey)) {
+            return this.getTranslated(this._MESSAGES[messageKey]);
+        }
+        throw new Error(`Message key "${messageKey}" not found in MESSAGES`);
+    }, 
+    /**
+     * @param {PluginInfo} plugin
+     */
+    getTranslatedName: function(plugin) {
+        if (this.bTranslate && plugin.nameLocale && ( plugin.nameLocale[this.lang] || plugin.nameLocale[this.shortLang] )) {
+            return ( plugin.nameLocale[this.lang] || plugin.nameLocale[this.shortLang] );
+        }
+        return plugin.name;
+    },
+    /**
+     * @param {any} variation
+     */
+    getTranslatedDescription: function(variation) {
+        if (this.bTranslate && variation.descriptionLocale && ( variation.descriptionLocale[this.lang] || variation.descriptionLocale[this.shortLang] ) ) {
+            return ( variation.descriptionLocale[this.lang] || variation.descriptionLocale[this.shortLang] )
+        }
+        return variation.description;
+    },
+
     translateAll: function() {
         const self = this;
         const nodes = document.querySelectorAll(".i18n");
@@ -194,7 +246,9 @@ const Utils = {
     makeChangeLogHtml: function(changelog) {
         const settings = this._getMarkedSetting();
         let value = this._parseChangelog(changelog);
+        // @ts-ignore
         let lexed = marked.lexer(value, settings);
+        // @ts-ignore
         return marked.parser(lexed, settings);
     },
     /** @param {string} data */
@@ -217,10 +271,15 @@ const Utils = {
         // function for marked librry
         let defaults = {};
         const settings = {};
+        // @ts-ignore
         if (typeof marked.getDefaults === 'function') {
+            // @ts-ignore
             defaults = marked.getDefaults();
+            // @ts-ignore
         } else if ('defaults' in marked) {
+            // @ts-ignore
             for (let prop in marked.defaults) {
+                // @ts-ignore
                 defaults[prop] = marked.defaults[prop];
             }
         }
@@ -242,4 +301,117 @@ const Utils = {
         return settings;
     },
 
+    /**
+     * @param {Plugins} pluginsOld 
+     * @param {Plugins} pluginsNew 
+     * @returns {boolean}
+     */
+    isSamePlugins: function(pluginsOld, pluginsNew) {
+        if (pluginsOld.length !== pluginsNew.length) {
+            return false;
+        }
+        
+        for (let i = 0; i < pluginsOld.length; i++) {
+            if (pluginsOld[i].guid !== pluginsNew[i].guid) {
+                return false;
+            }
+        }
+        
+        return true;
+    },
+    /**
+     * @param {Array<PluginInfo>} plugins
+     * @param {Array<number>} unloaded
+     */
+    removeUnloaded: function(plugins, unloaded) {
+        for (let i = unloaded.length - 1; i >= 0; i--) {
+            plugins.splice(unloaded[i], 1);
+        }
+    },
+    
+    /**
+     * @param {PluginInfo[] | InstalledPluginInfo[]} arrPlugins 
+     * @param {"rating" | "installations" | "start" | "name"} type 
+     */
+    sortPlugins: function(arrPlugins, type) {
+        if (!arrPlugins || !arrPlugins.length) {
+            return arrPlugins;
+        }
+        /** @type {Array<InstalledPluginInfo>} */
+        let installedPluginsToSort = [];
+        /** @type {Array<PluginInfo>} */
+        let allPluginsToSort = [];
+        if (Object.hasOwnProperty.call(arrPlugins[0], 'obj')) {
+            installedPluginsToSort = /** @type {Array<InstalledPluginInfo>} */(arrPlugins);
+        } else {
+            allPluginsToSort = /** @type {Array<PluginInfo>} */(arrPlugins);
+        }
+        switch (type) {
+            case 'rating':
+                // todo
+                break;
+            case 'installations':
+                // todo
+                break;
+            case 'start':
+                if (installedPluginsToSort.length) {
+                    /** @type {Array<InstalledPluginInfo>} */
+                    let guarded = [];
+                    /** @type {Array<InstalledPluginInfo>} */
+                    let removed = [];
+                    /** @type {Array<InstalledPluginInfo>} */
+                    let arr = [];
+                    installedPluginsToSort.forEach(function(pl) {
+                        if (!pl.canRemoved)
+                            guarded.push(pl);
+                        else if (pl.removed)
+                            removed.push(pl);
+                        else
+                            arr.push(pl);
+                    });
+                    return guarded.concat(arr, removed);
+                }
+                break;
+            case 'name':
+                if (allPluginsToSort.length) {
+                    return allPluginsToSort.sort(function(a, b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                } else {
+                    return installedPluginsToSort.sort(function(a, b) {
+                        return a.obj.name.localeCompare(b.obj.name);
+                    });
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+};
+
+function detectLanguage() {
+    // detect language or return default
+    let lang = getUrlSearchValue("lang");
+    if (lang.length == 2)
+        lang = (lang.toLowerCase() + "-" + lang.toUpperCase());
+    return lang || 'en-EN';
+};
+
+/**
+ * @param {string} key 
+ * @returns {string}
+ */
+function getUrlSearchValue(key) {
+    let res = '';
+    if (window.location && window.location.search) {
+        let search = window.location.search;
+        let pos1 = search.indexOf(key + '=');
+        if (-1 != pos1) {
+            pos1 += key.length + 1;
+            let pos2 = search.indexOf("&", pos1);
+            res = search.substring(pos1, (pos2 != -1 ? pos2 : search.length) )
+        }
+    }
+    return res;
 };

@@ -9,7 +9,6 @@
 /**
  * @typedef {Object} PluginCardWindowParams
  * @property {'showPluginCard'} type
- * @property {string} guid
  * @property {string} pluginName
  * @property {string} pluginDescription
  * @property {string} OOMarketplaceUrl
@@ -28,11 +27,13 @@
 /**
  * @typedef {Object} IframeMessage
  * @property {PluginInfo} config
- * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard' | 'close'} type
+ * @property {'getInstalled' | 'install' | 'remove' | 'update' | 'showPluginCard' | 'close' | 'resize'} type
  * @property {string} guid
  * @property {string} [url]
  * @property {boolean} [updateInstalled]
  * @property {boolean} [backup]
+ * @property {number} [width]
+ * @property {number} [height]
  */
 
 /**

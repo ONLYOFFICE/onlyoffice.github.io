@@ -32,55 +32,37 @@
 
 // @ts-check
 /// <reference path="./types.js" />
+/// <reference path="./utils.js" />
 /// <reference path="./data-fetcher.js" />
 
-const Common = {
-	/** @type {string} */
-	themeType: getUrlSearchValue("theme-type") || 'light', 		// current theme
-	lang: detectLanguage(),                                     // current language
-	shortLang: detectLanguage().split('-')[0],                  // short language
-
-};
-
-const MESSAGES = {
-	versionWarning: 'This plugin will only work in a newer version of the editor.',
-	installed: 'Install plugin manually',
-	updates: 'Install plugin manually',
-	marketplace: 'Submit your own plugin'
-};
-
-
-function detectLanguage() {
-	// detect language or return default
-	let lang = getUrlSearchValue("lang");
-	if (lang.length == 2)
-		lang = (lang.toLowerCase() + "-" + lang.toUpperCase());
-	return lang || 'en-EN';
-};
 
 /**
- * @param {string} key 
- * @returns {string}
+ * @param {{message: string}} err 
+ * @param {boolean} [bDontShow]
+ * @returns 
  */
-function getUrlSearchValue(key) {
-	let res = '';
-	if (window.location && window.location.search) {
-		let search = window.location.search;
-		let pos1 = search.indexOf(key + '=');
-		if (-1 != pos1) {
-			pos1 += key.length + 1;
-			let pos2 = search.indexOf("&", pos1);
-			res = search.substring(pos1, (pos2 != -1 ? pos2 : search.length) )
-		}
+function createError(err, bDontShow) {
+	// creates a modal window with error message for user and error in console
+	console.error(err);
+	let divErr = document.getElementById('div_error');
+	if (!divErr) {
+		return;
 	}
-	return res;
+	// we don't show a new error if we have previous one
+	if (!divErr.classList.contains('hidden') || bDontShow)
+		return;
+	let background = document.createElement('div');
+	background.className = 'asc-plugin-loader';
+	let span = document.createElement('span');
+	span.className = 'error_caption';
+	let message = err.message || 'Problem with loading some resources';
+	span.textContent = Utils.getTranslated(message);
+	background.appendChild(span);
+	divErr.appendChild(background);
+	divErr.classList.remove('hidden');
+	setTimeout(function() {
+		// remove error after 5 seconds
+		background.remove();
+		divErr.classList.add('hidden');
+	}, 5000);
 };
-
-/** @param {Object} message */
-function sendMessage(message) {
-	// this function sends message to editor
-	parent.postMessage(JSON.stringify(message), '*');
-};
-
-
-

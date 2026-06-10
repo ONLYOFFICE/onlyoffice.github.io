@@ -32,6 +32,7 @@
 
 // @ts-check
 /// <reference path="../../scripts/types.js" />
+/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
@@ -198,7 +199,7 @@
 					interval = null;
 				}
 				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
-				postMessage( { type: 'PluginReady', version: editorVersion } );
+				postMessage( { type: 'PluginReady', version: editorVersion, pluginVersion: window.Asc.plugin.version } );
 			});
 		};
 	};
@@ -260,6 +261,9 @@
 				break;
 			case 'showPluginCard':
 				PluginCard.show(data);
+				break;
+			case 'resize':
+				window.Asc.plugin.resizeWindow(data.width, data.height, data.width, data.height, 0, 0);
 				break;
 		}
 		
