@@ -373,7 +373,7 @@ function loadPluginCardAssets() {
 
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
-		link.href = 'resources/css/plugin-card.css';
+		link.href = 'resources/css/plugin-card.v1.0.5.css';
 		document.head.appendChild(link);
 
 		function onScriptLoad() {
