@@ -31,11 +31,11 @@
  */
 
 // @ts-check
-/// <reference path="./types.js" />
-/// <reference path="./common.js" />
-/// <reference path="./utils.js" />
+/// <reference path="../types.js" />
+/// <reference path="../common.js" />
+/// <reference path="../utils.js" />
 /// <reference path="./plugin-card-ui.js" />
-/// <reference path="./marketplace-plugin-service.js" />
+/// <reference path="../marketplace-plugin-service.js" />
 
 const PluginCard = {
 	/** @type {number} */
@@ -112,7 +112,7 @@ const PluginCard = {
      */
     _show: function(data) {
 		const self = this;
-console.log('data', data);
+
         // There we will make preview for selected plugin
         let offered = "Ascensio System SIA";
         let hiddenCounter = 0;
@@ -322,7 +322,7 @@ console.log('data', data);
             PluginCardUI.btnInstall.removeAttribute("title");
         }
 
-        this._setDivHeight();
+        this.setDivHeight();
     },
 
     /** @param {string} baseUrl */
@@ -438,7 +438,7 @@ console.log('data', data);
             // type: 1 - Overview; 2 - Info; 3 - Changelog;
             let element = PluginCardUI.divSelectedPreview;
             if (type === 1) {
-                this._setDivHeight();
+                this.setDivHeight();
             } else if (type === 2) {
                 element = PluginCardUI.divSelectedInfo;
             } else {
@@ -565,7 +565,7 @@ console.log('data', data);
             dots[this.slideIndex-1].className += ' active';
     },
     
-    _setDivHeight: function() {
+    setDivHeight: function() {
         // console.log(Math.round(window.devicePixelRatio * 100));
         if (PluginCardUI.divSelectedImage) {
             let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 70 + 'px';
@@ -587,6 +587,10 @@ console.log('data', data);
         }
         return baseUrl;
     }
+};
+
+window.onresize = function() {
+    PluginCard.setDivHeight();
 };
 
 window.addEventListener('message', function(message) {

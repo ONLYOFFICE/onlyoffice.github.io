@@ -40,7 +40,7 @@
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./common.js" />
 /// <reference path="./marketplace-plugin-service.js" />
-/// <reference path="./plugin-card.js" />
+/// <reference path="./card-v1.0.5/plugin-card.js" />
 
 const storeVersion = '1.0.9';                                        // version of store (will change it when update something in store)
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
@@ -367,8 +367,8 @@ function loadPluginCardAssets() {
 		var loaded = 0;
 		var scripts = [
 			'vendor/marked/marked.min.js',
-			'scripts/plugin-card-ui.js',
-			'scripts/plugin-card.js'
+			'scripts/card-v1.0.5/plugin-card-ui.js',
+			'scripts/card-v1.0.5/plugin-card.js'
 		];
 
 		var link = document.createElement('link');
@@ -1009,9 +1009,11 @@ function hidePluginCard() {
 		pluginCardDiv.classList.add('hidden');
 		marketplaceDiv.classList.remove('hidden');
 	}
+	window.onresize = onResize.bind(null, false);
 }
 
-window.onresize = function(bForce) {
+/** @param {boolean} bForce */
+function onResize(bForce) {
 	if (scale.devicePR !== window.devicePixelRatio || bForce) {
 		let html = document.getElementsByTagName('html')[0];
 		scale.devicePR = window.devicePixelRatio;
@@ -1040,13 +1042,15 @@ window.onresize = function(bForce) {
 			element.style.borderWidth = borderWidth + 'px';
 		}
 	}
-};
+}
+
+window.onresize = onResize.bind(null, false);
 
 // zoom on start if we start with a non 100% zoom
 if (scale.devicePR < 1) {
 	// maybe remove this flag
 	isResizeOnStart = false;
-	window.onresize(true);
+	onResize(true);
 }
 
 function calculateScale() {
