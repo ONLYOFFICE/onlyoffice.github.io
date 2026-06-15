@@ -124,13 +124,14 @@ const PluginCardUI = {
      * @returns {string|false} returns default background color or false if theme is not changed
      */
     onChangeTheme: function(theme, themeType, style) {
-        let rule = '.pc-sub,\n';
-        rule = '.pc-rating-count,\n';
-        rule = '.span_notification{color:'+theme["text-secondary"]+';}\n';
+        let rule = '.pc-rating-count,\n';
+        rule += '#div_changelog_preview li,\n';
+        rule += '.span_notification{color:'+theme["text-secondary"]+';}\n';
         rule += '.info-block{background-color: ' + (theme["highlight-button-pressed"] || '#DCDBDB') + ';}\n';
         
         rule += '.pc-sub,\n';
         rule += '.span_caption{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
+        rule += '#div_changelog_preview li::before,\n';
         rule += '.span_caption:hover{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
         rule += '.pc-header, .pc-tabs{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         rule += '.span_caption.span_selected,\n';
