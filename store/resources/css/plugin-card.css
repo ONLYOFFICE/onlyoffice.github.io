@@ -38,10 +38,9 @@ a.link {
 
 .about-body { font-size: 14px;line-height: 1.6; margin-top: 12px; }
 
-.info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
-.info-block strong { font-weight: 500; margin-bottom: 4px; font-size: 13px; line-height: 24px; }
+.info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; }
+.info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
 .info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
-
 
 .slideshow-container {
 	position: relative;
@@ -111,7 +110,6 @@ button.btn-text-default:not(.hidden) {
 	text-align: center;
 	margin: 0;
 }
-
 .next {
 	right: 5px;
 }
@@ -123,12 +121,10 @@ button.btn-text-default:not(.hidden) {
 	right: 0;
 	top: 0;
 }
-
 .prev {
 	left: 5px;
     text-indent: -3px;
 }
-
 /* arrow hovered*/
 .prev:hover, .next:hover {
 	background-color: rgba(223,223,227,.6976);
@@ -137,7 +133,6 @@ button.btn-text-default:not(.hidden) {
     -moz-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
-
 /* arrow active*/
 .prev:active, .next:active {
 	background-color: rgba(193,193,198,.6544);

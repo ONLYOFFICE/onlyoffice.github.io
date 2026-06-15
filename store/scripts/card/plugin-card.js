@@ -192,18 +192,6 @@ const PluginCard = {
             PluginCardUI.arrowNext.classList.add("hidden");
         }
 
-        if ((this.installed && this.installed.obj.version) || this.config.version) {
-            PluginCardUI.spanVersion.textContent = String(
-                this.installed && this.installed.obj.version ?
-                    this.installed.obj.version
-                :   this.config.version
-            );
-            PluginCardUI.divVersion.classList.remove("hidden");
-        } else {
-            PluginCardUI.spanVersion.textContent = "";
-            PluginCardUI.divVersion.classList.add("hidden");
-        }
-
         if (
             (this.installed && this.installed.obj.minVersion) ||
             this.config.minVersion
@@ -474,7 +462,7 @@ const PluginCard = {
             }
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnRemove.classList.remove('hidden');
-			PluginCardUI.spanVersion.textContent = String(self.config.version);
+            PluginCardUI.version.textContent = "· v" + String(self.config.version);
         });
     },
 
@@ -496,7 +484,7 @@ const PluginCard = {
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnInstall.classList.remove('hidden');
             if (self.plugin) {
-                PluginCardUI.spanVersion.textContent = String(self.plugin.version);
+                PluginCardUI.version.textContent = "· v" + String(self.plugin.version);
             }
         });
         
