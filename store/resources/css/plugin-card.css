@@ -1,0 +1,113 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html,body {
+	margin: 0px !important;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-flow: column;
+}
+
+body { background: #f2f3f5;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+.pc { width: 100%; }
+.pc-header { padding: 20px 24px 16px; border-bottom: 0.5px solid #e0e0e0; }
+.pc-title-row { display: flex; align-items: flex-start; gap: 16px; }
+.pc-icon { width: 171px; height: 84px; border-radius: 4px; background: #1a9e80; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; color: #fff; flex-shrink: 0; }
+.pc-meta { flex: 1; min-width: 0; }
+.pc-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.pc-name { font-size: 20px; font-weight: 500; color: #1a1a1a; }
+.pc-badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; background: #e8f5f1; color: #0f6e56; display: flex; align-items: center; gap: 4px; }
+.pc-sub { font-size: 13px; color: #777; margin-bottom: 8px; }
+.pc-stats { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.div_rating { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.pc-rating {display: flex; align-items: anchor-center;}
+.pc-rating > span:last-child { margin-left: 4px; }
+.stars { margin-right: 4px; }
+.stars span { color: #f5a623; font-size: 14px; }
+.pc-rating-count { font-size: 13px; color: #777; font-weight: 400; }
+.pc-stat { font-size: 12px; color: #777; }
+.pc-stat strong { color: #1a1a1a; font-weight: 500; }
+.pc-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn_update { background: #1a9e80; color: #fff; border: none; padding: 8px 20px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; }
+.btn_update:hover { background: #158a6e; }
+
+.pc-tabs { display: flex; border-bottom: 0.5px solid #e0e0e0; padding: 0 24px; }
+.span_caption { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #777; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
+.span_caption:hover { color: #1a1a1a; }
+.span_caption.span_selected { color: #1a9e80; border-bottom-color: #1a9e80; }
+
+.tab-pane { position: relative; height: calc(100% - 135px); padding: 0 24px 20px 24px; margin-top: 20px; }
+
+.about-body { font-size: 14px; color: #555; line-height: 1.6; }
+.review-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: #1a9e80; margin-top: 14px; cursor: pointer; text-decoration: none; }
+.review-link:hover { text-decoration: underline; }
+
+.cl-ver { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
+.cl-date { font-size: 12px; color: #aaa; margin-bottom: 6px; }
+.cl-entry { font-size: 13px; color: #555; display: flex; gap: 8px; margin-bottom: 3px; }
+.cl-tag { font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
+.cl-tag.new { background: #e8f5e9; color: #2e7d32; }
+.cl-tag.fix { background: #fff8e1; color: #f57f17; }
+.cl-tag.imp { background: #e3f2fd; color: #1565c0; }
+
+.info-block { background: #f8f8f8; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.info-block strong { font-weight: 500; color: #1a1a1a; margin-bottom: 4px; font-size: 13px; line-height: 24px; }
+.info-block p { font-size: 13px; color: #555; line-height: 1.6; margin: 0; }
+
+
+.slideshow-container {
+	position: relative;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+}
+.mySlides {
+	display: none;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+.screen {
+	vertical-align: middle;
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#div_changelog_preview ul {
+	list-style-position: inside;
+    margin-bottom: 12px;
+    margin-left: 12px;
+}
+.ti-circle-check {
+	display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 11px;
+    height: 11px;
+    border-radius: 5.5px;
+    background: var(--pm-accent);
+    color: rgb(255, 255, 255);
+    font-size: 7.15px;
+    font-weight: 700;
+    line-height: 1;
+    flex-shrink: 0;
+}
+button.btn-text-default:not(.hidden) {
+	height: 24px;
+	min-width: 100px;
+	border-radius: 3px;
+	font-weight: bold; 
+	display: inline-flex; 
+	align-items: center; 
+	justify-content: center; 
+	gap: 6px;
+	white-space: nowrap;
+}
+
+
+.hidden {
+	display: none;
+}
