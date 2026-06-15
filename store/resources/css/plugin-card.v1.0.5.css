@@ -113,18 +113,18 @@ button {
 	/* inset: 130px 0px 0px; */
 }
 
-.div_selected_preview {
+.tab-pane {
 	width: 100%;
 	height: calc(100% - 60px);
 	margin-top: 25px;
 	position: absolute;
 }
 
-.div_selected_preview_chanelog {
+.tab-changelog {
 	margin-top: 12px !important;
 }
 
-.div_selected_info {
+.info-block {
 	margin-top: 10px;
 }
 

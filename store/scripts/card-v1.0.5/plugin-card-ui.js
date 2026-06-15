@@ -38,108 +38,78 @@ const PluginCardUI = {
     /** @type {HTMLDivElement} */
     loader: undefined,
     /** @type {HTMLImageElement} */
-    imgIcon: null,
+    imgIcon: /** @type {HTMLImageElement} */ (document.getElementById('img_icon')),
     /** @type {HTMLSpanElement} */
-    spanName: null,
+    spanName: /** @type {HTMLSpanElement} */ (document.getElementById('span_name')),
     /** @type {HTMLSpanElement} */
-    spanOffered: null,
+    spanOffered: /** @type {HTMLSpanElement} */ (document.getElementById('span_offered')),
     /** @type {HTMLButtonElement} */
-    btnUpdate: null,
+    btnUpdate: /** @type {HTMLButtonElement} */ (document.getElementById('btn_update')),
     /** @type {HTMLButtonElement} */
-    btnRemove: null,
+    btnRemove: /** @type {HTMLButtonElement} */ (document.getElementById('btn_remove')),
     /** @type {HTMLButtonElement} */
-    btnInstall: null,
+    btnInstall: /** @type {HTMLButtonElement} */ (document.getElementById('btn_install')),
     /** @type {HTMLSpanElement} */
-    spanSelectedDescr: null,
+    spanSelectedDescr: /** @type {HTMLSpanElement} */ (document.getElementById('span_selected_description')),
     /** @type {HTMLAnchorElement} */
-    linkPlugin: null,
+    linkPlugin: /** @type {HTMLAnchorElement} */ (document.getElementById('link_plugin')),
     /** @type {HTMLSpanElement} */
-    arrowNext: null,
+    arrowNext: /** @type {HTMLSpanElement} */ (document.getElementById('next_arrow')),
     /** @type {HTMLSpanElement} */
-    arrowPrev: null,
+    arrowPrev: /** @type {HTMLSpanElement} */ (document.getElementById('prev_arrow')),
     /** @type {HTMLAnchorElement} */
-    discussionLink: null,
+    discussionLink: /** @type {HTMLAnchorElement} */ (document.getElementById('discussion_link')),
     /** @type {HTMLDivElement} */
-    divDescriptionSelected: null,
+    divDescriptionSelected: /** @type {HTMLDivElement} */ (document.getElementById('div_description_selected')),
     /** @type {HTMLDivElement} */
-    divGitLink: null,
+    divGitLink: /** @type {HTMLDivElement} */ (document.getElementById('div_github_link')),
     /** @type {HTMLDivElement} */
-    divLanguages: null,
+    divLanguages: /** @type {HTMLDivElement} */ (document.getElementById('div_languages')),
     /** @type {HTMLDivElement} */
-    divMinVersion: null,
+    divMinVersion: /** @type {HTMLDivElement} */ (document.getElementById('div_min_version')),
     /** @type {HTMLDivElement} */
-    divRatingLink: null,
+    divRatingLink: /** @type {HTMLDivElement} */ (document.getElementById('div_rating_link')),
     /** @type {HTMLDivElement} */
-    divReadme: null,
+    divReadme: /** @type {HTMLDivElement} */ (document.getElementById('div_readme_link')),
     /** @type {HTMLDivElement} */
-    divSelectedImage: null,
+    divSelectedImage: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_image')),
     /** @type {HTMLDivElement} */
-    divSelectedPreview: null,
+    divSelectedPreview: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_preview')),
     /** @type {HTMLDivElement} */
-    divStarsColored: null,
+    divStarsColored: /** @type {HTMLDivElement} */ (document.getElementById('stars_colored')),
     /** @type {HTMLDivElement} */
-    divVersion: null,
+    divVersion: /** @type {HTMLDivElement} */ (document.getElementById('div_version')),
     /** @type {HTMLDivElement} */
-    divVotes: null,
+    divVotes: /** @type {HTMLDivElement} */ (document.getElementById('div_votes')),
     /** @type {HTMLAnchorElement} */
-    linkReadme: null,
+    linkReadme: /** @type {HTMLAnchorElement} */ (document.getElementById('link_readme')),
     /** @type {HTMLSpanElement} */
-    spanLanguages: null,
+    spanLanguages: /** @type {HTMLSpanElement} */ (document.getElementById('span_langs')),
     /** @type {HTMLSpanElement} */
-    spanMinVersion: null,
+    spanMinVersion: /** @type {HTMLSpanElement} */ (document.getElementById('span_min_ver')),
     /** @type {HTMLSpanElement} */
-    spanVersion: null,
+    spanVersion: /** @type {HTMLSpanElement} */ (document.getElementById('span_ver')),
     /** @type {HTMLSpanElement} */
-    totalVotes: null,
+    totalVotes: /** @type {HTMLSpanElement} */ (document.getElementById('total_votes')),
     /** @type {HTMLSpanElement} */
-    spanChangelog: null,
+    spanChangelog: /** @type {HTMLSpanElement} */ (document.getElementById('span_changelog')),
+    /** @type {HTMLSpanElement} */
+    spanOverview: /** @type {HTMLSpanElement} */ (document.getElementById('span_overview')),
     /** @type {HTMLDivElement} */
-    divChangelogPreview: null,
+    divChangelogPreview: /** @type {HTMLDivElement} */ (document.getElementById('div_changelog_preview')),
     /** @type {HTMLDivElement} */
-    divIconInfo: null,
+    divSelectedContainer: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_container')),
     /** @type {HTMLDivElement} */
-    divSelectedChangelog: null,
+    divPointsContainer: /** @type {HTMLDivElement} */ (document.getElementById('points_container')),
     /** @type {HTMLDivElement} */
-    divSelectedInfo: null,
-
-    _initDom: function() {
-        this.imgIcon              = /** @type {HTMLImageElement} */ (document.getElementById('img_icon'));
-        this.spanName             = document.getElementById('span_name');
-        this.spanOffered          = document.getElementById('span_offered');
-        this.btnUpdate            = /** @type {HTMLButtonElement} */ (document.getElementById('btn_update'));
-        this.btnRemove            = /** @type {HTMLButtonElement} */ (document.getElementById('btn_remove'));
-        this.btnInstall           = /** @type {HTMLButtonElement} */ (document.getElementById('btn_install'));
-        this.spanSelectedDescr    = document.getElementById('span_selected_description');
-        this.linkPlugin           = /** @type {HTMLAnchorElement} */ (document.getElementById('link_plugin'));
-        this.arrowNext            = document.getElementById('next_arrow');
-        this.arrowPrev            = document.getElementById('prev_arrow');
-        this.discussionLink       = /** @type {HTMLAnchorElement} */ (document.getElementById('discussion_link'));
-        this.divDescriptionSelected = /** @type {HTMLDivElement} */ (document.getElementById('div_description_selected'));
-        this.divGitLink           = /** @type {HTMLDivElement} */ (document.getElementById('div_github_link'));
-        this.divLanguages         = /** @type {HTMLDivElement} */ (document.getElementById('div_languages'));
-        this.divMinVersion        = /** @type {HTMLDivElement} */ (document.getElementById('div_min_version'));
-        this.divRatingLink        = /** @type {HTMLDivElement} */ (document.getElementById('div_rating_link'));
-        this.divReadme            = /** @type {HTMLDivElement} */ (document.getElementById('div_readme_link'));
-        this.divSelectedImage     = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_image'));
-        this.divSelectedPreview   = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_preview'));
-        this.divStarsColored      = /** @type {HTMLDivElement} */ (document.getElementById('stars_colored'));
-        this.divVersion           = /** @type {HTMLDivElement} */ (document.getElementById('div_version'));
-        this.divVotes             = /** @type {HTMLDivElement} */ (document.getElementById('div_votes'));
-        this.linkReadme           = /** @type {HTMLAnchorElement} */ (document.getElementById('link_readme'));
-        this.spanLanguages        = document.getElementById('span_langs');
-        this.spanMinVersion       = document.getElementById('span_min_ver');
-        this.spanVersion          = document.getElementById('span_ver');
-        this.totalVotes           = document.getElementById('total_votes');
-        this.spanChangelog        = document.getElementById('span_changelog');
-        this.divChangelogPreview  = /** @type {HTMLDivElement} */ (document.getElementById('div_changelog_preview'));
-        this.divIconInfo          = /** @type {HTMLDivElement} */ (document.getElementById('div_icon_info'));
-        this.divSelectedChangelog = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_changelog'));
-        this.divSelectedInfo      = /** @type {HTMLDivElement} */ (document.getElementById('div_selected_info'));
-    },
+    divIconInfo: /** @type {HTMLDivElement} */ (document.getElementById('div_icon_info')),
+    /** @type {HTMLDivElement} */
+    divSelectedChangelog: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_changelog')),
+    /** @type {HTMLDivElement} */
+    divSelectedInfo: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_info')),
 
     /** @param {'light' | string} themeType */
     init: function(themeType) {
-        this._initDom();
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
         rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
         let styleTheme = document.createElement('style');

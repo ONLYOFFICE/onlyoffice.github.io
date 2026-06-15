@@ -269,7 +269,7 @@ main {
 	}
 .plugin-plate {
 	display: flex;
-	min-height: 178px;
+	min-height: 186px;
 	flex-direction: column;
 	padding: 16px;
 	border-style: solid;
@@ -295,7 +295,7 @@ main {
 	}
 	.plugin-plate .image {
 		width: 120px;
-		height: 52px;
+		height: 60px;
 		border-radius: 4px;
 		font-weight: 600;
 		font-size: 23.4px;
@@ -314,7 +314,6 @@ main {
 	}
 	.plugin-plate .name div:first-child {
 		display: flex;
-		align-items: center;
 		margin-bottom: 2px;
 	}
 	.plugin-plate .name div:first-child > *:not(:last-child) {
@@ -330,6 +329,7 @@ main {
 		justify-content: center;
 		width: 13px;
 		height: 13px;
+		margin-top: 1px;
 		border-radius: 6.5px;
 		color: rgb(255, 255, 255);
 		font-size: 8.45px;

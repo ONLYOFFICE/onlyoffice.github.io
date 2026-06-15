@@ -86,21 +86,18 @@ const PluginCard = {
     },
 
     _resetDom: function() {
-        let container = document.getElementById('div_selected_container');
-        if (container) {
-            let slides = container.querySelectorAll('.mySlides');
+        if (PluginCardUI.divSelectedContainer) {
+            let slides = PluginCardUI.divSelectedContainer.querySelectorAll('.mySlides');
             slides.forEach(function(el) { if (el.parentNode) el.parentNode.removeChild(el); });
         }
-        let points = document.getElementById('points_container');
-        if (points) points.innerHTML = '';
+        if (PluginCardUI.divPointsContainer) PluginCardUI.divPointsContainer.innerHTML = '';
         if (PluginCardUI.divChangelogPreview) PluginCardUI.divChangelogPreview.innerHTML = '';
         if (PluginCardUI.divStarsColored) PluginCardUI.divStarsColored.style.width = '0';
         if (PluginCardUI.spanChangelog) PluginCardUI.spanChangelog.classList.add('hidden');
-        let spanOverview = document.getElementById('span_overview');
-        if (spanOverview) {
+        if (PluginCardUI.spanOverview) {
             let spans = document.querySelectorAll('.span_caption');
             spans.forEach(function(el) { el.classList.remove('span_selected'); });
-            spanOverview.classList.add('span_selected');
+            PluginCardUI.spanOverview.classList.add('span_selected');
         }
         if (PluginCardUI.divSelectedPreview) PluginCardUI.divSelectedPreview.classList.remove('hidden');
         if (PluginCardUI.divSelectedInfo) PluginCardUI.divSelectedInfo.classList.add('hidden');
@@ -203,8 +200,7 @@ const PluginCard = {
                 screen.className = "screen";
                 screen.setAttribute("src", url);
                 container.appendChild(screen);
-                document
-                    .getElementById("div_selected_container")
+                PluginCardUI.divSelectedContainer
                     .insertBefore(container, PluginCardUI.arrowPrev);
                 if (arrScreens.length > 1) {
                     let point = document.createElement("span");
@@ -212,9 +208,7 @@ const PluginCard = {
                     point.onclick = function () {
                         self._currentSlide(ind + 1);
                     };
-                    document
-                        .getElementById("points_container")
-                        .appendChild(point);
+                    PluginCardUI.divPointsContainer.appendChild(point);
                 }
             });
             if (arrScreens.length > 1) {
@@ -430,7 +424,7 @@ const PluginCard = {
                 selectedSpans[i].classList.remove("span_selected");
             }
             target.classList.add("span_selected");
-            const selectedPreviews = document.querySelectorAll(".div_selected_preview");
+            const selectedPreviews = document.querySelectorAll(".tab-pane");
             for (let i = 0; i < selectedPreviews.length; i++) {
                 selectedPreviews[i].classList.add("hidden");
             }
