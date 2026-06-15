@@ -195,20 +195,20 @@ const UI = {
         
         if (theme.name === 'theme-classic-light') {
             rule += '.filter-by input:checked + label .category-name,\n' +
-                '.filter-by input:checked + label .main-filter-category{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+                '.filter-by input:checked + label .main-filter-category,\n';
             rule += '.filter-by input:checked + label > span:last-of-type{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
             rule += '.filter-by input:checked + label{background-color: ' + ('#7d858c') + ';}\n';
         }
 
         if (themeType.includes('light')) {
-            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';    
-            rule += '.submit-own-plugin a:visited,\n';
-            rule += '.submit-own-plugin a{color: ' + ('#00645b') + ' !important;}\n';    
-            rule += '.submit-own-plugin a:hover{color: ' + ('#0e8a7e') + ' !important;}\n';    
+            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';
+            rule += 'a.link:visited,\n';
+            rule += 'a.link{color: ' + ('#00645b') + ' !important;}\n';    
+            rule += 'a.link:hover{color: ' + ('#0e8a7e') + ' !important;}\n';    
             rule += 'button.btn_update:active{background-color: ' + ('#00645b') + ' !important;}\n';    
             rule += 'button.btn_update{border-color: ' + ('#0e8a7e') + ';}\n';    
             rule += 'button.btn_update:hover{background-color: ' + ('#007a6f') + ';}\n';    
-            rule += 'button.btn_update,\n';    
+            rule += 'button.btn_update{background-color: ' + ('#0e8a7e') + ';}\n'; 
             rule += '.plugin-plate .by-onlyoffice,\n';    
             rule += '.filter-by input:checked + label span.onlyoffice,\n';    
             rule += '.filter-by label span.mark{background-color: ' + ('#0e8a7e') + ' !important;}\n';    
@@ -222,14 +222,14 @@ const UI = {
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
         } else {
             document.body.classList.remove('white_bg');
-            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#60ddc0' + ' !important;}\n';    
-            rule += '.submit-own-plugin a:visited,\n';
-            rule += '.submit-own-plugin a{color: ' + ('#60ddc0') + ' !important;}\n';    
-            rule += '.submit-own-plugin a:hover{color: ' + ('#39bda0') + ' !important;}\n';    
+            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#60ddc0' + ' !important;}\n';
+            rule += 'a.link:visited,\n';
+            rule += 'a.link{color: ' + ('#60ddc0') + ' !important;}\n';
+            rule += 'a.link:hover{color: ' + ('#39bda0') + ' !important;}\n';
             rule += 'button.btn_update:active{background-color: ' + ('#60ddc0') + ' !important;}\n';    
             rule += 'button.btn_update{border-color: ' + ('#39bda0') + ';}\n';    
             rule += 'button.btn_update:hover{background-color: ' + ('#26b094') + ';}\n';    
-            rule += 'button.btn_update,\n';    
+            rule += 'button.btn_update{background-color: ' + ('#39bda0') + ';}\n';
             rule += '.plugin-plate .by-onlyoffice,\n';    
             rule += '.filter-by input:checked + label span.onlyoffice,\n';    
             rule += '.filter-by label span.mark{background-color: ' + ('#39bda0') + ' !important;}\n';    

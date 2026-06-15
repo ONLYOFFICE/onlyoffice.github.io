@@ -54,7 +54,7 @@
 	
 	window.Asc.plugin.init = function() {
 		// resize window
-		window.Asc.plugin.resizeWindow(608, 600, 608, 600, 0, 0);
+		window.Asc.plugin.resizeWindow(680, 600, 680, 600, 0, 0);
 		initPluginCard();
 	};
 

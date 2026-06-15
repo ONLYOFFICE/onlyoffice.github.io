@@ -246,7 +246,7 @@ const PluginCard = {
             PluginCardUI.spanOffered.textContent = "Ascensio System SIA";
         }
         if (this.config.version) {
-            PluginCardUI.version.textContent = this.config.version;
+            PluginCardUI.version.textContent = "· v" + this.config.version;
         } else {
             PluginCardUI.version.classList.add('hidden');
         }

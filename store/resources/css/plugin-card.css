@@ -9,52 +9,38 @@ html,body {
 	flex-flow: column;
 }
 
-body { background: #f2f3f5;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+a.link {
+	text-decoration: none;
+}
 
-.pc { width: 100%; }
-.pc-header { padding: 20px 24px 16px; border-bottom: 0.5px solid #e0e0e0; }
+.pc { display: flex; flex-direction: column; width: 100%; height: 100vh; margin: 0px; overflow: hidden; box-sizing: border-box; }
+.pc-header { padding: 20px 24px 16px; border-bottom-width: 0.5px; border-bottom-style: solid; flex: 0 0 auto; min-height: auto;}
 .pc-title-row { display: flex; align-items: flex-start; gap: 16px; }
-.pc-icon { width: 171px; height: 84px; border-radius: 4px; background: #1a9e80; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; color: #fff; flex-shrink: 0; }
+.pc-icon { width: 171px; height: 84px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; flex-shrink: 0; }
 .pc-meta { flex: 1; min-width: 0; }
 .pc-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-.pc-name { font-size: 20px; font-weight: 500; color: #1a1a1a; }
-.pc-badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; background: #e8f5f1; color: #0f6e56; display: flex; align-items: center; gap: 4px; }
-.pc-sub { font-size: 13px; color: #777; margin-bottom: 8px; }
-.pc-stats { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.div_rating { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #1a1a1a; }
-.pc-rating {display: flex; align-items: anchor-center;}
+.pc-name { font-size: 20px; font-weight: 500; }
+.pc-badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+.pc-sub { font-size: 13px; margin-bottom: 8px; }
+.pc-stats { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline;}
+.pc-rating {display: flex; align-items: baseline;}
 .pc-rating > span:last-child { margin-left: 4px; }
 .stars { margin-right: 4px; }
-.stars span { color: #f5a623; font-size: 14px; }
-.pc-rating-count { font-size: 13px; color: #777; font-weight: 400; }
-.pc-stat { font-size: 12px; color: #777; }
-.pc-stat strong { color: #1a1a1a; font-weight: 500; }
+.stars span { font-size: 14px; }
+.pc-rating-count { font-size: 13px; font-weight: 400; }
 .pc-actions { display: flex; gap: 8px; flex-shrink: 0; }
-.btn_update { background: #1a9e80; color: #fff; border: none; padding: 8px 20px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; }
-.btn_update:hover { background: #158a6e; }
 
-.pc-tabs { display: flex; border-bottom: 0.5px solid #e0e0e0; padding: 0 24px; }
-.span_caption { padding: 12px 16px; font-size: 13px; font-weight: 500; color: #777; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
-.span_caption:hover { color: #1a1a1a; }
-.span_caption.span_selected { color: #1a9e80; border-bottom-color: #1a9e80; }
+.pc-tabs { display: flex; border-bottom-width: 0.5px; border-bottom-style: solid; padding: 0 24px; flex: 0 0 auto; min-height: auto; }
+.span_caption { padding: 12px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
 
-.tab-pane { position: relative; height: calc(100% - 135px); padding: 0 24px 20px 24px; margin-top: 20px; }
+.tab-pane { position: relative; padding: 0 24px 20px 24px; margin-top: 20px; flex: 1 1 0%; overflow-y: auto;}
+.tabs-content {flex: 1 1 auto; min-height: 0px; overflow-y: auto; display: flex; flex-direction: column;}
 
-.about-body { font-size: 14px; color: #555; line-height: 1.6; }
-.review-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: #1a9e80; margin-top: 14px; cursor: pointer; text-decoration: none; }
-.review-link:hover { text-decoration: underline; }
+.about-body { font-size: 14px;line-height: 1.6; margin-top: 12px; }
 
-.cl-ver { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 2px; }
-.cl-date { font-size: 12px; color: #aaa; margin-bottom: 6px; }
-.cl-entry { font-size: 13px; color: #555; display: flex; gap: 8px; margin-bottom: 3px; }
-.cl-tag { font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 4px; flex-shrink: 0; margin-top: 2px; }
-.cl-tag.new { background: #e8f5e9; color: #2e7d32; }
-.cl-tag.fix { background: #fff8e1; color: #f57f17; }
-.cl-tag.imp { background: #e3f2fd; color: #1565c0; }
-
-.info-block { background: #f8f8f8; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
-.info-block strong { font-weight: 500; color: #1a1a1a; margin-bottom: 4px; font-size: 13px; line-height: 24px; }
-.info-block p { font-size: 13px; color: #555; line-height: 1.6; margin: 0; }
+.info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+.info-block strong { font-weight: 500; margin-bottom: 4px; font-size: 13px; line-height: 24px; }
+.info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
 
 
 .slideshow-container {
@@ -88,7 +74,6 @@ body { background: #f2f3f5;font-family: -apple-system, BlinkMacSystemFont, 'Sego
     width: 11px;
     height: 11px;
     border-radius: 5.5px;
-    background: var(--pm-accent);
     color: rgb(255, 255, 255);
     font-size: 7.15px;
     font-weight: 700;
@@ -106,6 +91,59 @@ button.btn-text-default:not(.hidden) {
 	gap: 6px;
 	white-space: nowrap;
 }
+
+/* buttons next & previous*/
+.prev, .next {
+	cursor: pointer;
+	position: absolute;
+	top: calc(50% - 17px);
+	padding: 12px;
+	transition: 0.3s ease;
+	user-select: none;
+	background: rgba(210,210,215,.64);
+	color: rgba(0,0,0,.56);
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	line-height: 8px;
+	font-weight: 300;
+	font-size: 25px;
+	text-align: center;
+	margin: 0;
+}
+
+.next {
+	right: 5px;
+}
+.next:after {
+	content: "";
+	position: absolute;
+	width: 33%;
+	height: 100%;
+	right: 0;
+	top: 0;
+}
+
+.prev {
+	left: 5px;
+    text-indent: -3px;
+}
+
+/* arrow hovered*/
+.prev:hover, .next:hover {
+	background-color: rgba(223,223,227,.6976);
+	color: rgba(0,0,0,.64);
+	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* arrow active*/
+.prev:active, .next:active {
+	background-color: rgba(193,193,198,.6544);
+	color: rgba(0,0,0,.64);
+}
+
 
 
 .hidden {

@@ -124,10 +124,38 @@ const PluginCardUI = {
      * @returns {string|false} returns default background color or false if theme is not changed
      */
     onChangeTheme: function(theme, themeType, style) {
-        let rule = '.span_notification{color:'+theme["text-secondary"]+';}\n';
+        let rule = '.pc-sub,\n';
+        rule = '.pc-rating-count,\n';
+        rule = '.span_notification{color:'+theme["text-secondary"]+';}\n';
+        rule += '.info-block{background-color: ' + (theme["highlight-button-pressed"] || '#DCDBDB') + ';}\n';
+        
+        rule += '.pc-sub,\n';
+        rule += '.span_caption{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
+        rule += '.span_caption:hover{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
+        rule += '.pc-header, .pc-tabs{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
+        rule += '.span_caption.span_selected,\n';
+        rule += '.span_caption.span_selected:hover{color: ' + theme["text-normal"] + ';}\n';
+        rule += '.span_caption.span_selected{border-bottom-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
+        
+        if (theme.name === 'theme-classic-light') {
+            rule += '.info-block{background-color: ' + ('#7d858c') + '; color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+            rule += '.info-block a.link{color: ' + (theme["text-inverse"] || '#fff') + '!important; text-decoration: underline;}\n';
+            rule += '.info-block a.link:hover{color: ' + (theme["text-inverse"] || '#fff') + '!important; text-decoration: none;}\n';
+        }
 
+        rule += 'button.btn_update,\n' +
+            'button.btn_update:active{color: ' + (theme["text-contrast-background"] || '#fff') + ';}\n';
+        rule += '.stars span{color: ' + (theme["canvas-anim-pane-effect-bar-emphasis-outline"] || '#c49a2a') + ';}\n';
+        
         if (themeType.includes('light')) {
             document.body.classList.add('white_bg');
+            rule += 'a.link:visited,\n';
+            rule += 'a.link{color: ' + ('#00645b') + ' !important;}\n';    
+            rule += 'a.link:hover{color: ' + ('#0e8a7e') + ' !important;}\n';   
+            rule += 'button.btn_update:active{background-color: ' + ('#00645b') + ' !important;}\n';    
+            rule += 'button.btn_update{border-color: ' + ('#0e8a7e') + ';}\n';    
+            rule += 'button.btn_update:hover{background-color: ' + ('#007a6f') + ';}\n';    
+            rule += 'button.btn_update{background-color: ' + ('#0e8a7e') + ';}\n'; 
             rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
             rule += '.btn_install:hover{background-color: #1c1c1c !important;}\n';
             rule += '.btn_install:active{background-color: #1c1c1c !important;}\n';
@@ -135,8 +163,19 @@ const PluginCardUI = {
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #444 !important; color: #fff !important; border:1px solid #444 !important;}\n';
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
             rule += '.ti-circle-check{background-color: ' + ('#0e8a7e') + ';}\n';    
+            
+            rule += '.pc-badge{color: ' + ('#0e8a7e') + ' !important;}\n';   
+            rule += '.pc-badge{background-color: ' + ('#e8f5f1') + ';}\n';
+
         } else {
             document.body.classList.remove('white_bg');
+            rule += 'a.link:visited,\n';
+            rule += 'a.link{color: ' + ('#60ddc0') + ' !important;}\n';
+            rule += 'a.link:hover{color: ' + ('#39bda0') + ' !important;}\n';
+            rule += 'button.btn_update:active{background-color: ' + ('#60ddc0') + ' !important;}\n';    
+            rule += 'button.btn_update{border-color: ' + ('#39bda0') + ';}\n';    
+            rule += 'button.btn_update:hover{background-color: ' + ('#26b094') + ';}\n';    
+            rule += 'button.btn_update{background-color: ' + ('#39bda0') + ';}\n';  
             rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
             rule += '.btn_install:hover{background-color: #fcfcfc !important;}\n';
             rule += '.btn_install:active{background-color: #fcfcfc !important;}\n';
@@ -144,6 +183,10 @@ const PluginCardUI = {
             rule += '.btn_install[disabled]:hover,.btn_install.disabled:hover,.btn_install[disabled]:active,.btn_install[disabled].active,.btn_install.disabled:active,.btn_install.disabled.active{background-color: #e0e0e0 !important; color: #333 !important; border:1px solid #e0e0e0 !important;}\n';
             style = style.replace(/#b5e4ff/g, 'rgba(255, 255, 255, 0.8)');
             rule += '.ti-circle-check{background-color: ' + ('#39bda0') + ';}\n';  
+
+            rule += '.pc-badge{color: ' + ('#60ddc0') + ' !important;}\n';   
+            rule += '.pc-badge{background-color: ' + ('rgba(96, 221, 192, 0.1)') + ';}\n'; 
+
         }
 
         let styleTheme = document.getElementById('theme_style');

@@ -57,9 +57,10 @@
                 <span id="span_name" class="pc-name">---</span>
                 <span class="pc-badge hidden"><i class="ti ti-circle-check">✓</i> By ONLYOFFICE</span>
                 </div>
-                <div class="pc-sub"><span id="span_offered"></span> · v<span id="span_version"></span></div>
+                <div class="pc-sub"><span id="span_offered"></span> <span id="span_version"></span></div>
                 <div id="div_rating_link" class="pc-stats">
                     <div class="pc-rating" id="stars_colored"></div>
+                    <a id="discussion_link" class="link review-link i18n" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
                 </div>
             </div>
             <div class="pc-actions">
@@ -76,7 +77,7 @@
             <span class="span_caption" id="span_changelog" onclick="PluginCard.onSelectPreview(event.target, 3)">Changelog</span>
         </div>
 
-        <div>
+        <div class="tabs-content">
             <div id="div_selected_preview" class="tab-pane">
                 <div id="div_selected_image">
                     <div id="div_selected_container" class="slideshow-container">
@@ -88,9 +89,6 @@
                 </div>
 
                 <div class="about-body" id="div_description_selected" ><span id="span_selected_description"></span></div>
-
-                <a id="discussion_link" class="review-link" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">&#10032; <span class="i18n">Click to rate</span></a>
-
             </div>
             <div id="div_selected_info" class="tab-pane hidden">
                 <div id="div_plugin_info" class="info-block">
@@ -105,7 +103,7 @@
                         <span id="span_min_ver"></span>
                     </div>
                     <div id="div_languages" class="hidden">
-                        <strong class="i18n">Languges</strong>
+                        <strong class="i18n">Languages</strong>
                         <span>: </span>
                         <span id="span_langs"></span>
                     </div>
@@ -116,14 +114,14 @@
                         <span> </span>
                         <span class="i18n">the plugin in</span>
                         <span> </span>
-                        <a id="link_readme" class="aboutlink link_info" target="blank" href="">README.</a>
+                        <a id="link_readme" class="link link_info" target="blank" href="">README.</a>
                     </div>
                     <div id="div_github_link">
                         <strong class="i18n">Contribute</strong>
                         <span> </span>
                         <span class="i18n">to the plugin development or report an issue on</span>
                         <span> </span>
-                        <a id="link_plugin" class="aboutlink link_info" target="blank">Github.</a>
+                        <a id="link_plugin" class="link link_info" target="blank">Github.</a>
                     </div>
                     <div>
                         <strong class="i18n">Get help</strong>
@@ -133,7 +131,7 @@
                     <div>
                         <span class="i18n">Create a new plugin using</span>
                         <span> </span>
-                        <a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/">ONLYOFFICE API.</a>
+                        <a class="link link_info" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/">ONLYOFFICE API.</a>
                     </div>
                 </div>
             </div>

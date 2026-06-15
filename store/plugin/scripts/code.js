@@ -85,7 +85,7 @@
 				isVisual : true,
 				isModal : true,
 				EditorsSupport : ["word", "cell", "slide", "pdf"],
-				size : [608, 600],
+				size : [680, 600],
 				fixedSize : true,
 			};
 			if (!this.window) {
