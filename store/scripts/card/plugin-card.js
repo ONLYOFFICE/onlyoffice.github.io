@@ -232,6 +232,7 @@ const PluginCard = {
         }
         if (this.config.version) {
             PluginCardUI.version.textContent = "· v" + this.config.version;
+            PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(self.config.version);
         } else {
             PluginCardUI.version.classList.add('hidden');
         }
@@ -459,6 +460,7 @@ const PluginCard = {
             PluginCardUI.btnUpdate.classList.add('hidden');
             PluginCardUI.btnRemove.classList.remove('hidden');
             PluginCardUI.version.textContent = "· v" + String(self.config.version);
+            PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(self.config.version);
         });
     },
 
@@ -481,6 +483,7 @@ const PluginCard = {
             PluginCardUI.btnInstall.classList.remove('hidden');
             if (self.plugin) {
                 PluginCardUI.version.textContent = "· v" + String(self.plugin.version);
+                PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(self.plugin.version);
             }
         });
         

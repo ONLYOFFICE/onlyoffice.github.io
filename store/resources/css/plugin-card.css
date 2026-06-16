@@ -29,7 +29,7 @@ a.link {
 .stars { margin-right: 4px; }
 .stars span { font-size: 14px; }
 .pc-rating-count { font-size: 13px; font-weight: 400; }
-.pc-actions { display: flex; flex-shrink: 0; }
+.pc-actions { display: flex; flex-shrink: 0; flex-direction: column; }
 .pc-actions button { margin-left: 8px; margin-bottom: 8px; }
 
 .pc-tabs { display: flex; border-bottom-width: 0.5px; border-bottom-style: solid; padding: 0 24px; flex: 0 0 auto; min-height: auto; }

@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "プラグインを管理する",
+	"Available plugins": "利用可能なプラグイン",
 	"Installed": "インストール済み",
+	"Updates": "アップデート",
 	"Marketplace": "マーケットプレイス",
 	"Submit your own plugin": "自作のプラグインを提出する",
 	"Install plugin manually": "手動でプラグインをインストールする",
