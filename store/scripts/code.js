@@ -40,7 +40,7 @@
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./common.js" />
 /// <reference path="./marketplace-plugin-service.js" />
-/// <reference path="./card-v1.0.5/plugin-card.js" />
+/// <reference path="./card/plugin-card.js" />
 
 const storeVersion = '1.0.9';                                        // version of store (will change it when update something in store)
 const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) ); // desktop detecting
@@ -367,13 +367,13 @@ function loadPluginCardAssets() {
 		var loaded = 0;
 		var scripts = [
 			'vendor/marked/marked.min.js',
-			'scripts/card-v1.0.5/plugin-card-ui.js',
-			'scripts/card-v1.0.5/plugin-card.js'
+			'scripts/card/plugin-card-ui.js',
+			'scripts/card/plugin-card.js'
 		];
 
 		var link = document.createElement('link');
 		link.rel = 'stylesheet';
-		link.href = 'resources/css/plugin-card.v1.0.5.css';
+		link.href = 'resources/css/plugin-card.css';
 		document.head.appendChild(link);
 
 		function onScriptLoad() {
@@ -614,6 +614,7 @@ window.addEventListener('message', function(message) {
 			UI.toggleLoader(false);
 			break;
 		case 'Theme':
+			Utils.theme = message.theme;
 			if (message.theme.type)
 				Utils.themeType = message.theme.type;
 			let bg = UI.onChangeTheme(message.theme, Utils.themeType, message.style);

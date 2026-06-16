@@ -70,6 +70,7 @@ const PluginCard = {
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
+        this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
         // @ts-ignore
@@ -87,6 +88,33 @@ const PluginCard = {
             self._show(data);
             PluginCardUI.toggleLoader(false);
         });
+    },
+
+    _resetDom: function() {
+        if (!this.config && Utils.theme) {
+            PluginCardUI.onChangeTheme(Utils.theme, Utils.themeType, '');
+        }
+        if (PluginCardUI.divSelectedContainer) {
+            let slides = PluginCardUI.divSelectedContainer.querySelectorAll('.mySlides');
+            for (let i = 0; i < slides.length; i++) {
+                const el = slides[i];
+                if (el.parentNode) el.parentNode.removeChild(el);
+            }
+        }
+        if (PluginCardUI.divPointsContainer) PluginCardUI.divPointsContainer.innerHTML = '';
+        if (PluginCardUI.divChangelogPreview) PluginCardUI.divChangelogPreview.innerHTML = '';
+        if (PluginCardUI.spanChangelog) PluginCardUI.spanChangelog.classList.add('hidden');
+        if (PluginCardUI.spanOverview) {
+            let spans = document.querySelectorAll('.span_caption');
+            for (let i = 0; i < spans.length; i++) {
+                const el = spans[i];
+                el.classList.remove('span_selected');
+            }
+            PluginCardUI.spanOverview.classList.add('span_selected');
+        }
+        if (PluginCardUI.divSelectedPreview) PluginCardUI.divSelectedPreview.classList.remove('hidden');
+        if (PluginCardUI.divSelectedInfo) PluginCardUI.divSelectedInfo.classList.add('hidden');
+        if (PluginCardUI.divSelectedChangelog) PluginCardUI.divSelectedChangelog.classList.add('hidden');
     },
 
     /**
@@ -225,7 +253,7 @@ const PluginCard = {
         
         if (this.config.offered) {
             PluginCardUI.spanOffered.textContent = this.config.offered;
-            
+            PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");
         } else {
             PluginCardUI.spanOnlyOfficeBadge.classList.remove("hidden");
             PluginCardUI.spanOffered.textContent = "Ascensio System SIA";

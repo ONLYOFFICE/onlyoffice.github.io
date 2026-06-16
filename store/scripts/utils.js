@@ -33,6 +33,7 @@
 // @ts-check
 /// <reference path="./types.js" />
 /// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").AscTheme} AscTheme */
 
 /**
  * @typedef {Object} Messages
@@ -43,7 +44,9 @@
  */
 
 const Utils = {
-    bTranslate: false,                                          // flag translate or not
+    bTranslate: false,          
+    /** @type {AscTheme | null} */
+    theme: null,                                // flag translate or not
     /** @type {string} */
     themeType: getUrlSearchValue("theme-type") || 'light',      // current theme
     /** @type {string} */

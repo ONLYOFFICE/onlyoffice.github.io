@@ -12,51 +12,51 @@ html,body {
 a.link {
 	text-decoration: none;
 }
-
 .pc { display: flex; flex-direction: column; width: 100%; height: 100vh; margin: 0px; overflow: hidden; box-sizing: border-box; }
 .pc-header { padding: 20px 24px 16px; border-bottom-width: 0.5px; border-bottom-style: solid; flex: 0 0 auto; min-height: auto;}
 .pc-title-row { display: flex; align-items: flex-start; }
 .pc-icon { width: 171px; height: 84px; margin-right: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; flex-shrink: 0; }
 .pc-meta { flex: 1; min-width: 0; margin-right: 16px; }
-.pc-name-row { display: flex; align-items: center; flex-wrap: wrap; margin-bottom: 4px; }
-.pc-name { font-size: 20px; font-weight: 500; margin-right: 10px; }
-.pc-badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; display: flex; align-items: center; }
+.pc-name-row { display: flex; align-items: center; flex-wrap: nowrap; margin-bottom: 4px; }
+.pc-name { font-size: 18px; font-weight: 500; margin-right: 10px; flex-shrink: 0; }
+.pc-badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; }
 .pc-badge i { margin-right: 4px; }
+.pc-badge span { text-overflow: ellipsis; overflow: hidden; }
 .pc-sub { font-size: 13px; margin-bottom: 8px; }
 .pc-stats { display: flex; flex-wrap: wrap; align-items: baseline;}
 .pc-rating { display: flex; align-items: baseline; margin-right: 10px; }
 .pc-rating > span:last-child { margin-left: 4px; }
-.stars { margin-right: 4px; }
-.stars span { font-size: 14px; }
+.pc .stars { margin-right: 4px; }
+.pc .stars span { font-size: 14px; }
 .pc-rating-count { font-size: 13px; font-weight: 400; }
 .pc-actions { display: flex; flex-shrink: 0; flex-direction: column; }
 .pc-actions button { margin-left: 8px; margin-bottom: 8px; }
 
 .pc-tabs { display: flex; border-bottom-width: 0.5px; border-bottom-style: solid; padding: 0 24px; flex: 0 0 auto; min-height: auto; }
-.span_caption { padding: 12px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
+.pc .span_caption { padding: 12px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
 
-.tab-pane { position: relative; padding: 0 24px; margin: 20px 0; flex: 1 1 0%; overflow-y: auto;}
-.tabs-content {flex: 1 1 auto; min-height: 0px; overflow-y: auto; display: flex; flex-direction: column;}
+.pc .tab-pane { position: relative; padding: 0 24px; margin: 20px 0; flex: 1 1 0%; overflow-y: auto;}
+.pc .tabs-content {flex: 1 1 auto; min-height: 0px; overflow-y: auto; display: flex; flex-direction: column;}
 
-.about-body { font-size: 14px;line-height: 1.6; margin-top: 12px; }
+.pc .about-body { font-size: 14px;line-height: 1.6; margin-top: 12px; }
 
-.info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; }
-.info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
-.info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
+.pc .info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; }
+.pc .info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
+.pc .info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
 
-.slideshow-container {
+.pc .slideshow-container {
 	position: relative;
 	margin: auto;
 	width: 100%;
 	height: 100%;
 }
-.mySlides {
+.pc .mySlides {
 	display: none;
 	height: 100%;
 	width: 100%;
 	text-align: center;
 }
-.screen {
+.pc .screen {
 	vertical-align: middle;
 	height: 100%;
 	width: 100%;
@@ -68,7 +68,7 @@ a.link {
     margin-bottom: 12px;
     margin-left: 12px;
 }
-.ti-circle-check {
+.pc .ti-circle-check {
 	display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -81,7 +81,7 @@ a.link {
     line-height: 1;
     flex-shrink: 0;
 }
-button.btn-text-default:not(.hidden) {
+.pc button.btn-text-default:not(.hidden) {
 	height: 24px;
 	min-width: 100px;
 	border-radius: 3px;
@@ -94,7 +94,7 @@ button.btn-text-default:not(.hidden) {
 }
 
 /* buttons next & previous*/
-.prev, .next {
+.pc .prev, .pc .next {
 	cursor: pointer;
 	position: absolute;
 	top: calc(50% - 17px);
@@ -112,10 +112,10 @@ button.btn-text-default:not(.hidden) {
 	text-align: center;
 	margin: 0;
 }
-.next {
+.pc .next {
 	right: 5px;
 }
-.next:after {
+.pc .next:after {
 	content: "";
 	position: absolute;
 	width: 33%;
@@ -123,12 +123,12 @@ button.btn-text-default:not(.hidden) {
 	right: 0;
 	top: 0;
 }
-.prev {
+.pc .prev {
 	left: 5px;
     text-indent: -3px;
 }
 /* arrow hovered*/
-.prev:hover, .next:hover {
+.pc .prev:hover, .pc .next:hover {
 	background-color: rgba(223,223,227,.6976);
 	color: rgba(0,0,0,.64);
 	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -136,7 +136,7 @@ button.btn-text-default:not(.hidden) {
     -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 /* arrow active*/
-.prev:active, .next:active {
+.pc .prev:active, .pc .next:active {
 	background-color: rgba(193,193,198,.6544);
 	color: rgba(0,0,0,.64);
 }
@@ -176,6 +176,6 @@ button.btn-text-default:not(.hidden) {
 }
 
 
-.hidden {
+.pc .hidden {
 	display: none;
 }
