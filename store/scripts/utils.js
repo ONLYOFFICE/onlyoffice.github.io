@@ -257,7 +257,7 @@ const Utils = {
     },
     /** @param {string} data */
     _parseChangelog: function(data) {
-        let arr = data.replace('# Change Log', '').split('\n\n## ');
+        let arr = data.replace(/\r\n/g, '\n').replace('# Change Log', '').split('\n\n## ');
         if (arr[0] == '')
             arr.shift();
 
