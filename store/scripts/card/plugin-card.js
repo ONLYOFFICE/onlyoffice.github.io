@@ -70,6 +70,7 @@ const PluginCard = {
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
+        window.onresize = this.setDivHeight;
         this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
@@ -568,10 +569,6 @@ const PluginCard = {
         }
         return baseUrl;
     }
-};
-
-window.onresize = function() {
-    //PluginCard.setDivHeight();
 };
 
 window.addEventListener('message', function(message) {

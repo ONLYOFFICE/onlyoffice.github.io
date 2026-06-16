@@ -38,7 +38,7 @@ a.link {
 .pc .tab-pane { position: relative; padding: 0 24px; margin: 20px 0; flex: 1 1 0%; overflow-y: auto;}
 .pc .tabs-content {flex: 1 1 auto; min-height: 0px; overflow-y: auto; display: flex; flex-direction: column;}
 
-.pc .about-body { font-size: 14px;line-height: 1.6; margin-top: 12px; }
+.pc .about-body { font-size: 14px;line-height: 1.6; margin-bottom: 12px; }
 
 .pc .info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; }
 .pc .info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
@@ -63,11 +63,6 @@ a.link {
 	object-fit: contain;
 }
 
-#div_changelog_preview ul {
-	list-style-position: inside;
-    margin-bottom: 12px;
-    margin-left: 12px;
-}
 .pc .ti-circle-check {
 	display: inline-flex;
     align-items: center;
@@ -154,6 +149,9 @@ a.link {
   border-top: none;
   padding-top: 0;
 }
+#div_changelog_preview ol {
+	list-style-position: inside;
+}
 #div_changelog_preview ul {
   list-style: none;
   margin: 6px 0 14px;
@@ -168,7 +166,7 @@ a.link {
   padding-left: 14px;
   position: relative;
 }
-#div_changelog_preview li::before {
+#div_changelog_preview ul li::before {
   content: '–';
   position: absolute;
   left: 0;

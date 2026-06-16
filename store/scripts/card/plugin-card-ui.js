@@ -122,15 +122,14 @@ const PluginCardUI = {
     onChangeTheme: function(theme, themeType, style) {
         let rule = '.pc-rating-count,\n';
         rule += '#div_changelog_preview li,\n';
-        rule += '.pc .span_notification{color:'+theme["text-secondary"]+';}\n';
-        rule += '.pc .info-block{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
-        
+        rule += '.pc .span_notification,\n';
         rule += '.pc-sub,\n';
         rule += '.pc .span_caption{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
+        rule += '.pc .info-block{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
         rule += '#div_changelog_preview li::before{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
         rule += '.pc .span_caption:hover{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.pc-header, .pc-tabs{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
-        rule += '.pc .span_caption.span_selected{color: ' + theme["text-normal"] + ';}\n';
+        rule += '.pc .span_caption.span_selected{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.pc .span_caption.span_selected{border-bottom-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         
         if (theme.name === 'theme-classic-light') {

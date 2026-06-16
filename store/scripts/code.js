@@ -57,7 +57,6 @@ let editorVersion;                                            		 // editor curre
 /** @type {number} */
 let pluginVersion;                                            		 // marketplace plugin version
 let defaultBG = Utils.themeType == 'light' ? "#F5F5F5" : '#555555';    // default background color for plugin header
-let isResizeOnStart = false;                                         // flag for firs resize on start
 /** @type {any} */
 let PsMain = null;                                                   // scroll for list of plugins
 const supportedScaleValues = [1, 1.25, 1.5, 1.75, 2];                // supported scale
@@ -1022,10 +1021,9 @@ function onResize(bForce) {
 		if (scale.devicePR > 2)
 			revZoom *= 2;
 
-		if (1 <= scale.devicePR && scale.devicePR <= 2 || isResizeOnStart) {
+		if (1 <= scale.devicePR && scale.devicePR <= 2) {
 			// set height for div with image in preview mode
 			if (PsMain) PsMain.update();
-			isResizeOnStart = false;
 			if (scale.devicePR < 1)
 				return;
 
@@ -1049,8 +1047,6 @@ window.onresize = onResize.bind(null, false);
 
 // zoom on start if we start with a non 100% zoom
 if (scale.devicePR < 1) {
-	// maybe remove this flag
-	isResizeOnStart = false;
 	onResize(true);
 }
 
