@@ -69,7 +69,6 @@ const PluginCard = {
 
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
-        console.warn(data);
         const self = this;
         this.plugin = data.plugin;
         this.installed = data.installed;
@@ -101,8 +100,6 @@ const PluginCard = {
         divPreview.className = "div_preview";
         /** @type {string} */
         let baseUrl = "";
-    console.log(this.plugin);
-    console.log(this.installed);
         if (this.plugin && this.plugin.baseUrl) {
             baseUrl = this.plugin.baseUrl;
         } else if (this.installed && this.installed.obj && this.installed.obj.baseUrl) {
@@ -436,7 +433,6 @@ const PluginCard = {
 
         return MarketplacePluginService.doInstall(url, guid, this.config).then(function (message) {
             PluginCardUI.toggleLoader(false);
-            console.log(message);
             if (!message || !message.guid) {
                 return;
             }
@@ -522,8 +518,6 @@ const PluginCard = {
     },
     
     setDivHeight: function() {
-        console.log(Math.round(window.devicePixelRatio * 100));
-
         let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 70 + 'px';
         PluginCardUI.divSelectedImage.style.height = height;
         PluginCardUI.divSelectedImage.style.maxHeight = height;

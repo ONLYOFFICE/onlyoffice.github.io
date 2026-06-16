@@ -88,7 +88,10 @@ const PluginCard = {
     _resetDom: function() {
         if (PluginCardUI.divSelectedContainer) {
             let slides = PluginCardUI.divSelectedContainer.querySelectorAll('.mySlides');
-            slides.forEach(function(el) { if (el.parentNode) el.parentNode.removeChild(el); });
+            for (let i = 0; i < slides.length; i++) {
+                const el = slides[i];
+                if (el.parentNode) el.parentNode.removeChild(el);
+            }
         }
         if (PluginCardUI.divPointsContainer) PluginCardUI.divPointsContainer.innerHTML = '';
         if (PluginCardUI.divChangelogPreview) PluginCardUI.divChangelogPreview.innerHTML = '';
@@ -96,7 +99,10 @@ const PluginCard = {
         if (PluginCardUI.spanChangelog) PluginCardUI.spanChangelog.classList.add('hidden');
         if (PluginCardUI.spanOverview) {
             let spans = document.querySelectorAll('.span_caption');
-            spans.forEach(function(el) { el.classList.remove('span_selected'); });
+            for (let i = 0; i < spans.length; i++) {
+                const el = spans[i];
+                el.classList.remove('span_selected');
+            }
             PluginCardUI.spanOverview.classList.add('span_selected');
         }
         if (PluginCardUI.divSelectedPreview) PluginCardUI.divSelectedPreview.classList.remove('hidden');
@@ -119,8 +125,6 @@ const PluginCard = {
         divPreview.className = "div_preview";
         /** @type {string} */
         let baseUrl = "";
-        console.log(this.plugin);
-        console.log(this.installed);
         if (this.plugin && this.plugin.baseUrl) {
             baseUrl = this.plugin.baseUrl;
         } else if (this.installed && this.installed.obj && this.installed.obj.baseUrl) {
@@ -129,7 +133,6 @@ const PluginCard = {
         } else if (this.installed && this.installed.baseUrl) {
             baseUrl = this.installed.baseUrl;
         }
-        console.log('baseUrl from:', baseUrl);
         this._loadAndShowLanguages(baseUrl, !!this.plugin);
 
         if (
@@ -473,7 +476,6 @@ const PluginCard = {
 
         return MarketplacePluginService.doInstall(url, guid, config).then(function (message) {
             PluginCardUI.toggleLoader(false);
-            console.log(message);
             if (!message || !message.guid) {
                 return;
             }

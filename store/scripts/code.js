@@ -325,7 +325,7 @@ const Marketplace = {
 				}
 				if (message.type === 'PluginReady') {
 					window.removeEventListener('message', onLoad);
-					let pluginVersion = 1_000_005; // 1.0.5
+					let pluginVersion = 1000005; // 1.0.5
 					if (message.pluginVersion && message.pluginVersion.includes('.')) {
 						pluginVersion = Utils.convertPluginVersionToNumber(message.pluginVersion);
 					}
@@ -394,7 +394,7 @@ function loadPluginCardAssets() {
 const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(versions) {
 	editorVersion = versions.editorVersion;
 	pluginVersion = versions.pluginVersion;
-	if (pluginVersion <= 1_000_005) {
+	if (pluginVersion <= 1000005) {
 		return loadPluginCardAssets().then(function() { return versions; });
 	}
 	return versions;
@@ -981,7 +981,7 @@ function onClickPluginPlate(guid) {
 		pluginDescription: Utils.getTranslatedDescription(config.variations[0]),
 		translate: Utils.translate
 	};
-	if (pluginVersion > 1_000_005) {
+	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);
 	}
 	showPluginCard(message);

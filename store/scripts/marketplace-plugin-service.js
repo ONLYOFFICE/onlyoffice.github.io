@@ -77,7 +77,11 @@ const MarketplacePluginService = {
 				}
 				if (message.type === 'Installed') {
 					window.removeEventListener('message', onInstall);
-					fResolve(message.data);
+                    if (message && message.data) {
+                        fResolve(message.data);
+                    } else {
+                        fResolve(message);
+                    }
 				}
 			};
 			window.addEventListener('message', onInstall);
@@ -108,7 +112,11 @@ const MarketplacePluginService = {
 				}
 				if (message.type === 'Removed') {
 					window.removeEventListener('message', onRemove);
-					fResolve(message.data);
+					if (message && message.data) {
+                        fResolve(message.data);
+                    } else {
+                        fResolve(message);
+                    }
 				}
 			};
 			window.addEventListener('message', onRemove);
@@ -140,7 +148,11 @@ const MarketplacePluginService = {
 				}
 				if (message.type === 'Updated') {
 					window.removeEventListener('message', onUpdate);
-					fResolve(message.data);
+					if (message && message.data) {
+                        fResolve(message.data);
+                    } else {
+                        fResolve(message);
+                    }
 				}
 			};
 			window.addEventListener('message', onUpdate);
@@ -248,7 +260,7 @@ const MarketplacePluginService = {
                 }
                 if (message.type === 'InstalledPlugins' && message.updateInstalled) {
                     window.removeEventListener('message', onGetInstalled);
-                    if (message.data) {
+                    if (message && message.data) {
                         fResolve(message.data);
                     } else {
                         fResolve([]);

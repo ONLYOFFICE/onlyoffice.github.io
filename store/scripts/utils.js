@@ -132,7 +132,7 @@ const Utils = {
         if (Object.hasOwnProperty.call(this._MESSAGES, messageKey)) {
             return this.getTranslated(this._MESSAGES[messageKey]);
         }
-        throw new Error(`Message key "${messageKey}" not found in MESSAGES`);
+        throw new Error("Message key " + messageKey + " not found in MESSAGES");
     }, 
     /**
      * @param {PluginInfo} plugin
@@ -179,7 +179,11 @@ const Utils = {
     },
     /** @param {Object<string, string>} translations */
     setTranslations: function(translations) {
-        this.translate = Object.assign(this.translate, translations);
+        for (var key in translations) {
+            if (Object.prototype.hasOwnProperty.call(translations, key)) {
+                this.translate[key] = translations[key];
+            }
+        }
     },
     /**
      * @param {string} text 
