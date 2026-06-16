@@ -518,7 +518,7 @@ const PluginCard = {
     },
     
     setDivHeight: function() {
-        let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 70 + 'px';
+        let height = PluginCardUI.divSelectedPreview.clientHeight - PluginCardUI.divDescriptionSelected.clientHeight - 26 + 'px';
         PluginCardUI.divSelectedImage.style.height = height;
         PluginCardUI.divSelectedImage.style.maxHeight = height;
 
