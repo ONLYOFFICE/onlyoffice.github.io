@@ -544,7 +544,7 @@ const PluginCard = {
         dots[this.slideIndex-1].className += " active";
 
         for (i = 0; i < slides.length; i++) {
-            slides[i].style.transform = `translateX(-${(this.slideIndex - 1) * 100}%)`;
+            slides[i].style.transform = "translateX(-" + (this.slideIndex - 1) * 100 + "%)";
         }
     },
     
