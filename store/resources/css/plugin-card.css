@@ -44,25 +44,12 @@ a.link {
 .pc .info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
 .pc .info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
 
-.pc .slideshow-container {
-	position: relative;
-	margin: auto;
-	width: 100%;
-	height: 100%;
-}
-.pc .mySlides {
-	display: none;
-	height: 100%;
-	width: 100%;
-	text-align: center;
-}
 .pc .screen {
 	vertical-align: middle;
 	height: 100%;
 	width: 100%;
 	object-fit: contain;
 }
-
 .pc .ti-circle-check {
 	display: inline-flex;
     align-items: center;
@@ -88,6 +75,37 @@ a.link {
 	white-space: nowrap;
 }
 
+.pc .slideshow-container {
+	display: flex;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+.pc .mySlides {
+	min-width: 100%;
+	display: block !important;
+	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#points_container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: -15px;
+}
+
+.pc .dot {
+	width: 8px;
+	height: 8px;
+	margin: 0 4px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.pc .dot.active {
+	width: 24px;
+}
 /* buttons next & previous*/
 .pc .prev, .pc .next {
 	cursor: pointer;

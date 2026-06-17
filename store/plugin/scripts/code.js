@@ -94,7 +94,7 @@
 				this.window.attachEvent('onInstall', this._onInstall.bind(this));
 				this.window.attachEvent('onUpdate', this._onUpdate.bind(this));
 				this.window.attachEvent('onRemove', this._onRemove.bind(this));
-				this.window.attachEvent('onClose', this._hide.bind(this));
+				this.window.attachEvent('onClose', this.hide.bind(this));
 			}
 			this.window.show(variation);
 		},
@@ -123,7 +123,7 @@
 		_onRemove: function(data) {
 			return PluginManager.remove(data);
 		},
-		_hide: function() {
+		hide: function() {
 			if (this.window) {
 				this.window.close();
 				this.window = null;
@@ -268,6 +268,9 @@
 				break;
 			case 'showPluginCard':
 				PluginCard.show(data);
+				break;
+			case 'hidePluginCard':
+				PluginCard.hide();
 				break;
 			case 'resize':
 				window.Asc.plugin.resizeWindow(data.width, data.height, data.width, data.height, 0, 0);

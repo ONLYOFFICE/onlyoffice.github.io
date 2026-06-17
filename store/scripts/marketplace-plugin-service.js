@@ -237,6 +237,9 @@ const MarketplacePluginService = {
         });
         
     },
+    closePluginCard: function() {
+        this._sendMessage({type: 'hidePluginCard'});
+    },
     /** @param {boolean} bShow */
     showBackButton: function(bShow) {
         this._sendMessage({ type: "showButton", show: bShow });

@@ -531,22 +531,21 @@ const PluginCard = {
     /** @param {number} n */
     _showSlides: function(n) {
         let i;
-        /** @type {HTMLCollectionOf<HTMLDivElement>} */
-        let slides = document.getElementsByClassName('mySlides');
-        let dots = document.getElementsByClassName('dot');
-        if (n > slides.length) {this.slideIndex = 1}    
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        
+        if (n > slides.length) {this.slideIndex = 1}
         if (n < 1) {this.slideIndex = slides.length}
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
-        }
+        
         for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(' active', '');
+            dots[i].className = dots[i].className.replace(" active", "");
         }
-        if (slides.length)
-            slides[this.slideIndex-1].style.display = "block";
 
-        if(dots.length)
-            dots[this.slideIndex-1].className += ' active';
+        dots[this.slideIndex-1].className += " active";
+
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.transform = `translateX(-${(this.slideIndex - 1) * 100}%)`;
+        }
     },
     
     setDivHeight: function() {

@@ -131,6 +131,8 @@ const PluginCardUI = {
         rule += '.pc-header, .pc-tabs{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         rule += '.pc .span_caption.span_selected{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.pc .span_caption.span_selected{border-bottom-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
+        rule += '.pc .dot{background-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
+        rule += '.pc .dot.active, .pc .dot:hover{background-color: ' + (theme["border-toolbar"] || '#111111') + ';}\n';
         
         if (theme.name === 'theme-classic-light') {
             rule += '.pc .info-block{background-color: ' + ('#7d858c') + '; color: ' + (theme["text-inverse"] || '#fff') + ';}\n';

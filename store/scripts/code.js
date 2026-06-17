@@ -642,6 +642,9 @@ window.addEventListener('message', function(message) {
 			}
 			break;
 		case 'onExternalMouseUp':
+            if (pluginVersion > 1000005) {
+				return MarketplacePluginService.closePluginCard();
+			}
 			let evt = document.createEvent("MouseEvents");
 			evt.initMouseEvent("mouseup", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 			document.dispatchEvent(evt);
