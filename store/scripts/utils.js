@@ -422,3 +422,34 @@ function getUrlSearchValue(key) {
     }
     return res;
 };
+
+/**
+ * @param {{message: string}} err 
+ * @param {boolean} [bDontShow]
+ * @returns 
+ */
+function createError(err, bDontShow) {
+	// creates a modal window with error message for user and error in console
+	console.error(err);
+	let divErr = document.getElementById('div_error');
+	if (!divErr) {
+		return;
+	}
+	// we don't show a new error if we have previous one
+	if (!divErr.classList.contains('hidden') || bDontShow)
+		return;
+	let background = document.createElement('div');
+	background.className = 'asc-plugin-loader';
+	let span = document.createElement('span');
+	span.className = 'error_caption';
+	let message = err.message || 'Problem with loading some resources';
+	span.textContent = Utils.getTranslated(message);
+	background.appendChild(span);
+	divErr.appendChild(background);
+	divErr.classList.remove('hidden');
+	setTimeout(function() {
+		// remove error after 5 seconds
+		background.remove();
+		divErr.classList.add('hidden');
+	}, 5000);
+};

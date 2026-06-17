@@ -32,7 +32,6 @@
 
 // @ts-check
 /// <reference path="../types.js" />
-/// <reference path="../common.js" />
 /// <reference path="../utils.js" />
 /// <reference path="./plugin-card-ui.js" />
 /// <reference path="../marketplace-plugin-service.js" />
