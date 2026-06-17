@@ -40,7 +40,16 @@ a.link {
 
 .pc .about-body { font-size: 14px;line-height: 1.6; margin-bottom: 12px; }
 
-.pc .info-block { border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; font-size: 12px; }
+.pc .info-block {
+	border-width: 1px;
+	border-style: solid;
+	box-shadow: rgba(0, 0, 0, 0.04) 0px 2px 8px;
+	transition: transform 0.2s, box-shadow 0.2s;
+	border-radius: 4px;
+	padding: 14px 16px;
+	margin-bottom: 10px;
+	font-size: 12px;
+}
 .pc .info-block strong { font-weight: 600; margin-bottom: 4px; line-height: 24px; }
 .pc .info-block p { font-size: 13px; line-height: 1.6; margin: 0; }
 

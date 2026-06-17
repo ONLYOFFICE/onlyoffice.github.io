@@ -125,7 +125,6 @@ const PluginCardUI = {
         rule += '.pc .span_notification,\n';
         rule += '.pc-sub,\n';
         rule += '.pc .span_caption{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
-        rule += '.pc .info-block{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
         rule += '#div_changelog_preview li::before{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
         rule += '.pc .span_caption:hover{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.pc-header, .pc-tabs{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
@@ -134,12 +133,7 @@ const PluginCardUI = {
         rule += '.pc .dot{background-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         rule += '.pc .dot.active, .pc .dot:hover{background-color: ' + (theme["border-toolbar"] || '#111111') + ';}\n';
         rule += '.pc .prev, .pc .next {background-color: ' + (theme["background-normal"] || '#fff') + '; color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
-        
-        if (theme.name === 'theme-classic-light') {
-            rule += '.pc .info-block{background-color: ' + ('#7d858c') + '; color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
-            rule += '.pc .info-block a.link{color: ' + (theme["text-inverse"] || '#fff') + '!important; text-decoration: underline;}\n';
-            rule += '.pc .info-block a.link:hover{color: ' + (theme["text-inverse"] || '#fff') + '!important; text-decoration: none;}\n';
-        }
+        rule += '.pc .info-block {border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
 
         rule += '.pc button.btn_update,\n' +
             '.pc button.btn_update:active{color: ' + (theme["text-contrast-background"] || '#fff') + ';}\n';
