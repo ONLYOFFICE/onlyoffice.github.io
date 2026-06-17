@@ -1,0 +1,158 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2026
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.soql {
+	--soql-opacity-disabled: 0.7;
+}
+
+.soql {
+	box-sizing: border-box;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+
+	background-color: var(--color-bg);
+}
+
+.soql__content {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+
+	padding: 16px;
+}
+
+.soql__label {
+	margin-bottom: 4px;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-bold);
+	font-style: normal;
+	line-height: var(--line-height-md);
+	letter-spacing: var(--letter-spacing);
+
+	color: var(--btn-link-color);
+}
+
+.soql__textarea {
+	box-sizing: border-box;
+	min-height: 154px;
+	width: 100%;
+	flex: 1;
+
+	padding: 6px 8px;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-normal);
+	line-height: var(--line-height-sm);
+	letter-spacing: var(--letter-spacing);
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	
+	color: var(--btn-link-color);
+	background-color: var(--color-bg);
+
+	resize: none;
+}
+
+.soql__textarea:focus {
+	border-color: var(--color-border);
+	outline: none;
+}
+
+.soql__textarea::placeholder {
+	color: var(--color-text-disabled);
+}
+
+.soql__textarea:disabled {
+	background-color: var(--color-bg-disabled);
+	cursor: not-allowed;
+	opacity: var(--soql-opacity-disabled);
+}
+
+.soql__divider {
+	width: 100%;
+
+	margin: 0;
+
+	border: none;
+	border-top: 1px solid var(--color-border);
+}
+
+.soql__buttons {
+	box-sizing: border-box;
+	width: 610px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	gap: 10px;
+}
+
+.soql__buttons .btn {
+	width: 108px;
+	height: 22px;
+	min-height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding: 4px 32px;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-normal);
+	line-height: var(--line-height-sm);
+	letter-spacing: var(--letter-spacing);
+
+	border-radius: var(--radius-sm);
+}
+
+.soql__buttons .btn--primary {
+	border: none;
+
+	background-color: var(--btn-primary-bg);
+	color: var(--btn-primary-color);
+}
+
+.soql__buttons .btn--primary:hover {
+	background-color: var(--btn-primary-bg-hover);
+}
+
+.soql__buttons .btn--primary:disabled {
+	background-color: var(--btn-primary-bg-disabled);
+}
+
+.soql__buttons .btn--secondary {
+	border: 1px solid var(--btn-secondary-border);
+
+	background-color: var(--btn-secondary-bg);
+	color: var(--btn-link-color);
+}
+
+.soql__buttons .btn--secondary:hover {
+	background-color: var(--btn-secondary-bg-hover);
+}
+
+.soql .error-box {
+	margin-top: 10px;
+}

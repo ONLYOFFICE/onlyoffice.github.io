@@ -1,0 +1,34 @@
+{
+    "name"       : "Salesforce",
+    "guid"       : "asc.{64993D68-3B46-47DE-A944-8A6C1FB1C955}",
+    "baseUrl"    : "",
+    "variations" : [
+        {
+            "description"         : "salesforce",
+            "url"                 : "index.html",
+            "icons"               : ["resources/images/icon.png", "resources/images/icon@2x.png"],
+            
+            "isViewer"            : false,
+            "EditorsSupport"      : ["cell"],
+            "type"                : "panel",
+            "initDataType"        : "none",
+            "buttons"             : [],
+
+            "isUpdateOleOnResize" : true,
+
+            "size"                : [400, 600],
+
+            "store": {
+                "background": {
+                    "light": "#00A1E0",
+                    "dark" : "#00A1E0"
+                },
+                "icons": {
+                    "light": "resources/images",
+                    "dark" : "resources/images"
+                },
+                "categories": ["work", "specAbilities"]
+            }
+        }
+    ]
+}
