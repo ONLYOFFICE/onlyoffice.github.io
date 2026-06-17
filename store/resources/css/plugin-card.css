@@ -107,24 +107,27 @@ a.link {
 .pc .dot.active {
 	width: 24px;
 }
-/* buttons next & previous*/
-.pc .prev, .pc .next {
+.pc .prev, .pc .next{
+	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12), 0 3px 5px -1px rgba(0, 0, 0, .2);
+	backdrop-filter: blur(8px);
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0px;
+	font-size: 20px;
+	font-weight: bold;
 	cursor: pointer;
 	position: absolute;
 	top: calc(50% - 17px);
-	padding: 12px;
 	transition: 0.3s ease;
 	user-select: none;
-	background: rgba(210,210,215,.64);
-	color: rgba(0,0,0,.56);
-	width: 34px;
-	height: 34px;
 	border-radius: 50%;
 	line-height: 8px;
-	font-weight: 300;
-	font-size: 25px;
 	text-align: center;
 	margin: 0;
+	opacity: 0.5;
 }
 .pc .next {
 	right: 5px;
@@ -143,8 +146,7 @@ a.link {
 }
 /* arrow hovered*/
 .pc .prev:hover, .pc .next:hover {
-	background-color: rgba(223,223,227,.6976);
-	color: rgba(0,0,0,.64);
+	opacity: 1;
 	box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     -moz-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     -webkit-box-shadow: 0 10px 20px rgba(0,0,0,0.1);
