@@ -22,7 +22,7 @@ const SALESFORCE_URLS = {
 };
 
 export function openSalesforceAuth(clientId: string, environment: 'production' | 'sandbox' = 'production'): void {
-  const redirectUri = import.meta.env.VITE_REDIRECT_URI ?? new URL('./oauth.html', window.location.href).href;
+  const redirectUri = import.meta.env.VITE_REDIRECT_URI ?? new URL('../oauth.html', import.meta.url).href;
   const baseUrl = SALESFORCE_URLS[environment];
 
   const params = new URLSearchParams({
