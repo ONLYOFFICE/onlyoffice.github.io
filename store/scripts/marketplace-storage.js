@@ -37,7 +37,7 @@ const MarketplaceStorage = {
     /** @type {MainFilter} */
     mainFilter: "marketplace",
     /** @type {CategoryFilter} */
-    categoryFilter: "all",
+    categoryFilter: "onlyoffice",
     /** @type {string} */
     searchQuery: "",
     /** @type {Map<string, number>} */

@@ -541,13 +541,13 @@ label.header {
 	.toolbar {
 		justify-content: space-between;
 	}
-	.toolbar .selected-category {
+	main:not(.full-width) .toolbar .selected-category {
 		display: none;
+	}
+	main:not(.full-width) #toggle-sidebar-full {
+		margin-right: 0;
 	}
 	.toolbar .search-container {
 		max-width: none;
-	}
-	#toggle-sidebar-full {
-		margin-right: 0;
 	}
 }
