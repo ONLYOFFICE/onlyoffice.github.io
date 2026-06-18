@@ -38,24 +38,18 @@
 const UI = {
     /** @type {HTMLDivElement | undefined} */
     loader: undefined,
-    /** @type {HTMLAnchorElement} */
-    linkNewPlugin: document.getElementById('link_newPlugin'),
-    /** @type {HTMLSpanElement} */
-    linkNewPluginText: document.querySelector('#link_newPlugin .link-text'),
-    /** @type {HTMLDivElement} */
-    pluginsList: document.getElementById('plugins'),
-    /** @type {HTMLDivElement} */
-    toolbar: document.getElementById('toolbar_tools'),
-    /** @type {HTMLDivElement} */
-    toolbarMainText: document.querySelector('.toolbar .place-name'),
-    /** @type {HTMLElement} */
-    toolbarSecondaryText: document.querySelector('.toolbar h1'),
-    /** @type {HTMLDivElement} */
-    divMain: document.getElementById('div_main'),
-    /** @type {HTMLButtonElement} */
-    btnUpdateAll: document.getElementById('btn_updateAll'),
-    /** @type {HTMLInputElement} */
-    inpSearch: document.getElementById('inp_search'),
+    linkNewPlugin: /** @type {HTMLAnchorElement} */(document.getElementById('link_newPlugin')),
+    linkNewPluginText: /** @type {HTMLSpanElement} */(document.querySelector('#link_newPlugin .link-text')),
+    pluginsList: /** @type {HTMLDivElement} */(document.getElementById('plugins')),
+    toolbar: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
+    toolbarMainText: /** @type {HTMLDivElement} */(document.querySelector('.toolbar .place-name')),
+    toolbarSecondaryText: /** @type {HTMLElement} */(document.querySelector('.toolbar h1')),
+    divMain: /** @type {HTMLDivElement} */(document.getElementById('div_main')),
+    toolbarTools: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
+    inpSearch: /** @type {HTMLInputElement} */(document.getElementById('inp_search')),
+    _aside: /** @type {HTMLElement} */(document.querySelector('aside')),
+    _toolbar: /** @type {HTMLDivElement} */(document.querySelector('.toolbar')),
+    _main: /** @type {HTMLElement} */(document.querySelector('main')),
     /** @type {Object<string, HTMLDivElement>} */
     _plugins: {},
 
@@ -455,6 +449,51 @@ const UI = {
         }
         result += '</button>';
         return result;
+    },
+    makeSidebarToggleButton: function() {
+        const self = this;
+
+        if (!this._aside || !this._toolbar) {
+            return;
+        }
+        this._main.classList.add('full-width');
+        this._aside.classList.add('collapsed');
+
+        const burgerIcon = '' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M3 9h18M3 15h18M3 3h18M3 21h18"></path>' +
+            '</svg>';
+        const closeIcon = '' +
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+            '<line x1="18" y1="6" x2="6" y2="18"></line>' +
+            '<line x1="6" y1="6" x2="18" y2="18"></line>' +
+            '</svg>';
+        const toggleBtn = document.createElement('button');
+        toggleBtn.id = 'toggle-sidebar-full';
+        toggleBtn.title = 'Show/hide panel';
+        toggleBtn.className = 'btn-text-default';
+        toggleBtn.innerHTML = burgerIcon;
+
+        this._toolbar.insertBefore(toggleBtn, this._toolbar.children[0]);
+
+        let isVisible = false;
+        setTimeout(function() {
+            self._aside.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        }, 1000);
+
+        toggleBtn.onclick = function() {
+            isVisible = !isVisible;
+
+            toggleBtn.innerHTML = isVisible ? closeIcon : burgerIcon;
+            if (isVisible) {
+                self._main.classList.remove('full-width');
+                self._aside.classList.remove('collapsed');
+            } else {
+                self._main.classList.add('full-width');
+                self._aside.classList.add('collapsed');
+            }
+        };
+
     },
     
     /**

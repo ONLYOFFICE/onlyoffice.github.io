@@ -24,11 +24,28 @@ aside {
 	border-right-style: solid;
 	padding: 18px 12px;
 	overflow-y: auto;
+	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
 }
+aside.collapsed {
+	width: 0px;
+	min-width: 0px;
+	opacity: 0;
+	padding: 0px;
+}
 aside > *:not(:last-child) {
 	margin-bottom: 22px;
+}
+#toggle-sidebar-full {
+    height: 34px;
+	min-width: 44px;
+    margin-right: 16px;
+    transition: all 0.2s ease;
+}
+
+#toggle-sidebar-full svg {
+    pointer-events: none;
 }
 .categories-header {
 	font-size: 10.5px;
@@ -152,13 +169,14 @@ main {
 	border-bottom-style: solid;
 	display: flex;
 	align-items: center;
+	justify-content: end;
 }
-	.toolbar>div:first-child {
+	.toolbar .selected-category {
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-basis: 0%;
 	}
-	.toolbar>div:nth-child(2) {
+	.toolbar .search-container {
 		max-width: 293px;
 		flex: 1;
 		margin-left: 16px;
@@ -233,22 +251,31 @@ main {
 		max-width: calc(33.333% - 14px);
 		margin: 7px;
 	}
-	@media (max-width: 1199px) {
-		.plugins-container .plugins-list > .plugin-plate {
+	@media (max-width: 1107px) {
+		main:not(.full-width) .plugins-container .plugins-list > .plugin-plate {
 			-ms-flex-preferred-size: calc(50% - 14px);
 			flex-basis: calc(50% - 14px);
 			width: calc(50% - 14px);
 			max-width: calc(50% - 14px);
 		}
 	}
-	@media (max-width: 892px) {
-		.plugins-container .plugins-list > .plugin-plate {
+	@media (max-width: 906px) {
+		main.full-width .plugins-container .plugins-list > .plugin-plate {
+			-ms-flex-preferred-size: calc(50% - 14px);
+			flex-basis: calc(50% - 14px);
+			width: calc(50% - 14px);
+			max-width: calc(50% - 14px);
+		}
+	}
+	@media (max-width: 846px) {
+		main:not(.full-width) .plugins-container .plugins-list > .plugin-plate {
 			-ms-flex-preferred-size: calc(100% - 14px);
 			flex-basis: calc(100% - 14px);
 			width: calc(100% - 14px);
 			max-width: calc(100% - 14px);
 		}
 	}
+
 	/* ↑ IE11 flex fallback above; grid overrides below */
 	/* Modern browsers: real CSS grid (IE11 ignores @supports and keeps flex). */
 	@supports (display: grid) {
@@ -256,15 +283,15 @@ main {
 			display: grid;
 			/* minmax(0, 1fr) instead of plain 1fr so columns can shrink past
 			content min-size — otherwise a single wide card unevens the grid. */
-			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 			gap: 14px;
 			margin: 0;
 		}
 		.plugins-container .plugins-list > .plugin-plate {
 			flex: initial;
 			margin: 0;
-			width: auto;
-			max-width: none;
+			width: auto !important;
+			max-width: none !important;
 		}
 	}
 .plugin-plate {
@@ -511,7 +538,16 @@ label.header {
 }
 
 @media (max-width: 800px) {
-	.toolbar>div:first-child {
+	.toolbar {
+		justify-content: space-between;
+	}
+	.toolbar .selected-category {
 		display: none;
+	}
+	.toolbar .search-container {
+		max-width: none;
+	}
+	#toggle-sidebar-full {
+		margin-right: 0;
 	}
 }

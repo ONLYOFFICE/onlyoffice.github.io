@@ -371,9 +371,9 @@ const Marketplace = {
 	 */
 	updateToolbar: function(numOfPluginsToUpdate, mainFilter) {
 		if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
-			UI.btnUpdateAll.classList.remove('hidden');
+			UI.toolbarTools.classList.remove('hidden');
 		} else {
-			UI.btnUpdateAll.classList.add('hidden');
+			UI.toolbarTools.classList.add('hidden');
 		}
 	}
 
@@ -416,6 +416,7 @@ const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(v
 	editorVersion = versions.editorVersion;
 	pluginVersion = versions.pluginVersion;
 	if (pluginVersion <= 1000005) {
+		UI.makeSidebarToggleButton();
 		return loadPluginCardAssets().then(function() { return versions; });
 	}
 	return versions;
@@ -970,7 +971,7 @@ function onClickRemove(guid, event) {
 }
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
-	UI.btnUpdateAll.classList.add('hidden');
+	UI.toolbarTools.classList.add('hidden');
 	let arr = MarketplaceStorage.allPlugins.filter(function(el) {
 		return el.bHasUpdate;
 	});
