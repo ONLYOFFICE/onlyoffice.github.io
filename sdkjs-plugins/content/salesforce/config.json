@@ -1,73 +1,76 @@
 {
-    "name"       : "Salesforce",
-    "guid"       : "asc.{64993D68-3B46-47DE-A944-8A6C1FB1C955}",
-    "baseUrl"    : "",
-    "variations" : [
+  "name": "Salesforce",
+  "guid": "asc.{64993D68-3B46-47DE-A944-8A6C1FB1C955}",
+  "baseUrl": "",
+  "variations": [
+    {
+      "description": "salesforce",
+      "url": "index.html",
+      "icons": [
+        "resources/images/icon_light.png",
+        "resources/images/icon_light@2x.png"
+      ],
+      "icons2": [
         {
-            "description"         : "salesforce",
-            "url"                 : "index.html",
-            "icons"               : ["resources/images/icon_light.png", "resources/images/icon_light@2x.png"],
-            "icons2"              : [
-                {
-                    "style" : "light",
-                    "100%": {
-                        "normal": "resources/images/icon_light.png"
-                    },
-                    "125%": {
-                        "normal": "resources/images/icon_light@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/images/icon_light@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/images/icon_light@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/images/icon_light@2x.png"
-                    }
-                },
-                {
-                    "style" : "dark",
-                    "100%": {
-                        "normal": "resources/images/icon_dark.png"
-                    },
-                    "125%": {
-                        "normal": "resources/images/icon_dark@1.25x.png"
-                    },
-                    "150%": {
-                        "normal": "resources/images/icon_dark@1.5x.png"
-                    },
-                    "175%": {
-                        "normal": "resources/images/icon_dark@1.75x.png"
-                    },
-                    "200%": {
-                        "normal": "resources/images/icon_dark@2x.png"
-                    }
-                }
-            ],
-            "isViewer"            : false,
-            "EditorsSupport"      : ["cell"],
-            "type"                : "panel",
-            "initDataType"        : "none",
-            "buttons"             : [],
-            "isUpdateOleOnResize" : true,
-            "size"                : [400, 600],
-            "store": {
-                "background": {
-				    "light" : "#E5222E",
-					"dark" : "#E5222E"
-                },
-                "screenshots" : [
-                    "resources/store/screenshots/screen_1.png",
-                    "resources/store/screenshots/screen_2.png",
-                    "resources/store/screenshots/screen_3.png"
-                ],
-                "icons": {
-                    "light": "resources/store/icons",
-                    "dark" : "resources/store/icons"
-                },
-                "categories": ["work", "specAbilities"]
-            }
+          "style": "light",
+          "100%": {
+            "normal": "resources/images/icon_light.png"
+          },
+          "125%": {
+            "normal": "resources/images/icon_light@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/images/icon_light@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/images/icon_light@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/images/icon_light@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/images/icon_dark.png"
+          },
+          "125%": {
+            "normal": "resources/images/icon_dark@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/images/icon_dark@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/images/icon_dark@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/images/icon_dark@2x.png"
+          }
         }
-    ]
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["cell"],
+      "type": "panel",
+      "initDataType": "none",
+      "buttons": [],
+      "isUpdateOleOnResize": true,
+      "size": [400, 600],
+      "store": {
+        "background": {
+          "light": "#E5222E",
+          "dark": "#E5222E"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png",
+          "resources/store/screenshots/screen_2.png",
+          "resources/store/screenshots/screen_3.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": ["work", "specAbilities"]
+      }
+    }
+  ]
 }
