@@ -131,8 +131,7 @@ const Marketplace = {
 				}
 				return [];
 			}).then(function(result) {
-				const allPlugins = result;
-				self._loadAndShowRating(allPlugins);
+				self._loadAndShowRating(result);
 				return result;
 			});
 	},
@@ -478,8 +477,8 @@ window.onload = function() {
 	UI.onChangeMainFilter = function(value) {
 		MarketplaceStorage.mainFilter = value;
 		_resetSearchState();
-		updateCategories();
 		showListOfPlugins('filtered');
+		updateCategories();
 		
 		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(value);
 		if (value === 'marketplace') {
@@ -598,6 +597,7 @@ function _onMessageUpdated(message) {
 	}
 	installed.obj.version = plugin.version;
 	plugin.bHasUpdate = false;
+	installed.obj.bHasUpdate = false;
 	if (updateCount <= 0) {
 		UI.toggleLoader(false);
 	}
@@ -683,62 +683,11 @@ function _onMessageMouseUp() {
 }
 
 function updateCategories() {
-	MarketplaceStorage.categories = new Map();
-	MarketplaceStorage.categories.set('all', 0);
-	MarketplaceStorage.categories.set('onlyoffice', 0);
-	/** @param {PluginInfo} plugin */
-	const addCategoryToStorage = function(plugin) {
-		let num = Number(MarketplaceStorage.categories.get('all'));
-		MarketplaceStorage.categories.set('all', num + 1);
-		if (!plugin.variations) {
-			return;
-		}
-		if (!plugin.offered) {
-			let category = 'onlyoffice';
-			if (MarketplaceStorage.categories.has(category)) {
-				let num = Number(MarketplaceStorage.categories.get(category));
-				MarketplaceStorage.categories.set(category, num + 1);
-			}
-		}
-		plugin.variations.forEach(function(variation) {
-			if (!variation.store || !variation.store.categories) {
-				return;
-			}
-			variation.store.categories.forEach(function(/** @type {string} */category) {
-				if (MarketplaceStorage.categories.has(category)) {
-					let num = Number(MarketplaceStorage.categories.get(category));
-					MarketplaceStorage.categories.set(category, num + 1);
-				} else {
-					MarketplaceStorage.categories.set(category, 1);
-				}
-			})
-		});
-	}
-	if (MarketplaceStorage.mainFilter === 'marketplace') {
-		MarketplaceStorage.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
-			addCategoryToStorage(plugin);
-		});
-	} else if (MarketplaceStorage.mainFilter === 'installed') {
-		MarketplaceStorage.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
-			if (!plugin.obj) {
-				return;
-			}
-			addCategoryToStorage(plugin.obj);
-		});
-	} else {
-		MarketplaceStorage.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
-			if (!plugin.bHasUpdate) {
-				return;
-			}
-			addCategoryToStorage(plugin);
-		});
-	}
+	MarketplaceStorage.updateCategories();
 	let numOfAllPlugins = MarketplaceStorage.allPlugins.length;
 	let numOfInstalledPlugins = MarketplaceStorage.installedPlugins.length;
-	let numOfPluginsToUpdate = MarketplaceStorage.allPlugins.reduce(function(acc, plugin) {
-		return plugin.bHasUpdate ? acc + 1 : acc;
-	}, 0);
-	UI.updateCategories(MarketplaceStorage.categories);
+	let numOfPluginsToUpdate = MarketplaceStorage.getNumOfPluginsToUpdate();
+	UI.updateCategories(MarketplaceStorage.getCategories());
 	UI.updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
 	if (MarketplaceStorage.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
 		UI.clickMainFilter('installed');
@@ -814,7 +763,7 @@ function showListOfPlugins(typeOfOperation) {
 /**
  * Resolves plugin and installed state for a plate.
  * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
- * @returns {{plugin: PluginInfo, installed: InstalledPluginInfo | undefined, bHasUpdate: boolean, bRemoved: boolean, bNotAvailable: boolean, bNeedUpdateButton: boolean, bNeedRemoveButton: boolean, bNeedInstallButton: boolean}}
+ * @returns {{config: PluginInfo, installed: InstalledPluginInfo | undefined, bHasUpdate: boolean, bRemoved: boolean, bNotAvailable: boolean, bNeedUpdateButton: boolean, bNeedRemoveButton: boolean, bNeedInstallButton: boolean}}
  */
 function _getPluginPlateState(pluginOrInstalledPlugin) {
 	const guid = pluginOrInstalledPlugin.guid;
@@ -823,16 +772,17 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 	let installed = bInstalled ? /** @type {InstalledPluginInfo} */(pluginOrInstalledPlugin) : MarketplaceStorage.findInstalledPlugin(guid);
 	/** @type {PluginInfo | undefined} */
 	let plugin = bInstalled ? MarketplaceStorage.findPlugin(guid) : /** @type {PluginInfo} */(pluginOrInstalledPlugin);
+	/** @type {PluginInfo} */
+	let config = /** @type {PluginInfo} */(plugin || (installed && installed.obj));
 
 	let bCheckUpdate = true;
 	if (!plugin) {
 		if (!installed) return /** @type {any} */(null);
-		plugin = installed.obj;
 		bCheckUpdate = false;
 	}
 
 	let bNotAvailable = false;
-	const minV = plugin.minVersion ? Utils.convertPluginVersionToNumber(plugin.minVersion) : -1;
+	const minV = config.minVersion ? Utils.convertPluginVersionToNumber(config.minVersion) : -1;
 	if (minV > editorVersion) {
 		bCheckUpdate = false;
 		bNotAvailable = true;
@@ -846,11 +796,12 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			plugin.bHasUpdate = true;
+			installed.obj.bHasUpdate = true;
 		}
 	}
 
 	return {
-		plugin: plugin,
+		config: config,
 		installed: installed,
 		bHasUpdate: bHasUpdate,
 		bRemoved: bRemoved,
@@ -863,16 +814,16 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 
 /**
  * @param {string} guid
- * @param {PluginInfo} plugin
+ * @param {PluginInfo} config
  * @param {{bNeedUpdateButton: boolean, bNeedRemoveButton: boolean, bNeedInstallButton: boolean, bNotAvailable: boolean}} flags
  * @returns {string}
  */
-function _buildPluginPlateHtml(guid, plugin, flags) {
-	const variation = plugin.variations[0];
-	const name = Utils.getTranslatedName(plugin);
+function _buildPluginPlateHtml(guid, config, flags) {
+	const variation = config.variations[0];
+	const name = Utils.getTranslatedName(config);
 	const description = Utils.getTranslatedDescription(variation);
 	const bg = variation.store && variation.store.background ? variation.store.background[Utils.themeType] : defaultBG;
-	const offered = plugin.offered || 'ONLYOFFICE';
+	const offered = config.offered || 'ONLYOFFICE';
 	const imgSrc = PluginIcons.getImageUrl(guid, isLocal);
 
 	return '<div class="introduction">' +
@@ -882,7 +833,7 @@ function _buildPluginPlateHtml(guid, plugin, flags) {
 		'<div class="name">' +
 			'<div>' +
 				'<span>' + name + '</span>' +
-				(!plugin.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
+				(!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
 			'</div>' +
 			'<div class="manufacturer">' + offered + '</div>' +
 		'</div>' +
@@ -890,7 +841,7 @@ function _buildPluginPlateHtml(guid, plugin, flags) {
 		'<div class="description">' + description + '</div>' +
 		'<div class="management">' +
 			'<div class="rating">' +
-				UI.makeRatingElements(plugin.rating, Utils.getTranslated('Not rated')) +
+				UI.makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
 			'</div>' +
 			UI.makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
 		'</div>' +
@@ -917,7 +868,7 @@ function createPluginPlate(pluginOrInstalledPlugin) {
 	pluginPlate.onclick = onClickPluginPlate.bind(pluginPlate, guid);
 
 	const state = _getPluginPlateState(pluginOrInstalledPlugin);
-	pluginPlate.innerHTML = _buildPluginPlateHtml(guid, state.plugin, state);
+	pluginPlate.innerHTML = _buildPluginPlateHtml(guid, state.config, state);
 	UI.addPlugin(guid, pluginPlate);
 };
 
@@ -971,9 +922,7 @@ function onClickRemove(guid, event) {
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
 	UI.toolbarTools.classList.add('hidden');
-	let arr = MarketplaceStorage.allPlugins.filter(function(el) {
-		return el.bHasUpdate;
-	});
+	let arr = MarketplaceStorage.getPluginsToUpdate();
 	updateCount = arr.length;
 	return Utils.waitForRepaint().then(function() { MarketplacePluginService.doUpdateAll(arr) });
 }
@@ -997,7 +946,7 @@ function onClickPluginPlate(guid) {
 	let iconBackground = pluginPlate.querySelector('.image').style.background;
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
-	let config = plugin ? plugin : installed.obj;
+	let config = /** @type {PluginInfo} */(plugin ? plugin : (installed && installed.obj));
 
 	/** @type {PluginCardWindowParams} */
 	let message = {

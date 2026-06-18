@@ -41,7 +41,7 @@ const MarketplaceStorage = {
     /** @type {string} */
     searchQuery: "",
     /** @type {Map<string, number>} */
-    categories: new Map(),
+    _categories: new Map(),
     /** @type {string} */
     selectedCategory: "",
     /** @type {string} */
@@ -75,16 +75,16 @@ const MarketplaceStorage = {
      * @returns {Plugins}
      */
     getFilteredPlugins: function(translateName) {
-        const category = MarketplaceStorage.categoryFilter;
-        const mainFilter = MarketplaceStorage.mainFilter;
-        const searchQuery = MarketplaceStorage.searchQuery;
+        const category = this.categoryFilter;
+        const mainFilter = this.mainFilter;
+        const searchQuery = this.searchQuery;
 
         /** @type {Plugins} */
-        let plugins = MarketplaceStorage.allPlugins;
+        let plugins = this.allPlugins;
         if (mainFilter === 'installed') {
-            plugins = MarketplaceStorage.installedPlugins;
+            plugins = this.installedPlugins;
         } else if (mainFilter === 'updates') {
-            plugins = MarketplaceStorage.allPlugins.filter(function(plugin) { return plugin.bHasUpdate; });
+            plugins = this.getPluginsToUpdate();
         }
 
         if (category === "onlyoffice") {
@@ -113,6 +113,83 @@ const MarketplaceStorage = {
         });
 
         return plugins;
-    }
+    },
 
+    getNumOfPluginsToUpdate: function() {
+        const self = this;
+        return this.allPlugins.reduce(function(acc, plugin) {
+            const installed = self.findInstalledPlugin(plugin.guid);
+            if (installed && installed.obj && installed.obj.bHasUpdate) {
+                return acc + 1;
+            }
+            return plugin.bHasUpdate ? acc + 1 : acc;
+        }, 0);
+    },
+    getPluginsToUpdate: function() {
+        return this.allPlugins.filter(function(el) {
+            return el.bHasUpdate;
+        });
+    },
+    /** @param {PluginInfo} plugin */
+    _addPluginCategory: function(plugin) {
+        const self = this;
+        let num = Number(this._categories.get('all'));
+		this._categories.set('all', num + 1);
+		if (!plugin.variations) {
+			return;
+		}
+		if (!plugin.offered) {
+			let category = 'onlyoffice';
+			if (this._categories.has(category)) {
+				let num = Number(this._categories.get(category));
+				this._categories.set(category, num + 1);
+			}
+		}
+		plugin.variations.forEach(function(variation) {
+			if (!variation.store || !variation.store.categories) {
+				return;
+			}
+			variation.store.categories.forEach(function(/** @type {string} */category) {
+				if (self._categories.has(category)) {
+					let num = Number(self._categories.get(category));
+					self._categories.set(category, num + 1);
+				} else {
+					self._categories.set(category, 1);
+				}
+			})
+		});
+    },
+
+    updateCategories: function() {
+        const self = this;
+	    this._resetCategories();
+        if (this.mainFilter === 'marketplace') {
+            this.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+                self._addPluginCategory(plugin);
+            });
+        } else if (this.mainFilter === 'installed') {
+            this.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
+                if (!plugin.obj) {
+                    return;
+                }
+                self._addPluginCategory(plugin.obj);
+            });
+        } else {
+            this.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+                if (!plugin.bHasUpdate) {
+                    return;
+                }
+                self._addPluginCategory(plugin);
+            });
+        }
+    },
+    _resetCategories: function() {
+        this._categories = new Map();
+        this._categories.set('all', 0);
+        this._categories.set('onlyoffice', 0);
+    },
+
+    getCategories: function() {
+        return this._categories;
+    }
 };

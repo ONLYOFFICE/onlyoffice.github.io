@@ -530,8 +530,10 @@ const PluginCard = {
     /** @param {number} n */
     _showSlides: function(n) {
         let i;
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
+        /** @type {HTMLCollectionOf<HTMLDivElement>} */
+        let slides = /** @type {HTMLCollectionOf<HTMLDivElement>} */(document.getElementsByClassName("mySlides"));
+        /** @type {HTMLCollectionOf<HTMLSpanElement>} */
+        let dots = /** @type {HTMLCollectionOf<HTMLSpanElement>} */(document.getElementsByClassName("dot"));
         
         if (n > slides.length) {this.slideIndex = 1}
         if (n < 1) {this.slideIndex = slides.length}
@@ -539,11 +541,14 @@ const PluginCard = {
         for (i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
-
-        dots[this.slideIndex-1].className += " active";
+        if (dots[this.slideIndex-1]) {
+            dots[this.slideIndex-1].className += " active";
+        }
 
         for (i = 0; i < slides.length; i++) {
-            slides[i].style.transform = "translateX(-" + (this.slideIndex - 1) * 100 + "%)";
+            if (slides[i]) {
+                slides[i].style.transform = "translateX(-" + (this.slideIndex - 1) * 100 + "%)";
+            }
         }
     },
     

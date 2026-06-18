@@ -252,7 +252,7 @@ const UI = {
     removePlugin: function(guid) {
         const pluginDiv = this._plugins[guid];
         if (pluginDiv) {
-            pluginDiv.remove();
+            if (pluginDiv.parentNode) pluginDiv.parentNode.removeChild(pluginDiv);
         }
     },
 
