@@ -6,26 +6,65 @@
         {
             "description"         : "salesforce",
             "url"                 : "index.html",
-            "icons"               : ["resources/images/icon.png", "resources/images/icon@2x.png"],
-            
+            "icons"               : ["resources/images/icon_light.png", "resources/images/icon_light@2x.png"],
+            "icons2"              : [
+                {
+                    "style" : "light",
+                    "100%": {
+                        "normal": "resources/images/icon_light.png"
+                    },
+                    "125%": {
+                        "normal": "resources/images/icon_light@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/images/icon_light@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/images/icon_light@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/images/icon_light@2x.png"
+                    }
+                },
+                {
+                    "style" : "dark",
+                    "100%": {
+                        "normal": "resources/images/icon_dark.png"
+                    },
+                    "125%": {
+                        "normal": "resources/images/icon_dark@1.25x.png"
+                    },
+                    "150%": {
+                        "normal": "resources/images/icon_dark@1.5x.png"
+                    },
+                    "175%": {
+                        "normal": "resources/images/icon_dark@1.75x.png"
+                    },
+                    "200%": {
+                        "normal": "resources/images/icon_dark@2x.png"
+                    }
+                }
+            ],
             "isViewer"            : false,
             "EditorsSupport"      : ["cell"],
             "type"                : "panel",
             "initDataType"        : "none",
             "buttons"             : [],
-
             "isUpdateOleOnResize" : true,
-
             "size"                : [400, 600],
-
             "store": {
                 "background": {
-                    "light": "#00A1E0",
-                    "dark" : "#00A1E0"
+				    "light" : "#E5222E",
+					"dark" : "#E5222E"
                 },
+                "screenshots" : [
+                    "resources/store/screenshots/screen_1.png",
+                    "resources/store/screenshots/screen_2.png",
+                    "resources/store/screenshots/screen_3.png"
+                ],
                 "icons": {
-                    "light": "resources/images",
-                    "dark" : "resources/images"
+                    "light": "resources/store/icons",
+                    "dark" : "resources/store/icons"
                 },
                 "categories": ["work", "specAbilities"]
             }
