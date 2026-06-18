@@ -1,0 +1,19 @@
+{
+	"name": "图片高清预览",
+	"guid": "asc.{eb6471e0-7981-4235-9856-42d48f101188}",
+	"version": "1.0.7",
+	"variations": [
+		{
+			"description": "点击后弹出独立悬浮窗口预览图片",
+			"url": "index.html",
+			"icons": ["./icon.png"],
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": false,
+			"initDataType": "html",
+			"initOnSelectionChanged": true,
+			"EditorsSupport": ["word", "cell", "slide"],
+			"size": [ 800, 600 ]
+		}
+	]
+}
