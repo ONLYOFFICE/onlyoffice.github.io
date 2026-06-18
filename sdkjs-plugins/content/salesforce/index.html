@@ -66,7 +66,7 @@
 					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id, windowId: windowId } }));
 					if (windowId === undefined || windowId === null) {
 						if (id === -1 || id === '-1' || id === 1 || id === '1')
-							window.Asc.plugin.executeCommand('close', '');
+							this.executeCommand('close', '');
 					}
 				};
 			})();
