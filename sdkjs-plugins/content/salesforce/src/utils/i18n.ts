@@ -19,7 +19,7 @@
 type Translations = Record<string, Record<string, string> | string>;
 
 const DEFAULT_LANGUAGE = 'en-US';
-const TRANSLATIONS_BASE_PATH = './translations';
+const TRANSLATIONS_BASE_PATH = new URL('../translations', import.meta.url).href;
 
 let supportedLanguages: string[] = [DEFAULT_LANGUAGE];
 let currentLanguage = DEFAULT_LANGUAGE;
