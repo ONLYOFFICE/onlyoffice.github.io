@@ -263,7 +263,6 @@ const Marketplace = {
 		if (!plugin.rating) return;
 		const pluginPlate = UI.getPlugin(plugin.guid);
 		if (!pluginPlate) {
-			console.error('Failed to find plugin plate for guid: ' + plugin.guid);
 			return;
 		}
 		const div = pluginPlate.querySelector('.rating');
