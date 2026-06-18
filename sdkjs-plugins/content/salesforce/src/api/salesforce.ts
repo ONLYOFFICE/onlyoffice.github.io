@@ -62,6 +62,7 @@ export interface SalesforceObject {
   label: string;
   labelPlural: string;
   queryable: boolean;
+  deprecatedAndHidden: boolean;
 }
 
 export interface SalesforceField {
@@ -99,17 +100,25 @@ export interface RequestOptions {
   timeout?: number;
 }
 
-export function fetchObjects(
+export async function fetchObjects(
   instanceUrl: string,
   accessToken: string,
   options?: RequestOptions,
 ): Promise<HttpResponse<SObjectsResponse>> {
   const timeout = options?.timeout ?? DEFAULT_TIMEOUT;
-  return createSalesforceClient({
+  const result = await createSalesforceClient({
     instanceUrl,
     accessToken,
     version: 'v59.0',
   })<SObjectsResponse>('sobjects', { signal: options?.signal, timeout });
+
+  if (result.data) {
+    result.data.sobjects = result.data.sobjects.filter(
+      (o) => !o.deprecatedAndHidden && !o.label.startsWith('__MISSING LABEL__'),
+    );
+  }
+
+  return result;
 }
 
 export function describeObject(
