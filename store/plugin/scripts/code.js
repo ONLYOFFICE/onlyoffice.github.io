@@ -50,9 +50,9 @@
 	// create iframe
 	const iframe = document.createElement('iframe');
 
-	/** @type {window.Asc.PluginWindow | null} */
+	/** @type {PluginWindow | null} */
 	let warningWindow = null;
-	/** @type {window.Asc.PluginWindow | null} */
+	/** @type {PluginWindow | null} */
 	let developerWindow = null;
 	let removeGuid = '';
 	let editorVersion = '';
@@ -79,11 +79,12 @@
 
 	const PluginCard = {
 		data: {},
-		/** @type {window.Asc.PluginWindow | null} */
+		/** @type {PluginWindow | null} */
 		window: null,
 		/** @param {PluginCardWindowParams} data */
 		show: function(data) {
 			this.data = data;
+			/** @type {VariationConfig} */
 			let variation = {
 				url : 'plugin-card.html',
 				description: data.pluginName,
@@ -396,6 +397,7 @@
 		let start = location.pathname.lastIndexOf('/') + 1;
 		let file = location.pathname.substring(start);
 		
+		/** @type {VariationConfig} */
 		let variation = {
 			url : location.href.replace(file, fileName),
 			description : description,

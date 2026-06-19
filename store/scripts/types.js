@@ -1,5 +1,9 @@
 
 /**
+ * @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").PluginWindow} PluginWindow
+ */
+
+/**
  * @typedef {Object} Rating
  * @property {number} percent
  * @property {string} average

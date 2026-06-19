@@ -675,6 +675,9 @@ function updateCategories() {
 }
 
 function _loadBackupPlugins() {
+	if (!window["AscDesktopEditor"]) {
+		return;
+	}
 	var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
 	if (!_pluginsTmp.length) return;
 	var len = _pluginsTmp[0]["pluginsData"].length;
@@ -923,11 +926,16 @@ function hidePluginCard() {
 }
 
 function installPluginManually() {
+	if (!window["AscDesktopEditor"]) {
+		return;
+	}
 	window["AscDesktopEditor"]["OpenFilenameDialog"]("plugin", false, function (_file) {
 		var file = _file;
 		if (Array.isArray(file))
 			file = file[0];
-
+		if (!window["AscDesktopEditor"]) {
+			return;
+		}
 		let result = window["AscDesktopEditor"]["PluginInstall"](file);
 		if (result) {
 			// need to update the list of installed plugins
