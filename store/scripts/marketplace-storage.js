@@ -75,6 +75,7 @@ const MarketplaceStorage = {
      * @returns {Plugins}
      */
     getFilteredPlugins: function(translateName) {
+        const self = this;
         const category = this.categoryFilter;
         const mainFilter = this.mainFilter;
         const searchQuery = this.searchQuery;
@@ -89,10 +90,18 @@ const MarketplaceStorage = {
 
         if (category === "onlyoffice") {
             plugins = plugins.filter(function(plugin) {
+                let installed = plugin;
                 if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-                    return !plugin.obj.offered;
+                    plugin = self.findPlugin(plugin.guid);
+                } else {    
+                    installed = self.findInstalledPlugin(plugin.guid);
                 }
-                return !plugin.offered;
+
+                if (!(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
+                    return true;
+                }
+
+                return false;
             });
         } else if (category != "all") {
             plugins = plugins.filter(function(plugin) {
@@ -130,22 +139,26 @@ const MarketplaceStorage = {
             return el.bHasUpdate;
         });
     },
-    /** @param {PluginInfo} plugin */
-    _addPluginCategory: function(plugin) {
+    /** @param {PluginInfo} config */
+    _addPluginCategory: function(config) {
         const self = this;
         let num = Number(this._categories.get('all'));
 		this._categories.set('all', num + 1);
-		if (!plugin.variations) {
-			return;
-		}
-		if (!plugin.offered) {
+        const plugin = this.findPlugin(config.guid);
+        const installed = this.findInstalledPlugin(config.guid);
+        const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.variations);
+        if (!variations) {
+            return;
+        }
+
+		if (!config.offered && !(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
 			let category = 'onlyoffice';
 			if (this._categories.has(category)) {
 				let num = Number(this._categories.get(category));
 				this._categories.set(category, num + 1);
 			}
 		}
-		plugin.variations.forEach(function(variation) {
+		variations.forEach(function(variation) {
 			if (!variation.store || !variation.store.categories) {
 				return;
 			}
@@ -170,6 +183,10 @@ const MarketplaceStorage = {
         } else if (this.mainFilter === 'installed') {
             this.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
                 if (!plugin.obj) {
+                    const config = self.findPlugin(plugin.guid);
+                    if (config) {
+                        self._addPluginCategory(config);
+                    }
                     return;
                 }
                 self._addPluginCategory(plugin.obj);
