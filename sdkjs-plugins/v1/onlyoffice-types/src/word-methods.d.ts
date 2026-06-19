@@ -366,7 +366,7 @@ export type WordMethodArgs = {
     
     // Methods E
     EditOleObject: [data: OLEProperties];
-    EndAction: [sType: string, description: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
+    EndAction: [sType: string, description?: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
     
     // Methods F
     FocusEditor: [];

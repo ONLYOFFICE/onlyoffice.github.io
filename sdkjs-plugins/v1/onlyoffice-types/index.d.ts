@@ -17,19 +17,25 @@ declare global {
 
 export {};
 
+type PluginScope = Record<string, any>;
+
+type PluginEventName = 'onExternalMouseUp' | 'onClickBack' | 'onWindowResize' | 'onDocumentContentReady' | 'onTargetPositionChanged' | string;
+
+type PluginEventCallback<E extends Event = Event> = (event: E) => void;
+
 interface Asc {
     plugin: AscPlugin;
-    scope: Object<any>;
+    scope: PluginScope;
     PluginWindow: new () => PluginWindow;
     ButtonContextMenu: new () => ButtonContextMenu;
     Buttons: Buttons;
 }
 
 interface AscPlugin {
-    attachEvent: (eventName: string, callback: (event: any) => void) => void;
+    attachEvent: (eventName: PluginEventName, callback: PluginEventCallback) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
-    detachEvent: (eventName: string) => void;
+    detachEvent: (eventName: PluginEventName) => void;
     executeMethod: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
     executeMethodAsync: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
     executeCommand: ExecuteCommandCallback;
@@ -37,10 +43,10 @@ interface AscPlugin {
     init: () => void;
     onThemeChanged: (theme: AscTheme) => void;
     onThemeChangedBase: (theme: AscTheme) => void;
-    onTranslate(): any;
+    onTranslate(): void;
     resizeWindow: (width: number, height: number) => void;
     sendEvent: (eventName: string, eventData?: unknown) => void;
-    sendToPlugin(message: string, payload?: any): void;
+    sendToPlugin(message: string, payload?: unknown): void;
     theme: AscTheme;
     tr: (key: string) => string;
     trigger: (eventName: string, eventData?: unknown) => void;
@@ -48,11 +54,11 @@ interface AscPlugin {
 
 interface PluginWindow {
     id: string;
-    show: (variation: any) => void;
+    show: (variation: VariationConfig) => void;
     close: () => void;
-    attachEvent: (eventName: string, callback: (event: any) => void) => void;
+    attachEvent: (eventName: string, callback: PluginEventCallback) => void;
     // detachEvent: (eventName: string) => void;
-    command: (methodName: string, payload?: any) => void;
+    command: (methodName: string, payload?: unknown) => void;
 }
 
 interface Buttons {
@@ -66,7 +72,7 @@ interface ButtonContextMenu {
 }
 
 interface ExecuteCommandCallback {
-    (command: string, value?: any, callback?: () => void): void;
+    (command: string, value?: unknown, callback?: () => void): void;
 }
 
 interface ButtonConfig {
@@ -78,8 +84,10 @@ interface ButtonConfig {
 
 type EditorType = 'word' | 'cell' | 'slide' | 'pdf';
 
+type IconScale = '100%' | '125%' | '150%' | '175%' | '200%';
+
 interface IconConfig {
-    [scale: string]: {
+    [scale: IconScale]: {
         active?: string;
         hover?: string;
         normal: string;
@@ -87,7 +95,6 @@ interface IconConfig {
 }
 
 type InitDataType = 'text' | 'html' | 'ole' | 'desktop' | 'desktop-external' | 'none' | 'sign';
-
 
 type MenuType = 'left' | 'right';
 
@@ -104,6 +111,28 @@ interface PluginInfo {
     userName: string;
 }
 
+interface PluginConfig {
+    baseUrl?: string;
+    description?: string;
+    discussion?: string;
+    guid: string;
+    minVersion?: string;
+    name: string;
+    nameLocale?: Record<string, string>;
+    offered?: string;
+    url?: string;
+    variations: VariationConfig[];
+    version?: string;
+}
+
+interface InstalledPluginInfo {
+    baseUrl: string;
+    canRemoved: boolean;
+    guid: string;
+    obj: PluginConfig;
+    removed?: boolean;
+}
+
 interface StoreConfig {
     background?: {
         dark: string;
@@ -117,12 +146,16 @@ interface StoreConfig {
     screenshots?: string[];
 }
 
+type KnownThemeName = "theme-night" | "theme-light" | "theme-dark" | "theme-gray" | "theme-white" | "theme-classic-light" | "theme-contrast-dark";
+
 interface AscTheme {
     /** Theme name */
-    Name: string;
-    /** Theme name (duplicate for compatibility) */
-    name: string;
+    Name: KnownThemeName | string;
+    /** @deprecated Theme name (duplicate for compatibility) */
+    name: KnownThemeName | string;
     /** Theme type (light/dark) */
+    Type: "light" | "dark";
+    /** @deprecated Theme type (light/dark) */
     type: "light" | "dark";
     /** Show rulers button */
     RulersButton: boolean;
@@ -658,23 +691,26 @@ interface VariationConfig {
     descriptionLocale?: Record<string, string>;
     EditorsSupport: EditorType[];
     events?: string[];
+    fixedSize?: boolean;
     icons?: string;
     icons2?: IconConfig[];
     initData?: string;
     initDataType?: InitDataType;
     initOnSelectionChanged?: boolean;
+    isCanDocked?: boolean;
     isCustomWindow?: boolean;
     isDisplayedInViewer?: boolean;
     isInsideMode?: boolean;
     isModal?: boolean;
     isSystem?: boolean;
+    isTargeted?: boolean;
     isUpdateOleOnResize?: boolean;
     isViewer?: boolean;
     isVisual: boolean;
     menu?: MenuType;
-    name: string;
+    name?: string;
     nameLocale?: Record<string, string>;
-    size: [number, number];
+    size?: [number, number];
     store?: StoreConfig;
     type?: VariationType;
     url: string;
@@ -686,7 +722,16 @@ export type {
     EditorType,
     AscTheme,
     VariationConfig,
-    PluginWindow
+    PluginWindow,
+    PluginConfig,
+    InstalledPluginInfo,
+    PluginScope,
+    PluginEventName,
+    PluginEventCallback,
+    ButtonConfig,
+    StoreConfig,
+    IconConfig,
+    IconScale
 };
 
 export type Api<T extends EditorType> =
