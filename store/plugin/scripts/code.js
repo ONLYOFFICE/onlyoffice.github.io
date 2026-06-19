@@ -43,7 +43,7 @@
 	const winSizes = {
 		width: 1200,
 		height: 776,
-		minWidth: 870,
+		minWidth: 850,
 		minHeight: 600
 	};
 

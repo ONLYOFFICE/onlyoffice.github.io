@@ -200,7 +200,7 @@ const UI = {
             }
         });*/
 
-        rule += '.plugin-plate .name span:first-child,\n' +
+        rule += '.plugin-plate .name .plugin-name,\n' +
             '.filter-by label{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.plugin-plate .description,\n' +
             '.toolbar .place-name,\n' +
@@ -482,11 +482,11 @@ const UI = {
                 '<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
             '</div>' +
             '<div class="name">' +
-                '<div>' +
-                    '<span>' + name + '</span>' +
+                '<div class="plugin-name">' + name + '</div>' +
+                '<div class="manufacturer">' +
+                    offered +
                     (!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
                 '</div>' +
-                '<div class="manufacturer">' + offered + '</div>' +
             '</div>' +
             '</div>' +
             '<div class="description">' + description + '</div>' +
