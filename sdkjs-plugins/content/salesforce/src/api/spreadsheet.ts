@@ -23,6 +23,7 @@ export type InsertTarget = 'cursor' | 'active' | 'new';
 export interface InsertOptions {
   target?: InsertTarget;
   sheetNamePrefix?: string;
+  offset?: number;
 }
 
 export interface SheetData {
@@ -93,12 +94,13 @@ export function insertData(data: DataMatrix, options: InsertOptions = {}): Promi
   if (!data.length) return Promise.reject(new SpreadsheetError('Data cannot be empty', 'EMPTY_DATA'));
 
   return runCommand(
-    { data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet' },
+    { data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet', offset: options.offset ?? 0 },
     () => {
-      const { data: rows, target, prefix } = Asc.scope as {
+      const { data: rows, target, prefix, offset } = Asc.scope as {
         data: CellValue[][];
         target: string;
         prefix: string;
+        offset: number;
       };
 
       if (!rows?.length) return;
@@ -130,6 +132,8 @@ export function insertData(data: DataMatrix, options: InsertOptions = {}): Promi
           startCol = sel.GetCol() - 1;
         }
       }
+
+      startCol += offset;
 
       if (!sheet) return;
 

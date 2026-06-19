@@ -196,6 +196,7 @@ export function useImport() {
 
     const { access_token, instance_url } = state.value;
     let totalRecords = 0;
+    let offset = 0;
     const errors: string[] = [];
 
     for (const objectName of objectsToQuery) {
@@ -225,7 +226,9 @@ export function useImport() {
           await insertRecords(headers, records, fieldNames, {
             target: 'active',
             sheetNamePrefix: objectName,
+            offset,
           });
+          offset += fieldNames.length;
         } catch (err) {
           const errorMsg = err instanceof Error ? err.message : t('common.unknown_error');
           errors.push(`${objectName}: ${t('import.insert_failed')} - ${errorMsg}`);
