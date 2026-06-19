@@ -219,7 +219,9 @@ main {
 		font-size: 13px;
 		outline: none;
 	}
-
+#btn_updateAll::after {
+  content: "(" attr(data-count) ")";
+}
 .plugins-container {
 	position: relative;
 	flex-grow: 1;

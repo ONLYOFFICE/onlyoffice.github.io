@@ -846,7 +846,7 @@ function onClickRemove(guid, event) {
 }
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
-	UI.toolbarTools.classList.add('hidden');
+	UI.updateToolbar(0, MarketplaceStorage.mainFilter);
 	let arr = MarketplaceStorage.getPluginsToUpdate();
 	updateCount = arr.length;
 	return Utils.waitForRepaint().then(function() { MarketplacePluginService.doUpdateAll(arr) });

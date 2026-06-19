@@ -39,17 +39,17 @@
 
 const UI = {
     /** @type {HTMLDivElement | undefined} */
-    loader: undefined,
+    _loader: undefined,
     _mainFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="main-filter"]')),
     _categoryFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="category-filter"]')),
     linkNewPlugin: /** @type {HTMLAnchorElement} */(document.getElementById('link_newPlugin')),
     linkNewPluginText: /** @type {HTMLSpanElement} */(document.querySelector('#link_newPlugin .link-text')),
     pluginsList: /** @type {HTMLDivElement} */(document.getElementById('plugins')),
-    toolbar: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
-    toolbarMainText: /** @type {HTMLDivElement} */(document.querySelector('.toolbar .place-name')),
-    toolbarSecondaryText: /** @type {HTMLElement} */(document.querySelector('.toolbar h1')),
+    _toolbarMainText: /** @type {HTMLDivElement} */(document.querySelector('.toolbar .place-name')),
+    _toolbarSecondaryText: /** @type {HTMLElement} */(document.querySelector('.toolbar h1')),
     divMain: /** @type {HTMLDivElement} */(document.getElementById('div_main')),
-    toolbarTools: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
+    _toolbarTools: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
+    _btnUpdateAll: /** @type {HTMLButtonElement} */(document.getElementById('btn_updateAll')),
     inpSearch: /** @type {HTMLInputElement} */(document.getElementById('inp_search')),
     _aside: /** @type {HTMLElement} */(document.querySelector('aside')),
     _toolbar: /** @type {HTMLDivElement} */(document.querySelector('.toolbar')),
@@ -116,7 +116,7 @@ const UI = {
                     return;
                 }
                 const text = mainFilterCategoryDiv.textContent;
-                self.toolbarMainText.textContent = text;
+                self._toolbarMainText.textContent = text;
             }
         }
 
@@ -141,7 +141,7 @@ const UI = {
                     return;
                 }
                 const text = categoryNameDiv.textContent;
-                self.toolbarSecondaryText.textContent = text;
+                self._toolbarSecondaryText.textContent = text;
             };
         }
 
@@ -610,9 +610,11 @@ const UI = {
 	 */
 	updateToolbar: function(numOfPluginsToUpdate, mainFilter) {
 		if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
-			this.toolbarTools.classList.remove('hidden');
+			this._toolbarTools.classList.remove('hidden');
+            this._btnUpdateAll.setAttribute('data-count', String(numOfPluginsToUpdate));
 		} else {
-			this.toolbarTools.classList.add('hidden');
+			this._toolbarTools.classList.add('hidden');
+            this._btnUpdateAll.setAttribute('data-count', "0");
 		}
 	},
     
@@ -628,12 +630,12 @@ const UI = {
         }
         if (!show) {
             loaderContainer.classList.add('hidden');
-            this.loader && (this.loader.remove ? this.loader.remove() : loaderContainer.removeChild(this.loader));
-            this.loader = undefined;	
-        } else if (!this.loader) {
+            this._loader && (this._loader.remove ? this._loader.remove() : loaderContainer.removeChild(this._loader));
+            this._loader = undefined;	
+        } else if (!this._loader) {
             loaderContainer.classList.remove('hidden');
             // @ts-ignore - global function
-            this.loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
+            this._loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
         }
     },
     /**
