@@ -92,6 +92,10 @@ interface AscPlugin {
     sendToPlugin(message: string, payload?: unknown): void;
     theme: AscTheme;
     tr: (key: string) => string;
+    /** Set to `true` after `tr` is first initialized */
+    tr_init?: boolean;
+    /** Translation map for the current language, populated by `pluginInitTranslateManager` */
+    translateManager?: Record<string, string>;
     trigger: (eventName: string, eventData?: unknown) => void;
 }
 
