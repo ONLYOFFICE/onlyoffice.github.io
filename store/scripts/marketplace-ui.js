@@ -162,6 +162,16 @@ const UI = {
             const input = this._categoryFilterInputs[i];
             if (input.value === defaultValue) {
                 input.checked = true;
+                const label = input.nextElementSibling;
+                if (!label) {
+                    return;
+                }
+                const categoryNameDiv = label.querySelector('.category-name');
+                if (!categoryNameDiv) {
+                    return;
+                }
+                const text = categoryNameDiv.textContent;
+                this._toolbarSecondaryText.textContent = text;
                 break;
             }
         }

@@ -40,6 +40,12 @@
 	let errTimeout = null;
 	let loader = null;
 	let loaderTimeout = null;
+	const winSizes = {
+		width: 1200,
+		height: 776,
+		minWidth: 870,
+		minHeight: 600
+	};
 
 	// create iframe
 	const iframe = document.createElement('iframe');
@@ -62,7 +68,7 @@
 	window.Asc.plugin.init = function() {
 		window.Asc.plugin.executeMethod('ShowButton',['developer', true, 'right']);
 		// resize window
-		window.Asc.plugin.resizeWindow(1200, 776, 1200, 776, 0, 0);
+		window.Asc.plugin.resizeWindow(winSizes.width, winSizes.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
 		if (!isLocal) {
 			checkInternet(true);
 			loaderTimeout = setTimeout(createLoader, 500);
@@ -204,6 +210,10 @@
 		};
 	};
 
+	/**
+	 * @param {string|number} id 
+	 * @param {string} windowID 
+	 */
 	window.Asc.plugin.button = function(id, windowID) {
 		if (warningWindow && warningWindow.id == windowID) {
 			switch (id) {
