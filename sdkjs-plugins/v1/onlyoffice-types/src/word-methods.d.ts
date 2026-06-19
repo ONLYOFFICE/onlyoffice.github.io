@@ -31,7 +31,6 @@ type ContentControlLock = 0 | 1 | 2 | 3;
 interface ContentControlProperties {
     Id?: number;
     Tag: string;
-    Lock?: number;
     Remove?: number;
     Alias?: string;
     Appearance?: number;
@@ -336,7 +335,7 @@ interface UpdateAddinFieldsOptions {
     Data: Record<string, any>;
 }
 
-export type WordMethodArgs = {
+type WordMethodArgs = {
     // Methods A
     AcceptReviewChanges: [boolean?];
     AddAddinField: [AddinFieldData];

@@ -3,6 +3,7 @@ import type { ApiSlide } from "./src/generated/slide";
 import type { ApiWord } from "./src/generated/word";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
+import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
 
 
 
@@ -79,8 +80,10 @@ interface AscPlugin {
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
     detachEvent: (eventName: PluginEventName) => void;
-    executeMethod: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
-    executeMethodAsync: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
+    executeMethod: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
+    executeMethodAsync: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
@@ -133,13 +136,13 @@ type EditorType = 'word' | 'cell' | 'slide' | 'pdf';
 
 type IconScale = '100%' | '125%' | '150%' | '175%' | '200%';
 
-interface IconConfig {
-    [scale: IconScale]: {
+type IconConfig = {
+    [K in IconScale]?: {
         active?: string;
         hover?: string;
         normal: string;
     };
-}
+};
 
 type InitDataType = 'text' | 'html' | 'ole' | 'desktop' | 'desktop-external' | 'none' | 'sign';
 
