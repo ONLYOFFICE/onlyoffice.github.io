@@ -40,6 +40,8 @@
 const UI = {
     /** @type {HTMLDivElement | undefined} */
     loader: undefined,
+    _mainFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="main-filter"]')),
+    _categoryFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="category-filter"]')),
     linkNewPlugin: /** @type {HTMLAnchorElement} */(document.getElementById('link_newPlugin')),
     linkNewPluginText: /** @type {HTMLSpanElement} */(document.querySelector('#link_newPlugin .link-text')),
     pluginsList: /** @type {HTMLDivElement} */(document.getElementById('plugins')),
@@ -82,16 +84,7 @@ const UI = {
             return button;
         }
     },
-    /**
-     * @param {string} guid
-     * @returns {HTMLDivElement | null} */
-    getSelectedPlugin: function(guid) {
-        if (!guid) {
-            return null;
-        }
-		const div = this._plugins[guid];
-		return div;
-    },
+
     /** @param {'light' | string} themeType */
     init: function(themeType) {
         const self = this;
@@ -101,9 +94,8 @@ const UI = {
         styleTheme.innerHTML = rule;
         document.head.appendChild(styleTheme);
 
-        let inputNodes = this.pluginsList.querySelectorAll('input[name="main-filter"]');
-        for (let i = 0; i < inputNodes.length; i++) {
-            const input = inputNodes[i];
+        for (let i = 0; i < this._mainFilterInputs.length; i++) {
+            const input = this._mainFilterInputs[i];
             if (input instanceof HTMLInputElement === false) {
                 continue;
             }
@@ -128,9 +120,8 @@ const UI = {
             }
         }
 
-        inputNodes = document.querySelectorAll('input[name="category-filter"]');
-        for (let i = 0; i < inputNodes.length; i++) {
-            const input = inputNodes[i];
+        for (let i = 0; i < this._categoryFilterInputs.length; i++) {
+            const input = this._categoryFilterInputs[i];
             if (input instanceof HTMLInputElement === false) {
                 continue;
             }
@@ -160,6 +151,24 @@ const UI = {
             }
             self.onChangeSearchInput(event.target.value.trim().toLowerCase());
         }, 500));
+    },
+    /**
+     * @param {boolean} [bTriggerEvent]
+     */
+    resetCategoriesFilter: function(bTriggerEvent) {
+        /** @type {CategoryFilter} */
+        const defaultValue = 'all';
+        for (let i = 0; i < this._categoryFilterInputs.length; i++) {
+            const input = this._categoryFilterInputs[i];
+            if (input.value === defaultValue) {
+                input.checked = true;
+                break;
+            }
+        }
+        
+        if (bTriggerEvent) {
+            this.onChangeCategoryFilter('all');
+        }
     },
     /** @param {MainFilter} installedFilter */
     onChangeMainFilter: function(installedFilter) {},
@@ -437,7 +446,7 @@ const UI = {
             zoom = (1 / devicePixelRatio) * 2;
         pluginPlate.style.borderStyle = 'solid';
         pluginPlate.style.borderWidth = (zoom > 1 ? 1 : zoom) + 'px';
-        pluginPlate.innerHTML = this.buildPluginPlateHtml(guid, state.config, state, isLocal, defaultBG);
+        pluginPlate.innerHTML = this._buildPluginPlateHtml(guid, state.config, state, isLocal, defaultBG);
         
         return pluginPlate;
     },
@@ -450,7 +459,7 @@ const UI = {
      * @param {string} defaultBG
      * @returns {string}
      */
-    buildPluginPlateHtml: function(guid, config, flags, isLocal, defaultBG) {
+    _buildPluginPlateHtml: function(guid, config, flags, isLocal, defaultBG) {
         const variation = config.variations[0];
         const name = Utils.getTranslatedName(config);
         const description = Utils.getTranslatedDescription(variation);
@@ -475,7 +484,7 @@ const UI = {
                 '<div class="rating">' +
                     this._makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
                 '</div>' +
-                this.makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
+                this._makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
             '</div>' +
         '</div>';
     },
@@ -533,7 +542,7 @@ const UI = {
      * @param {boolean} [bNotAvailable] 
      * @returns {string}
      */
-    makeActionButtons: function(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
+    _makeActionButtons: function(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
         let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslatedMessage('versionWarning') + '"'  : '';
         let result = '<button class="btn-text-default ';
         if (bNeedUpdateButton) {

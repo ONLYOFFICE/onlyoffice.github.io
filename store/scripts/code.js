@@ -452,7 +452,9 @@ window.onload = function() {
 
 	UI.onChangeMainFilter = function(value) {
 		MarketplaceStorage.mainFilter = value;
+		MarketplaceStorage.categoryFilter = 'all';
 		_resetSearchState();
+		UI.resetCategoriesFilter();
 		showListOfPlugins('filtered');
 		updateCategories();
 		
