@@ -718,6 +718,7 @@ interface ApiParagraph {
   GetIndFirstLine(): number | undefined;
   GetIndLeft(): number | undefined;
   GetIndRight(): number | undefined;
+  GetInternalId(): string;
   GetJc(): "left" | "right" | "both" | "center" | undefined;
   GetLastRunWithText(): ApiRun;
   GetNext(): ApiParagraph | null;
