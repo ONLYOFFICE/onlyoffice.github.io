@@ -221,7 +221,7 @@ const Marketplace = {
 				.then(function(rating) {
 					if (!rating) return null;
 					plugin.rating = rating;
-					self._showRating(plugin);
+					UI.showRating(plugin);
 					return rating;
 				}).catch(function(err) {
 					if (bDesktopRequest) {
@@ -254,19 +254,6 @@ const Marketplace = {
 			workers.push(next());
 		}
 		return Promise.all(workers).then(function() { return results; });
-	},
-	/**
-	 * @param {PluginInfo} plugin
-	 */
-	_showRating: function(plugin) {
-		if (!plugin.rating) return;
-		const pluginPlate = UI.getPlugin(plugin.guid);
-		if (!pluginPlate) {
-			return;
-		}
-		const div = pluginPlate.querySelector('.rating');
-		if (!div) return;
-		div.innerHTML = UI.makeRatingElements(plugin.rating, Utils.getTranslated("Not rated"));
 	},
 	/**
 	 * @param {Array<PluginInfo>} plugins
@@ -361,23 +348,12 @@ const Marketplace = {
 				showListOfPlugins('all');
 				updateCategories();
 			});
-	},
-	
-	/**
-	 * @param {number} numOfPluginsToUpdate 
-	 * @param {MainFilter} mainFilter 
-	 */
-	updateToolbar: function(numOfPluginsToUpdate, mainFilter) {
-		if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
-			UI.toolbarTools.classList.remove('hidden');
-		} else {
-			UI.toolbarTools.classList.add('hidden');
-		}
 	}
 
 };
 
 /**
+ * for v1.0.5
  * Dynamically loads CSS and JS assets needed for the inline plugin card.
  * @returns {Promise<void>}
  */
@@ -693,7 +669,7 @@ function updateCategories() {
 		UI.clickMainFilter('installed');
 	}
 
-	Marketplace.updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.mainFilter);
+	UI.updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.mainFilter);
 }
 
 function _loadBackupPlugins() {
@@ -747,8 +723,15 @@ function showListOfPlugins(typeOfOperation) {
 
 	if (arr.length) {
 		arr.forEach(function(plugin) {
-			if (plugin && plugin.guid)
-				createPluginPlate(plugin);
+			if (plugin && plugin.guid) {
+        		const state = _getPluginPlateState(plugin);
+				const pluginPlate = UI.createPluginPlate(plugin, isLocal, defaultBG, state);
+				pluginPlate.onclick = function() {
+					onClickPluginPlate(plugin.guid);
+				};
+				UI.addPlugin(plugin.guid, pluginPlate);
+			}
+				
 		});
 		setTimeout(function() { Scale.updateScroll(); UI.toggleLoader(false); });
 	} else {
@@ -763,7 +746,7 @@ function showListOfPlugins(typeOfOperation) {
 /**
  * Resolves plugin and installed state for a plate.
  * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
- * @returns {{config: PluginInfo, installed: InstalledPluginInfo | undefined, bHasUpdate: boolean, bRemoved: boolean, bNotAvailable: boolean, bNeedUpdateButton: boolean, bNeedRemoveButton: boolean, bNeedInstallButton: boolean}}
+ * @returns {PluginPlateState}
  */
 function _getPluginPlateState(pluginOrInstalledPlugin) {
 	const guid = pluginOrInstalledPlugin.guid;
@@ -811,66 +794,6 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		bNeedInstallButton: !installed || bRemoved
 	};
 }
-
-/**
- * @param {string} guid
- * @param {PluginInfo} config
- * @param {{bNeedUpdateButton: boolean, bNeedRemoveButton: boolean, bNeedInstallButton: boolean, bNotAvailable: boolean}} flags
- * @returns {string}
- */
-function _buildPluginPlateHtml(guid, config, flags) {
-	const variation = config.variations[0];
-	const name = Utils.getTranslatedName(config);
-	const description = Utils.getTranslatedDescription(variation);
-	const bg = variation.store && variation.store.background ? variation.store.background[Utils.themeType] : defaultBG;
-	const offered = config.offered || 'ONLYOFFICE';
-	const imgSrc = PluginIcons.getImageUrl(guid, isLocal);
-
-	return '<div class="introduction">' +
-		'<div class="image" style="background: ' + bg + '">' +
-			'<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
-		'</div>' +
-		'<div class="name">' +
-			'<div>' +
-				'<span>' + name + '</span>' +
-				(!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
-			'</div>' +
-			'<div class="manufacturer">' + offered + '</div>' +
-		'</div>' +
-		'</div>' +
-		'<div class="description">' + description + '</div>' +
-		'<div class="management">' +
-			'<div class="rating">' +
-				UI.makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
-			'</div>' +
-			UI.makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
-		'</div>' +
-	'</div>';
-}
-
-/**
- * This function creates div (preview) for plugins
- * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
- */
-function createPluginPlate(pluginOrInstalledPlugin) {
-	const guid = pluginOrInstalledPlugin.guid;
-	const pluginPlate = document.createElement('div');
-	pluginPlate.id = guid;
-	pluginPlate.setAttribute('data-guid', guid);
-	pluginPlate.className = 'plugin-plate form-control noselect';
-	let zoom = 1;
-	if (Scale.devicePR < 1)
-		zoom = (1 / devicePixelRatio);
-	else if (Scale.devicePR > 2)
-		zoom = (1 / devicePixelRatio) * 2;
-	pluginPlate.style.borderStyle = 'solid';
-	pluginPlate.style.borderWidth = (zoom > 1 ? 1 : zoom) + 'px';
-	pluginPlate.onclick = onClickPluginPlate.bind(pluginPlate, guid);
-
-	const state = _getPluginPlateState(pluginOrInstalledPlugin);
-	pluginPlate.innerHTML = _buildPluginPlateHtml(guid, state.config, state);
-	UI.addPlugin(guid, pluginPlate);
-};
 
 /**
  * @param {string} guid 
@@ -986,6 +909,7 @@ function showPluginCard(data) {
 
 	PluginCard.init(data);
 }
+// for v1.0.5
 function hidePluginCard() {
 	let pluginCardDiv = document.getElementById('plugin_card_panel');
 	let marketplaceDiv = document.getElementById('plugins');

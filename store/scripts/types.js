@@ -65,6 +65,18 @@
  */
 
 /**
+ * @typedef {Object} PluginPlateState
+ * @property {PluginInfo} config
+ * @property {InstalledPluginInfo | undefined} installed
+ * @property {boolean} bHasUpdate
+ * @property {boolean} bRemoved
+ * @property {boolean} bNotAvailable
+ * @property {boolean} bNeedUpdateButton
+ * @property {boolean} bNeedRemoveButton
+ * @property {boolean} bNeedInstallButton
+ */
+
+/**
  * @typedef {(InstalledPluginInfo | PluginInfo)[]} Plugins
  */ 
 

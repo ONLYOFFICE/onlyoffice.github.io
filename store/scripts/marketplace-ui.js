@@ -34,6 +34,8 @@
 // @ts-check
 /// <reference path="./types.js" />
 /// <reference path="./utils.js" />
+/// <reference path="./plugin-icons.js" />
+/// <reference path="./scale.js" />
 
 const UI = {
     /** @type {HTMLDivElement | undefined} */
@@ -111,9 +113,17 @@ const UI = {
                 }
 
                 /** @type {MainFilter} */
-                const installedFilter = event.currentTarget.value;
+                const installedFilter = /** @type {MainFilter} */(event.currentTarget.value);
                 self.onChangeMainFilter(installedFilter);
-                const text = input.nextElementSibling.querySelector('.main-filter-category').textContent;
+                const label = input.nextElementSibling;
+                if (!label) {
+                    return;
+                }
+                const mainFilterCategoryDiv = label.querySelector('.main-filter-category');
+                if (!mainFilterCategoryDiv) {
+                    return;
+                }
+                const text = mainFilterCategoryDiv.textContent;
                 self.toolbarMainText.textContent = text;
             }
         }
@@ -125,9 +135,21 @@ const UI = {
                 continue;
             }
             input.onchange = function(event) {
-                const value = event.currentTarget.value;
+                const target = event.currentTarget;
+                if (!target || target instanceof HTMLInputElement === false) {
+                    return;
+                }
+                const value = /** @type {CategoryFilter} */(target.value);
                 self.onChangeCategoryFilter(value);
-                const text = input.nextElementSibling.querySelector('.category-name').textContent;
+                const label = input.nextElementSibling;
+                if (!label) {
+                    return;
+                }
+                const categoryNameDiv = label.querySelector('.category-name');
+                if (!categoryNameDiv) {
+                    return;
+                }
+                const text = categoryNameDiv.textContent;
                 self.toolbarSecondaryText.textContent = text;
             };
         }
@@ -389,17 +411,94 @@ const UI = {
         spanNot.className = 'span_notification';
         spanNot.textContent = header;
         div.appendChild(spanNot);
-        UI.divMain.appendChild(div);
+        this.divMain.appendChild(div);
         div = document.createElement('div');
-        UI.divMain.appendChild(div);
+        this.divMain.appendChild(div);
     },
-    
+
+    /**
+     * This function creates div (preview) for plugins
+     * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
+     * @param {boolean} isLocal
+     * @param {string} defaultBG
+     * @param {PluginPlateState} state
+     * @returns {HTMLDivElement}
+     */
+    createPluginPlate: function(pluginOrInstalledPlugin, isLocal, defaultBG, state) {
+        const guid = pluginOrInstalledPlugin.guid;
+        const pluginPlate = document.createElement('div');
+        pluginPlate.id = guid;
+        pluginPlate.setAttribute('data-guid', guid);
+        pluginPlate.className = 'plugin-plate form-control noselect';
+        let zoom = 1;
+        if (Scale.devicePR < 1)
+            zoom = (1 / devicePixelRatio);
+        else if (Scale.devicePR > 2)
+            zoom = (1 / devicePixelRatio) * 2;
+        pluginPlate.style.borderStyle = 'solid';
+        pluginPlate.style.borderWidth = (zoom > 1 ? 1 : zoom) + 'px';
+        pluginPlate.innerHTML = this.buildPluginPlateHtml(guid, state.config, state, isLocal, defaultBG);
+        
+        return pluginPlate;
+    },
+
+    /**
+     * @param {string} guid
+     * @param {PluginInfo} config
+     * @param {PluginPlateState} flags
+     * @param {boolean} isLocal
+     * @param {string} defaultBG
+     * @returns {string}
+     */
+    buildPluginPlateHtml: function(guid, config, flags, isLocal, defaultBG) {
+        const variation = config.variations[0];
+        const name = Utils.getTranslatedName(config);
+        const description = Utils.getTranslatedDescription(variation);
+        const bg = variation.store && variation.store.background ? variation.store.background[Utils.themeType] : defaultBG;
+        const offered = config.offered || 'ONLYOFFICE';
+        const imgSrc = PluginIcons.getImageUrl(guid, isLocal);
+
+        return '<div class="introduction">' +
+            '<div class="image" style="background: ' + bg + '">' +
+                '<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
+            '</div>' +
+            '<div class="name">' +
+                '<div>' +
+                    '<span>' + name + '</span>' +
+                    (!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
+                '</div>' +
+                '<div class="manufacturer">' + offered + '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="description">' + description + '</div>' +
+            '<div class="management">' +
+                '<div class="rating">' +
+                    this._makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
+                '</div>' +
+                this.makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
+            '</div>' +
+        '</div>';
+    },
+
+	/**
+	 * @param {PluginInfo} plugin
+	 */
+	showRating: function(plugin) {
+		if (!plugin.rating) return;
+		const pluginPlate = this.getPlugin(plugin.guid);
+		if (!pluginPlate) {
+			return;
+		}
+		const div = pluginPlate.querySelector('.rating');
+		if (!div) return;
+		div.innerHTML = this._makeRatingElements(plugin.rating, Utils.getTranslated("Not rated"));
+	},
     /**
      * @param {Rating} [rating]
      * @param {string} [notRatedText]
      * @returns {string}
      */
-    makeRatingElements: function(rating, notRatedText) {
+    _makeRatingElements: function(rating, notRatedText) {
         let result = '';
         if (!rating) {
             result = '<em class="i18n">' + notRatedText + '</em>';
@@ -495,6 +594,18 @@ const UI = {
         };
 
     },
+	
+	/**
+	 * @param {number} numOfPluginsToUpdate 
+	 * @param {MainFilter} mainFilter 
+	 */
+	updateToolbar: function(numOfPluginsToUpdate, mainFilter) {
+		if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
+			this.toolbarTools.classList.remove('hidden');
+		} else {
+			this.toolbarTools.classList.add('hidden');
+		}
+	},
     
     /**
      * @param {boolean} show 
@@ -512,6 +623,7 @@ const UI = {
             this.loader = undefined;	
         } else if (!this.loader) {
             loaderContainer.classList.remove('hidden');
+            // @ts-ignore - global function
             this.loader = showLoader(loaderContainer, ( Utils.getTranslated(text || '') ) + '...');
         }
     },

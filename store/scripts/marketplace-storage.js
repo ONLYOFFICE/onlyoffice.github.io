@@ -32,6 +32,7 @@
 
 // @ts-check
 /// <reference path="./types.js" />
+/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").VariationConfig} VariationConfig */
 
 const MarketplaceStorage = {
     /** @type {MainFilter} */
@@ -105,9 +106,9 @@ const MarketplaceStorage = {
             });
         } else if (category != "all") {
             plugins = plugins.filter(function(plugin) {
-                let variations = plugin.variations;
+                let variations = /** @type {VariationConfig[]} */(plugin.variations);
                 if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-                    variations = plugin.obj.variations;
+                    variations = /** @type {VariationConfig[]} */(plugin.obj.variations);
                 }
                 let variation = variations[0];
                 let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
@@ -146,7 +147,8 @@ const MarketplaceStorage = {
 		this._categories.set('all', num + 1);
         const plugin = this.findPlugin(config.guid);
         const installed = this.findInstalledPlugin(config.guid);
-        const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.variations);
+        /** @type {VariationConfig[]} */
+        const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.obj.variations);
         if (!variations) {
             return;
         }
