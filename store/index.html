@@ -50,22 +50,16 @@
 		<div id="plugins" class="plugin-store transparent">
 			<aside>
 				<div class="filter-by filter-by-installed">
-					<input type="radio" name="main-filter" id="main-filter-marketplace" value="marketplace" checked>
-					<label class="marketplace" for="main-filter-marketplace">
-						<span>◎</span>
-						<span class="main-filter-category i18n">Marketplace</span>
-						<span class="amount">21</span>
-					</label>
-					<input type="radio" id="main-filter-installed" name="main-filter" value="installed">
-					<label class="installed" for="main-filter-installed">
+					<input type="radio" id="category-filter-installed" name="category-filter" value="installed">
+					<label class="installed" for="category-filter-installed">
 						<span>✓</span>
-						<span class="main-filter-category i18n">Available plugins</span>
+						<span class="category-name i18n">Installed</span>
 						<span class="amount">6</span>
 					</label>
-					<input type="radio" id="main-filter-updates" name="main-filter" value="updates">
-					<label class="updates" for="main-filter-updates">
+					<input type="radio" id="category-filter-updates" name="category-filter" value="updates">
+					<label class="updates" for="category-filter-updates">
 						<span>↑</span>
-						<span class="main-filter-category i18n">Updates</span>
+						<span class="category-name i18n">Updates</span>
 						<span class="amount mark">2</span>
 					</label>
 				</div>
@@ -183,7 +177,6 @@
 			<main>
 				<div class="toolbar">
 					<div class="selected-category">
-						<div class="place-name i18n">Marketplace</div>
 						<h1 class="i18n">By ONLYOFFICE</h1>
 					</div>
 					<div class="search-container">

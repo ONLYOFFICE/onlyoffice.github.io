@@ -175,16 +175,16 @@ const MarketplacePluginService = {
 	 * Get all installed plugins
      * @param {string} guidMarketplace - GUID of the marketplace plugin
      * @param {string} guidSettings - GUID of the settings plugin
-	 * @returns {Promise<InstalledPluginInfo[]>}
+	 * @returns {Promise<AvailablePluginInfo[]>}
 	 */
-	getInstalledPlugins: function(guidMarketplace, guidSettings) {
+	getAvailablePlugins: function(guidMarketplace, guidSettings) {
         const self = this;
 		return new Promise(function(fResolve) {
 			/**
 			 * @param {MessageEvent} event
 			 */
 			let onGetInstalled = function(event) {
-				/** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
+				/** @type {{type: string, data?: AvailablePluginInfo[], updateInstalled?: boolean}} */
 				let message;
 				try {
 					message = JSON.parse(event.data);
@@ -193,7 +193,7 @@ const MarketplacePluginService = {
 				}
 				if (message.type === 'InstalledPlugins' && !message.updateInstalled) {
 					window.removeEventListener('message', onGetInstalled);
-					/** @type {InstalledPluginInfo[]} */
+					/** @type {AvailablePluginInfo[]} */
 					let plugins = [];
 					if (message.data) {
 						// filter installed plugins (delete removed, that are in store and some system plugins)
@@ -244,16 +244,16 @@ const MarketplacePluginService = {
         this._sendMessage({ type: "showButton", show: bShow });
     },
     /**
-     * @returns {Promise<InstalledPluginInfo[]>}
+     * @returns {Promise<AvailablePluginInfo[]>}
      */
-    updateInstalledPlugins: function() {
+    updateAvailablePlugins: function() {
         const self = this;
         return new Promise(function(fResolve) {
             /**
              * @param {MessageEvent} event
              */
             let onGetInstalled = function(event) {
-                /** @type {{type: string, data?: InstalledPluginInfo[], updateInstalled?: boolean}} */
+                /** @type {{type: string, data?: AvailablePluginInfo[], updateInstalled?: boolean}} */
                 let message;
                 try {
                     message = JSON.parse(event.data);

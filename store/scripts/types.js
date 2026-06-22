@@ -17,7 +17,7 @@
  * @property {string} pluginDescription
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
- * @property {InstalledPluginInfo | null} installed
+ * @property {PluginInfo | null} installed
  * @property {PluginInfo | null} plugin
  * @property {string} iconBackground
  * @property {{src: string, srcset: string}} iconSrc
@@ -25,6 +25,8 @@
  * @property {number} editorVersion
  * @property {boolean} bHasUpdate
  * @property {boolean} bActionDisabled
+ * @property {boolean} removed
+ * @property {boolean} canRemoved
  * @property {Object<string, string>} translate
  */
 
@@ -71,7 +73,7 @@
  */
 
 /**
- * @typedef {Object} InstalledPluginInfo
+ * @typedef {Object} AvailablePluginInfo
  * @property {string} baseUrl
  * @property {string} guid
  * @property {boolean} canRemoved
@@ -82,7 +84,7 @@
 /**
  * @typedef {Object} PluginPlateState
  * @property {PluginInfo} config
- * @property {InstalledPluginInfo | undefined} installed
+ * @property {PluginInfo | undefined} installed
  * @property {boolean} bHasUpdate
  * @property {boolean} bRemoved
  * @property {boolean} bNotAvailable
@@ -92,12 +94,5 @@
  */
 
 /**
- * @typedef {(InstalledPluginInfo|PluginInfo)[]} Plugins
- */ 
-
-/**
- * @typedef { "marketplace" | "installed" | "updates" } MainFilter
- */
-/**
- * @typedef { "all" | "onlyoffice" | "ai" | "integrations" | "devTools" | "productivity" | "writing" | "translation" | "media" | "utilities"} CategoryFilter
+ * @typedef { "installed" | "updates" |"all" | "onlyoffice" | "ai" | "integrations" | "devTools" | "productivity" | "writing" | "translation" | "media" | "utilities"} CategoryFilter
  */

@@ -182,12 +182,6 @@ main {
 		margin-left: 16px;
 	}
 
-	.toolbar .place-name {
-		font-size: 11px;
-		text-transform: uppercase;
-		letter-spacing: 0.6px;
-		margin-bottom: 4px;
-	}
 	.toolbar h1 {
 		margin: 0px;
 		font-size: 20px;

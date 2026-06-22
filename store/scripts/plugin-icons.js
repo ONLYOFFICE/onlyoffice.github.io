@@ -53,20 +53,20 @@ const PluginIcons = {
 
 		/** @type {PluginInfo | undefined} */
 		let plugin;
-		/** @type {InstalledPluginInfo | undefined} */
-		let installedPlugin = MarketplaceStorage.findInstalledPlugin(guid);
+		/** @type {AvailablePluginInfo | undefined} */
+		let availablePlugin = MarketplaceStorage.findAvailablePlugin(guid);
 		let baseUrl = '';
 		// We have a problem with "http" and "file" routes.
 		// In desktop we have a local installed marketplace. It's why we use local routes only for desktop.
-		if (MarketplaceStorage.installedPlugins && isLocal) {
+		if (MarketplaceStorage.hasAvailablePlugins() && isLocal) {
 			// it doesn't work when we use icons from other resource (cors problems)
 			// it's why we use local icons only for desktop
-			if (installedPlugin) {
-				plugin = installedPlugin.obj;
+			if (availablePlugin) {
+				plugin = availablePlugin.obj;
 				baseUrl = plugin.baseUrl;
 			}
 		}
-		if ((!plugin || !isLocal) && MarketplaceStorage.allPlugins.length) {
+		if ((!plugin || !isLocal) && MarketplaceStorage.hasAllPlugins()) {
 			const found = MarketplaceStorage.findPlugin(guid);
 			if (found) {
 				plugin = found;

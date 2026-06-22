@@ -37,7 +37,6 @@
  * @typedef {Object} Messages
  * @property {string} versionWarning
  * @property {string} installed
- * @property {string} updates
  * @property {string} marketplace
  */
 
@@ -55,7 +54,6 @@ const Utils = {
     _MESSAGES: {
         versionWarning: 'This plugin will only work in a newer version of the editor.',
         installed: 'Install plugin manually',
-        updates: 'Install plugin manually',
         marketplace: 'Submit your own plugin'
     },
 
@@ -307,8 +305,8 @@ const Utils = {
     },
 
     /**
-     * @param {Plugins} pluginsOld 
-     * @param {Plugins} pluginsNew 
+     * @param {Array<PluginInfo>} pluginsOld 
+     * @param {Array<PluginInfo>} pluginsNew 
      * @returns {boolean}
      */
     isSamePlugins: function(pluginsOld, pluginsNew) {
@@ -333,66 +331,6 @@ const Utils = {
             plugins.splice(unloaded[i], 1);
         }
     },
-    
-    /**
-     * @param {PluginInfo[] | InstalledPluginInfo[]} arrPlugins 
-     * @param {"rating" | "installations" | "start" | "name"} type 
-     */
-    sortPlugins: function(arrPlugins, type) {
-        if (!arrPlugins || !arrPlugins.length) {
-            return arrPlugins;
-        }
-        /** @type {Array<InstalledPluginInfo>} */
-        let installedPluginsToSort = [];
-        /** @type {Array<PluginInfo>} */
-        let allPluginsToSort = [];
-        if (Object.hasOwnProperty.call(arrPlugins[0], 'obj')) {
-            installedPluginsToSort = /** @type {Array<InstalledPluginInfo>} */(arrPlugins);
-        } else {
-            allPluginsToSort = /** @type {Array<PluginInfo>} */(arrPlugins);
-        }
-        switch (type) {
-            case 'rating':
-                // todo
-                break;
-            case 'installations':
-                // todo
-                break;
-            case 'start':
-                if (installedPluginsToSort.length) {
-                    /** @type {Array<InstalledPluginInfo>} */
-                    let guarded = [];
-                    /** @type {Array<InstalledPluginInfo>} */
-                    let removed = [];
-                    /** @type {Array<InstalledPluginInfo>} */
-                    let arr = [];
-                    installedPluginsToSort.forEach(function(pl) {
-                        if (!pl.canRemoved)
-                            guarded.push(pl);
-                        else if (pl.removed)
-                            removed.push(pl);
-                        else
-                            arr.push(pl);
-                    });
-                    return guarded.concat(arr, removed);
-                }
-                break;
-            case 'name':
-                if (allPluginsToSort.length) {
-                    return allPluginsToSort.sort(function(a, b) {
-                        return a.name.localeCompare(b.name);
-                    });
-                } else {
-                    return installedPluginsToSort.sort(function(a, b) {
-                        return a.obj.name.localeCompare(b.obj.name);
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
 };
 
 function detectLanguage() {

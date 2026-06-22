@@ -54,7 +54,7 @@ const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid set
 
 // #region Mutable state
 
-/** @type {Plugins} */
+/** @type {Array<PluginInfo>} */
 let founded = [];        // last founded elements (for not to redraw if a result is the same)
 let updateCount = 0;     // counter for plugins in updating process
 /** @type {number} */
@@ -116,9 +116,9 @@ const Marketplace = {
 	 * Load all plugins and their ratings
 	 * @returns {Promise<Array<PluginInfo>>}
 	 */
-	loadAllPluginsAndRating: function() {
+	loadMarketplacePluginsAndRating: function() {
 		const self = this;
-		return this._fetchAllPlugins()
+		return this._fetchMarketplacePlugins()
 			.catch(function(err) {
 				if (!isLocal) {
 					createError( new Error('Problem with loading marketplace config.') );
@@ -134,7 +134,7 @@ const Marketplace = {
 	 * function for fetching all plugins from config
 	 * @returns {Promise<PluginInfo[]>}
 	 */
-	_fetchAllPlugins: function() {
+	_fetchMarketplacePlugins: function() {
 		const self = this;
 		return DataFetcher.makeRequest(configUrl, 'GET', null, null)
 			.then(function(/** @type {string} */response) {
@@ -295,7 +295,6 @@ const Marketplace = {
 
 		return Promise.all(pluginsPromises).then(function(arr) {
 			Utils.removeUnloaded(plugins, Unloaded);
-			Utils.sortPlugins(plugins, 'name');
 			return plugins;
 		});
 	},
@@ -334,12 +333,12 @@ const Marketplace = {
 	},
 
 	_onInternetConnectionRestored: function() {
-		if (MarketplaceStorage.allPlugins.length) {
+		if (MarketplaceStorage.hasAllPlugins()) {
 			return;
 		}
-		this.loadAllPluginsAndRating()
+		this.loadMarketplacePluginsAndRating()
 			.then(function(allPlugins) {
-				MarketplaceStorage.allPlugins = allPlugins;
+				MarketplaceStorage.setAllPlugins(allPlugins);
 				showListOfPlugins('all');
 				updateCategories();
 			});
@@ -391,22 +390,21 @@ const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(v
 	return versions;
 });
 
-/** @type {Promise<InstalledPluginInfo[]>} */
-const installedPluginsPromise = MarketplacePluginService.getInstalledPlugins(guidMarketplace, guidSettings)
+/** @type {Promise<AvailablePluginInfo[]>} */
+const availablePluginsPromise = MarketplacePluginService.getAvailablePlugins(guidMarketplace, guidSettings)
 	.catch(function(error) {
-		console.error('Failed to load installed plugins:', error);
+		console.error('Failed to load available plugins:', error);
 		return [];
 	}).then(function(plugins) {
-		Utils.sortPlugins(plugins, 'start');
-		MarketplaceStorage.installedPlugins = plugins;
+		MarketplaceStorage.setAvailablePlugins(plugins);
 		return plugins;
 	});
 const translationsPromise = Marketplace.loadAndApplyTranslations(Utils.lang, Utils.shortLang);
 
 /** @type {Promise<PluginInfo[]>} */
-let allPluginsPromise = Marketplace.loadAllPluginsAndRating()
+let allPluginsPromise = Marketplace.loadMarketplacePluginsAndRating()
 	.then(function(plugins) {
-		MarketplaceStorage.allPlugins = plugins;
+		MarketplaceStorage.setAllPlugins(plugins);
 		return plugins;
 	});
 
@@ -424,11 +422,11 @@ window.onload = function() {
 	Promise.all([
 		versionsPromise,
 		translationsPromise,
-		installedPluginsPromise,
+		availablePluginsPromise,
 		allPluginsPromise
 	])
 	.then(function(result) {
-		if (MarketplaceStorage.installedPlugins) {
+		if (MarketplaceStorage.hasAvailablePlugins()) {
 			if (DataFetcher.isOnline) {
 				showListOfPlugins('all');
 			} else {
@@ -445,13 +443,8 @@ window.onload = function() {
 		updateCategories();
 	});
 
-	UI.onChangeMainFilter = function(value) {
-		MarketplaceStorage.mainFilter = value;
-		MarketplaceStorage.categoryFilter = 'all';
-		_resetSearchState();
-		UI.resetCategoriesFilter();
-		showListOfPlugins('filtered');
-		updateCategories();
+	/*UI.onChangeMainFilter = function(value) {
+
 		
 		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(value);
 		if (value === 'marketplace') {
@@ -469,12 +462,33 @@ window.onload = function() {
 		} else {
 			UI.linkNewPlugin.onclick = null;
 		}
-	}
+	}*/
+	/** @param {CategoryFilter} category */
 	UI.onChangeCategoryFilter = function(category) {
 		MarketplaceStorage.categoryFilter = category;
 		_resetSearchState();
 		showListOfPlugins('filtered');
+		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(['installed', 'updates'].indexOf(category) !== -1 ? 'installed' : 'marketplace');
+		// TODO: check it
+		if (['installed', 'updates'].indexOf(category) !== -1) {
+			UI.linkNewPlugin.href = "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
+		} else {
+			UI.linkNewPlugin.href = (OOIO + "pulls");
+		}
+
+		if (isLocal && ['installed', 'updates'].indexOf(category) !== -1) {
+			UI.linkNewPlugin.href = "#";
+			UI.linkNewPlugin.onclick = function (e) {
+				e.preventDefault();
+				installPluginManually();
+			}
+		} else {
+			UI.linkNewPlugin.onclick = null;
+		}
+		let numOfPluginsToUpdate = MarketplaceStorage.getNumOfPluginsToUpdate();
+		UI.updateToolbar(numOfPluginsToUpdate, category);
 	}
+	/** @param {string} query */
 	UI.onChangeSearchInput = function(query) {
 		MarketplaceStorage.searchQuery = query;
 		showListOfPlugins('filtered');
@@ -482,16 +496,16 @@ window.onload = function() {
 };
 
 /**
- * @returns {Promise<InstalledPluginInfo[]>}
+ * @returns {Promise<AvailablePluginInfo[]>}
  */
-function updateInstalledPlugins() {
-	return MarketplacePluginService.updateInstalledPlugins().then(function(plugins) {
-		MarketplaceStorage.installedPlugins = plugins.filter(function(el) {
+function updateAvailablePlugins() {
+	return MarketplacePluginService.updateAvailablePlugins().then(function(plugins) {
+		const availablePlugins = plugins.filter(function(el) {
 			return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
 		});
-		Utils.sortPlugins(MarketplaceStorage.installedPlugins, 'start');
+		MarketplaceStorage.setAvailablePlugins(availablePlugins);
 		showListOfPlugins('installed'); // need show installed
-		return MarketplaceStorage.installedPlugins;
+		return availablePlugins;
 	});
 }
 
@@ -529,22 +543,27 @@ function _onMessageInstalled(message) {
 	}
 	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(message.guid);
-	/** @type {InstalledPluginInfo | undefined} */
+	/** @type {PluginInfo | undefined} */
 	let installed = MarketplaceStorage.findInstalledPlugin(message.guid);
-	if (!installed && plugin) {
-		MarketplaceStorage.installedPlugins.push({
+	/** @type {AvailablePluginInfo | undefined} */
+	let available = MarketplaceStorage.findAvailablePlugin(message.guid);
+	if (!available && plugin) {
+		MarketplaceStorage.addAvailablePlugin({
 			baseUrl: plugin.url,
 			guid: message.guid,
 			canRemoved: true,
 			obj: plugin,
 			removed: false
 		});
-	} else if (installed) {
-		if (installed.obj.backup) {
+	} else if (available) {
+		if (!installed && plugin) {
+			MarketplaceStorage.addInstalledPlugin(plugin);
+		}
+		if (available.obj.backup) {
 			// need to update the list of installed plugins so that resource links are correct
-			updateInstalledPlugins();
+			updateAvailablePlugins();
 		} else {
-			installed.removed = false;
+			available.removed = false;
 		}
 	}
 	changeAfterInstallUpdateRemove(true, message.guid);
@@ -560,17 +579,17 @@ function _onMessageUpdated(message) {
 		}
 		return;
 	}
-	/** @type {InstalledPluginInfo | undefined} */
-	let installed = MarketplaceStorage.findInstalledPlugin(message.guid);
+	/** @type {AvailablePluginInfo | undefined} */
+	let available = MarketplaceStorage.findAvailablePlugin(message.guid);
 	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(message.guid);
-	if (!plugin || !installed) {
-		console.error('Plugin or installed plugin not found');
+	if (!plugin || !available) {
+		console.error('Plugin or available plugin not found');
 		return;
 	}
-	installed.obj.version = plugin.version;
+	available.obj.version = plugin.version;
 	plugin.bHasUpdate = false;
-	installed.obj.bHasUpdate = false;
+	available.obj.bHasUpdate = false;
 	if (updateCount <= 0) {
 		UI.toggleLoader(false);
 	}
@@ -583,29 +602,30 @@ function _onMessageRemoved(message) {
 		UI.toggleLoader(false);
 		return;
 	}
-	let bUpdate = false;
 	let bHasLocal = false;
 	let needBackup = message.backup;
 	
 	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(message.guid);
-	/** @type {InstalledPluginInfo | undefined} */
-	let installed = MarketplaceStorage.findInstalledPlugin(message.guid);
-	if (installed) {
-		bHasLocal = !installed.obj.baseUrl.includes(ioUrl);
+	/** @type {AvailablePluginInfo | undefined} */
+	let available = MarketplaceStorage.findAvailablePlugin(message.guid);
+	if (available) {
+		bHasLocal = !available.obj.baseUrl.includes(ioUrl);
+		MarketplaceStorage.removeInstalledPlugin(message.guid);
+		available.removed = true;
 		if (plugin && (!bHasLocal || (isLocal && !needBackup))) {
-			MarketplaceStorage.installedPlugins = MarketplaceStorage.installedPlugins.filter(function(el) { return el.guid !== message.guid; });
-			bUpdate = true;
+			// do nothing
 		} else {
-			installed.removed = true;
 			// need to update the list of installed plugins so that resource links are correct
 			if (isLocal)
-				updateInstalledPlugins();
+				updateAvailablePlugins();
 		}
 	}
-	if (bUpdate && MarketplaceStorage.mainFilter === 'installed') {
+	if (MarketplaceStorage.categoryFilter === 'installed') {
 		if (MarketplaceStorage.searchQuery !== '') {
 			showListOfPlugins('filtered');
+		} else if (MarketplaceStorage.getNumOfInstalledPlugins() === 0) {
+			showListOfPlugins('installed');
 		} else {
 			UI.removePlugin(message.guid);
 			Scale.updateScroll();
@@ -624,15 +644,15 @@ function _onMessageTheme(message) {
 	Utils.theme = message.theme;
 	if (message.theme.type)
 		Utils.themeType = message.theme.type;
+	/** @type {string | false} */
 	let bg = UI.onChangeTheme(message.theme, Utils.themeType, message.style);
 	if (!bg) return;
 	defaultBG = bg;
-	let bShowMarketplace = MarketplaceStorage.mainFilter === 'marketplace';
-	/** @type {Plugins} */
-	let arrPl = bShowMarketplace ? MarketplaceStorage.allPlugins : MarketplaceStorage.installedPlugins;
-	arrPl.forEach(function(pl) {
-		const config = 'obj' in pl ? pl.obj : pl;
-		let variation = config.variations && config.variations[0];
+	let bInstalled = MarketplaceStorage.categoryFilter === 'installed';
+	/** @type {Array<PluginInfo>} */
+	let arrPl = bInstalled ? MarketplaceStorage.getInstalledPlugins() : MarketplaceStorage.getAllPlugins();
+	arrPl.forEach(function(plugin) {
+		let variation = plugin.variations && plugin.variations[0];
 		let imgSrc = null;
 		if (variation && variation.store) {
 			if (variation.store.background)
@@ -640,9 +660,9 @@ function _onMessageTheme(message) {
 		} else {
 			// todo now we have one icon for all theme for plugins in store. change it when we will have different icons for different theme (now it's not necessary). use for all icons 'changeIcons'
 			// It's why we should change icons only for plugins with default icon or plugins icon (which don't have 'store' field in config)
-			imgSrc = PluginIcons.getImageUrl(pl.guid, isLocal);
+			imgSrc = PluginIcons.getImageUrl(plugin.guid, isLocal);
 		}
-		UI.setPluginImage(pl.guid, bg, imgSrc);
+		UI.setPluginImage(plugin.guid, String(bg), imgSrc);
 	});
 	// todo change header background color and change icons for plugin cards and for plugin window
 }
@@ -658,16 +678,15 @@ function _onMessageMouseUp() {
 
 function updateCategories() {
 	MarketplaceStorage.updateCategories();
-	let numOfAllPlugins = MarketplaceStorage.allPlugins.length;
-	let numOfInstalledPlugins = MarketplaceStorage.installedPlugins.length;
+	let numOfAllPlugins = MarketplaceStorage.getAllPlugins().length;
+	let numOfInstalledPlugins = MarketplaceStorage.getNumOfInstalledPlugins();
 	let numOfPluginsToUpdate = MarketplaceStorage.getNumOfPluginsToUpdate();
-	UI.updateCategories(MarketplaceStorage.getCategories());
-	UI.updateMainCategories(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
-	if (MarketplaceStorage.mainFilter === 'updates' && numOfPluginsToUpdate === 0) {
+	UI.updateCategories(MarketplaceStorage.getCategories(), numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate);
+	if (MarketplaceStorage.categoryFilter === 'updates' && numOfPluginsToUpdate === 0) {
 		UI.clickMainFilter('installed');
 	}
 
-	UI.updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.mainFilter);
+	UI.updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.categoryFilter);
 }
 
 function _loadBackupPlugins() {
@@ -680,8 +699,8 @@ function _loadBackupPlugins() {
 	for (var i = 0; i < len; i++) {
 		let plugin = _pluginsTmp[0]["pluginsData"][i];
 		plugin.baseUrl = _pluginsTmp[0]["url"] + plugin.guid.replace('asc.', '') + '/';
-		if (!MarketplaceStorage.findInstalledPlugin(plugin.guid)) {
-			MarketplaceStorage.installedPlugins.push({
+		if (!MarketplaceStorage.findAvailablePlugin(plugin.guid)) {
+			MarketplaceStorage.addAvailablePlugin({
 				"baseUrl": _pluginsTmp[0]["url"],
 				"guid": plugin.guid,
 				"canRemoved": true,
@@ -696,7 +715,7 @@ function _loadBackupPlugins() {
  * @param {'filtered'|'all'|'installed'} typeOfOperation
  */
 function _showEmptyNotification(typeOfOperation) {
-	if (MarketplaceStorage.mainFilter === 'marketplace' && !DataFetcher.isOnline) {
+	if (MarketplaceStorage.categoryFilter !== 'installed' && !DataFetcher.isOnline) {
 		UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'));
 	} else {
 		// if no installed plugins and available plugins button was clicked
@@ -718,7 +737,7 @@ function showListOfPlugins(typeOfOperation) {
 	founded = arr;
 	UI.divMain.textContent = '';
 
-	if (MarketplaceStorage.mainFilter === 'installed' && isLocal) {
+	if (MarketplaceStorage.categoryFilter === 'installed' && isLocal) {
 		_loadBackupPlugins();
 	}
 
@@ -726,7 +745,7 @@ function showListOfPlugins(typeOfOperation) {
 		arr.forEach(function(plugin) {
 			if (plugin && plugin.guid) {
         		const state = _getPluginPlateState(plugin);
-				const pluginPlate = UI.createPluginPlate(plugin, isLocal, defaultBG, state);
+				const pluginPlate = UI.createPluginPlate(plugin.guid, isLocal, defaultBG, state);
 				pluginPlate.onclick = function() {
 					onClickPluginPlate(plugin.guid);
 				};
@@ -746,18 +765,19 @@ function showListOfPlugins(typeOfOperation) {
 
 /**
  * Resolves plugin and installed state for a plate.
- * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
+ * @param {PluginInfo} pluginOrInstalledPlugin
  * @returns {PluginPlateState}
  */
 function _getPluginPlateState(pluginOrInstalledPlugin) {
 	const guid = pluginOrInstalledPlugin.guid;
-	const bInstalled = MarketplaceStorage.mainFilter === 'installed';
-	/** @type {InstalledPluginInfo | undefined} */
-	let installed = bInstalled ? /** @type {InstalledPluginInfo} */(pluginOrInstalledPlugin) : MarketplaceStorage.findInstalledPlugin(guid);
+	const bInstalled = MarketplaceStorage.categoryFilter === 'installed';
+	/** @type {PluginInfo | undefined} */
+	let installed = bInstalled ? /** @type {PluginInfo} */(pluginOrInstalledPlugin) : MarketplaceStorage.findInstalledPlugin(guid);
+	let available = MarketplaceStorage.findAvailablePlugin(guid);
 	/** @type {PluginInfo | undefined} */
 	let plugin = bInstalled ? MarketplaceStorage.findPlugin(guid) : /** @type {PluginInfo} */(pluginOrInstalledPlugin);
 	/** @type {PluginInfo} */
-	let config = /** @type {PluginInfo} */(plugin || (installed && installed.obj));
+	let config = /** @type {PluginInfo} */(plugin || (installed));
 
 	let bCheckUpdate = true;
 	if (!plugin) {
@@ -773,14 +793,14 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 	}
 
 	let bHasUpdate = false;
-	let bRemoved = !!(installed && installed.removed);
-	if (bCheckUpdate && installed && plugin) {
-		const installedV = Utils.convertPluginVersionToNumber(installed.obj.version || '');
+	let bRemoved = !!(available && available.removed);
+	if (bCheckUpdate && available && plugin) {
+		const installedV = Utils.convertPluginVersionToNumber(available.obj.version || '');
 		const lastV = Utils.convertPluginVersionToNumber(plugin.version || '');
 		if (lastV > installedV) {
 			bHasUpdate = true;
 			plugin.bHasUpdate = true;
-			installed.obj.bHasUpdate = true;
+			available.obj.bHasUpdate = true;
 		}
 	}
 
@@ -791,7 +811,7 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		bRemoved: bRemoved,
 		bNotAvailable: bNotAvailable,
 		bNeedUpdateButton: bHasUpdate && !bRemoved,
-		bNeedRemoveButton: !!(installed && !bRemoved && installed.canRemoved),
+		bNeedRemoveButton: !!(installed && !bRemoved && available && available.canRemoved),
 		bNeedInstallButton: !installed || bRemoved
 	};
 }
@@ -805,19 +825,19 @@ function onClickInstall(guid, event) {
 	UI.toggleLoader(true, 'Installation');
 	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(guid);
-	/** @type {InstalledPluginInfo | undefined} */
-	let installed = MarketplaceStorage.findInstalledPlugin(guid);
-	if (!plugin && !installed) {
+	/** @type {AvailablePluginInfo | undefined} */
+	let available = MarketplaceStorage.findAvailablePlugin(guid);
+	if (!plugin && !available) {
 		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
 	}
 	let url = '';
-	if (installed) {
-		url = installed.obj.baseUrl;
+	if (available) {
+		url = available.obj.baseUrl;
 	} else if (plugin) {
 		url = plugin.url;
 	}
-	const config = (installed ? installed.obj : plugin);
+	const config = (available ? available.obj : plugin);
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
 }
 /**
@@ -850,7 +870,7 @@ function onClickRemove(guid, event) {
 }
 function onClickUpdateAll() {
 	UI.toggleLoader(true, 'Updating');
-	UI.updateToolbar(0, MarketplaceStorage.mainFilter);
+	UI.updateToolbar(0, MarketplaceStorage.categoryFilter);
 	let arr = MarketplaceStorage.getPluginsToUpdate();
 	updateCount = arr.length;
 	return Utils.waitForRepaint().then(function() { MarketplacePluginService.doUpdateAll(arr) });
@@ -866,16 +886,20 @@ function onClickPluginPlate(guid) {
 		console.error('Plugin not found: ' + guid);
 		return Promise.resolve(false);
 	}
-	/** @type {InstalledPluginInfo | undefined} */
+	/** @type {PluginInfo | undefined} */
 	let installed = MarketplaceStorage.findInstalledPlugin(guid);
+	let available = MarketplaceStorage.findAvailablePlugin(guid);
 	/** @type {PluginInfo | undefined} */
 	let plugin = MarketplaceStorage.findPlugin(guid);
-	MarketplaceStorage.selectedPluginGuid = guid;
 	let iconSrc = PluginIcons.getImageUrl(guid, isLocal);
-	let iconBackground = pluginPlate.querySelector('.image').style.background;
+	let iconBackground = 'transparent';
+	const image = pluginPlate.querySelector('.image');
+	if (image && (image instanceof HTMLElement) && image.style) {
+		iconBackground = image.style.background;
+	}
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
-	let config = /** @type {PluginInfo} */(plugin ? plugin : (installed && installed.obj));
+	let config = /** @type {PluginInfo} */(plugin ? plugin : installed);
 
 	/** @type {PluginCardWindowParams} */
 	let message = {
@@ -891,8 +915,10 @@ function onClickPluginPlate(guid) {
 		OOMarketplaceUrl: OOMarketplaceUrl,
 		OOIO: OOIO,
 		pluginName: Utils.getTranslatedName(config),
-		pluginDescription: Utils.getTranslatedDescription(config.variations[0]),
-		translate: Utils.translate
+		pluginDescription: config.variations ? Utils.getTranslatedDescription(config.variations[0]) : '',
+		translate: Utils.translate,
+		removed: available ? !!available.removed : false,
+		canRemoved: available ? !!available.canRemoved : false,
 	};
 	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);
@@ -940,7 +966,7 @@ function installPluginManually() {
 		let result = window["AscDesktopEditor"]["PluginInstall"](file);
 		if (result) {
 			// need to update the list of installed plugins
-			updateInstalledPlugins();
+			updateAvailablePlugins();
 		} else {
 			createError(new Error('Problem with plugin installation.'), false);
 		}

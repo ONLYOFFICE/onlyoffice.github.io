@@ -33,23 +33,21 @@
 /// <reference path="./types.js" />
 
 const MarketplaceStorage = {
-    /** @type {MainFilter} */
-    mainFilter: "marketplace",
     /** @type {CategoryFilter} */
     categoryFilter: "onlyoffice",
     /** @type {string} */
     searchQuery: "",
     /** @type {Map<string, number>} */
     _categories: new Map(),
-    /** @type {string} */
-    selectedCategory: "",
-    /** @type {string} */
-    selectedPluginGuid: "",
 
-    /** @type {Array<InstalledPluginInfo>} */
-    installedPlugins: [], // list of installed plugins
+    /** @type {Array<AvailablePluginInfo>} */
+    _availablePlugins: [], // list of installed plugins
     /** @type {Array<PluginInfo>} */
-    allPlugins: [], // list of all plugins from config
+    _marketplacePlugins: [], // list of all plugins from config
+    /** @type {Array<PluginInfo>} */
+    _installedPlugins: [], // list of all plugins from config
+    /** @type {Array<PluginInfo>} */
+    _allPlugins: [], // list of all plugins from config
 
     
     /**
@@ -57,72 +55,56 @@ const MarketplaceStorage = {
      * @returns {PluginInfo | undefined}
      */
     findPlugin: function(guid) {
-        let res = this.allPlugins.find(function(el){return el.guid === guid});
+        let res = this._allPlugins.find(function(el){return el.guid === guid});
         return res;
     },
 
     /**
      * @param {string} guid 
-     * @returns {InstalledPluginInfo | undefined}
+     * @returns {AvailablePluginInfo | undefined}
+     */
+    findAvailablePlugin: function(guid) {
+        return this._availablePlugins.find(function(el){return el.guid === guid});
+    },
+    
+    /**
+     * @param {string} guid 
+     * @returns {PluginInfo | undefined}
      */
     findInstalledPlugin: function(guid) {
-        return this.installedPlugins.find(function(el){return el.guid === guid});
+        return this._installedPlugins.find(function(el){return el.guid === guid});
     },
     
     /**
      * @param {function(PluginInfo): string} translateName
-     * @returns {Plugins}
+     * @returns {Array<PluginInfo>}
      */
     getFilteredPlugins: function(translateName) {
         const self = this;
         const category = this.categoryFilter;
-        const mainFilter = this.mainFilter;
         const searchQuery = this.searchQuery;
 
-        /** @type {Plugins} */
-        let plugins = this.allPlugins;
-        if (mainFilter === 'installed') {
-            plugins = this.installedPlugins;
-        } else if (mainFilter === 'updates') {
+        /** @type {Array<PluginInfo>} */
+        let plugins = this._allPlugins;
+        if (category === 'installed') {
+            plugins = this._installedPlugins;
+        } else if (category === 'updates') {
             plugins = this.getPluginsToUpdate();
-        }
-
-        if (category === "onlyoffice") {
-            plugins = plugins.filter(function(pl) {
-                /** @type {InstalledPluginInfo | undefined} */
-                let installed;
-                /** @type {PluginInfo | undefined} */
-                let plugin;
-                if ('obj' in pl) {
-                    plugin = self.findPlugin(pl.guid);
-                    installed = /** @type {InstalledPluginInfo} */(pl);
-                } else {    
-                    installed = self.findInstalledPlugin(pl.guid);
-                }
-
-                if (!(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
-                    return true;
-                }
-
-                return false;
+        } else if (category === "onlyoffice") {
+            plugins = plugins.filter(function(plugin) {
+                return !(plugin && plugin.offered);
             });
         } else if (category != "all") {
             plugins = plugins.filter(function(plugin) {
                 /** @type {VariationConfig[]} */
-                let variations = [];
-                if ('obj' in plugin) {
-                    variations = /** @type {VariationConfig[]} */(plugin.obj.variations);
-                } else {
-                    variations = /** @type {VariationConfig[]} */(plugin.variations);
-                }
+                let variations = /** @type {VariationConfig[]} */(plugin.variations);
                 let variation = variations[0];
                 let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
                 return arrCat.includes(category);
             });
         }
 
-        plugins = plugins.filter(function(el) {
-            let plugin = 'obj' in el ? el.obj : el;
+        plugins = plugins.filter(function(plugin) {
             let name = translateName(plugin);
             return name.toLowerCase().includes(searchQuery);
         });
@@ -132,8 +114,8 @@ const MarketplaceStorage = {
 
     getNumOfPluginsToUpdate: function() {
         const self = this;
-        return this.allPlugins.reduce(function(acc, plugin) {
-            const installed = self.findInstalledPlugin(plugin.guid);
+        return this._allPlugins.reduce(function(acc, plugin) {
+            const installed = self.findAvailablePlugin(plugin.guid);
             if (installed && installed.obj && installed.obj.bHasUpdate) {
                 return acc + 1;
             }
@@ -141,7 +123,7 @@ const MarketplaceStorage = {
         }, 0);
     },
     getPluginsToUpdate: function() {
-        return this.allPlugins.filter(function(el) {
+        return this._allPlugins.filter(function(el) {
             return el.bHasUpdate;
         });
     },
@@ -151,7 +133,7 @@ const MarketplaceStorage = {
         let num = Number(this._categories.get('all'));
 		this._categories.set('all', num + 1);
         const plugin = this.findPlugin(config.guid);
-        const installed = this.findInstalledPlugin(config.guid);
+        const installed = this.findAvailablePlugin(config.guid);
 
         const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.obj.variations);
         if (!variations) {
@@ -183,29 +165,10 @@ const MarketplaceStorage = {
     updateCategories: function() {
         const self = this;
 	    this._resetCategories();
-        if (this.mainFilter === 'marketplace') {
-            this.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
-                self._addPluginCategory(plugin);
-            });
-        } else if (this.mainFilter === 'installed') {
-            this.installedPlugins.forEach(function(/** @type {InstalledPluginInfo} */ plugin) {
-                if (!plugin.obj) {
-                    const config = self.findPlugin(plugin.guid);
-                    if (config) {
-                        self._addPluginCategory(config);
-                    }
-                    return;
-                }
-                self._addPluginCategory(plugin.obj);
-            });
-        } else {
-            this.allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
-                if (!plugin.bHasUpdate) {
-                    return;
-                }
-                self._addPluginCategory(plugin);
-            });
-        }
+        this._allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+            self._addPluginCategory(plugin);
+        });
+
     },
     _resetCategories: function() {
         this._categories = new Map();
@@ -215,5 +178,121 @@ const MarketplaceStorage = {
 
     getCategories: function() {
         return this._categories;
+    },
+    /** @param {Array<PluginInfo>} plugins */
+    setAllPlugins: function(plugins) {
+		this.sortPlugins(plugins, 'name');
+        this._allPlugins = plugins;
+    },
+    getAllPlugins: function() {
+        return this._allPlugins;
+    },
+    hasAllPlugins: function() {
+        return this._allPlugins.length > 0;
+    },
+    /** @param {PluginInfo} plugin */
+    addInstalledPlugin: function(plugin) {
+        console.warn(plugin);
+        this._installedPlugins.push(plugin);
+    },
+    /** @param {AvailablePluginInfo} plugin */
+    addAvailablePlugin: function(plugin) {
+        console.warn(plugin);
+        this._availablePlugins.push(plugin);
+        if (!plugin.removed) {
+            this._installedPlugins.push(plugin.obj);
+        }
+    },
+    /** @returns {boolean} */
+    hasAvailablePlugins: function() {
+        return this._availablePlugins.length > 0;
+    },
+    /** @param {Array<AvailablePluginInfo>} plugins */
+    setAvailablePlugins: function(plugins) {
+        this.sortPlugins(plugins, 'start');
+        this._availablePlugins = plugins;
+        this._installedPlugins = plugins.filter(function(plugin) {
+            return !plugin.removed;
+        }).map(function(plugin) {
+            return plugin.obj;
+        });
+    },
+    /**
+     * @param {Array<PluginInfo>} plugins
+     */
+    setMarketplacePlugins: function(plugins) {
+        this._marketplacePlugins = plugins;
+    },
+    /** @returns {Array<PluginInfo>} */
+    getInstalledPlugins: function() {
+        return this._installedPlugins;
+    },
+    /** @returns {number} */
+    getNumOfInstalledPlugins: function() {
+        return this._installedPlugins.length;
+    },
+    /** @param {string} guid */
+    removeInstalledPlugin: function(guid) {
+        this._installedPlugins = this._installedPlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
+    },
+    /**
+     * @param {PluginInfo[] | AvailablePluginInfo[]} arrPlugins 
+     * @param {"rating" | "installations" | "start" | "name"} type 
+     */
+    sortPlugins: function(arrPlugins, type) {
+        if (!arrPlugins || !arrPlugins.length) {
+            return arrPlugins;
+        }
+        /** @type {Array<AvailablePluginInfo>} */
+        let installedPluginsToSort = [];
+        /** @type {Array<PluginInfo>} */
+        let allPluginsToSort = [];
+        if (Object.hasOwnProperty.call(arrPlugins[0], 'obj')) {
+            installedPluginsToSort = /** @type {Array<AvailablePluginInfo>} */(arrPlugins);
+        } else {
+            allPluginsToSort = /** @type {Array<PluginInfo>} */(arrPlugins);
+        }
+        switch (type) {
+            case 'rating':
+                // todo
+                break;
+            case 'installations':
+                // todo
+                break;
+            case 'start':
+                if (installedPluginsToSort.length) {
+                    /** @type {Array<AvailablePluginInfo>} */
+                    let guarded = [];
+                    /** @type {Array<AvailablePluginInfo>} */
+                    let removed = [];
+                    /** @type {Array<AvailablePluginInfo>} */
+                    let arr = [];
+                    installedPluginsToSort.forEach(function(pl) {
+                        if (!pl.canRemoved)
+                            guarded.push(pl);
+                        else if (pl.removed)
+                            removed.push(pl);
+                        else
+                            arr.push(pl);
+                    });
+                    return guarded.concat(arr, removed);
+                }
+                break;
+            case 'name':
+                if (allPluginsToSort.length) {
+                    return allPluginsToSort.sort(function(a, b) {
+                        return a.name.localeCompare(b.name);
+                    });
+                } else {
+                    return installedPluginsToSort.sort(function(a, b) {
+                        return a.obj.name.localeCompare(b.obj.name);
+                    });
+                }
+                break;
+            default:
+                break;
+        }
     }
 };

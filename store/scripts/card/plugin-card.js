@@ -40,8 +40,10 @@ const PluginCard = {
 	editorVersion: 0,
 	/** @type {PluginInfo | null} */
     plugin: null,
-	/** @type {InstalledPluginInfo | null} */
+	/** @type {PluginInfo | null} */
     installed: null,
+    removed: false,
+    canRemoved: false,
 	/** @type {PluginInfo} */
     // @ts-ignore
     config: null,
@@ -78,6 +80,8 @@ const PluginCard = {
         this.backup = data.isLocal && !data.plugin;
         this.PsChangelog = null;
         this.slideIndex = 1;
+        this.removed = data.removed;
+        this.canRemoved = data.canRemoved;
         Utils.init();
         Utils.setTranslations(data.translate);
         Utils.translateAll();
@@ -129,11 +133,9 @@ const PluginCard = {
         let baseUrl = "";
         if (this.plugin && this.plugin.baseUrl) {
             baseUrl = this.plugin.baseUrl;
-        } else if (this.installed && this.installed.obj && this.installed.obj.baseUrl) {
-            baseUrl = this._correctBaseUrl(this.installed.obj.baseUrl);
-            this.plugin = this.installed.obj;
         } else if (this.installed && this.installed.baseUrl) {
-            baseUrl = this.installed.baseUrl;
+            baseUrl = this._correctBaseUrl(this.installed.baseUrl);
+            this.plugin = this.installed;
         }
 
         this._loadAndShowLanguages(baseUrl, !!this.plugin);
@@ -227,12 +229,12 @@ const PluginCard = {
         }
 
         if (
-            (this.installed && this.installed.obj.minVersion) ||
+            (this.installed && this.installed.minVersion) ||
             this.config.minVersion
         ) {
             PluginCardUI.spanMinVersion.textContent = String(
-                this.installed && this.installed.obj.minVersion ?
-                    this.installed.obj.minVersion
+                this.installed && this.installed.minVersion ?
+                    this.installed.minVersion
                 :   this.config.minVersion
             );
             PluginCardUI.divMinVersion.classList.remove("hidden");
@@ -299,8 +301,8 @@ const PluginCard = {
             PluginCardUI.btnUpdate.classList.add("hidden");
         }
 
-        if (this.installed && !this.installed.removed) {
-            if (this.installed.canRemoved) {
+        if (this.installed && !this.removed) {
+            if (this.canRemoved) {
                 PluginCardUI.btnRemove.classList.remove("hidden");
             } else {
                 PluginCardUI.btnRemove.classList.add("hidden");

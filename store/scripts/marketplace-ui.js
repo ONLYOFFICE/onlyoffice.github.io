@@ -39,12 +39,11 @@
 const UI = {
     /** @type {HTMLDivElement | undefined} */
     _loader: undefined,
-    _mainFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="main-filter"]')),
+    //_mainFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="main-filter"]')),
     _categoryFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="category-filter"]')),
     linkNewPlugin: /** @type {HTMLAnchorElement} */(document.getElementById('link_newPlugin')),
     linkNewPluginText: /** @type {HTMLSpanElement} */(document.querySelector('#link_newPlugin .link-text')),
     pluginsList: /** @type {HTMLDivElement} */(document.getElementById('plugins')),
-    _toolbarMainText: /** @type {HTMLDivElement} */(document.querySelector('.toolbar .place-name')),
     _toolbarSecondaryText: /** @type {HTMLElement} */(document.querySelector('.toolbar h1')),
     divMain: /** @type {HTMLDivElement} */(document.getElementById('div_main')),
     _toolbarTools: /** @type {HTMLDivElement} */(document.getElementById('toolbar_tools')),
@@ -93,32 +92,6 @@ const UI = {
         styleTheme.innerHTML = rule;
         document.head.appendChild(styleTheme);
 
-        for (let i = 0; i < this._mainFilterInputs.length; i++) {
-            const input = this._mainFilterInputs[i];
-            if (input instanceof HTMLInputElement === false) {
-                continue;
-            }
-            input.onchange = function(event) {
-                if (!event.currentTarget || event.currentTarget instanceof HTMLInputElement === false) {
-                    return;
-                }
-
-                /** @type {MainFilter} */
-                const installedFilter = /** @type {MainFilter} */(event.currentTarget.value);
-                self.onChangeMainFilter(installedFilter);
-                const label = input.nextElementSibling;
-                if (!label) {
-                    return;
-                }
-                const mainFilterCategoryDiv = label.querySelector('.main-filter-category');
-                if (!mainFilterCategoryDiv) {
-                    return;
-                }
-                const text = mainFilterCategoryDiv.textContent;
-                self._toolbarMainText.textContent = text;
-            }
-        }
-
         for (let i = 0; i < this._categoryFilterInputs.length; i++) {
             const input = this._categoryFilterInputs[i];
             if (input instanceof HTMLInputElement === false) {
@@ -151,36 +124,7 @@ const UI = {
             self.onChangeSearchInput(event.target.value.trim().toLowerCase());
         }, 500));
     },
-    /**
-     * @param {boolean} [bTriggerEvent]
-     */
-    resetCategoriesFilter: function(bTriggerEvent) {
-        /** @type {CategoryFilter} */
-        const defaultValue = 'all';
-        for (let i = 0; i < this._categoryFilterInputs.length; i++) {
-            const input = this._categoryFilterInputs[i];
-            if (input.value === defaultValue) {
-                input.checked = true;
-                const label = input.nextElementSibling;
-                if (!label) {
-                    return;
-                }
-                const categoryNameDiv = label.querySelector('.category-name');
-                if (!categoryNameDiv) {
-                    return;
-                }
-                const text = categoryNameDiv.textContent;
-                this._toolbarSecondaryText.textContent = text;
-                break;
-            }
-        }
-        
-        if (bTriggerEvent) {
-            this.onChangeCategoryFilter('all');
-        }
-    },
-    /** @param {MainFilter} installedFilter */
-    onChangeMainFilter: function(installedFilter) {},
+
     /** @param {CategoryFilter} value */
     onChangeCategoryFilter: function(value) {},
     /** @param {string} searchInput */
@@ -202,7 +146,6 @@ const UI = {
         rule += '.plugin-plate .name .plugin-name,\n' +
             '.filter-by label{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.plugin-plate .description,\n' +
-            '.toolbar .place-name,\n' +
             '.filter-by label > span:last-of-type{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
         rule += '.categories-header,\n' +
             '.toolbar .search span,\n' +
@@ -228,8 +171,7 @@ const UI = {
             'button.btn_update:active{color: ' + (theme["text-contrast-background"] || '#fff') + ';}\n';
         
         if (theme.name === 'theme-classic-light') {
-            rule += '.filter-by input:checked + label .category-name,\n' +
-                '.filter-by input:checked + label .main-filter-category,\n';
+            rule += '.filter-by input:checked + label .category-name,\n';
             rule += '.filter-by input:checked + label > span:last-of-type{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
             rule += '.filter-by input:checked + label{background-color: ' + ('#7d858c') + ';}\n';
         }
@@ -296,7 +238,7 @@ const UI = {
         }
     },
 
-    /** @param {MainFilter} value */
+    /** @param {CategoryFilter} value */
     clickMainFilter: function(value) {
         const current = this.pluginsList.querySelector('input[value="' + value + '"]');
         if (!current || current instanceof HTMLInputElement === false) {
@@ -329,19 +271,19 @@ const UI = {
             }
         }
     },
+
     /**
+     * @param {Map<string, number>} categories
      * @param {number} numOfAllPlugins 
      * @param {number} numOfInstalledPlugins 
      * @param {number} numOfPluginsToUpdate 
      */
-    updateMainCategories: function(numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
-        const mainCounter = this.pluginsList.querySelector('.filter-by-installed .marketplace .amount');
+    updateCategories: function(categories, numOfAllPlugins, numOfInstalledPlugins, numOfPluginsToUpdate) {
+        const self = this;
         const installedCounter = this.pluginsList.querySelector('.filter-by-installed .installed .amount');
         const updatesCounter = this.pluginsList.querySelector('.filter-by-installed .updates .amount');
         const updates = this.pluginsList.querySelector('.filter-by-installed .updates');
-        if (mainCounter) {
-            mainCounter.textContent = numOfAllPlugins.toString();
-        }
+
         if (installedCounter) {
             installedCounter.textContent = numOfInstalledPlugins.toString();
         }
@@ -351,17 +293,8 @@ const UI = {
                 updatesCounter.textContent = numOfPluginsToUpdate.toString();
             } else {
                 updates.classList.add('hidden');
-                if (updates.querySelector('input:checked')) {
-
-                }
             }
         }
-    },
-    /**
-     * @param {Map<string, number>} categories
-     */
-    updateCategories: function(categories) {
-        const self = this;
         const amountNodes = this.pluginsList.querySelectorAll('.filter-by-category .amount');
         for (let i = 0; i < amountNodes.length; i++) {
             amountNodes[i].textContent = '0';
@@ -436,14 +369,13 @@ const UI = {
 
     /**
      * This function creates div (preview) for plugins
-     * @param {InstalledPluginInfo | PluginInfo} pluginOrInstalledPlugin
+     * @param {string} guid
      * @param {boolean} isLocal
      * @param {string} defaultBG
      * @param {PluginPlateState} state
      * @returns {HTMLDivElement}
      */
-    createPluginPlate: function(pluginOrInstalledPlugin, isLocal, defaultBG, state) {
-        const guid = pluginOrInstalledPlugin.guid;
+    createPluginPlate: function(guid, isLocal, defaultBG, state) {
         const pluginPlate = document.createElement('div');
         pluginPlate.id = guid;
         pluginPlate.setAttribute('data-guid', guid);
@@ -469,6 +401,9 @@ const UI = {
      * @returns {string}
      */
     _buildPluginPlateHtml: function(guid, config, flags, isLocal, defaultBG) {
+        if (!config.variations) {
+            return '<div>Invalid plugin configuration</div>';
+        }
         const variation = config.variations[0];
         const name = Utils.getTranslatedName(config);
         const description = Utils.getTranslatedDescription(variation);
@@ -615,10 +550,10 @@ const UI = {
 	
 	/**
 	 * @param {number} numOfPluginsToUpdate 
-	 * @param {MainFilter} mainFilter 
+	 * @param {CategoryFilter} category 
 	 */
-	updateToolbar: function(numOfPluginsToUpdate, mainFilter) {
-		if (!!numOfPluginsToUpdate && mainFilter === 'updates') {
+	updateToolbar: function(numOfPluginsToUpdate, category) {
+		if (!!numOfPluginsToUpdate && category === 'updates') {
 			this._toolbarTools.classList.remove('hidden');
             this._btnUpdateAll.setAttribute('data-count', String(numOfPluginsToUpdate));
 		} else {
