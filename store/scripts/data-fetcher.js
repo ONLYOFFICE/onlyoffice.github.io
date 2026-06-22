@@ -226,25 +226,29 @@ const DataFetcher = {
         return new Promise(function(resolve, reject) {
             if ( !_url.startsWith('http') ) {
                 resolve({status:'skipped', response: {statusText: _url}});
-            } else {
-                window.AscSimpleRequest.createRequest({
-                    url: _url,
-                    crossOrigin: true,
-                    crossDomain: true,
-                    timeout: 10000,
-                    headers: '',
-                    complete: function(e, status) {
-                        if ( status == 'success' ) {
-                            resolve({status:status, response:e});
-                        } else {
-                            reject({status:status, response:e});
-                        }
-                    },
-                    error: function(e, status, error) {
+                return;
+            }
+            if (!window.AscSimpleRequest) {
+                reject({status:'error', response:{statusText:'AscSimpleRequest is not available'}});
+                return;
+            }
+            window.AscSimpleRequest.createRequest({
+                url: _url,
+                crossOrigin: true,
+                crossDomain: true,
+                timeout: 10000,
+                headers: '',
+                complete: function(e, status) {
+                    if ( status == 'success' ) {
+                        resolve({status:status, response:e});
+                    } else {
                         reject({status:status, response:e});
                     }
-                });
-            }
+                },
+                error: function(e, status, error) {
+                    reject({status:status, response:e});
+                }
+            });
         });
     },
     

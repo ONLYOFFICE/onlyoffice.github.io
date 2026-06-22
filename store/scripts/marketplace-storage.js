@@ -88,12 +88,16 @@ const MarketplaceStorage = {
         }
 
         if (category === "onlyoffice") {
-            plugins = plugins.filter(function(plugin) {
-                let installed = plugin;
-                if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
-                    plugin = self.findPlugin(plugin.guid);
+            plugins = plugins.filter(function(pl) {
+                /** @type {InstalledPluginInfo | undefined} */
+                let installed;
+                /** @type {PluginInfo | undefined} */
+                let plugin;
+                if ('obj' in pl) {
+                    plugin = self.findPlugin(pl.guid);
+                    installed = /** @type {InstalledPluginInfo} */(pl);
                 } else {    
-                    installed = self.findInstalledPlugin(plugin.guid);
+                    installed = self.findInstalledPlugin(pl.guid);
                 }
 
                 if (!(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
@@ -104,9 +108,12 @@ const MarketplaceStorage = {
             });
         } else if (category != "all") {
             plugins = plugins.filter(function(plugin) {
-                let variations = /** @type {VariationConfig[]} */(plugin.variations);
-                if (Object.prototype.hasOwnProperty.call(plugin, 'obj')) {
+                /** @type {VariationConfig[]} */
+                let variations = [];
+                if ('obj' in plugin) {
                     variations = /** @type {VariationConfig[]} */(plugin.obj.variations);
+                } else {
+                    variations = /** @type {VariationConfig[]} */(plugin.variations);
                 }
                 let variation = variations[0];
                 let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
@@ -115,7 +122,7 @@ const MarketplaceStorage = {
         }
 
         plugins = plugins.filter(function(el) {
-            let plugin = el.obj || el;
+            let plugin = 'obj' in el ? el.obj : el;
             let name = translateName(plugin);
             return name.toLowerCase().includes(searchQuery);
         });
@@ -145,7 +152,7 @@ const MarketplaceStorage = {
 		this._categories.set('all', num + 1);
         const plugin = this.findPlugin(config.guid);
         const installed = this.findInstalledPlugin(config.guid);
-        /** @type {VariationConfig[]} */
+
         const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.obj.variations);
         if (!variations) {
             return;

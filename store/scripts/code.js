@@ -72,13 +72,9 @@ let defaultBG = Utils.themeType == 'light' ? '#F5F5F5' : '#555555'; // default b
 Utils.init();
 
 // it's necessary for loader (because it detects theme by this object)
-window.Asc = {
-	plugin : {
-		theme : {
-			type : Utils.themeType
-		}
-	}
-};
+window.Asc = /** @type {Asc} */ (/** @type {unknown} */ ({ plugin: { theme: { type: Utils.themeType } } }));
+
+
 
 /**
  * Resolves the base IO URL from the current page href.
@@ -179,7 +175,7 @@ const Marketplace = {
 					}
 					Utils.bTranslate = true;
 					DataFetcher.makeRequestWithWaitConnectionStrategy('./translations/' + name + '.json', 'GET', null, null)
-						.onSuccess(function(res) {
+						.onSuccess(function(/** @type {string} */res) {
 							if (!res) {
 								return false;
 							}
@@ -187,12 +183,12 @@ const Marketplace = {
 							Utils.translateAll();
 							fResolve(true);
 						})
-						.onFailure(function(err) {
+						.onFailure(function(/** @type {Error} */err) {
 							createError(new Error('Cannot load translation for current language.'));
 							fReject(err);
 						});
 				})
-				.onFailure(function(err) {
+				.onFailure(function(/** @type {Error} */err) {
 					createError( new Error('Cannot load translations list file.'));
 					fReject(err);
 				});
@@ -266,6 +262,7 @@ const Marketplace = {
 		/** @type {Promise<any>[]} */
 		const pluginsPromises = plugins.map(function(/** @type {PluginInfo} */ plugin, i, arr) {
 			if (typeof plugin !== 'object') {
+				// @ts-ignore - i do not know why this condition was added
 				plugin.name = plugin;
 			}
 			let pluginUrl = plugin.baseUrl;
@@ -634,9 +631,10 @@ function _onMessageTheme(message) {
 	/** @type {Plugins} */
 	let arrPl = bShowMarketplace ? MarketplaceStorage.allPlugins : MarketplaceStorage.installedPlugins;
 	arrPl.forEach(function(pl) {
-		let variation = pl.variations ? pl.variations[0] : pl.obj.variations[0];
+		const config = 'obj' in pl ? pl.obj : pl;
+		let variation = config.variations && config.variations[0];
 		let imgSrc = null;
-		if (variation.store) {
+		if (variation && variation.store) {
 			if (variation.store.background)
 				bg = variation.store.background[Utils.themeType];
 		} else {
@@ -813,7 +811,12 @@ function onClickInstall(guid, event) {
 		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
 	}
-	const url = (installed ? installed.obj.baseUrl : plugin.url);
+	let url = '';
+	if (installed) {
+		url = installed.obj.baseUrl;
+	} else if (plugin) {
+		url = plugin.url;
+	}
 	const config = (installed ? installed.obj : plugin);
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
 }

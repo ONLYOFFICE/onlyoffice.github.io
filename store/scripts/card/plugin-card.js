@@ -180,6 +180,8 @@ const PluginCard = {
 
         if (
             bCorrectUrl &&
+            this.config.variations &&
+            this.config.variations[0] &&
             this.config.variations[0].store &&
             this.config.variations[0].store.screenshots &&
             this.config.variations[0].store.screenshots.length

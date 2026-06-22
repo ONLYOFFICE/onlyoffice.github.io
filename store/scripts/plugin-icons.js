@@ -78,7 +78,10 @@ const PluginIcons = {
 			return this._buildImgAttrs(defaults);
 		}
 
-		const variation = plugin.variations[0];
+		const variation = plugin.variations && plugin.variations[0];
+		if (!variation) {
+			return this._buildImgAttrs(defaults);
+		}
 
 		if (variation.store && variation.store.icons) {
 			// new scheme: folder per theme + scale suffix
@@ -94,12 +97,12 @@ const PluginIcons = {
 		if (variation.icons) {
 			if (!Array.isArray(variation.icons)) {
 				// new scheme: object { light, dark } with folder paths
-				const folder = baseUrl + variation.icons[Utils.themeType];
+				const folder = baseUrl + /** @type {Record<string, string>} */(variation.icons)[Utils.themeType];
 				return this._buildImgAttrs(this._ICON_SCALES.map(function(s) { return folder + s[1]; }));
 			}
 			if (typeof variation.icons[0] === 'object') {
 				// old scheme like icons2
-				return this._buildImgAttrs(this._resolveOldThemedIcons(variation.icons, baseUrl));
+				return this._buildImgAttrs(this._resolveOldThemedIcons(/** @type {Array<{style?: string, [key: string]: any}>} */(/** @type {unknown} */(variation.icons)), baseUrl));
 			}
 			// old scheme: plain string array [normal, retina]
 			const normal = baseUrl + variation.icons[0];

@@ -45,12 +45,12 @@ const Utils = {
     bTranslate: false,          
     /** @type {AscTheme | null} */
     theme: null,                                // flag translate or not
+    /** @type {'light' | 'dark'} */
+    themeType: getUrlSearchValue("theme-type") === 'light' ? 'light' : 'dark',
     /** @type {string} */
-    themeType: getUrlSearchValue("theme-type") || 'light',      // current theme
+    lang: detectLanguage(),                     // current language
     /** @type {string} */
-    lang: detectLanguage(),                                     // current language
-    /** @type {string} */
-    shortLang: detectLanguage().split('-')[0],                  // short language
+    shortLang: detectLanguage().split('-')[0],  // short language
     /** @type {Messages} */
     _MESSAGES: {
         versionWarning: 'This plugin will only work in a newer version of the editor.',

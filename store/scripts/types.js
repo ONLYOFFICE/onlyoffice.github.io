@@ -66,7 +66,8 @@
  * @property {string} [discussion]
  * @property {string} [discussionUrl]
  * @property {string} [version]
- * @property {any} [variations]
+ * @property {Array<VariationConfig>} [variations]
+ * @property {any} [backup]
  */
 
 /**
