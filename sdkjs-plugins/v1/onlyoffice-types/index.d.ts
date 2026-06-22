@@ -48,13 +48,29 @@ interface AscDesktopEditor {
     startExternalConvertation(type: string, params: string): void;
 }
 
+interface AscSimpleRequestOptions {
+    url: string;
+    crossOrigin?: boolean;
+    crossDomain?: boolean;
+    timeout?: number;
+    headers?: string;
+    complete?: (response: any, status: string) => void;
+    error?: (response: any, status: string, error: any) => void;
+}
+
+interface AscSimpleRequest {
+    createRequest(options: AscSimpleRequestOptions): void;
+}
+
 declare global {
     interface Window {
         Asc: Asc;
         AscDesktopEditor?: AscDesktopEditor;
+        AscSimpleRequest?: AscSimpleRequest;
     }
     var Asc: Asc;
     var AscDesktopEditor: AscDesktopEditor | undefined;
+    var AscSimpleRequest: AscSimpleRequest | undefined;
     /** Available inside callCommand callback - editor API for current editor type */
     var Api: ApiWord & ApiCell & ApiSlide;
 }
