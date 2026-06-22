@@ -758,7 +758,7 @@ interface VariationConfig {
     EditorsSupport: EditorType[];
     events?: string[];
     fixedSize?: boolean;
-    icons?: string;
+    icons?: Record<string, string> | string[] | string;
     icons2?: IconConfig[];
     initData?: string;
     initDataType?: InitDataType;
