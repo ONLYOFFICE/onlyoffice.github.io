@@ -30,8 +30,6 @@
  *
  */
 
-// @ts-check
-
 /// <reference path="./types.js" />
 /// <reference path="./marketplace-storage.js" />
 /// <reference path="./utils.js" />

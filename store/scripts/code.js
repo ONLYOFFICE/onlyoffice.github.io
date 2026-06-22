@@ -30,8 +30,6 @@
  *
  */
 
-// @ts-check
-
 /// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 /// <reference path="./types.js" />
 /// <reference path="./marketplace-ui.js" />

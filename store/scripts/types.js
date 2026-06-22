@@ -1,7 +1,7 @@
 
-/**
- * @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").PluginWindow} PluginWindow
- */
+/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").PluginWindow} PluginWindow */
+/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").VariationConfig} VariationConfig */
+/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").AscTheme} AscTheme */
 
 /**
  * @typedef {Object} Rating
@@ -39,6 +39,16 @@
  * @property {number} [width]
  * @property {number} [height]
  */
+
+/**
+ * @typedef {Object} PluginCardIframeMessage
+ * @property {'PluginReady' | 'Error' | 'Theme' | 'onExternalMouseUp'} type
+ * @property {{message: string}} error
+ * @property {AscTheme} theme
+ * @property {string} style
+ * @property {PluginCardWindowParams} data
+ */
+
 
 /**
  * @typedef {Object} PluginInfo
@@ -81,7 +91,7 @@
  */
 
 /**
- * @typedef {(InstalledPluginInfo | PluginInfo)[]} Plugins
+ * @typedef {(InstalledPluginInfo|PluginInfo)[]} Plugins
  */ 
 
 /**

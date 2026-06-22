@@ -30,8 +30,6 @@
  *
  */
 
-// @ts-check
-
 const Scale = {
 	/** @type {any} */
 	PsMain: null,       // scroll for list of plugins

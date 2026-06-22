@@ -30,7 +30,6 @@
  *
  */
 
-// @ts-check
 /// <reference path="../../scripts/types.js" />
 /// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 

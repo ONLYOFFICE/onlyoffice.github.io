@@ -30,7 +30,6 @@
  *
  */
 
-// @ts-check
 /// <reference path="../types.js" />
 /// <reference path="../utils.js" />
 /// <reference path="./plugin-card-ui.js" />
@@ -185,7 +184,15 @@ const PluginCard = {
             this.config.variations[0].store.screenshots &&
             this.config.variations[0].store.screenshots.length
         ) {
-            let arrScreens = this.config.variations[0].store.screenshots;
+            /** @type {VariationConfig} */
+            const variation = this.config.variations[0];
+            if (!variation.store) {
+                return;
+            }
+            const arrScreens = variation.store.screenshots;
+            if (!arrScreens) {
+                return;
+            }
             arrScreens.forEach(function (screenUrl, ind) {
                 let url = self.config.baseUrl + screenUrl;
                 let container = document.createElement("div");
@@ -385,8 +392,8 @@ const PluginCard = {
         if (discussionUrl) {
             const bDesktopRequest =
                 isLocal &&
-                window.AscSimpleRequest &&
-                window.AscSimpleRequest.createRequest;
+                !!window.AscSimpleRequest &&
+                !!window.AscSimpleRequest.createRequest;
             return DataFetcher.getRating(discussionUrl, bDesktopRequest)
                 .then(function (rating) {
                     if (!rating) return null;
@@ -574,14 +581,16 @@ const PluginCard = {
     }
 };
 
-window.addEventListener('message', function(message) {
+window.addEventListener('message', function(event) {
 	// getting messages from editor or plugin
 	// try to parse message
+    /** @type {PluginCardIframeMessage}} */
+    let message;
 	try {
-		message = JSON.parse(message.data);
+		message = JSON.parse(event.data);
 	} catch (error) {
 		// if we have a problem, don't process this message
-		console.error('Failed to parse message', message);
+		console.error('Failed to parse message', event.data);
 		return;
 	}
 

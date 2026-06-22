@@ -30,10 +30,8 @@
  *
  */
 
-// @ts-check
 /// <reference path="./types.js" />
 /// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
-/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").AscTheme} AscTheme */
 
 /**
  * @typedef {Object} Messages

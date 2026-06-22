@@ -31,7 +31,6 @@
  *
  */
 
-// @ts-check
 /// <reference path="./types.js" />
 /// <reference path="./utils.js" />
 /// <reference path="./plugin-icons.js" />

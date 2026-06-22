@@ -30,13 +30,12 @@
  *
  */
 
-// @ts-check
 /// <reference path="../types.js" />
 /// <reference path="../utils.js" />
 
 const PluginCardUI = {
-    /** @type {HTMLDivElement} */
-    loader: undefined,
+    /** @type {HTMLDivElement | undefined} */
+    _loader: undefined,
     /** @type {HTMLSpanElement} */
     version: /** @type {HTMLSpanElement} */ (document.getElementById('span_version')),
     /** @type {HTMLSpanElement} */
@@ -238,13 +237,13 @@ const PluginCardUI = {
         }
         if (!show) {
             loaderContainer.classList.add('hidden');
-            this.loader && (this.loader.remove ? this.loader.remove() : loaderContainer.removeChild(this.loader));
-            this.loader = undefined;	
-        } else if (!this.loader) {
+            this._loader && (this._loader.remove ? this._loader.remove() : loaderContainer.removeChild(this._loader));
+            this._loader = undefined;	
+        } else if (!this._loader) {
             loaderContainer.classList.remove('hidden');
             const translatedText = text ? Utils.getTranslated(text) : '';
             // @ts-ignore
-            this.loader = showLoader(loaderContainer, translatedText + '...');
+            this._loader = showLoader(loaderContainer, translatedText + '...');
         }
     },
 }

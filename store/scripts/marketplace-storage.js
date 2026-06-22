@@ -30,9 +30,7 @@
  *
  */
 
-// @ts-check
 /// <reference path="./types.js" />
-/** @typedef {import("../../sdkjs-plugins/v1/onlyoffice-types").VariationConfig} VariationConfig */
 
 const MarketplaceStorage = {
     /** @type {MainFilter} */
