@@ -52,7 +52,6 @@ const MarketplaceStorage = {
 
     /** @param {AvailablePluginInfo} plugin */
     addAvailablePlugin: function(plugin) {
-        console.warn(plugin);
         this._availablePlugins.push(plugin);
         if (!plugin.removed) {
             this._installedPlugins.push(plugin.obj);
@@ -60,7 +59,6 @@ const MarketplaceStorage = {
     },
     /** @param {PluginInfo} plugin */
     addInstalledPlugin: function(plugin) {
-        console.warn(plugin);
         this._installedPlugins.push(plugin);
     },
 
@@ -168,11 +166,6 @@ const MarketplaceStorage = {
         });
     },
 
-    /** @param {Array<PluginInfo>} plugins */
-    setAllPlugins: function(plugins) {
-		this.sortPlugins(plugins, 'name');
-        this._allPlugins = plugins;
-    },
     /** @param {Array<AvailablePluginInfo>} plugins */
     setAvailablePlugins: function(plugins) {
         this.sortPlugins(plugins, 'start');
@@ -182,12 +175,34 @@ const MarketplaceStorage = {
         }).map(function(plugin) {
             return plugin.obj;
         });
+        const aAllPluginsGuids = this._allPlugins.map(function(p) { return p.guid; });
+        for (let i = 0; i < plugins.length; i++) {
+            const plugin = plugins[i];
+            const index = aAllPluginsGuids.indexOf(plugin.guid);
+            if (index === -1) {
+                this._allPlugins.push(plugin.obj);
+            }
+        }
     },
     /**
      * @param {Array<PluginInfo>} plugins
      */
     setMarketplacePlugins: function(plugins) {
+		this.sortPlugins(plugins, 'name');
+        /** @type {string[]} */
+        const oldMarketplacePluginsGuids = this._marketplacePlugins.map(function(p) { return p.guid; });
+        this._allPlugins = this._allPlugins.filter(function(p) { return !oldMarketplacePluginsGuids.includes(p.guid); });
         this._marketplacePlugins = plugins;
+        const aAllPluginsGuids = this._allPlugins.map(function(p) { return p.guid; });
+        for (let i = plugins.length - 1; i >= 0; i--) {
+            const plugin = plugins[i];
+            const index = aAllPluginsGuids.indexOf(plugin.guid);
+            if (index === -1) {
+                this._allPlugins.unshift(plugin);
+            } else {
+                this._allPlugins[index] = plugin;
+            }
+        }
     },
     /**
      * @param {PluginInfo[] | AvailablePluginInfo[]} arrPlugins 
@@ -247,6 +262,7 @@ const MarketplaceStorage = {
                 break;
         }
     },
+
     updateCategories: function() {
         const self = this;
 	    this._resetCategories();
@@ -254,7 +270,6 @@ const MarketplaceStorage = {
             self._addPluginCategory(plugin);
         });
     },
-
     /** @param {PluginInfo} config */
     _addPluginCategory: function(config) {
         const self = this;

@@ -338,7 +338,7 @@ const Marketplace = {
 		}
 		this.loadMarketplacePluginsAndRating()
 			.then(function(allPlugins) {
-				MarketplaceStorage.setAllPlugins(allPlugins);
+				MarketplaceStorage.setMarketplacePlugins(allPlugins);
 				showListOfPlugins('all');
 				updateCategories();
 			});
@@ -404,7 +404,7 @@ const translationsPromise = Marketplace.loadAndApplyTranslations(Utils.lang, Uti
 /** @type {Promise<PluginInfo[]>} */
 let allPluginsPromise = Marketplace.loadMarketplacePluginsAndRating()
 	.then(function(plugins) {
-		MarketplaceStorage.setAllPlugins(plugins);
+		MarketplaceStorage.setMarketplacePlugins(plugins);
 		return plugins;
 	});
 
