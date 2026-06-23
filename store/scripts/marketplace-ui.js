@@ -123,6 +123,19 @@ const UI = {
             }
             self.onChangeSearchInput(event.target.value.trim().toLowerCase());
         }, 500));
+
+        if (!!window.AscDesktopEditor) {
+			this.linkNewPluginText.textContent = Utils.getTranslatedMessage('installed');
+			this.linkNewPlugin.href = "#";
+			this.linkNewPlugin.onclick = function (e) {
+				e.preventDefault();
+				installPluginManually();
+			}
+		} else {
+			this.linkNewPluginText.textContent = Utils.getTranslatedMessage('marketplace');
+			this.linkNewPlugin.href = (OOIO + "pulls");
+			this.linkNewPlugin.onclick = null;
+		}
     },
 
     /** @param {CategoryFilter} value */

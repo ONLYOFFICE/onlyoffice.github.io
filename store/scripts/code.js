@@ -448,23 +448,7 @@ window.onload = function() {
 		MarketplaceStorage.categoryFilter = category;
 		_resetSearchState();
 		showListOfPlugins('filtered');
-		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(['installed', 'updates'].indexOf(category) !== -1 ? 'installed' : 'marketplace');
-		// TODO: check it
-		if (['installed', 'updates'].indexOf(category) !== -1) {
-			UI.linkNewPlugin.href = "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
-		} else {
-			UI.linkNewPlugin.href = (OOIO + "pulls");
-		}
 
-		if (isLocal && ['installed', 'updates'].indexOf(category) !== -1) {
-			UI.linkNewPlugin.href = "#";
-			UI.linkNewPlugin.onclick = function (e) {
-				e.preventDefault();
-				installPluginManually();
-			}
-		} else {
-			UI.linkNewPlugin.onclick = null;
-		}
 		let numOfPluginsToUpdate = MarketplaceStorage.getNumOfPluginsToUpdate();
 		UI.updateToolbar(numOfPluginsToUpdate, category);
 	}
