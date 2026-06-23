@@ -184,6 +184,9 @@ const MarketplaceStorage = {
             if (index === -1) {
                 this._allPlugins.push(plugin.obj);
             }
+            if (!plugin.canRemoved) {
+                plugin.obj.local = true;
+            }
         }
 		this._sortPlugins(this._allPlugins, 'name');
 
@@ -193,6 +196,7 @@ const MarketplaceStorage = {
      * @param {Array<PluginInfo>} plugins
      */
     setMarketplacePlugins: function(plugins) {
+        const self = this;
         /** @type {string[]} */
         const oldMarketplacePluginsGuids = this._marketplacePlugins.map(function(p) { return p.guid; });
         this._marketplacePlugins = plugins.slice();
@@ -201,13 +205,19 @@ const MarketplaceStorage = {
 
         for (let i = 0; i < plugins.length; i++) {
             const plugin = plugins[i];
-            const index = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
-            if (index === -1) {
+            const indexAll = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
+            if (indexAll === -1) {
                 this._allPlugins.push(plugin);
             } else {
-                this._allPlugins[index] = plugin;
+                this._allPlugins[indexAll] = plugin;
             }
         }
+        this._allPlugins.forEach(function(plugin, index) {
+            let marketIndex = self._marketplacePlugins.findIndex(function(p) { return p.guid === plugin.guid; });
+            if (marketIndex === -1) {
+                self._allPlugins[index].local = true;
+            }
+        });
 		this._sortPlugins(this._allPlugins, 'name');
     },
     /**

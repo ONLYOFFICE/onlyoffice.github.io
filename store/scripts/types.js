@@ -71,6 +71,7 @@
  * @property {string} [version]
  * @property {Array<VariationConfig>} [variations]
  * @property {any} [backup]
+ * @property {boolean} [local] - If "true", then the plugin is not being downloaded from GitHub.
  */
 
 /**

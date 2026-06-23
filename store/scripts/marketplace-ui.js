@@ -143,7 +143,7 @@ const UI = {
     /** @param {string} searchInput */
     onChangeSearchInput: function(searchInput) {},
     /**
-     * @param {*} theme
+     * @param {AscTheme} theme
      * @param {'light'|string} themeType
      * @param {string} style
      */
@@ -401,19 +401,19 @@ const UI = {
         pluginPlate.style.borderStyle = 'solid';
         pluginPlate.style.borderWidth = (zoom > 1 ? 1 : zoom) + 'px';
         pluginPlate.innerHTML = this._buildPluginPlateHtml(guid, state.config, state, isLocal, defaultBG);
-        
+                
         return pluginPlate;
     },
 
     /**
      * @param {string} guid
      * @param {PluginInfo} config
-     * @param {PluginPlateState} flags
+     * @param {PluginPlateState} state
      * @param {boolean} isLocal
      * @param {string} defaultBG
      * @returns {string}
      */
-    _buildPluginPlateHtml: function(guid, config, flags, isLocal, defaultBG) {
+    _buildPluginPlateHtml: function(guid, config, state, isLocal, defaultBG) {
         if (!config.variations) {
             return '<div>Invalid plugin configuration</div>';
         }
@@ -424,7 +424,7 @@ const UI = {
         const offered = config.offered || 'ONLYOFFICE';
         const imgSrc = PluginIcons.getImageUrl(guid, isLocal);
 
-        return '<div class="introduction">' +
+        let intro = '<div class="introduction">' +
             '<div class="image" style="background: ' + bg + '">' +
                 '<img id="img_' + guid + '" class="plugin_icon" data-guid="' + guid + '" src="' + imgSrc.src + '" srcset="' + imgSrc.srcset + '">' +
             '</div>' +
@@ -437,13 +437,24 @@ const UI = {
             '</div>' +
             '</div>' +
             '<div class="description">' + description + '</div>' +
-            '<div class="management">' +
-                '<div class="rating">' +
+            '<div class="management">';
+
+        if (state.config.local || (state.installed && state.installed.local)) {
+            intro += '<span class="default-plugin-icon" title="' + Utils.getTranslated('Built‑in') + '">' +
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>' +
+                '<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>' +
+                '<line x1="12" y1="22.08" x2="12" y2="12"></line>' +
+                '</svg></span>';
+        }
+        intro += '<div class="rating">' +
                     this._makeRatingElements(config.rating, Utils.getTranslated('Not rated')) +
                 '</div>' +
-                this._makeActionButtons(guid, flags.bNeedUpdateButton, flags.bNeedRemoveButton, flags.bNeedInstallButton, flags.bNotAvailable) +
+                this._makeActionButtons(guid, state) +
             '</div>' +
         '</div>';
+
+        return intro;
     },
 
 	/**
@@ -493,21 +504,18 @@ const UI = {
     
     /**
      * @param {string} guid 
-     * @param {boolean} bNeedUpdateButton 
-     * @param {boolean} bNeedRemoveButton 
-     * @param {boolean} bNeedInstallButton
-     * @param {boolean} [bNotAvailable] 
+     * @param {PluginPlateState} state
      * @returns {string}
      */
-    _makeActionButtons: function(guid, bNeedUpdateButton, bNeedRemoveButton, bNeedInstallButton, bNotAvailable) {
-        let additional = bNotAvailable ? 'disabled title="' + Utils.getTranslatedMessage('versionWarning') + '"'  : '';
+    _makeActionButtons: function(guid, state) {
+        let additional = state.bNotAvailable ? 'disabled title="' + Utils.getTranslatedMessage('versionWarning') + '"'  : '';
         let result = '<button class="btn-text-default ';
-        if (bNeedUpdateButton) {
+        if (state.bNeedUpdateButton) {
             result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)" ' + additional + '>' + Utils.getTranslated("Update");
-        } else if (bNeedRemoveButton) {
-            result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
+        } else if (state.bNeedRemoveButton) {
+            result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (state.bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';
             result += Utils.getTranslated("Remove");
-        } else if (bNeedInstallButton) {
+        } else if (state.bNeedInstallButton) {
             result += 'btn_install" onclick="onClickInstall(\'' + guid + '\', event)" ' + additional + '>'  + Utils.getTranslated("Install");
         } else {
             return '';

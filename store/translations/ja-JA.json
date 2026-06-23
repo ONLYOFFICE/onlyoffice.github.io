@@ -65,5 +65,6 @@
 	"Problem with plugin installation." : "プラグインのインストールに問題があります。",
 	"By ONLYOFFICE": "ONLYOFFICE によって",
 	"No plugins match your filters.": "フィルターに一致するプラグインがありません。",
-	"Try a different category or search term." : "別のカテゴリーや検索語を試してください。"
+	"Try a different category or search term." : "別のカテゴリーや検索語を試してください。",
+	"Built-in": "内蔵"
 }

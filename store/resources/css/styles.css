@@ -81,7 +81,7 @@ aside > *:not(:last-child) {
 	border-radius: 4px;
 	background: transparent;
 	border: medium;
-	font-size: 12.5px;
+	font-size: 13px;
 	font-weight: 400;
 	cursor: pointer;
 	text-align: left;
@@ -302,6 +302,11 @@ main {
 	transition: 150ms;
 	position: relative;
 }
+	.plugin-plate .default-plugin-icon {
+		width: 18px;
+		height: 18px;
+		cursor: help;
+	}
 	.plugin-plate > *:not(:last-child) {
 		margin-bottom: 12px;
 	}
@@ -356,8 +361,9 @@ main {
 		flex-shrink: 0;
 	}
 	.plugin-plate .description {
-		font-size: 12.5px;
+		font-size: 13px;
 		line-height: 1.5;
+		min-height: 2.8em;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-moz-box-orient: vertical;
@@ -371,14 +377,18 @@ main {
 		pointer-events: none;
 	}
 	.plugin-plate .management {
+		position: relative;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: flex-start;
 		gap: 8px;
 		min-height: 32px;
 		padding-top: 8px;
 		border-top-width: 1px;
 		border-top-style: solid;
+	}
+	.plugin-plate .management > button {
+		margin-left: auto;
 	}
 	.plugin-plate .rating {
 		display: flex;
