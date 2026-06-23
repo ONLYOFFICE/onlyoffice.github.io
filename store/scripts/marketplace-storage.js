@@ -41,22 +41,27 @@ const MarketplaceStorage = {
     _categories: new Map(),
 
     /** @type {Array<AvailablePluginInfo>} */
-    _availablePlugins: [], // list of installed plugins
+    _availablePlugins: [], // list of installed and custom plugins
     /** @type {Array<PluginInfo>} */
-    _marketplacePlugins: [], // list of all plugins from config
+    _marketplacePlugins: [], // list of plugins from config
     /** @type {Array<PluginInfo>} */
-    _installedPlugins: [], // list of all plugins from config
+    _installedPlugins: [], // list of installed plugins
     /** @type {Array<PluginInfo>} */
-    _allPlugins: [], // list of all plugins from config
+    _allPlugins: [], // list of all plugins
 
-    
-    /**
-     * @param {string} guid 
-     * @returns {PluginInfo | undefined}
-     */
-    findPlugin: function(guid) {
-        let res = this._allPlugins.find(function(el){return el.guid === guid});
-        return res;
+
+    /** @param {AvailablePluginInfo} plugin */
+    addAvailablePlugin: function(plugin) {
+        console.warn(plugin);
+        this._availablePlugins.push(plugin);
+        if (!plugin.removed) {
+            this._installedPlugins.push(plugin.obj);
+        }
+    },
+    /** @param {PluginInfo} plugin */
+    addInstalledPlugin: function(plugin) {
+        console.warn(plugin);
+        this._installedPlugins.push(plugin);
     },
 
     /**
@@ -66,7 +71,6 @@ const MarketplaceStorage = {
     findAvailablePlugin: function(guid) {
         return this._availablePlugins.find(function(el){return el.guid === guid});
     },
-    
     /**
      * @param {string} guid 
      * @returns {PluginInfo | undefined}
@@ -74,7 +78,21 @@ const MarketplaceStorage = {
     findInstalledPlugin: function(guid) {
         return this._installedPlugins.find(function(el){return el.guid === guid});
     },
-    
+    /**
+     * @param {string} guid 
+     * @returns {PluginInfo | undefined}
+     */
+    findPlugin: function(guid) {
+        let res = this._allPlugins.find(function(el){return el.guid === guid});
+        return res;
+    },
+
+    getAllPlugins: function() {
+        return this._allPlugins;
+    },
+    getCategories: function() {
+        return this._categories;
+    },
     /**
      * @param {function(PluginInfo): string} translateName
      * @returns {Array<PluginInfo>}
@@ -111,7 +129,14 @@ const MarketplaceStorage = {
 
         return plugins;
     },
-
+    /** @returns {Array<PluginInfo>} */
+    getInstalledPlugins: function() {
+        return this._installedPlugins;
+    },
+    /** @returns {number} */
+    getNumOfInstalledPlugins: function() {
+        return this._installedPlugins.length;
+    },
     getNumOfPluginsToUpdate: function() {
         const self = this;
         return this._allPlugins.reduce(function(acc, plugin) {
@@ -127,85 +152,26 @@ const MarketplaceStorage = {
             return el.bHasUpdate;
         });
     },
-    /** @param {PluginInfo} config */
-    _addPluginCategory: function(config) {
-        const self = this;
-        let num = Number(this._categories.get('all'));
-		this._categories.set('all', num + 1);
-        const plugin = this.findPlugin(config.guid);
-        const installed = this.findAvailablePlugin(config.guid);
 
-        const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.obj.variations);
-        if (!variations) {
-            return;
-        }
-
-		if (!config.offered && !(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
-			let category = 'onlyoffice';
-			if (this._categories.has(category)) {
-				let num = Number(this._categories.get(category));
-				this._categories.set(category, num + 1);
-			}
-		}
-		variations.forEach(function(variation) {
-			if (!variation.store || !variation.store.categories) {
-				return;
-			}
-			variation.store.categories.forEach(function(/** @type {string} */category) {
-				if (self._categories.has(category)) {
-					let num = Number(self._categories.get(category));
-					self._categories.set(category, num + 1);
-				} else {
-					self._categories.set(category, 1);
-				}
-			})
-		});
-    },
-
-    updateCategories: function() {
-        const self = this;
-	    this._resetCategories();
-        this._allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
-            self._addPluginCategory(plugin);
-        });
-
-    },
-    _resetCategories: function() {
-        this._categories = new Map();
-        this._categories.set('all', 0);
-        this._categories.set('onlyoffice', 0);
-    },
-
-    getCategories: function() {
-        return this._categories;
-    },
-    /** @param {Array<PluginInfo>} plugins */
-    setAllPlugins: function(plugins) {
-		this.sortPlugins(plugins, 'name');
-        this._allPlugins = plugins;
-    },
-    getAllPlugins: function() {
-        return this._allPlugins;
-    },
     hasAllPlugins: function() {
         return this._allPlugins.length > 0;
-    },
-    /** @param {PluginInfo} plugin */
-    addInstalledPlugin: function(plugin) {
-        console.warn(plugin);
-        this._installedPlugins.push(plugin);
-    },
-    /** @param {AvailablePluginInfo} plugin */
-    addAvailablePlugin: function(plugin) {
-        console.warn(plugin);
-        this._availablePlugins.push(plugin);
-        if (!plugin.removed) {
-            this._installedPlugins.push(plugin.obj);
-        }
     },
     /** @returns {boolean} */
     hasAvailablePlugins: function() {
         return this._availablePlugins.length > 0;
+    },
+
+    /** @param {string} guid */
+    removeInstalledPlugin: function(guid) {
+        this._installedPlugins = this._installedPlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
+    },
+
+    /** @param {Array<PluginInfo>} plugins */
+    setAllPlugins: function(plugins) {
+		this.sortPlugins(plugins, 'name');
+        this._allPlugins = plugins;
     },
     /** @param {Array<AvailablePluginInfo>} plugins */
     setAvailablePlugins: function(plugins) {
@@ -222,20 +188,6 @@ const MarketplaceStorage = {
      */
     setMarketplacePlugins: function(plugins) {
         this._marketplacePlugins = plugins;
-    },
-    /** @returns {Array<PluginInfo>} */
-    getInstalledPlugins: function() {
-        return this._installedPlugins;
-    },
-    /** @returns {number} */
-    getNumOfInstalledPlugins: function() {
-        return this._installedPlugins.length;
-    },
-    /** @param {string} guid */
-    removeInstalledPlugin: function(guid) {
-        this._installedPlugins = this._installedPlugins.filter(function(p) {
-            return p.guid !== guid;
-        });
     },
     /**
      * @param {PluginInfo[] | AvailablePluginInfo[]} arrPlugins 
@@ -294,5 +246,52 @@ const MarketplaceStorage = {
             default:
                 break;
         }
-    }
+    },
+    updateCategories: function() {
+        const self = this;
+	    this._resetCategories();
+        this._allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+            self._addPluginCategory(plugin);
+        });
+    },
+
+    /** @param {PluginInfo} config */
+    _addPluginCategory: function(config) {
+        const self = this;
+        let num = Number(this._categories.get('all'));
+		this._categories.set('all', num + 1);
+        const plugin = this.findPlugin(config.guid);
+        const installed = this.findAvailablePlugin(config.guid);
+
+        const variations = config.variations || (plugin && plugin.variations) || (installed && installed.obj && installed.obj.variations);
+        if (!variations) {
+            return;
+        }
+
+		if (!config.offered && !(plugin && plugin.offered) && !(installed && installed.obj && installed.obj.offered)) {
+			let category = 'onlyoffice';
+			if (this._categories.has(category)) {
+				let num = Number(this._categories.get(category));
+				this._categories.set(category, num + 1);
+			}
+		}
+		variations.forEach(function(variation) {
+			if (!variation.store || !variation.store.categories) {
+				return;
+			}
+			variation.store.categories.forEach(function(/** @type {string} */category) {
+				if (self._categories.has(category)) {
+					let num = Number(self._categories.get(category));
+					self._categories.set(category, num + 1);
+				} else {
+					self._categories.set(category, 1);
+				}
+			})
+		});
+    },
+    _resetCategories: function() {
+        this._categories = new Map();
+        this._categories.set('all', 0);
+        this._categories.set('onlyoffice', 0);
+    },
 };
