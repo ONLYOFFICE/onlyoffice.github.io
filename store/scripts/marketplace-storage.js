@@ -86,7 +86,7 @@ const MarketplaceStorage = {
     },
 
     getAllPlugins: function() {
-        return this._allPlugins;
+        return this._allPlugins.slice();
     },
     getCategories: function() {
         return this._categories;
@@ -101,17 +101,17 @@ const MarketplaceStorage = {
         const searchQuery = this.searchQuery;
 
         /** @type {Array<PluginInfo>} */
-        let plugins = this._allPlugins;
+        let filteredPlugins = this._allPlugins.slice();
         if (category === 'installed') {
-            plugins = this._installedPlugins;
+            filteredPlugins = this._installedPlugins;
         } else if (category === 'updates') {
-            plugins = this.getPluginsToUpdate();
+            filteredPlugins = this.getPluginsToUpdate();
         } else if (category === "onlyoffice") {
-            plugins = plugins.filter(function(plugin) {
+            filteredPlugins = filteredPlugins.filter(function(plugin) {
                 return !(plugin && plugin.offered);
             });
         } else if (category != "all") {
-            plugins = plugins.filter(function(plugin) {
+            filteredPlugins = filteredPlugins.filter(function(plugin) {
                 /** @type {VariationConfig[]} */
                 let variations = /** @type {VariationConfig[]} */(plugin.variations);
                 let variation = variations[0];
@@ -120,12 +120,12 @@ const MarketplaceStorage = {
             });
         }
 
-        plugins = plugins.filter(function(plugin) {
+        filteredPlugins = filteredPlugins.filter(function(plugin) {
             let name = translateName(plugin);
             return name.toLowerCase().includes(searchQuery);
         });
 
-        return plugins;
+        return filteredPlugins;
     },
     /** @returns {Array<PluginInfo>} */
     getInstalledPlugins: function() {
@@ -166,49 +166,56 @@ const MarketplaceStorage = {
         });
     },
 
-    /** @param {Array<AvailablePluginInfo>} plugins */
+    /**
+     * @param {Array<AvailablePluginInfo>} plugins
+     * @returns {Array<AvailablePluginInfo>}
+     */
     setAvailablePlugins: function(plugins) {
-        this.sortPlugins(plugins, 'start');
-        this._availablePlugins = plugins;
+        this._sortPlugins(plugins, 'start');
+        this._availablePlugins = plugins.slice();
         this._installedPlugins = plugins.filter(function(plugin) {
             return !plugin.removed;
         }).map(function(plugin) {
             return plugin.obj;
         });
-        const aAllPluginsGuids = this._allPlugins.map(function(p) { return p.guid; });
+
         for (let i = 0; i < plugins.length; i++) {
             const plugin = plugins[i];
-            const index = aAllPluginsGuids.indexOf(plugin.guid);
+            const index = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
             if (index === -1) {
                 this._allPlugins.push(plugin.obj);
             }
         }
+		this._sortPlugins(this._allPlugins, 'name');
+
+        return plugins;
     },
     /**
      * @param {Array<PluginInfo>} plugins
      */
     setMarketplacePlugins: function(plugins) {
-		this.sortPlugins(plugins, 'name');
         /** @type {string[]} */
         const oldMarketplacePluginsGuids = this._marketplacePlugins.map(function(p) { return p.guid; });
+        this._marketplacePlugins = plugins.slice();
+
         this._allPlugins = this._allPlugins.filter(function(p) { return !oldMarketplacePluginsGuids.includes(p.guid); });
-        this._marketplacePlugins = plugins;
-        const aAllPluginsGuids = this._allPlugins.map(function(p) { return p.guid; });
+
         for (let i = plugins.length - 1; i >= 0; i--) {
             const plugin = plugins[i];
-            const index = aAllPluginsGuids.indexOf(plugin.guid);
+            const index = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
             if (index === -1) {
                 this._allPlugins.unshift(plugin);
             } else {
                 this._allPlugins[index] = plugin;
             }
         }
+		this._sortPlugins(this._allPlugins, 'name');
     },
     /**
      * @param {PluginInfo[] | AvailablePluginInfo[]} arrPlugins 
      * @param {"rating" | "installations" | "start" | "name"} type 
      */
-    sortPlugins: function(arrPlugins, type) {
+    _sortPlugins: function(arrPlugins, type) {
         if (!arrPlugins || !arrPlugins.length) {
             return arrPlugins;
         }
