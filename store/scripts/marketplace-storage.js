@@ -96,7 +96,6 @@ const MarketplaceStorage = {
      * @returns {Array<PluginInfo>}
      */
     getFilteredPlugins: function(translateName) {
-        const self = this;
         const category = this.categoryFilter;
         const searchQuery = this.searchQuery;
 
@@ -200,11 +199,11 @@ const MarketplaceStorage = {
 
         this._allPlugins = this._allPlugins.filter(function(p) { return !oldMarketplacePluginsGuids.includes(p.guid); });
 
-        for (let i = plugins.length - 1; i >= 0; i--) {
+        for (let i = 0; i < plugins.length; i++) {
             const plugin = plugins[i];
             const index = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
             if (index === -1) {
-                this._allPlugins.unshift(plugin);
+                this._allPlugins.push(plugin);
             } else {
                 this._allPlugins[index] = plugin;
             }

@@ -249,6 +249,13 @@ const PluginCard = {
             data.OOMarketplaceUrl,
             data.OOIO + "tree/master/"
         );
+        let githubUrl = pluginUrl;
+        if (baseUrl.indexOf(data.OOMarketplaceUrl) === -1) {
+            githubUrl = baseUrl.replace(
+                data.ioUrl,
+                data.OOIO + "tree/master/"
+            );
+        }
 
         // TODO problem with plugins icons (different margin from top)
         // we do this, because new icons for store are too big for use it in this window.
@@ -279,14 +286,15 @@ const PluginCard = {
         
         PluginCardUI.spanSelectedDescr.textContent = data.pluginDescription;
         if (bWebUrl) {
-            PluginCardUI.linkPlugin.setAttribute("href", pluginUrl);
+            PluginCardUI.divGitLink.classList.remove("hidden");
+            PluginCardUI.linkGithub.setAttribute("href", githubUrl);
             PluginCardUI.linkReadme.setAttribute(
                 "href",
                 pluginUrl + "README.md"
             );
             PluginCardUI.divReadme.classList.remove("hidden");
         } else {
-            PluginCardUI.linkPlugin.setAttribute("href", "");
+            PluginCardUI.divGitLink.classList.add("hidden");
             PluginCardUI.linkReadme.setAttribute("href", "");
             PluginCardUI.divReadme.classList.add("hidden");
         }

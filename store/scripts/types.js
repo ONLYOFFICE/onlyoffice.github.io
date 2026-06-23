@@ -17,6 +17,7 @@
  * @property {string} pluginDescription
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
+ * @property {string} ioUrl
  * @property {PluginInfo | null} installed
  * @property {PluginInfo | null} plugin
  * @property {string} iconBackground

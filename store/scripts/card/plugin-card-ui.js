@@ -55,7 +55,7 @@ const PluginCardUI = {
     /** @type {HTMLSpanElement} */
     spanSelectedDescr: /** @type {HTMLSpanElement} */ (document.getElementById('span_selected_description')),
     /** @type {HTMLAnchorElement} */
-    linkPlugin: /** @type {HTMLAnchorElement} */ (document.getElementById('link_plugin')),
+    linkGithub: /** @type {HTMLAnchorElement} */ (document.getElementById('link_plugin')),
     /** @type {HTMLSpanElement} */
     arrowNext: /** @type {HTMLSpanElement} */ (document.getElementById('next_arrow')),
     /** @type {HTMLSpanElement} */

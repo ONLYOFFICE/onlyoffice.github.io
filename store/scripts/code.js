@@ -443,26 +443,6 @@ window.onload = function() {
 		updateCategories();
 	});
 
-	/*UI.onChangeMainFilter = function(value) {
-
-		
-		UI.linkNewPluginText.textContent = Utils.getTranslatedMessage(value);
-		if (value === 'marketplace') {
-			UI.linkNewPlugin.href = (OOIO + "pulls");
-		} else {
-			UI.linkNewPlugin.href = "https://api.onlyoffice.com/docs/plugin-and-macros/tutorials/installing/onlyoffice-docs-on-premises/";
-		}
-		
-		if (isLocal && value !== 'marketplace') {
-			UI.linkNewPlugin.href = "#";
-			UI.linkNewPlugin.onclick = function (e) {
-				e.preventDefault();
-				installPluginManually();
-			}
-		} else {
-			UI.linkNewPlugin.onclick = null;
-		}
-	}*/
 	/** @param {CategoryFilter} category */
 	UI.onChangeCategoryFilter = function(category) {
 		MarketplaceStorage.categoryFilter = category;
@@ -914,6 +894,7 @@ function onClickPluginPlate(guid) {
 		bActionDisabled: !!(actionButton && actionButton.hasAttribute('disabled')),
 		OOMarketplaceUrl: OOMarketplaceUrl,
 		OOIO: OOIO,
+		ioUrl: ioUrl,
 		pluginName: Utils.getTranslatedName(config),
 		pluginDescription: config.variations ? Utils.getTranslatedDescription(config.variations[0]) : '',
 		translate: Utils.translate,
