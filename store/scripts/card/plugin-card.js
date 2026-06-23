@@ -269,6 +269,11 @@ const PluginCard = {
         }
         PluginCardUI.spanName.textContent = data.pluginName;
         
+        if (this.config.local || (this.installed && this.installed.local)) {
+            PluginCardUI.defaultPluginIcon.classList.remove("hidden");
+        } else {
+            PluginCardUI.defaultPluginIcon.classList.add("hidden");
+        }
         if (this.config.offered) {
             PluginCardUI.spanOffered.textContent = this.config.offered;
             PluginCardUI.spanOnlyOfficeBadge.classList.add("hidden");

@@ -102,6 +102,8 @@ const PluginCardUI = {
     divSelectedChangelog: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_changelog')),
     /** @type {HTMLDivElement} */
     divSelectedInfo: /** @type {HTMLDivElement} */ (document.getElementById('div_selected_info')),
+    /** @type {HTMLDivElement} */
+    defaultPluginIcon: /** @type {HTMLDivElement} */ (document.querySelector('.default-plugin-icon')),
 
     /** @param {'light' | string} themeType */
     init: function(themeType) {
