@@ -200,9 +200,15 @@ main {
 	}
 	.toolbar .search span {
 		position: absolute;
+		width: 14px;
+		height: 14px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		left: 12px;
 		top: 10px;
 		pointer-events: none;
+		vertical-align: baseline;
 	}
 	.toolbar .search span svg {
 		vertical-align: middle;
