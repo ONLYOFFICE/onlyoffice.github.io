@@ -390,20 +390,20 @@ type WordMethodArgs = {
     GetFormValue: [sInternalId: string];
     GetFormsByTag: [sTag: string];
     GetImageDataFromSelection: [];
-    GetInstalledPlugins: [null?];
+    GetInstalledPlugins: [null?] | null;
     GetMacros: [];
     GetSelectedContent: [];
     GetSelectedOleObjects: [];
     GetSelectedText: [oPr?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; ParaSeparator?: string; TabSymbol?: string }];
     GetSelectionType: [];
     GetVBAMacros: [];
-    GetVersion: [];
+    GetVersion: [] | null;
     
     // Methods I
     InputText: [sText: string, sText2?: string];
     InsertAndReplaceContentControls: [aDocuments: any[]];
     InsertOleObject: [oOleObj: OLEProperties, bIsAdd?: boolean];
-    InstallPlugin: [oConfig: any];
+    InstallPlugin: [oConfig: any, guid?: string];
     
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
@@ -465,7 +465,10 @@ type WordMethodArgs = {
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
     Undo: [];
     UpdateAddinFields: [aData: AddinFieldData[]];
-    UpdatePlugin: [oConfig: any];
+    UpdatePlugin: [oConfig: any, guid?: string];
+
+    // Common plugin methods
+    CloseWindow: [windowId: string | number];
 };
 
 type WordMethodName = keyof WordMethodArgs;
