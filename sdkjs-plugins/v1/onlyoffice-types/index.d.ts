@@ -96,17 +96,22 @@ interface AscPlugin {
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
     detachEvent: (eventName: PluginEventName) => void;
-    executeMethod: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+    executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
+        ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
+        (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
-    executeMethodAsync: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+    executeMethodAsync: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
+        ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
+        (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
+    onExternalMouseUp: () => void;
     onThemeChanged: (theme: AscTheme) => void;
     onThemeChangedBase: (theme: AscTheme) => void;
     onTranslate(): void;
-    resizeWindow: (width: number, height: number) => void;
+    resizeWindow: (width: number, height: number, minWidth?: number, minHeight?: number, maxWidth?: number, maxHeight?: number) => void;
     sendEvent: (eventName: string, eventData?: unknown) => void;
     sendToPlugin(message: string, payload?: unknown): void;
     theme: AscTheme;
