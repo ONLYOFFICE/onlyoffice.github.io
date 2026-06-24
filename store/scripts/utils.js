@@ -217,23 +217,34 @@ const Utils = {
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(data, "text/html");
                 // we will have a problem if github change their page
-                let first = Number(doc.getElementById('result-row-1').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
-                let second = Number(doc.getElementById('result-row-2').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
-                let third = Number(doc.getElementById('result-row-3').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
-                let fourth = Number(doc.getElementById('result-row-4').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
-                let fifth = Number(doc.getElementById('result-row-5').childNodes[1].childNodes[3].textContent.replace(/[\n\s%]/g,''));
-                let total = Number(doc.getElementsByClassName('text-small color-fg-subtle')[0].childNodes[1].firstChild.textContent.replace(/[\n\sa-z]/g,''));
-                first = Math.ceil(total * first / 100) * 5;   // it's 5 stars
-                second = Math.ceil(total * second / 100) * 4; // it's 4 stars
-                third = Math.ceil(total * third / 100) * 3;   // it's 3 stars
-                fourth = Math.ceil(total * fourth / 100) * 2; // it's 2 stars
-                fifth = Math.ceil(total * fifth / 100);       // it's 1 star
-                let average = total === 0 ? 0 : (first + second + third + fourth + fifth) / total;
-                let percent = average / 5 * 100;
+                const rowsIds = ['result-row-1', 'result-row-2', 'result-row-3', 'result-row-4', 'result-row-5'];
+                const sum = rowsIds.reduce(function(acc, id, index) {
+                    const element = doc.getElementById(id);
+                    if (
+                        !element || !element.childNodes || !element.childNodes[1] ||
+                        !element.childNodes[1].childNodes || !element.childNodes[1].childNodes[3] ||
+                        !element.childNodes[1].childNodes[3].textContent) {
+                        return acc;
+                    }
+                    const textContent = element.childNodes[1].childNodes[3].textContent;
+                    const value = Number(textContent.replace(/[\n\s%]/g,''));
+                    return acc + Math.ceil(total * value / 100) * (rowsIds.length - index);
+                }, 0);
+
+                const totalContainer = doc.getElementsByClassName('text-small color-fg-subtle');
+                let total = 0;
+                if (totalContainer && totalContainer[0] && totalContainer[0].childNodes &&
+                    totalContainer[0].childNodes[1] && totalContainer[0].childNodes[1].firstChild &&
+                    totalContainer[0].childNodes[1].firstChild.textContent) {
+                        const totalText = totalContainer[0].childNodes[1].firstChild.textContent;
+                        total = Number(totalText.replace(/[\n\sa-z]/g,''));
+                } 
+                
+                let average = total === 0 ? 0 : sum / total;
                 result = {
                     total: total,
                     average: average.toFixed(1),
-                    percent: percent
+                    percent: average / rowsIds.length * 100
                 };
             } catch (error) {
                 // nothing to do
