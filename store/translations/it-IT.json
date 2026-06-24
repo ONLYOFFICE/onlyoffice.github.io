@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "Di ONLYOFFICE",
 	"No plugins match your filters.": "Nessun plugin corrisponde ai tuoi filtri.",
 	"Try a different category or search term." : "Prova una categoria o un termine di ricerca diverso.",
-	"Local": "Locale"
+	"Local": "Locale",
+	"No updates available.": "Nessun aggiornamento disponibile.",
+	"All your plugins are up to date.": "Tutti i tuoi plugin sono aggiornati.",
+	"Show panel": "Mostra pannello",
+	"Hide panel": "Nascondi pannello"
 }

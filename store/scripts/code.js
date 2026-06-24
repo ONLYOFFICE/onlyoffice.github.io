@@ -681,6 +681,8 @@ function _loadBackupPlugins() {
 function _showEmptyNotification(typeOfOperation) {
 	if (MarketplaceStorage.categoryFilter !== 'installed' && !DataFetcher.isOnline) {
 		UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'));
+	} else if (MarketplaceStorage.categoryFilter === 'updates' && MarketplaceStorage.getNumOfPluginsToUpdate() === 0) {
+		UI.createNotification(Utils.getTranslated('No updates available.'), Utils.getTranslated('All your plugins are up to date.'));
 	} else {
 		// if no installed plugins and available plugins button was clicked
 		let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';

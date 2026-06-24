@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "От ONLYOFFICE",
 	"No plugins match your filters.": "Нет плагинов, соответствующих вашим фильтрам.",
 	"Try a different category or search term." : "Попробуйте другую категорию или поисковый запрос.",
-	"Local": "Локальный"
+	"Local": "Локальный",
+	"No updates available.": "Нет доступных обновлений.",
+	"All your plugins are up to date.": "Все ваши плагины обновлены.",
+	"Show panel": "Показать панель",
+	"Hide panel": "Скрыть панель"
 }

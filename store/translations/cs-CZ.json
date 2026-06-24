@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "Od ONLYOFFICE",
 	"No plugins match your filters.": "Žádné pluginy neodpovídají vašim filtrům.",
 	"Try a different category or search term." : "Zkuste jinou kategorii nebo vyhledávací termín.",
-	"Local": "Lokální"
+	"Local": "Lokální",
+	"No updates available.": "Žádné aktualizace nejsou k dispozici.",
+	"All your plugins are up to date.": "Všechny vaše pluginy jsou aktuální.",
+	"Show panel": "Zobrazit panel",
+	"Hide panel": "Skrýt panel"
 }

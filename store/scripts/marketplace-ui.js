@@ -302,10 +302,11 @@ const UI = {
         }
         if (updatesCounter && updates) {
             if (numOfPluginsToUpdate) {
-                updates.classList.remove('hidden');
+                updatesCounter.classList.add('mark');
                 updatesCounter.textContent = numOfPluginsToUpdate.toString();
             } else {
-                updates.classList.add('hidden');
+                updatesCounter.classList.remove('mark');
+                updatesCounter.textContent = '0';
             }
         }
         const amountNodes = this.pluginsList.querySelectorAll('.filter-by-category .amount');
@@ -525,45 +526,61 @@ const UI = {
     },
     makeSidebarToggleButton: function() {
         const self = this;
-
         if (!this._aside || !this._toolbar) {
             return;
         }
-        this._main.classList.add('full-width');
-        this._aside.classList.add('collapsed');
+        let isVisible = localStorage.getItem('sidebar-visible') === 'true';
 
         const burgerIcon = '' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
-            '<path d="M3 9h18M3 15h18M3 3h18M3 21h18"></path>' +
+            '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
+            '<g transform="scale(-1,1) translate(-24,0) rotate(90,12,12)">' +
+                '<path d="M20,24H4c-2.2,0-4-1.8-4-4V4c0-2.2,1.8-4,4-4h16c2.2,0,4,1.8,4,4v16C24,22.2,22.2,24,20,24z M4,2C2.9,2,2,2.9,2,4v16c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V4c0-1.1-0.9-2-2-2H4z"/>' +
+                '<path d="M23,9H1C0.4,9,0,8.6,0,8s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,9,23,9z"/>' +
+                '<g transform="rotate(180,12,15)">' +
+                '<path d="M15,18c-0.3,0-0.5-0.1-0.7-0.3l-3-3c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l3,3c0.4,0.4,0.4,1,0,1.4C15.5,17.9,15.3,18,15,18z"/>' +
+                '<path d="M9,18c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l3-3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-3,3C9.5,17.9,9.3,18,9,18z"/>' +
+                '</g>' +
+            '</g>' +
             '</svg>';
-        const closeIcon = '' +
-            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
-            '<line x1="18" y1="6" x2="6" y2="18"></line>' +
-            '<line x1="6" y1="6" x2="18" y2="18"></line>' +
+        const closeIcon = '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
+            '<g transform="scale(-1,1) translate(-24,0) rotate(90,12,12)">' +
+                '<path d="M20,24H4c-2.2,0-4-1.8-4-4V4c0-2.2,1.8-4,4-4h16c2.2,0,4,1.8,4,4v16C24,22.2,22.2,24,20,24z M4,2C2.9,2,2,2.9,2,4v16c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V4c0-1.1-0.9-2-2-2H4z"/>' +
+                '<path d="M23,9H1C0.4,9,0,8.6,0,8s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,9,23,9z"/>' +
+                '<path d="M15,18c-0.3,0-0.5-0.1-0.7-0.3l-3-3c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l3,3c0.4,0.4,0.4,1,0,1.4C15.5,17.9,15.3,18,15,18z"/>' +
+                '<path d="M9,18c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4l3-3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-3,3C9.5,17.9,9.3,18,9,18z"/>' +
+            '</g>' +
             '</svg>';
         const toggleBtn = document.createElement('button');
         toggleBtn.id = 'toggle-sidebar-full';
-        toggleBtn.title = 'Show/hide panel';
-        toggleBtn.className = 'btn-text-default';
+        toggleBtn.className = 'btn-text-default i18n';
         toggleBtn.innerHTML = burgerIcon;
 
+        if (!isVisible) {
+            this._main.classList.add('full-width');
+            this._aside.classList.add('collapsed');
+            toggleBtn.title = Utils.getTranslated('Show panel');
+        } else {
+            toggleBtn.title = Utils.getTranslated('Hide panel');
+        }
         this._toolbar.insertBefore(toggleBtn, this._toolbar.children[0]);
 
-        let isVisible = false;
         setTimeout(function() {
             self._aside.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
         }, 1000);
 
         toggleBtn.onclick = function() {
             isVisible = !isVisible;
+            localStorage.setItem('sidebar-visible', isVisible.toString());
 
             toggleBtn.innerHTML = isVisible ? closeIcon : burgerIcon;
             if (isVisible) {
                 self._main.classList.remove('full-width');
                 self._aside.classList.remove('collapsed');
+                toggleBtn.title = Utils.getTranslated('Hide panel');
             } else {
                 self._main.classList.add('full-width');
                 self._aside.classList.add('collapsed');
+                toggleBtn.title = Utils.getTranslated('Show panel');
             }
         };
 

@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "ONLYOFFICE වෙතින්",
 	"No plugins match your filters.": "ඔබගේ පෙරහන් අනුව ප්ලගින නොමැත.",
 	"Try a different category or search term." : "වෙනත් වර්ගය හෝ සෙවුම් පදයක් උත්සාහ කරන්න.",
-	"Local": "ස්ථානීය"
+	"Local": "ස්ථානීය",
+	"No updates available.": "යාවත්කාලීන නොමැත.",
+	"All your plugins are up to date.": "ඔබගේ සියලු ප්ලගින යාවත්කාලීනයි.",
+	"Show panel": "පැනල් පෙන්වන්න",
+	"Hide panel": "පැනල් සඟවන්න"
 }

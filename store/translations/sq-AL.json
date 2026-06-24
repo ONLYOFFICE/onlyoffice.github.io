@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "Nga ONLYOFFICE",
 	"No plugins match your filters.": "Asnjë shtojcë nuk përputhet me filtrat tuaj.",
 	"Try a different category or search term." : "Provo një kategori të ndryshme ose term kërkimi.",
-	"Local": "Lokale"
+	"Local": "Lokale",
+	"No updates available.": "Nuk ka përditësime të disponueshme.",
+	"All your plugins are up to date.": "Të gjitha shtesat tuaja janë të përditësuara.",
+	"Show panel": "Shfaq panelin",
+	"Hide panel": "Fshih panelin"
 }

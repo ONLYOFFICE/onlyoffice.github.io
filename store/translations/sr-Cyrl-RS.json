@@ -66,5 +66,9 @@
 	"By ONLYOFFICE": "Од ONLYOFFICE",
 	"No plugins match your filters.": "Нема додатака који одговарају вашим филтерима.",
 	"Try a different category or search term." : "Покушајте другу категорију или термин претраге.",
-	"Local": "Локално"
+	"Local": "Локално",
+	"No updates available.": "Нема доступних ажурирања.",
+	"All your plugins are up to date.": "Сви ваши додаци су ажурирани.",
+	"Show panel": "Прикажи панел",
+	"Hide panel": "Сакриј панел"
 }

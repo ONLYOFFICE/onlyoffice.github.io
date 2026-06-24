@@ -35,8 +35,9 @@ aside.collapsed {
 	opacity: 0;
 	padding: 0px;
 }
-aside > *:not(:last-child) {
+aside > .filter-by {
 	margin-bottom: 22px;
+	min-width: 215px;
 }
 #toggle-sidebar-full {
     height: 34px;
@@ -145,6 +146,7 @@ aside > *:not(:last-child) {
 }
 .submit-own-plugin {
 	margin-top: auto;
+	min-width: 215px;
 }
 .submit-own-plugin a {
 	display: block;
