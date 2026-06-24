@@ -35,10 +35,14 @@
 
 (function(window, undefined) {
 	const isLocal = ( (window.AscDesktopEditor !== undefined) && (window.location.protocol.indexOf('file') !== -1) );
-	let interval = null;
-	let errTimeout = null;
+	/** @type {NodeJS.Timeout | undefined} */
+	let interval;
+	/** @type {NodeJS.Timeout | undefined} */
+	let errTimeout;
+	/** @type {any} */
 	let loader = null;
-	let loaderTimeout = null;
+	/** @type {NodeJS.Timeout | undefined} */
+	let loaderTimeout;
 	const winSizes = {
 		width: 1200,
 		height: 776,
@@ -77,6 +81,7 @@
 	};
 
 	const PluginCard = {
+		/** @type {Partial<PluginCardWindowParams>} */
 		data: {},
 		/** @type {PluginWindow | null} */
 		window: null,
@@ -202,7 +207,7 @@
 				if (divNoInt && !divNoInt.classList.contains('hidden')) {
 					divNoInt.classList.add('hidden');
 					clearInterval(interval);
-					interval = null;
+					interval = undefined;
 				}
 				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
 				postMessage( { type: 'PluginReady', version: editorVersion, pluginVersion: window.Asc.plugin.version } );
@@ -283,7 +288,10 @@
 				PluginCard.hide();
 				break;
 			case 'resize':
-				window.Asc.plugin.resizeWindow(data.width, data.height, data.width, data.height, 0, 0);
+				if (!data.width || !data.height) {
+					return;
+				}
+				window.Asc.plugin.resizeWindow(data.width, data.height, winSizes.minWidth, winSizes.minHeight, 0, 0);
 				break;
 		}
 		
@@ -303,8 +311,9 @@
 		}
 		window.Asc.plugin.onThemeChangedBase(theme);
 		let style = document.head.lastChild;
-		if (iframe && iframe.contentWindow)
+		if (iframe && iframe.contentWindow && style instanceof HTMLStyleElement) {
 			postMessage( { type: 'Theme', theme: theme, style : style.innerHTML } );
+		}
 	};
 
 	window.Asc.plugin.onTranslate = function() {
@@ -317,6 +326,7 @@
 			label.textContent = window.Asc.plugin.tr(label.textContent);
 	};
 
+	/** @param {boolean} bSetTimeout */
 	function checkInternet(bSetTimeout) {
 		try {
 			let xhr = new XMLHttpRequest();
@@ -347,14 +357,20 @@
 		}
 	};
 
+	/** @param {boolean} isOnline */
 	function endInternetChecking(isOnline) {
 		clearTimeout(errTimeout);
-		errTimeout = null;
+		errTimeout = undefined;
 		destroyLoader();
 		if (isOnline) {
 			initPlugin();
 		} else {
-			document.getElementById('div_noIternet').classList.remove('hidden');
+			const noInternetElement = document.getElementById('div_noIternet');
+			if (!noInternetElement) {
+				console.error('div_noIternet element not found');
+				return;
+			}
+			noInternetElement.classList.remove('hidden');
 			if (!interval) {
 				interval = setInterval(function() {
 					checkInternet(false);
@@ -363,6 +379,7 @@
 		}
 	};
 
+	/** @param {string} type */
 	function createWindow(type) {
 		let fileName = type + '.html';
 		let description = window.Asc.plugin.tr('Warning');
@@ -418,18 +435,24 @@
 				developerWindow = new window.Asc.PluginWindow();
 				developerWindow.attachEvent('onWindowMessage', function(message) {
 					if (message.type == 'SetURL') {
+						const notificationElement = document.getElementById('notification');
+						if (!notificationElement) {
+							return;
+						}
 						if (message.url.length) {
 							marketplaceURl = message.url;
 							localStorage.setItem('DeveloperMarketplaceUrl', marketplaceURl);
-							document.getElementById('notification').classList.remove('hidden');
+							notificationElement.classList.remove('hidden');
 						} else {
 							marketplaceURl = OOMarketplaceUrl;
 							localStorage.removeItem('DeveloperMarketplaceUrl');
-							document.getElementById('notification').classList.add('hidden');
+							notificationElement.classList.add('hidden');
 						}
 						iframe.src = marketplaceURl + window.location.search;
 					}
-					window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
+					if (developerWindow) {
+						window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
+					}
 				});
 			}
 			developerWindow.show(variation);
@@ -437,6 +460,7 @@
 		
 	};
 
+	/** @param {boolean} backup */
 	function removePlugin(backup) {
 		if (removeGuid) {
 			return new Promise(function(fResolve) {
@@ -455,7 +479,7 @@
 		if (window.devicePixelRatio < 1)
 			zoom = 1 / window.devicePixelRatio;
 		
-		document.getElementsByTagName('html')[0].style.zoom = zoom;
+		document.documentElement.style.zoom = String(zoom);
 	};
 
 	function createLoader() {
@@ -466,7 +490,7 @@
 
 	function destroyLoader() {
 		clearTimeout(loaderTimeout);
-		loaderTimeout = null;
+		loaderTimeout = undefined;
 		$('#loader-container').addClass( 'hidden' )
 		loader && (loader.remove ? loader.remove() : $('#loader-container')[0].removeChild(loader));
 		loader = undefined;

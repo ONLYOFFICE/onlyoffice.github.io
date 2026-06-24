@@ -55,7 +55,11 @@
 		initPluginCard();
 	};
 
+	/** @param {Partial<PluginCardIframeMessage>} message */
 	function postMessage(message) {
+		if (!iframe || !iframe.contentWindow) {
+			return;
+		}
 		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
 	};
 
@@ -133,6 +137,9 @@
 				window.Asc.plugin.sendToPlugin("onClose", {});
 				break;
 			case 'resize':
+				if (!data.width || !data.height) {
+					return;
+				}
 				window.Asc.plugin.resizeWindow(data.width, data.height, data.width, data.height, 0, 0);
 				break;
 		}
@@ -146,6 +153,7 @@
 		}
 	};
 
+	/** @param {AscTheme} theme */
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		// theme changed event
 		if ( theme.type.indexOf('light') !== -1 ) {
@@ -164,7 +172,7 @@
 		if (window.devicePixelRatio < 1)
 			zoom = 1 / window.devicePixelRatio;
 		
-		document.getElementsByTagName('html')[0].style.zoom = zoom;
+		document.documentElement.style.zoom = String(zoom);
 	};
 
 })(window, undefined);
