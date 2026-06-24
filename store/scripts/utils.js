@@ -217,6 +217,14 @@ const Utils = {
                 let parser = new DOMParser();
                 let doc = parser.parseFromString(data, "text/html");
                 // we will have a problem if github change their page
+                const totalContainer = doc.getElementsByClassName('text-small color-fg-subtle');
+                let total = 0;
+                if (totalContainer && totalContainer[0] && totalContainer[0].childNodes &&
+                    totalContainer[0].childNodes[1] && totalContainer[0].childNodes[1].firstChild &&
+                    totalContainer[0].childNodes[1].firstChild.textContent) {
+                        const totalText = totalContainer[0].childNodes[1].firstChild.textContent;
+                        total = Number(totalText.replace(/[\n\sa-z]/g,''));
+                }
                 const rowsIds = ['result-row-1', 'result-row-2', 'result-row-3', 'result-row-4', 'result-row-5'];
                 const sum = rowsIds.reduce(function(acc, id, index) {
                     const element = doc.getElementById(id);
@@ -230,15 +238,6 @@ const Utils = {
                     const value = Number(textContent.replace(/[\n\s%]/g,''));
                     return acc + Math.ceil(total * value / 100) * (rowsIds.length - index);
                 }, 0);
-
-                const totalContainer = doc.getElementsByClassName('text-small color-fg-subtle');
-                let total = 0;
-                if (totalContainer && totalContainer[0] && totalContainer[0].childNodes &&
-                    totalContainer[0].childNodes[1] && totalContainer[0].childNodes[1].firstChild &&
-                    totalContainer[0].childNodes[1].firstChild.textContent) {
-                        const totalText = totalContainer[0].childNodes[1].firstChild.textContent;
-                        total = Number(totalText.replace(/[\n\sa-z]/g,''));
-                } 
                 
                 let average = total === 0 ? 0 : sum / total;
                 result = {
@@ -248,6 +247,7 @@ const Utils = {
                 };
             } catch (error) {
                 // nothing to do
+                console.error(error);
                 return result;
             }
         }
