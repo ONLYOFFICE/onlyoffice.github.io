@@ -531,7 +531,7 @@ const UI = {
         }
         let isVisible = localStorage.getItem('sidebar-visible') === 'true';
 
-        const burgerIcon = '' +
+        const showIcon = '' +
             '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
             '<g transform="scale(-1,1) translate(-24,0) rotate(90,12,12)">' +
                 '<path d="M20,24H4c-2.2,0-4-1.8-4-4V4c0-2.2,1.8-4,4-4h16c2.2,0,4,1.8,4,4v16C24,22.2,22.2,24,20,24z M4,2C2.9,2,2,2.9,2,4v16c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V4c0-1.1-0.9-2-2-2H4z"/>' +
@@ -553,14 +553,15 @@ const UI = {
         const toggleBtn = document.createElement('button');
         toggleBtn.id = 'toggle-sidebar-full';
         toggleBtn.className = 'btn-text-default i18n';
-        toggleBtn.innerHTML = burgerIcon;
 
         if (!isVisible) {
             this._main.classList.add('full-width');
             this._aside.classList.add('collapsed');
             toggleBtn.title = Utils.getTranslated('Show panel');
+            toggleBtn.innerHTML = showIcon;
         } else {
             toggleBtn.title = Utils.getTranslated('Hide panel');
+            toggleBtn.innerHTML = closeIcon;
         }
         this._toolbar.insertBefore(toggleBtn, this._toolbar.children[0]);
 
@@ -572,7 +573,7 @@ const UI = {
             isVisible = !isVisible;
             localStorage.setItem('sidebar-visible', isVisible.toString());
 
-            toggleBtn.innerHTML = isVisible ? closeIcon : burgerIcon;
+            toggleBtn.innerHTML = isVisible ? closeIcon : showIcon;
             if (isVisible) {
                 self._main.classList.remove('full-width');
                 self._aside.classList.remove('collapsed');
