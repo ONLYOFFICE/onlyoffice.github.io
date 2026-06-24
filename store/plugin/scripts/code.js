@@ -299,7 +299,9 @@
 
 	window.Asc.plugin.onExternalMouseUp = function() {
 		// mouse up event outside the plugin window
-		if (iframe && iframe.contentWindow) {
+		if (developerWindow) {
+			window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
+		} else if (iframe && iframe.contentWindow) {
 			postMessage( { type: 'onExternalMouseUp' } );
 		}
 	};
