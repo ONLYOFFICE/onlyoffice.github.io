@@ -7,6 +7,7 @@ html,body {
 	overflow: hidden;
 	display: flex;
 	flex-flow: column;
+	font-family: "Segoe UI", Arial, Helvetica, "Helvetica Neue", sans-serif;
 }
 
 .plugin-store {
@@ -305,6 +306,7 @@ main {
 	.plugin-plate .default-plugin-icon {
 		width: 18px;
 		height: 18px;
+		margin-right: 8px;
 		cursor: help;
 	}
 	.plugin-plate > *:not(:last-child) {
@@ -381,11 +383,13 @@ main {
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		gap: 8px;
 		min-height: 32px;
 		padding-top: 8px;
 		border-top-width: 1px;
 		border-top-style: solid;
+	}
+	.plugin-plate .management.local {
+		pointer-events: none;
 	}
 	.plugin-plate .management > button {
 		margin-left: auto;

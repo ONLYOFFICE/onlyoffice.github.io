@@ -184,10 +184,11 @@ const MarketplaceStorage = {
             if (index === -1) {
                 this._allPlugins.push(plugin.obj);
             }
-            if (!plugin.canRemoved) {
+            /*if (!plugin.canRemoved) {
                 plugin.obj.local = true;
-            }
+            }*/
         }
+        this._markLocalPlugins();
 		this._sortPlugins(this._allPlugins, 'name');
 
         return plugins;
@@ -212,13 +213,20 @@ const MarketplaceStorage = {
                 this._allPlugins[indexAll] = plugin;
             }
         }
+        this._markLocalPlugins();
+		this._sortPlugins(this._allPlugins, 'name');
+    },
+    _markLocalPlugins: function() {
+        const self = this;
+        if (!this._marketplacePlugins || this._marketplacePlugins.length === 0) {
+            return;
+        }
         this._allPlugins.forEach(function(plugin, index) {
             let marketIndex = self._marketplacePlugins.findIndex(function(p) { return p.guid === plugin.guid; });
             if (marketIndex === -1) {
                 self._allPlugins[index].local = true;
             }
         });
-		this._sortPlugins(this._allPlugins, 'name');
     },
     /**
      * @param {PluginInfo[] | AvailablePluginInfo[]} arrPlugins 
