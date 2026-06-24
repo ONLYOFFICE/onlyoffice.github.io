@@ -32,7 +32,7 @@
 		"please_login": "Inicie sesión con su cuenta de Salesforce para continuar.",
 		"authorize_description": "Haga clic para autorizar esta hoja a conectarse con Salesforce.",
 		"client_id": "ID de cliente",
-		"client_id_placeholder": "Introduzca la clave Consumer de su aplicación conectada",
+		"client_id_placeholder": "Introduzca su clave de consumidor de la aplicación conectada",
 		"environment": "Entorno",
 		"production": "Producción",
 		"sandbox": "Sandbox"

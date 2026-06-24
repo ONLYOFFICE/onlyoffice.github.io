@@ -32,7 +32,7 @@
 		"please_login": "Bitte melden Sie sich mit Ihrem Salesforce-Konto an, um fortzufahren.",
 		"authorize_description": "Klicken Sie hier, um dieses Blatt für die Verbindung mit Salesforce zu autorisieren.",
 		"client_id": "Client-ID",
-		"client_id_placeholder": "Geben Sie den Consumer Key Ihrer Connected App ein",
+		"client_id_placeholder": "Geben Sie Ihren Clientschlüssel für die verbundene App ein",
 		"environment": "Umgebung",
 		"production": "Produktion",
 		"sandbox": "Sandbox"

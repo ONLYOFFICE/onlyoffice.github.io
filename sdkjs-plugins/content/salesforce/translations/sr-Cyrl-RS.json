@@ -32,7 +32,7 @@
 		"please_login": "Пријавите се са својим Salesforce налогом да бисте наставили.",
 		"authorize_description": "Кликните да бисте овластили овај лист да се повеже са Salesforce-ом.",
 		"client_id": "ID клијента",
-		"client_id_placeholder": "Унесите Consumer Key вашe Connected App",
+		"client_id_placeholder": "Унесите свој кључ за потрошаче повезане апликације",
 		"environment": "Окружење",
 		"production": "Продукција",
 		"sandbox": "Sandbox"

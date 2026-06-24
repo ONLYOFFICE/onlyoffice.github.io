@@ -32,7 +32,7 @@
 		"please_login": "Prijavite se sa svojim Salesforce nalogom da biste nastavili.",
 		"authorize_description": "Kliknite da biste ovlastili ovaj list da se poveže sa Salesforce-om.",
 		"client_id": "ID klijenta",
-		"client_id_placeholder": "Unesite Consumer Key vaše Connected App",
+		"client_id_placeholder": "Unesite svoj ključ za potrošače povezane aplikacije",
 		"environment": "Okruženje",
 		"production": "Produkcija",
 		"sandbox": "Sandbox"

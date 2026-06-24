@@ -32,7 +32,7 @@
 		"please_login": "Ju lutemi identifikohuni me llogarinë tuaj të Salesforce për të vazhduar.",
 		"authorize_description": "Klikoni për të autorizuar këtë fletë të lidhet me Salesforce.",
 		"client_id": "ID e klientit",
-		"client_id_placeholder": "Shkruani Consumer Key të Connected App tuaj",
+		"client_id_placeholder": "Futni Çelësin e Konsumatorit të Aplikacionit të Lidhur",
 		"environment": "Mjedisi",
 		"production": "Prodhim",
 		"sandbox": "Sandbox"

@@ -32,7 +32,7 @@
 		"please_login": "Entre com sua conta do Salesforce para continuar.",
 		"authorize_description": "Clique para autorizar esta planilha a se conectar ao Salesforce.",
 		"client_id": "ID do Cliente",
-		"client_id_placeholder": "Insira a Consumer Key do seu Connected App",
+		"client_id_placeholder": "Insira sua chave de consumidor do aplicativo conectado",
 		"environment": "Ambiente",
 		"production": "Produção",
 		"sandbox": "Sandbox"

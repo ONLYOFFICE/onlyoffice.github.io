@@ -32,7 +32,7 @@
 		"please_login": "Pro pokračování se přihlaste pomocí svého účtu Salesforce.",
 		"authorize_description": "Kliknutím autorizujte tento list pro připojení k Salesforce.",
 		"client_id": "ID klienta",
-		"client_id_placeholder": "Zadejte Consumer Key vaší Connected App",
+		"client_id_placeholder": "Zadejte svůj zákaznický klíč pro připojenou aplikaci",
 		"environment": "Prostředí",
 		"production": "Produkční",
 		"sandbox": "Sandbox"

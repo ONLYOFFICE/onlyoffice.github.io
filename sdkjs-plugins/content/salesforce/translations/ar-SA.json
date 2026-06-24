@@ -32,7 +32,7 @@
 		"please_login": "يرجى تسجيل الدخول باستخدام حساب Salesforce الخاص بك للمتابعة.",
 		"authorize_description": "انقر لتفويض هذه الورقة بالاتصال بـ Salesforce.",
 		"client_id": "معرف العميل",
-		"client_id_placeholder": "أدخل Consumer Key الخاص بتطبيقك المتصل",
+		"client_id_placeholder": "أدخل مفتاح مستهلك التطبيق المتصل",
 		"environment": "البيئة",
 		"production": "الإنتاج",
 		"sandbox": "Sandbox"

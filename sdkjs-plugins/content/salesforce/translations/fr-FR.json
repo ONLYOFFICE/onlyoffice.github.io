@@ -11,7 +11,7 @@
 		"add": "Ajouter",
 		"edit": "Modifier",
 		"select": "Sélectionner",
-		"select_all": "Tout sélectionner",
+		"select_all": "Sélectionner tout",
 		"skip": "Ignorer",
 		"next": "Suivant",
 		"reload": "Recharger",
@@ -32,7 +32,7 @@
 		"please_login": "Veuillez vous connecter avec votre compte Salesforce pour continuer.",
 		"authorize_description": "Cliquez pour autoriser cette feuille à se connecter à Salesforce.",
 		"client_id": "ID client",
-		"client_id_placeholder": "Saisissez la clé Consumer de votre application connectée",
+		"client_id_placeholder": "Saisissez votre clé d'utilisateur d'application connectée",
 		"environment": "Environnement",
 		"production": "Production",
 		"sandbox": "Bac à sable"

@@ -32,9 +32,9 @@
 		"please_login": "続行するにはSalesforceアカウントでログインしてください。",
 		"authorize_description": "クリックして、このシートのSalesforceへの接続を許可します。",
 		"client_id": "クライアントID",
-		"client_id_placeholder": "Connected AppのConsumer Keyを入力してください",
+		"client_id_placeholder": "接続済みアプリの消費者キーを入力してください",
 		"environment": "環境",
-		"production": "本番環境",
+		"production": "生産",
 		"sandbox": "Sandbox"
 	},
 	"main": {
@@ -162,8 +162,8 @@
 			"does_not_contain": "含まない"
 		},
 		"connectors": {
-			"and": "AND",
-			"or": "OR"
+			"and": "と",
+			"or": "または"
 		},
 		"remove_filter": "フィルタを削除"
 	},

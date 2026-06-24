@@ -32,7 +32,7 @@
 		"please_login": "Accedi con il tuo account Salesforce per continuare.",
 		"authorize_description": "Fai clic per autorizzare questo foglio a connettersi a Salesforce.",
 		"client_id": "ID client",
-		"client_id_placeholder": "Inserisci la Consumer Key della tua Connected App",
+		"client_id_placeholder": "Inserisci la tua chiave utente dell'app connessa",
 		"environment": "Ambiente",
 		"production": "Produzione",
 		"sandbox": "Sandbox"
