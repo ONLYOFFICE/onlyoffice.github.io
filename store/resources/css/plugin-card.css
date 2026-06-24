@@ -24,7 +24,7 @@ a.link {
 .pc-badge i { margin-right: 4px; }
 .pc-badge span { text-overflow: ellipsis; overflow: hidden; }
 .pc-sub { font-size: 13px; margin-bottom: 8px; }
-.pc-sub .default-plugin-icon { vertical-align: middle; cursor: help;	}
+.pc-sub .default-plugin-icon { vertical-align: middle; }
 .pc-stats { display: flex; flex-wrap: wrap; align-items: baseline;}
 .pc-rating { display: flex; align-items: baseline; margin-right: 10px; }
 .pc-rating > span:last-child { margin-left: 4px; }
