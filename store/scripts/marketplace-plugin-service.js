@@ -114,6 +114,7 @@ const MarketplacePluginService = {
 					if (message && message.data) {
                         fResolve(message.data);
                     } else {
+                        // @ts-ignore - just in case
                         fResolve(message);
                     }
 				}

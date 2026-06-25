@@ -18,8 +18,9 @@
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
  * @property {string} ioUrl
- * @property {PluginInfo | null} installed
- * @property {PluginInfo | null} plugin
+ * @property {PluginInfo} [installed]
+ * @property {AvailablePluginInfo} [available]
+ * @property {PluginInfo} [plugin]
  * @property {string} iconBackground
  * @property {{src: string, srcset: string}} iconSrc
  * @property {boolean} isLocal

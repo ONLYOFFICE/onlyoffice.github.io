@@ -38,10 +38,12 @@
 const PluginCard = {
 	/** @type {number} */
 	editorVersion: 0,
-	/** @type {PluginInfo | null} */
-    plugin: null,
-	/** @type {PluginInfo | null} */
-    installed: null,
+	/** @type {PluginInfo | undefined} */
+    plugin: undefined,
+	/** @type {PluginInfo | undefined} */
+    installed: undefined,
+	/** @type {AvailablePluginInfo | undefined} */
+    available: undefined,
     removed: false,
     canRemoved: false,
 	/** @type {PluginInfo} */
@@ -74,8 +76,9 @@ const PluginCard = {
         this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
+        this.available = data.available;
         // @ts-ignore
-        this.config = data.plugin || (data.installed ? data.installed.obj : null);
+        this.config = data.plugin || (data.available && data.available.obj);
         this.editorVersion = data.editorVersion;
         this.backup = data.isLocal && !data.plugin;
         this.PsChangelog = null;
@@ -130,18 +133,12 @@ const PluginCard = {
         divPreview.id = "div_preview";
         divPreview.className = "div_preview";
         /** @type {string} */
-        let baseUrl = "";
-        if (this.plugin && this.plugin.baseUrl) {
-            baseUrl = this.plugin.baseUrl;
-        } else if (this.installed && this.installed.baseUrl) {
-            baseUrl = this._correctBaseUrl(this.installed.baseUrl);
-            this.plugin = this.installed;
-        }
+        let baseUrl = this._getCorrectBaseUrl(data.plugin, data.installed, data.available);
 
         this._loadAndShowLanguages(baseUrl, !!this.plugin);
 
         if (
-            this.installed &&
+            this.available &&
             (!this.plugin ||
                 (data.isLocal && this.plugin.baseUrl.includes("file:")))
         ) {
@@ -228,15 +225,9 @@ const PluginCard = {
             PluginCardUI.arrowNext.classList.add("hidden");
         }
 
-        if (
-            (this.installed && this.installed.minVersion) ||
-            this.config.minVersion
-        ) {
-            PluginCardUI.spanMinVersion.textContent = String(
-                this.installed && this.installed.minVersion ?
-                    this.installed.minVersion
-                :   this.config.minVersion
-            );
+        const minVersion = (this.available && this.available.obj && this.available.obj.minVersion) || this.config.minVersion;
+        if (minVersion) {
+            PluginCardUI.spanMinVersion.textContent = String(minVersion);
             PluginCardUI.divMinVersion.classList.remove("hidden");
         } else {
             PluginCardUI.spanMinVersion.textContent = "";
@@ -269,7 +260,7 @@ const PluginCard = {
         }
         PluginCardUI.spanName.textContent = data.pluginName;
         
-        if (this.config.local || (this.installed && this.installed.local)) {
+        if (this.config.local || (this.available && this.available.obj && this.available.obj.local)) {
             PluginCardUI.defaultPluginIcon.classList.remove("hidden");
         } else {
             PluginCardUI.defaultPluginIcon.classList.add("hidden");
@@ -476,7 +467,7 @@ const PluginCard = {
         return Utils.waitForRepaint().then(function() { self._doInstall() });
     },
     _doInstall: function() {
-        if (!this.plugin && !this.installed) {
+        if (!this.plugin && !this.available) {
             // if we are here if means that plugin tab is opened, plugin is uninstalled and we don't have internet connection
             this.onClickClose();
         }
@@ -584,16 +575,32 @@ const PluginCard = {
     },
 
     /**
-     * @param {string} baseUrl
+     * @param {PluginInfo} [plugin]
+     * @param {PluginInfo} [installed]
+     * @param {AvailablePluginInfo} [available]
      * @returns {string}
      */
-    _correctBaseUrl: function(baseUrl) {
-        if (baseUrl.indexOf('../') !== 0) {
-            return baseUrl;
+    _getCorrectBaseUrl: function(plugin, installed, available) {
+        let baseUrl = '';
+        let pluginBaseUrl = plugin && plugin.baseUrl;
+        let installedBaseUrl = installed && installed.baseUrl;
+        let availableBaseUrl = available && available.obj && available.obj.baseUrl;
+        if (pluginBaseUrl && pluginBaseUrl !== installedBaseUrl) {
+            baseUrl = pluginBaseUrl;
+        } else if (installedBaseUrl) {
+            baseUrl = installedBaseUrl;
+            if (baseUrl.indexOf('../') !== 0) {
+                return baseUrl;
+            }
+            if (!baseUrl.includes("/sdkjs-plugins/content/") && baseUrl.includes('/sdkjs-plugins/')) {
+                baseUrl = baseUrl.replace('/sdkjs-plugins/', '/sdkjs-plugins/content/');
+            }
+        } else if (pluginBaseUrl) {
+            baseUrl = pluginBaseUrl;
+        } else {
+            baseUrl = availableBaseUrl || '';
         }
-        if (!baseUrl.includes("/sdkjs-plugins/content/") && baseUrl.includes('/sdkjs-plugins/')) {
-            baseUrl = baseUrl.replace('/sdkjs-plugins/', '/sdkjs-plugins/content/');
-        }
+        
         return baseUrl;
     }
 };

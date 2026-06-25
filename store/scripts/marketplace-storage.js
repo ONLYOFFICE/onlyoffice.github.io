@@ -56,12 +56,25 @@ const MarketplaceStorage = {
         if (!plugin.removed) {
             this._installedPlugins.push(plugin.obj);
         }
+
+        const index = this._allPlugins.findIndex(function(p) { return p.guid === plugin.guid; });
+        if (index === -1) {
+            plugin.obj.local = true;
+            this._allPlugins.push(plugin.obj);
+        }
+
+        this._sortPlugins(this._allPlugins, 'name');
     },
     /** @param {PluginInfo} plugin */
     addInstalledPlugin: function(plugin) {
         this._installedPlugins.push(plugin);
     },
-
+    /** @param {PluginInfo} plugin */
+    changeUrlsToBackupAfterDelete(plugin) {
+        if (plugin.baseUrl.indexOf('/sdkjs-plugins/backup/') === -1) {
+            plugin.baseUrl = plugin.baseUrl.replace('/sdkjs-plugins/', '/sdkjs-plugins/backup/');
+        }
+    },
     /**
      * @param {string} guid 
      * @returns {AvailablePluginInfo | undefined}
@@ -82,6 +95,14 @@ const MarketplaceStorage = {
      */
     findPlugin: function(guid) {
         let res = this._allPlugins.find(function(el){return el.guid === guid});
+        return res;
+    },
+    /**
+     * @param {string} guid 
+     * @returns {PluginInfo | undefined}
+     */
+    findMarketplacePlugin: function(guid) {
+        let res = this._marketplacePlugins.find(function(el){return el.guid === guid});
         return res;
     },
 
@@ -156,6 +177,22 @@ const MarketplaceStorage = {
     /** @returns {boolean} */
     hasAvailablePlugins: function() {
         return this._availablePlugins.length > 0;
+    },
+
+    /** @param {string} guid */
+    removePluginEverywhere: function(guid) {
+        this._availablePlugins = this._availablePlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
+        this._installedPlugins = this._installedPlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
+        this._allPlugins = this._allPlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
+        this._marketplacePlugins = this._marketplacePlugins.filter(function(p) {
+            return p.guid !== guid;
+        });
     },
 
     /** @param {string} guid */

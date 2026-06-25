@@ -395,9 +395,15 @@ const availablePluginsPromise = MarketplacePluginService.getAvailablePlugins(gui
 	.catch(function(error) {
 		console.error('Failed to load available plugins:', error);
 		return [];
-	}).then(function(plugins) {
-		MarketplaceStorage.setAvailablePlugins(plugins);
-		return plugins;
+	}).then(function(/** @type {Array<AvailablePluginInfo>} */availablePlugins) {
+		const backupPlugins = _loadBackupPlugins();
+		backupPlugins.forEach(function(plugin) {
+			if (availablePlugins.findIndex(function(el) { return el.guid === plugin.guid; }) === -1) {
+				availablePlugins.push(plugin);
+			}
+		});
+		MarketplaceStorage.setAvailablePlugins(availablePlugins);
+		return availablePlugins;
 	});
 const translationsPromise = Marketplace.loadAndApplyTranslations(Utils.lang, Utils.shortLang);
 
@@ -467,6 +473,13 @@ function updateAvailablePlugins() {
 		const availablePlugins = plugins.filter(function(el) {
 			return (el.guid !== guidMarketplace && el.guid !== guidSettings && !( el.removed && el.obj.baseUrl.includes(ioUrl) ));
 		});
+		const backupPlugins = _loadBackupPlugins();
+		backupPlugins.forEach(function(plugin) {
+			if (availablePlugins.findIndex(function(el) { return el.guid === plugin.guid; }) === -1) {
+				availablePlugins.push(plugin);
+			}
+		});
+
 		MarketplaceStorage.setAvailablePlugins(availablePlugins);
 		showListOfPlugins('installed'); // need show installed
 		return availablePlugins;
@@ -506,7 +519,7 @@ function _onMessageInstalled(message) {
 		return;
 	}
 	/** @type {PluginInfo | undefined} */
-	let plugin = MarketplaceStorage.findPlugin(message.guid);
+	let plugin = MarketplaceStorage.findMarketplacePlugin(message.guid);
 	/** @type {PluginInfo | undefined} */
 	let installed = MarketplaceStorage.findInstalledPlugin(message.guid);
 	/** @type {AvailablePluginInfo | undefined} */
@@ -520,8 +533,8 @@ function _onMessageInstalled(message) {
 			removed: false
 		});
 	} else if (available) {
-		if (!installed && plugin) {
-			MarketplaceStorage.addInstalledPlugin(plugin);
+		if (!installed) {
+			MarketplaceStorage.addInstalledPlugin(plugin || available.obj);
 		}
 		if (available.obj.backup) {
 			// need to update the list of installed plugins so that resource links are correct
@@ -570,7 +583,7 @@ function _onMessageRemoved(message) {
 	let needBackup = message.backup;
 	
 	/** @type {PluginInfo | undefined} */
-	let plugin = MarketplaceStorage.findPlugin(message.guid);
+	let plugin = MarketplaceStorage.findMarketplacePlugin(message.guid);
 	/** @type {AvailablePluginInfo | undefined} */
 	let available = MarketplaceStorage.findAvailablePlugin(message.guid);
 	if (available) {
@@ -579,23 +592,22 @@ function _onMessageRemoved(message) {
 		available.removed = true;
 		if (plugin && (!bHasLocal || (isLocal && !needBackup))) {
 			// do nothing
-		} else {
+		} else if (isLocal) {
 			// need to update the list of installed plugins so that resource links are correct
-			if (isLocal)
-				updateAvailablePlugins();
-		}
-	}
-	if (MarketplaceStorage.categoryFilter === 'installed') {
-		if (MarketplaceStorage.searchQuery !== '') {
-			showListOfPlugins('filtered');
-		} else if (MarketplaceStorage.getNumOfInstalledPlugins() === 0) {
-			showListOfPlugins('installed');
-		} else {
-			UI.removePlugin(message.guid);
-			Scale.updateScroll();
+			if (needBackup === false) {
+				MarketplaceStorage.removePluginEverywhere(message.guid);
+			} else {
+				MarketplaceStorage.changeUrlsToBackupAfterDelete(available.obj);
+			}
 		}
 	}
 	changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
+
+	if (MarketplaceStorage.categoryFilter === 'installed' && MarketplaceStorage.getNumOfInstalledPlugins() === 0) {
+		showListOfPlugins('installed');
+	} else {
+		showListOfPlugins('filtered');
+	}
 	UI.toggleLoader(false);
 }
 /** @param {any} message */
@@ -653,26 +665,29 @@ function updateCategories() {
 	UI.updateToolbar(numOfPluginsToUpdate, MarketplaceStorage.categoryFilter);
 }
 
+/** @returns {Array<AvailablePluginInfo>} */
 function _loadBackupPlugins() {
-	if (!window["AscDesktopEditor"]) {
-		return;
+	/** @type {Array<AvailablePluginInfo>} */
+	const availablePlugins = [];
+	if (!isLocal || !window["AscDesktopEditor"]) {
+		return availablePlugins;
 	}
-	var _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
-	if (!_pluginsTmp.length) return;
-	var len = _pluginsTmp[0]["pluginsData"].length;
+	let _pluginsTmp = JSON.parse(window["AscDesktopEditor"]["GetBackupPlugins"]());
+	if (!_pluginsTmp || !_pluginsTmp.length) return availablePlugins;
+	const len = _pluginsTmp[0]["pluginsData"].length;
 	for (var i = 0; i < len; i++) {
 		let plugin = _pluginsTmp[0]["pluginsData"][i];
 		plugin.baseUrl = _pluginsTmp[0]["url"] + plugin.guid.replace('asc.', '') + '/';
-		if (!MarketplaceStorage.findAvailablePlugin(plugin.guid)) {
-			MarketplaceStorage.addAvailablePlugin({
-				"baseUrl": _pluginsTmp[0]["url"],
-				"guid": plugin.guid,
-				"canRemoved": true,
-				"obj": plugin,
-				"removed": true
-			});
-		}
+		availablePlugins.push({
+			"baseUrl": _pluginsTmp[0]["url"],
+			"guid": plugin.guid,
+			"canRemoved": true,
+			"obj": plugin,
+			"removed": true
+		});
+
 	}
+	return availablePlugins;
 }
 
 /**
@@ -702,10 +717,6 @@ function showListOfPlugins(typeOfOperation) {
 	}
 	founded = arr;
 	UI.divMain.textContent = '';
-
-	if (MarketplaceStorage.categoryFilter === 'installed' && isLocal) {
-		_loadBackupPlugins();
-	}
 
 	if (arr.length) {
 		arr.forEach(function(plugin) {
@@ -741,13 +752,12 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 	let installed = bInstalled ? /** @type {PluginInfo} */(pluginOrInstalledPlugin) : MarketplaceStorage.findInstalledPlugin(guid);
 	let available = MarketplaceStorage.findAvailablePlugin(guid);
 	/** @type {PluginInfo | undefined} */
-	let plugin = bInstalled ? MarketplaceStorage.findPlugin(guid) : /** @type {PluginInfo} */(pluginOrInstalledPlugin);
+	let plugin = bInstalled ? MarketplaceStorage.findMarketplacePlugin(guid) : /** @type {PluginInfo} */(pluginOrInstalledPlugin);
 	/** @type {PluginInfo} */
-	let config = /** @type {PluginInfo} */(plugin || (installed));
+	let config = /** @type {PluginInfo} */(plugin || (available && available.obj));
 
 	let bCheckUpdate = true;
 	if (!plugin) {
-		if (!installed) return /** @type {any} */(null);
 		bCheckUpdate = false;
 	}
 
@@ -790,7 +800,7 @@ function onClickInstall(guid, event) {
 	event.stopImmediatePropagation();
 	UI.toggleLoader(true, 'Installation');
 	/** @type {PluginInfo | undefined} */
-	let plugin = MarketplaceStorage.findPlugin(guid);
+	let plugin = MarketplaceStorage.findMarketplacePlugin(guid);
 	/** @type {AvailablePluginInfo | undefined} */
 	let available = MarketplaceStorage.findAvailablePlugin(guid);
 	if (!plugin && !available) {
@@ -831,7 +841,7 @@ function onClickRemove(guid, event) {
 	// check installed plugin:
 	// if the plugin exists in the store (and its version <= ?), we can delete it, user will be able to install the current version
 	// if the plugin is not in the store, we need to keep it for the user with the ability to restore
-	const needBackup = isLocal ? MarketplaceStorage.findPlugin(guid) == undefined : false;
+	const needBackup = isLocal ? MarketplaceStorage.findMarketplacePlugin(guid) == undefined : false;
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doRemove(guid, needBackup) });
 }
 function onClickUpdateAll() {
@@ -856,7 +866,7 @@ function onClickPluginPlate(guid) {
 	let installed = MarketplaceStorage.findInstalledPlugin(guid);
 	let available = MarketplaceStorage.findAvailablePlugin(guid);
 	/** @type {PluginInfo | undefined} */
-	let plugin = MarketplaceStorage.findPlugin(guid);
+	let plugin = MarketplaceStorage.findMarketplacePlugin(guid);
 	let iconSrc = PluginIcons.getImageUrl(guid, isLocal);
 	let iconBackground = 'transparent';
 	const image = pluginPlate.querySelector('.image');
@@ -865,13 +875,14 @@ function onClickPluginPlate(guid) {
 	}
 	const actionButton = UI.getPluginButton(guid);
 	let bHasUpdate = actionButton && actionButton.classList.contains('btn_update');
-	let config = /** @type {PluginInfo} */(plugin ? plugin : installed);
+	let config = /** @type {PluginInfo} */(plugin ? plugin : (available && available.obj));
 
 	/** @type {PluginCardWindowParams} */
 	let message = {
 		type : 'showPluginCard',
-		installed: installed || null,
-		plugin: plugin || null,
+		installed: installed,
+		available: available,
+		plugin: plugin,
 		iconBackground: iconBackground,
 		iconSrc: iconSrc,
 		isLocal: isLocal,
@@ -933,7 +944,8 @@ function installPluginManually() {
 		let result = window["AscDesktopEditor"]["PluginInstall"](file);
 		if (result) {
 			// need to update the list of installed plugins
-			updateAvailablePlugins();
+			updateAvailablePlugins()
+				.then(updateCategories);
 		} else {
 			createError(new Error('Problem with plugin installation.'), false);
 		}
