@@ -37,7 +37,7 @@
 /// <reference path="./utils.js" />
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./marketplace/service.js" />
-/// <reference path="./scale.js" />
+/// <reference path="./marketplace/scale.js" />
 /// <reference path="./marketplace/plugin-icons.js" />
 /// <reference path="./card/plugin-card.js" />
 
