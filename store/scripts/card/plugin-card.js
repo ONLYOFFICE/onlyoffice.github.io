@@ -272,9 +272,10 @@ const PluginCard = {
             PluginCardUI.spanOnlyOfficeBadge.classList.remove("hidden");
             PluginCardUI.spanOffered.textContent = "Ascensio System SIA";
         }
-        if (this.config.version) {
-            PluginCardUI.version.textContent = "· v" + this.config.version;
-            PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(self.config.version);
+        const version = this.installed && this.installed.version || this.config.version;
+        if (version) {
+            PluginCardUI.version.textContent = "· v" + version;
+            PluginCardUI.version.title = Utils.getTranslated("Version") + ": " + String(version);
         } else {
             PluginCardUI.version.classList.add('hidden');
         }
