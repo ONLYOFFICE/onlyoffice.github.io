@@ -594,10 +594,9 @@ function _onMessageRemoved(message) {
 			// do nothing
 		} else if (isLocal) {
 			// need to update the list of installed plugins so that resource links are correct
+			updateAvailablePlugins();
 			if (needBackup === false) {
 				MarketplaceStorage.removePluginEverywhere(message.guid);
-			} else {
-				MarketplaceStorage.changeUrlsToBackupAfterDelete(available.obj);
 			}
 		}
 	}

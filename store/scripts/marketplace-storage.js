@@ -69,12 +69,6 @@ const MarketplaceStorage = {
     addInstalledPlugin: function(plugin) {
         this._installedPlugins.push(plugin);
     },
-    /** @param {PluginInfo} plugin */
-    changeUrlsToBackupAfterDelete(plugin) {
-        if (plugin.baseUrl.indexOf('/sdkjs-plugins/backup/') === -1) {
-            plugin.baseUrl = plugin.baseUrl.replace('/sdkjs-plugins/', '/sdkjs-plugins/backup/');
-        }
-    },
     /**
      * @param {string} guid 
      * @returns {AvailablePluginInfo | undefined}
