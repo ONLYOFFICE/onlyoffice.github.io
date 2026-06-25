@@ -339,7 +339,7 @@ const Marketplace = {
 		this.loadMarketplacePluginsAndRating()
 			.then(function(allPlugins) {
 				MarketplaceStorage.setMarketplacePlugins(allPlugins);
-				showListOfPlugins('all');
+				updateListOfPlugins(true);
 				updateCategories();
 			});
 	}
@@ -434,7 +434,7 @@ window.onload = function() {
 	.then(function(result) {
 		if (MarketplaceStorage.hasAvailablePlugins()) {
 			if (DataFetcher.isOnline) {
-				showListOfPlugins('all');
+				updateListOfPlugins(true);
 			} else {
 				UI.clickMainFilter("installed");
 				if (!isLocal && !DataFetcher.isOnline) {
@@ -453,7 +453,7 @@ window.onload = function() {
 	UI.onChangeCategoryFilter = function(category) {
 		MarketplaceStorage.categoryFilter = category;
 		_resetSearchState();
-		showListOfPlugins('filtered');
+		updateListOfPlugins();
 
 		let numOfPluginsToUpdate = MarketplaceStorage.getNumOfPluginsToUpdate();
 		UI.updateToolbar(numOfPluginsToUpdate, category);
@@ -461,7 +461,7 @@ window.onload = function() {
 	/** @param {string} query */
 	UI.onChangeSearchInput = function(query) {
 		MarketplaceStorage.searchQuery = query;
-		showListOfPlugins('filtered');
+		updateListOfPlugins();
 	}
 };
 
@@ -481,7 +481,6 @@ function updateAvailablePlugins() {
 		});
 
 		MarketplaceStorage.setAvailablePlugins(availablePlugins);
-		showListOfPlugins('installed'); // need show installed
 		return availablePlugins;
 	});
 }
@@ -538,7 +537,9 @@ function _onMessageInstalled(message) {
 		}
 		if (available.obj.backup) {
 			// need to update the list of installed plugins so that resource links are correct
-			updateAvailablePlugins();
+			updateAvailablePlugins().then(function() {
+				updateListOfPlugins();
+			});
 		} else {
 			available.removed = false;
 		}
@@ -603,11 +604,8 @@ function _onMessageRemoved(message) {
 	}
 	changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
 
-	if (MarketplaceStorage.categoryFilter === 'installed' && MarketplaceStorage.getNumOfInstalledPlugins() === 0) {
-		showListOfPlugins('installed');
-	} else {
-		showListOfPlugins('filtered');
-	}
+	updateListOfPlugins();
+
 	UI.toggleLoader(false);
 }
 /** @param {any} message */
@@ -690,28 +688,27 @@ function _loadBackupPlugins() {
 	return availablePlugins;
 }
 
-/**
- * @param {'filtered'|'all'|'installed'} typeOfOperation
- */
-function _showEmptyNotification(typeOfOperation) {
+/** @param {boolean} [bDirectLoad] */
+function _showEmptyNotification(bDirectLoad) {
 	if (MarketplaceStorage.categoryFilter !== 'installed' && !DataFetcher.isOnline) {
 		UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'));
 	} else if (MarketplaceStorage.categoryFilter === 'updates' && MarketplaceStorage.getNumOfPluginsToUpdate() === 0) {
 		UI.createNotification(Utils.getTranslated('No updates available.'), Utils.getTranslated('All your plugins are up to date.'));
+	} else if (MarketplaceStorage.categoryFilter === 'installed' && MarketplaceStorage.getNumOfInstalledPlugins() === 0) {
+		UI.createNotification(Utils.getTranslated('Try a different category or search term.'), Utils.getTranslated('No installed plugins.'));
 	} else {
-		// if no installed plugins and available plugins button was clicked
-		let notification = typeOfOperation === 'filtered' ? 'No plugins match your filters.' : typeOfOperation === 'all' ? 'Problem with loading plugins.' : 'No installed plugins.';
+		let notification = bDirectLoad ? 'Problem with loading plugins.' : 'No plugins match your filters.';
 		UI.createNotification(Utils.getTranslated('Try a different category or search term.'), Utils.getTranslated(notification));
 	}
 }
 
 /**
- * @param {'filtered'|'all'|'installed'} typeOfOperation
+ * @param {boolean} [bDirectLoad]
  * @returns {number}
  */
-function showListOfPlugins(typeOfOperation) {
+function updateListOfPlugins(bDirectLoad) {
 	let arr = MarketplaceStorage.getFilteredPlugins(Utils.getTranslatedName.bind(Utils));
-	if (arr.length && Utils.isSamePlugins(founded, arr) && typeOfOperation !== 'all') {
+	if (arr.length && Utils.isSamePlugins(founded, arr) && !bDirectLoad) {
 		UI.toggleLoader(false);
 		return arr.length;
 	}
@@ -732,7 +729,7 @@ function showListOfPlugins(typeOfOperation) {
 		});
 		setTimeout(function() { Scale.updateScroll(); UI.toggleLoader(false); });
 	} else {
-		_showEmptyNotification(typeOfOperation);
+		_showEmptyNotification(bDirectLoad);
 		UI.toggleLoader(false);
 		Scale.updateScroll();
 	}
@@ -945,7 +942,10 @@ function installPluginManually() {
 		if (result) {
 			// need to update the list of installed plugins
 			updateAvailablePlugins()
-				.then(updateCategories);
+				.then(function() {
+					updateCategories();
+					updateListOfPlugins();
+				});
 		} else {
 			createError(new Error('Problem with plugin installation.'), false);
 		}
