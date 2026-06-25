@@ -167,7 +167,7 @@
 			if ( Number( editorVersion.split('.').join('')) < 740 )
 				removePlugin(true);
 			else if ( !data.backup )
-				removePlugin(data.backup);
+				removePlugin(!!data.backup);
 			else
 				createWindow('warning');
 		},
@@ -299,9 +299,7 @@
 
 	window.Asc.plugin.onExternalMouseUp = function() {
 		// mouse up event outside the plugin window
-		if (developerWindow) {
-			window.Asc.plugin.executeMethod('CloseWindow', [developerWindow.id]);
-		} else if (iframe && iframe.contentWindow) {
+		if (iframe && iframe.contentWindow) {
 			postMessage( { type: 'onExternalMouseUp' } );
 		}
 	};
