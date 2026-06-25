@@ -41,7 +41,7 @@
 	<script src="scripts/marketplace-ui.js" defer></script>
 	<script src="scripts/utils.js" defer></script>
 	<script src="scripts/data-fetcher.js" defer></script>
-	<script src="scripts/marketplace-plugin-service.js" defer></script>
+	<script src="scripts/marketplace/service.js" defer></script>
 	<script src="scripts/scale.js" defer></script>
 	<script src="scripts/plugin-icons.js" defer></script>
 	<script src="scripts/code.js" defer></script>
@@ -49,6 +49,10 @@
 	<body class="noselect">
 		<div id="plugins" class="plugin-store transparent">
 			<aside>
+				<div class="filter-by filter-by-editor" style="margin-bottom: 8px;display: flex;align-items: center;padding: 0px 10px;cursor: pointer;">
+					<input type="checkbox" id="filter-current-editor" style="margin-right: 10px; cursor: pointer;">
+					<label for="filter-current-editor" style="cursor: pointer; font-size: 13px; user-select: none;" class="i18n">For this editor</label>
+				</div>
 				<div class="filter-by filter-by-installed">
 					<input type="radio" id="category-filter-installed" name="category-filter" value="installed">
 					<label class="installed" for="category-filter-installed">
