@@ -31,7 +31,7 @@
  */
 
 /// <reference path="../types.js" />
-/// <reference path="../utils.js" />
+/// <reference path="../shared/utils.js" />
 
 const PluginCardUI = {
     /** @type {HTMLDivElement | undefined} */

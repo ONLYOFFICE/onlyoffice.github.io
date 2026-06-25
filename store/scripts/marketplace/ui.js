@@ -32,7 +32,7 @@
  */
 
 /// <reference path="./types.js" />
-/// <reference path="./utils.js" />
+/// <reference path="../shared/utils.js" />
 /// <reference path="./plugin-icons.js" />
 /// <reference path="./scale.js" />
 

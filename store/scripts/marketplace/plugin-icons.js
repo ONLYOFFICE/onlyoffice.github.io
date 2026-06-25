@@ -32,7 +32,7 @@
 
 /// <reference path="./types.js" />
 /// <reference path="./marketplace/storage.js" />
-/// <reference path="./utils.js" />
+/// <reference path="../shared/utils.js" />
 
 const PluginIcons = {
 	_ICON_SCALES: [

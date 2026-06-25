@@ -31,7 +31,8 @@
  */
 
 /// <reference path="../types.js" />
-/// <reference path="../utils.js" />
+/// <reference path="../shared/data-fetcher.js" />
+/// <reference path="../shared/utils.js" />
 /// <reference path="./plugin-card-ui.js" />
 /// <reference path="../marketplace/service.js" />
 
