@@ -535,13 +535,12 @@ function _onMessageInstalled(message) {
 		if (!installed) {
 			MarketplaceStorage.addInstalledPlugin(plugin || available.obj);
 		}
+		available.removed = false;
 		if (available.obj.backup) {
 			// need to update the list of installed plugins so that resource links are correct
 			updateAvailablePlugins().then(function() {
 				updateListOfPlugins();
 			});
-		} else {
-			available.removed = false;
 		}
 	}
 	changeAfterInstallUpdateRemove(true, message.guid);
@@ -594,13 +593,14 @@ function _onMessageRemoved(message) {
 		if (plugin && (!bHasLocal || (isLocal && !needBackup))) {
 			// do nothing
 		} else if (isLocal) {
-			// need to update the list of installed plugins so that resource links are correct
-
-			updateAvailablePlugins();
 			if (needBackup === false) {
 				MarketplaceStorage.removePluginEverywhere(message.guid);
 			}
 		}
+	}
+	if (isLocal) {
+		// need to update the list of installed plugins so that resource links are correct
+		updateAvailablePlugins();
 	}
 	changeAfterInstallUpdateRemove(false, message.guid, bHasLocal);
 
@@ -805,12 +805,12 @@ function onClickInstall(guid, event) {
 		UI.toggleLoader(false);
 	}
 	let url = '';
-	if (available) {
-		url = available.obj.baseUrl;
-	} else if (plugin) {
+	if (plugin) {
 		url = plugin.url;
+	} else if (available) {
+		url = available.obj.baseUrl;
 	}
-	const config = (available ? available.obj : plugin);
+	const config = plugin ? plugin : available && available.obj;
 	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
 }
 /**
