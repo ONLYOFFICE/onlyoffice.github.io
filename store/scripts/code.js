@@ -38,7 +38,7 @@
 /// <reference path="./data-fetcher.js" />
 /// <reference path="./marketplace/service.js" />
 /// <reference path="./scale.js" />
-/// <reference path="./plugin-icons.js" />
+/// <reference path="./marketplace/plugin-icons.js" />
 /// <reference path="./card/plugin-card.js" />
 
 // #region Constants
