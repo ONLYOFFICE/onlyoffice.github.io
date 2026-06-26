@@ -115,6 +115,8 @@ const MarketplaceStorage = {
      * @returns {Array<PluginInfo>}
      */
     getFilteredPlugins: function(translateName) {
+        const filterByCurrentEditor = this.filterByCurrentEditor;
+        const editorType = this.editorType;
         const category = this.categoryFilter;
         const searchQuery = this.searchQuery;
 
@@ -135,6 +137,28 @@ const MarketplaceStorage = {
                 let variation = variations[0];
                 let arrCat = (variation.store && variation.store.categories) ? variation.store.categories : [];
                 return arrCat.includes(category);
+            });
+        }
+
+        if (filterByCurrentEditor && editorType) {
+            filteredPlugins = filteredPlugins.filter(function(plugin) {
+                /** @type {VariationConfig[]} */
+                let variations = /** @type {VariationConfig[]} */(plugin.variations);
+                if (!variations) {
+                    return true;
+                }
+                let variation = variations[0];
+                if (!variation) {
+                    return true;
+                }
+                let editorsSupport = variation.store && variation.EditorsSupport;
+                if (!editorsSupport) {
+                    return true;
+                }
+                if (Array.isArray(editorsSupport)) {
+                    return editorsSupport.indexOf(editorType) !== -1;
+                }
+                return true;
             });
         }
 

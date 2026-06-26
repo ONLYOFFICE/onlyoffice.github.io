@@ -390,6 +390,7 @@ const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(v
 		return loadPluginCardAssets().then(function() { return versions; });
 	}
 	if (versions.editorType) {
+		MarketplaceStorage.editorType = versions.editorType;
 		UI.showFilterByEditorType(MarketplaceStorage.filterByCurrentEditor);
 	}
 	return versions;
