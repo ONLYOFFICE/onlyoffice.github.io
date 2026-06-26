@@ -121,6 +121,7 @@ interface AscPlugin {
     /** Translation map for the current language, populated by `pluginInitTranslateManager` */
     translateManager?: Record<string, string>;
     trigger: (eventName: string, eventData?: unknown) => void;
+    version: string;
 }
 
 interface PluginWindow {
