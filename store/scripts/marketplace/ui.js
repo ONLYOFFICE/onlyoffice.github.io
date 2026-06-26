@@ -172,6 +172,8 @@ const UI = {
             '.filter-by label{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';
         rule += '.plugin-plate .description,\n' +
             '.filter-by label > span:last-of-type{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
+            
+        rule += '.filter-by input:checked + label > span:first-of-type{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
         rule += '.categories-header,\n' +
             '.toolbar .search span,\n' +
             '.plugin-plate .manufacturer,\n' +
@@ -200,11 +202,11 @@ const UI = {
         
         if (theme.name === 'theme-classic-light') {
             rule += '.filter-by input:checked + label .category-name,\n';
-            rule += '.filter-by input:checked + label > span:last-of-type{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+            rule += '.filter-by input:checked + label > span{color: ' + (theme["text-inverse"] || '#fff') + ' !important;}\n';
             rule += '.filter-by input:checked + label{background-color: ' + ('#7d858c') + ';}\n';
         }
 
-        /** checkbox styles */
+        // #region checkbox styles
         rule += ".checkbox-visual { background-color: " + (theme["background-normal"] || '#fff') + "; }\n";
         rule += ".checkbox-visual { border-color: " + (theme["border-regular-control"] || "#c0c0c0") + "; }\n";
         rule += ".checkbox-indeterminate { background-color: " +
@@ -212,7 +214,6 @@ const UI = {
                 "; border-color: " +
                 (theme["background-primary-dialog-button"] || "#444444") +
                 "; }\n";
-
         if (
             ["theme-white", "theme-night"].indexOf(theme.name) !== -1 ||
             ["theme-white", "theme-night"].indexOf(theme.Name) !== -1
@@ -233,7 +234,6 @@ const UI = {
                 "; background-color: " +
                 (theme["highlight-primary-dialog-button-hover"] || "#1c1c1c") +
                 "; }\n";
-
         } else {
             rule +=
                 ".checkbox-checkmark { color: " +
@@ -244,10 +244,9 @@ const UI = {
                 (theme["border-control-focus"] || "#848484") +
                 "; }\n";
         }
-        /** end checkbox styles */
+        // #endregion checkbox styles */
 
         if (themeType.includes('light')) {
-            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';
             rule += 'a.link:visited,\n';
             rule += 'a.link{color: ' + ('#00645b') + ' !important;}\n';    
             rule += 'a.link:hover{color: ' + ('#0e8a7e') + ' !important;}\n';    
@@ -256,8 +255,7 @@ const UI = {
             rule += 'button.btn_update:hover{background-color: ' + ('#007a6f') + ';}\n';    
             rule += 'button.btn_update{background-color: ' + ('#0e8a7e') + ';}\n'; 
             rule += '.plugin-plate .by-onlyoffice,\n';    
-            rule += '.filter-by input:checked + label span.onlyoffice,\n';
-            rule += '.filter-by label span.mark{background-color: ' + ('#0e8a7e') + ' !important;}\n';    
+            rule += '.filter-by label span.mark{background-color: ' + ('#0e8a7e') + ' !important;}\n';
 
             document.body.classList.add('white_bg');
             rule += '.btn_install{background-color: #444 !important; color: #fff !important}\n';
@@ -268,7 +266,6 @@ const UI = {
             style = style.replace(/#445799/g, 'rgba(0, 0, 0, 0.8)');
         } else {
             document.body.classList.remove('white_bg');
-            rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#60ddc0' + ' !important;}\n';
             rule += 'a.link:visited,\n';
             rule += 'a.link{color: ' + ('#60ddc0') + ' !important;}\n';
             rule += 'a.link:hover{color: ' + ('#39bda0') + ' !important;}\n';
@@ -276,8 +273,7 @@ const UI = {
             rule += 'button.btn_update{border-color: ' + ('#39bda0') + ';}\n';    
             rule += 'button.btn_update:hover{background-color: ' + ('#26b094') + ';}\n';    
             rule += 'button.btn_update{background-color: ' + ('#39bda0') + ';}\n';
-            rule += '.plugin-plate .by-onlyoffice,\n';    
-            rule += '.filter-by input:checked + label span.onlyoffice,\n';    
+            rule += '.plugin-plate .by-onlyoffice,\n';     
             rule += '.filter-by label span.mark{background-color: ' + ('#39bda0') + ' !important;}\n';    
 
             rule += '.btn_install{background-color: #e0e0e0 !important; color: #333 !important}\n';
