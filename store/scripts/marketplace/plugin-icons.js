@@ -30,8 +30,8 @@
  *
  */
 
-/// <reference path="./types.js" />
-/// <reference path="./marketplace/storage.js" />
+/// <reference path="../types.js" />
+/// <reference path="../marketplace/storage.js" />
 /// <reference path="../shared/utils.js" />
 
 const PluginIcons = {

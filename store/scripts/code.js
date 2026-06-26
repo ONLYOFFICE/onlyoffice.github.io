@@ -299,12 +299,12 @@ const Marketplace = {
 		});
 	},
 
-	/** @returns {Promise<{editorVersion: number, pluginVersion: number}>} */
+	/** @returns {Promise<{editorVersion: number, pluginVersion: number, editorType?: EditorType}>} */
 	getEditorAndPluginVersions: function() {
 		return new Promise(function(fResolve) {
 			/** @param {MessageEvent} event */
 			let onLoad = function(event) {
-				/** @type {{type: string, version?: string, pluginVersion?: string}} */
+				/** @type {PluginReadyMessage} */
 				let message;
 				try {
 					message = JSON.parse(event.data);
@@ -318,9 +318,11 @@ const Marketplace = {
 						pluginVersion = Utils.convertPluginVersionToNumber(message.pluginVersion);
 					}
 					const editorVersion = ( message.version && message.version.includes('.') ? Utils.convertPluginVersionToNumber(message.version) : 1e8 );
+					const editorType = message.editorType;
 					fResolve({
 						pluginVersion: pluginVersion,
-						editorVersion: editorVersion
+						editorVersion: editorVersion,
+						editorType: editorType
 					});
 				}
 			};
@@ -387,6 +389,9 @@ const versionsPromise = Marketplace.getEditorAndPluginVersions().then(function(v
 		UI.makeSidebarToggleButton();
 		return loadPluginCardAssets().then(function() { return versions; });
 	}
+	if (versions.editorType) {
+		UI.showFilterByEditorType(MarketplaceStorage.filterByCurrentEditor);
+	}
 	return versions;
 });
 
@@ -421,7 +426,7 @@ function _resetSearchState() {
 }
 
 window.onload = function() {
-	UI.init(Utils.themeType);
+	UI.init(Utils.themeType, MarketplaceStorage.filterByCurrentEditor);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 
@@ -463,6 +468,11 @@ window.onload = function() {
 		MarketplaceStorage.searchQuery = query;
 		updateListOfPlugins();
 	}
+	/** @param {boolean} filterByCurrentEditor */
+	UI.onChangeCurrentEditor = function(filterByCurrentEditor) {
+        MarketplaceStorage.saveFilterCurrentEditorState(filterByCurrentEditor);
+		updateListOfPlugins();
+	};
 };
 
 /**

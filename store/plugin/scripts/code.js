@@ -209,8 +209,15 @@
 					clearInterval(interval);
 					interval = undefined;
 				}
-				postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
-				postMessage( { type: 'PluginReady', version: editorVersion, pluginVersion: window.Asc.plugin.version } );
+				if (style instanceof HTMLStyleElement) {
+					postMessage( { type: 'Theme', theme: window.Asc.plugin.theme, style : style.innerHTML } );
+				}
+				postMessage({
+					type: 'PluginReady',
+					version: editorVersion,
+					pluginVersion: window.Asc.plugin.version,
+					editorType: window.Asc.plugin.info.editorType
+				} );
 			});
 		};
 	};
@@ -304,6 +311,7 @@
 		}
 	};
 
+	/** @param {AscTheme} theme */
 	window.Asc.plugin.onThemeChanged = function(theme) {
 		// theme changed event
 		if ( theme.type.indexOf('light') !== -1 ) {

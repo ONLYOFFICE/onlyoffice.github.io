@@ -67,3 +67,21 @@ Uint8Array.prototype.copyWithin = Uint8Array.prototype.copyWithin || function(ta
 		String.prototype.trimRight = trimEnd;
 	}
 })();
+
+if (typeof Object.assign !== 'function') {
+	Object.assign = function(target) {
+		if (target == null) throw new TypeError('Cannot convert undefined or null to object');
+		var to = Object(target);
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];
+			if (source != null) {
+				for (var key in source) {
+					if (Object.prototype.hasOwnProperty.call(source, key)) {
+						to[key] = source[key];
+					}
+				}
+			}
+		}
+		return to;
+	};
+}

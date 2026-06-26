@@ -30,8 +30,8 @@
  *
  */
 
-/// <reference path="./types.js" />
-/// <reference path="../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
+/// <reference path="../types.js" />
+/// <reference path="../../../sdkjs-plugins/v1/onlyoffice-types/index.d.ts" /> 
 
 /**
  * @typedef {Object} Messages

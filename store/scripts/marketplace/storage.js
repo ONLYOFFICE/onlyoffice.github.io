@@ -30,13 +30,17 @@
  *
  */
 
-/// <reference path="./types.js" />
+/// <reference path="../types.js" />
 
 const MarketplaceStorage = {
+    /** @type {'' | EditorType} */
+    editorType: '',
+    filterByCurrentEditor: localStorage.getItem('filter-by-current-editor') === 'true',
     /** @type {CategoryFilter} */
     categoryFilter: "onlyoffice",
     /** @type {string} */
     searchQuery: "",
+    isSidebarVisible: localStorage.getItem('sidebar-visible') === 'true',
     /** @type {Map<string, number>} */
     _categories: new Map(),
 
@@ -364,4 +368,13 @@ const MarketplaceStorage = {
         this._categories.set('all', 0);
         this._categories.set('onlyoffice', 0);
     },
+    /** @param {boolean} filterByCurrentEditor */
+    saveFilterCurrentEditorState: function(filterByCurrentEditor) {
+        this.filterByCurrentEditor = filterByCurrentEditor;
+        localStorage.setItem('filter-by-current-editor', filterByCurrentEditor.toString());
+    },
+    /** @param {boolean} isVisible */
+    saveSidebarVisibleState: function(isVisible) {
+        localStorage.setItem('sidebar-visible', isVisible.toString());
+    }
 };

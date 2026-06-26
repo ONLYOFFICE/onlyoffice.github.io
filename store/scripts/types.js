@@ -53,6 +53,16 @@
  * @property {PluginCardWindowParams} data
  */
 
+/** @typedef {'word' | 'slide' | 'cell' | 'pdf'} EditorType */
+
+/**
+ * @typedef {Object} PluginReadyMessage
+ * @property {'PluginReady'} type
+ * @property {string} version
+ * @property {string} pluginVersion
+ * @property {EditorType} editorType
+ */
+
 
 /**
  * @typedef {Object} PluginInfo

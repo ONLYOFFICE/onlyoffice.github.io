@@ -31,8 +31,9 @@
  *
  */
 
-/// <reference path="./types.js" />
+/// <reference path="../types.js" />
 /// <reference path="../shared/utils.js" />
+/// <reference path="../shared/checkbox.js" />
 /// <reference path="./plugin-icons.js" />
 /// <reference path="./scale.js" />
 
@@ -52,8 +53,19 @@ const UI = {
     _aside: /** @type {HTMLElement} */(document.querySelector('aside')),
     _toolbar: /** @type {HTMLDivElement} */(document.querySelector('.toolbar')),
     _main: /** @type {HTMLElement} */(document.querySelector('main')),
+    _filterByEditorTypeContainer: /** @type {HTMLDivElement} */(document.querySelector('.filter-by-editor')),
+    _inputCurrentEditor: /** @type {HTMLInputElement} */ (document.getElementById('filter-current-editor')),
+    /** @type {null | Checkbox} */
+    _checkboxCurrentEditor: null,
     /** @type {Object<string, HTMLDivElement>} */
     _plugins: {},
+
+    /** @param {CategoryFilter} value */
+    onChangeCategoryFilter: function(value) {},
+    /** @param {string} searchInput */
+    onChangeSearchInput: function(searchInput) {},
+    /** @param {boolean} filterByCurrentEditor */
+    onChangeCurrentEditor: function(filterByCurrentEditor) {},
 
     /**
      * @param {string} guid
@@ -83,7 +95,9 @@ const UI = {
         }
     },
 
-    /** @param {'light' | string} themeType */
+    /**
+     * @param {'light' | string} themeType
+     * */
     init: function(themeType) {
         const self = this;
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
@@ -136,12 +150,10 @@ const UI = {
 			this.linkNewPlugin.href = (OOIO + "pulls");
 			this.linkNewPlugin.onclick = null;
 		}
+
     },
 
-    /** @param {CategoryFilter} value */
-    onChangeCategoryFilter: function(value) {},
-    /** @param {string} searchInput */
-    onChangeSearchInput: function(searchInput) {},
+
     /**
      * @param {AscTheme} theme
      * @param {'light'|string} themeType
@@ -166,6 +178,9 @@ const UI = {
             '.toolbar .search input::placeholder,\n' +
             '.filter-by label>span:first-of-type,\n' +
             '.plugin-plate .rating{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
+        rule += '.filter-by span.onlyoffice{background-color: ' + 
+            (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') +
+             '; color: ' + (theme["background-normal"] || '#fff') + ';}\n';
 
         rule += '.plugin-plate{background-color: ' + (theme["background-normal"] || '#fff') + '; border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
         //rule += 'main{background-color: ' + theme["background-pane"] + ';}\n';
@@ -173,9 +188,9 @@ const UI = {
         rule += '.plugin-plate{border-color: ' + (theme["border-regular-control"] || '#c0c0c0') + ';}\n';
 
         rule += '.plugin-plate .stars{color: ' + (theme["canvas-anim-pane-effect-bar-emphasis-outline"] || '#c49a2a') + ';}\n';
-        rule += '.filter-by label:hover{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
-        rule += '.filter-by input:checked + label{background-color: ' + (theme["highlight-button-pressed"] || '#DCDBDB') + ';}\n';
-        rule += '.filter-by label > span.mark{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
+        rule += '.filter-by>label:hover{background-color: ' + (theme["highlight-button-hover"] || '#e0e0e0') + ';}\n';
+        rule += '.filter-by>input:checked + label{background-color: ' + (theme["highlight-button-pressed"] || '#DCDBDB') + ';}\n';
+        rule += '.filter-by>label > span.mark{color: ' + (theme["text-inverse"] || '#fff') + ';}\n';
         rule += 'aside,\n' +
             '.plugin-plate .management,\n' +
             '.toolbar{border-color: ' + (theme["border-divider"] || '#dfdfdf') + ';}\n';
@@ -189,6 +204,48 @@ const UI = {
             rule += '.filter-by input:checked + label{background-color: ' + ('#7d858c') + ';}\n';
         }
 
+        /** checkbox styles */
+        rule += ".checkbox-visual { background-color: " + (theme["background-normal"] || '#fff') + "; }\n";
+        rule += ".checkbox-visual { border-color: " + (theme["border-regular-control"] || "#c0c0c0") + "; }\n";
+        rule += ".checkbox-indeterminate { background-color: " +
+                (theme["background-primary-dialog-button"] || "#444444") +
+                "; border-color: " +
+                (theme["background-primary-dialog-button"] || "#444444") +
+                "; }\n";
+
+        if (
+            ["theme-white", "theme-night"].indexOf(theme.name) !== -1 ||
+            ["theme-white", "theme-night"].indexOf(theme.Name) !== -1
+        ) {
+            rule += ".checkbox-checkmark { color: " + theme["text-inverse"] + "; }\n";
+            rule += ".checkbox--checked .checkbox-visual { background-color: " +
+                (theme["background-primary-dialog-button"] || "#444444") + "; }\n";
+            rule +=
+                ".checkbox--checked .checkbox-visual { border-color: " +
+                (theme["background-primary-dialog-button"] || "#444444") + "; }\n";
+            rule +=
+                ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " +
+                (theme["highlight-button-hover"] || "#e0e0e0") +
+                "; }\n";
+            rule +=
+                ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
+                (theme["highlight-primary-dialog-button-hover"] || "#1c1c1c") +
+                "; background-color: " +
+                (theme["highlight-primary-dialog-button-hover"] || "#1c1c1c") +
+                "; }\n";
+
+        } else {
+            rule +=
+                ".checkbox-checkmark { color: " +
+                (theme["text-normal"] || 'rgba(0,0,0,0.8)') +
+                "; }\n";
+            rule +=
+                ".checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " +
+                (theme["border-control-focus"] || "#848484") +
+                "; }\n";
+        }
+        /** end checkbox styles */
+
         if (themeType.includes('light')) {
             rule += '.filter-by input:checked + label>span:first-of-type{color: ' + '#00645b' + ' !important;}\n';
             rule += 'a.link:visited,\n';
@@ -199,7 +256,7 @@ const UI = {
             rule += 'button.btn_update:hover{background-color: ' + ('#007a6f') + ';}\n';    
             rule += 'button.btn_update{background-color: ' + ('#0e8a7e') + ';}\n'; 
             rule += '.plugin-plate .by-onlyoffice,\n';    
-            rule += '.filter-by input:checked + label span.onlyoffice,\n';    
+            rule += '.filter-by input:checked + label span.onlyoffice,\n';
             rule += '.filter-by label span.mark{background-color: ' + ('#0e8a7e') + ' !important;}\n';    
 
             document.body.classList.add('white_bg');
@@ -502,7 +559,22 @@ const UI = {
 
         return result;
     },
-    
+    /** @param {boolean} filterByCurrentEditor */
+    showFilterByEditorType: function(filterByCurrentEditor) {
+        const self = this;
+        this._checkboxCurrentEditor = new Checkbox(this._inputCurrentEditor, {
+            label: Utils.getTranslated("For this editor"),
+            checked: filterByCurrentEditor
+        });
+
+        this._checkboxCurrentEditor.subscribe(function(event) {
+            if (event.type === 'change') {
+                const checked = event.detail.checked;
+                self.onChangeCurrentEditor(checked);
+            }
+        });
+        //this._filterByEditorTypeContainer.classList.remove('hidden');
+    },
     /**
      * @param {string} guid 
      * @param {PluginPlateState} state
@@ -529,7 +601,7 @@ const UI = {
         if (!this._aside || !this._toolbar) {
             return;
         }
-        let isVisible = localStorage.getItem('sidebar-visible') === 'true';
+        let isVisible = MarketplaceStorage.isSidebarVisible;
 
         const showIcon = '' +
             '<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
@@ -571,7 +643,7 @@ const UI = {
 
         toggleBtn.onclick = function() {
             isVisible = !isVisible;
-            localStorage.setItem('sidebar-visible', isVisible.toString());
+            MarketplaceStorage.saveSidebarVisibleState(isVisible);
 
             toggleBtn.innerHTML = isVisible ? closeIcon : showIcon;
             if (isVisible) {

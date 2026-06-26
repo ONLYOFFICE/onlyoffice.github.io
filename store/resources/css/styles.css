@@ -23,7 +23,7 @@ aside {
 	min-width: 220px;
 	border-right-width: 1px;
 	border-right-style: solid;
-	padding: 18px 12px;
+	padding: 12px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	display: flex;
@@ -56,6 +56,16 @@ aside > .filter-by {
 	letter-spacing: 0.8px;
 	padding: 0px 10px 6px;
 }
+.filter-by-editor {
+	margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	padding: 0px 10px;
+	cursor: pointer;
+}
+.filter-by-editor .checkbox-container {
+	width: stretch;
+}
 .filter-by-installed {
 	display: flex;
 	flex-direction: column;
@@ -75,7 +85,21 @@ aside > .filter-by {
 		flex-shrink: 1;
 		flex-basis: 0%;
 	}
-.filter-by label {
+.filter-by .checkbox-label {
+	margin-left: 12px;
+	font-size: 13px;
+	position: relative;
+	flex-grow: 1;
+}
+.filter-by .checkbox-label::before {
+	content: '';
+	position: absolute;
+	left: -36px;
+	top: -10px;
+	width: calc(100% + 46px);
+	height: calc(100% + 20px);
+}
+.filter-by>label {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -88,20 +112,20 @@ aside > .filter-by {
 	cursor: pointer;
 	text-align: left;
 }
-.filter-by label > *:not(:last-child) {
+.filter-by>label > *:not(:last-child) {
 	margin-right: 10px;
 }
-.filter-by input[type="radio"] {
+.filter-by>input[type="radio"] {
 	position: absolute;
 	opacity: 0;
 	pointer-events: none;
 	width: 0;
 	height: 0;
 }
-.filter-by input:checked + label {
+.filter-by>input:checked + label {
 	font-weight: 600;
 }
-.filter-by label>span:first-of-type {
+.filter-by>label>span:first-of-type {
 	width: 16px;
 	text-align: center;
 	font-size: 12px;
@@ -109,19 +133,23 @@ aside > .filter-by {
 	align-items: center;
 	justify-content: center;
 }
-.filter-by label>span:nth-of-type(2) {
+.filter-by>label>span:nth-of-type(2) {
 	flex-grow: 1;
 	flex-shrink: 1;
 	flex-basis: 0%;
 }
-.filter-by label>span:last-of-type {
+.filter-by>label>span:last-of-type {
 	border-radius: 50%;
-}
-.filter-by label>span:last-of-type {
 	font-size: 10.5px;
 	font-weight: 500;
+	width: 20px;
+    height: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.filter-by label span.mark {
+.filter-by>label span.mark {
 	color: rgb(255, 255, 255);
 	padding: 1px 6px;
 }
@@ -134,13 +162,15 @@ aside > .filter-by {
 	border-radius: 5.5px;
 	line-height: 1;
 	flex-shrink: 0;
+	font-size: 7.15px;
+    font-weight: 700;
 }
-.filter-by input:checked + label span.onlyoffice {
+.filter-by>input:checked + label span.onlyoffice {
 	color: rgb(255, 255, 255);
 	font-size: 7.15px;
 	font-weight: 700;
 }
-.filter-by input:disabled + label {
+.filter-by>input:disabled + label {
 	pointer-events: none;
 	opacity: 0.65;
 }
