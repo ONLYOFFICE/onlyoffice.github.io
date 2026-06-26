@@ -57,13 +57,13 @@
 				<div class="filter-by filter-by-installed">
 					<input type="radio" id="category-filter-installed" name="category-filter" value="installed">
 					<label class="installed" for="category-filter-installed">
-						<span>✓</span>
+						<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 7.5L5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 						<span class="category-name i18n">Installed</span>
 						<span class="amount">999</span>
 					</label>
 					<input type="radio" id="category-filter-updates" name="category-filter" value="updates">
 					<label class="updates" for="category-filter-updates">
-						<span>↑</span>
+						<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 12V2M7 2L3 6M7 2L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 						<span class="category-name i18n">Updates</span>
 						<span class="amount mark">0</span>
 					</label>
@@ -72,13 +72,15 @@
 					<div class="filter-by filter-by-category">
 						<input type="radio" id="category-filter-all" name="category-filter" value="all">
 						<label for="category-filter-all" class="all">
-							<span>◎</span>
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="4.5" height="4.5" rx="0.75" fill="currentColor"/><rect x="8" y="1.5" width="4.5" height="4.5" rx="0.75" fill="currentColor"/><rect x="1.5" y="8" width="4.5" height="4.5" rx="0.75" fill="currentColor"/><rect x="8" y="8" width="4.5" height="4.5" rx="0.75" fill="currentColor"/></svg></span>
 							<span class="category-name i18n">All plugins</span>
 							<span class="amount">999</span>
 						</label>
 						<input type="radio" id="category-filter-onlyoffice" name="category-filter" value="onlyoffice" checked>
 						<label class="onlyoffice" for="category-filter-onlyoffice">
-							<span><span class="onlyoffice">✓</span></span>
+							<span>
+								<svg width="14" height="14" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 1L6.5 1.8L7.8 1.7L8.3 2.9L9.4 3.5L9.1 4.8L9.7 5.9L8.8 6.8L8.6 8.1L7.3 8.4L6.4 9.4L5.2 8.8L4 9.2L3.2 8.2L1.9 7.9L1.8 6.6L1 5.6L1.7 4.5L1.5 3.2L2.7 2.6L3.3 1.5L4.6 1.7L5.5 1Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/><path d="M3.4 5.4L4.8 6.8L7.6 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							</span>
 							<span class="category-name i18n">By ONLYOFFICE</span>
 							<span class="amount">999</span>
 						</label>
@@ -86,88 +88,40 @@
 						</div>
 						<input type="radio" id="category-filter-recommended" name="category-filter" value="recommended">
 						<label class="recommended" for="category-filter-recommended">
-							<span>★</span>
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L8.5 5L12.7 5.2L9.4 7.8L10.5 11.9L7 9.5L3.5 11.9L4.6 7.8L1.3 5.2L5.5 5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
 							<span class="category-name i18n">Recommended</span>
 							<span class="amount">99</span>
 						</label>
-						<!--input type="radio" name="category-filter" value="ai">
-						<label class="ai">
-							<span>✦</span>
-							<span class="category-name i18n">AI &amp; Automation</span>
-							<span class="amount">9</span>
-						</label-->
 						<input type="radio" id="category-filter-work" name="category-filter" value="work">
 						<label class="work" for="category-filter-work">
-							<span>⚒</span>
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="4.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M5 4.5V3.5C5 2.9 5.4 2.5 6 2.5H8C8.6 2.5 9 2.9 9 3.5V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1.5" y1="8" x2="12.5" y2="8" stroke="currentColor" stroke-width="1.3"/></svg></span>
 							<span class="category-name i18n">Work</span>
 							<span class="amount">999</span>
 						</label>
 						<input type="radio" id="category-filter-entertainment" name="category-filter" value="entertainment">
 						<label class="entertainment" for="category-filter-entertainment">
-							<span>▶</span>
+							<span><svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.8 4H11.2C12.5 4 13.5 4.9 13.7 6.2L14.1 9.5C14.3 10.9 13.4 12 12.1 12C11.4 12 10.8 11.6 10.4 11L9.5 9.4H6.5L5.6 11C5.2 11.6 4.6 12 3.9 12C2.6 12 1.7 10.9 1.9 9.5L2.3 6.2C2.5 4.9 3.5 4 4.8 4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 6.4V8.4M4 7.4H6" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><circle cx="10.3" cy="7" r="0.5" fill="currentColor"/><circle cx="11.6" cy="7.8" r="0.5" fill="currentColor"/></svg></span>
 							<span class="category-name i18n">Entertainment</span>
 							<span class="amount">999</span>
 						</label>
 						<input type="radio" id="category-filter-communication" name="category-filter" value="communication">
 						<label class="communication" for="category-filter-communication">
-							<span>✉</span>
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 4L7 8.5L12.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 							<span class="category-name i18n">Communication</span>
 							<span class="amount">999</span>
 						</label>
 						<input type="radio" id="category-filter-specAbilities" name="category-filter" value="specAbilities">
 						<label class="specAbilities" for="category-filter-specAbilities">
-							<span>❖</span>
+							<span><svg width="16" height="14" viewBox="0 32 511.957 447.96" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M458.624 191.979C442.603 191.979 433.237 198.08 424.256 203.926C420.757 206.187 416.555 206.251 412.992 204.118C409.429 201.985 407.488 198.209 407.829 194.07L415.936 96.854C416.192 93.889 415.168 90.945 413.163 88.747C411.136 86.55 408.299 85.291 405.312 85.291H309.611C301.782 85.291 294.614 89.558 290.859 96.427C287.147 103.275 287.424 111.574 291.627 118.08C295.894 124.693 298.667 129.685 298.667 138.624C298.667 156.267 279.531 170.624 256 170.624C232.469 170.624 213.333 156.267 213.333 138.624C213.333 129.685 216.106 124.693 220.352 118.101C224.576 111.552 224.853 103.253 221.141 96.426C217.386 89.557 210.218 85.29 202.389 85.29H106.666C103.701 85.29 100.842 86.549 98.815 88.746C96.81 90.943 95.786 93.887 96.042 96.853L104.149 194.069C104.49 198.229 102.549 201.984 98.986 204.117C95.402 206.25 91.178 206.165 86.975 203.434C78.719 198.079 69.354 191.978 53.332 191.978C23.935 191.978 -0.001 220.693 -0.001 255.978C-0.001 291.263 23.935 319.978 53.332 319.978C69.353 319.978 78.719 313.877 87.7 308.031C91.199 305.77 95.401 305.706 98.964 307.839C102.527 309.972 104.468 313.748 104.127 317.887L96.02 415.103C95.764 418.068 96.788 421.012 98.793 423.21C100.82 425.407 103.657 426.666 106.644 426.666H202.367C210.196 426.666 217.364 422.399 221.119 415.53C224.831 408.682 224.554 400.383 220.351 393.877C216.084 387.264 213.311 382.272 213.311 373.333C213.311 355.69 232.447 341.333 255.978 341.333C279.509 341.333 298.645 355.69 298.645 373.333C298.645 382.272 295.872 387.264 291.626 393.856C287.402 400.405 287.125 408.704 290.837 415.531C294.592 422.4 301.76 426.667 309.589 426.667H405.312C408.299 426.667 411.136 425.408 413.141 423.211C415.146 421.014 416.17 418.07 415.914 415.105L407.807 317.889C407.466 313.729 409.407 309.974 412.97 307.841C416.533 305.686 420.757 305.793 424.981 308.524C433.237 313.879 442.602 319.98 458.624 319.98C488.021 319.98 511.957 291.265 511.957 255.98C511.957 220.695 488.021 191.979 458.624 191.979ZM458.624 298.667C448.939 298.667 443.776 295.318 435.861 290.155C425.536 283.435 412.586 283.222 402.048 289.536C391.488 295.851 385.557 307.392 386.581 319.659L393.706 405.334L309.567 405.398C314.836 397.206 319.978 387.99 319.978 373.334C319.978 343.937 291.263 320.001 255.978 320.001C220.693 320.001 191.978 343.937 191.978 373.334C191.978 387.99 197.119 397.206 202.367 405.334H118.25L125.375 319.659C126.399 307.392 120.468 295.851 109.908 289.536C99.348 283.2 86.377 283.456 75.305 290.667C68.158 295.318 63.017 298.667 53.31 298.667C35.667 298.667 21.31 279.531 21.31 256C21.31 232.469 35.667 213.333 53.31 213.333C62.995 213.333 68.158 216.682 76.073 221.845C86.377 228.544 99.348 228.757 109.886 222.464C120.446 216.149 126.377 204.608 125.353 192.341L118.228 106.666L202.367 106.602C197.098 114.794 191.956 124.01 191.956 138.666C191.956 168.063 220.671 191.999 255.956 191.999C291.241 191.999 319.956 168.063 319.956 138.666C319.956 124.01 314.815 114.794 309.567 106.666H393.684L386.559 192.341C385.535 204.608 391.466 216.149 402.026 222.464C412.565 228.757 425.514 228.523 436.629 221.333C443.776 216.682 448.917 213.333 458.624 213.333C476.267 213.333 490.624 232.469 490.624 256C490.624 279.531 476.267 298.667 458.624 298.667Z" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round"/></svg></span>
 							<span class="category-name i18n">Special abilities</span>
 							<span class="amount">999</span>
 						</label>
-						<!--label class="translation">
-							<input type="radio" name="category-filter" value="translation">
-							<span>文</span>
-							<span class="category-name i18n">Translation</span>
-							<span class="amount">6</span>
-						</label>
-						<label class="writing">
-							<input type="radio" name="category-filter" value="writing">
-							<span>¶</span>
-							<span class="category-name i18n">Writing tools</span>
-							<span class="amount">7</span>
-						</label>
-						<label class="productivity">
-							<input type="radio" name="category-filter" value="productivity">
-							<span>☑</span>
-							<span class="category-name i18n">Productivity</span>
-							<span class="amount">11</span>
-						</label-->
 						<input type="radio" id="category-filter-devTools" name="category-filter" value="devTools">
 						<label class="devTools" for="category-filter-devTools">
-							<span>&lt;&gt;</span>
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L1.5 7L4 10" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><line x1="8.2" y1="1.5" x2="5.8" y2="12.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M10 4L12.5 7L10 10" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 							<span class="category-name i18n">Developer tools</span>
 							<span class="amount">999</span>
 						</label>
-						<!--label class="integrations">
-							<input type="radio" name="category-filter" value="integrations">
-							<span>◈</span>
-							<span class="category-name i18n">Integrations</span>
-							<span class="amount">8</span>
-						</label>
-						<label class="media">
-							<input type="radio" name="category-filter" value="media">
-							<span>▦</span>
-							<span class="category-name i18n">Media &amp; Design</span>
-							<span class="amount">4</span>
-						</label>
-						<label class="utilities">
-							<input type="radio" name="category-filter" value="utilities">
-							<span>⚙</span>
-							<span class="category-name i18n">Utilities</span>
-							<span class="amount">6</span>
-						</label>
-						<label class="games">
-							<input type="radio" name="category-filter" value="games">
-							<span>♞</span>
-							<span class="category-name i18n">Games</span>
-							<span class="amount">2</span>
-						</label-->
 					</div>
 				<div class="submit-own-plugin">
 					<!-- TODO think about how to open the form for uploading -->
