@@ -30,4 +30,4 @@
 
 ## 1.0.6
 
-* New UI for plugin manager.
+* Replaced tab-based navigation with a persistent sidebar for quicker access to plugin categories.
