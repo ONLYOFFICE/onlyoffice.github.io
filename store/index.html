@@ -35,158 +35,228 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 	<link rel="stylesheet" href="./resources/css/styles.css">
-	<link rel="stylesheet" href="vendor/select2-4.0.13/css/select2.css"/>
-	<script type="text/javascript" src="vendor/jquery/jquery-3.7.1.min.js"></script>
-	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-	<script type="text/javascript" src="scripts/polyfill.js"></script>
-	<script type="text/javascript" src="scripts/code.js"></script>
-	<script src="vendor/select2-4.0.13/js/select2.js"></script>
-	<script src="vendor/marked/marked.min.js"></script>
+	<link rel="stylesheet" href="./resources/css/checkbox.css">
+	<script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<script src="scripts/shared/polyfill.js" defer></script>
+	<script src="scripts/shared/checkbox.js" defer></script>
+	<script src="scripts/marketplace/storage.js" defer></script>
+	<script src="scripts/marketplace/ui.js" defer></script>
+	<script src="scripts/shared/utils.js" defer></script>
+	<script src="scripts/shared/data-fetcher.js" defer></script>
+	<script src="scripts/marketplace/service.js" defer></script>
+	<script src="scripts/marketplace/scale.js" defer></script>
+	<script src="scripts/marketplace/plugin-icons.js" defer></script>
+	<script src="scripts/code.js" defer></script>
 </head>
 	<body class="noselect">
-		<img class="stars_grey" style="opacity: 0; z-index: -1000;" src="./resources/img/stars/rating-stars.svg"/>
-		<div id="div_header" class="header hidden">
-			<!-- <span id="arrow" class="arrow hidden">&#8592;</span> -->
-			<label id="lbl_header" class="aboutlable header">Manage plugins</label>
-			<!-- <span id="close" class="close">&times;</span> -->
-		</div>
-		<div id="div_body" class="div_body transparent">
-			<div id="toolbar" class="toolbar">
-				<div class="toolbar_top">
-					<div class="toolbar_buttons">
-						<button id="btn_AvailablePlugins" class="btn_menu btn_menu_left btn-text-default">Available plugins</button>
-						<button id="btn_marketplace" class="btn_menu btn_menu_right btn-text-default btn_toolbar_active">Marketplace</button>
-					</div>
-					<div class="toolbar_link">
-						<!-- TODO think about how to open the form for uploading -->
-						<a id="link_newPlugin" class="link_submit" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">Submit your own plugin</a>
-					</div>
+		<div id="plugins" class="plugin-store transparent">
+			<aside>
+				<div class="filter-by filter-by-editor hidden">
+					<input type="checkbox" id="filter-current-editor">
 				</div>
-				<div id="toolbar_tools" class="toolbar_tools">
-					<div class="flex">
-						<div style="display: flex; justify-content: center; align-items: center;">
-							<span id="span_categories" style="margin-right: 4px; margin-top: 1px;">Categories</span>
-							<select id="select_categories">
-								<option id="opt_all" value="all">All</option>
-								<option id="opt_rec" value="recommended">Recommended</option>
-								<option id="opt_dev" value="devTools">Developer tools</option>
-								<option id="opt_work" value="work">Work</option>
-								<option id="opt_enter" value="entertainment">Entertainment</option>
-								<option id="opt_com" value="communication">Communication</option>
-								<option id="opt_spec" value="specAbilities">Special abilities</option>
+				<div class="filter-by filter-by-installed">
+					<input type="radio" id="category-filter-installed" name="category-filter" value="installed">
+					<label class="installed" for="category-filter-installed">
+						<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 7.5L5 10.5L12 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<span class="category-name i18n">Installed</span>
+						<span class="amount">999</span>
+					</label>
+					<input type="radio" id="category-filter-updates" name="category-filter" value="updates">
+					<label class="updates" for="category-filter-updates">
+						<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 12V2M7 2L3 6M7 2L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<span class="category-name i18n">Updates</span>
+						<span class="amount mark">0</span>
+					</label>
+				</div>
+					<div class="categories-header i18n">Categories</div>
+					<div class="filter-by filter-by-category">
+						<input type="radio" id="category-filter-all" name="category-filter" value="all">
+						<label for="category-filter-all" class="all">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.7" y="1.7" width="3.8" height="3.8" rx="0.6" stroke="currentColor" stroke-width="1.2"/><rect x="1.7" y="8.5" width="3.8" height="3.8" rx="0.6" stroke="currentColor" stroke-width="1.2"/><rect x="8.5" y="8.5" width="3.8" height="3.8" rx="0.6" stroke="currentColor" stroke-width="1.2"/><path d="M10.4 1.6V5.6M8.4 3.6H12.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+							<span class="category-name i18n">All plugins</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-onlyoffice" name="category-filter" value="onlyoffice" checked>
+						<label class="onlyoffice" for="category-filter-onlyoffice">
+							<span>
+								<svg width="14" height="14" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 1L6.5 1.8L7.8 1.7L8.3 2.9L9.4 3.5L9.1 4.8L9.7 5.9L8.8 6.8L8.6 8.1L7.3 8.4L6.4 9.4L5.2 8.8L4 9.2L3.2 8.2L1.9 7.9L1.8 6.6L1 5.6L1.7 4.5L1.5 3.2L2.7 2.6L3.3 1.5L4.6 1.7L5.5 1Z" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/><path d="M3.4 5.4L4.8 6.8L7.6 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+							</span>
+							<span class="category-name i18n">By ONLYOFFICE</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-recommended" name="category-filter" value="recommended">
+						<label class="recommended" for="category-filter-recommended">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L8.5 5L12.7 5.2L9.4 7.8L10.5 11.9L7 9.5L3.5 11.9L4.6 7.8L1.3 5.2L5.5 5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+							<span class="category-name i18n">Recommended</span>
+							<span class="amount">99</span>
+						</label>
+						<input type="radio" id="category-filter-work" name="category-filter" value="work">
+						<label class="work" for="category-filter-work">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="4.5" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M5 4.5V3.5C5 2.9 5.4 2.5 6 2.5H8C8.6 2.5 9 2.9 9 3.5V4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="1.5" y1="8" x2="12.5" y2="8" stroke="currentColor" stroke-width="1.3"/></svg></span>
+							<span class="category-name i18n">Work</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-entertainment" name="category-filter" value="entertainment">
+						<label class="entertainment" for="category-filter-entertainment">
+							<span><svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.8 4H11.2C12.5 4 13.5 4.9 13.7 6.2L14.1 9.5C14.3 10.9 13.4 12 12.1 12C11.4 12 10.8 11.6 10.4 11L9.5 9.4H6.5L5.6 11C5.2 11.6 4.6 12 3.9 12C2.6 12 1.7 10.9 1.9 9.5L2.3 6.2C2.5 4.9 3.5 4 4.8 4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 6.4V8.4M4 7.4H6" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><circle cx="10.3" cy="7" r="0.5" fill="currentColor"/><circle cx="11.6" cy="7.8" r="0.5" fill="currentColor"/></svg></span>
+							<span class="category-name i18n">Entertainment</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-communication" name="category-filter" value="communication">
+						<label class="communication" for="category-filter-communication">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="3" width="11" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 4L7 8.5L12.5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+							<span class="category-name i18n">Communication</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-specAbilities" name="category-filter" value="specAbilities">
+						<label class="specAbilities" for="category-filter-specAbilities">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="1.4" stroke="currentColor" stroke-width="1.2"/><path d="M7 1.5V3M7 11V12.5M1.5 7H3M11 7H12.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+							<span class="category-name i18n">Special abilities</span>
+							<span class="amount">999</span>
+						</label>
+						<input type="radio" id="category-filter-devTools" name="category-filter" value="devTools">
+						<label class="devTools" for="category-filter-devTools">
+							<span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4L1.5 7L4 10" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><line x1="8.2" y1="1.5" x2="5.8" y2="12.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M10 4L12.5 7L10 10" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+							<span class="category-name i18n">Developer tools</span>
+							<span class="amount">999</span>
+						</label>
+					</div>
+				<div class="submit-own-plugin">
+					<!-- TODO think about how to open the form for uploading -->
+					<a id="link_newPlugin" class="link" target="blank" href="https://github.com/ONLYOFFICE/onlyoffice.github.io/pulls">
+						<span class="i18n link-text">Submit your own plugin</span>
+						<span> →</span>
+					</a>
+				</div>
+			</aside>
+			<main>
+				<div class="toolbar">
+					<div class="selected-category">
+						<h1 class="i18n">By ONLYOFFICE</h1>
+					</div>
+					<div class="search-container">
+						<div class="search">
+							<span>
+								<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M10 5.5C10 7.98528 7.98528 10 5.5 10C3.01472 10 1 7.98528 1 5.5C1 3.01472 3.01472 1 5.5 1C7.98528 1 10 3.01472 10 5.5ZM9.01953 9.72663C8.06578 10.5217 6.83875 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 6.83875 10.5217 8.06578 9.72663 9.01953L13.8536 13.1465L13.1465 13.8536L9.01953 9.72663Z" fill="currentColor" fill-opacity="0.8"/>
+								</svg>
+							</span>
+							<input id="inp_search" class="i18n form-control" type="text" spellcheck="false" placeholder="Search plugins…" value="">
+						</div>
+					</div>
+					<div id="toolbar_tools" class="toolbar_tools">
+						<button id="btn_updateAll" class="btn-text-default btn_update i18n" onclick="onClickUpdateAll()" data-count="0">Update All</button>
+						<div class="hidden">
+							<span id="span_sort">Sort by</span>
+							<select id="select_sortBy">
+								<option value="name">Name</option>
+								<option value="raiting">Raiting</option>
+								<option value="instalations">Instalations</option>
 							</select>
 						</div>
-						<button id="btn_updateAll" class="btn-text-default btn_update btn_install hidden" onclick="onClickUpdateAll()">Update All</button>
 					</div>
-					<div class="hidden">
-						<span id="span_sort">Sort by</span>
-						<select id="select_sortBy">
-							<option value="name">Name</option>
-							<option value="raiting">Raiting</option>
-							<option value="instalations">Instalations</option>
-						</select>
-					</div>
-					<input id="inp_search" type="text" spellcheck="false" class="form-control" placeholder="Search plugins...">
 				</div>
-			</div>
-			<div id="div_main" class="main_content"></div>
+				<div id="plugins_container" class="plugins-container">
+					<div id="div_main" class="plugins-list"></div>
+				</div>
+			</main>
+
 		</div>
-		<div id="div_selected_toolbar" class="div_selected_toolbar hidden">
-			<!-- TODO temporarily, I added an arrow here so that I could go back -->
-			<span id="arrow" class="arrow hidden">&#8592;</span>
-			<div class="div_selected_description">
-				<span id="span_name" class="span_name_selected"></span>
-				<div class="div_offered_votes">
-					<span id="span_offered_caption" class="span_offered">Offered by</span>
-					<span id="span_offered" class="span_offered"></span>
-				</div>
-				<div class="div_rating_general">
-					<div id="div_rating_link" class="div_rating_general">
-						<div class="div_info_column">
-							<div id="div_rating_stars" >
-								<div class="div_rating">
-									<div class="stars_grey"></div>
-									<div id="stars_colored" class="stars_orange"></div>
-								</div>
-							</div>
-						</div>
-						<div id="div_votes" class="div_votes div_offered_votes hidden">
-							<span id="total_votes"></span>
-						</div>
-						<a id="discussion_link" class="aboutlink link_submit" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
-					</div>
-					<div style="height: 18px;"></div>
-				</div>
-				<div>
-					<button id="btn_remove" class="btn-text-default btn_preview btn_remove" onclick="onClickRemove(event.target.parentNode, event)">Remove</button>
-					<button id="btn_update" class="btn-text-default btn_preview btn_install" onclick="onClickUpdate(event.target)">Update</button>
-					<button id="btn_install" class="btn-text-default btn_preview btn_install" onclick="onClickInstall(event.target.parentNode, event)">Install</button>
-				</div>
-			</div>
-			<div class="div_info_column">
-				<div id="div_icon_info" class="div_icon_info">
+		<div id="plugin_card_panel" class="pc hidden">
+			<div class="pc-header">
+				<div class="pc-title-row">
+				<div id="div_icon_info" class="pc-icon">
 					<img id="img_icon">
 				</div>
-			</div>
-		</div>
-		<div id="div_selected_main" class="div_selected_main hidden">
-			<div style="width:100%; height:100%">
-				<div>
-					<span id="span_overview" class="span_caption span_selected" onclick="onSelectPreview(event.target, 1)">Overview</span>
-					<span id="span_info" class="span_caption" onclick="onSelectPreview(event.target, 2)">Info & Support</span>
-					<span id="span_changelog" class="span_caption" onclick="onSelectPreview(event.target, 3)">Changelog</span>
-					<hr>
-				</div>
-				<div id="div_selected_preview" class="div_selected_preview">
-					<div class="div_description_selected">
-						<span id="span_selected_description"></span>
+				<div class="pc-meta">
+					<div class="pc-name-row">
+					<span id="span_name" class="pc-name">---</span>
+					<span class="pc-badge hidden"><i class="ti ti-circle-check">✓</i> <span class="i18n" title="By ONLYOFFICE">By ONLYOFFICE</span></span>
 					</div>
+					<div class="pc-sub">
+						<span class="default-plugin-icon hidden i18n" title="Local">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+								<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+								<line x1="12" y1="22.08" x2="12" y2="12"></line>
+							</svg>
+						</span>
+						<span id="span_offered"></span> <span id="span_version"></span>
+					</div>
+					<div id="div_rating_link" class="pc-stats">
+						<div class="pc-rating" id="stars_colored"></div>
+						<a id="discussion_link" class="link review-link i18n" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/overview/">Click to rate</a>
+					</div>
+				</div>
+				<div class="pc-actions">
+					<button id="btn_remove" class="btn-text-default btn_preview btn_remove hidden i18n" onclick="PluginCard.onClickRemove(event)">Remove</button>
+					<button id="btn_update" class="btn-text-default btn_update hidden i18n" onclick="PluginCard.onClickUpdate(event)">Update</button>
+					<button id="btn_install" class="btn-text-default btn_preview btn_install hidden i18n" onclick="PluginCard.onClickInstall(event)">Install</button>
+				</div>
+				</div>
+			</div>
+
+			<div class="pc-tabs">
+				<span class="span_caption span_selected i18n" id="span_overview" onclick="PluginCard.onSelectPreview(event.target, 1)">Overview</span>
+				<span class="span_caption i18n" onclick="PluginCard.onSelectPreview(event.target, 2)">Info &amp; Support</span>
+				<span class="span_caption" id="span_changelog" onclick="PluginCard.onSelectPreview(event.target, 3)">Changelog</span>
+			</div>
+
+			<div class="tabs-content">
+				<div id="div_selected_preview" class="tab-pane">
+					<div class="about-body" id="div_description_selected" ><span id="span_selected_description"></span></div>
 					<div id="div_selected_image">
 						<div id="div_selected_container" class="slideshow-container">
-							<span id="prev_arrow" class="prev hidden" onclick="plusSlides(-1)"></span>
-							<span id="next_arrow" class="next hidden" onclick="plusSlides(1)"></span>
+							<span id="prev_arrow" class="prev hidden" onclick="PluginCard.plusSlides(-1)">&#10094;</span>
+							<span id="next_arrow" class="next hidden" onclick="PluginCard.plusSlides(1)">&#10095;</span>
 						</div>
-						<br>
 						<div id="points_container" style="text-align:center"></div>
 					</div>
 				</div>
-				<div id="div_selected_info" class="div_selected_preview hidden">
-					<div id="div_plugin_info" class="div_plugin_info">
-						<div id="div_version" class="div_selected_info margin_0 hidden">
-							<span id="span_ver_caption" class="font_bold">Version: </span>
-							<span id="span_ver"></span>
-						</div>
-						<div id="div_min_version" class="div_selected_info hidden">
-							<span id="span_min_ver_caption" class="font_bold">The minimum supported editors version: </span>
+				<div id="div_selected_info" class="tab-pane hidden">
+					<div id="div_plugin_info" class="info-block">
+						<div id="div_min_version" class="hidden">
+							<strong class="i18n">The minimum supported editors version</strong>
+							<span>: </span>
 							<span id="span_min_ver"></span>
 						</div>
-						<div id="div_languages" class="div_selected_info hidden">
-							<span id="span_langs_caption" class="font_bold">Languges: </span>
+						<div id="div_languages" class="hidden">
+							<strong class="i18n">Languages</strong>
+							<span>: </span>
 							<span id="span_langs"></span>
 						</div>
 					</div>
-					<div id="div_readme_link" class="div_selected_info">
-						<span id="span_lern" class="font_bold">Learn how to use </span>
-						<span id="span_lern_plugin">the plugin in </span>
-						<a id="link_readme" class="aboutlink link_info" target="blank" href="">README.</a>
-					</div>
-					<div id="div_github_link" class="div_selected_info">
-						<span id="span_contribute" class="font_bold">Contribute </span>
-						<span id="span_contribute_end">to the plugin development or report an issue on </span>
-						<a id="link_plugin" class="aboutlink link_info" target="blank">Github.</a>
-					</div>
-					<div class="div_selected_info">
-						<span id="span_help" class="font_bold">Get help </span>
-						<span id="span_help_end">with the plugin functionality on our forum.</span>
-					</div>
-					<div class="div_selected_info">
-						<span id="span_create">Create a new plugin using </span>
-						<a class="aboutlink link_info" target="blank" href="https://api.onlyoffice.com/docs/plugin-and-macros/get-started/">ONLYOFFICE API.</a>
+					<div class="info-block">
+						<div id="div_readme_link">
+							<strong class="i18n">Learn how to use</strong>
+							<span> </span>
+							<span class="i18n">the plugin in</span>
+							<span> </span>
+							<a id="link_readme" class="link link_info" target="blank" href="">README.</a>
+						</div>
+						<div id="div_github_link">
+							<strong class="i18n">Contribute</strong>
+							<span> </span>
+							<span class="i18n">to the plugin development or report an issue on</span>
+							<span> </span>
+							<a id="link_plugin" class="link link_info" target="blank">Github.</a>
+						</div>
+						<div>
+							<strong class="i18n">Get help</strong>
+							<span> </span>
+							<span class="i18n">with the plugin functionality on our forum.</span>
+						</div>
+						<div>
+							<span class="i18n">Create a new plugin using</span>
+							<span> </span>
+							<a class="link link_info" target="blank" href="https://api.onlyoffice.com/docs/plugins/get-started/">ONLYOFFICE API.</a>
+						</div>
 					</div>
 				</div>
-				<div id="div_selected_changelog" class="div_selected_preview div_selected_preview_chanelog hidden">
+				<div id="div_selected_changelog" class="tab-pane hidden">
 					<div id="div_changelog_preview"></div>
 				</div>
+
 			</div>
 		</div>
 		<div id="div_error" class="error_main hidden"><div class="loader_background"></div></div>

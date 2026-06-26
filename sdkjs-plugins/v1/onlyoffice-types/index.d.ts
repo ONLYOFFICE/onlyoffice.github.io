@@ -3,56 +3,133 @@ import type { ApiSlide } from "./src/generated/slide";
 import type { ApiWord } from "./src/generated/word";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
+import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
 
 
+
+type DesktopDialogType = 'plugin' | 'images' | 'cell' | 'word' | 'slide';
+
+/** Native C++ object injected by OnlyOffice Desktop Editor into the browser window */
+interface AscDesktopEditor {
+    // Plugin management
+    GetInstallPlugins(): string;
+    GetBackupPlugins(): string;
+    PluginInstall(path: string): boolean;
+
+    // File dialogs
+    OpenFilenameDialog(type: DesktopDialogType, multiple: boolean, callback: (file: string | string[]) => void): void;
+
+    // Local file operations
+    LocalStartOpen(): void;
+    LocalFileSave(params: string, password: string, docinfo?: unknown, fileType?: number, jsonOptions?: string, passwordOld?: string): void;
+    LocalFileSaveChanges(changes: string, deleteIndex: number, count: number): void;
+    LocalFileGetSaved(): boolean;
+    LocalFileGetSourcePath(): string;
+    LocalFileGetRelativePath(path: string): string;
+    LocalFileGetOpenChangesCount(): number;
+    LocalFileGetImageUrl(path: string): string;
+    LocalFileGetImageUrlCorrect(path: string): string;
+    IsLocalFileExist(path: string): boolean;
+    GetOpenedFile(path: string): ArrayBuffer | null;
+    AddChanges(type: number, base64: string): void;
+
+    // Document state
+    SetDocumentName(name: string): void;
+    onDocumentModifiedChanged(isModified: boolean): void;
+    SetLocalRestrictions(value: number): void;
+    SetAdvancedOptions(xml: string): void;
+    NativeViewerOpen(password: string): void;
+    CheckUserId(): string;
+
+    // Encryption
+    buildCryptedEnd(success: boolean): void;
+
+    // External conversions
+    startExternalConvertation(type: string, params: string): void;
+}
+
+interface AscSimpleRequestOptions {
+    url: string;
+    crossOrigin?: boolean;
+    crossDomain?: boolean;
+    timeout?: number;
+    headers?: string;
+    complete?: (response: any, status: string) => void;
+    error?: (response: any, status: string, error: any) => void;
+}
+
+interface AscSimpleRequest {
+    createRequest(options: AscSimpleRequestOptions): void;
+}
 
 declare global {
     interface Window {
         Asc: Asc;
+        AscDesktopEditor?: AscDesktopEditor;
+        AscSimpleRequest?: AscSimpleRequest;
     }
     var Asc: Asc;
+    var AscDesktopEditor: AscDesktopEditor | undefined;
+    var AscSimpleRequest: AscSimpleRequest | undefined;
     /** Available inside callCommand callback - editor API for current editor type */
     var Api: ApiWord & ApiCell & ApiSlide;
 }
 
 export {};
 
+type PluginScope = Record<string, any>;
+
+type PluginEventName = 'onExternalMouseUp' | 'onClickBack' | 'onWindowResize' | 'onDocumentContentReady' | 'onTargetPositionChanged' | string;
+
+type PluginEventCallback<T = any> = (data: T) => void;
+
 interface Asc {
     plugin: AscPlugin;
-    scope: Object<any>;
+    scope: PluginScope;
     PluginWindow: new () => PluginWindow;
     ButtonContextMenu: new () => ButtonContextMenu;
     Buttons: Buttons;
 }
 
 interface AscPlugin {
-    attachEvent: (eventName: string, callback: (event: any) => void) => void;
+    attachEvent: (eventName: PluginEventName, callback: PluginEventCallback) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
-    detachEvent: (eventName: string) => void;
-    executeMethod: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
-    executeMethodAsync: <T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void;
+    detachEvent: (eventName: PluginEventName) => void;
+    executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
+        ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
+        (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
+    executeMethodAsync: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
+        ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
+        (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
+    onExternalMouseUp: () => void;
     onThemeChanged: (theme: AscTheme) => void;
     onThemeChangedBase: (theme: AscTheme) => void;
-    onTranslate(): any;
-    resizeWindow: (width: number, height: number) => void;
+    onTranslate(): void;
+    resizeWindow: (width: number, height: number, minWidth?: number, minHeight?: number, maxWidth?: number, maxHeight?: number) => void;
     sendEvent: (eventName: string, eventData?: unknown) => void;
-    sendToPlugin(message: string, payload?: any): void;
+    sendToPlugin(message: string, payload?: unknown): void;
     theme: AscTheme;
     tr: (key: string) => string;
+    /** Set to `true` after `tr` is first initialized */
+    tr_init?: boolean;
+    /** Translation map for the current language, populated by `pluginInitTranslateManager` */
+    translateManager?: Record<string, string>;
     trigger: (eventName: string, eventData?: unknown) => void;
 }
 
 interface PluginWindow {
     id: string;
-    show: (variation: any) => void;
+    show: (variation: VariationConfig) => void;
     close: () => void;
-    attachEvent: (eventName: string, callback: (event: any) => void) => void;
+    attachEvent: (eventName: string, callback: PluginEventCallback) => void;
     // detachEvent: (eventName: string) => void;
-    command: (methodName: string, payload?: any) => void;
+    command: (methodName: string, payload?: unknown) => void;
 }
 
 interface Buttons {
@@ -66,7 +143,7 @@ interface ButtonContextMenu {
 }
 
 interface ExecuteCommandCallback {
-    (command: string, value?: any, callback?: () => void): void;
+    (command: string, value?: unknown, callback?: () => void): void;
 }
 
 interface ButtonConfig {
@@ -78,16 +155,17 @@ interface ButtonConfig {
 
 type EditorType = 'word' | 'cell' | 'slide' | 'pdf';
 
-interface IconConfig {
-    [scale: string]: {
+type IconScale = '100%' | '125%' | '150%' | '175%' | '200%';
+
+type IconConfig = {
+    [K in IconScale]?: {
         active?: string;
         hover?: string;
         normal: string;
     };
-}
+};
 
 type InitDataType = 'text' | 'html' | 'ole' | 'desktop' | 'desktop-external' | 'none' | 'sign';
-
 
 type MenuType = 'left' | 'right';
 
@@ -104,6 +182,28 @@ interface PluginInfo {
     userName: string;
 }
 
+interface PluginConfig {
+    baseUrl?: string;
+    description?: string;
+    discussion?: string;
+    guid: string;
+    minVersion?: string;
+    name: string;
+    nameLocale?: Record<string, string>;
+    offered?: string;
+    url?: string;
+    variations: VariationConfig[];
+    version?: string;
+}
+
+interface InstalledPluginInfo {
+    baseUrl: string;
+    canRemoved: boolean;
+    guid: string;
+    obj: PluginConfig;
+    removed?: boolean;
+}
+
 interface StoreConfig {
     background?: {
         dark: string;
@@ -117,12 +217,16 @@ interface StoreConfig {
     screenshots?: string[];
 }
 
+type KnownThemeName = "theme-night" | "theme-light" | "theme-dark" | "theme-gray" | "theme-white" | "theme-classic-light" | "theme-contrast-dark";
+
 interface AscTheme {
     /** Theme name */
-    Name: string;
-    /** Theme name (duplicate for compatibility) */
-    name: string;
+    Name: KnownThemeName | string;
+    /** @deprecated Theme name (duplicate for compatibility) */
+    name: KnownThemeName | string;
     /** Theme type (light/dark) */
+    Type: "light" | "dark";
+    /** @deprecated Theme type (light/dark) */
     type: "light" | "dark";
     /** Show rulers button */
     RulersButton: boolean;
@@ -658,23 +762,26 @@ interface VariationConfig {
     descriptionLocale?: Record<string, string>;
     EditorsSupport: EditorType[];
     events?: string[];
-    icons?: string;
+    fixedSize?: boolean;
+    icons?: Record<string, string> | string[] | string;
     icons2?: IconConfig[];
     initData?: string;
     initDataType?: InitDataType;
     initOnSelectionChanged?: boolean;
+    isCanDocked?: boolean;
     isCustomWindow?: boolean;
     isDisplayedInViewer?: boolean;
     isInsideMode?: boolean;
     isModal?: boolean;
     isSystem?: boolean;
+    isTargeted?: boolean;
     isUpdateOleOnResize?: boolean;
     isViewer?: boolean;
     isVisual: boolean;
     menu?: MenuType;
-    name: string;
+    name?: string;
     nameLocale?: Record<string, string>;
-    size: [number, number];
+    size?: number[];
     store?: StoreConfig;
     type?: VariationType;
     url: string;
@@ -686,7 +793,16 @@ export type {
     EditorType,
     AscTheme,
     VariationConfig,
-    PluginWindow
+    PluginWindow,
+    PluginConfig,
+    InstalledPluginInfo,
+    PluginScope,
+    PluginEventName,
+    PluginEventCallback,
+    ButtonConfig,
+    StoreConfig,
+    IconConfig,
+    IconScale
 };
 
 export type Api<T extends EditorType> =

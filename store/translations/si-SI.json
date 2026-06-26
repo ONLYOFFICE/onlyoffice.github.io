@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "පේනු කළමනාකරණය",
+	"Available plugins": "මාගේ පේනු",
 	"My plugins": "තිබෙන පේනු",
+	"Updates": "යාවත්කාල",
 	"Marketplace": "වෙළඳපොළ",
 	"Submit your own plugin": "ඔබගේ පේනුවක් යොමන්න",
 	"Install plugin manually": "අතින් ස්ථාපනය කරන්න",
@@ -41,8 +43,8 @@
 	"Chinese": "චීන",
 	"Update All": "සියල්ල යාවත්කාලය",
 	"Categories": "ප්‍රවර්ග",
-	"Search plugins": "පේනු සොයන්න",
-	"All": "සියල්ල",
+	"Search plugins…": "පේනු සොයන්න…",
+	"All plugins": "සියල්ල පේනු",
 	"Recommended": "නිර්දේශිත",
 	"Developer tools": "සංවර්ධක මෙවලම්",
 	"Work": "වැඩ",
@@ -60,5 +62,13 @@
 	"Problem with loading some resources" : "ඇතැම් සම්පත් පූරණයට අසමත් විය",
 	"Click to rate" : "ඇගැයීමට ඔබන්න",
 	"No disscussion page for this plugin." : "මෙම පේනුව පිළිබඳව සාකච්ඡා නැත.",
-	"Problem with plugin installation." : "ප්ලගින ස්ථාපනය කිරීමේ ගැටළුව."
+	"Problem with plugin installation." : "ප්ලගින ස්ථාපනය කිරීමේ ගැටළුව.",
+	"By ONLYOFFICE": "ONLYOFFICE වෙතින්",
+	"No plugins match your filters.": "ඔබගේ පෙරහන් අනුව ප්ලගින නොමැත.",
+	"Try a different category or search term." : "වෙනත් වර්ගය හෝ සෙවුම් පදයක් උත්සාහ කරන්න.",
+	"Local": "ස්ථානීය",
+	"No updates available.": "යාවත්කාලීන නොමැත.",
+	"All your plugins are up to date.": "ඔබගේ සියලු ප්ලගින යාවත්කාලීනයි.",
+	"Show panel": "පැනල් පෙන්වන්න",
+	"Hide panel": "පැනල් සඟවන්න"
 }

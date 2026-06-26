@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Gestisci plugin",
 	"Available plugins": "Plugin disponibili",
+	"Installed": "Installati",
+	"Updates": "Aggiornamenti",
 	"Marketplace": "Marketplace",
 	"Submit your own plugin": "Invia il tuo plugin",
 	"Install plugin manually": "Installa il plugin manualmente",
@@ -41,8 +43,8 @@
 	"Chinese": "Cinese",
 	"Update All": "Aggiorna tutto",
 	"Categories": "Categorie",
-	"Search plugins": "Cerca plugin",
-	"All": "Tutti",
+	"Search plugins…": "Cerca plugin…",
+	"All plugins": "Tutti i plugin",
 	"Recommended": "Consigliati",
 	"Developer tools": "Strumenti di sviluppo",
 	"Work": "Lavoro",
@@ -60,5 +62,13 @@
 	"Problem with loading some resources" : "Problema con il caricamento di alcune risorse",
 	"Click to rate" : "Fai clic per votare",
 	"No disscussion page for this plugin." : "Nessuna pagina di discussione per questo plugin.",
-	"Problem with plugin installation." : "Problema con l'installazione del plugin."
+	"Problem with plugin installation." : "Problema con l'installazione del plugin.",
+	"By ONLYOFFICE": "Di ONLYOFFICE",
+	"No plugins match your filters.": "Nessun plugin corrisponde ai tuoi filtri.",
+	"Try a different category or search term." : "Prova una categoria o un termine di ricerca diverso.",
+	"Local": "Locale",
+	"No updates available.": "Nessun aggiornamento disponibile.",
+	"All your plugins are up to date.": "Tutti i tuoi plugin sono aggiornati.",
+	"Show panel": "Mostra pannello",
+	"Hide panel": "Nascondi pannello"
 }

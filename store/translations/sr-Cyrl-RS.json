@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Управљај додацима",
+	"Available plugins": "Моји додаци",
 	"My plugins": "Моји додаци",
+	"Updates": "Ажурирања",
 	"Marketplace": "Тржиште",
 	"Submit your own plugin": "Пошаљи свој додатак",
 	"Install plugin manually": "Инсталирај плугин ручно",
@@ -41,8 +43,8 @@
 	"Chinese": "Кинески",
 	"Update All": "Ажурирај све",
 	"Categories": "Категорије",
-	"Search plugins": "Претражи додатке",
-	"All": "Све",
+	"Search plugins…": "Претражи додатке…",
+	"All plugins": "Сви додаци",
 	"Recommended": "Препоручено",
 	"Developer tools": "Алати за програмере",
 	"Work": "Посао",
@@ -60,5 +62,13 @@
 	"Problem with loading some resources" : "Проблем са учитавањем неких ресурса",
 	"Click to rate" : "Кликни да оцениш",
 	"No disscussion page for this plugin." : "Нема странице за дискусију за овај додатак.",
-	"Problem with plugin installation." : "Проблем са инсталацијом додатка."
+	"Problem with plugin installation." : "Проблем са инсталацијом додатка.",
+	"By ONLYOFFICE": "Од ONLYOFFICE",
+	"No plugins match your filters.": "Нема додатака који одговарају вашим филтерима.",
+	"Try a different category or search term." : "Покушајте другу категорију или термин претраге.",
+	"Local": "Локално",
+	"No updates available.": "Нема доступних ажурирања.",
+	"All your plugins are up to date.": "Сви ваши додаци су ажурирани.",
+	"Show panel": "Прикажи панел",
+	"Hide panel": "Сакриј панел"
 }
