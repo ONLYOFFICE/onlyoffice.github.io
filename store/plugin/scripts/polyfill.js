@@ -49,3 +49,20 @@ Uint8Array.prototype.copyWithin = Uint8Array.prototype.copyWithin || function(ta
 	this.set(tmpArray, target);
 	return this;
 };
+
+// String.prototype.trimEnd / trimRight (ES2019; trimRight is the legacy alias).
+// Whitespace set matches the spec (WhiteSpace + LineTerminator).
+(function() {
+	var trimEnd = String.prototype.trimEnd || String.prototype.trimRight || function() {
+		if (this == null) {
+			throw new TypeError("String.prototype.trimEnd called on null or undefined");
+		}
+		return String(this).replace(/[\s\uFEFF\xA0]+$/, "");
+	};
+	if (!String.prototype.trimEnd) {
+		String.prototype.trimEnd = trimEnd;
+	}
+	if (!String.prototype.trimRight) {
+		String.prototype.trimRight = trimEnd;
+	}
+})();
