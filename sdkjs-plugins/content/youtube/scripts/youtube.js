@@ -263,6 +263,48 @@
 	} catch (error) {
 		console.log("Some problem");
 	}
+
+	const isLocalDesktop = (function(){
+		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+			return false;
+		if (window.location && window.location.protocol == "file:")
+			return true;
+		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
+			return true;
+		return false;
+	})();
+
+	if (!isLocalDesktop) {
+		console.log("Running in web environment");
+		return;
+	}
+
+
+
+	const iframe = document.createElement('iframe');
+
+	function postMessage(message) {
+		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
+	};
+
+	iframe.src = "https://onlyoffice.github.io/sdkjs-plugins/content/youtube/player.html";
+	iframe.onload = function() {
+		postMessage({
+			type: 'youtube-video-id',
+			id: 'MUSnPlOfaTI'
+		} );
+	};
 	
+	window.addEventListener("message", function(event) {
+		if (!event.data || event.data.type !== "youtube-plugin-message")
+			return;
+	
+		if (event.data.action === "insert") {
+			var url = event.data.url;
+			console.log("Received URL:", url);
+			document.getElementById("textbox_url").value = url;
+			//document.getElementById("textbox_button").onclick();
+		}
+	});
 	
 })(window, undefined);
