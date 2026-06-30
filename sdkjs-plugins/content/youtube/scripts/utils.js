@@ -30,8 +30,8 @@
  *
  */
 
-
 // @ts-check
+/// <reference path="../../../v1/onlyoffice-types/index.d.ts" />
 
 const Utils = {
     /** @param {string} url @param {string} param @returns {string | undefined} */
@@ -67,6 +67,13 @@ const Utils = {
             _id = _id.substr(0, _amp);
 
         return _id;
+    },
+    /**
+     * @param {string} text
+     * @returns {string}
+     */
+    getTranslated: function(text) {
+        return window.Asc.plugin.tr(text);
     },
     /** @param {string} url @returns {boolean} */
     validateYoutubeUrl1: function(url) {

@@ -106,7 +106,17 @@
 				if (!isWindowPlayer)
 				{
 					var _table     = document.getElementById("id_player");
-					_table.innerHTML = "<div id=\"content\" style=\"position:absolute;padding:0;margin:0;left:0;top:0;width:100%;height:100%;\"></div>";
+					_table.textContent = "";
+					const div = document.createElement("div");
+					div.id = "content";
+					div.style.position = "absolute";
+					div.style.padding = "0";
+					div.style.margin = "0";
+					div.style.left = "0";
+					div.style.top = "0";
+					div.style.width = "100%";
+					div.style.height = "100%";
+					_table.appendChild(div);
 					isWindowPlayer = true;
 
 					window.Asc.plugin.resizeWindow(620, 480, 390, 400, 0, 0);
@@ -115,7 +125,6 @@
 				url = _url;
 
 				Player.show(url, isLocalDesktop);
-
 			};
 
 			url = text;
@@ -186,6 +195,10 @@
 			var label = document.getElementById("td_labelUrl");
 			if (label)
 				label.textContent = window.Asc.plugin.tr("Paste youtube video URL");
+			const loading = document.querySelector(".asc-loader-title");
+			if (loading) {
+				loading.textContent = window.Asc.plugin.tr("Loading video");
+			}
 		};
 	} catch (error) {
 		console.log("Some problem");

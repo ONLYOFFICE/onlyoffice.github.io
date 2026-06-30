@@ -39,6 +39,8 @@ const Player = {
      * @type {any}
      */
     player: null,
+    /** @type {HTMLDivElement | undefined} */
+    _loader: undefined,
     /**
      * @param {string} url
      * @param {boolean} [isLocalDesktop]
@@ -78,6 +80,12 @@ const Player = {
                 playerVars: { 
                     'fs' : 1,
                     'start' : 0
+                },
+                events: {
+                    /** @param {any} event */
+                    onReady: function(event) {
+                        window.parent.postMessage({ type: 'player-ready' }, '*');
+                    },
                 }
             };
 
@@ -97,12 +105,14 @@ const Player = {
      * @param {string} url
      */
     _showDesktop: function(url) {
-
+        const self = this;
 		const playerContainer = document.getElementById("id_player");
         if (!playerContainer) {
             console.error("Player container not found");
             return;
         }
+
+        this.toggleLoader(true, "Loading video");
         playerContainer.textContent = "";
         /** @type {HTMLIFrameElement} */
         let iframe = document.createElement("iframe");
@@ -113,17 +123,42 @@ const Player = {
 		iframe.setAttribute("allowfullscreen", "true");
 		playerContainer.appendChild(iframe);
 
-		iframe.src = "https://onlyoffice-github-io.pages.dev/sdkjs-plugins/content/youtube/desktop-player.html";
-		iframe.onload = this._postMessage.bind(this, iframe, {
-			type: 'youtube-video',
-			url: url
-		});
+		iframe.src = "https://localhost:4004/sdkjs-plugins/content/youtube/desktop-player.html";
+		// iframe.src = "https://onlyoffice-github-io.pages.dev/sdkjs-plugins/content/youtube/desktop-player.html";
+		iframe.onload = function() {
+			self._postMessage(iframe, {
+				type: 'youtube-video',
+				url: url
+			});
+		};
 		
 		window.addEventListener("message", function(event) {
-			if (!event.data || event.data.type !== "youtube-plugin-message")
+			if (!event.data || event.data.type !== "player-ready")
 				return;
 		
-			console.log("Received:", event);
+			self.toggleLoader(false);
 		});
-    }
+    },
+        
+    /**
+     * @param {boolean} show 
+     * @param {string} [text]
+     */
+    toggleLoader: function(show, text) {
+        // show or hide loader (don't use UI for this function)
+        let loaderContainer = document.getElementById('loader-container');
+        if (!loaderContainer) {
+            return;
+        }
+        if (!show) {
+            loaderContainer.classList.add('hidden');
+            this._loader && (this._loader.remove ? this._loader.remove() : loaderContainer.removeChild(this._loader));
+            this._loader = undefined;	
+        } else if (!this._loader) {
+            loaderContainer.classList.remove('hidden');
+            const translatedText = text ? Utils.getTranslated(text) : '';
+            // @ts-ignore
+            this._loader = showLoader(loaderContainer, translatedText + '...');
+        }
+    },
 };
