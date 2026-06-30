@@ -34,28 +34,24 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>youtube</title>
+	<script type="text/javascript">
+		window.YT = null;
+	</script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script type="text/javascript" src="scripts/utils.js"></script>
+	<script type="text/javascript" src="scripts/player.js"></script>
 </head>
 <body>
-	<iframe 
-        width="100%"
-        height="100%" 
-        src="https://www.youtube.com/embed/MUSnPlOfaTI?si=I-AgDF8aTAdne5BB" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        referrerpolicy="strict-origin-when-cross-origin" 
-        allowfullscreen
-    ></iframe>
+	<div id="content"></div>
     <script>
-        window.parent.postMessage({
-            type: "youtube-plugin-message",
-            action: "insert",
-            url: "https://www.youtube.com/watch?v=MUSnPlOfaTI"
-        }, "*");
-
         window.addEventListener('message', function(event) {
             console.log(event);
+            if (event.data.type === 'youtube-video') {
+                Player.show(event.data.url);
+            }
         });
+
+        
     </script>
 </body>
 </html>

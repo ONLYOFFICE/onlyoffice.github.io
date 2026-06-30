@@ -30,61 +30,10 @@
  *
  */
 (function(window, undefined){
-
+	
 	try {
 		var url = "";
-		var player = null;
 		var isWindowPlayer = false;
-
-		function getParam(url, param)
-		{
-			var _questPos = url.indexOf("?");
-			if (_questPos < 0 && _questPos >= (url.length - 1))
-				return undefined;
-
-			var _url = url.substr(_questPos + 1);
-			var _propPos = _url.indexOf(param + "=");
-			if (_propPos < 0 && _propPos >= (url.length - 1))
-				return undefined; 
-
-			_propPos += param.length;
-			_propPos += 1; // '='
-
-			var _last = _url.indexOf("&", _propPos);
-			if (_last < 0)
-				_last = _url.length;
-
-			return _url.substr(_propPos, _last - _propPos);
-		}
-		
-		function validateYoutubeUrl1(url)
-		{
-			var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-			return (url.match(p)) ? true : false;
-		}
-		function validateYoutubeUrl2(url)
-		{
-			var p = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-			var match = url.match(p);
-			return (match && match[2] && match[2].length == 11) ? true : false;
-		}
-		
-		var validateYoutubeUrl = validateYoutubeUrl2;
-		
-		function getVideoId(url)
-		{
-			var _ids = url.split("/");
-			var _id = _ids[_ids.length - 1];
-
-			if (0 == _id.indexOf("watch?v="))
-				_id = _id.substr(8);
-
-			var _amp = _id.indexOf("&");
-			if (-1 != _amp)
-				_id = _id.substr(0, _amp);
-
-			return _id;
-		}
 
 		window.Asc.plugin.init = function(text)
 		{
@@ -92,6 +41,17 @@
 				document.getElementsByTagName('body')[0].innerHTML = "<p id='message' style='text-align:center; font-size:12pt;'>" + window.Asc.plugin.tr("This service isn't available in your region.") + "<\/p>";
 				return;
 			}
+
+			const isLocalDesktop = (function(){
+				if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+					return false;
+				if (window.location && window.location.protocol == "file:")
+					return true;
+				if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
+					return true;
+				return false;
+			})();
+
 			var _textbox = document.getElementById("textbox_url");
 
 			// disable input and button elements in view mode
@@ -132,11 +92,11 @@
 
 				if (_findDoubleUrl > 0)
 				{
-					_url = _url.substr(0, _findDoubleUrl);
+					_url = _url.substring(0, _findDoubleUrl);
 					document.getElementById("textbox_url").value = _url;
 				}
 
-				if (!validateYoutubeUrl(_url))
+				if (!Utils.validateYoutubeUrl(_url))
 				{
 					document.getElementById("textbox_url").style.borderColor = "#d9534f";
 					document.getElementById("input_error_id").style.display = "block";
@@ -152,36 +112,10 @@
 					window.Asc.plugin.resizeWindow(620, 480, 390, 400, 0, 0);
 				}
 
-				if (true)
-				{
-					url = _url;
+				url = _url;
 
-					if (!player)
-					{
-						var opt = {
-							height: '100%',
-							width: '100%',
-							videoId: getVideoId(url),
-							playerVars: { 
-								'fs' : 1
-							}
-						};
+				Player.show(url, isLocalDesktop);
 
-						var _time = getParam(url, "t");
-						if (_time && _time.length > 0)
-							opt.playerVars.start = parseInt(_time);
-
-						player = new YT.Player('content', opt);
-					}
-					else
-					{
-						if (player.stopVideo && player.loadVideoById)
-						{
-							player.stopVideo();
-							player.loadVideoById(getVideoId(url));
-						}
-					}
-				}
 			};
 
 			url = text;
@@ -195,30 +129,23 @@
 		
 		window.Asc.plugin.button = function(id)
 		{
-			try
-			{
-				if (player && player.stopVideo)
-					player.stopVideo();
-			}
-			catch (err)
-			{
-			}
+			Player.stop();
 
 			if (id == 0 && YT)
 			{
 				url = document.getElementById("textbox_url").value;
 
-				if (!validateYoutubeUrl(url))
+				if (!Utils.validateYoutubeUrl(url))
 				{
 					document.getElementById("textbox_url").style.borderColor = "#d9534f";
 					document.getElementById("input_error_id").style.display = "block";
 					return;
 				}
 
-				var _id = getVideoId(url);
+				var _id = Utils.extractVideoId(url);
 				var _questPos = _id.indexOf("?");
 				if (_questPos > 0)
-					_id = _id.substr(0, _questPos);
+					_id = _id.substring(0, _questPos);
 
 				var _url = "http://img.youtube.com/vi/" + _id + "/0.jpg";
 				if (_id)
@@ -258,53 +185,10 @@
 		{
 			var label = document.getElementById("td_labelUrl");
 			if (label)
-				label.innerHTML = window.Asc.plugin.tr("Paste youtube video URL");
+				label.textContent = window.Asc.plugin.tr("Paste youtube video URL");
 		};
 	} catch (error) {
 		console.log("Some problem");
 	}
 
-	const isLocalDesktop = (function(){
-		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
-			return false;
-		if (window.location && window.location.protocol == "file:")
-			return true;
-		if (window.document && window.document.currentScript && 0 == window.document.currentScript.src.indexOf("file:///"))
-			return true;
-		return false;
-	})();
-
-	if (!isLocalDesktop) {
-		console.log("Running in web environment");
-		return;
-	}
-
-
-
-	const iframe = document.createElement('iframe');
-
-	function postMessage(message) {
-		iframe.contentWindow.postMessage(JSON.stringify(message), '*');
-	};
-
-	iframe.src = "https://onlyoffice.github.io/sdkjs-plugins/content/youtube/player.html";
-	iframe.onload = function() {
-		postMessage({
-			type: 'youtube-video-id',
-			id: 'MUSnPlOfaTI'
-		} );
-	};
-	
-	window.addEventListener("message", function(event) {
-		if (!event.data || event.data.type !== "youtube-plugin-message")
-			return;
-	
-		if (event.data.action === "insert") {
-			var url = event.data.url;
-			console.log("Received URL:", url);
-			document.getElementById("textbox_url").value = url;
-			//document.getElementById("textbox_button").onclick();
-		}
-	});
-	
 })(window, undefined);
