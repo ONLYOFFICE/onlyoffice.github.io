@@ -45,10 +45,16 @@
 	<div id="content"></div>
     <script>
         window.addEventListener('message', function(event) {
-            console.log(event);
             try {
                 const data = JSON.parse(event.data);
+                if (!event.origin) {
+                    return;
+                }
+                if (event.origin.indexOf('file://') !== 0 && event.origin.indexOf('onlyoffice') !== 0) {
+                    return;
+                }
                 if (data.type === 'youtube-video') {
+                    console.log('Received youtube-video message:', data);
                     Player.show(data.url);
                 }
             } catch (e) {
