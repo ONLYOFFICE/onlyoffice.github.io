@@ -47,7 +47,8 @@ const Player = {
      */
     show: function(url, isLocalDesktop) {
         if (isLocalDesktop) {
-            this._showDesktop(url);
+            //this._showDesktop(url);
+            this._showOnlyOffice();
         } else {
             this._showBrowser(url);
         }
@@ -123,8 +124,9 @@ const Player = {
 		iframe.setAttribute("allowfullscreen", "true");
 		playerContainer.appendChild(iframe);
 
-		iframe.src = "https://localhost:4004/sdkjs-plugins/content/youtube/desktop-player.html";
-		// iframe.src = "https://onlyoffice-github-io.pages.dev/sdkjs-plugins/content/youtube/desktop-player.html";
+		//iframe.src = "https://onlyoffice.github.io/sdkjs-plugins/content/youtube/desktop-player.html";
+		// iframe.src = "https://localhost:4004/sdkjs-plugins/content/youtube/desktop-player.html";
+		iframe.src = "https://onlyoffice-github-io.pages.dev/sdkjs-plugins/content/youtube/desktop-player.html";
 		iframe.onload = function() {
 			self._postMessage(iframe, {
 				type: 'youtube-video',
