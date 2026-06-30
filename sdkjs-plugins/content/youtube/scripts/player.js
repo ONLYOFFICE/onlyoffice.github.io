@@ -97,10 +97,6 @@ const Player = {
      * @param {string} url
      */
     _showDesktop: function(url) {
-        const self = this;
-        console.warn(document);
-		console.warn(document.querySelector("#desktop_player"));
-		console.warn(document.getElementById("desktop_player"));
 
 		const playerContainer = document.getElementById("id_player");
         if (!playerContainer) {
