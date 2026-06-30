@@ -40,6 +40,15 @@
 	<script src="https://www.youtube.com/iframe_api"></script>
 	<script type="text/javascript" src="scripts/utils.js"></script>
 	<script type="text/javascript" src="scripts/player.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 	<div id="content"></div>
@@ -54,7 +63,6 @@
                     return;
                 }
                 if (data.type === 'youtube-video') {
-                    console.log('Received youtube-video message:', data);
                     Player.show(data.url);
                 }
             } catch (e) {
