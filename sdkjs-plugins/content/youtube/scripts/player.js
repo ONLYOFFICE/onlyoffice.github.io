@@ -132,19 +132,12 @@ const Player = {
 		// iframe.src = "https://localhost:4004/sdkjs-plugins/content/youtube/desktop-player.html";
 		
         iframe.onload = function() {
+			self.toggleLoader(false);
 			self._postMessage(iframe, {
 				type: 'youtube-video',
 				url: url
 			});
 		};
-		
-        // listen to the desktop iframe that is inside the current iframe
-		window.addEventListener("message", function(event) {
-			if (!event.data || event.data.type !== "player-ready")
-				return;
-		
-			self.toggleLoader(false);
-		});
     },
         
     /**
