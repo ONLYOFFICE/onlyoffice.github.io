@@ -49,7 +49,7 @@ const Player = {
         if (isLocalDesktop) {
             this._showDesktop(url);
         } else {
-            this._showBrowser(url);
+            this._showBrowser(url, isLocalDesktop);
         }
     },
     stop: function() {
@@ -70,8 +70,9 @@ const Player = {
     },
     /**
      * @param {string} url
+     * @param {boolean} [isLocalDesktop]
      */
-    _showBrowser: function(url) {
+    _showBrowser: function(url, isLocalDesktop) {
         if (!this.player) {
             const opt = {
                 height: '100%',
@@ -84,6 +85,10 @@ const Player = {
                 events: {
                     /** @param {any} event */
                     onReady: function(event) {
+                        // only for desktop player
+                        if (typeof isLocalDesktop !== 'boolean') {
+                            return;
+                        }
                         window.parent.postMessage({ type: 'player-ready' }, '*');
                     },
                 }
@@ -123,16 +128,17 @@ const Player = {
 		iframe.setAttribute("allowfullscreen", "true");
 		playerContainer.appendChild(iframe);
 
-		//iframe.src = "https://onlyoffice.github.io/sdkjs-plugins/content/youtube/desktop-player.html";
+		iframe.src = "https://onlyoffice.github.io/sdkjs-plugins/content/youtube/desktop-player.html";
 		// iframe.src = "https://localhost:4004/sdkjs-plugins/content/youtube/desktop-player.html";
-		iframe.src = "https://onlyoffice-github-io.pages.dev/sdkjs-plugins/content/youtube/desktop-player.html";
-		iframe.onload = function() {
+		
+        iframe.onload = function() {
 			self._postMessage(iframe, {
 				type: 'youtube-video',
 				url: url
 			});
 		};
 		
+        // listen to the desktop iframe that is inside the current iframe
 		window.addEventListener("message", function(event) {
 			if (!event.data || event.data.type !== "player-ready")
 				return;

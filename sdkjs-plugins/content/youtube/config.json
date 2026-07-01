@@ -92,5 +92,6 @@
 				"categories": ["specAbilities", "entertainment", "recommended"]
 			}
 		}
-	]
+	],
+	"onlyofficeScheme": false
 }
