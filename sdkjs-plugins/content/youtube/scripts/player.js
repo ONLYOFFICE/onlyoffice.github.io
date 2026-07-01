@@ -47,8 +47,7 @@ const Player = {
      */
     show: function(url, isLocalDesktop) {
         if (isLocalDesktop) {
-            //this._showDesktop(url);
-            this._showOnlyOffice();
+            this._showDesktop(url);
         } else {
             this._showBrowser(url);
         }
