@@ -1,0 +1,76 @@
+{
+	"name" : "Antidote",
+	"nameLocale": {
+		"ru": "Antidote",
+		"fr": "Antidote",
+		"es": "Antidote",
+		"de": "Antidote",
+		"cs": "Antidote",
+		"zh": "Antidote",
+		"pt-BR": "Antidote",
+		"sr-Cyrl-RS": "Antidote",
+		"sr-Latn-RS": "Antidote",
+		"ja-JA": "Antidote",
+		"sq-AL": "Antidote",
+		"it": "Antidote",
+		"ar-SA": "Antidote"
+	},
+
+	"guid" : "asc.{ANTIDOTE-1RX8-0FQM-R98O-XSS4P72PO236}",
+	"version": "0.0.1",
+	"minVersion" : "9.3.0",
+
+	"variations" : [
+		{
+			"description": "Integrate Antidote into ONLYOFFICE",
+			"descriptionLocale": {
+				"ru": "Интегрируйте Antidote в ONLYOFFICE",
+				"fr": "Intégrez Antidote dans ONLYOFFICE",
+				"es": "Integre Antidote en ONLYOFFICE",
+				"pt-BR": "Integre Antidote no ONLYOFFICE",
+				"de": "Integrieren Sie Antidote in ONLYOFFICE",
+				"cs": "Integrujte Antidote do ONLYOFFICE",
+				"zh": "将 Antidote 集成到 ONLYOFFICE 中",
+				"sr-Cyrl-RS": "Интегришите Antidote у ONLYOFFICE",
+				"sr-Latn-RS": "Integrišite Antidote u ONLYOFFICE",
+				"ja-JA": "Antidote を ONLYOFFICE に統合する",
+				"sq-AL": "Integroni Antidote në ONLYOFFICE",
+				"it": "Integra Antidote in ONLYOFFICE",
+				"ar-SA": "أدمج Antidote في ONLYOFFICE"
+			},
+			"events": ["onContextMenuShow", "onContextMenuClick"],
+			"url"         : "index.html",
+
+			"icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",			
+
+			"isViewer"            : false,
+			"EditorsSupport"      : ["word", "cell", "pdf"],
+			"initDataType"        : "none",
+			"isVisual": true,
+			"isModal": false,
+			"isInsideMode": true,
+			"isUpdateOleOnResize": false,
+			"initOnSelectionChanged": false,
+
+			"store": {
+				"background": {
+					"light" : "radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.55) 18%, transparent 42%), radial-gradient(circle at 75% 15%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.25) 22%, transparent 45%), radial-gradient(circle at 55% 70%, rgba(255, 255, 255, 0.35) 0%, transparent 38%), radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.3) 0%, transparent 35%), linear-gradient(135deg, #14d4a5 0%, #0bc8b5 35%, #05b8c5 70%, #009bd9 100%)",
+					"dark" : "radial-gradient(ellipse 130% 110% at -15% -20%, rgba(255,255,255,.18) 0%, rgba(255,255,255,.06) 34%, transparent 72%), radial-gradient(ellipse 90% 80% at 105% 5%, rgba(255,255,255,.10) 0%, transparent 65%), radial-gradient(ellipse 140% 100% at 25% 65%, rgba(0, 210, 255, .12) 0%, transparent 60%), radial-gradient(ellipse 120% 90% at 80% 35%, rgba(0, 170, 200, .10) 0%, transparent 60%), linear-gradient(135deg, #0a5678 0%, #0b5f7d 18%, #0b6d7c 38%, #0b7776 58%, #0b717f 75%, #0b6597 90%, #0b54b2 100%)"
+				},
+				"screenshots" :
+				[
+					"resources/store/screenshots/screen_1.png",
+					"resources/store/screenshots/screen_2.png",
+					"resources/store/screenshots/screen_3.png"
+				],
+				"icons" : {
+					"light" : "resources/store/icons",
+					"dark"  : "resources/store/icons"
+				},
+				"categories": ["specAbilities", "work"]
+			}
+		}
+	],
+
+	"onlyofficeScheme": false
+}
