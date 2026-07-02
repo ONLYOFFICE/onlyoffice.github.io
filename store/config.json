@@ -42,5 +42,7 @@
 	{ "name": "bergamot", "discussion": "" },
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
-	{"name": "lizardtypst", "discussion": ""}
+	{"name": "lizardtypst", "discussion": ""},
+	{"name": "chineseconvertor", "discussion": ""},
+	{"name": "chineseautoformattool", "discussion": ""}
 ]

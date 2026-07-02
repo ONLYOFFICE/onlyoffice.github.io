@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Convertor</title>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+    <script type="text/javascript" src="vendor/opencc/opencc.js"></script>
+    <script type="text/javascript" src="vendor/pinyin/pinyin.js"></script>
+    <script type="text/javascript" src="code.js"></script>
+
+    <style>
+        #toast {
+            position: absolute;
+            /* 相对于 container */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(-20px);
+            /* 初始上移 20px */
+            background-color: #4BB543;
+            /* 成功绿色 */
+            color: white;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 9999;
+            text-align: center;
+            min-width: 100px;
+            pointer-events: none;
+        }
+        
+        #toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateY(0);
+            /* 动画移动到正中 */
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h5 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            /* 按钮间距 */
+        }
+        
+        .btn {
+            background-color: #1e3a8a;
+            /* 深蓝色 */
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.25s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2563eb;
+            /* 悬停时变亮蓝色 */
+        }
+        
+        .btn:active {
+            background-color: #1d4ed8;
+            /* 点击时更深蓝色 */
+        }
+        
+        .btn2 {
+            background-color: #5cc687;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.25s ease;
+        }
+        
+        .btn2:hover {
+            background-color: #9feabd;
+        }
+        
+        .myHint {
+            border: 1px dashed #82DCA4;
+            padding: 10px;
+            color: #808E75;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="btn-container">
+        <h5 id="operatorHints">Please select the text you want to operate and click the corresponding operation button.</h5>
+        <button id="button1" class="btn" onclick="action('convertChineseToFan')">Simplified → Traditional</button>
+        <button id="button2" class="btn" onclick="action('convertFanToChinese')">Traditional → Simplified</button>
+        <button id="button3" class="btn2" onclick="action('addPinyin')">Add pinyin</button>
+        <button id="button4" class="btn2" onclick="action('removePinyin')">Remove pinyin</button>
+        <div class="myHint">
+            <img style="height: 12px;" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgNTEyIj4gPHBhdGggZmlsbD0iIzM4QTE2OSIgZD0iTTMwMi4xODkgMzI5LjEyNkgxOTYuMTA1bDU1LjgzMSAxMzUuOTkzYzMuODg5IDkuNDI4LS41NTUgMTkuOTk5LTkuNDQ0IDIzLjk5OWwtNDkuMTY1IDIxLjQyN2MtOS4xNjUgNC0xOS40NDMtLjU3MS0yMy4zMzItOS43MTRsLTUzLjA1My0xMjkuMTM2LTg2LjY2NCA4OS4xMzhDMTguNzI5IDQ3Mi43MSAwIDQ2My41NTQgMCA0NDcuOTc3VjE4LjI5OUMwIDEuODk5IDE5LjkyMS02LjA5NiAzMC4yNzcgNS40NDNsMjg0LjQxMiAyOTIuNTQyYzExLjQ3MiAxMS4xNzkgMy4wMDcgMzEuMTQxLTEyLjUgMzEuMTQxeiI+PC9wYXRoPiA8L3N2Zz4="
+            />
+            <span id="operatorHints2">Tip: Right-click after selecting text to use the function directly.</span>
+        </div>
+        <div id="toast"></div>
+    </div>
+</body>
+
+</html>
