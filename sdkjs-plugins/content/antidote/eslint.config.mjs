@@ -61,13 +61,58 @@ const jsConfig = [
   },
 ];
 
+const reactConfig = [
+  plugins.react,
+  plugins.reactHooks,
+  plugins.reactA11y,
+  ...configs.react.recommended,
+  {
+    settings: {
+      react: {
+        version: 'detect',
+        pragma: 'h',
+      },
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
+      'react/jsx-uses-vars': 'error',
+      'react/require-default-props': 'off',
+      'react/button-has-type': 'off',
+      'react/no-unescaped-entities': 'off',
+      'react/no-array-index-key': 'warn',
+      'react/no-unused-prop-types': 'warn',
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
+      'jsx-a11y/no-noninteractive-element-interactions': 'warn',
+      'jsx-a11y/label-has-associated-control': 'warn',
+      'jsx-a11y/interactive-supports-focus': 'warn',
+    },
+  },
+];
+
+const typescriptConfig = [
+  plugins.typescriptEslint,
+  ...configs.base.typescript,
+  ...configs.react.typescript,
+  {
+    rules: {
+      '@typescript-eslint/no-shadow': 'warn',
+      '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
+    },
+  },
+];
+
 export default [
   includeIgnoreFile(gitignorePath),
   ...jsConfig,
+  ...reactConfig,
+  ...typescriptConfig,
   {
     rules: {
       'import-x/prefer-default-export': 'off',
       'import-x/no-cycle': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
       'consistent-return': 'warn',
       '@stylistic/no-tabs': 'error',
       '@stylistic/no-mixed-spaces-and-tabs': 'error',

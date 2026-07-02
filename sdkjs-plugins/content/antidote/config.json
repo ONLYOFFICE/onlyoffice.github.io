@@ -17,40 +17,56 @@
 	},
 
 	"guid" : "asc.{ANTIDOTE-1RX8-0FQM-R98O-XSS4P72PO236}",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"minVersion" : "9.3.0",
 
 	"variations" : [
 		{
-			"description": "Integrate Antidote into ONLYOFFICE",
+			"description": "Check spelling, grammar and style with Antidote, and look words up in its Dictionaries and Guides.",
 			"descriptionLocale": {
-				"ru": "Интегрируйте Antidote в ONLYOFFICE",
-				"fr": "Intégrez Antidote dans ONLYOFFICE",
-				"es": "Integre Antidote en ONLYOFFICE",
-				"pt-BR": "Integre Antidote no ONLYOFFICE",
-				"de": "Integrieren Sie Antidote in ONLYOFFICE",
-				"cs": "Integrujte Antidote do ONLYOFFICE",
-				"zh": "将 Antidote 集成到 ONLYOFFICE 中",
-				"sr-Cyrl-RS": "Интегришите Antidote у ONLYOFFICE",
-				"sr-Latn-RS": "Integrišite Antidote u ONLYOFFICE",
-				"ja-JA": "Antidote を ONLYOFFICE に統合する",
-				"sq-AL": "Integroni Antidote në ONLYOFFICE",
-				"it": "Integra Antidote in ONLYOFFICE",
-				"ar-SA": "أدمج Antidote في ONLYOFFICE"
+				"ru": "Проверяйте орфографию, грамматику и стиль с помощью Antidote, ищите слова в Словарях и Гидах.",
+				"fr": "Corrigez l'orthographe, la grammaire et le style avec Antidote, et consultez ses Dictionnaires et Guides.",
+				"es": "Revise la ortografía, la gramática y el estilo con Antidote, y consulte sus Diccionarios y Guías.",
+				"pt-BR": "Verifique ortografia, gramática e estilo com o Antidote, e consulte seus Dicionários e Guias.",
+				"de": "Überprüfen Sie Rechtschreibung, Grammatik und Stil mit Antidote und nutzen Sie dessen Wörterbücher und Leitfäden.",
+				"cs": "Kontrolujte pravopis, gramatiku a styl pomocí Antidote a vyhledávejte ve slovnících a průvodcích.",
+				"zh": "使用 Antidote 检查拼写、语法和风格，并查阅其词典和指南。",
+				"sr-Cyrl-RS": "Проверите правопис, граматику и стил помоћу Antidote-а и претражујте речнике и водиче.",
+				"sr-Latn-RS": "Proverite pravopis, gramatiku i stil pomoću Antidote-a i pretražujte rečnike i vodiče.",
+				"ja-JA": "Antidote でスペル、文法、文体をチェックし、辞書とガイドを参照できます。",
+				"sq-AL": "Kontrolloni drejtshkrimin, gramatikën dhe stilin me Antidote, dhe kërkoni fjalë në Fjalorët dhe Udhëzuesit e tij.",
+				"it": "Controlla ortografia, grammatica e stile con Antidote e consulta i suoi Dizionari e Guide.",
+				"ar-SA": "تحقق من الإملاء والقواعد والأسلوب باستخدام Antidote، واطّلع على قواميسه وأدلته."
 			},
-			"events": ["onContextMenuShow", "onContextMenuClick"],
-			"url"         : "index.html",
 
-			"icons": "resources/%theme-type%(light|dark)/icon%scale%(default).%extension%(png)",			
+			"url": "index.html",
 
-			"isViewer"            : false,
-			"EditorsSupport"      : ["word", "cell", "pdf"],
-			"initDataType"        : "none",
-			"isVisual": true,
-			"isModal": false,
-			"isInsideMode": true,
-			"isUpdateOleOnResize": false,
-			"initOnSelectionChanged": false,
+			"icons2": [
+				{
+					"style": "light",
+					"100%": { "normal": "resources/light/icon.png" },
+					"125%": { "normal": "resources/light/icon@1.25x.png" },
+					"150%": { "normal": "resources/light/icon@1.5x.png" },
+					"175%": { "normal": "resources/light/icon@1.75x.png" },
+					"200%": { "normal": "resources/light/icon@2x.png" }
+				},
+				{
+					"style": "dark",
+					"100%": { "normal": "resources/dark/icon.png" },
+					"125%": { "normal": "resources/dark/icon@1.25x.png" },
+					"150%": { "normal": "resources/dark/icon@1.5x.png" },
+					"175%": { "normal": "resources/dark/icon@1.75x.png" },
+					"200%": { "normal": "resources/dark/icon@2x.png" }
+				}
+			],
+
+			"isViewer": false,
+			"EditorsSupport": ["word", "cell", "pdf"],
+			"type": "panel",
+			"initDataType": "none",
+			"buttons": [],
+			"isUpdateOleOnResize": true,
+			"size": [320, 480],
 
 			"store": {
 				"background": {

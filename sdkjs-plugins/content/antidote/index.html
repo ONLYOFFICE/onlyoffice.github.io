@@ -31,14 +31,55 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mendeley</title>
-    <link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
-    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
-    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
-</head>
-<body spellcheck="false" class="noselect">
-    ANTIDOTE
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Antidote</title>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<script type="text/javascript">
+			(function() {
+				var checkPlugin = setInterval(function() {
+					if (window.Asc && window.Asc.plugin && window.Asc.plugin.info && window.Asc.plugin.info.theme) {
+						clearInterval(checkPlugin);
+						var theme = window.Asc.plugin.info.theme;
+						var isDark = theme.name && (theme.name.includes('dark') || theme.name.includes('night') || theme.name.includes('contrast'));
+
+						var classes = '';
+						if (theme.name) {
+							classes = theme.name + ' theme-type-' + theme.type;
+						} else {
+							classes = 'theme-' + theme.type + ' theme-type-' + theme.type + (isDark ? ' theme-dark' : ' theme-light');
+						}
+
+						document.body.className = classes;
+						document.documentElement.classList.add('theme-ready');
+					}
+				}, 10);
+
+				setTimeout(function() {
+					clearInterval(checkPlugin);
+					if (!document.documentElement.classList.contains('theme-ready')) {
+						document.body.className = 'theme-light theme-type-light';
+						document.documentElement.classList.add('theme-ready');
+					}
+				}, 2000);
+
+				if (!window.Asc || !window.Asc.plugin) return;
+
+				window.Asc.plugin.button = function(id) {
+					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id } }));
+					if (id === -1 || id === '-1' || id === 1 || id === '1')
+						this.executeCommand('close', '');
+				};
+			})();
+		</script>
+		<link rel="stylesheet" href="./dist/index.css">
+		<script type="module" src="./dist/index.js"></script>
+	</head>
+	<body class="theme-light theme-type-light">
+		<div id="app"></div>
+	</body>
 </html>

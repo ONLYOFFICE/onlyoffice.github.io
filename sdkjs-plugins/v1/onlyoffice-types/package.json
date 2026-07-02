@@ -1,5 +1,5 @@
 {
-  "name": "@types/onlyoffice-plugins-api",
+  "name": "onlyoffice-plugins-api",
   "version": "0.1.0",
   "types": "index.d.ts",
   "description": "TypeScript definitions for OnlyOffice plugins",

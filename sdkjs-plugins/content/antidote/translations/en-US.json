@@ -1,0 +1,44 @@
+{
+  "common": {
+    "error": "Error",
+    "reload": "Reload",
+    "initializingPlugin": "Initializing plugin…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Check",
+    "scope": {
+      "document": "Whole document",
+      "selection": "Selection"
+    },
+    "check": "Check with Antidote",
+    "stop": "Stop",
+    "lookup": {
+      "title": "Look up a word",
+      "placeholder": "Word or phrase…",
+      "dictionaries": "Dictionaries",
+      "guides": "Guides"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Ready to check your text with Antidote.",
+      "connecting": "Connecting to Antidote…",
+      "connected": "Antidote corrector is open.",
+      "error": "Something went wrong."
+    },
+    "errors": {
+      "notDetected": "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.",
+      "unknown": "An unexpected error occurred while talking to Antidote."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "manualPort": {
+      "label": "Connectix WebSocket port",
+      "hint": "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".",
+      "save": "Save",
+      "clear": "Clear"
+    }
+  }
+}
