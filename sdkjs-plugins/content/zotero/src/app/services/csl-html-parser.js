@@ -8,6 +8,7 @@ class CslHtmlParser {
         "i",
         "u",
         "b",
+        "p",
         "sc",
         "sup",
         "sub",
