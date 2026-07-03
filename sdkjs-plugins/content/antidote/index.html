@@ -69,6 +69,13 @@
 
 				if (!window.Asc || !window.Asc.plugin) return;
 
+				window.Asc.plugin.init = function() {
+					var theme = window.Asc.plugin.info && window.Asc.plugin.info.theme;
+					if (theme && theme.type === 'dark') {
+						document.body.classList.add('theme-dark');
+					}
+				};
+
 				window.Asc.plugin.button = function(id) {
 					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id } }));
 					if (id === -1 || id === '-1' || id === 1 || id === '1')

@@ -33,7 +33,7 @@
 type Translations = Record<string, Record<string, string> | string>;
 
 const DEFAULT_LANGUAGE = 'en-US';
-const TRANSLATIONS_BASE_PATH = new URL('../../translations', import.meta.url).href;
+const TRANSLATIONS_BASE_PATH = new URL('../translations', import.meta.url).href;
 
 let supportedLanguages: string[] = [DEFAULT_LANGUAGE];
 let currentLanguage = DEFAULT_LANGUAGE;
@@ -101,6 +101,7 @@ function normalizeLanguageCode(lang: string): string {
   const base = normalized.split('-')[0];
 
   const match = supportedLanguages.find((supported) => supported.toLowerCase().startsWith(base));
+  console.log('Lang:', match);
 
   return match || DEFAULT_LANGUAGE;
 }

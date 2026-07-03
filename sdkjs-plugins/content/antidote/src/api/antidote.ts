@@ -40,19 +40,65 @@ export class AntidoteError extends Error {
   }
 }
 
-// AgentConnectix's WebSocket port is either overridden manually in Settings, or discovered through
-// the Antidote browser/desktop connector. If neither is available, Antidote (or its connector)
-// isn't installed/running on this machine.
+// `AntidoteConnector.isDetected()` only recognizes the Antidote *browser extension* (Firefox/
+// Chrome/Safari) — it's never present inside ONLYOFFICE Desktop's webview. There is also no way to
+// ask Connectix for its WebSocket port from plugin JS: `AgentConnectixConsole --api` is a CLI tool.
+// So on desktop we fall back to probing the ephemeral port range Connectix binds to, same approach
+// used by other Antidote/word-processor desktop integrations (e.g. the "textcure" OnlyOffice plugin).
+const PORT_RANGE_START = 49152;
+const PORT_RANGE_SIZE = 13;
+const PROBE_TIMEOUT_MS = 500;
+
+let cachedPort: number | null = null;
+
+function probePort(port: number): Promise<boolean> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const socket = new WebSocket(`ws://localhost:${port}`);
+
+    const finish = (ok: boolean) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      socket.close();
+      resolve(ok);
+    };
+
+    const timer = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
+    socket.addEventListener('open', () => finish(true));
+    socket.addEventListener('error', () => finish(false));
+  });
+}
+
+async function scanForPort(): Promise<number> {
+  for (let offset = 0; offset < PORT_RANGE_SIZE; offset++) {
+    const port = PORT_RANGE_START + offset;
+    // eslint-disable-next-line no-await-in-loop
+    if (await probePort(port)) return port;
+  }
+  throw new AntidoteError('Antidote connector not detected', 'NOT_DETECTED');
+}
+
+// AgentConnectix's WebSocket port is either overridden manually in Settings, cached from a previous
+// successful scan, discovered through the Antidote browser connector (only relevant outside
+// desktop), or found by probing the local port range. If none work, Antidote/Connectix isn't
+// installed or running on this machine.
 export function getPortProvider(): () => Promise<number> {
   if (manualPort.value !== null) {
     const port = manualPort.value;
     return () => Promise.resolve(port);
   }
 
-  AntidoteConnector.announcePresence();
-  if (AntidoteConnector.isDetected()) {
-    return AntidoteConnector.getWebSocketPort;
-  }
+  return async () => {
+    if (cachedPort !== null && await probePort(cachedPort)) return cachedPort;
 
-  throw new AntidoteError('Antidote connector not detected', 'NOT_DETECTED');
+    AntidoteConnector.announcePresence();
+    if (AntidoteConnector.isDetected()) {
+      cachedPort = await AntidoteConnector.getWebSocketPort();
+      return cachedPort;
+    }
+
+    cachedPort = await scanForPort();
+    return cachedPort;
+  };
 }
