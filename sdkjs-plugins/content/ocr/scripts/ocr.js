@@ -41,11 +41,17 @@
     };
     
     function escapeHtml(string) {
-        var res = string;
-        res = res.replace(/[\', \", \\,]/g, function (sSymbol) {
-            return '\\' + sSymbol;
-        });
-        return res;
+        return String(string)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function updateInsertButtonState() {
+        const hasRecognizedText = document.getElementById('text-container-div').textContent.trim().length > 0;
+        window.Asc.plugin.executeMethod('SetButtonDisabled', [0, !hasRecognizedText]);
     }
 
     var arrParsedData = [];
@@ -239,7 +245,7 @@
 						document.getElementById('recognize-button').removeAttribute('disabled');
 						document.getElementById('lang-select').removeAttribute('disabled');
 						document.getElementById('load-file-button-id').removeAttribute('disabled', '');
-						window.Asc.plugin.executeMethod('SetButtonDisabled', [0, false]);
+						updateInsertButtonState();
 					}
 				};
 
@@ -252,7 +258,7 @@
 						document.getElementById('recognize-button').removeAttribute('disabled');
 						document.getElementById('lang-select').removeAttribute('disabled');
 						document.getElementById('load-file-button-id').removeAttribute('disabled');
-						window.Asc.plugin.executeMethod('SetButtonDisabled', [0, false]);
+						updateInsertButtonState();
 						console.error(err);
 					});
             }
@@ -297,7 +303,7 @@
 				if(sLastSpanText.length > 0 && oLastWord) {
 					let sStyle = "";
 					if(oLastWord.font_name && oLastWord.font_name.length > 0) {
-						sStyle += ("font-family:" + oLastWord.font_name + ";");
+						sStyle += ("font-family:" + escapeHtml(oLastWord.font_name) + ";");
 					}
 					//if(oLastWord.font_size) {
 					//}
@@ -315,7 +321,7 @@
 					if(oLastWord.is_underlined) {
 						sStyle += ("text-decoration:underline;");
 					}
-					sResult += "<span lang=\"" + oLastWord.language +"\" style=\"" + sStyle + "\">" + sLastSpanText + "</span>";
+					sResult += "<span lang=\"" + escapeHtml(oLastWord.language) +"\" style=\"" + sStyle + "\">" + escapeHtml(sLastSpanText) + "</span>";
 				}
 			}
 			
@@ -413,7 +419,7 @@
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("label1");
 		if (elem){
-			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets recognize text in pictures (bmp, jpg, png, webp, gif)");
+			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)");
 		}
 		elem = document.getElementById("load-file-button-id");
 		if (elem){
