@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote, leku për shkrimin."
+  "common": {
+    "error": "Gabim",
+    "reload": "Rifresko",
+    "initializingPlugin": "Duke inicializuar shtesën…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Kontrollo",
+    "scope": {
+      "document": "I gjithë dokumenti",
+      "selection": "Përzgjedhja"
+    },
+    "check": "Kontrollo me Antidote",
+    "stop": "Ndalo",
+    "lookup": {
+      "title": "Kërko një fjalë",
+      "placeholder": "Fjalë ose frazë…",
+      "dictionaries": "Fjalorët",
+      "guides": "Udhëzuesit"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Gati për të kontrolluar tekstin tuaj me Antidote.",
+      "connecting": "Duke u lidhur me Antidote…",
+      "connected": "Redaktuesi i Antidote është i hapur.",
+      "error": "Diçka nuk shkoi si duhej."
+    },
+    "errors": {
+      "notDetected": "Antidote nuk u zbulua. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion.",
+      "unknown": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote."
+    }
+  },
+  "settings": {
+    "title": "Cilësimet",
+    "manualPort": {
+      "label": "Porti WebSocket i Connectix",
+      "hint": "Lëreni bosh për zbulim automatik. Gjeni portin duke ekzekutuar \"AgentConnectixConsole --api\".",
+      "save": "Ruaj",
+      "clear": "Pastro"
+    }
+  }
 }

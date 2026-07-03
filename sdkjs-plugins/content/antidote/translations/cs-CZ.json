@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote, lék na psaní."
+  "common": {
+    "error": "Chyba",
+    "reload": "Znovu načíst",
+    "initializingPlugin": "Inicializace pluginu…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Kontrola",
+    "scope": {
+      "document": "Celý dokument",
+      "selection": "Výběr"
+    },
+    "check": "Kontrola pomocí Antidote",
+    "stop": "Zastavit",
+    "lookup": {
+      "title": "Vyhledat slovo",
+      "placeholder": "Slovo nebo fráze…",
+      "dictionaries": "Slovníky",
+      "guides": "Průvodce"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Připraveno k kontrole vašeho textu pomocí Antidote.",
+      "connecting": "Připojování k Antidote…",
+      "connected": "Antidote je otevřen.",
+      "error": "Něco se pokazilo."
+    },
+    "errors": {
+      "notDetected": "Antidote nebyl detekován. Ujistěte se, že Antidote 12 a jeho Connectix agent jsou nainstalovány a běží.",
+      "unknown": "Došlo k neočekávané chybě při komunikaci s Antidote."
+    }
+  },
+  "settings": {
+    "title": "Nastavení",
+    "manualPort": {
+      "label": "Connectix WebSocket port",
+      "hint": "Ponechte prázdné pro automatické detekování. Najděte port spuštěním \"AgentConnectixConsole --api\".",
+      "save": "Uložit",
+      "clear": "Vymazat"
+    }
+  }
 }

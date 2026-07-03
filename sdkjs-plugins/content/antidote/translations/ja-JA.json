@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote、文章の治療法。"
+  "common": {
+    "error": "エラー",
+    "reload": "リロード",
+    "initializingPlugin": "プラグインを初期化中…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "チェック",
+    "scope": {
+      "document": "ドキュメント全体",
+      "selection": "選択範囲"
+    },
+    "check": "Antidoteでチェック",
+    "stop": "停止",
+    "lookup": {
+      "title": "単語を検索",
+      "placeholder": "単語またはフレーズ…",
+      "dictionaries": "辞書",
+      "guides": "ガイド"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Antidoteでテキストをチェックする準備ができています。",
+      "connecting": "Antidoteに接続中…",
+      "connected": "Antidoteの校正ツールが開いています。",
+      "error": "何か問題が発生しました。"
+    },
+    "errors": {
+      "notDetected": "Antidoteが検出されませんでした。Antidote 12およびそのConnectixエージェントがインストールされており、実行されていることを確認してください。",
+      "unknown": "Antidoteとの通信中に予期しないエラーが発生しました。"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "manualPort": {
+      "label": "Connectix WebSocket ポート",
+      "hint": "空のままにすると自動検出されます。\"AgentConnectixConsole --api\"を実行してポートを見つけます。",
+      "save": "保存",
+      "clear": "クリア"
+    }
+  }
 }

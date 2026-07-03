@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote, lek za pisanje."
+  "common": {
+    "error": "Greška",
+    "reload": "Ponovo učitaj",
+    "initializingPlugin": "Inicijalizacija dodatka…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Proveri",
+    "scope": {
+      "document": "Ceo dokument",
+      "selection": "Izbor"
+    },
+    "check": "Proveri sa Antidote",
+    "stop": "Zaustavi",
+    "lookup": {
+      "title": "Pretraži reč",
+      "placeholder": "Reč ili fraza…",
+      "dictionaries": "Rečnici",
+      "guides": "Vodiči"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Spremno za proveru teksta sa Antidote.",
+      "connecting": "Povezivanje sa Antidote…",
+      "connected": "Antidote editor je otvoren.",
+      "error": "Nešto nije prošlo kako treba."
+    },
+    "errors": {
+      "notDetected": "Antidote nije detektovan. Proverite da li je Antidote 12 i njegov Connectix agent instaliran i aktivan.",
+      "unknown": "Došlo je do neočekivane greške prilikom komunikacije sa Antidote."
+    }
+  },
+  "settings": {
+    "title": "Podešavanja",
+    "manualPort": {
+      "label": "Connectix WebSocket port",
+      "hint": "Ostavite prazno za automatsko detekciju. Pronađite port pokretanjem \"AgentConnectixConsole --api\".",
+      "save": "Sačuvaj",
+      "clear": "Očisti"
+    }
+  }
 }

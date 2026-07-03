@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote, die Schreibkur."
+  "common": {
+    "error": "Fehler",
+    "reload": "Neu laden",
+    "initializingPlugin": "Plugin wird initialisiert…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Prüfen",
+    "scope": {
+      "document": "Gesamtes Dokument",
+      "selection": "Auswahl"
+    },
+    "check": "Mit Antidote prüfen",
+    "stop": "Stoppen",
+    "lookup": {
+      "title": "Ein Wort suchen",
+      "placeholder": "Wort oder Phrase…",
+      "dictionaries": "Wörterbücher",
+      "guides": "Anleitungen"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Bereit, Ihren Text mit Antidote zu prüfen.",
+      "connecting": "Verbindung zu Antidote wird hergestellt…",
+      "connected": "Antidote-Editor ist geöffnet.",
+      "error": "Etwas ist schief gelaufen."
+    },
+    "errors": {
+      "notDetected": "Antidote wurde nicht erkannt. Stellen Sie sicher, dass Antidote 12 und sein Connectix-Agent installiert und aktiv sind.",
+      "unknown": "Ein unerwarteter Fehler ist während der Kommunikation mit Antidote aufgetreten."
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "manualPort": {
+      "label": "Connectix WebSocket-Port",
+      "hint": "Leer lassen, um automatisch zu erkennen. Finden Sie den Port, indem Sie \"AgentConnectixConsole --api\" ausführen.",
+      "save": "Speichern",
+      "clear": "Löschen"
+    }
+  }
 }

@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote, de schrijfcuratie."
+  "common": {
+    "error": "Fout",
+    "reload": "Herladen",
+    "initializingPlugin": "Plugin initialiseren…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "Controleren",
+    "scope": {
+      "document": "Hele document",
+      "selection": "Selectie"
+    },
+    "check": "Controleren met Antidote",
+    "stop": "Stoppen",
+    "lookup": {
+      "title": "Zoek een woord",
+      "placeholder": "Woord of zin…",
+      "dictionaries": "Woordenboeken",
+      "guides": "Gidsen"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "Klaar om uw tekst te controleren met Antidote.",
+      "connecting": "Verbinding maken met Antidote…",
+      "connected": "Antidote corrector is geopend.",
+      "error": "Er is iets misgegaan."
+    },
+    "errors": {
+      "notDetected": "Antidote werd niet gedetecteerd. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn.",
+      "unknown": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote."
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "manualPort": {
+      "label": "Connectix WebSocket-poort",
+      "hint": "Leeg laten voor automatische detectie. Vind de poort door \"AgentConnectixConsole --api\" uit te voeren.",
+      "save": "Opslaan",
+      "clear": "Wissen"
+    }
+  }
 }

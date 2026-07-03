@@ -1,3 +1,44 @@
 {
-	"Antidote, the write cure.": "Antidote，写作良方。"
+  "common": {
+    "error": "错误",
+    "reload": "重新加载",
+    "initializingPlugin": "正在初始化插件…"
+  },
+  "main": {
+    "title": "Antidote",
+    "scopeTitle": "检查",
+    "scope": {
+      "document": "整篇文档",
+      "selection": "选区"
+    },
+    "check": "使用 Antidote 检查",
+    "stop": "停止",
+    "lookup": {
+      "title": "查找单词",
+      "placeholder": "单词或短语…",
+      "dictionaries": "词典",
+      "guides": "指南"
+    }
+  },
+  "correction": {
+    "status": {
+      "idle": "准备使用 Antidote 检查您的文本。",
+      "connecting": "正在连接到 Antidote…",
+      "connected": "Antidote 校对器已打开。",
+      "error": "出现问题。"
+    },
+    "errors": {
+      "notDetected": "未检测到 Antidote。请确保已安装 Antidote 12 及其 Connectix 代理。",
+      "unknown": "与 Antidote 通信时发生意外错误。"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "manualPort": {
+      "label": "Connectix WebSocket 端口",
+      "hint": "留空以自动检测。通过运行 \"AgentConnectixConsole --api\" 查找端口。",
+      "save": "保存",
+      "clear": "清除"
+    }
+  }
 }
