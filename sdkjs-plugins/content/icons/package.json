@@ -9,7 +9,7 @@
         "es-check": "npx es-check es5 dist/bundle.es5.js"
     },
     "devDependencies": {
-        "@babel/core": "^7.28.4",
+        "@babel/core": "^7.29.6",
         "@babel/preset-env": "^7.28.3",
         "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-commonjs": "^29.0.0",
