@@ -43,6 +43,7 @@
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
 	{"name": "lizardtypst", "discussion": ""},
+	{"name": "bg-remover", "discussion": ""},
 	{"name": "chineseconvertor", "discussion": ""},
 	{"name": "chineseautoformattool", "discussion": ""}
 ]
