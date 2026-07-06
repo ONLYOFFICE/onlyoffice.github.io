@@ -64,11 +64,12 @@
 	"No disscussion page for this plugin." : "Žádná diskusní stránka pro tento plugin.",
 	"Problem with plugin installation." : "Problém s instalací pluginu.",
 	"By ONLYOFFICE": "Od ONLYOFFICE",
-	"No plugins match your filters.": "Žádné pluginy neodpovídají vašim filtrům.",
+	"No plugins match your filters.": "Žádné pluginy neodpovídají vašim filtrům.", 
 	"Try a different category or search term." : "Zkuste jinou kategorii nebo vyhledávací termín.",
 	"Local": "Lokální",
 	"No updates available.": "Žádné aktualizace nejsou k dispozici.",
 	"All your plugins are up to date.": "Všechny vaše pluginy jsou aktuální.",
 	"Show panel": "Zobrazit panel",
-	"Hide panel": "Skrýt panel"
+	"Hide panel": "Skrýt panel",
+	"For this editor": 
 }

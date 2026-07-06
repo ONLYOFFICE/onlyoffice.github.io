@@ -456,7 +456,7 @@ function _resetSearchState() {
 }
 
 window.onload = function() {
-	UI.init(Utils.themeType, MarketplaceStorage.filterByCurrentEditor);
+	UI.init(Utils.themeType);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 	if (independentMode) {
@@ -507,6 +507,7 @@ window.onload = function() {
 	UI.onChangeCurrentEditor = function(filterByCurrentEditor) {
         MarketplaceStorage.saveFilterCurrentEditorState(filterByCurrentEditor);
 		updateListOfPlugins();
+		updateCategories();
 	};
 };
 
