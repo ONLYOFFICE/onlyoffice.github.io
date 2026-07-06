@@ -307,7 +307,11 @@ const PluginCard = {
             PluginCardUI.btnUpdate.classList.add("hidden");
         }
 
-        if (this.installed && !this.removed) {
+        if (data.independentMode) {
+            PluginCardUI.btnRemove.classList.add("hidden");
+            PluginCardUI.btnDownload.classList.remove("hidden");
+
+        } else if (this.installed && !this.removed) {
             if (this.canRemoved) {
                 PluginCardUI.btnRemove.classList.remove("hidden");
             } else {
@@ -460,6 +464,21 @@ const PluginCard = {
     onClickClose: function() {
         let guid = this.config.guid;
         MarketplacePluginService.close(guid, this.config);
+    },
+
+    onClickDownload: function() {
+        let baseUrlParts = this.config.baseUrl ? this.config.baseUrl.split('/').filter(Boolean) : [];
+        let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
+        let url = this.config.baseUrl ? (this.config.baseUrl + 'deploy/' + pluginFileName + '.plugin') : '';
+
+        if (url) {
+            let link = document.createElement('a');
+            link.href = url;
+            link.download = '';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        }
     },
 
     /** @param {Event} event */

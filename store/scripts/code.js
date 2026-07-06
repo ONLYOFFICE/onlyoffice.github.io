@@ -456,7 +456,7 @@ function _resetSearchState() {
 }
 
 window.onload = function() {
-	UI.init(Utils.themeType);
+	UI.init(Utils.themeType, independentMode);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
 	if (independentMode) {
@@ -831,8 +831,35 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		bNotAvailable: bNotAvailable,
 		bNeedUpdateButton: bHasUpdate && !bRemoved,
 		bNeedRemoveButton: !!(installed && !bRemoved && available && available.canRemoved),
-		bNeedInstallButton: !installed || bRemoved
+		bNeedInstallButton: !installed || bRemoved,
+		independentMode: independentMode
 	};
+}
+
+/**
+ * @param {string} guid 
+ * @param {Event} event 
+ */
+function onClickDownload(guid, event) {
+	event.stopImmediatePropagation();
+	/** @type {PluginInfo | undefined} */
+	let plugin = MarketplaceStorage.findMarketplacePlugin(guid);
+	if (!plugin) {
+		// if we are here if means that plugin is uninstalled and we don't have internet connection
+		return;
+	}
+	let baseUrlParts = plugin.baseUrl ? plugin.baseUrl.split('/').filter(Boolean) : [];
+	let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
+	let url = plugin.baseUrl ? (plugin.baseUrl + 'deploy/' + pluginFileName + '.plugin') : '';
+
+	if (url) {
+		let link = document.createElement('a');
+		link.href = url;
+		link.download = '';
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
+	}
 }
 
 /**
@@ -954,6 +981,7 @@ function onClickPluginPlate(guid) {
 		translate: Utils.translate,
 		removed: available ? !!available.removed : false,
 		canRemoved: available ? !!available.canRemoved : false,
+		independentMode: independentMode
 	};
 	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);

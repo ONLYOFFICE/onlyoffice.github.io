@@ -29,6 +29,7 @@
  * @property {boolean} bActionDisabled
  * @property {boolean} removed
  * @property {boolean} canRemoved
+ * @property {boolean} independentMode
  * @property {Object<string, string>} translate
  */
 
@@ -104,6 +105,7 @@
  * @property {boolean} bNeedUpdateButton
  * @property {boolean} bNeedRemoveButton
  * @property {boolean} bNeedInstallButton
+ * @property {boolean} independentMode
  */
 
 /**
