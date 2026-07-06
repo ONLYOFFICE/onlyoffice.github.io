@@ -438,17 +438,17 @@ window.onload = function() {
 		allPluginsPromise
 	])
 	.then(function(result) {
-		if (DataFetcher.isOnline) {
-			updateListOfPlugins(true);
-		} else {
-			UI.clickMainFilter("installed");
-			if (!isLocal && !DataFetcher.isOnline) {
-				UI.divMain.textContent = '';
-				setTimeout(Scale.updateScroll.bind(Scale));
-				UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'), true);
+			if (DataFetcher.isOnline) {
+				updateListOfPlugins(true);
+			} else {
+				UI.clickMainFilter("installed");
+				if (!isLocal && !DataFetcher.isOnline) {
+					UI.divMain.textContent = '';
+					setTimeout(Scale.updateScroll.bind(Scale));
+					UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'), true);
+				}
+				UI.toggleLoader(false);
 			}
-			UI.toggleLoader(false);
-		}
 		updateCategories();
 	}).catch(function(error) {
 		console.error('Failed to load plugins:', error);
