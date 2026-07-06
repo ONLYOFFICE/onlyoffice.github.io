@@ -438,21 +438,23 @@ window.onload = function() {
 		allPluginsPromise
 	])
 	.then(function(result) {
-		if (MarketplaceStorage.hasAvailablePlugins()) {
-			if (DataFetcher.isOnline) {
-				updateListOfPlugins(true);
-			} else {
-				UI.clickMainFilter("installed");
-				if (!isLocal && !DataFetcher.isOnline) {
-					UI.divMain.textContent = '';
-					setTimeout(Scale.updateScroll.bind(Scale));
-					UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'), true);
-				}
-				UI.toggleLoader(false);
+		if (DataFetcher.isOnline) {
+			updateListOfPlugins(true);
+		} else {
+			UI.clickMainFilter("installed");
+			if (!isLocal && !DataFetcher.isOnline) {
+				UI.divMain.textContent = '';
+				setTimeout(Scale.updateScroll.bind(Scale));
+				UI.createNotification(Utils.getTranslated('No Internet Connection.'), Utils.getTranslated('Problem with loading some resources'), true);
 			}
-			UI.pluginsList.classList.remove('transparent');
+			UI.toggleLoader(false);
 		}
 		updateCategories();
+	}).catch(function(error) {
+		console.error('Failed to load plugins:', error);
+		UI.toggleLoader(false);
+	}).finally(function() {
+		UI.pluginsList.classList.remove('transparent');
 	});
 
 	/** @param {CategoryFilter} category */
