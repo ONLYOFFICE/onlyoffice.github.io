@@ -18,6 +18,7 @@
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO
  * @property {string} ioUrl
+ * @property {string} releaseUrl
  * @property {PluginInfo} [installed]
  * @property {AvailablePluginInfo} [available]
  * @property {PluginInfo} [plugin]

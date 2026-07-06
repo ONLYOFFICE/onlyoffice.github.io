@@ -51,6 +51,7 @@ const discussionsUrl = OOIO + 'discussions/';                        // discussi
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
 const independentMode = window.parent === window;                    // when opening the marketplace in a browser tab
+const releaseUrl = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/releases/latest/download/'; // to download plugins
 // #endregion
 
 // #region Mutable state
@@ -850,7 +851,7 @@ function onClickDownload(guid, event) {
 	}
 	let baseUrlParts = plugin.baseUrl ? plugin.baseUrl.split('/').filter(Boolean) : [];
 	let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
-	let url = plugin.baseUrl ? (plugin.baseUrl + 'deploy/' + pluginFileName + '.plugin') : '';
+	let url = plugin.baseUrl ? releaseUrl + pluginFileName + '.plugin' : '';
 
 	if (url) {
 		let link = document.createElement('a');
@@ -981,7 +982,8 @@ function onClickPluginPlate(guid) {
 		translate: Utils.translate,
 		removed: available ? !!available.removed : false,
 		canRemoved: available ? !!available.canRemoved : false,
-		independentMode: independentMode
+		independentMode: independentMode,
+		releaseUrl: releaseUrl
 	};
 	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);
