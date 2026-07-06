@@ -300,7 +300,7 @@ const MarketplacePluginService = {
      */
     _sendMessage: function(message) {
         // this function sends message to editor
-        if (window.parent === window) {
+        if (window.parent === window) { // browser tab
             return false;
         }
         parent.postMessage(JSON.stringify(message), '*');

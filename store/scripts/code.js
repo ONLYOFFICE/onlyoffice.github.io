@@ -50,6 +50,7 @@ const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to o
 const discussionsUrl = OOIO + 'discussions/';                        // discussions url
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
+const independentMode = window.parent === window;                    // when opening the marketplace in a browser tab
 // #endregion
 
 // #region Mutable state
@@ -62,6 +63,8 @@ let editorVersion;       // editor current version
 /** @type {number} */
 let pluginVersion;       // marketplace plugin version
 let defaultBG = Utils.themeType == 'light' ? '#F5F5F5' : '#555555'; // default background color for plugin header
+
+let isPluginCardHistoryPushed = false;
 
 
 // #endregion
@@ -339,7 +342,7 @@ const Marketplace = {
 				}
 			};
 			
-			if (window.parent === window) {
+			if (independentMode) { // browser tab
 				fResolve(defaultVersions);
 			} else {
 				// This case is impossible, but let it be processed
@@ -456,6 +459,9 @@ window.onload = function() {
 	UI.init(Utils.themeType, MarketplaceStorage.filterByCurrentEditor);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
+	if (independentMode) {
+		setThemeForBrowserTabMode();
+	}
 
 	Promise.all([
 		versionsPromise,
@@ -544,7 +550,7 @@ window.addEventListener('message', function(event) {
 		case 'Error':             _onMessageError(message);     break;
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
-		case 'onClickBack':       hidePluginCard();             break;
+		case 'onClickBack':       _onClickBackToMarketplace();  break;
 	}
 }, false);
 
@@ -968,9 +974,13 @@ function showPluginCard(data) {
 	}
 
 	PluginCard.init(data);
+
+	isPluginCardHistoryPushed = true;
+	history.pushState({ pluginCardOpen: true }, '');
 }
 // for v1.0.5
-function hidePluginCard() {
+/** @param {boolean} [blockForwardHistory] - discard the forward history entry left by history.back(), so the user can't navigate forward to reopen the card */
+function hidePluginCard(blockForwardHistory) {
 	let pluginCardDiv = document.getElementById('plugin_card_panel');
 	let marketplaceDiv = document.getElementById('plugins');
 	if (pluginCardDiv && marketplaceDiv) {
@@ -978,7 +988,27 @@ function hidePluginCard() {
 		marketplaceDiv.classList.remove('hidden');
 	}
 	window.onresize = Scale.onResize.bind(Scale, false);
+	if (blockForwardHistory) {
+		history.pushState(null, '');
+	}
 }
+
+function _onClickBackToMarketplace() {
+	if (isPluginCardHistoryPushed) {
+		// consume the history entry pushed by showPluginCard,
+		// the actual hiding is done by the popstate handler
+		history.back();
+	} else {
+		hidePluginCard();
+	}
+}
+
+window.addEventListener('popstate', function() {
+	if (isPluginCardHistoryPushed) {
+		isPluginCardHistoryPushed = false;
+		hidePluginCard(true);
+	}
+});
 
 function installPluginManually() {
 	if (!window["AscDesktopEditor"]) {
@@ -1044,3 +1074,16 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 	updateCategories();
 };
 
+function setThemeForBrowserTabMode() {
+	// theme data is kept in a separate file and loaded on demand only when the marketplace is opened in an independent browser tab
+	if (typeof ThemeDefaultMessage !== 'undefined') {
+		_onMessageTheme(ThemeDefaultMessage);
+		return;
+	}
+	var script = document.createElement('script');
+	script.src = 'scripts/marketplace/theme-default.js';
+	script.onload = function() {
+		_onMessageTheme(ThemeDefaultMessage);
+	};
+	document.head.appendChild(script);
+}
