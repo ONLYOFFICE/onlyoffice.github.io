@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -356,6 +356,7 @@ SelectCitationsComponent.prototype._buildCitationParams = function (item) {
     });
     const locatorSelectbox = new SelectBox(locatorSelect, {
         placeholder: translate("Locator"),
+        usePortal: true,
         translate: translate
     });
     LOCATOR_VALUES.forEach(function (info) {

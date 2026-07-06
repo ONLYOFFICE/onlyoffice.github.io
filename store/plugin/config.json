@@ -3,7 +3,7 @@
     "nameLocale": {
         "ru": "Менеджер плагинов",
         "fr": "Gestionnaire de Plugins",
-        "it": "Plugin Manager",
+        "it": "Gestore Plugin",
         "ja": "プラグインマネージャー",
         "es": "Administrador de Complementos",
         "de": "Plugin-Verwaltung",
@@ -16,7 +16,7 @@
         "sr-Latn-RS": "Menadžer dodataka"
     },
     "guid" : "asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "group" : {
         "name" : "Plugin Manager",
         "rank" : 1
@@ -81,7 +81,7 @@
             "isSystem"            : false,
             "initDataType"        : "none",
             "isUpdateOleOnResize" : false,
-            "size"                : [608, 600],
+            "size"                : [1200, 776],
             "buttons"             : []
         }
     ]

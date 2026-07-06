@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Menaxhoni shtojcat",
+	"Available plugins": "Shtojcat e mia",
 	"My plugins": "Shtojca të disponueshme",
+	"Updates": "Përditësime",
 	"Marketplace": "Maketplace",
 	"Submit your own plugin": "Paraqitni shtojcën tuaj",
 	"Install plugin manually": "Instaloni shtojcën manualisht",
@@ -41,8 +43,8 @@
 	"Chinese": "Kinezisht",
 	"Update All": "Përditësoni të gjitha",
 	"Categories": "Kategoritë",
-	"Search plugins": "Kërkoni shtojcat",
-	"All": "Të gjithë/a",
+	"Search plugins…": "Kërkoni shtojcat…",
+	"All plugins": "Të gjitha shtojcat",
 	"Recommended": "Rekomanduar",
 	"Developer tools": "Mjetet e zhvilluesit",
 	"Work": "Punë",
@@ -60,5 +62,16 @@
 	"Problem with loading some resources" : "Problem me ngarkimin e disa burimeve.",
 	"Click to rate" : "Klikoni për të vlersuar.",
 	"No disscussion page for this plugin." : "Nuk ka faqe diskutimi për këtë shtojcë.",
-	"Problem with plugin installation." : "Problem me instalimin e shtojcës."
+	"Problem with plugin installation." : "Problem me instalimin e shtojcës.",
+	"By ONLYOFFICE": "Nga ONLYOFFICE",
+	"No plugins match your filters.": "Asnjë shtojcë nuk përputhet me filtrat tuaj.",
+	"Try a different category or search term." : "Provo një kategori të ndryshme ose term kërkimi.",
+	"Local": "Lokale",
+	"No updates available.": "Nuk ka përditësime të disponueshme.",
+	"All your plugins are up to date.": "Të gjitha shtesat tuaja janë të përditësuara.",
+	"Show panel": "Shfaq panelin",
+	"Hide panel": "Fshih panelin",
+	"For this editor": "Për këtë editor",
+	"Download": "Shkarko",
+	"Problem with downloading plugin.": "Problem me shkarkimin e shtojcës."
 }

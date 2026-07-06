@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Gérer les plugins",
+	"Available plugins": "Plugins disponibles",
 	"My plugins": "Mes plugins",
+	"Updates": "Mises à jour",
 	"Marketplace": "Marché",
 	"Submit your own plugin": "Soumettez votre propre plugin",
 	"Install plugin manually": "Installer le plugin manuellement",
@@ -41,8 +43,8 @@
 	"Chinese": "Chinois",
 	"Update All": "Tout Mettre à Jour",
 	"Categories": "Catégorie",
-	"Search plugins": "Plugins de recherche",
-	"All": "Tout",
+	"Search plugins…": "Plugins de recherche…",
+	"All plugins": "Tous les plugins",
 	"Recommended": "Recommandé",
 	"Developer tools": "Outils de développement",
 	"Work": "Travail",
@@ -60,5 +62,16 @@
 	"Problem with loading some resources" : "Problème de chargement de certaines ressources",
 	"Click to rate" : "Cliquez pour évaluer",
 	"No disscussion page for this plugin." : "Pas de page de discussion pour ce plugin.",
-	"Problem with plugin installation." : "Problème avec l'installation du plugin."
+	"Problem with plugin installation." : "Problème avec l'installation du plugin.",
+	"By ONLYOFFICE": "Par ONLYOFFICE",
+	"No plugins match your filters.": "Aucun plugin ne correspond à vos filtres.",
+	"Try a different category or search term." : "Essayez une catégorie ou un terme de recherche différent.",
+	"Local": "Local",
+	"No updates available.": "Aucune mise à jour disponible.",
+	"All your plugins are up to date.": "Tous vos plugins sont à jour.",
+	"Show panel": "Afficher le panneau",
+	"Hide panel": "Masquer le panneau",
+	"For this editor": "Pour cet éditeur",
+	"Download": "Télécharger",
+	"Problem with downloading plugin.": "Problème avec le téléchargement du plugin."
 }

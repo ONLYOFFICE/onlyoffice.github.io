@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -69,6 +69,7 @@ import "../styles.css";
         groups: [],
         groupsHash: "",
     };
+    let bInProgress = false;
 
     /** @type {SearchFilterComponents} */
     let searchFilter;
@@ -409,9 +410,25 @@ import "../styles.css";
             }
             await onStartAction(true, "Zotero (" + translate("Inserting citation") + ")");
             const items = selectCitation.getSelectedItems();
-            /** @type {AddinFieldData | null} */
-            let addedField = null;
             let bHasNotes = false;
+
+            /** @type {AddinFieldData | null} */
+            let currentField = await citationService.getCurrentField();
+            if (currentField) {
+                return citationService.insertSelectedCitationsToCurrentField(items, currentField)
+                    .then((field) => {
+                        selectCitation.removeItems(Object.keys(items));
+                        return showEditCitationWindow(field);
+                    })
+                    .then((bSuccess) => {
+                        if (bSuccess && currentField) {
+                            citationService.showSuccessMessage("Citation has been updated successfully");
+                        }
+                    })
+                    .finally(async () => {
+                        onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
+                    });
+            }
 
             return citationService.insertSelectedCitations(items)
                 .then(function (hasNotes) {
@@ -420,11 +437,18 @@ import "../styles.css";
                     return citationService.getCurrentField();
                 })
                 .then(function (field) {
-                    addedField = field;
+                    currentField = field;
                     if (bHasNotes) {
                         return citationService.updateCslItems(false);
                     }
                     return citationService.updateCslItems();
+                })
+                .then(() => {
+                    if (bHasNotes) {
+                        return citationService.moveCursorRight();
+                    } else if (currentField) {
+                        return citationService.moveCursorOutsideField(currentField.FieldId);
+                    }
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -436,11 +460,6 @@ import "../styles.css";
                 })
                 .finally(async () => {
                     onEndAction(false, "Zotero (" + translate("Inserting citation") + ")");
-                    if (bHasNotes) {
-                        await citationService.moveCursorRight();
-                    } else if (addedField) {
-                        await citationService.moveCursorOutsideField(addedField.FieldId);
-                    }
                 });
         });
 
@@ -619,6 +638,7 @@ import "../styles.css";
      * @param {string} [preloaderMessage]
      */
     async function onStartAction(keepSelection, preloaderMessage) {
+        bInProgress = true;
         insertBibBtn.disable();
         refreshBtn.disable();
         insertLinkBtn.disable();
@@ -646,6 +666,7 @@ import "../styles.css";
      * @param {string} [preloaderMessage]
      */
     async function onEndAction(scrollToTarget, preloaderMessage) {
+        bInProgress = false;
         insertBibBtn.enable();
         refreshBtn.enable();
         checkSelected();
@@ -877,16 +898,16 @@ import "../styles.css";
         }
         if (numOfSelected <= 0) {
             insertLinkBtn.disable();
-            insertLinkBtn.setText(translate("Insert Citation"));
+            insertLinkBtn.setText(translate("Insert/Edit Citation"));
         } else {
-            insertLinkBtn.enable();
+            !bInProgress && insertLinkBtn.enable();
             if (numOfSelected > 1) {
                 // TODO: add translate
                 insertLinkBtn.setText(
                     translate("Insert " + numOfSelected + " Citations"),
                 );
             } else {
-                insertLinkBtn.setText(translate("Insert Citation"));
+                insertLinkBtn.setText(translate("Insert/Edit Citation"));
             }
         }
     }
@@ -927,52 +948,62 @@ import "../styles.css";
                     resolve,
                 );
             });
-            if (
-                !field ||
-                !field.Value ||
-                field.Value.toLowerCase().indexOf("zotero_item") === -1
-            ) {
-                citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
-                return;
-            }
-            const updatedField = await citationService.showEditCitationWindow(field);
-            if (!updatedField) {
-                return;
-            }
             await onStartAction(false, "Zotero (" + translate("Updating citations") + ")");
-
-            let updateFn = citationService.updateItem.bind(
-                citationService,
-                updatedField
-            );
-
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateItem.bind(
-                    citationService,
-                    updatedField,
-                    styleManager.getLastUsedNotesStyle()
-                );
-            }
-
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to insert citation");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
-                    }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                    if (field) {
-                        citationService.moveCursorOutsideField(field.FieldId);
-                    }
-                });
+            await showEditCitationWindow(field);
+            await onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
         });
         Asc.Buttons.registerContextMenu();
 
+    }
+
+    /**
+     * @param {AddinFieldData | null} field
+     * @returns {Promise<boolean>}
+     */
+    async function showEditCitationWindow(field) {
+        if (
+            !field ||
+            !field.Value ||
+            field.Value.toLowerCase().indexOf("zotero_item") === -1
+        ) {
+            citationService.showWarningMessage("No Zotero citation found at the cursor. Please click directly on a citation to edit it.");
+            return false;
+        }
+        const updatedField = await citationService.showEditCitationWindow(field);
+        if (!updatedField) {
+            return false;
+        }
+
+        let updateFn = citationService.updateItem.bind(
+            citationService,
+            updatedField
+        );
+
+        const styleManager = settings.getStyleManager();
+        if (styleManager.getLastUsedFormat() === "note") {
+            // this way, because "SelectAddinField" does not work with notes
+            updateFn = citationService.updateItem.bind(
+                citationService,
+                updatedField,
+                styleManager.getLastUsedNotesStyle()
+            );
+        }
+
+        return updateFn()
+            .then(() => {
+                if (field) {
+                    citationService.moveCursorOutsideField(field.FieldId);
+                }
+                return true;
+            })
+            .catch(function (error) {
+                console.error(error);
+                let message = translate("Failed to insert citation");
+                if (typeof error === "string") {
+                    message += ". " + translate(error);
+                }
+                showError(message);
+                return false;
+            });
     }
 })();

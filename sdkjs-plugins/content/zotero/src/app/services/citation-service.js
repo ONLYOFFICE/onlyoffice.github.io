@@ -1,5 +1,5 @@
 /*
- * (c) Copyright Ascensio System SIA 2010-2025
+ * (c) Copyright Ascensio System SIA 2010-2026
  *
  * This program is a free software product. You can redistribute it and/or
  * modify it under the terms of the GNU Affero General Public License (AGPL)
@@ -82,7 +82,7 @@ class CitationService {
 
     /**
      * @param {CSLCitation} cslCitation
-     * @returns {Promise<boolean>}
+     * @returns {Promise<boolean>} - has notes
      */
     #formatInsertLink(cslCitation) {
         const self = this;
@@ -107,36 +107,50 @@ class CitationService {
                     self._formatter.updateItems(arrIds);
                 }
             })
-            .then(function () {
-                const fragment = document.createDocumentFragment();
-                const tempElement = document.createElement("div");
-
-                const citationsPre = self._storage.getCitationsPre(cslCitation.citationID);
-                const citationsPost = self._storage.getCitationsPost(cslCitation.citationID);;
-
-                const citations = self._storage.getAllCitationsInJson();
-                self._formatter.rebuildProcessorState(citations);
-                
-                const formattedCitationObj = self._formatter.processCitationCluster(
-                    cslCitation.toJSON(),
-                    citationsPre,
-                    citationsPost
-                );
-
-                let htmlCitation = self.#unEscapeHtml(formattedCitationObj[1][0][1]);
-                fragment.appendChild(tempElement);
-                tempElement.innerHTML = htmlCitation;
-                cslCitation.setPlainCitation(tempElement.innerText);
+            .then(() => this.#makeCitationHtml(cslCitation))
+            .then((htmlCitation) => {
                 let notesStyle = null;
                 if ("note" === self._cslStylesManager.getLastUsedFormat()) {
                     notesStyle = self._cslStylesManager.getLastUsedNotesStyle();
                 }
+
                 return self.citationDocService.addCitation(
                     htmlCitation,
                     JSON.stringify(cslCitation.toJSON()),
                     notesStyle,
                 );
             });
+    }
+
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {Promise<string>}
+     */
+    #formatGetUpdatedFieldHtml(cslCitation) {
+        const self = this;
+        let bUpdateItems = false;
+
+
+        return Promise.resolve()
+            .then(function () {
+                cslCitation
+                    .getCitationItems()
+                    .forEach(function (/** @type {CitationItem} */ item) {
+                        if (!self._storage.hasItem(item.id)) {
+                            bUpdateItems = true;
+                        }
+                    });
+
+                if (bUpdateItems) {
+                    /** @type {string[]} */
+                    var arrIds = [];
+                    self._storage.forEachItem(function (item, id) {
+                        arrIds.push(id);
+                    });
+                    self._formatter.updateItems(arrIds);
+                }
+            })
+            .then(() => this.#makeCitationHtml(cslCitation));
     }
 
     /**
@@ -232,13 +246,41 @@ class CitationService {
                 false ===
                 this._cslStylesManager.isLastUsedStyleContainBibliography()
             ) {
-                this.#additionalWindow.showInfoWindow("Warning!", "Style does not describe the bibliography");
+                this.showWarningMessage("Style does not describe the bibliography");
             } else {
                 console.error(e);
                 throw "Failed to apply this style.";
             }
             return "";
         }
+    }
+
+    /**
+     * @param {CSLCitation} cslCitation
+     * @returns {string}
+     */
+    #makeCitationHtml(cslCitation) {
+        const fragment = document.createDocumentFragment();
+        const tempElement = document.createElement("div");
+
+        const citationsPre = this._storage.getCitationsPre(cslCitation.citationID);
+        const citationsPost = this._storage.getCitationsPost(cslCitation.citationID);;
+
+        const citations = this._storage.getAllCitationsInJson();
+        this._formatter.rebuildProcessorState(citations);
+        
+        const formattedCitationObj = this._formatter.processCitationCluster(
+            cslCitation.toJSON(),
+            citationsPre,
+            citationsPost
+        );
+
+        let htmlCitation = this.#unEscapeHtml(formattedCitationObj[1][0][1]);
+        fragment.appendChild(tempElement);
+        tempElement.innerHTML = htmlCitation;
+        cslCitation.setPlainCitation(tempElement.innerText);
+        
+        return htmlCitation;
     }
 
     /** @param {AddinFieldData} field */
@@ -257,9 +299,10 @@ class CitationService {
     }
     /**
      * @param {Object & {citationID: string}} [updatedField]
+     * @param {string} [updatedCitationId]
      * @returns {Promise<{fieldsWithCitations: {field: AddinFieldData, cslCitation: CSLCitation}[], bibFieldValue: string, bibField: AddinFieldData | undefined}>}
      */
-    #synchronizeStorageWithDocItems(updatedField) {
+    #synchronizeStorageWithDocItems(updatedField, updatedCitationId) {
         const self = this;
         this._storage.clear();
         CSLCitation.resetUsedIDs();
@@ -301,7 +344,7 @@ class CitationService {
                     }
 
                     let cslCitation = new CSLCitation(citationID);
-                    if (updatedField) {
+                    if (updatedField && updatedCitationId === citationID) {
                         numOfItems += cslCitation.fillFromObject(updatedField);
                     } else {
                         numOfItems +=
@@ -311,19 +354,6 @@ class CitationService {
 
                     return { field: { ...field }, cslCitation: cslCitation };
                 });
-                if (updatedField) {
-                    fieldsWithCitations = fieldsWithCitations.filter(
-                        function (b) {
-                            if (
-                                b.cslCitation.citationID ===
-                                updatedField.citationID
-                            ) {
-                                return true;
-                            }
-                            return false;
-                        },
-                    );
-                }
 
                 return {
                     bibField: bibField,
@@ -539,10 +569,8 @@ class CitationService {
     async saveAsText() {
         const isOk = await this.citationDocService.saveAsText();
         if (isOk) {
-            this.#additionalWindow.showInfoWindow(
-                "Success!",
-                "All active Mendeley citations and Bibliography have been replaced.",
-                "success",
+            this.showSuccessMessage(
+                "All active Zotero citations and Bibliography have been replaced."
             );
         }
         return isOk;
@@ -555,17 +583,12 @@ class CitationService {
     async insertSelectedCitations(items) {
         const self = this;
 
-        try {
-            await this.#synchronizeStorageWithDocItems();
-            this.#updateFormatter();
-        } catch (e) {
-            throw e;
-        }
+        await this.#synchronizeStorageWithDocItems();
+        this.#updateFormatter();
 
         const cslCitation = new CSLCitation("");
         for (var citationID in items) {
             const item = items[citationID];
-
             cslCitation.fillFromObject(item);
         }
 
@@ -577,6 +600,42 @@ class CitationService {
             this._storage.addCslCitation(cslCitation);
             return self.#formatInsertLink(cslCitation);
         });
+    }
+
+    /**
+     * @param {Array<SearchResultItem>} items
+     * @param {AddinFieldData} currentField
+     * @returns {Promise<AddinFieldData>}
+     */
+    async insertSelectedCitationsToCurrentField(items, currentField) {
+        const citationObject = this.#extractField(currentField);
+        let citationID = citationObject.citationID;
+
+        const tempCitation = new CSLCitation("");
+        tempCitation.fillFromObject(citationObject);
+        for (let id in items) {
+            const item = items[id];
+            tempCitation.fillFromObject(item);
+        }
+        const itemsInJsonFormat = await this.#getSelectedInJsonFormat(items);
+        itemsInJsonFormat.forEach(function (item) {
+            tempCitation.fillFromObject(item);
+        });
+
+        const { fieldsWithCitations } = await this.#synchronizeStorageWithDocItems(tempCitation.toJSON(), citationID);
+        this.#updateFormatter();
+        
+        const cslCitation = fieldsWithCitations.find((f) => f.cslCitation.citationID === citationID)?.cslCitation;
+        if (!cslCitation) {
+            throw new Error("Citation not found");
+        }
+
+        return this.#formatGetUpdatedFieldHtml(cslCitation)
+            .then((htmlCitation) => {
+                currentField.Content = htmlCitation;
+                currentField.Value = this._citPrefixNew + " " + this._citSuffixNew + JSON.stringify(cslCitation.toJSON());
+                return currentField;
+            });
     }
 
     /** @returns {Promise<string>} */
@@ -712,12 +771,25 @@ class CitationService {
      */
     async updateItem(updatedField, notesStyle) {
         try {
-            const { fieldsWithCitations, bibField } =
-                await this.#synchronizeStorageWithDocItems(updatedField);
+            let { fieldsWithCitations, bibField } =
+                await this.#synchronizeStorageWithDocItems(updatedField, updatedField.citationID);
             const bNoHaveFields = fieldsWithCitations.length === 0;
 
             this.#updateFormatter();
 
+            if (updatedField) {
+                fieldsWithCitations = fieldsWithCitations.filter(
+                    function (b) {
+                        if (
+                            b.cslCitation.citationID ===
+                            updatedField.citationID
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    },
+                );
+            }
             /** @type {AddinFieldData[]} */
             let updatedFields = await this.#getUpdatedFields(
                 fieldsWithCitations,
@@ -837,6 +909,14 @@ class CitationService {
     /** @param {string} message */
     async showWarningMessage(message) {
         this.#additionalWindow.showInfoWindow("Warning!", message);
+    }
+    /** @param {string} message */
+    async showSuccessMessage(message) {
+        this.#additionalWindow.showInfoWindow(
+            "Success!",
+            message,
+            "success",
+        );
     }
 }
 

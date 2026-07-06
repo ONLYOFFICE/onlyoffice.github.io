@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "プラグインを管理する",
 	"Available plugins": "利用可能なプラグイン",
+	"Installed": "インストール済み",
+	"Updates": "アップデート",
 	"Marketplace": "マーケットプレイス",
 	"Submit your own plugin": "自作のプラグインを提出する",
 	"Install plugin manually": "手動でプラグインをインストールする",
@@ -41,8 +43,8 @@
 	"Chinese": "中国語",
 	"Update All": "すべてをアップデートする",
 	"Categories": "カテゴリー",
-	"Search plugins": "プラグインの検索",
-	"All": "すべて",
+	"Search plugins…": "プラグインの検索…",
+	"All plugins": "すべてのプラグイン",
 	"Recommended": "おすすめ",
 	"Developer tools": "開発者ツール",
 	"Work": "仕事",
@@ -60,5 +62,16 @@
 	"Problem with loading some resources" : "リソースの読み込みに関する問題",
 	"Click to rate" : "クリックで評価",
 	"No disscussion page for this plugin." : "このプラグインのディスカッションページはありません。",
-	"Problem with plugin installation." : "プラグインのインストールに問題があります。"
+	"Problem with plugin installation." : "プラグインのインストールに問題があります。",
+	"By ONLYOFFICE": "ONLYOFFICE によって",
+	"No plugins match your filters.": "フィルターに一致するプラグインがありません。",
+	"Try a different category or search term." : "別のカテゴリーや検索語を試してください。",
+	"Local": "ローカル",
+	"No updates available.": "利用可能なアップデートはありません。",
+	"All your plugins are up to date.": "すべてのプラグインは最新の状態です。",
+	"Show panel": "パネルを表示",
+	"Hide panel": "パネルを非表示",
+	"For this editor": "このエディタ用",
+	"Download": "ダウンロード",
+	"Problem with downloading plugin.": "プラグインのダウンロードに問題があります。"
 }
