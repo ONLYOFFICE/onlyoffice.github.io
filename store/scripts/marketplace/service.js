@@ -84,7 +84,10 @@ const MarketplacePluginService = {
 				}
 			};
 			window.addEventListener('message', onInstall);
-			self._sendMessage(message);
+			const wasSent = self._sendMessage(message);
+            if (!wasSent) {
+                fResolve(undefined);
+            }
         });
     },
     /**
@@ -120,7 +123,10 @@ const MarketplacePluginService = {
 				}
 			};
 			window.addEventListener('message', onRemove);
-			self._sendMessage(message);
+			const wasSent = self._sendMessage(message);
+			if (!wasSent) {
+				fResolve(undefined);
+			}
         });
     },
     /**
@@ -156,7 +162,10 @@ const MarketplacePluginService = {
 				}
 			};
 			window.addEventListener('message', onUpdate);
-			self._sendMessage(message);
+			const wasSent = self._sendMessage(message);
+			if (!wasSent) {
+				fResolve(undefined);
+			}
         });
     },
     /**
@@ -206,7 +215,10 @@ const MarketplacePluginService = {
 				}
 			};
 			window.addEventListener('message', onGetInstalled);
-			self._sendMessage({type: 'getInstalled'});
+			const wasSent = self._sendMessage({type: 'getInstalled'});
+			if (!wasSent) {
+				fResolve([]);
+			}
 		});
 	},
     /**
@@ -214,7 +226,10 @@ const MarketplacePluginService = {
      * @returns {Promise<boolean>}
      */
     openPluginCard: function(params) {
-        this._sendMessage(params);
+        const wasSent = this._sendMessage(params);
+        if (!wasSent) {
+            return Promise.resolve(false);
+        }
         return new Promise(function(fResolve, fReject) {
             /**
              * @param {MessageEvent} event
@@ -271,17 +286,25 @@ const MarketplacePluginService = {
                 }	
             };
             window.addEventListener('message', onGetInstalled);
-            self._sendMessage({type: 'getInstalled', updateInstalled: true});
+            const wasSent = self._sendMessage({type: 'getInstalled', updateInstalled: true});
+            if (!wasSent) {
+                fResolve([]);
+            }
         });
     },
 
     /**
      * @param {Object} message
+     * @returns {boolean}
      * @private
      */
     _sendMessage: function(message) {
         // this function sends message to editor
+        if (window.parent === window) {
+            return false;
+        }
         parent.postMessage(JSON.stringify(message), '*');
+        return true;
     }
 
 };

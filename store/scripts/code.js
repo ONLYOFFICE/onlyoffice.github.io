@@ -301,7 +301,14 @@ const Marketplace = {
 
 	/** @returns {Promise<{editorVersion: number, pluginVersion: number, editorType?: EditorType}>} */
 	getEditorAndPluginVersions: function() {
+		const defaultVersions = {
+			editorVersion: 1e8,
+			pluginVersion: 1000005
+		};
 		return new Promise(function(fResolve) {
+			let isResolved = false;
+			/** @type {any} */
+			let timeoutId = undefined;
 			/** @param {MessageEvent} event */
 			let onLoad = function(event) {
 				/** @type {PluginReadyMessage} */
@@ -312,7 +319,12 @@ const Marketplace = {
 					return;
 				}
 				if (message.type === 'PluginReady') {
+					if (isResolved) {
+						return;
+					}
+					isResolved = true;
 					window.removeEventListener('message', onLoad);
+					clearTimeout(timeoutId);
 					let pluginVersion = 1000005; // 1.0.5
 					if (message.pluginVersion && message.pluginVersion.includes('.')) {
 						pluginVersion = Utils.convertPluginVersionToNumber(message.pluginVersion);
@@ -326,6 +338,20 @@ const Marketplace = {
 					});
 				}
 			};
+			
+			if (window.parent === window) {
+				fResolve(defaultVersions);
+			} else {
+				// This case is impossible, but let it be processed
+				timeoutId = setTimeout(function() {
+					if (isResolved) {
+						return;
+					}
+					isResolved = true;
+					window.removeEventListener('message', onLoad);
+					fResolve(defaultVersions);
+				}, 5000);
+			}
 			window.addEventListener('message', onLoad);
 		});
 	},
@@ -824,7 +850,14 @@ function onClickInstall(guid, event) {
 		url = available.obj.baseUrl;
 	}
 	const config = plugin ? plugin : available && available.obj;
-	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
+	return Utils.waitForRepaint()
+		.then(function() { return MarketplacePluginService.doInstall(url, guid, config) })
+		.then(function(result) {
+			if (!result) {
+				UI.toggleLoader(false);
+			}
+			return result;
+		});
 }
 /**
  * @param {string} guid 
@@ -839,7 +872,14 @@ function onClickUpdate(guid, event) {
 		UI.toggleLoader(false);
 		return;
 	}
-	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doUpdate(guid, plugin) });
+	return Utils.waitForRepaint()
+		.then(function() { return MarketplacePluginService.doUpdate(guid, plugin) })
+		.then(function(result) {
+			if (!result) {
+				UI.toggleLoader(false);
+			}
+			return result;
+		});
 }
 /**
  * @param {string} guid 
