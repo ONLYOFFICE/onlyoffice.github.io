@@ -72,5 +72,6 @@
 	"Show panel": "Mostrar panel",
 	"Hide panel": "Ocultar panel",
 	"For this editor": "Para este editor",
-	"Download": "Descargar"
+	"Download": "Descargar",
+	"Problem with downloading plugin.": "Problema con la descarga del plugin."
 }

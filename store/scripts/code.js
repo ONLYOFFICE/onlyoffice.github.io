@@ -202,7 +202,7 @@ const Marketplace = {
 	},
 
 	/**
-	 * The function consumes a lot of resources.ц
+	 * The function consumes a lot of resources.
 	 * @param {Array<PluginInfo>} plugins
 	 * @returns {Promise<Array<Rating | null>>}
 	 */
@@ -853,14 +853,17 @@ function onClickDownload(guid, event) {
 	let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
 	let url = plugin.baseUrl ? releaseUrl + pluginFileName + '.plugin' : '';
 
-	if (url) {
-		let link = document.createElement('a');
-		link.href = url;
-		link.download = '';
-		document.body.appendChild(link);
-		link.click();
-		link.remove();
+	if (!url) {
+		createError(new Error('Problem with downloading plugin.'));
+		return;
 	}
+
+	let link = document.createElement('a');
+	link.href = url;
+	link.download = '';
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 }
 
 /**
@@ -877,6 +880,7 @@ function onClickInstall(guid, event) {
 	if (!plugin && !available) {
 		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
+		return;
 	}
 	let url = '';
 	if (plugin) {

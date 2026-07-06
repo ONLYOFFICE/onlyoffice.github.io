@@ -72,5 +72,6 @@
 	"Show panel": "显示面板",
 	"Hide panel": "隐藏面板",
 	"For this editor": "对于此编辑器",
-	"Download": "下载"
+	"Download": "下载",
+	"Problem with downloading plugin.": "下载插件时出现问题。"
 }

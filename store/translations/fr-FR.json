@@ -72,5 +72,6 @@
 	"Show panel": "Afficher le panneau",
 	"Hide panel": "Masquer le panneau",
 	"For this editor": "Pour cet éditeur",
-	"Download": "Télécharger"
+	"Download": "Télécharger",
+	"Problem with downloading plugin.": "Problème avec le téléchargement du plugin."
 }

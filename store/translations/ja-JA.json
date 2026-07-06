@@ -72,5 +72,6 @@
 	"Show panel": "パネルを表示",
 	"Hide panel": "パネルを非表示",
 	"For this editor": "このエディタ用",
-	"Download": "ダウンロード"
+	"Download": "ダウンロード",
+	"Problem with downloading plugin.": "プラグインのダウンロードに問題があります。"
 }

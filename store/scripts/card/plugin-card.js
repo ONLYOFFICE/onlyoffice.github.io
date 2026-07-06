@@ -473,14 +473,17 @@ const PluginCard = {
         let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
         let url = this.config.baseUrl ? (this.releaseUrl + pluginFileName + '.plugin') : '';
 
-        if (url) {
-            let link = document.createElement('a');
-            link.href = url;
-            link.download = '';
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+        if (!url) {
+            createError(new Error('Problem with downloading plugin.'));
+            return;
         }
+
+        let link = document.createElement('a');
+        link.href = url;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     },
 
     /** @param {Event} event */
