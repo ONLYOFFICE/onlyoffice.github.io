@@ -71,21 +71,21 @@
   border-top: 1px solid var(--border-preview, rgba(128, 128, 128, 0.25));
 }
 
-.antidote-button {
+.button {
   width: auto;
 }
 
-.antidote-button--full-width {
+.button--full-width {
   width: 100%;
   display: block;
 }
 
-.antidote-text-field {
+.text-field {
   width: 100%;
   box-sizing: border-box;
 }
 
-.antidote-loading {
+.loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,38 +94,38 @@
   padding: 24px;
 }
 
-.antidote-error-box {
+.error-box {
   border: 1px solid #e06c6c;
   border-radius: 4px;
   padding: 10px 12px;
   background: rgba(224, 108, 108, 0.08);
 }
 
-.antidote-error-box__title {
+.error-box__title {
   font-weight: 600;
   margin-bottom: 4px;
 }
 
-.antidote-status-banner {
+.status-banner {
   border-radius: 4px;
   padding: 8px 12px;
   margin-bottom: 12px;
   font-size: 13px;
 }
 
-.antidote-status-banner--idle {
+.status-banner--idle {
   background: rgba(128, 128, 128, 0.1);
 }
 
-.antidote-status-banner--pending {
+.status-banner--pending {
   background: rgba(11, 200, 181, 0.12);
 }
 
-.antidote-status-banner--success {
+.status-banner--success {
   background: rgba(76, 175, 80, 0.12);
 }
 
-.antidote-status-banner--error {
+.status-banner--error {
   background: rgba(224, 108, 108, 0.12);
   color: #b03a3a;
 }

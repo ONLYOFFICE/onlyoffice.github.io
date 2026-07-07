@@ -45,9 +45,9 @@ export function Button({
 }: ButtonProps): JSX.Element {
   const classes = [
     'btn-text-default',
-    'antidote-button',
+    'button',
     variant === 'primary' ? 'primary' : '',
-    fullWidth ? 'antidote-button--full-width' : '',
+    fullWidth ? 'button--full-width' : '',
   ].filter(Boolean).join(' ');
 
   return (

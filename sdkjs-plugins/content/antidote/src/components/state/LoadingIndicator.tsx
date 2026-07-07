@@ -38,7 +38,7 @@ export interface LoadingIndicatorProps {
 
 export function LoadingIndicator({ message }: LoadingIndicatorProps): JSX.Element {
   return (
-    <div class="asc-plugin-loader antidote-loading">
+    <div class="asc-plugin-loader loading">
       <div class="asc-loader-container">
         <div class="asc-loader-image" />
       </div>

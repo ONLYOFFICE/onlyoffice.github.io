@@ -21,7 +21,7 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "typecheck": "tsc --noEmit",
-    "dev": "vite",
+    "dev": "vite build --watch",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist"
