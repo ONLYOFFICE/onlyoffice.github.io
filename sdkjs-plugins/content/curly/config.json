@@ -1,0 +1,57 @@
+{
+    "name": "Curly",
+    "guid": "asc.{CE3A8C7D-2C4F-4E1A-9A5A-C8B1A7D0F2E3}",
+    "version": "1.0.0",
+    "baseUrl": "",
+    "variations": [
+        {
+            "description": "Turn any document into a reusable template: mark the parts that change with {tags} and fill them from the task pane — a finished, ready-to-send copy in seconds.",
+            "descriptionLocale": {
+                "nl": "Maak van elk document een herbruikbare sjabloon: markeer de variabele delen met {tags} en vul ze in vanuit het taakvenster — binnen enkele seconden een verzendklaar document.",
+                "de": "Machen Sie aus jedem Dokument eine wiederverwendbare Vorlage: Markieren Sie veränderliche Stellen mit {Tags} und füllen Sie sie im Seitenbereich aus — in Sekunden ein versandfertiges Dokument.",
+                "fr": "Transformez n'importe quel document en modèle réutilisable : marquez les parties variables avec des {balises} et remplissez-les depuis le panneau latéral — un document prêt à envoyer en quelques secondes.",
+                "es": "Convierta cualquier documento en una plantilla reutilizable: marque las partes variables con {etiquetas} y rellénelas desde el panel lateral — un documento listo para enviar en segundos.",
+                "pt-BR": "Transforme qualquer documento em um modelo reutilizável: marque as partes variáveis com {tags} e preencha-as no painel lateral — um documento pronto para envio em segundos.",
+                "it": "Trasforma qualsiasi documento in un modello riutilizzabile: contrassegna le parti variabili con {tag} e compilale dal pannello laterale — un documento pronto da inviare in pochi secondi."
+            },
+            "url": "index.html",
+            "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "icons2": [
+                {
+                    "100%": { "normal": "resources/img/icon.png" },
+                    "125%": { "normal": "resources/img/icon@1.25x.png" },
+                    "150%": { "normal": "resources/img/icon@1.5x.png" },
+                    "175%": { "normal": "resources/img/icon@1.75x.png" },
+                    "200%": { "normal": "resources/img/icon@2x.png" }
+                }
+            ],
+            "isViewer": true,
+            "EditorsSupport": ["word"],
+            "isVisual": true,
+            "isModal": false,
+            "isInsideMode": true,
+            "initDataType": "none",
+            "initData": "",
+            "isUpdateOleOnResize": true,
+            "buttons": [
+                { "text": "Close", "primary": false }
+            ],
+            "size": [320, 600],
+            "store": {
+                "background": {
+                    "light": "#F5F5F5",
+                    "dark": "#444444"
+                },
+                "screenshots": [
+                    "resources/store/screenshots/screen_1.png",
+                    "resources/store/screenshots/screen_2.png"
+                ],
+                "icons": {
+                    "light": "resources/store/icons",
+                    "dark": "resources/store/icons"
+                },
+                "categories": ["work"]
+            }
+        }
+    ]
+}
