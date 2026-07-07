@@ -70,5 +70,8 @@
 	"No updates available.": "Aucune mise à jour disponible.",
 	"All your plugins are up to date.": "Tous vos plugins sont à jour.",
 	"Show panel": "Afficher le panneau",
-	"Hide panel": "Masquer le panneau"
+	"Hide panel": "Masquer le panneau",
+	"For this editor": "Pour cet éditeur",
+	"Download": "Télécharger",
+	"Problem with downloading plugin.": "Problème avec le téléchargement du plugin."
 }

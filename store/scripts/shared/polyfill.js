@@ -85,3 +85,21 @@ if (typeof Object.assign !== 'function') {
 		return to;
 	};
 }
+
+if (typeof Promise !== 'undefined' && typeof Promise.prototype.finally !== 'function') {
+	Promise.prototype.finally = function(callback) {
+		var P = this.constructor || Promise;
+		return this.then(
+			function(value) {
+				return P.resolve(typeof callback === 'function' ? callback() : callback).then(function() {
+					return value;
+				});
+			},
+			function(reason) {
+				return P.resolve(typeof callback === 'function' ? callback() : callback).then(function() {
+					throw reason;
+				});
+			}
+		);
+	};
+}

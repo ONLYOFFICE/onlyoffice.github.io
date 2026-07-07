@@ -50,6 +50,7 @@ const PluginCard = {
 	/** @type {PluginInfo} */
     // @ts-ignore
     config: null,
+    releaseUrl: '',
     /** @type {any} */
     PsChangelog: null,
     slideIndex: 1,  // index for slides
@@ -78,6 +79,7 @@ const PluginCard = {
         this.plugin = data.plugin;
         this.installed = data.installed;
         this.available = data.available;
+        this.releaseUrl = data.releaseUrl;
         // @ts-ignore
         this.config = data.plugin || (data.available && data.available.obj);
         this.editorVersion = data.editorVersion;
@@ -307,7 +309,11 @@ const PluginCard = {
             PluginCardUI.btnUpdate.classList.add("hidden");
         }
 
-        if (this.installed && !this.removed) {
+        if (data.independentMode) {
+            PluginCardUI.btnRemove.classList.add("hidden");
+            PluginCardUI.btnDownload.classList.remove("hidden");
+
+        } else if (this.installed && !this.removed) {
             if (this.canRemoved) {
                 PluginCardUI.btnRemove.classList.remove("hidden");
             } else {
@@ -460,6 +466,24 @@ const PluginCard = {
     onClickClose: function() {
         let guid = this.config.guid;
         MarketplacePluginService.close(guid, this.config);
+    },
+
+    onClickDownload: function() {
+        let baseUrlParts = this.config.baseUrl ? this.config.baseUrl.split('/').filter(Boolean) : [];
+        let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
+        let url = this.config.baseUrl ? (this.releaseUrl + pluginFileName + '.plugin') : '';
+
+        if (!url) {
+            createError(new Error('Problem with downloading plugin.'));
+            return;
+        }
+
+        let link = document.createElement('a');
+        link.href = url;
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     },
 
     /** @param {Event} event */

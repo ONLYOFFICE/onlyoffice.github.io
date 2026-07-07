@@ -433,6 +433,30 @@
         background-color: #d1d5db;
         color: #000000;
       }
+
+      .checkbox-group {
+        margin-bottom: 16px;
+      }
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 12px;
+        user-select: none;
+      }
+
+      .checkbox-label input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+        cursor: pointer;
+        accent-color: #2563eb;
+      }
+
+      .checkbox-label span {
+        font-weight: normal;
+      }
     </style>
   </head>
   <body>
@@ -533,6 +557,13 @@
             <option value="D-MMM-YY">26-May-25</option>
             <option value="M.D.YYYY">5.26.2025</option>
           </select>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="keepStyles" />
+            <span id="keepStylesLabel">Keep cell formatting</span>
+          </label>
         </div>
 
         <button id="insertDate" class="button">Insert date</button>

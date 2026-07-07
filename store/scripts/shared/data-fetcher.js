@@ -30,7 +30,7 @@
  *
  */
 
-/// <reference path="./types.js" />
+/// <reference path="../types.js" />
 /// <reference path="./utils.js" />
 
 const DataFetcher = {

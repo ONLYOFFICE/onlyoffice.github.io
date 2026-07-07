@@ -1,0 +1,10 @@
+{
+    "Please select the text you want to operate and click the corresponding operation button.": "请选择需要操作的文字，并点击对应的操作按钮。",
+    "Simplified → Traditional": "简体 → 繁体",
+    "Traditional → Simplified": "繁体 → 简体",
+    "Add pinyin": "添加拼音",
+    "Remove pinyin": "移除拼音",
+    "Tip: Right-click after selecting text to use the function directly.": "提示：选中文本后右键单击可直接使用功能。",
+    "Success!": "成功！",
+    "Please select some text first": "请先选择一些文本"
+}

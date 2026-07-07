@@ -45,7 +45,7 @@ const Utils = {
     /** @type {AscTheme | null} */
     theme: null,                                // flag translate or not
     /** @type {'light' | 'dark'} */
-    themeType: getUrlSearchValue("theme-type") === 'light' ? 'light' : 'dark',
+    themeType: getUrlSearchValue("theme-type") === 'dark' ? 'dark' : 'light',
     /** @type {string} */
     lang: detectLanguage(),                     // current language
     /** @type {string} */

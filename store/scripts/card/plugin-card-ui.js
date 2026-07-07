@@ -52,6 +52,8 @@ const PluginCardUI = {
     btnRemove: /** @type {HTMLButtonElement} */ (document.getElementById('btn_remove')),
     /** @type {HTMLButtonElement} */
     btnInstall: /** @type {HTMLButtonElement} */ (document.getElementById('btn_install')),
+    /** @type {HTMLButtonElement} */
+    btnDownload: /** @type {HTMLButtonElement} */ (document.getElementById('btn_download')),
     /** @type {HTMLSpanElement} */
     spanSelectedDescr: /** @type {HTMLSpanElement} */ (document.getElementById('span_selected_description')),
     /** @type {HTMLAnchorElement} */
