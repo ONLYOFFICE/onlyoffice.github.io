@@ -16,14 +16,23 @@
                 "it": "Trasforma qualsiasi documento in un modello riutilizzabile: contrassegna le parti variabili con {tag} e compilale dal pannello laterale — un documento pronto da inviare in pochi secondi."
             },
             "url": "index.html",
-            "icons": ["resources/img/icon.png", "resources/img/icon@2x.png"],
+            "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
             "icons2": [
                 {
-                    "100%": { "normal": "resources/img/icon.png" },
-                    "125%": { "normal": "resources/img/icon@1.25x.png" },
-                    "150%": { "normal": "resources/img/icon@1.5x.png" },
-                    "175%": { "normal": "resources/img/icon@1.75x.png" },
-                    "200%": { "normal": "resources/img/icon@2x.png" }
+                    "style": "light",
+                    "100%": { "normal": "resources/light/icon.png" },
+                    "125%": { "normal": "resources/light/icon@1.25x.png" },
+                    "150%": { "normal": "resources/light/icon@1.5x.png" },
+                    "175%": { "normal": "resources/light/icon@1.75x.png" },
+                    "200%": { "normal": "resources/light/icon@2x.png" }
+                },
+                {
+                    "style": "dark",
+                    "100%": { "normal": "resources/dark/icon.png" },
+                    "125%": { "normal": "resources/dark/icon@1.25x.png" },
+                    "150%": { "normal": "resources/dark/icon@1.5x.png" },
+                    "175%": { "normal": "resources/dark/icon@1.75x.png" },
+                    "200%": { "normal": "resources/dark/icon@2x.png" }
                 }
             ],
             "isViewer": true,
