@@ -30,8 +30,41 @@
  *
  */
 
-export { TextField } from './TextField';
-export type { TextFieldProps } from './TextField';
+import { JSX } from 'preact';
 
-export { RadioGroup } from './RadioGroup';
-export type { RadioGroupProps, RadioOption } from './RadioGroup';
+export interface RadioOption<T extends string> {
+  value: T;
+  label: string;
+}
+
+export interface RadioGroupProps<T extends string> {
+  name: string;
+  value: T;
+  options: RadioOption<T>[];
+  ariaLabel?: string;
+  disabled?: boolean;
+  onChange: (value: T) => void;
+}
+
+export function RadioGroup<T extends string>({
+  name, value, options, ariaLabel, disabled, onChange,
+}: RadioGroupProps<T>): JSX.Element {
+  return (
+    <div class="radio-group" role="radiogroup" aria-label={ariaLabel}>
+      {options.map((option) => (
+        <label key={option.value} class="radio-group__option">
+          <input
+            type="radio"
+            class="form-control"
+            name={name}
+            value={option.value}
+            checked={value === option.value}
+            disabled={disabled}
+            onChange={() => onChange(option.value)}
+          />
+          <span>{option.label}</span>
+        </label>
+      ))}
+    </div>
+  );
+}

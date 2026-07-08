@@ -85,6 +85,19 @@
   box-sizing: border-box;
 }
 
+.radio-group {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.radio-group__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
 .loading {
   display: flex;
   flex-direction: column;
@@ -137,12 +150,6 @@
 .antidote-section__title {
   font-weight: 600;
   margin-bottom: 8px;
-}
-
-.antidote-scope-toggle {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
 }
 
 .antidote-lookup-row {

@@ -35,7 +35,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import {
-  Layout, Header, Footer, Button, TextField, StatusBanner,
+  Layout, Header, Footer, Button, TextField, RadioGroup, StatusBanner,
 } from '@components';
 import { useHasSelection, useTranslation } from '@hooks';
 import { useCorrection, CorrectionScope } from '@features/correction';
@@ -76,6 +76,13 @@ export function Main(): JSX.Element {
     scope.value = nextScope;
   };
 
+  const scopeOptions = [
+    ...(canCheckWholeDocument
+      ? [{ value: 'document' as CorrectionScope, label: t('main.scope.document') }]
+      : []),
+    { value: 'selection' as CorrectionScope, label: t('main.scope.selection') },
+  ];
+
   const handleLookup = (tool: LookupTool) => {
     if (!lookupText.trim()) return;
     openLookup(tool, lookupText.trim());
@@ -90,22 +97,14 @@ export function Main(): JSX.Element {
 
       <div class="antidote-section">
         <div class="antidote-section__title">{t('main.scopeTitle')}</div>
-        <div class="antidote-scope-toggle">
-          {canCheckWholeDocument && (
-            <Button
-              variant={scope.value === 'document' ? 'primary' : 'secondary'}
-              onClick={() => handleScopeChange('document')}
-            >
-              {t('main.scope.document')}
-            </Button>
-          )}
-          <Button
-            variant={scope.value === 'selection' ? 'primary' : 'secondary'}
-            onClick={() => handleScopeChange('selection')}
-          >
-            {t('main.scope.selection')}
-          </Button>
-        </div>
+        <RadioGroup
+          name="scope"
+          value={scope.value}
+          options={scopeOptions}
+          ariaLabel={t('main.scopeTitle')}
+          disabled={connectionState.value === 'connecting'}
+          onChange={handleScopeChange}
+        />
 
         {connectionState.value === 'connected' ? (
           <Button fullWidth onClick={stop}>{t('main.stop')}</Button>
