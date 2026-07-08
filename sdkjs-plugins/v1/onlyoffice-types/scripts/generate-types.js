@@ -111,6 +111,18 @@ function extractClasses(data) {
     if (item.kind === 'function' && item.name && item.memberof) {
       const className = item.memberof.replace('#', '');
       if (classes[className]) {
+        // office-js-api-declarations sometimes lists the same method twice for a class — once with
+        // a properly parsed @returns tag, once more with a malformed one (parsedType: null) whose
+        // type was actually scraped from an unrelated method (e.g. ApiRun#GetClassType's second
+        // entry claims "textPr", copied from ApiTextPr#GetClassType, instead of the real "run").
+        // The malformed duplicate always comes second, so once a method has a good entry recorded,
+        // skip any further entry whose return type didn't parse cleanly rather than let it clobber
+        // the correct one.
+        const alreadyRecorded = classes[className].methods[item.name];
+        const firstReturnType = item.returns && item.returns[0] && item.returns[0].type;
+        const parsedCleanly = !firstReturnType || firstReturnType.parsedType != null;
+        if (alreadyRecorded && !parsedCleanly) continue;
+
         const seenNames = new Set();
         let hasOptional = false;
         const params = item.params ? item.params.map(p => {
@@ -124,11 +136,11 @@ function extractClasses(data) {
           if (p.optional || p.defaultvalue !== undefined) hasOptional = true;
           return { name, type: parseType(p.type), optional: hasOptional, defaultValue: p.defaultvalue };
         }) : [];
-        
-        const returnType = item.returns && item.returns.length > 0 
-          ? parseType(item.returns[0].type) 
+
+        const returnType = item.returns && item.returns.length > 0
+          ? parseType(item.returns[0].type)
           : 'void';
-        
+
         classes[className].methods[item.name] = {
           params,
           returnType,
@@ -172,14 +184,16 @@ function extractTypedefs(data) {
   return typedefs;
 }
 
-function generateInterface(className, classData, isExported = false) {
+function generateInterface(className, classData) {
   let output = '';
-  
+
   if (classData.description) {
     output += `/** ${classData.description.replace(/\n/g, ' ')} */\n`;
   }
-  const exportKw = isExported ? 'export ' : '';
-  output += `${exportKw}interface ${className} {\n`;
+  // Every class is exported, not just the main per-editor one: consumers need to be able to name
+  // helper types like ApiParagraph/ApiRun/ApiHyperlink (e.g. to type a callCommand callback that
+  // walks paragraph content), not just the top-level Api object.
+  output += `export interface ${className} {\n`;
   
   const propertyNames = Object.keys(classData.properties).sort();
   for (const propName of propertyNames) {
@@ -212,14 +226,14 @@ function generateTypedef(name, typedefData) {
     output += `/** ${typedefData.description.replace(/\n/g, ' ')} */\n`;
   }
   if (typedefData.properties.length > 0) {
-    output += `interface ${name} {\n`;
+    output += `export interface ${name} {\n`;
     for (const prop of typedefData.properties) {
       const opt = prop.optional ? '?' : '';
       output += `  ${prop.name}${opt}: ${prop.type};\n`;
     }
     output += '}\n';
   } else {
-    output += `type ${name} = ${typedefData.type || 'any'};\n`;
+    output += `export type ${name} = ${typedefData.type || 'any'};\n`;
   }
   return output;
 }
@@ -258,7 +272,6 @@ function collectReferencedApiTypes(classes, typedefs) {
 
 function generateDtsFile(data, typeName) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
-  const mainClassName = `Api${editorName.charAt(0).toUpperCase() + editorName.slice(1)}`;
   let output = 'export {};\n\n';
   output += `// Auto-generated from ${API_REPO}\n`;
   output += `// Editor type: ${editorName}\n\n`;
@@ -285,8 +298,7 @@ function generateDtsFile(data, typeName) {
   }
 
   for (const className of classNames) {
-    const isExported = className === mainClassName;
-    output += generateInterface(className, classes[className], isExported);
+    output += generateInterface(className, classes[className]);
     output += '\n';
   }
   
