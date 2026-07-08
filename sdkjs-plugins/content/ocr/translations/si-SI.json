@@ -1,11 +1,10 @@
 {
-	"Tesseract.js lets recognize text in pictures (png, jpg)": "Tesseract.js මගින් රූපවල පෙළ හඳුනා ගැනීමට හැකිය (png, jpg)",
+	"Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)": "Tesseract.js මගින් රූපවල පෙළ හඳුනා ගැනීමට හැකිය (bmp, jpg, png, webp, gif)",
 	"Choose language": "භාෂාව තෝරන්න",
 	"Load File": "ගොනුව පූරණය",
 	"English": "ඉංග්‍රීසි",
 	"Chinese": "චීන",
 	"Russian": "රුසියානු",
-	"Meme": "විඩම්බන",
 	"Thai": "තායි",
 	"German": "ජර්මානු",
 	"Japanese": "ජපන්",
@@ -65,6 +64,6 @@
 	"Slovak": "ස්ලෝවැක්",
 	"Recognize": "හඳුනාගන්න",
 	"Tesseract.js Add-on": "Tesseract.js එක්කහුව",
-	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.": "Tesseract.js යනු චීන, සිංහල, ඉංග්‍රීසි, විඩම්බන හා වෙනත් භාෂා 60 ක් හඳුනා ගන්නා <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR යන්ත්‍රයේ</a> පිරිසිදු ජාවාස්ක්‍රිප්ට් අනුවාදයකි.",
+	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian and 60 other languages.": "Tesseract.js යනු චීන්, සිංහල, ඉංග්‍රෝසි හා වෙනත් භාෂා 60 ක්‍ හේනා ගන්නා <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR යන්ත්‍රයේ</a> පිරිසිදු ජාවාස්ක්‍රිභ්ට් අනුවාදයකි.",
 	"Source code": "මූලාශ්‍ර කේතය"
 }
