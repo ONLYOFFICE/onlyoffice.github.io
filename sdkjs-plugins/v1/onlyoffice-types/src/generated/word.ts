@@ -4,34 +4,34 @@ export {};
 // Editor type: word
 
 /** Types of all supported forms.  ## Try it   ```js document-builder={"documentType": "word"} let copyTextForm = textForm.Copy(); ``` */
-type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm;
+export type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm;
 
 /** Axis position in the chart.  ## Try it   ```js document-builder={"documentType": "word"} chart.SetAxieNumFormat("top", "0.00"); ``` */
-type AxisPos = "top" | "bottom" | "right" | "left";
+export type AxisPos = "top" | "bottom" | "right" | "left";
 
 /** The type of a fill which uses an image as a background. <b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface. <b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.  ## Try it   ```js document-builder={"documentType": "word"} let blipFill = Api.CreateBlipFill("https://example.com/myimage.png", "tile"); ``` */
-type BlipFillType = "tile" | "stretch";
+export type BlipFillType = "tile" | "stretch";
 
 /** A border type which will be added to the document element. <b>"none"</b> - no border will be added to the created element or the selected element side. <b>"single"</b> - a single border will be added to the created element or the selected element side.  ## Try it   ```js document-builder={"documentType": "word"} paraPr.SetBottomBorder("single", 24, 0, 0, 255, 0); ``` */
-type BorderType = "none" | "single";
+export type BorderType = "none" | "single";
 
 /** Possible values for the caption label.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddCaptionCrossRef("Table", "pageNum", caption); ``` */
-type CaptionLabel = "Table" | "Equation" | "Figure";
+export type CaptionLabel = "Table" | "Equation" | "Figure";
 
 /** Possible values for the caption numbering format. <b>"ALPHABETIC"</b> - upper letter. <b>"alphabetic"</b> - lower letter. <b>"Roman"</b> - upper Roman. <b>"roman"</b> - lower Roman. <b>"Arabic"</b> - arabic.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen"); ``` */
-type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
+export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
 /** Possible values for the caption separator. <b>"hyphen"</b> - the "-" punctuation mark. <b>"period"</b> - the "." punctuation mark. <b>"colon"</b> - the ":" punctuation mark. <b>"longDash"</b> - the "—" punctuation mark. <b>"dash"</b> - the "-" punctuation mark.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen"); ``` */
-type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
+export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
 /** This type specifies the available chart types which can be used to create a new chart.  ## Try it   ```js document-builder={"documentType": "word"} // ChartType used in text documents // The resulting chart will have a 'bar3D' type: var chart = Api.CreateChart("bar3D", [[200, 240, 280],[250, 260, 280]], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);  // ChartType used in spreadsheets // The resulting chart will have a 'bar3D' type: var chart = worksheet.AddChart("'Sheet1'!$A$1:$D$3", true, "bar3D", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000); ``` */
-type ChartType = "bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" | "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent" | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" | "lineStacked" | "lineStackedPercent" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "stock" | "area" | "areaStacked" | "areaStackedPercent" | "comboBarLine" | "comboBarLineSecondary" | "comboCustom" | "unknown";
+export type ChartType = "bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" | "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent" | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" | "lineStacked" | "lineStackedPercent" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "stock" | "area" | "areaStacked" | "areaStackedPercent" | "comboBarLine" | "comboBarLineSecondary" | "comboCustom" | "unknown";
 
 /** Report on all comments. This is a dictionary where the keys are usernames.  ## Try it   ```js document-builder={"documentType": "word"} let commentsReport = oDocument.GetCommentsReport(); ``` */
-type CommentReport = Record<string, CommentReportRecord[]>;
+export type CommentReport = Record<string, CommentReportRecord[]>;
 
 /** Record of one comment.  ## Try it   ```js document-builder={"documentType": "word"} let commentsReport = oDocument.GetCommentsReport(); ``` */
-interface CommentReportRecord {
+export interface CommentReportRecord {
   IsAnswer?: boolean;
   CommentMessage: string;
   Date: number;
@@ -40,22 +40,22 @@ interface CommentReportRecord {
 }
 
 /** Any valid element which can be added to the document structure.  ## Try it   ```js document-builder={"documentType": "word"} doc.AddElement(paragraph); ``` */
-type DocumentElement = ApiParagraph | ApiTable | ApiBlockLvlSdt;
+export type DocumentElement = ApiParagraph | ApiTable | ApiBlockLvlSdt;
 
 /** Any valid drawing element. */
-type Drawing = ApiShape | ApiImage | ApiGroup | ApiOleObject | ApiChart;
+export type Drawing = ApiShape | ApiImage | ApiGroup | ApiOleObject | ApiChart;
 
 /** Available drawing element for grouping. */
-type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
+export type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
 
 /** This type specifies the type of drawing lock.  ## Try it   ```js document-builder={"documentType": "word"} let lockValue = drawing.GetLockValue("noSelect"); ``` */
-type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
+export type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
 
 /** English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs. */
-type EMU = number;
+export type EMU = number;
 
 /** Form data.  ## Try it   ```js document-builder={"documentType": "word"} let formData = {key: "CompanyName", value: "OnlyOffice", type: "text"}; ``` */
-interface FormData {
+export interface FormData {
   key: string;
   value: string | boolean;
   tag: string;
@@ -63,43 +63,43 @@ interface FormData {
 }
 
 /** The specific form type.  ## Try it   ```js document-builder={"documentType": "word"} let formsData = doc.GetFormsData(); ``` */
-type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio";
+export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio";
 
 /** Form type. The available form types.  ## Try it   ```js document-builder={"documentType": "word"} let formType = textForm.GetFormType(); ``` */
-type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm";
+export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm";
 
 /** Header and footer types which can be applied to the document sections. <b>"default"</b> - a header or footer which can be applied to any default page. <b>"title"</b> - a header or footer which is applied to the title page. <b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).  ## Try it   ```js document-builder={"documentType": "word"} let docContent = finalSection.RemoveHeader("title"); ``` */
-type HdrFtrType = "default" | "title" | "even";
+export type HdrFtrType = "default" | "title" | "even";
 
 /** Standard numeric format.  ## Try it   ```js document-builder={"documentType": "word"} worksheet.GetRange("A1").SetOrientation("xlUpward"); ``` */
-type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
+export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
 /** The types of elements that can be added to the paragraph structure.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddElement(run, 0); ``` */
-type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
 
 /** The available preset patterns which can be used for the fill.  ## Try it   ```js document-builder={"documentType": "word"} let fill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0)); ``` */
-type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
+export type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
 
 /** 60000th of a degree (5400000 = 90 degrees).  ## Try it   ```js document-builder={"documentType": "word"} let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000); ``` */
-type PositiveFixedAngle = number;
+export type PositiveFixedAngle = number;
 
 /** The 1000th of a percent (100000 = 100%).  ## Try it   ```js document-builder={"documentType": "word"} let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000); ``` */
-type PositivePercentage = number;
+export type PositivePercentage = number;
 
 /** The available preset color names.  ## Try it   ```js document-builder={"documentType": "word"} let schemeColor = Api.CreatePresetColor("lightYellow"); ``` */
-type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
+export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
 /** The possible values for the base which the relative horizontal positioning of an object will be calculated from.  ## Try it   ```js document-builder={"documentType": "word"} drawing.SetHorAlign("page", "center"); ``` */
-type RelFromH = "character" | "column" | "leftMargin" | "rightMargin" | "margin" | "page";
+export type RelFromH = "character" | "column" | "leftMargin" | "rightMargin" | "margin" | "page";
 
 /** The possible values for the base which the relative vertical positioning of an object will be calculated from.  ## Try it   ```js document-builder={"documentType": "word"} drawing.SetVerAlign("page", "center"); ``` */
-type RelFromV = "bottomMargin" | "topMargin" | "margin" | "page" | "line" | "paragraph";
+export type RelFromV = "bottomMargin" | "topMargin" | "margin" | "page" | "line" | "paragraph";
 
 /** Report on all review changes. This is a dictionary where the keys are usernames.  ## Try it   ```js document-builder={"documentType": "word"} let reviewRecord = { 	"John Smith" : [{Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}, 					{Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}], 	"Mark Pottato" : [{Type: "ParaRem", Date: 1679941755942}, 					{Type: "TextPr", Date: 1679941757832}] } ``` */
-type ReviewReport = Record<string, ReviewReportRecord[]>;
+export type ReviewReport = Record<string, ReviewReportRecord[]>;
 
 /** Record of one review change.  ## Try it   ```js document-builder={"documentType": "word"} let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}; let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}; let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942}; let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832}; let reviewRecord = { 	"John Smith" : [reviewReportRecord1, reviewReportRecord2], 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4] }; ``` */
-interface ReviewReportRecord {
+export interface ReviewReportRecord {
   Type: ReviewReportRecordType;
   Value?: string;
   Date: number;
@@ -107,58 +107,58 @@ interface ReviewReportRecord {
 }
 
 /** Review record type.  ## Try it   ```js document-builder={"documentType": "word"} let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}; let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}; let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942}; let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832}; let reviewRecord = { 	"John Smith" : [reviewReportRecord1, reviewReportRecord2], 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4] }; ``` */
-type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
+export type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
 
 /** The condition to scale an image in the picture form.  ## Try it   ```js document-builder={"documentType": "word"} pictureForm.SetScaleFlag("tooBig"); ``` */
-type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
+export type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
 
 /** The available color scheme identifiers.  ## Try it   ```js document-builder={"documentType": "word"} let schemeColor = Api.CreateSchemeColor("accent2"); ``` */
-type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
+export type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
 
 /** The lock type of the content control.  ## Try it   ```js document-builder={"documentType": "word"} inlineLvlSdt.SetLock("sdtContentLocked"); ``` */
-type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
+export type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
 
 /** The section break type which defines how the contents of the current section are placed relative to the previous section. WordprocessingML supports five distinct types of section breaks: <b>Next page</b> ("nextPage") - starts a new section on the next page (the default value). <b>Odd</b> ("oddPage") - starts a new section on the next odd-numbered page. <b>Even</b> ("evenPage") - starts a new section on the next even-numbered page. <b>Continuous</b> ("continuous") - starts a new section in the next paragraph. This means that continuous section breaks might not specify certain page-level section properties, since they shall be inherited from the following section. However, these breaks can specify other section properties, such as line numbering and footnote/endnote settings. <b>Column</b> ("nextColumn") - starts a new section in the next column on the page. */
-type SectionBreakType = "nextPage" | "oddPage" | "evenPage" | "continuous" | "nextColumn";
+export type SectionBreakType = "nextPage" | "oddPage" | "evenPage" | "continuous" | "nextColumn";
 
 /** This type specifies the preset shape geometry that will be used for a shape.  ## Try it   ```js document-builder={"documentType": "word"} let drawing = Api.CreateShape("diamond", 100 * 36000, 100 * 36000, fill, stroke); ``` */
-type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
+export type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
 
 /** A shade type which can be added to the document element.  ## Try it   ```js document-builder={"documentType": "word"} tablePr.SetShd("clear", 0, 255, 0, false); ``` */
-type ShdType = "nil" | "clear";
+export type ShdType = "nil" | "clear";
 
 /** The style type used for the document element.  ## Try it   ```js document-builder={"documentType": "word"} let normalStyle = doc.GetDefaultStyle("paragraph"); ``` */
-type StyleType = "paragraph" | "table" | "run" | "numbering";
+export type StyleType = "paragraph" | "table" | "run" | "numbering";
 
 /** Custom tab types.  ## Try it   ```js document-builder={"documentType": "word"} paraPr.SetTabs([1000, 1500, 3000], ["center", "left", "right"]); ``` */
-type TabJc = "clear" | "left" | "right" | "center";
+export type TabJc = "clear" | "left" | "right" | "center";
 
 /** This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used. <b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell. <b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell. <b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell. <b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell. <b>"firstRow"</b> - specifies that the table formatting is applied to the first row. <b>"lastRow"</b> - specifies that the table formatting is applied to the last row. <b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format. <b>"lastColumn"</b> - specifies that the table formatting is applied to the last column. <b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows. <b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows. <b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns. <b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns. <b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table.  ## Try it   ```js document-builder={"documentType": "word"} tableStyle.GetConditionalTableStyle("topLeftCell").GetTableCellPr().SetShd("clear", 255, 0, 0); ``` */
-type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
+export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
 /** The possible values for the units of the width property are defined by a specific table or table cell width property. <b>"auto"</b> - sets the table or table cell width to auto width. <b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point. <b>"nul"</b> - sets the table or table cell width to be of a zero value. <b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container.  ## Try it   ```js document-builder={"documentType": "word"} tableCell.SetWidth("twips", 2000); ``` */
-type TableWidth = "auto" | "twips" | "nul" | "percent";
+export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
 /** Text transform type.  ## Try it   ```js document-builder={"documentType": "word"} let textArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", fill, stroke, 0, 150 * 36000, 50 * 36000); ``` */
-type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
+export type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
 
 /** Possible values for the position of chart tick labels (either horizontal or vertical). <b>"none"</b> - not display the selected tick labels. <b>"nextTo"</b> - sets the position of the selected tick labels next to the main label. <b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values. <b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values.  ## Try it   ```js document-builder={"documentType": "word"} chart.SetVertAxisTickLabelPosition("nextTo"); ``` */
-type TickLabelPosition = "none" | "nextTo" | "low" | "high";
+export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
 /** The type of tick mark appearance.  ## Try it   ```js document-builder={"documentType": "word"} chart.SetVertAxisMajorTickMark("cross"); ``` */
-type TickMark = "cross" | "in" | "none" | "out";
+export type TickMark = "cross" | "in" | "none" | "out";
 
 /** Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.  ## Try it   ```js document-builder={"documentType": "word"} let tocBuildFromPr = {"OutlineLvls": 9}; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": tocBuildFromPr, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
-interface TocBuildFromPr {
+export interface TocBuildFromPr {
   OutlineLvls?: number;
   StylesLvls: TocStyleLvl[];
 }
 
 /** Possible values for the table of contents leader: <b>"dot"</b> - "......." <b>"dash"</b> - "-------" <b>"underline"</b> - "_______"  ## Try it   ```js document-builder={"documentType": "word"} let tocLeader = "dot"; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": tocLeader, "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
-type TocLeader = "dot" | "dash" | "underline" | "none";
+export type TocLeader = "dot" | "dash" | "underline" | "none";
 
 /** Table of contents properties.  ## Try it   ```js document-builder={"documentType": "word"} let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
-interface TocPr {
+export interface TocPr {
   ShowPageNums?: boolean;
   RightAlgn?: boolean;
   LeaderType?: TocLeader;
@@ -168,16 +168,16 @@ interface TocPr {
 }
 
 /** Possible values for the table of contents style.  ## Try it   ```js document-builder={"documentType": "word"} let tocStyle = "standard"; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": tocStyle}; doc.AddTableOfContents(tocPr); ``` */
-type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
+export type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
 
 /** Table of contents style levels.  ## Try it   ```js document-builder={"documentType": "word"} let tocStyleLvl = [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}]; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"StylesLvls": tocStyleLvl}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
-interface TocStyleLvl {
+export interface TocStyleLvl {
   Name: string;
   Lvl: number;
 }
 
 /** Table of figures properties.  ## Try it   ```js document-builder={"documentType": "word"} let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": "distinctive"}; doc.AddTableOfFigures(tofPr); ``` */
-interface TofPr {
+export interface TofPr {
   ShowPageNums?: boolean;
   RightAlgn?: boolean;
   LeaderType?: TocLeader;
@@ -188,61 +188,61 @@ interface TofPr {
 }
 
 /** Possible values for the table of figures style.  ## Try it   ```js document-builder={"documentType": "word"} let tofStyle = "distinctive"; let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": tofStyle}; doc.AddTableOfFigures(tofPr); ``` */
-type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
+export type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
 
 /** The available text vertical alignment (used to align text in a shape with a placement for text inside it).  ## Try it   ```js document-builder={"documentType": "word"} drawing.SetVerticalTextAlign("top"); ``` */
-type VerticalTextAlign = "top" | "center" | "bottom";
+export type VerticalTextAlign = "top" | "center" | "bottom";
 
 /** The watermark direction.  ## Try it   ```js document-builder={"documentType": "word"} watermarkSettings.SetDirection("clockwise45"); ``` */
-type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45";
+export type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45";
 
 /** The watermark type.  ## Try it   ```js document-builder={"documentType": "word"} watermarkSettings.SetType("text"); ``` */
-type WatermarkType = "none" | "text" | "image";
+export type WatermarkType = "none" | "text" | "image";
 
 /** Available values of the "bookmark" reference type: <b>"text"</b> - the entire bookmark text; <b>"pageNum"</b> - the bookmark page number; <b>"paraNum"</b> - the bookmark paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1"; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddBookmarkCrossRef("pageNum", bookmark); ``` */
-type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
+export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
 /** A numeric value from 0 to 255.  ## Try it   ```js document-builder={"documentType": "word"} // The resulting color is green, the bytes are measured in decimal numbers: let rgbColorGreen = Api.CreateRGBColor(0, 255, 0); // The resulting color is red, the bytes are measured in hexadecimal numbers: let rgbColorRed = Api.CreateRGBColor(0xff, 0, 0); ``` */
-type byte = number;
+export type byte = number;
 
 /** Available values of the "equation"/"figure"/"table" reference type: <b>"entireCaption"</b>- the entire caption text; <b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1"; <b>"captionText"</b> - the caption text only; <b>"pageNum"</b> - the page number containing the referenced object; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddCaptionCrossRef("table", "pageNum", caption); ``` */
-type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
+export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
 /** Available values of the "endnote" reference type: <b>"endnoteNum"</b> - the endnote number; <b>"pageNum"</b> - the endnote page number; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position; <b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddEndnoteCrossRef("pageNum", endnoteParagraph); ``` */
-type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
+export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
 /** Available values of the "footnote" reference type: <b>"footnoteNum"</b> - the footnote number; <b>"pageNum"</b> - the page number of the footnote; <b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item; <b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddFootnoteCrossRef("pageNum", footnoteParagraph); ``` */
-type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
+export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
 /** Available values of the "heading" reference type: <b>"text"</b> - the entire heading text; <b>"pageNum"</b> - the heading page number; <b>"headingNum"</b> - the heading sequence number; <b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only; <b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddHeadingCrossRef("pageNum", headingParagraph); ``` */
-type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
+export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
 /** Available highlight colors.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.SetHighlight("green"); ``` */
-type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
+export type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
 
 /** Half-points (2 half-points = 1 point).  ## Try it   ```js document-builder={"documentType": "word"} textPr.SetFontSize(22); ``` */
-type hps = number;
+export type hps = number;
 
 /** 240ths of a line.  ## Try it   ```js document-builder={"documentType": "word"} paraPr.SetSpacingLine(240, "auto"); ``` */
-type line240 = number;
+export type line240 = number;
 
 /** 1 millimetre equals 1/10th of a centimetre.  ## Try it   ```js document-builder={"documentType": "word"} textForm.SetCellWidth(7); ``` */
-type mm = number;
+export type mm = number;
 
 /** Available values of the "numbered" reference type: <b>"pageNum"</b> - the numbered item page number; <b>"paraNum"</b> - the numbered item paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1"; <b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "word"} paragraph.AddNumberedCrossRef("pageNum", numberedParagraph, true, true); ``` */
-type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
+export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
 /** Value from 0 to 100.  ## Try it   ```js document-builder={"documentType": "word"} pictureForm.SetPicturePosition(70, 70); ``` */
-type percentage = number;
+export type percentage = number;
 
 /** A point.  ## Try it   ```js document-builder={"documentType": "word"} paraPr.SetBottomBorder("single", 24, 1, 0, 255, 0); ``` */
-type pt = number;
+export type pt = number;
 
 /** Eighths of a point (24 eighths of a point = 3 points).  ## Try it   ```js document-builder={"documentType": "word"} paraPr.SetBottomBorder("single", 48, 0, 0, 255, 0); ``` */
-type pt_8 = number;
+export type pt_8 = number;
 
 /** Twentieths of a point (equivalent to 1/1440th of an inch).  ## Try it   ```js document-builder={"documentType": "word"} paragraph.SetEqualColumns(2, 720); ``` */
-type twips = number;
+export type twips = number;
 
 // Cross-file type stubs
 type ALPHABETIC = any;
@@ -266,7 +266,7 @@ type TextRem = any;
 type Unknown = any;
 
 /** Base class */
-interface Api {
+export interface Api {
   AddComment(element?: ApiRun[] | DocumentElement, text?: string, author?: string, userId?: string): ApiComment;
   ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;
   CreateBlipFill(imageUrl?: string, blipFillType?: BlipFillType): ApiFill;
@@ -310,7 +310,7 @@ interface Api {
 }
 
 /** Class representing a container for the document content. */
-interface ApiBlockLvlSdt {
+export interface ApiBlockLvlSdt {
   AddCaption(additionalText?: string, label?: CaptionLabel | string, excludeLabel?: boolean, numFormat?: CaptionNumberingFormat, isBefore?: boolean, headingLvl?: number, captionSep?: CaptionSep): boolean;
   AddComment(text?: string, author?: string, userId?: string): ApiComment;
   AddElement(element?: DocumentElement, pos?: number): boolean;
@@ -351,7 +351,7 @@ interface ApiBlockLvlSdt {
 }
 
 /** Class representing a bookmark in the document. */
-interface ApiBookmark {
+export interface ApiBookmark {
   Delete(): boolean;
   GetName(): string;
   GetRange(): ApiRange;
@@ -363,7 +363,7 @@ interface ApiBookmark {
 }
 
 /** Class representing a chart. */
-interface ApiChart {
+export interface ApiChart {
   ApplyChartStyle(nStyleId?: any): boolean;
   GetAllSeries(): ApiChartSeries[];
   GetChartType(): ChartType;
@@ -415,14 +415,14 @@ interface ApiChart {
 }
 
 /** Class representing a chart series. */
-interface ApiChartSeries {
+export interface ApiChartSeries {
   ChangeChartType(sType?: ChartType): boolean;
   GetChartType(): ChartType;
   GetClassType(): "chartSeries";
 }
 
 /** Class representing a document checkbox / radio button. */
-interface ApiCheckBoxForm {
+export interface ApiCheckBoxForm {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -452,7 +452,7 @@ interface ApiCheckBoxForm {
 }
 
 /** Class representing a document combo box / dropdown list. */
-interface ApiComboBoxForm {
+export interface ApiComboBoxForm {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -482,7 +482,7 @@ interface ApiComboBoxForm {
 }
 
 /** Class representing a comment. */
-interface ApiComment {
+export interface ApiComment {
   AddReply(sText?: string, sAuthorName?: string, sUserId?: string, nPos?: number): ApiComment;
   Delete(): boolean;
   GetAuthorName(): string;
@@ -506,7 +506,7 @@ interface ApiComment {
 }
 
 /** Class representing a comment reply. */
-interface ApiCommentReply {
+export interface ApiCommentReply {
   GetAuthorName(): string;
   GetClassType(): "commentReply";
   GetText(): string;
@@ -517,7 +517,7 @@ interface ApiCommentReply {
 }
 
 /** Class representing a complex field. */
-interface ApiComplexForm {
+export interface ApiComplexForm {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -542,7 +542,7 @@ interface ApiComplexForm {
 }
 
 /** Class representing a list of values of the combo box / dropdown list content control. */
-interface ApiContentControlList {
+export interface ApiContentControlList {
   Add(sText?: string, sValue?: string, nIndex?: number): boolean;
   Clear(): void;
   GetAllItems(): ApiContentControlListEntry[];
@@ -553,7 +553,7 @@ interface ApiContentControlList {
 }
 
 /** Class representing an entry of the combo box / dropdown list content control. */
-interface ApiContentControlListEntry {
+export interface ApiContentControlListEntry {
   Delete(): boolean;
   GetClassType(): "contentControlList";
   GetIndex(): number;
@@ -569,7 +569,7 @@ interface ApiContentControlListEntry {
 }
 
 /** Class representing a document date field. */
-interface ApiDateForm {
+export interface ApiDateForm {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -600,7 +600,7 @@ interface ApiDateForm {
 }
 
 /** Class representing a document. */
-interface ApiDocument {
+export interface ApiDocument {
   AcceptAllRevisionChanges(): void;
   AddComment(sText?: string, sAuthor?: string, sUserId?: string): ApiComment;
   AddDrawingToPage(oDrawing?: ApiDrawing, nPage?: number, x?: number, y?: number): boolean;
@@ -634,7 +634,7 @@ interface ApiDocument {
   GetAllTablesOnPage(nPage?: number): ApiTable[];
   GetBookmark(sBookmarkName?: string): ApiBookmark;
   GetBookmarkRange(sName?: string): ApiRange | null;
-  GetClassType(): "documentContent";
+  GetClassType(): "document";
   GetCommentById(sId?: string): ApiComment;
   GetCommentsReport(): CommentReport;
   GetContent(bGetCopies?: boolean): any[];
@@ -691,7 +691,7 @@ interface ApiDocument {
   SetTrackRevisions(isTrack?: boolean): void;
   SetWatermarkSettings(Settings?: ApiWatermarkSettings): ApiDrawing;
   ToHtml(bHtmlHeadings?: boolean, bBase64img?: boolean, bDemoteHeadings?: boolean, bRenderHTMLTags?: boolean): string;
-  ToJSON(isWriteNumberings?: boolean, isWriteStyles?: boolean): object;
+  ToJSON(bWriteDefaultTextPr?: boolean, bWriteDefaultParaPr?: boolean, bWriteTheme?: boolean, bWriteSectionPr?: boolean, bWriteNumberings?: boolean, bWriteStyles?: boolean): object;
   ToMarkdown(bHtmlHeadings?: boolean, bBase64img?: boolean, bDemoteHeadings?: boolean, bRenderHTMLTags?: boolean): string;
   UpdateAllFields(bBySelection?: boolean): void;
   UpdateAllTOC(bOnlyPageNumbers?: boolean): void;
@@ -699,7 +699,7 @@ interface ApiDocument {
 }
 
 /** Class representing a container for paragraphs and tables. */
-interface ApiDocumentContent {
+export interface ApiDocumentContent {
   AddElement(nPos?: number, oElement?: DocumentElement): void;
   GetAllCharts(): ApiChart[];
   GetAllDrawingObjects(): Drawing[];
@@ -721,7 +721,7 @@ interface ApiDocumentContent {
 }
 
 /** Class representing a graphical object. */
-interface ApiDrawing {
+export interface ApiDrawing {
   AddBreak(breakType?: number, position?: string): boolean;
   Copy(): ApiDrawing;
   Delete(): boolean;
@@ -758,13 +758,13 @@ interface ApiDrawing {
 }
 
 /** Class representing a base class for fill. */
-interface ApiFill {
+export interface ApiFill {
   GetClassType(): "fill";
   ToJSON(): object;
 }
 
 /** Class representing a document form base. */
-interface ApiFormBase {
+export interface ApiFormBase {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -789,19 +789,19 @@ interface ApiFormBase {
 }
 
 /** Class representing gradient stop. */
-interface ApiGradientStop {
+export interface ApiGradientStop {
   GetClassType(): "gradientStop";
   ToJSON(): object;
 }
 
 /** Class representing a group of drawings. */
-interface ApiGroup {
+export interface ApiGroup {
   GetClassType(): "group";
   Ungroup(): boolean;
 }
 
 /** Class representing a Paragraph hyperlink. */
-interface ApiHyperlink {
+export interface ApiHyperlink {
   GetClassType(): "hyperlink";
   GetDisplayedText(): string;
   GetElement(nPos?: number): ParagraphContent;
@@ -817,14 +817,14 @@ interface ApiHyperlink {
 }
 
 /** Class representing an image. */
-interface ApiImage {
+export interface ApiImage {
   GetClassType(): "image";
   GetNextImage(): ApiImage | null;
   GetPrevImage(): ApiImage | null;
 }
 
 /** Class representing a container for the paragraph elements. */
-interface ApiInlineLvlSdt {
+export interface ApiInlineLvlSdt {
   AddComment(sText?: string, sAuthor?: string, sUserId?: string): ApiComment;
   AddElement(oElement?: ParagraphContent, nPos?: number): boolean;
   AddText(sText?: string): boolean;
@@ -860,14 +860,14 @@ interface ApiInlineLvlSdt {
 }
 
 /** Class representing the numbering properties. */
-interface ApiNumbering {
+export interface ApiNumbering {
   GetClassType(): "numbering";
   GetLevel(nLevel?: number): ApiNumberingLevel;
   ToJSON(): object;
 }
 
 /** Class representing a reference to a specified level of the numbering. */
-interface ApiNumberingLevel {
+export interface ApiNumberingLevel {
   GetClassType(): "numberingLevel";
   GetLevelIndex(): number;
   GetNumbering(): ApiNumbering;
@@ -882,7 +882,7 @@ interface ApiNumberingLevel {
 }
 
 /** Class representing an Ole object. */
-interface ApiOleObject {
+export interface ApiOleObject {
   GetApplicationId(): string;
   GetClassType(): "oleObject";
   GetData(): string;
@@ -891,7 +891,7 @@ interface ApiOleObject {
 }
 
 /** Class representing the paragraph properties. */
-interface ApiParaPr {
+export interface ApiParaPr {
   GetClassType(): "paraPr";
   GetIndFirstLine(): number | undefined;
   GetIndLeft(): number | undefined;
@@ -930,7 +930,7 @@ interface ApiParaPr {
 }
 
 /** Class representing a paragraph. */
-interface ApiParagraph {
+export interface ApiParagraph {
   AddBookmarkCrossRef(sRefTo?: bookmarkRefTo, sBookmarkName?: string, bLink?: boolean, bAboveBelow?: boolean, sSepWith?: string): boolean;
   AddCaption(sAdditional?: string, sLabel?: CaptionLabel | string, bExludeLabel?: boolean, sNumberingFormat?: CaptionNumberingFormat, bBefore?: boolean, nHeadingLvl?: number, sCaptionSep?: CaptionSep): boolean;
   AddCaptionCrossRef(sCaption?: CaptionLabel | string, sRefType?: captionRefTo, oParaTo?: ApiParagraph, bLink?: boolean, bAboveBelow?: boolean): boolean;
@@ -958,7 +958,7 @@ interface ApiParagraph {
   GetAllImages(): ApiImage[];
   GetAllOleObjects(): ApiOleObject[];
   GetAllShapes(): ApiShape[];
-  GetClassType(): "paraPr";
+  GetClassType(): "paragraph";
   GetElement(nPos?: number): ParagraphContent;
   GetElementsCount(): number;
   GetFontNames(): string[];
@@ -1035,12 +1035,12 @@ interface ApiParagraph {
   SetUnderline(isUnderline?: boolean): ApiParagraph;
   SetVertAlign(sType?: "baseline" | "subscript" | "superscript"): ApiParagraph | null;
   SetWidowControl(isWidowControl?: boolean): void;
-  ToJSON(bWriteStyles?: boolean): object;
+  ToJSON(bWriteNumberings?: boolean, bWriteStyles?: boolean): object;
   WrapInMailMergeField(): void;
 }
 
 /** Class representing a document picture form. */
-interface ApiPictureForm {
+export interface ApiPictureForm {
   Clear(): void;
   Copy(): ApiForm;
   GetClassType(): "form";
@@ -1075,19 +1075,19 @@ interface ApiPictureForm {
 }
 
 /** Class representing a Preset Color. */
-interface ApiPresetColor {
+export interface ApiPresetColor {
   GetClassType(): "presetColor";
   ToJSON(): object;
 }
 
 /** Class representing an RGB Color. */
-interface ApiRGBColor {
+export interface ApiRGBColor {
   GetClassType(): "rgbColor";
   ToJSON(): object;
 }
 
 /** Class representing a continuous region in a document.  Each Range object is determined by the position of the start and end characters. */
-interface ApiRange {
+export interface ApiRange {
   AddBookmark(sName?: string): boolean;
   AddComment(sText?: string, sAuthor?: string, sUserId?: string): ApiComment;
   AddHyperlink(sLink?: string, sScreenTipText?: string): ApiHyperlink | null;
@@ -1129,7 +1129,7 @@ interface ApiRange {
 }
 
 /** Class representing a small text block called 'run'. */
-interface ApiRun {
+export interface ApiRun {
   AddColumnBreak(): void;
   AddComment(sText?: string, sAuthor?: string, sUserId?: string): ApiComment;
   AddDrawing(oDrawing?: ApiDrawing): boolean;
@@ -1143,7 +1143,7 @@ interface ApiRun {
   Delete(): void;
   GetBold(): boolean;
   GetCaps(): boolean;
-  GetClassType(): "textPr";
+  GetClassType(): "run";
   GetColor(): ApiRGBColor;
   GetDoubleStrikeout(): boolean;
   GetFontFamily(): string;
@@ -1196,13 +1196,13 @@ interface ApiRun {
 }
 
 /** Class representing a Scheme Color. */
-interface ApiSchemeColor {
+export interface ApiSchemeColor {
   GetClassType(): "schemeColor";
   ToJSON(): object;
 }
 
 /** Class representing a document section. */
-interface ApiSection {
+export interface ApiSection {
   GetClassType(): "section";
   GetFooter(sType?: HdrFtrType, isCreate?: boolean): ApiDocumentContent;
   GetHeader(sType?: HdrFtrType, isCreate?: boolean): ApiDocumentContent;
@@ -1227,7 +1227,7 @@ interface ApiSection {
 }
 
 /** Class representing a shape. */
-interface ApiShape {
+export interface ApiShape {
   GetClassType(): "shape";
   GetDocContent(): ApiDocumentContent;
   GetNextShape(): ApiShape | null;
@@ -1237,13 +1237,13 @@ interface ApiShape {
 }
 
 /** Class representing a stroke. */
-interface ApiStroke {
+export interface ApiStroke {
   GetClassType(): "stroke";
   ToJSON(): object;
 }
 
 /** Class representing a style. */
-interface ApiStyle {
+export interface ApiStyle {
   GetClassType(): "style";
   GetConditionalTableStyle(sType?: TableStyleOverrideType): ApiTableStylePr;
   GetName(): string;
@@ -1259,7 +1259,7 @@ interface ApiStyle {
 }
 
 /** Class representing a table. */
-interface ApiTable {
+export interface ApiTable {
   AddCaption(sAdditional?: string, sLabel?: CaptionLabel | string, bExludeLabel?: boolean, sNumberingFormat?: CaptionNumberingFormat, bBefore?: boolean, nHeadingLvl?: number, sCaptionSep?: CaptionSep): boolean;
   AddColumn(oCell?: ApiTableCell, isBefore?: boolean): void;
   AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): void;
@@ -1271,7 +1271,7 @@ interface ApiTable {
   Copy(): ApiTable;
   Delete(): boolean;
   GetCell(nRow?: number, nCell?: number): ApiTableCell | null;
-  GetClassType(): "tablePr";
+  GetClassType(): "table";
   GetParentContentControl(): ApiBlockLvlSdt | null;
   GetParentTable(): ApiTable | null;
   GetParentTableCell(): ApiTableCell | null;
@@ -1318,16 +1318,16 @@ interface ApiTable {
   SetWidth(sType?: TableWidth, nValue?: number): void;
   SetWrappingStyle(isFlow?: boolean): boolean;
   Split(oCell?: ApiTableCell, nRow?: number, nCol?: number): ApiTable | null;
-  ToJSON(): object;
+  ToJSON(bWriteNumberings?: boolean, bWriteStyles?: boolean): object;
 }
 
 /** Class representing a table cell. */
-interface ApiTableCell {
+export interface ApiTableCell {
   AddColumns(nCount?: number, isBefore?: boolean): ApiTable | null;
   AddElement(nPos?: number, oElement?: DocumentElement): boolean;
   AddRows(nCount?: number, isBefore?: boolean): ApiTable | null;
   Clear(): boolean;
-  GetClassType(): "tableCellPr";
+  GetClassType(): "tableCell";
   GetContent(): ApiDocumentContent;
   GetIndex(): number;
   GetNext(): ApiTableCell | null;
@@ -1360,7 +1360,7 @@ interface ApiTableCell {
 }
 
 /** Class representing the table cell properties. */
-interface ApiTableCellPr {
+export interface ApiTableCellPr {
   GetClassType(): "tableCellPr";
   SetCellBorderBottom(sType?: BorderType, nSize?: pt_8, nSpace?: number, r?: number, g?: number, b?: number): void;
   SetCellBorderLeft(sType?: BorderType, nSize?: pt_8, nSpace?: number, r?: number, g?: number, b?: number): void;
@@ -1379,7 +1379,7 @@ interface ApiTableCellPr {
 }
 
 /** Class representing the table properties. */
-interface ApiTablePr {
+export interface ApiTablePr {
   GetClassType(): "tablePr";
   GetTableDescription(): string;
   GetTableTitle(): string;
@@ -1407,12 +1407,12 @@ interface ApiTablePr {
 }
 
 /** Class representing a table row. */
-interface ApiTableRow {
+export interface ApiTableRow {
   AddRows(nCount?: number, isBefore?: boolean): ApiTable | null;
   Clear(): boolean;
   GetCell(nPos?: number): ApiTableCell;
   GetCellsCount(): number;
-  GetClassType(): "tableRowPr";
+  GetClassType(): "tableRow";
   GetIndex(): number;
   GetNext(): ApiTableRow | null;
   GetParentTable(): ApiTable | null;
@@ -1428,7 +1428,7 @@ interface ApiTableRow {
 }
 
 /** Class representing the table row properties. */
-interface ApiTableRowPr {
+export interface ApiTableRowPr {
   GetClassType(): "tableRowPr";
   SetHeight(sHRule?: "auto" | "atLeast", nValue?: number): void;
   SetTableHeader(isHeader?: boolean): void;
@@ -1436,7 +1436,7 @@ interface ApiTableRowPr {
 }
 
 /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a table which match the requirement specified on the <code>Type</code>. */
-interface ApiTableStylePr {
+export interface ApiTableStylePr {
   GetClassType(): "tableStylePr";
   GetParaPr(): ApiParaPr;
   GetTableCellPr(): ApiTableCellPr;
@@ -1448,7 +1448,7 @@ interface ApiTableStylePr {
 }
 
 /** Class representing a document text field. */
-interface ApiTextForm {
+export interface ApiTextForm {
   Clear(): void;
   Copy(): ApiForm;
   GetCharactersLimit(): number;
@@ -1483,7 +1483,7 @@ interface ApiTextForm {
 }
 
 /** Class representing the text properties. */
-interface ApiTextPr {
+export interface ApiTextPr {
   GetBold(): boolean;
   GetCaps(): boolean;
   GetClassType(): "textPr";
@@ -1527,19 +1527,19 @@ interface ApiTextPr {
 }
 
 /** Class representing a base class for color types. */
-interface ApiUniColor {
+export interface ApiUniColor {
   GetClassType(): "uniColor";
   GetRGB(): number;
   ToJSON(): object;
 }
 
 /** Class representing an unsupported element. */
-interface ApiUnsupported {
+export interface ApiUnsupported {
   GetClassType(): "unsupported";
 }
 
 /** Class representing the settings which are used to create a watermark. */
-interface ApiWatermarkSettings {
+export interface ApiWatermarkSettings {
   GetClassType(): "watermarkSettings";
   GetDirection(): WatermarkDirection;
   GetImageHeight(): number | null;

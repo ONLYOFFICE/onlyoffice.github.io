@@ -5,6 +5,19 @@ import type { ApiWord } from "./src/generated/word";
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
 
+// Word-only content types, re-exported by name for consumers that need to type a callCommand
+// callback walking paragraph content (e.g. runs/hyperlinks for style ranges), not just the
+// top-level Api object. Deliberately not re-exporting the cell/slide equivalents under the same
+// names here — each generated file has its own slightly different shape, so importing "the"
+// ApiParagraph from this package would be ambiguous once more than one editor's version is exposed.
+export type {
+  ApiParagraph,
+  ApiRun,
+  ApiTextPr,
+  ApiHyperlink,
+  ParagraphContent,
+} from "./src/generated/word";
+
 
 
 type DesktopDialogType = 'plugin' | 'images' | 'cell' | 'word' | 'slide';
@@ -806,7 +819,7 @@ export type {
     IconScale
 };
 
-export type Api<T extends EditorType> =
+export type EditorApi<T extends EditorType> =
     T extends "cell" ? ApiCell :
     T extends "slide" ? ApiSlide :
     T extends "word" ? ApiWord :
