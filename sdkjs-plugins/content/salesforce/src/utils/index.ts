@@ -23,5 +23,5 @@ export {
 export { isDesktop } from './desktop';
 
 export function openGuide(): void {
-  window.open('https://api.onlyoffice.com/docs/plugin-and-macros/get-started/');
+  window.open('https://api.onlyoffice.com/docs/plugins/get-started/');
 }
