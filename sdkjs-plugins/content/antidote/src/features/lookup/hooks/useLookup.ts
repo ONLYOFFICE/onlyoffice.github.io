@@ -34,18 +34,33 @@ import { useCallback, useState } from 'preact/hooks';
 import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
+import { getSelectedText } from '@api/document';
 import { t } from '@utils/i18n';
 
 import { LookupAgent } from '../agents/lookupAgent';
 
 export type LookupTool = 'dictionaries' | 'guides';
 
+// Mirrors Antidote's Word/LibreOffice add-ins: a document selection always wins over the manually
+// typed field, so "select a word, click Dictionaries" works with no typing required. The field is
+// only consulted when nothing is selected.
 export function useLookup() {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  const open = useCallback(async (tool: LookupTool, text: string) => {
+  const open = useCallback(async (tool: LookupTool, manualText: string) => {
     setError(null);
+
+    let selected = '';
+    try {
+      selected = await getSelectedText();
+    } catch {
+      console.error('Failed to get selected text');
+      // no plugin selection API available (e.g. cell/pdf without a selection) — fall back below
+    }
+    const text = selected.trim() || manualText.trim();
+    if (!text) return;
+
     setPending(true);
 
     try {

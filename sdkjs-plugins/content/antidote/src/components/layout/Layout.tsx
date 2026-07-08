@@ -40,9 +40,9 @@ export interface LayoutProps {
 
 export function Layout({ header, footer, children }: LayoutProps): JSX.Element {
   return (
-    <div class="antidote-layout">
+    <div className="antidote-layout">
       {header}
-      <main class="antidote-layout__content">{children}</main>
+      <main className="antidote-layout__content">{children}</main>
       {footer}
     </div>
   );

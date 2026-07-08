@@ -40,15 +40,15 @@ export interface HeaderProps {
 
 export function Header({ title, onBack, onSettings }: HeaderProps): JSX.Element {
   return (
-    <header class="antidote-header">
+    <header className="antidote-header">
       {onBack && (
-        <button type="button" class="antidote-header__icon-button" aria-label="Back" onClick={onBack}>
+        <button type="button" className="antidote-header__icon-button" aria-label="Back" onClick={onBack}>
           ‹
         </button>
       )}
-      <span class="antidote-header__title">{title}</span>
+      <span className="antidote-header__title">{title}</span>
       {onSettings && (
-        <button type="button" class="antidote-header__icon-button" aria-label="Settings" onClick={onSettings}>
+        <button type="button" className="antidote-header__icon-button" aria-label="Settings" onClick={onSettings}>
           ⚙
         </button>
       )}

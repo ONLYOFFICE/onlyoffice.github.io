@@ -65,6 +65,7 @@ export function Main(): JSX.Element {
   useEffect(() => {
     if (canCheckWholeDocument && !hasSelection) scope.value = 'document';
     else scope.value = 'selection';
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `scope` is a stable module-level signal, not state
   }, [hasSelection, canCheckWholeDocument]);
 
   const statusMessage = connectionState.value === 'error'
@@ -84,8 +85,7 @@ export function Main(): JSX.Element {
   ];
 
   const handleLookup = (tool: LookupTool) => {
-    if (!lookupText.trim()) return;
-    openLookup(tool, lookupText.trim());
+    openLookup(tool, lookupText);
   };
 
   return (
@@ -95,8 +95,8 @@ export function Main(): JSX.Element {
     >
       <StatusBanner tone={statusTone(connectionState.value)} message={statusMessage} />
 
-      <div class="antidote-section">
-        <div class="antidote-section__title">{t('main.scopeTitle')}</div>
+      <div className="antidote-section">
+        <div className="antidote-section__title">{t('main.scopeTitle')}</div>
         <RadioGroup
           name="scope"
           value={scope.value}
@@ -120,9 +120,9 @@ export function Main(): JSX.Element {
         )}
       </div>
 
-      <div class="antidote-section">
-        <div class="antidote-section__title">{t('main.lookup.title')}</div>
-        <div class="antidote-lookup-row">
+      <div className="antidote-section">
+        <div className="antidote-section__title">{t('main.lookup.title')}</div>
+        <div className="antidote-lookup-row">
           <TextField
             value={lookupText}
             placeholder={t('main.lookup.placeholder')}
@@ -130,7 +130,7 @@ export function Main(): JSX.Element {
             onEnter={() => handleLookup('dictionaries')}
           />
         </div>
-        <div class="antidote-lookup-row" style={{ marginTop: '8px' }}>
+        <div className="antidote-lookup-row" style={{ marginTop: '8px' }}>
           <Button onClick={() => handleLookup('dictionaries')}>{t('main.lookup.dictionaries')}</Button>
           <Button onClick={() => handleLookup('guides')}>{t('main.lookup.guides')}</Button>
         </div>

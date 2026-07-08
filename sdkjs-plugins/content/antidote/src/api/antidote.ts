@@ -56,6 +56,7 @@ function probePort(port: number): Promise<boolean> {
     let settled = false;
     const socket = new WebSocket(`ws://localhost:${port}`);
 
+    let timer: ReturnType<typeof setTimeout>;
     const finish = (ok: boolean) => {
       if (settled) return;
       settled = true;
@@ -64,7 +65,7 @@ function probePort(port: number): Promise<boolean> {
       resolve(ok);
     };
 
-    const timer = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
+    timer = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
     socket.addEventListener('open', () => finish(true));
     socket.addEventListener('error', () => finish(false));
   });

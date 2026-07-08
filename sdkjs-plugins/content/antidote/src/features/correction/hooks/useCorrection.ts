@@ -38,7 +38,9 @@ import { t } from '@utils/i18n';
 
 import { DocumentCorrectionAgent } from '../agents/documentAgent';
 import { SelectionCorrectionAgent } from '../agents/selectionAgent';
-import { connectionState, scope, errorMessage, CorrectionScope } from '../store/correctionStore';
+import {
+  connectionState, scope, errorMessage, CorrectionScope,
+} from '../store/correctionStore';
 
 const DOCUMENT_TITLE = 'ONLYOFFICE';
 

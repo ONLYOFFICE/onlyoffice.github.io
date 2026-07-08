@@ -41,7 +41,7 @@ export interface StatusBannerProps {
 
 export function StatusBanner({ tone, message }: StatusBannerProps): JSX.Element {
   return (
-    <div class={`status-banner status-banner--${tone}`}>
+    <div className={`status-banner status-banner--${tone}`}>
       {message}
     </div>
   );

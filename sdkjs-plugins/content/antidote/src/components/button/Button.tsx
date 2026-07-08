@@ -51,7 +51,7 @@ export function Button({
   ].filter(Boolean).join(' ');
 
   return (
-    <button type="button" class={classes} disabled={disabled} onClick={onClick}>
+    <button type="button" className={classes} disabled={disabled} onClick={onClick}>
       {children}
     </button>
   );

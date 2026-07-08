@@ -50,12 +50,12 @@ export function RadioGroup<T extends string>({
   name, value, options, ariaLabel, disabled, onChange,
 }: RadioGroupProps<T>): JSX.Element {
   return (
-    <div class="radio-group" role="radiogroup" aria-label={ariaLabel}>
+    <div className="radio-group" role="radiogroup" aria-label={ariaLabel}>
       {options.map((option) => (
-        <label key={option.value} class="radio-group__option">
+        <label key={option.value} className="radio-group__option">
           <input
             type="radio"
-            class="form-control"
+            className="form-control"
             name={name}
             value={option.value}
             checked={value === option.value}

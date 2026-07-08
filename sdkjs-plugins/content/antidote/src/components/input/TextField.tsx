@@ -46,7 +46,7 @@ export function TextField({
   return (
     <input
       type="text"
-      class="form-control text-field"
+      className="form-control text-field"
       value={value}
       placeholder={placeholder}
       disabled={disabled}

@@ -34,7 +34,7 @@ import { render } from 'preact';
 import { LocationProvider, Router, Route } from 'preact-iso';
 
 import {
-  Layout, Header, Footer, LoadingIndicator, ErrorBox, Button,
+  Layout, LoadingIndicator, ErrorBox, Button,
 } from '@components';
 
 import { usePluginReady, useTranslation, useTheme } from '@hooks';
@@ -90,4 +90,4 @@ export function App() {
   );
 }
 
-render(<App />, document.getElementById('app')!);
+render(<App />, document.getElementById('app'));

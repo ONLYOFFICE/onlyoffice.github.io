@@ -101,7 +101,6 @@ function normalizeLanguageCode(lang: string): string {
   const base = normalized.split('-')[0];
 
   const match = supportedLanguages.find((supported) => supported.toLowerCase().startsWith(base));
-  console.log('Lang:', match);
 
   return match || DEFAULT_LANGUAGE;
 }

@@ -39,9 +39,9 @@ export interface ErrorBoxProps {
 
 export function ErrorBox({ title, message }: ErrorBoxProps): JSX.Element {
   return (
-    <div class="error-box">
-      <div class="error-box__title">{title}</div>
-      <div class="error-box__message">{message}</div>
+    <div className="error-box">
+      <div className="error-box__title">{title}</div>
+      <div className="error-box__message">{message}</div>
     </div>
   );
 }

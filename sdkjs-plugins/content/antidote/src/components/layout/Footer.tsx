@@ -38,5 +38,5 @@ export interface FooterProps {
 
 export function Footer({ children }: FooterProps): JSX.Element | null {
   if (!children) return null;
-  return <footer class="antidote-footer">{children}</footer>;
+  return <footer className="antidote-footer">{children}</footer>;
 }

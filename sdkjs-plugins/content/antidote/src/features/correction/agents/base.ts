@@ -46,6 +46,7 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
     this.title = title;
   }
 
+  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   allowEdit(_params: ParamsAllowEdit): boolean {
     return true;
   }
