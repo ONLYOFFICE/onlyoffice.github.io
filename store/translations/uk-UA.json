@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Керування плаґінами",
-	"Available plugins": "Доступні плагіни",
+	"Available plugins": "Мої плаґіни",
+	"Installed": "Встановлені",
+	"Updates": "Оновлення",
 	"My plugins": "Мої плаґіни",
 	"Marketplace": "Крамниця",
 	"Submit your own plugin": "Надіслати власний плаґін",
@@ -42,8 +44,8 @@
 	"Chinese": "Китайська",
 	"Update All": "Оновіть все",
 	"Categories": "Категорія",
-	"Search plugins": "Пошукові плагіни",
-	"All": "Весь",
+	"Search plugins…": "Пошукові плагіни…",
+	"All plugins": "Всі плагіни",
 	"Recommended": "Рекомендований",
 	"Developer tools": "Інструменти розробника",
 	"Work": "Робота",
@@ -61,5 +63,13 @@
 	"Problem with loading some resources" : "Проблема із завантаженням деяких ресурсів",
 	"Click to rate" : "Натисніть, щоб оцінити",
 	"No disscussion page for this plugin." : "Для цього плагіна немає сторінки обговорення.",
-	"Problem with plugin installation." : "Проблема з установкою плагіна."
+	"Problem with plugin installation." : "Проблема з установкою плагіна.",
+	"By ONLYOFFICE": "Від ONLYOFFICE",
+	"No plugins match your filters.": "Немає плагінів, які відповідають вашим фільтрам.",
+	"Try a different category or search term." : "Спробуйте іншу категорію або пошуковий запит.",
+	"Local": "Місцевий",
+	"No updates available.": "Немає доступних оновлень.",
+	"All your plugins are up to date.": "Усі ваші плагіни оновлені.",
+	"Show panel": "Показати панель",
+	"Hide panel": "Приховати панель"
 }

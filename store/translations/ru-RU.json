@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "Управление плагинами",
 	"Available plugins": "Мои плагины",
+	"Installed": "Установленные",
+	"Updates": "Обновления",
 	"Marketplace": "Магазин",
 	"Submit your own plugin": "Отправить свой плагин",
 	"Install plugin manually": "Установить плагин вручную",
@@ -41,8 +43,8 @@
 	"Chinese": "Китайский",
 	"Update All": "Обновить все",
 	"Categories": "Категории",
-	"Search plugins": "Поиск плагинов",
-	"All": "Все",
+	"Search plugins…": "Поиск плагинов…",
+	"All plugins": "Все плагины",
 	"Recommended": "Рекомендованные",
 	"Developer tools": "Инструменты разработчика",
 	"Work": "Для работы",
@@ -60,5 +62,13 @@
 	"Problem with loading some resources" : "Проблема с загрузкой некоторых ресурсов",
 	"Click to rate" : "Нажмите, чтобы оценить",
 	"No disscussion page for this plugin." : "Нет страницы дискуссии для этого плагина.",
-	"Problem with plugin installation." : "Проблемы с установкой плагина."
+	"Problem with plugin installation." : "Проблемы с установкой плагина.",
+	"By ONLYOFFICE": "От ONLYOFFICE",
+	"No plugins match your filters.": "Нет плагинов, соответствующих вашим фильтрам.",
+	"Try a different category or search term." : "Попробуйте другую категорию или поисковый запрос.",
+	"Local": "Локальный",
+	"No updates available.": "Нет доступных обновлений.",
+	"All your plugins are up to date.": "Все ваши плагины обновлены.",
+	"Show panel": "Показать панель",
+	"Hide panel": "Скрыть панель"
 }

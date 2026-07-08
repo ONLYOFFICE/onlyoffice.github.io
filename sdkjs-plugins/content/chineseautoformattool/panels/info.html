@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8" />
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<base href="../">
+	<title>Info</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			margin: 12px;
+		}
+
+		#info_message {
+			font-size: 12px;
+		}
+
+		#info-image {
+			height: 40px;
+			margin: 12px;
+		}
+
+		#info-container {
+			display: flex;
+			align-items: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="info-container">
+		<img id="info-image" src="resources/info.png" alt="Info">
+		<div id="info_message"></div>
+	</div>
+	<script>
+		window.Asc.plugin.init = function () {
+			window.Asc.plugin.sendToPlugin("onWindowReady", {});
+			window.Asc.plugin.attachEvent("onWindowMessage", function (data) {
+				if (data && data.type === "info") {
+					document.getElementById("info_message").innerText = data.message || "No information available.";
+				}
+			});
+		};
+	</script>
+</body>
+
+</html>
