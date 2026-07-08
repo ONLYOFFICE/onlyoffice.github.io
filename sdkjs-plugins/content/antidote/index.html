@@ -78,8 +78,9 @@
 
 				window.Asc.plugin.button = function(id) {
 					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id } }));
-					if (id === -1 || id === '-1' || id === 1 || id === '1')
+					if (id === -1 || id === '-1') {
 						this.executeCommand('close', '');
+					}
 				};
 			})();
 		</script>

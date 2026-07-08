@@ -95,17 +95,7 @@ export function Main(): JSX.Element {
     >
       <StatusBanner tone={statusTone(connectionState.value)} message={statusMessage} />
 
-      <div className="antidote-section">
-        <div className="antidote-section__title">{t('main.scopeTitle')}</div>
-        <RadioGroup
-          name="scope"
-          value={scope.value}
-          options={scopeOptions}
-          ariaLabel={t('main.scopeTitle')}
-          disabled={connectionState.value === 'connecting'}
-          onChange={handleScopeChange}
-        />
-
+      <div className="antidote-tools">
         {connectionState.value === 'connected' ? (
           <Button fullWidth onClick={stop}>{t('main.stop')}</Button>
         ) : (
@@ -118,23 +108,31 @@ export function Main(): JSX.Element {
             {t('main.check')}
           </Button>
         )}
+        <Button fullWidth onClick={() => handleLookup('dictionaries')}>{t('main.lookup.dictionaries')}</Button>
+        <Button fullWidth onClick={() => handleLookup('guides')}>{t('main.lookup.guides')}</Button>
+      </div>
+      {lookupError && <StatusBanner tone="error" message={lookupError} />}
+
+      <div className="antidote-section antidote-section--secondary">
+        <div className="antidote-section__title">{t('main.scopeTitle')}</div>
+        <RadioGroup
+          name="scope"
+          value={scope.value}
+          options={scopeOptions}
+          ariaLabel={t('main.scopeTitle')}
+          disabled={connectionState.value === 'connecting'}
+          onChange={handleScopeChange}
+        />
       </div>
 
-      <div className="antidote-section">
+      <div className="antidote-section antidote-section--secondary">
         <div className="antidote-section__title">{t('main.lookup.title')}</div>
-        <div className="antidote-lookup-row">
-          <TextField
-            value={lookupText}
-            placeholder={t('main.lookup.placeholder')}
-            onInput={setLookupText}
-            onEnter={() => handleLookup('dictionaries')}
-          />
-        </div>
-        <div className="antidote-lookup-row" style={{ marginTop: '8px' }}>
-          <Button onClick={() => handleLookup('dictionaries')}>{t('main.lookup.dictionaries')}</Button>
-          <Button onClick={() => handleLookup('guides')}>{t('main.lookup.guides')}</Button>
-        </div>
-        {lookupError && <StatusBanner tone="error" message={lookupError} />}
+        <TextField
+          value={lookupText}
+          placeholder={t('main.lookup.placeholder')}
+          onInput={setLookupText}
+          onEnter={() => handleLookup('dictionaries')}
+        />
       </div>
     </Layout>
   );
