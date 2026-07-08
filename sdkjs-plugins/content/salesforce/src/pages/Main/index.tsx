@@ -93,9 +93,9 @@ export function Main() {
         <Button variant="link" onClick={() => route('/settings')}>
           {t('settings.configure_plugin')}
         </Button>
-        <Button variant="link" onClick={openGuide}>
+        {/* <Button variant="link" onClick={openGuide}>
           {t('common.open_guide')}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

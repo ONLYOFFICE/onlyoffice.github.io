@@ -130,9 +130,9 @@ export function Settings() {
       </div>
 
       <div className="settings-page__footer">
-        <Button variant="link" onClick={openGuide}>
+        {/* <Button variant="link" onClick={openGuide}>
           {t('common.open_guide')}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

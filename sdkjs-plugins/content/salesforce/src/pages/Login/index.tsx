@@ -124,9 +124,9 @@ export function Login() {
       </div>
 
       <div className="login-page__footer">
-        <Button variant="link" onClick={openGuide}>
+        {/* <Button variant="link" onClick={openGuide}>
           {t('common.open_guide')}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
