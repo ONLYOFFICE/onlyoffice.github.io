@@ -36,18 +36,25 @@ import {
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
+  StyleInfo,
+  TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { getSelectedText, replaceSelectedText } from '@api/document';
+import { getSelectedTextWithStyle, replaceSelectedText, CorrectionStyleRange } from '@api/document';
 import { BaseCorrectionAgent } from './base';
 
 // Selection scope. Works uniformly across word/cell/pdf since GetSelectedText/ReplaceTextSmart are
 // generic host methods, unlike the paragraph object model used by DocumentCorrectionAgent.
+// styleInfo (bold/italic/etc.) is best-effort, word-only — see getSelectedTextWithStyle.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   private text = '';
 
+  private styleInfo: CorrectionStyleRange[] = [];
+
   async loadSelection(): Promise<void> {
-    this.text = await getSelectedText();
+    const selected = await getSelectedTextWithStyle();
+    this.text = selected.text;
+    this.styleInfo = selected.styleInfo ?? [];
   }
 
   configuration(): WordProcessorConfiguration {
@@ -59,7 +66,15 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   }
 
   zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
-    return [{ text: this.text, zoneId: '', zoneIsFocused: true }];
+    const styleInfo: StyleInfo[] = this.styleInfo.map((range) => ({
+      positionStart: range.positionStart,
+      positionEnd: range.positionEnd,
+      style: range.style as TextStyle,
+    }));
+
+    return [{
+      text: this.text, zoneId: '', zoneIsFocused: true, styleInfo,
+    }];
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {

@@ -36,15 +36,18 @@ import {
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
+  StyleInfo,
+  TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { getDocumentParagraphs, replaceParagraph } from '@api/document';
+import { getDocumentParagraphs, replaceParagraph, CorrectionStyleRange } from '@api/document';
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
   index: number;
   start: number;
   text: string;
+  styleInfo?: CorrectionStyleRange[];
 }
 
 const PARAGRAPH_SEPARATOR = '\r\n\r\n';
@@ -58,7 +61,9 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     const paragraphs = await getDocumentParagraphs();
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
-      const offset: ParagraphOffset = { index: paragraph.index, start, text: paragraph.text };
+      const offset: ParagraphOffset = {
+        index: paragraph.index, start, text: paragraph.text, styleInfo: paragraph.styleInfo,
+      };
       start += paragraph.text.length + PARAGRAPH_SEPARATOR.length;
       return offset;
     });
@@ -73,10 +78,22 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
+    const styleInfo: StyleInfo[] = [];
+    this.paragraphs.forEach((paragraph) => {
+      (paragraph.styleInfo ?? []).forEach((range) => {
+        styleInfo.push({
+          positionStart: range.positionStart + paragraph.start,
+          positionEnd: range.positionEnd + paragraph.start,
+          style: range.style as TextStyle,
+        });
+      });
+    });
+
     return [{
       text: this.paragraphs.map((paragraph) => paragraph.text).join(PARAGRAPH_SEPARATOR),
       zoneId: '',
       zoneIsFocused: true,
+      styleInfo,
     }];
   }
 
