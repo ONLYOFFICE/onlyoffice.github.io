@@ -1,6 +1,8 @@
 {
 	"Manage plugins": "管理插件",
-	"Available plugins": "可用的插件",
+	"Available plugins": "我的插件",
+	"Installed": "已安装",
+	"Updates": "更新",
 	"Marketplace": "市场",
 	"Submit your own plugin": "提交您自己的插件",
 	"Install plugin manually": "手动安装插件",
@@ -41,8 +43,8 @@
 	"Chinese": "中文",
 	"Update All": "全部更新",
 	"Categories": "类目",
-	"Search plugins": "搜索插件",
-	"All": "全部",
+	"Search plugins…": "搜索插件…",
+	"All plugins": "全部插件",
 	"Recommended": "推荐的",
 	"Developer tools": "开发者工具",
 	"Work": "工作",
@@ -60,5 +62,16 @@
 	"Problem with loading some resources" : "加载某些资源时出现问题",
 	"Click to rate" : "点击评分",
 	"No disscussion page for this plugin." : "该插件没有讨论页面。",
-	"Problem with plugin installation." : "插件安装的问题。"
+	"Problem with plugin installation." : "插件安装的问题。",
+	"By ONLYOFFICE": "由ONLYOFFICE提供",
+	"No plugins match your filters.": "没有符合您筛选条件的插件。",
+	"Try a different category or search term." : "尝试不同的类别或搜索词。",
+	"Local": "本地",
+	"No updates available.": "没有可用的更新。",
+	"All your plugins are up to date.": "您的所有插件都是最新的。",
+	"Show panel": "显示面板",
+	"Hide panel": "隐藏面板",
+	"For this editor": "对于此编辑器",
+	"Download": "下载",
+	"Problem with downloading plugin.": "下载插件时出现问题。"
 }

@@ -27,3 +27,7 @@
 ## 1.0.5
 
 * Fix problem into desktop with deletting manually installed plugins.
+
+## 1.0.6
+
+* Replaced tab-based navigation with a persistent sidebar for quicker access to plugin categories.

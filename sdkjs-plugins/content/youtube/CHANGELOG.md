@@ -19,3 +19,7 @@
 ## 1.0.4
 
 * Add message that service isn't available in user region (if we have problem with loading necessary data).
+
+## 1.0.5
+
+* Added the use of GitHub Pages URLs to display videos in the desktop editor.

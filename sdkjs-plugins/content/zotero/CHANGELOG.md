@@ -50,3 +50,7 @@
 ## 1.0.8
 
 * Added the ability to edit citations by adding new sources to them.
+
+## 1.0.9
+
+* Fixed a bibliography formatting issue.

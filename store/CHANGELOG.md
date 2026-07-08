@@ -48,3 +48,7 @@
 ## 1.0.8
 
 * Add logs and notification if we have problem with manually plugins intalling.
+
+## 1.0.9
+
+* UI/UX improvements
