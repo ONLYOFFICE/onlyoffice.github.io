@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "加载中...",
+		"desktop_not_supported": "此插件在桌面编辑器中不可用。",
 		"cancel": "取消",
 		"back": "返回",
 		"error": "错误",

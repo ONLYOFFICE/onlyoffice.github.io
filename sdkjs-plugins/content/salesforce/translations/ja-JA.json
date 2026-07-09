@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "読み込み中...",
+		"desktop_not_supported": "このプラグインはデスクトップエディタでは動作しません。",
 		"cancel": "キャンセル",
 		"back": "戻る",
 		"error": "エラー",

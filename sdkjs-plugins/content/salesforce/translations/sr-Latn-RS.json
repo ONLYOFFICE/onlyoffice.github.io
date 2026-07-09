@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Učitavanje...",
+		"desktop_not_supported": "Ovaj dodatak ne radi u desktop editorima.",
 		"cancel": "Otkaži",
 		"back": "Nazad",
 		"error": "Greška",

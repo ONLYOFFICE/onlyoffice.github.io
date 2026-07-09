@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Po ngarkohet...",
+		"desktop_not_supported": "Kjo shtojcë nuk funksionon në redaktorët e desktopit.",
 		"cancel": "Anulo",
 		"back": "Mbrapa",
 		"error": "Gabim",

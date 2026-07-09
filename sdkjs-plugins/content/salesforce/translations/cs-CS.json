@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Načítání...",
+		"desktop_not_supported": "Tento plugin nefunguje v desktopových editorech.",
 		"cancel": "Zrušit",
 		"back": "Zpět",
 		"error": "Chyba",
