@@ -216,7 +216,7 @@ function createModalStore(): ModalStore {
 
     clearSoqlStorage();
 
-    const url = buildUrl('soql-editor', { query: options.query || '' });
+    const url = buildUrl('soql-editor', options.query ? { query: options.query } : undefined);
     const pluginWindow = new window.Asc.PluginWindow();
     let pollInterval: ReturnType<typeof setInterval> | null = null;
 
