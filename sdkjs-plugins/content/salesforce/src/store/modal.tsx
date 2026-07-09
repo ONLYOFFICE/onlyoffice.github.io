@@ -27,6 +27,7 @@ import { t } from '@utils/i18n';
 export type ModalComponent = ComponentType<{ params: URLSearchParams }>;
 
 const BASE_URL = `${window.location.origin}${window.location.pathname}`;
+console.log('BASE_URL', BASE_URL);
 const PLUGIN_BUTTON_EVENT = 'plugin:button';
 const SOQL_KEYS = {
   query: '__soql_editor_query__',
@@ -276,7 +277,8 @@ function createModalStore(): ModalStore {
       pluginWindow.close();
       isOpen.value = false;
     };
-
+    console.warn('showing soql modal', url);
+    console.log(options);
     pluginWindow.show({
       url,
       ...getPluginWindowConfig(t('import.soql_editor'), options.size ?? DEFAULT_SOQL_SIZE),
