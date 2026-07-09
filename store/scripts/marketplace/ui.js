@@ -494,6 +494,7 @@ const UI = {
                     offered +
                     (!config.offered ? '<span class="by-onlyoffice">✓</span>' : '') +
                 '</div>' +
+                this._buildEditorBadgesHtml(variation) +
             '</div>' +
             '</div>' +
             '<div class="description">' + description + '</div>' +
@@ -515,6 +516,37 @@ const UI = {
         '</div>';
 
         return intro;
+    },
+
+    /**
+     * Builds the small "supported editor" badge row (Document/Spreadsheet/Presentation/PDF Editor).
+     * @param {VariationConfig} variation
+     * @returns {string}
+     */
+    _buildEditorBadgesHtml: function(variation) {
+        const editorsSupport = variation.store && variation.EditorsSupport;
+        if (!editorsSupport || !Array.isArray(editorsSupport) || !editorsSupport.length) {
+            return '';
+        }
+        /** @type {Object<EditorType, {label: string, title: string}>} */
+        const badgesInfo = {
+            word: { label: 'DE', title: 'Document Editor' },
+            cell: { label: 'SE', title: 'Spreadsheet Editor' },
+            slide: { label: 'PE', title: 'Presentation Editor' },
+            pdf: { label: 'PDF', title: 'PDF Editor' }
+        };
+        let html = '';
+        ['word', 'cell', 'slide', 'pdf'].forEach(function(type) {
+            if (editorsSupport.indexOf(type) === -1) {
+                return;
+            }
+            const info = badgesInfo[type];
+            html += '<span class="editor-badge editor-badge-' + type + '" title="' + Utils.getTranslated(info.title) + '">' + info.label + '</span>';
+        });
+        if (!html) {
+            return '';
+        }
+        return '<div class="editor-badges">' + html + '</div>';
     },
 
 	/**
