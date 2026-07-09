@@ -4,7 +4,7 @@ Import data from Salesforce into your spreadsheet and export records back to Sal
 
 The plugin lets you connect to your Salesforce org, browse standard and custom objects, query reports, and pull the results directly into spreadsheet cells as a formatted table. You can also select rows in the spreadsheet and push them back to Salesforce as new or updated records.
 
-The Salesforce plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of the ONLYOFFICE editors.
+The Salesforce plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) versions of the ONLYOFFICE editors.
 
 ## How to use
 
