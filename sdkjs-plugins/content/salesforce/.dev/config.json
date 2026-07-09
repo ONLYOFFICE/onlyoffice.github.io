@@ -6,7 +6,6 @@
         ".DS_Store",
         ".gitignore",
         "eslint.config.mjs",
-        "LICENSE",
         "package.json",
         "package-lock.json",
         "README.md",
