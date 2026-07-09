@@ -33,4 +33,5 @@ npm run lint
 
 ## Attribution
 
-Uses `@druide-informatique/antidote-api-js` (MIT, © Druide informatique inc.) — see [NOTICE](NOTICE).
+Uses `@druide-informatique/antidote-api-js` (MIT, © Druide informatique inc.), `preact`,
+`preact-iso`, and `@preact/signals` — see [3rd-Party.txt](3rd-Party.txt) and [licenses](licenses).

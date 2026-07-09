@@ -9,6 +9,7 @@
         "README.md",
         "vite.config.ts",
         "tsconfig.json",
-        "eslint.config.mjs"
+        "eslint.config.mjs",
+        "CLAUDE.md"
     ]
 }
