@@ -254,7 +254,12 @@ function createModalStore(): ModalStore {
       }
     }, POLL_INTERVAL);
 
-    const buttonHandler = () => {
+    const buttonHandler = (e: Event) => {
+      const { id, windowId } = (e as CustomEvent<{ id: number | string; windowId?: string | number }>).detail;
+      const isPopupClose = !!windowId && !String(windowId).startsWith('iframe_asc.');
+      const isMainClose = (id === -1 || id === '-1') && !isPopupClose;
+      if (!isPopupClose && !isMainClose) return;
+
       window.removeEventListener(PLUGIN_BUTTON_EVENT, buttonHandler as EventListener);
       closeSoqlModal();
       onCancel?.();
