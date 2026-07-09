@@ -373,6 +373,9 @@ main {
 		flex-shrink: 0;
 		box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 0px 1px inset; 
 	}
+		.plugin-plate .image img {
+			max-height: 100%;
+		}
 	.plugin-plate .manufacturer {
 		font-size: 11.5px;
 		display: flex;
@@ -400,41 +403,6 @@ main {
 		font-weight: 700;
 		line-height: 1;
 		flex-shrink: 0;
-	}
-	.plugin-plate .editor-badges {
-		display: flex;
-		align-items: center;
-		margin-top: 4px;
-	}
-	.plugin-plate .editor-badges > *:not(:last-child) {
-		margin-right: 4px;
-	}
-	.plugin-plate .editor-badge {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		height: 15px;
-		min-width: 15px;
-		padding: 0 3px;
-		border-radius: 3px;
-		color: rgb(255, 255, 255);
-		font-size: 7.5px;
-		font-weight: 700;
-		letter-spacing: 0.2px;
-		line-height: 1;
-		flex-shrink: 0;
-	}
-	.plugin-plate .editor-badge-word {
-		background-color: #446995;
-	}
-	.plugin-plate .editor-badge-cell {
-		background-color: #3A8056;
-	}
-	.plugin-plate .editor-badge-slide {
-		background-color: #B75B44;
-	}
-	.plugin-plate .editor-badge-pdf {
-		background-color: #AA5252;
 	}
 	.plugin-plate .description {
 		font-size: 13px;
@@ -506,7 +474,7 @@ button.btn-text-default {
 	background-color: #fff !important;
 }
 
-img {
+#plugins_container img {
 	pointer-events: none;
 }
 

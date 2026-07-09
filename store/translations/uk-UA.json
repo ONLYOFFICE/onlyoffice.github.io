@@ -74,5 +74,10 @@
 	"Hide panel": "Приховати панель",
 	"For this editor": "Для цього редактора",
 	"Download": "Завантажити",
-	"Problem with downloading plugin.": "Проблема з завантаженням плагіна."
+	"Problem with downloading plugin.": "Проблема з завантаженням плагіна.",
+	"Works with": "Працює з",
+	"Document Editor": "Редактор документів",
+	"Spreadsheet Editor": "Редактор електронних таблиць",
+	"Presentation Editor": "Редактор презентацій",
+	"PDF Editor": "Редактор PDF"
 }
