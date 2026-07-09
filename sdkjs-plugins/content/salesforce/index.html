@@ -64,10 +64,8 @@
 				
 				window.Asc.plugin.button = function(id, windowId) {
 					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id, windowId: windowId } }));
-					if (windowId === undefined || windowId === null) {
-						if (id === -1 || id === '-1' || id === 1 || id === '1')
-							this.executeCommand('close', '');
-					}
+					if (id === -1 || id === '-1' || id === 1 || id === '1')
+						this.executeCommand('close', '');
 				};
 			})();
 		</script>

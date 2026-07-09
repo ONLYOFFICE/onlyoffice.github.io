@@ -73,6 +73,36 @@ const MarketplaceStorage = {
     addInstalledPlugin: function(plugin) {
         this._installedPlugins.push(plugin);
     },
+    /** 
+     * @param {Array<PluginInfo>} plugins 
+     * @returns {Array<PluginInfo>}
+     */
+    _filterPluginsByEditor: function(plugins) {
+        const editorType = this.editorType;
+
+        if (editorType && this.filterByCurrentEditor) {
+            return plugins.filter(function(plugin) {
+                /** @type {VariationConfig[]} */
+                let variations = /** @type {VariationConfig[]} */(plugin.variations);
+                if (!variations) {
+                    return true;
+                }
+                let variation = variations[0];
+                if (!variation) {
+                    return true;
+                }
+                let editorsSupport = variation.store && variation.EditorsSupport;
+                if (!editorsSupport) {
+                    return true;
+                }
+                if (Array.isArray(editorsSupport)) {
+                    return editorsSupport.indexOf(editorType) !== -1;
+                }
+                return true;
+            });
+        }
+        return plugins;
+    },
     /**
      * @param {string} guid 
      * @returns {AvailablePluginInfo | undefined}
@@ -103,9 +133,9 @@ const MarketplaceStorage = {
         let res = this._marketplacePlugins.find(function(el){return el.guid === guid});
         return res;
     },
-
+    /** @returns {Array<PluginInfo>} */
     getAllPlugins: function() {
-        return this._allPlugins.slice();
+        return this._filterPluginsByEditor(this._allPlugins);
     },
     getCategories: function() {
         return this._categories;
@@ -115,8 +145,6 @@ const MarketplaceStorage = {
      * @returns {Array<PluginInfo>}
      */
     getFilteredPlugins: function(translateName) {
-        const filterByCurrentEditor = this.filterByCurrentEditor;
-        const editorType = this.editorType;
         const category = this.categoryFilter;
         const searchQuery = this.searchQuery;
 
@@ -140,27 +168,7 @@ const MarketplaceStorage = {
             });
         }
 
-        if (filterByCurrentEditor && editorType) {
-            filteredPlugins = filteredPlugins.filter(function(plugin) {
-                /** @type {VariationConfig[]} */
-                let variations = /** @type {VariationConfig[]} */(plugin.variations);
-                if (!variations) {
-                    return true;
-                }
-                let variation = variations[0];
-                if (!variation) {
-                    return true;
-                }
-                let editorsSupport = variation.store && variation.EditorsSupport;
-                if (!editorsSupport) {
-                    return true;
-                }
-                if (Array.isArray(editorsSupport)) {
-                    return editorsSupport.indexOf(editorType) !== -1;
-                }
-                return true;
-            });
-        }
+        filteredPlugins = this._filterPluginsByEditor(filteredPlugins);
 
         filteredPlugins = filteredPlugins.filter(function(plugin) {
             let name = translateName(plugin);
@@ -171,15 +179,15 @@ const MarketplaceStorage = {
     },
     /** @returns {Array<PluginInfo>} */
     getInstalledPlugins: function() {
-        return this._installedPlugins;
+        return this._filterPluginsByEditor(this._installedPlugins);
     },
     /** @returns {number} */
     getNumOfInstalledPlugins: function() {
-        return this._installedPlugins.length;
+        return this._filterPluginsByEditor(this._installedPlugins).length;
     },
     getNumOfPluginsToUpdate: function() {
         const self = this;
-        return this._allPlugins.reduce(function(acc, plugin) {
+        return this._filterPluginsByEditor(this._allPlugins).reduce(function(acc, plugin) {
             const installed = self.findAvailablePlugin(plugin.guid);
             if (installed && installed.obj && installed.obj.bHasUpdate) {
                 return acc + 1;
@@ -187,10 +195,11 @@ const MarketplaceStorage = {
             return plugin.bHasUpdate ? acc + 1 : acc;
         }, 0);
     },
+    /** @returns {Array<PluginInfo>} */
     getPluginsToUpdate: function() {
-        return this._allPlugins.filter(function(el) {
+        return this._filterPluginsByEditor(this._allPlugins.filter(function(el) {
             return el.bHasUpdate;
-        });
+        }));
     },
 
     hasAllPlugins: function() {
@@ -349,7 +358,7 @@ const MarketplaceStorage = {
     updateCategories: function() {
         const self = this;
 	    this._resetCategories();
-        this._allPlugins.forEach(function(/** @type {PluginInfo} */ plugin) {
+        this._filterPluginsByEditor(this._allPlugins).forEach(function(/** @type {PluginInfo} */ plugin) {
             self._addPluginCategory(plugin);
         });
     },

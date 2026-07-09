@@ -1,5 +1,16 @@
 {
   "name": "Salesforce",
+  "nameLocale": {
+    "ru": "Salesforce",
+    "fr": "Salesforce",
+    "es": "Salesforce",
+    "pt-BR": "Salesforce",
+    "de": "Salesforce",
+    "sq-AL": "Salesforce",
+    "sr-Cyrl-RS": "Salesforce",
+    "sr-Latn-RS": "Salesforce",
+    "zh-ZH": "Salesforce"
+  },
   "guid": "asc.{64993D68-3B46-47DE-A944-8A6C1FB1C955}",
   "variations": [
     {

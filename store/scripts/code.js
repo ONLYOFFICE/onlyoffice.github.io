@@ -50,6 +50,8 @@ const OOIO = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/';  // url to o
 const discussionsUrl = OOIO + 'discussions/';                        // discussions url
 const guidMarketplace = 'asc.{AA2EA9B6-9EC2-415F-9762-634EE8D9A95E}'; // guid marketplace
 const guidSettings = 'asc.{8D67F3C5-7736-4BAE-A0F2-8C7127DC4BB8}';   // guid settings plugins
+const independentMode = window.parent === window;                    // when opening the marketplace in a browser tab
+const releaseUrl = 'https://github.com/ONLYOFFICE/onlyoffice.github.io/releases/latest/download/'; // to download plugins
 // #endregion
 
 // #region Mutable state
@@ -62,6 +64,8 @@ let editorVersion;       // editor current version
 /** @type {number} */
 let pluginVersion;       // marketplace plugin version
 let defaultBG = Utils.themeType == 'light' ? '#F5F5F5' : '#555555'; // default background color for plugin header
+
+let isPluginCardHistoryPushed = false;
 
 
 // #endregion
@@ -198,7 +202,7 @@ const Marketplace = {
 	},
 
 	/**
-	 * The function consumes a lot of resources.ц
+	 * The function consumes a lot of resources.
 	 * @param {Array<PluginInfo>} plugins
 	 * @returns {Promise<Array<Rating | null>>}
 	 */
@@ -301,7 +305,14 @@ const Marketplace = {
 
 	/** @returns {Promise<{editorVersion: number, pluginVersion: number, editorType?: EditorType}>} */
 	getEditorAndPluginVersions: function() {
+		const defaultVersions = {
+			editorVersion: 1e8,
+			pluginVersion: 1000005
+		};
 		return new Promise(function(fResolve) {
+			let isResolved = false;
+			/** @type {any} */
+			let timeoutId = undefined;
 			/** @param {MessageEvent} event */
 			let onLoad = function(event) {
 				/** @type {PluginReadyMessage} */
@@ -312,7 +323,12 @@ const Marketplace = {
 					return;
 				}
 				if (message.type === 'PluginReady') {
+					if (isResolved) {
+						return;
+					}
+					isResolved = true;
 					window.removeEventListener('message', onLoad);
+					clearTimeout(timeoutId);
 					let pluginVersion = 1000005; // 1.0.5
 					if (message.pluginVersion && message.pluginVersion.includes('.')) {
 						pluginVersion = Utils.convertPluginVersionToNumber(message.pluginVersion);
@@ -326,6 +342,20 @@ const Marketplace = {
 					});
 				}
 			};
+			
+			if (independentMode) { // browser tab
+				fResolve(defaultVersions);
+			} else {
+				// This case is impossible, but let it be processed
+				timeoutId = setTimeout(function() {
+					if (isResolved) {
+						return;
+					}
+					isResolved = true;
+					window.removeEventListener('message', onLoad);
+					fResolve(defaultVersions);
+				}, 5000);
+			}
 			window.addEventListener('message', onLoad);
 		});
 	},
@@ -427,9 +457,12 @@ function _resetSearchState() {
 }
 
 window.onload = function() {
-	UI.init(Utils.themeType, MarketplaceStorage.filterByCurrentEditor);
+	UI.init(Utils.themeType, independentMode);
 	UI.toggleLoader(true, "Loading");
 	Marketplace.init();
+	if (independentMode) {
+		setThemeForBrowserTabMode();
+	}
 
 	Promise.all([
 		versionsPromise,
@@ -438,7 +471,6 @@ window.onload = function() {
 		allPluginsPromise
 	])
 	.then(function(result) {
-		if (MarketplaceStorage.hasAvailablePlugins()) {
 			if (DataFetcher.isOnline) {
 				updateListOfPlugins(true);
 			} else {
@@ -450,9 +482,12 @@ window.onload = function() {
 				}
 				UI.toggleLoader(false);
 			}
-			UI.pluginsList.classList.remove('transparent');
-		}
 		updateCategories();
+	}).catch(function(error) {
+		console.error('Failed to load plugins:', error);
+		UI.toggleLoader(false);
+	}).finally(function() {
+		UI.pluginsList.classList.remove('transparent');
 	});
 
 	/** @param {CategoryFilter} category */
@@ -473,6 +508,7 @@ window.onload = function() {
 	UI.onChangeCurrentEditor = function(filterByCurrentEditor) {
         MarketplaceStorage.saveFilterCurrentEditorState(filterByCurrentEditor);
 		updateListOfPlugins();
+		updateCategories();
 	};
 };
 
@@ -516,7 +552,7 @@ window.addEventListener('message', function(event) {
 		case 'Error':             _onMessageError(message);     break;
 		case 'Theme':             _onMessageTheme(message);     break;
 		case 'onExternalMouseUp': _onMessageMouseUp();          break;
-		case 'onClickBack':       hidePluginCard();             break;
+		case 'onClickBack':       _onClickBackToMarketplace();  break;
 	}
 }, false);
 
@@ -796,8 +832,38 @@ function _getPluginPlateState(pluginOrInstalledPlugin) {
 		bNotAvailable: bNotAvailable,
 		bNeedUpdateButton: bHasUpdate && !bRemoved,
 		bNeedRemoveButton: !!(installed && !bRemoved && available && available.canRemoved),
-		bNeedInstallButton: !installed || bRemoved
+		bNeedInstallButton: !installed || bRemoved,
+		independentMode: independentMode
 	};
+}
+
+/**
+ * @param {string} guid 
+ * @param {Event} event 
+ */
+function onClickDownload(guid, event) {
+	event.stopImmediatePropagation();
+	/** @type {PluginInfo | undefined} */
+	let plugin = MarketplaceStorage.findMarketplacePlugin(guid);
+	if (!plugin) {
+		// if we are here if means that plugin is uninstalled and we don't have internet connection
+		return;
+	}
+	let baseUrlParts = plugin.baseUrl ? plugin.baseUrl.split('/').filter(Boolean) : [];
+	let pluginFileName = baseUrlParts.length ? baseUrlParts[baseUrlParts.length - 1] : '';
+	let url = plugin.baseUrl ? releaseUrl + pluginFileName + '.plugin' : '';
+
+	if (!url) {
+		createError(new Error('Problem with downloading plugin.'));
+		return;
+	}
+
+	let link = document.createElement('a');
+	link.href = url;
+	link.download = '';
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 }
 
 /**
@@ -814,6 +880,7 @@ function onClickInstall(guid, event) {
 	if (!plugin && !available) {
 		// if we are here if means that plugin is uninstalled and we don't have internet connection
 		UI.toggleLoader(false);
+		return;
 	}
 	let url = '';
 	if (plugin) {
@@ -822,7 +889,14 @@ function onClickInstall(guid, event) {
 		url = available.obj.baseUrl;
 	}
 	const config = plugin ? plugin : available && available.obj;
-	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doInstall(url, guid, config) });
+	return Utils.waitForRepaint()
+		.then(function() { return MarketplacePluginService.doInstall(url, guid, config) })
+		.then(function(result) {
+			if (!result) {
+				UI.toggleLoader(false);
+			}
+			return result;
+		});
 }
 /**
  * @param {string} guid 
@@ -837,7 +911,14 @@ function onClickUpdate(guid, event) {
 		UI.toggleLoader(false);
 		return;
 	}
-	return Utils.waitForRepaint().then(function() { return MarketplacePluginService.doUpdate(guid, plugin) });
+	return Utils.waitForRepaint()
+		.then(function() { return MarketplacePluginService.doUpdate(guid, plugin) })
+		.then(function(result) {
+			if (!result) {
+				UI.toggleLoader(false);
+			}
+			return result;
+		});
 }
 /**
  * @param {string} guid 
@@ -905,6 +986,8 @@ function onClickPluginPlate(guid) {
 		translate: Utils.translate,
 		removed: available ? !!available.removed : false,
 		canRemoved: available ? !!available.canRemoved : false,
+		independentMode: independentMode,
+		releaseUrl: releaseUrl
 	};
 	if (pluginVersion > 1000005) {
 		return MarketplacePluginService.openPluginCard(message);
@@ -926,9 +1009,13 @@ function showPluginCard(data) {
 	}
 
 	PluginCard.init(data);
+
+	isPluginCardHistoryPushed = true;
+	history.pushState({ pluginCardOpen: true }, '');
 }
 // for v1.0.5
-function hidePluginCard() {
+/** @param {boolean} [blockForwardHistory] - discard the forward history entry left by history.back(), so the user can't navigate forward to reopen the card */
+function hidePluginCard(blockForwardHistory) {
 	let pluginCardDiv = document.getElementById('plugin_card_panel');
 	let marketplaceDiv = document.getElementById('plugins');
 	if (pluginCardDiv && marketplaceDiv) {
@@ -936,7 +1023,27 @@ function hidePluginCard() {
 		marketplaceDiv.classList.remove('hidden');
 	}
 	window.onresize = Scale.onResize.bind(Scale, false);
+	if (blockForwardHistory) {
+		history.pushState(null, '');
+	}
 }
+
+function _onClickBackToMarketplace() {
+	if (isPluginCardHistoryPushed) {
+		// consume the history entry pushed by showPluginCard,
+		// the actual hiding is done by the popstate handler
+		history.back();
+	} else {
+		hidePluginCard();
+	}
+}
+
+window.addEventListener('popstate', function() {
+	if (isPluginCardHistoryPushed) {
+		isPluginCardHistoryPushed = false;
+		hidePluginCard(true);
+	}
+});
 
 function installPluginManually() {
 	if (!window["AscDesktopEditor"]) {
@@ -1002,3 +1109,16 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 	updateCategories();
 };
 
+function setThemeForBrowserTabMode() {
+	// theme data is kept in a separate file and loaded on demand only when the marketplace is opened in an independent browser tab
+	if (typeof ThemeDefaultMessage !== 'undefined') {
+		_onMessageTheme(ThemeDefaultMessage);
+		return;
+	}
+	var script = document.createElement('script');
+	script.src = 'scripts/marketplace/theme-default.js';
+	script.onload = function() {
+		_onMessageTheme(ThemeDefaultMessage);
+	};
+	document.head.appendChild(script);
+}

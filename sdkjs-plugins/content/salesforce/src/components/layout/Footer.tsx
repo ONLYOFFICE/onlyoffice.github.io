@@ -34,9 +34,9 @@ export function Footer({ onConfigure }: FooterProps) {
       <Button variant="link" onClick={onConfigure}>
         {t('common.configure')}
       </Button>
-      <Button variant="link" onClick={openGuide}>
+      {/* <Button variant="link" onClick={openGuide}>
         {t('common.open_guide')}
-      </Button>
+      </Button> */}
     </div>
   );
 }

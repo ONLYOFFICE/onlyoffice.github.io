@@ -43,7 +43,7 @@
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
 	{"name": "lizardtypst", "discussion": ""},
-	{"name": "salesforce", "discussion": ""},
 	{"name": "chineseconvertor", "discussion": ""},
-	{"name": "chineseautoformattool", "discussion": ""}
+	{"name": "chineseautoformattool", "discussion": ""},
+	{"name": "salesforce", "discussion": ""}
 ]
