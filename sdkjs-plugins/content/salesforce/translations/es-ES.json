@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Cargando...",
+		"desktop_not_supported": "Este complemento no funciona en editores de escritorio.",
 		"cancel": "Cancelar",
 		"back": "Atrás",
 		"error": "Error",

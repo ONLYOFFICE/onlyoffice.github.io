@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Chargement...",
+		"desktop_not_supported": "Ce plugin ne fonctionne pas dans les éditeurs de bureau.",
 		"cancel": "Annuler",
 		"back": "Retour",
 		"error": "Erreur",

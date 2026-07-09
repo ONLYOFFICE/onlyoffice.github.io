@@ -1,6 +1,7 @@
 {
 	"common": {
 		"loading": "Loading...",
+		"desktop_not_supported": "This plugin doesn't work in Desktop Editors.",
 		"cancel": "Cancel",
 		"back": "Back",
 		"error": "Error",
