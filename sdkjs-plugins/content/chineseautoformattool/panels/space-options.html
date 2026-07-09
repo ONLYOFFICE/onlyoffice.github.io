@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8" />
+	<base href="../">
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+	<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+	<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Spacing options</title>
+	<style>
+		:root {
+			--bg: #f6f8fb;
+			--card: #fff;
+			--row: #fff;
+			--line: #e6e8ef;
+			--title: #111827;
+			--text: #374151;
+			--muted: #6b7280;
+			--primary: #155EEF;
+			--primary-weak: #e7efff;
+			--ring: #cdd9ff;
+		}
+
+		html.theme-type-dark,
+		body.theme-type-dark {
+			--bg: #1f2430;
+			--card: #2a3140;
+			--row: #31394a;
+			--line: #465066;
+			--title: #f3f4f6;
+			--text: #d6d9e0;
+			--muted: #a9b1c3;
+			--primary: #4f8cff;
+			--primary-weak: rgba(79, 140, 255, 0.16);
+			--ring: rgba(79, 140, 255, 0.32);
+		}
+
+		* {
+			box-sizing: border-box
+		}
+
+		html,
+		body {
+			height: 100%
+		}
+
+		body {
+			margin: 0;
+			background: var(--bg);
+			font: 14px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+			color: var(--text);
+			display: block;
+			padding: 12px;
+			overflow: auto;
+		}
+
+		.card {
+			width: 100%;
+			max-width: 560px;
+			background: var(--card);
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			box-shadow: 0 4px 20px rgba(17, 24, 39, .06);
+			margin: 0 auto;
+			padding: 18px;
+			max-height: calc(100vh - 24px);
+			overflow: auto;
+		}
+
+		.header {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			margin-bottom: 8px;
+		}
+
+		.dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--primary);
+		}
+
+		h3 {
+			margin: 0;
+			font-size: 16px;
+			color: var(--title);
+		}
+
+		.desc {
+			margin: 6px 0 14px;
+			font-size: 13px;
+			color: var(--muted);
+			background: var(--primary-weak);
+			padding: 8px 10px;
+			border-radius: 10px;
+		}
+
+		.group {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			margin: 8px 0 6px;
+		}
+
+		.row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 10px 12px;
+			border: 1px solid var(--line);
+			border-radius: 10px;
+			background: var(--row);
+		}
+
+		.row .label {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+
+		.row .title {
+			font-weight: 600;
+			color: var(--title);
+		}
+
+		.row .hint {
+			font-size: 12px;
+			color: var(--muted);
+		}
+
+		.switch {
+			position: relative;
+			width: 44px;
+			height: 24px;
+			flex: 0 0 44px;
+		}
+
+		.switch input {
+			appearance: none;
+			-webkit-appearance: none;
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			outline: none;
+			cursor: pointer;
+		}
+
+		.switch .track {
+			position: absolute;
+			inset: 0;
+			background: #e5e7eb;
+			border-radius: 999px;
+			transition: .2s ease;
+			border: 1px solid #d1d5db;
+		}
+
+		.switch .thumb {
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			width: 20px;
+			height: 20px;
+			background: #fff;
+			border-radius: 50%;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+			transition: .2s ease;
+		}
+
+		.switch input:checked+.track {
+			background: var(--primary);
+			border-color: var(--primary);
+		}
+
+		.switch input:checked+.track+.thumb {
+			left: 22px;
+		}
+
+		.switch input:focus-visible+.track {
+			box-shadow: 0 0 0 3px var(--ring);
+		}
+
+		.actions {
+			position: sticky;
+			bottom: 0;
+			display: flex;
+			justify-content: center;
+			padding-top: 10px;
+			margin-top: 14px;
+			background: linear-gradient(to top, rgba(246, 248, 251, 1), rgba(246, 248, 251, 0));
+		}
+
+		.theme-type-dark .card {
+			box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+		}
+
+		.theme-type-dark .switch .track {
+			background: #4b5565;
+			border-color: #5a6478;
+		}
+
+		.theme-type-dark .switch .thumb {
+			background: #f8fafc;
+		}
+
+		.theme-type-dark .actions {
+			background: linear-gradient(to top, rgba(31, 36, 48, 1), rgba(31, 36, 48, 0));
+		}
+
+		.btn {
+			appearance: none;
+			-webkit-appearance: none;
+			cursor: pointer;
+			user-select: none;
+			border: none;
+			outline: none;
+			padding: 10px 16px;
+			border-radius: 10px;
+			font-weight: 600;
+			background: var(--primary);
+			color: #fff;
+			box-shadow: 0 2px 8px rgba(21, 94, 239, .22);
+		}
+
+		.btn:focus-visible {
+			box-shadow: 0 0 0 4px var(--ring);
+		}
+
+		.ex {
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="card">
+		<div class="header">
+			<span class="dot"></span>
+			<h3 id="i_title">Spacing options</h3>
+		</div>
+		<div class="desc" id="i_desc">
+			Check the rules to add spaces. If unchecked, no spaces will be added. Your choices will also appear in the
+			report.
+		</div>
+
+		<div class="group">
+			<!-- 1. CJK + Latin -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_cjk_en">Add space between Chinese and Latin letters</div>
+						<!-- 示例固定中文，不参与翻译 -->
+						<div class="hint"><span class="ex">e.g：你好World → 你好&nbsp;World；AI技术 → AI&nbsp;技术</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_cjkEnSpace"
+						aria-label="Add space between Chinese and Latin letters" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+
+			<!-- 2. CJK + Digit -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_cjk_num">Add space between Chinese and digits</div>
+						<div class="hint"><span class="ex">e.g：共3台 → 共&nbsp;3&nbsp;台；3年 → 3&nbsp;年</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_cjkDigitSpace" aria-label="Add space between Chinese and digits" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+
+			<!-- 3. number + unit -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_num_unit">Add space between numbers and units</div>
+						<div class="hint"><span class="ex">e.g：10kg → 10&nbsp;kg；65℃ → 65&nbsp;℃</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_numUnitSpace" aria-label="Add space between numbers and units" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+
+			<!-- 4. number + symbol -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_num_symbol">Add space between numbers and symbols</div>
+						<div class="hint"><span class="ex">e.g：￥100→ ￥&nbsp;100；$100→ $&nbsp;100</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_numSymbolSpace" aria-label="Add space between numbers and symbols" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+
+			<!-- 5. 半角 -> 全角 -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_half_to_full">Convert half-width digits/letters to full-width</div>
+						<div class="hint"><span class="ex">e.g：ABC123 → ＡＢＣ１２３</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_alnumHalfToFull"
+						aria-label="Convert half-width digits/letters to full-width" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+
+			<!-- 6. 全角 -> 半角 -->
+			<div class="row">
+				<div class="label">
+					<div>
+						<div class="title" id="lbl_full_to_half">Convert full-width digits/letters to half-width</div>
+						<div class="hint"><span class="ex">e.g：ＡＢＣ１２３ → ABC123</span></div>
+					</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="opt_alnumFullToHalf"
+						aria-label="Convert full-width digits/letters to half-width" />
+					<span class="track"></span><span class="thumb"></span>
+				</label>
+			</div>
+		</div>
+
+		<!-- 页面内按钮（可保留；若改为宿主按钮，可用 CSS 隐藏） -->
+		<!-- <div class="actions">
+      <button id="ok" class="btn">Confirm</button>
+    </div> -->
+	</div>
+
+	<script>
+		(function () {
+			function $(id) { return document.getElementById(id); }
+			function asBool(v) { return v === true || v === '1' || v === 'true'; }
+
+			function sendToHost(payload) {
+				try {
+					if (window.Asc && window.Asc.plugin && typeof window.Asc.plugin.sendToPlugin === 'function') {
+						window.Asc.plugin.sendToPlugin("onWindowMessage", payload);
+						return;
+					}
+				} catch (e) { }
+			}
+
+			// ---------- 初始化开关状态（保持你现有逻辑） ----------
+			function initSwitches() {
+				// 兼容旧键（用于首次预填）
+				const old_cjkAgg = localStorage.getItem('opt_cjkAnSpace');          // 旧：中文-英/数
+				const old_numAgg = localStorage.getItem('opt_numUnitSpace');        // 旧：数字-单位/符号（聚合）
+
+				// 新键
+				const v_cjkEn = localStorage.getItem('opt_cjkEnSpace');
+				const v_cjkDig = localStorage.getItem('opt_cjkDigitSpace');
+				const v_numUnit = localStorage.getItem('opt_numUnitSpace');         // 现在专指“数字-单位”
+				const v_numSym = localStorage.getItem('opt_numSymbolSpace');
+
+				$('opt_cjkEnSpace').checked = v_cjkEn != null ? asBool(v_cjkEn) : (old_cjkAgg ? asBool(old_cjkAgg) : false);
+				$('opt_cjkDigitSpace').checked = v_cjkDig != null ? asBool(v_cjkDig) : (old_cjkAgg ? asBool(old_cjkAgg) : false);
+				$('opt_numUnitSpace').checked = v_numUnit != null ? asBool(v_numUnit) : (old_numAgg ? asBool(old_numAgg) : false);
+				$('opt_numSymbolSpace').checked = v_numSym != null ? asBool(v_numSym) : (old_numAgg ? asBool(old_numAgg) : false);
+
+				$('opt_alnumHalfToFull').checked = (localStorage.getItem('opt_alnumHalfToFull') === '1');
+				$('opt_alnumFullToHalf').checked = (localStorage.getItem('opt_alnumFullToHalf') === '1');
+
+				persist(); //Persist the current UI state on the first pass (ensuring Host Confirm is immediately available)
+			}
+
+			// —— 新增：统一把当前开关状态写入 localStorage —— //
+			function persist() {
+				const $ = (id) => document.getElementById(id);
+				const cjkEn = $('opt_cjkEnSpace')?.checked || false;
+				const cjkDig = $('opt_cjkDigitSpace')?.checked || false;
+				const numUnit = $('opt_numUnitSpace')?.checked || false;
+				const numSym = $('opt_numSymbolSpace')?.checked || false;
+
+				// 新键
+				localStorage.setItem('opt_cjkEnSpace', cjkEn ? '1' : '0');
+				localStorage.setItem('opt_cjkDigitSpace', cjkDig ? '1' : '0');
+				localStorage.setItem('opt_numUnitSpace', numUnit ? '1' : '0');
+				localStorage.setItem('opt_numSymbolSpace', numSym ? '1' : '0');
+
+				// 兼容旧聚合键（formatChecker 里仍有兜底读取）
+				localStorage.setItem('opt_cjkAnSpace', (cjkEn || cjkDig) ? '1' : '0');
+				localStorage.setItem('opt_numUnitSpace_legacyAgg', (numUnit || numSym) ? '1' : '0');
+
+				// 字母数字半/全角
+				localStorage.setItem('opt_alnumHalfToFull', ($('opt_alnumHalfToFull')?.checked ? '1' : '0'));
+				localStorage.setItem('opt_alnumFullToHalf', ($('opt_alnumFullToHalf')?.checked ? '1' : '0'));
+			}
+
+			// ---------- 防丢监听：事件委托 + 一次性绑定 ----------
+			function bindOkOnce() {
+				const btn = $('ok');
+				if (btn && !btn.dataset.bound) {
+					btn.addEventListener('click', confirmAndClose);
+					btn.dataset.bound = '1';
+				}
+			}
+			// 委托（即使按钮被重渲染，点击也能命中）
+			document.addEventListener('click', function (e) {
+				const t = e.target.closest && e.target.closest('#ok');
+				if (t) confirmAndClose();
+			});
+
+			// ---------- 生命周期 ----------
+			document.addEventListener('DOMContentLoaded', function () {
+				initSwitches();
+
+				// 监听所有开关变化即刻落盘
+				['opt_cjkEnSpace', 'opt_cjkDigitSpace', 'opt_numUnitSpace', 'opt_numSymbolSpace', 'opt_alnumHalfToFull', 'opt_alnumFullToHalf']
+					.forEach(function (id) {
+						var el = document.getElementById(id);
+						if (el) el.addEventListener('change', persist);
+					});
+
+				bindOkOnce();
+			});
+
+			// 翻译回调里可能改 innerHTML，保险起见再绑定一次
+			if (window.Asc && window.Asc.plugin) {
+				const origTranslate = window.Asc.plugin.onTranslate;
+				window.Asc.plugin.onTranslate = function () {
+					if (typeof origTranslate === 'function') origTranslate();
+					bindOkOnce();
+				};
+				const origInit = window.Asc.plugin.init;
+				window.Asc.plugin.init = function () {
+					if (typeof origInit === 'function') origInit();
+					// 某些环境 init 会先于 DOMContentLoaded 触发，这里只做兜底绑定
+					bindOkOnce();
+				};
+			}
+		})();
+	</script>
+
+	<script>
+		// 把翻译写回到页面元素（启动和语言切换都会触发）
+		window.Asc.plugin.onTranslate = function () {
+			setText('i_title', 'Spacing options');
+			setText('i_desc', 'Check the rules to add spaces. If unchecked, no spaces will be added. Your choices will also appear in the report.');
+
+			setText('lbl_cjk_en', 'Add space between Chinese and Latin letters');
+			setText('lbl_cjk_num', 'Add space between Chinese and digits');
+			setText('lbl_num_unit', 'Add space between numbers and units');
+			setText('lbl_num_symbol', 'Add space between numbers and symbols');
+			setText('lbl_half_to_full', 'Convert half-width digits/letters to full-width');
+			setText('lbl_full_to_half', 'Convert full-width digits/letters to half-width');
+
+			setText('ok', 'Confirm');
+
+			// 同步开关的无障碍标签（可选）
+			syncAria('opt_cjkEnSpace', 'lbl_cjk_en');
+			syncAria('opt_cjkDigitSpace', 'lbl_cjk_num');
+			syncAria('opt_numUnitSpace', 'lbl_num_unit');
+			syncAria('opt_numSymbolSpace', 'lbl_num_symbol');
+			syncAria('opt_alnumHalfToFull', 'lbl_half_to_full');
+			syncAria('opt_alnumFullToHalf', 'lbl_full_to_half');
+		};
+
+		// 启动时立即执行一次翻译（有些环境不会自动触发）
+		if (document.readyState === 'complete' || document.readyState === 'interactive') {
+			window.Asc.plugin.onTranslate();
+		} else {
+			document.addEventListener('DOMContentLoaded', function () { window.Asc.plugin.onTranslate(); });
+		}
+
+		function setText(id, key) {
+			var el = document.getElementById(id);
+			if (el) el.innerHTML = window.Asc.plugin.tr(key);
+		}
+		function syncAria(inputId, labelId) {
+			var input = document.getElementById(inputId);
+			var label = document.getElementById(labelId);
+			if (input && label) input.setAttribute('aria-label', label.textContent || label.innerText);
+		}
+	</script>
+	<script>
+		(function () {
+			function resolveThemeType(theme) {
+			const rawType = String((theme && theme.type) || '').toLowerCase();
+			if (rawType.indexOf('dark') !== -1) return 'dark';
+			if (rawType.indexOf('light') !== -1) return 'light';
+
+			const rawName = String((theme && (theme.name || theme.Name)) || '').toLowerCase();
+			if (rawName.indexOf('dark') !== -1 || rawName.indexOf('night') !== -1) return 'dark';
+			return 'light';
+		}
+
+		function syncThemeClasses(theme) {
+			if (!document.body) return;
+
+			var themeType = resolveThemeType(theme);
+			var themeName = String((theme && (theme.name || theme.Name)) || '');
+			[document.documentElement, document.body].forEach(function (node) {
+				var classes = node.className.split(/\s+/).filter(Boolean);
+				classes.forEach(function (className) {
+					if (className.indexOf('theme-') === 0) {
+						node.classList.remove(className);
+					}
+				});
+
+				if (themeName) {
+					node.classList.add(themeName);
+				}
+
+				node.classList.add('theme-type-' + themeType);
+				node.setAttribute('data-theme', themeType);
+			});
+			document.documentElement.style.colorScheme = themeType === 'dark' ? 'dark' : 'light';
+			}
+
+			function applyTheme(theme) {
+				if (!window.Asc || !window.Asc.plugin) return;
+				if (typeof window.Asc.plugin.onThemeChangedBase === 'function') {
+					window.Asc.plugin.onThemeChangedBase(theme);
+				}
+				syncThemeClasses(theme || window.Asc.plugin.theme || {});
+			}
+
+			if (window.Asc && window.Asc.plugin) {
+				var originalInit = window.Asc.plugin.init;
+				window.Asc.plugin.init = function () {
+					if (typeof originalInit === 'function') {
+						originalInit.apply(this, arguments);
+					}
+					if (window.Asc.plugin.theme) {
+						applyTheme(window.Asc.plugin.theme);
+					}
+				};
+
+				window.Asc.plugin.onThemeChanged = applyTheme;
+				if (typeof window.Asc.plugin.attachEvent === 'function') {
+					window.Asc.plugin.attachEvent('onThemeChanged', applyTheme);
+				}
+				if (window.Asc.plugin.theme) {
+					applyTheme(window.Asc.plugin.theme);
+				}
+			}
+		})();
+	</script>
+</body>
+
+</html>
