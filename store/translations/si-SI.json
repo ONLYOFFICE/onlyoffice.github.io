@@ -73,5 +73,10 @@
 	"Hide panel": "පැනල් සඟවන්න",
 	"For this editor": "මෙම සංස්කරක සඳහා",
 	"Download": "බාගන්න",
-	"Problem with downloading plugin.": "ප්ලගින බාගැනීමේ ගැටළුව."
+	"Problem with downloading plugin.": "ප්ලගින බාගැනීමේ ගැටළුව.",
+	"Works with": "සමඟ වැඩ කරන්නේ",
+	"Document Editor": "ලිපි සංස්කරක",
+	"Spreadsheet Editor": "සැටි සංස්කරක",
+	"Presentation Editor": "පෙනීම් සංස්කරක",
+	"PDF Editor": "PDF සංස්කරක"
 }
