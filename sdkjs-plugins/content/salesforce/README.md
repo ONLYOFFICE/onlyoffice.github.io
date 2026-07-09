@@ -4,7 +4,7 @@ Import data from Salesforce into your spreadsheet and export records back to Sal
 
 The plugin lets you connect to your Salesforce org, browse standard and custom objects, query reports, and pull the results directly into spreadsheet cells as a formatted table. You can also select rows in the spreadsheet and push them back to Salesforce as new or updated records.
 
-The Salesforce plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of ONLYOFFICE editors.
+The Salesforce plugin is compatible with [self-hosted](https://github.com/ONLYOFFICE/DocumentServer) and [desktop](https://github.com/ONLYOFFICE/DesktopEditors) versions of the ONLYOFFICE editors.
 
 ## How to use
 
@@ -26,7 +26,7 @@ Detailed instructions can be found in [ONLYOFFICE API documentation](https://api
 
 ## Need help? Feedback & Support 💡
 
-* **🐞 Found a bug?** Please report it by creating an [issue](https://github.com/ONLYOFFICE/plugin-salesforce/issues).
-* **👨‍💻 Want to browse the code?** Check out the [source code](https://github.com/ONLYOFFICE/plugin-salesforce).
+* **🐞 Found a bug?** Please report it by creating an [issue](https://github.com/ONLYOFFICE/onlyoffice.github.io/issues).
+* **👨‍💻 Want to browse the plugin code?** Check out the [source code](https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/content/salesforce).
 * **❓ Have a question?** Ask our community and developers via [community.onlyoffice.com](https://community.onlyoffice.com/).
-* **💡 Want to suggest a feature?** Share your ideas on our [feedback platform](https://feedback.onlyoffice.com/forums/966080-your-voice-matters).
+* **💡 Want to suggest a feature?** [Share your ideas](https://community.onlyoffice.com/c/suggestions/40).
