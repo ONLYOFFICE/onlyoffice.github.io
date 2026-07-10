@@ -40,7 +40,7 @@ const MarketplaceStorage = {
     categoryFilter: "onlyoffice",
     /** @type {string} */
     searchQuery: "",
-    isSidebarVisible: localStorage.getItem('sidebar-visible') === 'true',
+    isSidebarVisible: (localStorage.getItem('sidebar-visible') === 'true') || (window.parent === window),
     /** @type {Map<string, number>} */
     _categories: new Map(),
 

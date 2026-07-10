@@ -16,7 +16,8 @@ a.link {
 .pc { display: flex; flex-direction: column; width: 100%; height: 100vh; margin: 0px; overflow: hidden; box-sizing: border-box; }
 .pc-header { padding: 20px 24px 16px; border-bottom-width: 0.5px; border-bottom-style: solid; flex: 0 0 auto; min-height: auto;}
 .pc-title-row { display: flex; align-items: flex-start; }
-.pc-icon { width: 171px; height: 84px; margin-right: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; flex-shrink: 0; }
+.pc-icon { width: 171px; height: 98px; margin-right: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 500; flex-shrink: 0; }
+.pc-icon img {max-width: 100%; max-height: 100%;}
 .pc-meta { flex: 1; min-width: 0; margin-right: 16px; }
 .pc-name-row { display: flex; align-items: center; flex-wrap: nowrap; margin-bottom: 4px; }
 .pc-name { font-size: 18px; font-weight: 500; margin-right: 10px; flex-shrink: 0; }
@@ -25,6 +26,10 @@ a.link {
 .pc-badge span { text-overflow: ellipsis; overflow: hidden; }
 .pc-sub { font-size: 13px; margin-bottom: 8px; }
 .pc-sub .default-plugin-icon { vertical-align: middle; }
+.pc-editor-badges { display: flex; align-items: center; margin-bottom: 8px; }
+.pc-editor-badges-label { font-size: 13px; margin-right: 8px; }
+.pc-editor-badges .editor-badge { width: 13.5px; height: 18px; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 0px 1px inset; }
+.pc-editor-badges .editor-badge:not(:last-child) { margin-right: 6px; }
 .pc-stats { display: flex; flex-wrap: wrap; align-items: baseline;}
 .pc-rating { display: flex; align-items: baseline; margin-right: 10px; }
 .pc-rating > span:last-child { margin-left: 4px; }

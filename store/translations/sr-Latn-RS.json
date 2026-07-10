@@ -73,5 +73,10 @@
 	"Hide panel": "Sakrij panel",
 	"For this editor": "Za ovaj uređivač",
 	"Download": "Preuzmi",
-	"Problem with downloading plugin.": "Problem sa preuzimanjem dodatka."
+	"Problem with downloading plugin.": "Problem sa preuzimanjem dodatka.",
+	"Works with": "Radi sa",
+	"Document Editor": "Uređivač dokumenata",
+	"Spreadsheet Editor": "Uređivač tabela",
+	"Presentation Editor": "Uređivač prezentacija",
+	"PDF Editor": "Uređivač PDF-a"
 }
