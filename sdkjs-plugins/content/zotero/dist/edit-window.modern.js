@@ -74,35 +74,23 @@ function o(t) {
 			var o = t[n](r), s = o.value, c = s instanceof e;
 			Promise.resolve(c ? s.v : s).then(function(e) {
 				if (c) {
-					var r = n === "return" ? "return" : "next";
+					var r = n === "return" && s.k ? n : "next";
 					if (!s.k || e.done) return i(r, e);
 					e = t[r](e).value;
 				}
-				a(o.done ? "return" : "normal", e);
+				a(!!o.done, e);
 			}, function(e) {
 				i("throw", e);
 			});
 		} catch (e) {
-			a("throw", e);
+			a(2, e);
 		}
 	}
 	function a(e, t) {
-		switch (e) {
-			case "return":
-				n.resolve({
-					value: t,
-					done: !0
-				});
-				break;
-			case "throw":
-				n.reject(t);
-				break;
-			default: n.resolve({
-				value: t,
-				done: !1
-			});
-		}
-		(n = n.next) ? i(n.key, n.arg) : r = null;
+		e === 2 ? n.reject(t) : n.resolve({
+			value: t,
+			done: e
+		}), (n = n.next) ? i(n.key, n.arg) : r = null;
 	}
 	this._invoke = function(e, t) {
 		return new Promise(function(a, o) {
