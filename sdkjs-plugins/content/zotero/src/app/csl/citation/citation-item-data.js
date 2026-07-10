@@ -538,6 +538,9 @@ CitationItemData.prototype.fillFromObject = function (itemDataObject) {
                 if (a.given !== name.given && (a.given || name.given)) {
                     return false;
                 }
+                if (a.literal !== name.literal && (a.literal || name.literal)) {
+                    return false;
+                }
                 return true;
             });
             if (bHas) {

@@ -46,6 +46,11 @@ const ZoteroSdk = function () {
     this._userId = 0;
     /** @type {Array<UserGroupInfo>}} */
     this._userGroups = [];
+    /** Tracks whether `_userGroups` reflects a real fetch, since an empty
+     * array (a user with no groups) is indistinguishable from "not yet
+     * fetched" otherwise - that used to force a network re-fetch on every
+     * single search keystroke for such users. */
+    this._userGroupsLoaded = false;
     this._isOnlineAvailable = true;
 
     this._fetcher = new RateLimitedFetcher({
@@ -59,6 +64,10 @@ ZoteroSdk.prototype.ZOTERO_API_VERSION = "3";
 ZoteroSdk.prototype.USER_AGENT = "AscDesktopEditor";
 /** @type {"csljson"|"json"} */
 ZoteroSdk.prototype.DEFAULT_FORMAT = "csljson";
+// Caps how many matches a text search can return - unbounded search queries
+// can match hundreds/thousands of library items, which is slow to convert
+// (csljson) and slow to render in the results list.
+ZoteroSdk.prototype.SEARCH_RESULT_LIMIT = 50;
 ZoteroSdk.prototype.STORAGE_KEYS = {
     USER_ID: "zoteroUserId",
     API_KEY: "zoteroApiKey",
@@ -93,6 +102,7 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
             headers: {
                 "Zotero-API-Version": self.ZOTERO_API_VERSION,
                 "User-Agent": self.USER_AGENT,
+                "Cache-Control": "no-cache",
             },
             complete: resolve,
             error: function (/** @type {AscSimpleResponse} */ error) {
@@ -113,6 +123,9 @@ ZoteroSdk.prototype._getDesktopRequest = function (url) {
  * @returns {Promise<FetchResponse>}
  */
 ZoteroSdk.prototype._getOnlineRequest = function (url) {
+    // No Cache-Control header here: api.zotero.org's CORS preflight does not
+    // allow it, so adding it would make every online request fail. The
+    // fetch cache option below handles cache-busting instead.
     const headers = {
         "Zotero-API-Version": this.ZOTERO_API_VERSION,
         "Zotero-API-Key": this._apiKey || "",
@@ -120,7 +133,10 @@ ZoteroSdk.prototype._getOnlineRequest = function (url) {
 
     //return this._fetcher.fetchWithRetry(url, headers, 9);
 
-    return fetch(url, { headers: headers })
+    // "no-store" is required so that repeated requests for the same item
+    // (e.g. clicking "Refresh") always hit the network instead of the
+    // browser returning a stale cached response for the identical URL.
+    return fetch(url, { headers: headers, cache: "no-store" })
         .then(function (response) {
             if (!response.ok) {
                 const message = response.status + " " + response.statusText;
@@ -282,18 +298,34 @@ ZoteroSdk.prototype.getItems = function (search, itemsID, format) {
     var self = this;
     format = format || self.DEFAULT_FORMAT;
 
-    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType: string}} */
+    /** @type {{format: "csljson"|"json", q?: string, itemKey?: string, limit?: number, itemType?: string}} */
     let queryParams = {
         format: format,
-        itemType: "-attachment", // skip attachments (pdf, docx, etc.)
     };
 
     if (search) {
+        // Without a limit, a broad/short search term can match hundreds or
+        // thousands of library items, which is slow to both request (csljson
+        // requires Zotero to run its citeproc conversion per item) and render.
         queryParams.q = search;
+        queryParams.limit = self.SEARCH_RESULT_LIMIT;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
+        if (!this._isOnlineAvailable) {
+            // The local API labels csljson items with CSL citation keys and
+            // no URIs, so citations inserted from such results cannot be
+            // mapped back to the library later (e.g. by Refresh). The json
+            // format carries real item keys and links.
+            queryParams.format = "json";
+        }
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
+        // Deliberately NO itemType filter here: negated itemType forces
+        // Zotero's local API to run a library-wide search instead of a
+        // direct key lookup (seconds to minutes on large libraries), and
+        // it is pointless when the exact item keys are already known.
     } else {
         queryParams.limit = 20;
+        queryParams.itemType = "-attachment"; // skip attachments (pdf, docx, etc.)
         if (!this._isOnlineAvailable) {
             queryParams.format = "json";
         }
@@ -328,12 +360,18 @@ ZoteroSdk.prototype.getGroupItems = function (
     format = format || self.DEFAULT_FORMAT;
 
     var queryParams =
-        /** @type {{format: string, q?: string, itemKey?: string}} */ ({
+        /** @type {{format: string, q?: string, itemKey?: string, limit?: number}} */ ({
             format: format,
         });
 
     if (search) {
         queryParams.q = search;
+        queryParams.limit = self.SEARCH_RESULT_LIMIT;
+        if (!this._isOnlineAvailable) {
+            // See getItems: local csljson results cannot be mapped back to
+            // the library later; json results carry real keys and links.
+            queryParams.format = "json";
+        }
     } else if (itemsID) {
         queryParams.itemKey = itemsID.join(",");
     }
@@ -346,6 +384,79 @@ ZoteroSdk.prototype.getGroupItems = function (
 };
 
 /**
+ * Search the user library across all fields ("everything" mode), which
+ * also matches CSL citation keys (e.g. pinned by Better BibTeX). Used to
+ * re-link citations whose stored ids are citation keys rather than Zotero
+ * item keys.
+ * @param {string} query
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.searchUserItemsEverything = function (query) {
+    var path =
+        this.API_PATHS.USERS +
+        "/" +
+        this._userId +
+        "/" +
+        this.API_PATHS.ITEMS;
+    var request = this._buildGetRequest(path, {
+        format: "json",
+        q: query,
+        qmode: "everything",
+        itemType: "-attachment",
+        limit: 10,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * Get a single item by key from the user library.
+ * Uses the single-item endpoint (/items/KEY) because the list endpoint
+ * with ?itemKey= also returns the item's child notes/attachments, and in
+ * "csljson" format entries carry CSL citation keys instead of Zotero item
+ * keys, so a multi-entry response cannot be matched back to the request.
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getItemByKey = function (itemKey, format) {
+    var path =
+        this.API_PATHS.USERS +
+        "/" +
+        this._userId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, this._userId);
+};
+
+/**
+ * Get a single item by key from a group library.
+ * See getItemByKey for why the single-item endpoint is used.
+ * @param {number|string} groupId
+ * @param {string} itemKey
+ * @param {"csljson"|"json"} [format]
+ * @returns {Promise<SearchResult>}
+ */
+ZoteroSdk.prototype.getGroupItemByKey = function (groupId, itemKey, format) {
+    var path =
+        this.API_PATHS.GROUPS +
+        "/" +
+        groupId +
+        "/" +
+        this.API_PATHS.ITEMS +
+        "/" +
+        itemKey;
+    var request = this._buildGetRequest(path, {
+        format: format || this.DEFAULT_FORMAT,
+    });
+    return this._parseResponse(request, groupId);
+};
+
+/**
  * Get user groups
  * @returns {Promise<Array<UserGroupInfo>>}
  */
@@ -353,7 +464,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
     var self = this;
 
     return new Promise(function (resolve, reject) {
-        if (self._userGroups.length > 0) {
+        if (self._userGroupsLoaded) {
             resolve(self._userGroups);
             return;
         }
@@ -389,6 +500,7 @@ ZoteroSdk.prototype.getUserGroups = function () {
                         name: group.data.name,
                     };
                 });
+                self._userGroupsLoaded = true;
                 resolve(self._userGroups);
             })
             .catch(reject);
@@ -462,6 +574,7 @@ ZoteroSdk.prototype.clearSettings = function () {
     localStorage.removeItem(this.STORAGE_KEYS.USER_ID);
     localStorage.removeItem(this.STORAGE_KEYS.API_KEY);
     this._userGroups = [];
+    this._userGroupsLoaded = false;
     this._userId = 0;
     this._apiKey = null;
 };

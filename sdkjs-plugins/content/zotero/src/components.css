@@ -646,11 +646,20 @@
         float: left;
         margin-right: 6px;
     }
+    .loader-image circle {
+        transition: stroke-dashoffset 0.25s ease;
+        transform-origin: center;
+        transform: rotate(-90deg);
+    }
     .loader-title {
         white-space: pre-wrap;
         height: 17px;
         line-height: 17px;
     }
+}
+/* Determinate progress: a growing pie/ring instead of the spinning arc */
+.loader-container.loader-determinate .loader-image {
+    animation: none;
 }
 .loader-container-main {
     width: 100vw;

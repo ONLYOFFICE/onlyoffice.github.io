@@ -187,7 +187,7 @@ import "../styles.css";
                     console.error(e);
                     showError(translate("An error occurred while loading library groups. Try restarting the plugin."));
                 });
-                let initSettingsPromise = loadStyleFromDocument(settings.getStyleManager())
+                let initSettingsPromise = loadStyleFromDocument()
                     .catch((e) => console.error("Failed to read document prefs:", e))
                     .then(() => settings.init())
                     .catch((e) => {
@@ -370,34 +370,92 @@ import "../styles.css";
                 showError(translate("Language is not selected"));
                 return;
             }
-            await onStartAction(true, "Zotero (" + translate("Updating citations") + ")");
 
-            let updateFn = citationService.updateCslItems.bind(
-                citationService,
-                false
-            );
-            
-            const styleManager = settings.getStyleManager();
-            if (styleManager.getLastUsedFormat() === "note") {
-                // this way, because "SelectAddinField" does not work with notes
-                updateFn = citationService.updateCslItemsInNotes.bind(
-                    citationService,
-                    styleManager.getLastUsedNotesStyle()
+            insertBibBtn.disable();
+            refreshBtn.disable();
+            insertLinkBtn.disable();
+            editCitationBtn.disable();
+
+            // Fetching from Zotero can take a few seconds (network + rate
+            // limiting), so it deliberately runs *without* the document-wide
+            // GroupActions lock below - only the final, fast write to the
+            // document needs that lock. Progress is shown in the plugin panel
+            // instead of freezing the whole editor for the entire refresh.
+            let fetchFraction = 0;
+            let applyFraction = 0;
+            /** @param {{phase: "fetch"|"apply", completed: number, total: number}} progress */
+            function onRefreshProgress(progress) {
+                const fraction =
+                    progress.total > 0 ? progress.completed / progress.total : 1;
+                if (progress.phase === "fetch") {
+                    fetchFraction = fraction;
+                } else {
+                    applyFraction = fraction;
+                }
+                Loader.setProgress(fetchFraction * 0.4 + applyFraction * 0.6);
+                const phaseLabel =
+                    progress.phase === "fetch"
+                        ? translate("Fetching updated references")
+                        : translate("Updating citations");
+                Loader.setText(
+                    "Zotero (" +
+                        phaseLabel +
+                        " " +
+                        progress.completed +
+                        "/" +
+                        progress.total +
+                        ")",
                 );
             }
 
-            updateFn()
-                .catch(function (error) {
-                    console.error(error);
-                    let message = translate("Failed to refresh");
-                    if (typeof error === "string") {
-                        message += ". " + translate(error);
+            Loader.setText("Zotero (" + translate("Updating citations") + ")");
+            Loader.setProgress(0);
+            Loader.show();
+
+            const styleManager = settings.getStyleManager();
+            const isNotesFormat = styleManager.getLastUsedFormat() === "note";
+
+            try {
+                if (isNotesFormat) {
+                    // this way, because "SelectAddinField" does not work with notes
+                    const prepared =
+                        await citationService.prepareRefreshCslItemsInNotes(
+                            styleManager.getLastUsedNotesStyle(),
+                            onRefreshProgress,
+                        );
+                    await lockDocumentGroupAction(true);
+                    try {
+                        await citationService.applyRefreshCslItemsInNotes(prepared);
+                    } finally {
+                        await unlockDocumentGroupAction(false);
                     }
-                    showError(message);
-                })
-                .finally(function () {
-                    onEndAction(false, "Zotero (" + translate("Updating citations") + ")");
-                });
+                } else {
+                    const updatedFields = await citationService.prepareRefreshCslItems(
+                        undefined,
+                        onRefreshProgress,
+                    );
+                    await lockDocumentGroupAction(true);
+                    try {
+                        await citationService.applyRefreshCslItems(updatedFields);
+                    } finally {
+                        await unlockDocumentGroupAction(false);
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+                let message = translate("Failed to refresh");
+                if (typeof error === "string") {
+                    message += ". " + translate(error);
+                }
+                showError(message);
+            } finally {
+                Loader.setProgress(null);
+                Loader.hide();
+                insertBibBtn.enable();
+                refreshBtn.enable();
+                editCitationBtn.enable();
+                checkSelected();
+            }
         });
 
         insertBibBtn.subscribe(async (event) => {
@@ -766,15 +824,14 @@ import "../styles.css";
     }
 
     /**
+     * Locks the document for a batch of edits (single undo step, no user input
+     * while it runs). Kept separate from button state so slow, non-document work
+     * (e.g. network requests) can happen without holding this lock - see
+     * `unlockDocumentGroupAction`.
      * @param {boolean} keepSelection
-     * @param {string} [preloaderMessage]
+     * @returns {Promise<void>}
      */
-    async function onStartAction(keepSelection, preloaderMessage) {
-        insertBibBtn.disable();
-        refreshBtn.disable();
-        insertLinkBtn.disable();
-        editCitationBtn.disable();
-
+    async function lockDocumentGroupAction(keepSelection) {
         const editorVersion = window.Asc.scope.editorVersion;
         if (editorVersion && editorVersion < 9004000) {
             // @ts-ignore
@@ -784,6 +841,38 @@ import "../styles.css";
                 Asc.plugin.executeMethod("StartAction", ["GroupActions", { "lockScroll" : true, "keepSelection" : keepSelection }], resolve);
             });
         }
+    }
+
+    /**
+     * @param {boolean} scrollToTarget
+     * @param {boolean} [skipCursorRestore] - skip restoring cursor (old editor path) when caller handles it
+     * @returns {Promise<void>}
+     */
+    async function unlockDocumentGroupAction(scrollToTarget, skipCursorRestore) {
+        const editorVersion = window.Asc.scope.editorVersion;
+        if (editorVersion && editorVersion < 9004000) {
+            if (!skipCursorRestore) {
+                // @ts-ignore
+                await CursorService.setCursorPosition(window._cursorPosition || 0);
+            }
+        } else {
+            await new Promise(resolve => {
+                Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
+            });
+        }
+    }
+
+    /**
+     * @param {boolean} keepSelection
+     * @param {string} [preloaderMessage]
+     */
+    async function onStartAction(keepSelection, preloaderMessage) {
+        insertBibBtn.disable();
+        refreshBtn.disable();
+        insertLinkBtn.disable();
+        editCitationBtn.disable();
+
+        await lockDocumentGroupAction(keepSelection);
         /*if (preloaderMessage) {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("StartAction", ["Info", preloaderMessage], function(returnValue){
@@ -803,18 +892,8 @@ import "../styles.css";
         refreshBtn.enable();
         editCitationBtn.enable();
         checkSelected();
-        
-        const editorVersion = window.Asc.scope.editorVersion;
-        if (editorVersion && editorVersion < 9004000) {
-            if (!skipCursorRestore) {
-                // @ts-ignore
-                await CursorService.setCursorPosition(window._cursorPosition || 0);
-            }
-        } else {
-            await new Promise(resolve => {
-                Asc.plugin.executeMethod("EndAction", ["GroupActions", { "scrollToTarget" : scrollToTarget }], resolve);
-            });
-        }
+
+        await unlockDocumentGroupAction(scrollToTarget, skipCursorRestore);
         /*if (preloaderMessage) {
             await new Promise(resolve => {
                 Asc.plugin.executeMethod("EndAction", ["Info", preloaderMessage], function(returnValue){
@@ -969,7 +1048,10 @@ import "../styles.css";
         if (res && res.items && res.items.length > 0) {
             res.items = res.items.map(item => {
                 item = convertJsonToCsl(item);
-                item[isGroup ? "groupID" : "userID"] = res.id;
+                // Store as string: the desktop-mode user library id is 0,
+                // which would otherwise fail the truthiness checks that
+                // decide which library an item belongs to.
+                item[isGroup ? "groupID" : "userID"] = String(res.id);
                 fillUrisFromId(item);
                 return item;
             });
@@ -1134,13 +1216,26 @@ import "../styles.css";
 
         const citationStartIndex = field.Value.indexOf("{");
         const citationEndIndex = field.Value.lastIndexOf("}");
-        if (citationStartIndex === -1) {
+        if (
+            citationStartIndex === -1 ||
+            citationEndIndex === -1 ||
+            citationEndIndex < citationStartIndex
+        ) {
             citationService.showWarningMessage(translate("Could not parse the citation data."));
             return;
         }
-        const citationObject = JSON.parse(
-            field.Value.slice(citationStartIndex, citationEndIndex + 1)
+        const citationJson = field.Value.slice(
+            citationStartIndex,
+            citationEndIndex + 1,
         );
+        let citationObject;
+        try {
+            citationObject = JSON.parse(citationJson);
+        } catch (error) {
+            console.error("Failed to parse citation data:", error);
+            citationService.showWarningMessage(translate("Could not parse the citation data."));
+            return;
+        }
 
         // Clear current state
         selectCitation.removeItems(Object.keys(selectCitation.getSelectedItems()));
@@ -1206,10 +1301,9 @@ import "../styles.css";
      * Reads ZOTERO_PREF from document custom properties and sets localStorage
      * if no style is currently saved. This preserves the citation style when
      * opening a DOCX created by the Word Zotero plugin.
-     * @param {import('../csl/styles').CslStylesManager} styleManager
      * @returns {Promise<void>}
      */
-    async function loadStyleFromDocument(styleManager) {
+    async function loadStyleFromDocument() {
 
         const prefXml = await new Promise((resolve) => {
             Asc.plugin.callCommand(
@@ -1217,11 +1311,28 @@ import "../styles.css";
                     const doc = Api.GetDocument();
                     const props = doc.GetCustomProperties();
                     if (!props) return "";
+
+                    const countValue = typeof props.Get === "function"
+                        ? props.Get("ZOTERO_PREF_COUNT")
+                        : null;
+                    const count = parseInt(String(countValue || ""), 10);
                     let xml = "";
                     let i = 1;
+
+                    if (!isNaN(count) && count > 0) {
+                        for (; i <= count; i++) {
+                            const val = props.Get("ZOTERO_PREF_" + i);
+                            if (val === null || val === undefined || val === "") {
+                                break;
+                            }
+                            xml += String(val);
+                        }
+                        return xml;
+                    }
+
                     while (true) {
                         const val = props.Get("ZOTERO_PREF_" + i);
-                        if (val === null || val === undefined) break;
+                        if (val === null || val === undefined || val === "") break;
                         xml += String(val);
                         i++;
                     }
@@ -1249,7 +1360,17 @@ import "../styles.css";
                     }
                 }
                 if (locale) {
-                    localStorage.setItem("zoteroLocale", locale);
+                    localStorage.setItem("zoteroLang", locale);
+                }
+
+                const hasBibliography = styleEl.getAttribute("hasBibliography");
+                if (hasBibliography !== null) {
+                    localStorage.setItem(
+                        "zoteroContainBibliography",
+                        hasBibliography === "1" || hasBibliography === "true"
+                            ? "true"
+                            : "false",
+                    );
                 }
             }
             const noteTypePref = xmlDoc.querySelector('pref[name="noteType"]');
@@ -1257,8 +1378,21 @@ import "../styles.css";
                 const noteType = noteTypePref.getAttribute("value");
                 if (noteType === "1") {
                     localStorage.setItem("zoteroNotesStyleId", "footnotes");
+                    localStorage.setItem("zoteroFormatId", "note");
                 } else if (noteType === "2") {
                     localStorage.setItem("zoteroNotesStyleId", "endnotes");
+                    localStorage.setItem("zoteroFormatId", "note");
+                }
+            }
+
+            const hasBibliographyPref = xmlDoc.querySelector('pref[name="hasBibliography"]');
+            if (hasBibliographyPref) {
+                const hasBibliography = hasBibliographyPref.getAttribute("value");
+                if (hasBibliography !== null) {
+                    localStorage.setItem(
+                        "zoteroContainBibliography",
+                        hasBibliography === "true" ? "true" : "false",
+                    );
                 }
             }
         } catch (e) {
@@ -1312,12 +1446,50 @@ import "../styles.css";
             Asc.scope.prefChunks = chunks;
             Asc.plugin.callCommand(
                 function () {
+                    function getCustomProperty(props, name) {
+                        if (typeof props.Get === "function") {
+                            return props.Get(name);
+                        }
+                        return null;
+                    }
+
+                    function deleteCustomProperty(props, name) {
+                        if (typeof props.Delete === "function") {
+                            props.Delete(name);
+                        } else if (typeof props.Remove === "function") {
+                            props.Remove(name);
+                        }
+                    }
+
                     var doc = Api.GetDocument();
                     var props = doc.GetCustomProperties();
                     var chunks = Asc.scope.prefChunks;
-                    for (var i = 0; i < chunks.length; i++) {
-                        props.Add("ZOTERO_PREF_" + (i + 1), chunks[i]);
+                    var prefix = "ZOTERO_PREF_";
+                    var existingCount = parseInt(
+                        String(getCustomProperty(props, "ZOTERO_PREF_COUNT") || ""),
+                        10,
+                    );
+
+                    if (!isNaN(existingCount) && existingCount > 0) {
+                        for (var clearIndex = 1; clearIndex <= existingCount; clearIndex++) {
+                            deleteCustomProperty(props, prefix + clearIndex);
+                        }
+                    } else {
+                        for (var probeIndex = 1; ; probeIndex++) {
+                            var existingValue = getCustomProperty(props, prefix + probeIndex);
+                            if (existingValue === null || existingValue === undefined || existingValue === "") {
+                                break;
+                            }
+                            deleteCustomProperty(props, prefix + probeIndex);
+                        }
                     }
+
+                    deleteCustomProperty(props, "ZOTERO_PREF_COUNT");
+
+                    for (var i = 0; i < chunks.length; i++) {
+                        props.Add(prefix + (i + 1), chunks[i]);
+                    }
+                    props.Add("ZOTERO_PREF_COUNT", String(chunks.length));
                 },
                 false,
                 false,

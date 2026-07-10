@@ -261,7 +261,6 @@ SelectCitationsComponent.prototype._buildDocElement = function (item) {
     var title = document.createElement("div");
     title.textContent = item.title.trim();
     title.classList.add("truncate-text");
-    title.classList.add("secondary-text");
 
     if (item.publisher || item["publisher-place"]) {
         title.textContent +=

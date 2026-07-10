@@ -98,6 +98,31 @@ CitationItem.prototype.fillFromObject = function (itemObject) {
 };
 
 /**
+ * Replaces the bibliographic data with a freshly fetched CSL item.
+ * fillFromObject only merges, so a field the user deleted in Zotero would
+ * survive in the stored copy forever; a refresh must treat the fetched
+ * item as the complete authoritative record instead. Citation-local state
+ * (prefix/suffix/locator, URIs) and the library context custom properties
+ * are preserved.
+ * @param {any} cslItemObject - a plain CSL JSON item (not the API "json" shape)
+ */
+CitationItem.prototype.replaceItemDataFromCsl = function (cslItemObject) {
+    const oldItemData = this._itemData;
+    this._itemData = new CitationItemData(this.id);
+
+    const userID = oldItemData.getCustomProperty("userID");
+    const groupID = oldItemData.getCustomProperty("groupID");
+    if (userID !== null) {
+        this._itemData._addCustomProperty("userID", userID);
+    }
+    if (groupID !== null) {
+        this._itemData._addCustomProperty("groupID", groupID);
+    }
+
+    this._itemData.fillFromObject(cslItemObject);
+};
+
+/**
  * @returns {InfoForCitationCluster}
  */
 CitationItem.prototype.getInfoForCitationCluster = function () {

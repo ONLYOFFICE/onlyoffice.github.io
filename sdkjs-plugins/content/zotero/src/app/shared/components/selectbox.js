@@ -295,6 +295,27 @@ class SelectBox {
         var searchTerm = target.value.toLowerCase();
         this.#renderOptions(searchTerm);
     }
+
+    /**
+     * @param {string} searchTerm
+     * @param {{value: string, text: string} | null} item
+     * @returns {boolean}
+     */
+    #matchesSearchTerm(searchTerm, item) {
+        if (item === null) {
+            return false;
+        }
+        if (!searchTerm) {
+            return true;
+        }
+
+        var searchWords = searchTerm.split(/\s+/).filter(Boolean);
+        var text = item.text.toLowerCase();
+        return searchWords.every(function (word) {
+            return text.indexOf(word) !== -1;
+        });
+    }
+
     /**
      * @param {'up'|'down'} direction
      */
@@ -307,9 +328,7 @@ class SelectBox {
             return item !== null;
         });
         if (searchTerm) {
-            items = items.filter(function (item) {
-                return item.text.toLowerCase().indexOf(searchTerm) !== -1;
-            });
+            items = items.filter((item) => this.#matchesSearchTerm(searchTerm, item));
         }
         if (items.length === 0) {
             return;
@@ -406,14 +425,7 @@ class SelectBox {
 
         var filteredItems = this._items;
         if (searchTerm) {
-            var searchWords = searchTerm.split(/\s+/).filter(Boolean);
-            filteredItems = filteredItems.filter(function (item) {
-                if (item === null) return false;
-                var text = item.text.toLowerCase();
-                return searchWords.every(function (word) {
-                    return text.indexOf(word) !== -1;
-                });
-            });
+            filteredItems = filteredItems.filter((item) => this.#matchesSearchTerm(searchTerm, item));
         }
 
         var fragment = document.createDocumentFragment();

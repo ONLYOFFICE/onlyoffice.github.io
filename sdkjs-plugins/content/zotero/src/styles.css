@@ -266,6 +266,9 @@ div::-moz-selection {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        /* Byline (author/year) is secondary to the title shown in .docInfo below it */
+        font-size: 11px;
+        color: #999999;
     }
     & .doc-expand-btn {
         width: 24px;
