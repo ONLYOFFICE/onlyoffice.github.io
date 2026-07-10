@@ -2,7 +2,9 @@
   "common": {
     "error": "Fehler",
     "reload": "Neu laden",
-    "initializingPlugin": "Plugin wird initialisiert…"
+    "initializingPlugin": "Plugin wird initialisiert…",
+    "back": "Zurück",
+    "close": "Schließen"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "Gesamtes Dokument",
       "selection": "Auswahl"
     },
-    "check": "Mit Antidote prüfen",
+    "check": "Korrektur",
+    "check_title": "Korrektur starten",
     "stop": "Stoppen",
     "lookup": {
       "title": "Ein Wort suchen",
       "placeholder": "Wort oder Phrase…",
       "dictionaries": "Wörterbücher",
-      "guides": "Anleitungen"
+      "dictionaries_title": "Wörterbücher zum ausgewählten Wort öffnen",
+      "guides": "Anleitungen",
+      "guides_title": "Anleitungen öffnen"
     }
   },
   "correction": {

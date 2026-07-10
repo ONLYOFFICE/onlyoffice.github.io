@@ -2,7 +2,9 @@
   "common": {
     "error": "Gabim",
     "reload": "Rifresko",
-    "initializingPlugin": "Duke inicializuar shtesën…"
+    "initializingPlugin": "Duke inicializuar shtesën…",
+    "back": "Mbrapsht",
+    "close": "Mbyll"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "I gjithë dokumenti",
       "selection": "Përzgjedhja"
     },
-    "check": "Kontrollo me Antidote",
+    "check": "Korrigjuesi",
+    "check_title": "Nis korrigjuesin",
     "stop": "Ndalo",
     "lookup": {
       "title": "Kërko një fjalë",
       "placeholder": "Fjalë ose frazë…",
       "dictionaries": "Fjalorët",
-      "guides": "Udhëzuesit"
+      "dictionaries_title": "Hap fjalorët për fjalën e përzgjedhur",
+      "guides": "Udhëzuesit",
+      "guides_title": "Hap udhëzuesit"
     }
   },
   "correction": {

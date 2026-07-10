@@ -32,18 +32,23 @@
 
 import { JSX } from 'preact';
 
+import { IconButton } from '@components/button';
+
 export interface TextFieldProps {
   value: string;
   label?: string;
   caption?: string;
   placeholder?: string;
   disabled?: boolean;
+  clearable?: boolean;
+  clearLabel?: string;
   onInput: (value: string) => void;
   onEnter?: () => void;
+  onClear?: () => void;
 }
 
 export function TextField({
-  value, label, caption, placeholder, disabled, onInput, onEnter,
+  value, label, caption, placeholder, disabled, clearable, clearLabel, onInput, onEnter, onClear,
 }: TextFieldProps): JSX.Element {
   const input = (
     <input
@@ -59,12 +64,27 @@ export function TextField({
     />
   );
 
-  if (!label && !caption) return input;
+  const showClear = clearable && !!value;
+
+  if (!label && !caption && !clearable) return input;
 
   return (
     <div className="text-field-group">
       {label && <span className="text-field-group__label">{label}</span>}
-      {input}
+      {clearable ? (
+        <div className="text-field-wrapper">
+          {input}
+          {showClear && (
+            <IconButton
+              ariaLabel={clearLabel || 'Clear'}
+              variant='icon-only'
+              onClick={() => (onClear ? onClear() : onInput(''))}
+            >
+              <span aria-hidden="true">×</span>
+            </IconButton>
+          )}
+        </div>
+      ) : input}
       {caption && <span className="text-field-group__caption">{caption}</span>}
     </div>
   );

@@ -2,7 +2,9 @@
   "common": {
     "error": "Chyba",
     "reload": "Znovu načíst",
-    "initializingPlugin": "Inicializace pluginu…"
+    "initializingPlugin": "Inicializace pluginu…",
+    "back": "Zpět",
+    "close": "Zavřít"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "Celý dokument",
       "selection": "Výběr"
     },
-    "check": "Kontrola pomocí Antidote",
+    "check": "Korrektur",
+    "check_title": "Spustit korrektur",
     "stop": "Zastavit",
     "lookup": {
       "title": "Vyhledat slovo",
       "placeholder": "Slovo nebo fráze…",
       "dictionaries": "Slovníky",
-      "guides": "Průvodce"
+      "dictionaries_title": "Otevřít slovníky k vybranému slovu",
+      "guides": "Průvodce",
+      "guides_title": "Otevřít průvodce"
     }
   },
   "correction": {

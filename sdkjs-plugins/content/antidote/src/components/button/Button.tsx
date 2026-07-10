@@ -40,10 +40,11 @@ export interface ButtonProps {
   loading?: boolean;
   onClick?: (event: MouseEvent) => void;
   children: ComponentChildren;
+  title?: string;
 }
 
 export function Button({
-  variant = 'secondary', size = 24, fullWidth, disabled, loading, onClick, children,
+  variant = 'secondary', size = 24, fullWidth, disabled, loading, onClick, children, title,
 }: ButtonProps): JSX.Element {
   const classes = [
     'button',
@@ -54,7 +55,7 @@ export function Button({
   ].filter(Boolean).join(' ');
 
   return (
-    <button type="button" className={classes} disabled={disabled || loading} onClick={onClick}>
+    <button type="button" className={classes} disabled={disabled || loading} onClick={onClick} title={title}>
       {children}
     </button>
   );

@@ -2,7 +2,9 @@
   "common": {
     "error": "Грешка",
     "reload": "Поново учитај",
-    "initializingPlugin": "Иницијализација додатка…"
+    "initializingPlugin": "Иницијализација додатка…",
+    "back": "Назад",
+    "close": "Затвори"
   },
   "main": {
     "title": "Антидот",
@@ -11,13 +13,16 @@
       "document": "Цео документ",
       "selection": "Избор"
     },
-    "check": "Провери са Антидотом",
+    "check": "Коригатор",
+    "check_title": "Покрени коригатор",
     "stop": "Заустави",
     "lookup": {
       "title": "Претражи реч",
       "placeholder": "Реч или фраза…",
       "dictionaries": "Речници",
-      "guides": "Водичи"
+      "dictionaries_title": "Отвори речнике за изабрану реч",
+      "guides": "Водичи",
+      "guides_title": "Отвори водиче"
     }
   },
   "correction": {

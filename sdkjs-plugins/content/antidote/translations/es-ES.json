@@ -2,7 +2,9 @@
   "common": {
     "error": "Error",
     "reload": "Recargar",
-    "initializingPlugin": "Inicializando plugin…"
+    "initializingPlugin": "Inicializando plugin…",
+    "back": "Atrás",
+    "close": "Cerrar"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "Documento completo",
       "selection": "Selección"
     },
-    "check": "Verificar con Antidote",
+    "check": "Corrector",
+    "check_title": "Iniciar el corrector",
     "stop": "Detener",
     "lookup": {
       "title": "Buscar una palabra",
       "placeholder": "Palabra o frase…",
       "dictionaries": "Diccionarios",
-      "guides": "Guías"
+      "dictionaries_title": "Abrir diccionarios al palabra seleccionada",
+      "guides": "Guías",
+      "guides_title": "Abrir guías"
     }
   },
   "correction": {

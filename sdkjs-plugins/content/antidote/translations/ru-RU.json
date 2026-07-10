@@ -2,7 +2,9 @@
   "common": {
     "error": "Ошибка",
     "reload": "Перезагрузить",
-    "initializingPlugin": "Инициализация плагина…"
+    "initializingPlugin": "Инициализация плагина…",
+    "back": "Назад",
+    "close": "Закрыть"
   },
   "main": {
     "title": "Антидот",
@@ -11,13 +13,16 @@
       "document": "Весь документ",
       "selection": "Выделение"
     },
-    "check": "Проверить с помощью Антидота",
+    "check": "Корректор",
+    "check_title": "Запустить корректор",
     "stop": "Остановить",
     "lookup": {
       "title": "Поиск слова",
       "placeholder": "Слово или фраза…",
       "dictionaries": "Словари",
-      "guides": "Руководства"
+      "dictionaries_title": "Открыть словари к выбранному слову",
+      "guides": "Руководства",
+      "guides_title": "Открыть руководства"
     }
   },
   "correction": {

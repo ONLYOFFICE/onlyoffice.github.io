@@ -2,7 +2,9 @@
   "common": {
     "error": "Fout",
     "reload": "Herladen",
-    "initializingPlugin": "Plugin initialiseren…"
+    "initializingPlugin": "Plugin initialiseren…",
+    "back": "Terug",
+    "close": "Sluiten"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "Hele document",
       "selection": "Selectie"
     },
-    "check": "Controleren met Antidote",
+    "check": "Corrector",
+    "check_title": "Corrector starten",
     "stop": "Stoppen",
     "lookup": {
       "title": "Zoek een woord",
       "placeholder": "Woord of zin…",
       "dictionaries": "Woordenboeken",
-      "guides": "Gidsen"
+      "dictionaries_title": "Woordenboeken voor het geselecteerde woord openen",
+      "guides": "Gidsen",
+      "guides_title": "Gidsen openen"
     }
   },
   "correction": {

@@ -2,7 +2,9 @@
   "common": {
     "error": "Greška",
     "reload": "Ponovo učitaj",
-    "initializingPlugin": "Inicijalizacija dodatka…"
+    "initializingPlugin": "Inicijalizacija dodatka…",
+    "back": "Nazad",
+    "close": "Zatvori"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "Ceo dokument",
       "selection": "Izbor"
     },
-    "check": "Proveri sa Antidote",
+    "check": "Korigator",
+    "check_title": "Pokreni korigator",
     "stop": "Zaustavi",
     "lookup": {
       "title": "Pretraži reč",
       "placeholder": "Reč ili fraza…",
       "dictionaries": "Rečnici",
-      "guides": "Vodiči"
+      "dictionaries_title": "Otvori rečnike za izabranu reč",
+      "guides": "Vodiči",
+      "guides_title": "Otvori vodiče"
     }
   },
   "correction": {

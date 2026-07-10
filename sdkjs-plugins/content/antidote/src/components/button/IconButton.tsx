@@ -35,25 +35,28 @@ import { ComponentChildren, JSX } from 'preact';
 export interface IconButtonProps {
   ariaLabel: string;
   /** `ghost` (default) has no visible border/background until hover/active/focus,
-   * `outline` always shows its border/background. */
-  variant?: 'ghost' | 'outline';
+   * `outline` always shows its border/background,
+   * `icon-only` removes padding and border/background. */
+  variant?: 'ghost' | 'outline' | 'icon-only';
   disabled?: boolean;
   active?: boolean;
   onClick?: (event: MouseEvent) => void;
   children: ComponentChildren;
+  title?: string;
 }
 
 export function IconButton({
-  ariaLabel, variant = 'ghost', disabled, active, onClick, children,
+  ariaLabel, variant = 'ghost', disabled, active, onClick, children, title,
 }: IconButtonProps): JSX.Element {
   const classes = [
     'icon-button',
     variant === 'outline' ? 'icon-button--outline' : '',
+    variant === 'icon-only' ? 'icon-button--icon-only' : '',
     active ? 'icon-button--active' : '',
   ].filter(Boolean).join(' ');
 
   return (
-    <button type="button" className={classes} disabled={disabled} onClick={onClick} aria-label={ariaLabel}>
+    <button type="button" className={classes} disabled={disabled} onClick={onClick} aria-label={ariaLabel} title={title}>
       {children}
     </button>
   );

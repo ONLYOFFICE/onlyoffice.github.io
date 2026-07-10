@@ -2,7 +2,9 @@
   "common": {
     "error": "错误",
     "reload": "重新加载",
-    "initializingPlugin": "正在初始化插件…"
+    "initializingPlugin": "正在初始化插件…",
+    "back": "返回",
+    "close": "关闭"
   },
   "main": {
     "title": "Antidote",
@@ -11,13 +13,16 @@
       "document": "整篇文档",
       "selection": "选区"
     },
-    "check": "使用 Antidote 检查",
+    "check": "校对器",
+    "check_title": "启动校对器",
     "stop": "停止",
     "lookup": {
       "title": "查找单词",
       "placeholder": "单词或短语…",
       "dictionaries": "词典",
-      "guides": "指南"
+      "dictionaries_title": "打开所选单词的词典",
+      "guides": "指南",
+      "guides_title": "打开指南"
     }
   },
   "correction": {

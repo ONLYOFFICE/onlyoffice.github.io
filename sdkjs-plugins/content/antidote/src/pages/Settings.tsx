@@ -58,7 +58,7 @@ export function Settings(): JSX.Element {
 
   return (
     <Layout
-      header={<Header title={t('settings.title')} onBack={() => route('/')} />}
+      header={<Header title={t('settings.title')} />}
       footer={<Footer />}
     >
       <div className="antidote-section">
@@ -67,12 +67,21 @@ export function Settings(): JSX.Element {
           caption={t('settings.manualPort.hint')}
           value={value}
           placeholder="59004"
+          clearable
+          clearLabel={t('settings.manualPort.clear')}
           onInput={setValue}
           onEnter={save}
+          onClear={clear}
         />
         <div className="antidote-lookup-row">
           <Button variant="primary" onClick={save}>{t('settings.manualPort.save')}</Button>
-          <Button onClick={clear}>{t('settings.manualPort.clear')}</Button>
+          <Button
+            fullWidth
+            onClick={() => route('/')}
+            title={t('common.back')}
+          >
+            {t('common.back')}
+          </Button>
         </div>
       </div>
     </Layout>
