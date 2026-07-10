@@ -26,7 +26,7 @@ import { t } from '@utils/i18n';
 
 export type ModalComponent = ComponentType<{ params: URLSearchParams }>;
 
-const BASE_URL = `${window.location.origin}${window.location.pathname}`;
+const BASE_URL = new URL('index.html', window.location.href).href;
 const PLUGIN_BUTTON_EVENT = 'plugin:button';
 const SOQL_KEYS = {
   query: '__soql_editor_query__',
