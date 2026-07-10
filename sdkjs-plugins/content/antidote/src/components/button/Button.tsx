@@ -34,24 +34,27 @@ import { ComponentChildren, JSX } from 'preact';
 
 export interface ButtonProps {
   variant?: 'primary' | 'secondary';
+  size?: 22 | 24;
   fullWidth?: boolean;
   disabled?: boolean;
+  loading?: boolean;
   onClick?: (event: MouseEvent) => void;
   children: ComponentChildren;
 }
 
 export function Button({
-  variant = 'secondary', fullWidth, disabled, onClick, children,
+  variant = 'secondary', size = 24, fullWidth, disabled, loading, onClick, children,
 }: ButtonProps): JSX.Element {
   const classes = [
-    'btn-text-default',
     'button',
-    variant === 'primary' ? 'primary' : '',
+    variant === 'primary' ? 'button--primary' : 'button--secondary',
+    size === 22 ? 'button--sm' : 'button--md',
     fullWidth ? 'button--full-width' : '',
+    loading ? 'button--loading' : '',
   ].filter(Boolean).join(' ');
 
   return (
-    <button type="button" className={classes} disabled={disabled} onClick={onClick}>
+    <button type="button" className={classes} disabled={disabled || loading} onClick={onClick}>
       {children}
     </button>
   );

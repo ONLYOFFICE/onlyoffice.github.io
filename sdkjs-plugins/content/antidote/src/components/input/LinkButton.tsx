@@ -30,42 +30,29 @@
  *
  */
 
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 
-export interface TextFieldProps {
-  value: string;
-  label?: string;
-  caption?: string;
-  placeholder?: string;
+export interface LinkButtonProps {
+  href?: string;
   disabled?: boolean;
-  onInput: (value: string) => void;
-  onEnter?: () => void;
+  onClick?: (event: MouseEvent) => void;
+  children: ComponentChildren;
 }
 
-export function TextField({
-  value, label, caption, placeholder, disabled, onInput, onEnter,
-}: TextFieldProps): JSX.Element {
-  const input = (
-    <input
-      type="text"
-      className="form-control text-field"
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      onInput={(event) => onInput((event.target as HTMLInputElement).value)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') onEnter?.();
-      }}
-    />
-  );
-
-  if (!label && !caption) return input;
+export function LinkButton({
+  href, disabled, onClick, children,
+}: LinkButtonProps): JSX.Element {
+  if (href) {
+    return (
+      <a className="link-button" href={href} target="_blank" rel="noreferrer" onClick={onClick}>
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <div className="text-field-group">
-      {label && <span className="text-field-group__label">{label}</span>}
-      {input}
-      {caption && <span className="text-field-group__caption">{caption}</span>}
-    </div>
+    <button type="button" className="link-button" disabled={disabled} onClick={onClick}>
+      {children}
+    </button>
   );
 }

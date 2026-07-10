@@ -30,42 +30,33 @@
  *
  */
 
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 
-export interface TextFieldProps {
-  value: string;
-  label?: string;
-  caption?: string;
-  placeholder?: string;
+export interface CheckboxProps {
+  checked: boolean;
   disabled?: boolean;
-  onInput: (value: string) => void;
-  onEnter?: () => void;
+  onChange: (checked: boolean) => void;
+  children?: ComponentChildren;
 }
 
-export function TextField({
-  value, label, caption, placeholder, disabled, onInput, onEnter,
-}: TextFieldProps): JSX.Element {
-  const input = (
-    <input
-      type="text"
-      className="form-control text-field"
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      onInput={(event) => onInput((event.target as HTMLInputElement).value)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') onEnter?.();
-      }}
-    />
-  );
-
-  if (!label && !caption) return input;
-
+export function Checkbox({
+  checked, disabled, onChange, children,
+}: CheckboxProps): JSX.Element {
   return (
-    <div className="text-field-group">
-      {label && <span className="text-field-group__label">{label}</span>}
-      {input}
-      {caption && <span className="text-field-group__caption">{caption}</span>}
-    </div>
+    <label className="checkbox">
+      <input
+        type="checkbox"
+        className="checkbox__input"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange((event.target as HTMLInputElement).checked)}
+      />
+      <span className="checkbox__mark">
+        <svg viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.682129 3.40702L3.68213 6.20702L9.18218 0.707116" stroke="currentColor" strokeWidth="2" />
+        </svg>
+      </span>
+      {children && <span className="checkbox__label">{children}</span>}
+    </label>
   );
 }

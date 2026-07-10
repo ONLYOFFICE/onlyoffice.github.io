@@ -62,9 +62,14 @@ export function Settings(): JSX.Element {
       footer={<Footer />}
     >
       <div className="antidote-section">
-        <div className="antidote-section__title">{t('settings.manualPort.label')}</div>
-        <TextField value={value} placeholder="59004" onInput={setValue} onEnter={save} />
-        <p>{t('settings.manualPort.hint')}</p>
+        <TextField
+          label={t('settings.manualPort.label')}
+          caption={t('settings.manualPort.hint')}
+          value={value}
+          placeholder="59004"
+          onInput={setValue}
+          onEnter={save}
+        />
         <div className="antidote-lookup-row">
           <Button variant="primary" onClick={save}>{t('settings.manualPort.save')}</Button>
           <Button onClick={clear}>{t('settings.manualPort.clear')}</Button>

@@ -55,13 +55,14 @@ export function RadioGroup<T extends string>({
         <label key={option.value} className="radio-group__option">
           <input
             type="radio"
-            className="form-control"
+            className="radio__input"
             name={name}
             value={option.value}
             checked={value === option.value}
             disabled={disabled}
             onChange={() => onChange(option.value)}
           />
+          <span className="radio__mark" />
           <span>{option.label}</span>
         </label>
       ))}

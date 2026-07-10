@@ -30,42 +30,31 @@
  *
  */
 
-import { JSX } from 'preact';
+import { ComponentChildren, JSX } from 'preact';
 
-export interface TextFieldProps {
-  value: string;
-  label?: string;
-  caption?: string;
-  placeholder?: string;
+export interface IconButtonProps {
+  ariaLabel: string;
+  /** `ghost` (default) has no visible border/background until hover/active/focus,
+   * `outline` always shows its border/background. */
+  variant?: 'ghost' | 'outline';
   disabled?: boolean;
-  onInput: (value: string) => void;
-  onEnter?: () => void;
+  active?: boolean;
+  onClick?: (event: MouseEvent) => void;
+  children: ComponentChildren;
 }
 
-export function TextField({
-  value, label, caption, placeholder, disabled, onInput, onEnter,
-}: TextFieldProps): JSX.Element {
-  const input = (
-    <input
-      type="text"
-      className="form-control text-field"
-      value={value}
-      placeholder={placeholder}
-      disabled={disabled}
-      onInput={(event) => onInput((event.target as HTMLInputElement).value)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') onEnter?.();
-      }}
-    />
-  );
-
-  if (!label && !caption) return input;
+export function IconButton({
+  ariaLabel, variant = 'ghost', disabled, active, onClick, children,
+}: IconButtonProps): JSX.Element {
+  const classes = [
+    'icon-button',
+    variant === 'outline' ? 'icon-button--outline' : '',
+    active ? 'icon-button--active' : '',
+  ].filter(Boolean).join(' ');
 
   return (
-    <div className="text-field-group">
-      {label && <span className="text-field-group__label">{label}</span>}
-      {input}
-      {caption && <span className="text-field-group__caption">{caption}</span>}
-    </div>
+    <button type="button" className={classes} disabled={disabled} onClick={onClick} aria-label={ariaLabel}>
+      {children}
+    </button>
   );
 }

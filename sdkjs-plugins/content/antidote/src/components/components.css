@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border-preview, rgba(128, 128, 128, 0.25));
 }
 
@@ -58,12 +58,26 @@
 }
 
 .antidote-header__icon-button {
+  position: relative;
   background: none;
   border: none;
   cursor: pointer;
   font-size: 16px;
   color: inherit;
-  padding: 4px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.antidote-header__icon-button::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 54px;
+  height: 46px;
+  top: -8px;
+  left: -12px;
 }
 
 .antidote-footer {
@@ -71,19 +85,202 @@
   border-top: 1px solid var(--border-preview, rgba(128, 128, 128, 0.25));
 }
 
+/* button */
+
 .button {
+  box-sizing: border-box;
   width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.button--md {
+  height: 24px;
+  padding: 0 12px;
+}
+
+.button--sm {
+  height: 22px;
+  padding: 0 10px;
 }
 
 .button--full-width {
   width: 100%;
-  display: block;
+  display: flex;
 }
+
+.button--primary {
+  background: var(--background-primary-dialog-button, #444444);
+  border-color: var(--background-primary-dialog-button, #444444);
+  color: var(--text-inverse, #fff);
+}
+
+.button--primary:hover,
+.button--primary:active {
+  background: var(--highlight-primary-dialog-button-hover, #1c1c1c);
+  border-color: var(--highlight-primary-dialog-button-hover, #1c1c1c);
+}
+
+.button--secondary {
+  background: var(--background-normal, #fff);
+  border-color: var(--border-regular-control, #c0c0c0);
+  color: var(--text-normal, rgba(0, 0, 0, 0.8));
+}
+
+.button--secondary:hover {
+  background: var(--highlight-button-hover, #e0e0e0);
+}
+
+.button--secondary:active {
+  background: var(--highlight-button-pressed, #cbcbcb);
+}
+
+.button--secondary:focus-visible:not(:hover):not(:active) {
+  border-color: var(--border-control-focus, #848484);
+}
+
+.button[disabled] {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.icon-button {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  color: var(--icon-normal, rgba(0, 0, 0, 0.8));
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.icon-button:hover {
+  background: var(--highlight-button-hover, #e0e0e0);
+  border-color: var(--border-regular-control, #c0c0c0);
+}
+
+.icon-button:active,
+.icon-button--active {
+  background: var(--highlight-button-pressed, #cbcbcb);
+  border-color: var(--border-regular-control, #c0c0c0);
+}
+
+.icon-button:focus-visible:not(:hover):not(:active) {
+  border-color: var(--border-control-focus, #848484);
+}
+
+.icon-button[disabled] {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.icon-button--outline {
+  background: var(--background-normal, #fff);
+  border-color: var(--border-regular-control, #c0c0c0);
+}
+
+/* text field */
 
 .text-field {
   width: 100%;
   box-sizing: border-box;
 }
+
+.text-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.text-field-group__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-normal, rgba(0, 0, 0, 0.8));
+}
+
+.text-field-group__caption {
+  font-size: 10px;
+  color: var(--text-tertiary, rgba(0, 0, 0, 0.4));
+}
+
+/* checkbox */
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.checkbox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkbox__mark {
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-regular-control, #c0c0c0);
+  border-radius: 2px;
+  background: var(--background-normal, #fff);
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.checkbox:hover .checkbox__mark {
+  border-color: var(--border-control-focus, #848484);
+}
+
+.checkbox__input:disabled ~ .checkbox__mark {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.checkbox__mark svg {
+  position: absolute;
+  left: 2px;
+  top: 3px;
+  width: 10px;
+  height: 8px;
+  color: var(--text-normal, rgba(0, 0, 0, 0.8));
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.checkbox__input:checked ~ .checkbox__mark svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox__label {
+  font-size: 11px;
+  color: var(--text-normal, rgba(0, 0, 0, 0.8));
+}
+
+/* radio group */
 
 .radio-group {
   display: flex;
@@ -96,6 +293,119 @@
   align-items: center;
   gap: 6px;
   cursor: pointer;
+}
+
+.radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio__mark {
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-regular-control, #c0c0c0);
+  border-radius: 50%;
+  background: var(--background-normal, #fff);
+  position: relative;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.radio-group__option:hover .radio__mark {
+  border-color: var(--border-control-focus, #848484);
+}
+
+.radio__input:disabled ~ .radio__mark {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.radio__input:checked ~ .radio__mark {
+  background: var(--text-normal, rgba(0, 0, 0, 0.8));
+  box-shadow: 0 0 0 2px var(--background-normal, #fff) inset;
+}
+
+/*
+ * "Modern"/accent themes (theme-white, theme-night — ONLYOFFICE's actual runtime names for what
+ * the Figma file calls "Modern Light") render checked radio/checkbox as a fully accent-filled
+ * shape with a small contrast dot, not the dark-fill-with-ring look above. `theme-white`/
+ * `theme-night` land on <body> as class names via useTheme.ts.
+ */
+.theme-white .radio__input:checked ~ .radio__mark,
+.theme-night .radio__input:checked ~ .radio__mark {
+  background: var(--background-normal, #fff);
+  border-width: 4px;
+  border-color: var(--background-primary-dialog-button, #4a87e7);
+  box-shadow: none;
+}
+
+.theme-white .radio-group__option:hover .radio__input:checked ~ .radio__mark,
+.theme-night .radio-group__option:hover .radio__input:checked ~ .radio__mark {
+  border-color: var(--highlight-primary-dialog-button-hover, #2566d5);
+}
+
+.theme-white .radio-group__option:hover .radio__input:not(:checked) ~ .radio__mark,
+.theme-night .radio-group__option:hover .radio__input:not(:checked) ~ .radio__mark,
+.theme-white .checkbox:hover .checkbox__input:not(:checked) ~ .checkbox__mark,
+.theme-night .checkbox:hover .checkbox__input:not(:checked) ~ .checkbox__mark {
+  background: var(--highlight-button-hover, #e0e0e0);
+}
+
+.theme-white .checkbox__input:checked ~ .checkbox__mark,
+.theme-night .checkbox__input:checked ~ .checkbox__mark {
+  background: var(--background-primary-dialog-button, #4a87e7);
+  border-color: var(--background-primary-dialog-button, #4a87e7);
+}
+
+.theme-white .checkbox:hover .checkbox__input:checked ~ .checkbox__mark,
+.theme-night .checkbox:hover .checkbox__input:checked ~ .checkbox__mark {
+  background: var(--highlight-primary-dialog-button-hover, #2566d5);
+  border-color: var(--highlight-primary-dialog-button-hover, #2566d5);
+}
+
+.theme-white .checkbox__input:checked ~ .checkbox__mark svg,
+.theme-night .checkbox__input:checked ~ .checkbox__mark svg {
+  color: var(--text-inverse, #fff);
+}
+
+.theme-white .button,
+.theme-night .button,
+.theme-white .icon-button,
+.theme-night .icon-button,
+.theme-white .text-field,
+.theme-night .text-field,
+.theme-white .error-box,
+.theme-night .error-box,
+.theme-white .status-banner,
+.theme-night .status-banner {
+  border-radius: 4px;
+}
+
+/* link button */
+
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-family: inherit;
+  color: var(--text-link, rgba(0, 0, 0, 0.8));
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--text-link-hover, #1c1c1c);
+}
+
+.link-button[disabled] {
+  opacity: 0.5;
+  text-decoration: none;
+  cursor: default;
 }
 
 .loading {

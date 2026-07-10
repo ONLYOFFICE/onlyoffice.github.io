@@ -35,3 +35,9 @@ export type { TextFieldProps } from './TextField';
 
 export { RadioGroup } from './RadioGroup';
 export type { RadioGroupProps, RadioOption } from './RadioGroup';
+
+export { Checkbox } from './Checkbox';
+export type { CheckboxProps } from './Checkbox';
+
+export { LinkButton } from './LinkButton';
+export type { LinkButtonProps } from './LinkButton';
