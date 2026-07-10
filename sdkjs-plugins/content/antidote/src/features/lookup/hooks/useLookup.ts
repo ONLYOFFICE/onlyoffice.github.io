@@ -34,7 +34,7 @@ import { useCallback, useState } from 'preact/hooks';
 import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
-import { getSelectedText } from '@api/document';
+import { getSelectedText, getCurrentWord } from '@api/document';
 import { t } from '@utils/i18n';
 
 import { LookupAgent } from '../agents/lookupAgent';
@@ -58,7 +58,8 @@ export function useLookup() {
       console.error('Failed to get selected text');
       // no plugin selection API available (e.g. cell/pdf without a selection) — fall back below
     }
-    const text = selected.trim() || manualText.trim();
+    const currentWord = selected.trim() ? '' : await getCurrentWord();
+    const text = selected.trim() || currentWord.trim() || manualText.trim();
     if (!text) return;
 
     setPending(true);

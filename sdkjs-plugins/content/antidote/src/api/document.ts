@@ -113,6 +113,14 @@ export function hasSelection(): Promise<boolean> {
     .catch(() => false);
 }
 
+// Word only: `ApiDocument.GetCurrentWord()` isn't exposed for cell/pdf's object model (same
+// restriction as getDocumentParagraphs). Mirrors Antidote's own Word add-in, which looks up
+// whatever word the caret is in or next to rather than requiring an explicit selection first.
+export function getCurrentWord(): Promise<string> {
+  if (window.Asc?.plugin?.info?.editorType !== 'word') return Promise.resolve('');
+  return runQuery<string>(() => Api.GetDocument().GetCurrentWord()).catch(() => '');
+}
+
 export function replaceSelectedText(paragraphs: string[]): Promise<boolean> {
   ensurePlugin();
   return new Promise((resolve) => {

@@ -39,11 +39,15 @@ import {
 } from '@components';
 import { useTranslation } from '@hooks';
 import { manualPort, setManualPort } from '@features/correction';
+import { discoveredPort } from '@api/antidote';
 
 export function Settings(): JSX.Element {
   const { t } = useTranslation();
   const { route } = useLocation();
-  const [value, setValue] = useState(manualPort.value ? String(manualPort.value) : '');
+  // No manual override yet? Prefill with the port auto-discovery already found, so the field reads
+  // as if the user had typed it in themselves rather than showing blank while a port is in use.
+  const effectivePort = manualPort.value ?? discoveredPort.value;
+  const [value, setValue] = useState(effectivePort ? String(effectivePort) : '');
 
   const save = () => {
     const port = Number(value.trim());

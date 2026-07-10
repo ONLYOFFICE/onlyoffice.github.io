@@ -30,6 +30,7 @@
  *
  */
 
+import { signal } from '@preact/signals';
 import { AntidoteConnector } from '@druide-informatique/antidote-api-js';
 import { manualPort } from '@features/correction/store/correctionStore';
 
@@ -57,7 +58,9 @@ const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
 const PROBE_TIMEOUT_MS = 500;
 
-let cachedPort: number | null = null;
+// The port found by the last successful scan/probe, exposed so Settings can display it as the
+// effective port even when the user hasn't set a manual override — as if they had typed it in.
+export const discoveredPort = signal<number | null>(null);
 
 function probePort(port: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -99,15 +102,33 @@ export function getPortProvider(): () => Promise<number> {
   }
 
   return async () => {
+    const cachedPort = discoveredPort.value;
     if (cachedPort !== null && await probePort(cachedPort)) return cachedPort;
 
     AntidoteConnector.announcePresence();
     if (AntidoteConnector.isDetected()) {
-      cachedPort = await AntidoteConnector.getWebSocketPort();
-      return cachedPort;
+      discoveredPort.value = await AntidoteConnector.getWebSocketPort();
+      return discoveredPort.value;
     }
 
-    cachedPort = await scanForPort();
-    return cachedPort;
+    discoveredPort.value = await scanForPort();
+    return discoveredPort.value;
   };
+}
+
+let warmupInFlight: Promise<number> | null = null;
+
+// Runs the same port discovery as `getPortProvider()`, but ahead of time (e.g. as soon as the panel
+// opens) so `discoveredPort` is already populated by the time the user presses "Corrector"/
+// "Dictionaries"/"Guides" — the actual click then only pays for `probePort`'s single round trip
+// instead of the full up-to-13-port scan. Safe to call repeatedly (e.g. on every Main mount): a
+// no-op once a port is already cached or manually overridden, and de-duped while a scan is already
+// in progress.
+export function warmUpPort(): void {
+  if (manualPort.value !== null || discoveredPort.value !== null || warmupInFlight !== null) return;
+
+  warmupInFlight = getPortProvider()();
+  warmupInFlight.catch(() => {}).finally(() => {
+    warmupInFlight = null;
+  });
 }

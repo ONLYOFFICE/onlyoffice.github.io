@@ -77,7 +77,7 @@ export function TextField({
           {showClear && (
             <IconButton
               ariaLabel={clearLabel || 'Clear'}
-              variant='icon-only'
+              variant="icon-only"
               onClick={() => (onClear ? onClear() : onInput(''))}
             >
               <span aria-hidden="true">×</span>
