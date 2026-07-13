@@ -63,7 +63,7 @@ export function useLookup() {
     }
     const currentWord = selected.trim() ? '' : await getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();
-    if (!text) {
+    if (tool === 'dictionaries' && !text) {
       showWarning(t('main.lookup.noWordWarning'));
       return;
     }
@@ -79,7 +79,7 @@ export function useLookup() {
       if (tool === 'dictionaries') connectix.launchDictionaries();
       else connectix.launchGuides();
     } catch (err) {
-      setError(err instanceof AntidoteError ? t('correction.errors.notDetected') : t('correction.errors.unknown'));
+      showWarning(err instanceof AntidoteError ? t('correction.errors.notDetected') : t('correction.errors.unknown'));
     } finally {
       setPending(false);
     }

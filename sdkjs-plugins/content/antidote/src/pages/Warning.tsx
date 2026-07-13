@@ -74,7 +74,6 @@ export function Warning(): JSX.Element {
   useEffect(() => {
     if (!message) return;
     window.Asc.plugin.sendToPlugin?.('onUpdateHeight', document.body.scrollHeight);
-    console.warn('set message', document.body.scrollHeight);
   }, [message]);
 
   return (
