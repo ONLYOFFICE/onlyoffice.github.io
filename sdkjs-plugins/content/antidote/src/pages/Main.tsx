@@ -75,9 +75,13 @@ export function Main(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (lookupError) {
-      showWarning(lookupError);
+    if (!lookupError) {
+      return;
     }
+    showWarning(lookupError);
+    route('/settings?reason=connectionError');
+    stop();
+    warmUpPort(true);
   }, [lookupError]);
 
   useEffect(() => {
@@ -85,9 +89,9 @@ export function Main(): JSX.Element {
       return;
     }
     showWarning(errorMessage.value ?? t('correction.errors.unknown'));
-
-    route('/settings');
+    route('/settings?reason=connectionError');
     stop();
+    warmUpPort(true);
   }, [connectionState.value]);
 
   const statusMessage = connectionState.value === 'error'

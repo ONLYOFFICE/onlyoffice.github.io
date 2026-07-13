@@ -125,7 +125,7 @@ let warmupInFlight: Promise<number> | null = null;
 // no-op once a port is already cached or manually overridden, and de-duped while a scan is already
 // in progress.
 export function warmUpPort(refresh = false): void {
-  if (manualPort.value !== null || discoveredPort.value !== null || warmupInFlight !== null) return;
+  if (!refresh && (manualPort.value !== null || discoveredPort.value !== null || warmupInFlight !== null)) return;
 
   warmupInFlight = getPortProvider(refresh)();
   warmupInFlight.catch(() => {

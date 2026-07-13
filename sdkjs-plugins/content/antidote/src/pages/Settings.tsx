@@ -43,7 +43,7 @@ import { discoveredPort } from '@api/antidote';
 
 export function Settings(): JSX.Element {
   const { t } = useTranslation();
-  const { route } = useLocation();
+  const { route, query } = useLocation();
   // No manual override yet? Prefill with the port auto-discovery already found, so the field reads
   // as if the user had typed it in themselves rather than showing blank while a port is in use.
   const effectivePort = manualPort.value ?? discoveredPort.value;
@@ -59,6 +59,13 @@ export function Settings(): JSX.Element {
     setValue('');
     setManualPort(null);
   };
+
+  if (query.reason === 'connectionError') {
+    if (discoveredPort.value) {
+      setValue(String(discoveredPort.value));
+      setManualPort(discoveredPort.value);
+    }
+  }
 
   return (
     <Layout
