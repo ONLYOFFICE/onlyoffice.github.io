@@ -283,6 +283,25 @@ export function getSelectionInfo(): Promise<SelectionInfo> {
   );
 }
 
+export function isActiveSheetEmpty(): Promise<boolean> {
+  return runQuery<boolean>(() => {
+    const sheet = Api.GetActiveSheet();
+    if (!sheet) return true;
+
+    const usedRange = sheet.GetUsedRange();
+    if (!usedRange) return true;
+
+    const rangeAny = usedRange as unknown as { GetAddress: (rowAbs: boolean, colAbs: boolean, refStyle: string, external: boolean) => string | null };
+    const address = rangeAny.GetAddress(false, false, 'xlA1', false);
+
+    if (!address) return true;
+    if (address.includes(':')) return false;
+
+    const value = usedRange.GetValue();
+    return value === '' || value === null || value === undefined;
+  });
+}
+
 export function hasValidSelection(): Promise<boolean> {
   return runQuery<boolean>(
     () => {

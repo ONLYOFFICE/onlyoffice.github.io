@@ -27,7 +27,7 @@ import { useModals } from '@store/modal';
 
 import { useTranslation } from '@hooks';
 
-import { insertRecords } from '@api/spreadsheet';
+import { insertRecords, isActiveSheetEmpty } from '@api/spreadsheet';
 import { executeQuery } from '@api/salesforce';
 
 export type Step = 'object' | 'fields' | 'filters' | 'loading' | 'success' | 'soql';
@@ -285,23 +285,45 @@ export function useImport() {
   }, [state.value, t]);
 
   const submit = useCallback(() => {
-    confirm(
-      {
-        title: t('import.title'),
-        message: t('import.replace_warning'),
-        confirmText: t('import.replace'),
-      },
-      () => execute(),
-    );
+    isActiveSheetEmpty().then((empty) => {
+      if (empty) {
+        execute();
+        return;
+      }
+
+      confirm(
+        {
+          title: t('import.title'),
+          message: t('import.replace_warning'),
+          confirmText: t('import.replace'),
+        },
+        () => execute(),
+      );
+    });
   }, [confirm, execute, t]);
 
   const openSoqlEditor = useCallback(() => {
-    soqlEditor({ query }, async (q) => {
+    const callOpen = () => soqlEditor({ query }, async (q) => {
       const result = await executeSoqlDirect(q);
       setQuery(result.success ? '' : q);
       return result;
     });
-  }, [soqlEditor, query, executeSoqlDirect]);
+
+    isActiveSheetEmpty().then((empty) => {
+      if (!empty) {
+        confirm(
+          {
+            title: t('import.title'),
+            message: t('import.replace_warning'),
+            confirmText: t('import.replace'),
+          },
+          callOpen,
+        );
+      } else {
+        callOpen();
+      }
+    });
+  }, [soqlEditor, query, executeSoqlDirect, confirm, t]);
 
   const reset = useCallback(() => {
     objects.reset();
