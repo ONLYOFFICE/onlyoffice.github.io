@@ -28,28 +28,28 @@
   },
   "dependencies": {
     "@druide-informatique/antidote-api-js": "^1.3.4",
-    "@preact/signals": "^2.9.2",
-    "preact": "^10.26.9",
-    "preact-iso": "^2.11.0"
+    "@preact/signals": "^2.9.3",
+    "preact": "^10.29.7",
+    "preact-iso": "^2.12.0"
   },
   "devDependencies": {
-    "onlyoffice-plugins-api": "file:../../v1/onlyoffice-types",
     "@eslint/compat": "^1.4.1",
     "@eslint/js": "^9.39.2",
-    "@preact/preset-vite": "^2.10.2",
+    "@preact/preset-vite": "^2.10.5",
     "@stylistic/eslint-plugin": "^3.1.0",
-    "@types/node": "^26.1.0",
-    "eslint": "^9.39.2",
+    "@types/node": "^26.1.1",
+    "eslint": "^9.39.5",
     "eslint-config-airbnb-extended": "^2.3.3",
     "eslint-config-preact": "^2.0.0",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "onlyoffice-plugins-api": "file:../../v1/onlyoffice-types",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.51.0",
-    "vite": "^7.0.4"
+    "typescript-eslint": "^8.63.0",
+    "vite": "^7.3.6"
   },
   "eslintConfig": {
     "extends": "preact"
