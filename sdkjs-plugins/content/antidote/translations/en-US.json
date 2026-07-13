@@ -4,7 +4,9 @@
     "reload": "Reload",
     "initializingPlugin": "Initializing plugin…",
     "back": "Back",
-    "close": "Close"
+    "close": "Close",
+    "ok": "OK",
+    "warning": "Warning"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "Dictionaries",
       "dictionaries_title": "Open the dictionaries to the selected word",
       "guides": "Guides",
-      "guides_title": "Open guides"
+      "guides_title": "Open guides",
+      "noWordWarning": "Select some text or place the cursor on a word to look it up."
     }
   },
   "correction": {

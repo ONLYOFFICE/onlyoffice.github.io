@@ -41,9 +41,16 @@ import { usePluginReady, useTranslation, useTheme } from '@hooks';
 
 import { Main } from '@pages/Main';
 import { Settings } from '@pages/Settings';
+import { Warning } from '@pages/Warning';
 
 import './variables.css';
 import './styles/themes.css';
+
+// showWarning() (src/api/pluginWindow.ts) opens a separate PluginWindow pointed at this same
+// index.html with `?modal=warning` — reusing the one bundle/theme/CSS instead of shipping a
+// second hand-rolled static HTML page. `modal` only selects which page to mount below; the actual
+// message text is delivered separately over PluginWindow's own message channel (see Warning.tsx).
+const modalName = new URLSearchParams(window.location.search).get('modal');
 
 function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) {
   const { ready, error } = usePluginReady();
@@ -76,7 +83,16 @@ function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) 
   return <>{children}</>;
 }
 
+function ModalApp() {
+  useTheme();
+
+  if (modalName === 'warning') return <Warning />;
+  return null;
+}
+
 export function App() {
+  if (modalName) return <ModalApp />;
+
   return (
     <PluginReadyGuard>
       <LocationProvider>

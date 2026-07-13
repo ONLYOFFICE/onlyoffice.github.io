@@ -4,7 +4,9 @@
     "reload": "Znovu načíst",
     "initializingPlugin": "Inicializace pluginu…",
     "back": "Zpět",
-    "close": "Zavřít"
+    "close": "Zavřít",
+    "ok": "OK",
+    "warning": "Varování"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "Slovníky",
       "dictionaries_title": "Otevřít slovníky k vybranému slovu",
       "guides": "Průvodce",
-      "guides_title": "Otevřít průvodce"
+      "guides_title": "Otevřít průvodce",
+      "noWordWarning": "Vyberte text nebo umístěte kurzor na slovo, které chcete vyhledat."
     }
   },
   "correction": {

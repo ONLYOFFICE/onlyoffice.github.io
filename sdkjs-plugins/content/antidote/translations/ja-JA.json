@@ -4,7 +4,9 @@
     "reload": "リロード",
     "initializingPlugin": "プラグインを初期化中…",
     "back": "戻る",
-    "close": "閉じる"
+    "close": "閉じる",
+    "ok": "OK",
+    "warning": "警告"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "辞書",
       "dictionaries_title": "選択した単語の辞書を開く",
       "guides": "ガイド",
-      "guides_title": "ガイドを開く"
+      "guides_title": "ガイドを開く",
+      "noWordWarning": "検索するテキストを選択するか、単語にカーソルを置いてください。"
     }
   },
   "correction": {

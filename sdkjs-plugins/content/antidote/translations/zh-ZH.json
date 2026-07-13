@@ -4,7 +4,9 @@
     "reload": "重新加载",
     "initializingPlugin": "正在初始化插件…",
     "back": "返回",
-    "close": "关闭"
+    "close": "关闭",
+    "ok": "确定",
+    "warning": "警告"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "词典",
       "dictionaries_title": "打开所选单词的词典",
       "guides": "指南",
-      "guides_title": "打开指南"
+      "guides_title": "打开指南",
+      "noWordWarning": "请选择文本或将光标放在单词上以进行查找。"
     }
   },
   "correction": {

@@ -4,7 +4,9 @@
     "reload": "Ricarica",
     "initializingPlugin": "Inizializzazione del plugin…",
     "back": "Indietro",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "ok": "OK",
+    "warning": "Avviso"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "Dizionari",
       "dictionaries_title": "Apri i dizionari per la parola selezionata",
       "guides": "Guide",
-      "guides_title": "Apri le guide"
+      "guides_title": "Apri le guide",
+      "noWordWarning": "Seleziona del testo o posiziona il cursore su una parola per cercarla."
     }
   },
   "correction": {

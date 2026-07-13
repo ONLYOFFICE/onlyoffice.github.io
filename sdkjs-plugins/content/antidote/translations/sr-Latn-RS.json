@@ -4,7 +4,9 @@
     "reload": "Ponovo učitaj",
     "initializingPlugin": "Inicijalizacija dodatka…",
     "back": "Nazad",
-    "close": "Zatvori"
+    "close": "Zatvori",
+    "ok": "OK",
+    "warning": "Upozorenje"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "Rečnici",
       "dictionaries_title": "Otvori rečnike za izabranu reč",
       "guides": "Vodiči",
-      "guides_title": "Otvori vodiče"
+      "guides_title": "Otvori vodiče",
+      "noWordWarning": "Izaberite tekst ili postavite kursor na reč da biste je potražili."
     }
   },
   "correction": {

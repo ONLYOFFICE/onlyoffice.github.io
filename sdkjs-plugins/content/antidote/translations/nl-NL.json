@@ -4,7 +4,9 @@
     "reload": "Herladen",
     "initializingPlugin": "Plugin initialiseren…",
     "back": "Terug",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "ok": "OK",
+    "warning": "Waarschuwing"
   },
   "main": {
     "title": "Antidote",
@@ -22,7 +24,8 @@
       "dictionaries": "Woordenboeken",
       "dictionaries_title": "Woordenboeken voor het geselecteerde woord openen",
       "guides": "Gidsen",
-      "guides_title": "Gidsen openen"
+      "guides_title": "Gidsen openen",
+      "noWordWarning": "Selecteer tekst of plaats de cursor op een woord om het op te zoeken."
     }
   },
   "correction": {

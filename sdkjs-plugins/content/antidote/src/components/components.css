@@ -531,3 +531,16 @@
 .antidote-lookup-row button {
   width: 100%;
 }
+
+.antidote-warning {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  line-height: 16px;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.antidote-warning__message {
+  width: calc(100% - 76px);
+}

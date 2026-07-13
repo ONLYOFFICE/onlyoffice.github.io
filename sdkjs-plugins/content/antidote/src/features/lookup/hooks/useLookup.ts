@@ -35,15 +35,18 @@ import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
 import { getSelectedText, getCurrentWord } from '@api/document';
+import { showWarning } from '@api/pluginWindow';
 import { t } from '@utils/i18n';
 
 import { LookupAgent } from '../agents/lookupAgent';
 
 export type LookupTool = 'dictionaries' | 'guides';
 
-// Mirrors Antidote's Word/LibreOffice add-ins: a document selection always wins over the manually
-// typed field, so "select a word, click Dictionaries" works with no typing required. The field is
-// only consulted when nothing is selected.
+// Mirrors Antidote's own Word add-in: an explicit selection always wins, but absent one it falls
+// back to whatever word the caret is in or next to (getCurrentWord, word editor only) rather than
+// requiring the user to select anything first. The manual text field is the last resort, for
+// cell/pdf (no caret-word API) or when there's truly nothing at the caret. If none of the three
+// produce anything, a separate PluginWindow warns the user instead of silently doing nothing.
 export function useLookup() {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -60,7 +63,10 @@ export function useLookup() {
     }
     const currentWord = selected.trim() ? '' : await getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();
-    if (!text) return;
+    if (!text) {
+      showWarning(t('main.lookup.noWordWarning'));
+      return;
+    }
 
     setPending(true);
 
