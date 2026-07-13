@@ -57,6 +57,10 @@ function closeWarning(): void {
 // the same attachEvent/command pair other ONLYOFFICE plugins in this repo use for info/warning
 // windows (e.g. Zotero's info-window.html), rather than a URL query param: no encoding/length
 // concerns for arbitrary text, and the payload never touches window.location/history.
+// Initial guess only — `onUpdateHeight` below resizes the window to the actual rendered content
+// once Warning.tsx reports it, so a wrong guess here just means a brief resize, not clipped text.
+const WARNING_WINDOW_SIZE: [number, number] = [340, 74];
+
 export function showWarning(message: string): void {
   if (!window.Asc?.PluginWindow) return;
 
@@ -67,6 +71,15 @@ export function showWarning(message: string): void {
 
   pluginWindow.attachEvent('onWindowReady', () => {
     pluginWindow.command('onWarning', message);
+  });
+
+  // see Warning.tsx, the opener resizes the actual window to fit it.
+  pluginWindow.attachEvent('onUpdateHeight', (height: number) => {
+    window.Asc.plugin.executeMethod(
+      'ResizeWindow',
+      [pluginWindow.id, [WARNING_WINDOW_SIZE[0], height]],
+      () => {},
+    );
   });
 
   const onButtonClick = () => {
@@ -81,7 +94,7 @@ export function showWarning(message: string): void {
     isModal: true,
     isVisual: true,
     EditorsSupport: ['word', 'cell', 'pdf'],
-    size: [340, 110],
+    size: WARNING_WINDOW_SIZE,
     buttons: [{ text: t('common.ok'), primary: true }],
   });
 }

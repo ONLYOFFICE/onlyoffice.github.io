@@ -67,6 +67,16 @@ export function Warning(): JSX.Element {
     };
   }, []);
 
+  // Reports content height once the message has actually rendered (state updates are async, so
+  // this can't happen inside the `onWarning` handler itself) — the opener's `onUpdateHeight`
+  // listener (src/api/pluginWindow.ts) resizes the window to fit, same handshake Zotero's
+  // additional-window.js/info-window.html use for their info/warning windows.
+  useEffect(() => {
+    if (!message) return;
+    window.Asc.plugin.sendToPlugin?.('onUpdateHeight', document.body.scrollHeight);
+    console.warn('set message', document.body.scrollHeight);
+  }, [message]);
+
   return (
     <div className="antidote-warning noselect">
       <svg width="44" height="39" viewBox="0 0 44 39" fill="none" xmlns="http://www.w3.org/2000/svg">
