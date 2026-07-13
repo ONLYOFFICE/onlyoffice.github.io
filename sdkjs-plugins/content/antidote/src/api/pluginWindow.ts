@@ -90,7 +90,7 @@ export function showWarning(message: string): void {
 
   pluginWindow.show({
     url: WARNING_WINDOW_URL,
-    description: t('common.warning') + '!',
+    description: `${t('common.warning')}!`,
     isModal: true,
     isVisual: true,
     EditorsSupport: ['word', 'cell', 'pdf'],

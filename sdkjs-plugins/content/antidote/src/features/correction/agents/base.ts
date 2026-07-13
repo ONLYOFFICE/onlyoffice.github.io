@@ -41,9 +41,17 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
 
   private queue: Promise<void> = Promise.resolve();
 
-  constructor(title: string) {
+  constructor(title: string, private readonly onSessionEnded?: () => void) {
     super();
     this.title = title;
+  }
+
+  // Antidote calls this when the correction window (or Antidote itself) closes on its own — not
+  // just when we call `connectix.close()` ourselves. Without this, `useCorrection`'s connection
+  // state would only ever reset via our own "Stop" button, going stale the moment the user closes
+  // Antidote's window directly instead.
+  sessionEnded(): void {
+    this.onSessionEnded?.();
   }
 
   // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method

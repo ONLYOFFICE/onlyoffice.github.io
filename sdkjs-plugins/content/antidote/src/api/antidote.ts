@@ -95,7 +95,7 @@ async function scanForPort(): Promise<number> {
 // successful scan, discovered through the Antidote browser connector (only relevant outside
 // desktop), or found by probing the local port range. If none work, Antidote/Connectix isn't
 // installed or running on this machine.
-export function getPortProvider(refresh: boolean = false): () => Promise<number> {
+export function getPortProvider(refresh = false): () => Promise<number> {
   if (!refresh && manualPort.value !== null) {
     const port = manualPort.value;
     return () => Promise.resolve(port);
@@ -124,7 +124,7 @@ let warmupInFlight: Promise<number> | null = null;
 // instead of the full up-to-13-port scan. Safe to call repeatedly (e.g. on every Main mount): a
 // no-op once a port is already cached or manually overridden, and de-duped while a scan is already
 // in progress.
-export function warmUpPort(refresh: boolean = false): void {
+export function warmUpPort(refresh = false): void {
   if (manualPort.value !== null || discoveredPort.value !== null || warmupInFlight !== null) return;
 
   warmupInFlight = getPortProvider(refresh)();

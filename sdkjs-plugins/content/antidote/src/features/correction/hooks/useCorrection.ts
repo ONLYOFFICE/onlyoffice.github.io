@@ -61,9 +61,14 @@ export function useCorrection() {
     try {
       const portProvider = getPortProvider();
 
+      const handleSessionEnded = () => {
+        connectixRef.current = null;
+        connectionState.value = 'idle';
+      };
+
       const agent = targetScope === 'document'
-        ? new DocumentCorrectionAgent(DOCUMENT_TITLE)
-        : new SelectionCorrectionAgent(DOCUMENT_TITLE);
+        ? new DocumentCorrectionAgent(DOCUMENT_TITLE, handleSessionEnded)
+        : new SelectionCorrectionAgent(DOCUMENT_TITLE, handleSessionEnded);
 
       if (agent instanceof DocumentCorrectionAgent) await agent.loadParagraphs();
       else await agent.loadSelection();
