@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote n'a pas été détecté. Assurez-vous qu'Antidote 12 et son agent Connectix sont installés et en cours d'exécution.",
-      "unknown": "Une erreur inattendue s'est produite lors de la communication avec Antidote."
+      "unknown": "Une erreur inattendue s'est produite lors de la communication avec Antidote. Rechargez le plugin ou modifiez le port dans les paramètres."
     }
   },
   "settings": {

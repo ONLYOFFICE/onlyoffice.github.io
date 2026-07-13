@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote werd niet gedetecteerd. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn.",
-      "unknown": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote."
+      "unknown": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote. Herlaad de plugin of wijzig de poort in de instellingen."
     }
   },
   "settings": {

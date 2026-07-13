@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "O Antidoto não foi detectado. Certifique-se de que o Antidoto 12 e seu agente Connectix estão instalados e em execução.",
-      "unknown": "Ocorreu um erro inesperado ao se comunicar com o Antidoto."
+      "unknown": "Ocorreu um erro inesperado ao se comunicar com o Antidoto. Recarregue o plugin ou altere a porta nas configurações."
     }
   },
   "settings": {

@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.",
-      "unknown": "An unexpected error occurred while talking to Antidote."
+      "unknown": "An unexpected error occurred while talking to Antidote. Reload the plugin or change the port in the settings."
     }
   },
   "settings": {

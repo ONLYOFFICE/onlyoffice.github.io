@@ -35,7 +35,6 @@ import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
 import { getSelectedText, getCurrentWord } from '@api/document';
-import { showWarning } from '@api/pluginWindow';
 import { t } from '@utils/i18n';
 
 import { LookupAgent } from '../agents/lookupAgent';
@@ -64,7 +63,7 @@ export function useLookup() {
     const currentWord = selected.trim() ? '' : await getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();
     if (tool === 'dictionaries' && !text) {
-      showWarning(t('main.lookup.noWordWarning'));
+      setError(t('main.lookup.noWordWarning'));
       return;
     }
 
@@ -79,7 +78,7 @@ export function useLookup() {
       if (tool === 'dictionaries') connectix.launchDictionaries();
       else connectix.launchGuides();
     } catch (err) {
-      showWarning(err instanceof AntidoteError ? t('correction.errors.notDetected') : t('correction.errors.unknown'));
+      setError(err instanceof AntidoteError ? t('correction.errors.notDetected') : t('correction.errors.unknown'));
     } finally {
       setPending(false);
     }

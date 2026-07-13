@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote nuk u zbulua. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion.",
-      "unknown": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote."
+      "unknown": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote. Rifreskoni shtesën ose ndryshoni portin në cilësimet."
     }
   },
   "settings": {

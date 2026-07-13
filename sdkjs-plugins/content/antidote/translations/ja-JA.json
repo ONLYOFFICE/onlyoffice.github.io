@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidoteが検出されませんでした。Antidote 12およびそのConnectixエージェントがインストールされており、実行されていることを確認してください。",
-      "unknown": "Antidoteとの通信中に予期しないエラーが発生しました。"
+      "unknown": "Antidoteとの通信中に予期しないエラーが発生しました。プラグインを再読み込みするか、設定でポートを変更してください。"
     }
   },
   "settings": {

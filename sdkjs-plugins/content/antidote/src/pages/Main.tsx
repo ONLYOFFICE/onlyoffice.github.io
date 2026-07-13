@@ -41,6 +41,7 @@ import { useHasSelection, useTranslation } from '@hooks';
 import { useCorrection, CorrectionScope } from '@features/correction';
 import { useLookup, LookupTool } from '@features/lookup';
 import { warmUpPort } from '@api/antidote';
+import { showWarning } from '@api/pluginWindow';
 
 function statusTone(state: ReturnType<typeof useCorrection>['connectionState']['value']) {
   if (state === 'connected') return 'success' as const;
@@ -73,8 +74,24 @@ export function Main(): JSX.Element {
     warmUpPort();
   }, []);
 
+  useEffect(() => {
+    if (lookupError) {
+      showWarning(lookupError);
+    }
+  }, [lookupError]);
+
+  useEffect(() => {
+    if (!connectionState || connectionState.value !== 'error') {
+      return;
+    }
+    showWarning(errorMessage.value ?? t('correction.errors.unknown'));
+
+    route('/settings');
+    stop();
+  }, [connectionState.value]);
+
   const statusMessage = connectionState.value === 'error'
-    ? (errorMessage.value ?? t('correction.errors.unknown'))
+    ? ''
     : t(`correction.status.${connectionState.value}`);
 
   const handleScopeChange = (nextScope: CorrectionScope) => {
@@ -98,7 +115,7 @@ export function Main(): JSX.Element {
       header={<Header title={t('main.title')} />}
       footer={<Footer />}
     >
-      <StatusBanner tone={statusTone(connectionState.value)} message={statusMessage} />
+      {connectionState.value !== 'error' && <StatusBanner tone={statusTone(connectionState.value)} message={statusMessage} />}
 
       <div className="antidote-section antidote-section--secondary" hidden={scopeOptions.length <= 1}>
         <div className="antidote-section__title">{t('main.scopeTitle')}</div>
@@ -150,7 +167,6 @@ export function Main(): JSX.Element {
         </Button>
 
       </div>
-      {lookupError && <StatusBanner tone="error" message={lookupError} />}
 
       <div className="antidote-section antidote-section--secondary">
         <div className="antidote-section__title">{t('main.lookup.title')}</div>

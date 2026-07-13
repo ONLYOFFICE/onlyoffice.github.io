@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote nebyl detekován. Ujistěte se, že Antidote 12 a jeho Connectix agent jsou nainstalovány a běží.",
-      "unknown": "Došlo k neočekávané chybě při komunikaci s Antidote."
+      "unknown": "Došlo k neočekávané chybě při komunikaci s Antidote. Načtěte plugin znovu nebo upravte port v nastavení."
     }
   },
   "settings": {

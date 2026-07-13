@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "未检测到 Antidote。请确保已安装 Antidote 12 及其 Connectix 代理。",
-      "unknown": "与 Antidote 通信时发生意外错误。"
+      "unknown": "与 Antidote 通信时发生意外错误。请重新加载插件或在设置中修改端口。"
     }
   },
   "settings": {

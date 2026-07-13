@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote nije detektovan. Proverite da li je Antidote 12 i njegov Connectix agent instaliran i aktivan.",
-      "unknown": "Došlo je do neočekivane greške prilikom komunikacije sa Antidote."
+      "unknown": "Došlo je do neočekivane greške prilikom komunikacije sa Antidote. Ponovo učitajte dodatak ili promenite port u podešavanjima."
     }
   },
   "settings": {

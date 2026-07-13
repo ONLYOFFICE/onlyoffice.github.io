@@ -37,7 +37,7 @@
     },
     "errors": {
       "notDetected": "Antidote non è stato rilevato. Assicurati che Antidote 12 e il suo agente Connectix siano installati e in esecuzione.",
-      "unknown": "Si è verificato un errore imprevisto durante la comunicazione con Antidote."
+      "unknown": "Si è verificato un errore imprevisto durante la comunicazione con Antidote. Ricarica il plugin o modifica la porta nelle impostazioni."
     }
   },
   "settings": {
