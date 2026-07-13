@@ -272,8 +272,7 @@ async function fetchAllQueryPages(
   timeout?: number,
 ): Promise<Record<string, unknown>[]> {
   const allRecords = [...initialData.records];
-  let done = initialData.done;
-  let nextRecordsUrl = initialData.nextRecordsUrl;
+  let { done, nextRecordsUrl } = initialData;
 
   while (!done && nextRecordsUrl) {
     // eslint-disable-next-line no-await-in-loop
@@ -309,8 +308,7 @@ function applyClientSideFilters(
   }
 
   if (options?.filters?.myReportsOnly) {
-    if (options.userId)
-      filtered = filtered.filter((r) => r.ownerId === options.userId);
+    if (options.userId) filtered = filtered.filter((r) => r.ownerId === options.userId);
   }
 
   if (options?.filters?.privateFolderOnly) {
@@ -351,7 +349,11 @@ export async function fetchReports(
     : '';
 
   const fetchReportsWithScope = async (scope: string): Promise<Record<string, unknown>[]> => {
-    const query = `SELECT Id, Name, DeveloperName, OwnerId, LastModifiedDate, FolderName FROM Report USING SCOPE ${scope}${whereClause} ORDER BY Name ASC`;
+    const query = [
+      'SELECT Id, Name, DeveloperName, OwnerId, LastModifiedDate, FolderName',
+      `FROM Report USING SCOPE ${scope}${whereClause}`,
+      'ORDER BY Name ASC',
+    ].join(' ');
     const result = await client<QueryResponse>(
       `query?q=${encodeURIComponent(query)}`,
       { signal: options?.signal, timeout },
@@ -397,9 +399,7 @@ export async function fetchReports(
   }
 
   const isPrivate = options?.filters?.privateFolderOnly ?? false;
-  const reports = allRecords.map((r) =>
-    mapReportRecord(r, 'v59.0', isPrivate),
-  );
+  const reports = allRecords.map((r) => mapReportRecord(r, 'v59.0', isPrivate));
 
   return { data: reports };
 }

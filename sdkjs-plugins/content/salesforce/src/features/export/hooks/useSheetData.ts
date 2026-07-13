@@ -35,16 +35,16 @@ export function useSheetData() {
     try {
       const data = await readSheetData();
       const indices = data.headers
-        .map((h, i) => h?.trim() ? i : null)
+        .map((h, i) => (h?.trim() ? i : null))
         .filter((i): i is number => i !== null);
-      
+
       const filtered: SheetData = {
         headers: indices.map((i) => data.headers[i]),
         rows: data.rows.map((row) => indices.map((i) => row[i])),
         rowCount: data.rowCount,
         colCount: indices.length,
       };
-      
+
       setSheetData(filtered);
       return filtered;
     } catch (err) {

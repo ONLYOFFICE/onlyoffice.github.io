@@ -94,9 +94,13 @@ export function insertData(data: DataMatrix, options: InsertOptions = {}): Promi
   if (!data.length) return Promise.reject(new SpreadsheetError('Data cannot be empty', 'EMPTY_DATA'));
 
   return runCommand(
-    { data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet', offset: options.offset ?? 0 },
+    {
+      data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet', offset: options.offset ?? 0,
+    },
     () => {
-      const { data: rows, target, prefix, offset } = Asc.scope as {
+      const {
+        data: rows, target, prefix, offset,
+      } = Asc.scope as {
         data: CellValue[][];
         target: string;
         prefix: string;
@@ -291,7 +295,15 @@ export function isActiveSheetEmpty(): Promise<boolean> {
     const usedRange = sheet.GetUsedRange();
     if (!usedRange) return true;
 
-    const rangeAny = usedRange as unknown as { GetAddress: (rowAbs: boolean, colAbs: boolean, refStyle: string, external: boolean) => string | null };
+    const rangeAny = usedRange as unknown as {
+      GetAddress: (
+        rowAbs: boolean,
+        colAbs: boolean,
+        refStyle: string,
+        external: boolean,
+      ) => string | null;
+    };
+
     const address = rangeAny.GetAddress(false, false, 'xlA1', false);
 
     if (!address) return true;

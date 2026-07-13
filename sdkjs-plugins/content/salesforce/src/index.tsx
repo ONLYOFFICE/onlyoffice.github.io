@@ -117,4 +117,4 @@ export function App() {
   );
 }
 
-render(isDesktop ? <DesktopPlaceholder /> : <App />, document.getElementById('app')!);
+render(isDesktop ? <DesktopPlaceholder /> : <App />, document.getElementById('app'));
