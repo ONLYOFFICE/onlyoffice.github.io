@@ -1,0 +1,21 @@
+Salesforce ONLYOFFICE integration plugin uses code from the following 3rd party projects:
+
+1. Preact - Fast 3kB React alternative with the same modern API. Components & Virtual DOM. (https://github.com/preactjs/preact)
+
+License:        MIT
+License File:   licenses/preact.license
+
+2. Preact ISO - Isomorphic utilities for Preact. (https://github.com/preactjs/preact-iso)
+
+License:        MIT
+License File:   licenses/preact-iso.license
+
+3. Preact Render to String - Universal rendering for Preact: render JSX and Preact components to HTML. (https://github.com/preactjs/preact-render-to-string)
+
+License:        MIT
+License File:   licenses/preact-render-to-string.license
+
+4. Preact Signals - Manage state with style in every framework. (https://github.com/preactjs/signals)
+
+License:        MIT
+License File:   licenses/preact-signals.license

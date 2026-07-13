@@ -1,0 +1,55 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2026
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.collapsible__toggle {
+	padding: 0;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-normal);
+	line-height: var(--line-height-md);
+	letter-spacing: var(--letter-spacing);
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-underline-offset: 2px;
+	
+	border: none;
+
+	outline: none;
+	background: none;
+	color: var(--btn-link-color);
+	cursor: pointer;
+}
+
+.collapsible__toggle:focus-visible {
+	outline-offset: 2px;
+	outline: 1px solid var(--color-accent);
+}
+
+.collapsible__content {
+	padding: 0;
+	margin: 10px 0;
+}
+
+.collapsible__content .form-group {
+	margin-bottom: 8px;
+}
+
+.collapsible__content .form-group:last-child {
+	margin-bottom: 0;
+}

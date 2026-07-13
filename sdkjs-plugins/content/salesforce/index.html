@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="color-scheme" content="light dark" />
+		<!--
+		*
+		* (c) Copyright Ascensio System SIA 2026
+		*
+		* Licensed under the Apache License, Version 2.0 (the "License");
+		* you may not use this file except in compliance with the License.
+		* You may obtain a copy of the License at
+		*
+		*     http://www.apache.org/licenses/LICENSE-2.0
+		*
+		* Unless required by applicable law or agreed to in writing, software
+		* distributed under the License is distributed on an "AS IS" BASIS,
+		* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		* See the License for the specific language governing permissions and
+		* limitations under the License.
+		*
+		-->
+		<title>Salesforce</title>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+		<script type="text/javascript" src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins-ui.js"></script>
+		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
+		<script type="text/javascript">
+			(function() {
+				var checkPlugin = setInterval(function() {
+					if (window.Asc && window.Asc.plugin && window.Asc.plugin.info && window.Asc.plugin.info.theme) {
+						clearInterval(checkPlugin);
+						var theme = window.Asc.plugin.info.theme;
+						var isDark = theme.name && (theme.name.includes('dark') || theme.name.includes('night') || theme.name.includes('contrast'));
+						
+						var classes = '';
+						if (theme.name) {
+							classes = theme.name + ' theme-type-' + theme.type;
+						} else {
+							classes = 'theme-' + theme.type + ' theme-type-' + theme.type + (isDark ? ' theme-dark' : ' theme-light');
+						}
+
+						document.body.className = classes;
+						document.documentElement.classList.add('theme-ready');
+					}
+				}, 10);
+				
+				setTimeout(function() {
+					clearInterval(checkPlugin);
+					if (!document.documentElement.classList.contains('theme-ready')) {
+						document.body.className = 'theme-light theme-type-light';
+						document.documentElement.classList.add('theme-ready');
+					}
+				}, 2000);
+				
+				if (!window.Asc || !window.Asc.plugin) return;
+				
+				window.Asc.plugin.init = function() {
+					var theme = window.Asc.plugin.info && window.Asc.plugin.info.theme;
+					if (theme && theme.type === 'dark') {
+						document.body.classList.add('theme-dark');
+					}
+				};
+				
+				window.Asc.plugin.button = function(id, windowId) {
+					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id, windowId: windowId } }));
+					let isMainFrame = !windowId || String(windowId).indexOf('iframe_asc.') === 0;
+					if (isMainFrame && (id === -1 || id === '-1' || id === 1 || id === '1'))
+						this.executeCommand('close', '');
+				};
+			})();
+		</script>
+		<link rel="stylesheet" href="./dist/index.css">
+		<script type="module" src="./dist/index.js"></script>
+	</head>
+	<body class="theme-light theme-type-light">
+		<div id="app"></div>
+	</body>
+</html>

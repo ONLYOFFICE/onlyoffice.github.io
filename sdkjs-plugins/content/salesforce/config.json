@@ -1,0 +1,98 @@
+{
+  "name": "Salesforce",
+  "nameLocale": {
+    "ru": "Salesforce",
+    "fr": "Salesforce",
+    "es": "Salesforce",
+    "pt-BR": "Salesforce",
+    "de": "Salesforce",
+    "sq-AL": "Salesforce",
+    "sr-Cyrl-RS": "Salesforce",
+    "sr-Latn-RS": "Salesforce",
+    "zh-ZH": "Salesforce"
+  },
+  "guid": "asc.{64993D68-3B46-47DE-A944-8A6C1FB1C955}",
+  "variations": [
+    {
+      "description": "Import data from Salesforce objects and reports into your spreadsheet, and export records back to Salesforce.",
+      "descriptionLocale": {
+        "ru": "Импортируйте данные из объектов и отчетов Salesforce в электронную таблицу и экспортируйте записи обратно в Salesforce.",
+        "fr": "Importez des données depuis les objets et rapports Salesforce dans votre feuille de calcul et exportez des enregistrements vers Salesforce.",
+        "es": "Importe datos de objetos e informes de Salesforce en su hoja de cálculo y exporte registros de vuelta a Salesforce.",
+        "pt-BR": "Importe dados de objetos e relatórios do Salesforce para sua planilha e exporte registros de volta ao Salesforce.",
+        "de": "Importieren Sie Daten aus Salesforce-Objekten und -Berichten in Ihre Tabellenkalkulation und exportieren Sie Datensätze zurück zu Salesforce.",
+        "sq-AL": "Importoni të dhëna nga objektet dhe raportet Salesforce në fletëllogaritëse tuaj dhe eksportoni regjistrimet përsëri në Salesforce.",
+        "sr-Cyrl-RS": "Увозите податке из Salesforce објеката и извештаја у табелу и извозите записе назад у Salesforce.",
+        "sr-Latn-RS": "Uvozite podatke iz Salesforce objekata i izveštaja u tabelu i izvozite zapise nazad u Salesforce.",
+        "zh-ZH": "将 Salesforce 对象和报表中的数据导入电子表格，并将记录导出回 Salesforce。"
+      },
+      "url": "index.html",
+      "icons": [
+        "resources/images/icon_light.png",
+        "resources/images/icon_light@2x.png"
+      ],
+      "icons2": [
+        {
+          "style": "light",
+          "100%": {
+            "normal": "resources/images/icon_light.png"
+          },
+          "125%": {
+            "normal": "resources/images/icon_light@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/images/icon_light@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/images/icon_light@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/images/icon_light@2x.png"
+          }
+        },
+        {
+          "style": "dark",
+          "100%": {
+            "normal": "resources/images/icon_dark.png"
+          },
+          "125%": {
+            "normal": "resources/images/icon_dark@1.25x.png"
+          },
+          "150%": {
+            "normal": "resources/images/icon_dark@1.5x.png"
+          },
+          "175%": {
+            "normal": "resources/images/icon_dark@1.75x.png"
+          },
+          "200%": {
+            "normal": "resources/images/icon_dark@2x.png"
+          }
+        }
+      ],
+      "isViewer": false,
+      "EditorsSupport": ["cell"],
+      "type": "panel",
+      "initDataType": "none",
+      "buttons": [],
+      "isUpdateOleOnResize": true,
+      "size": [400, 600],
+      "store": {
+        "background": {
+          "light": "#DFF5FD",
+          "dark": "#DFF5FD"
+        },
+        "screenshots": [
+          "resources/store/screenshots/screen_1.png",
+          "resources/store/screenshots/screen_2.png",
+          "resources/store/screenshots/screen_3.png",
+          "resources/store/screenshots/screen_4.png"
+        ],
+        "icons": {
+          "light": "resources/store/icons",
+          "dark": "resources/store/icons"
+        },
+        "categories": ["work", "specAbilities"]
+      }
+    }
+  ]
+}
