@@ -27,7 +27,7 @@ import type { Step, InsertTarget } from '@features/reports/types';
 
 import { useTranslation } from '@hooks';
 
-import { insertWithHeaders } from '@api/spreadsheet';
+import { insertWithHeaders, isActiveSheetEmpty } from '@api/spreadsheet';
 import { executeReport } from '@api/salesforce';
 
 export function useReports() {
@@ -78,14 +78,26 @@ export function useReports() {
   const submit = useCallback(() => {
     if (!searchHook.selected || !target) return;
 
-    confirm(
-      {
-        title: t('reports.title'),
-        message: t('reports.replace_warning'),
-        confirmText: t('reports.replace'),
-      },
-      execute,
-    );
+    if (target === 'new') {
+      execute();
+      return;
+    }
+
+    isActiveSheetEmpty().then((empty) => {
+      if (empty) {
+        execute();
+        return;
+      }
+
+      confirm(
+        {
+          title: t('reports.title'),
+          message: t('reports.replace_warning'),
+          confirmText: t('reports.replace'),
+        },
+        execute,
+      );
+    });
   }, [confirm, execute, searchHook.selected, target, t]);
 
   const reset = () => {

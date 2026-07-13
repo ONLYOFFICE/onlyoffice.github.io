@@ -58,6 +58,7 @@ interface Plugin {
 
 interface ApiWorksheet {
   GetRange: (address: string) => ApiRange;
+  GetUsedRange: () => ApiRange;
   SetActive: () => void;
 }
 

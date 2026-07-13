@@ -67,7 +67,9 @@ export interface SoqlEditorOptions {
 }
 
 interface SoqlExecuteResult {
-  success: boolean; error?: string;
+  success: boolean;
+  error?: string;
+  cancelled?: boolean;
 }
 
 interface ModalStore {

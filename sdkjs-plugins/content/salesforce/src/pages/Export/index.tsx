@@ -159,7 +159,7 @@ export function Export() {
             const sorted = rows.sort((a, b) => a - b);
             const ranges = sorted.reduce<string[]>((acc, row, i) => {
               if (i === 0 || row !== sorted[i - 1] + 1) acc.push(String(row));
-              else acc[acc.length - 1] = acc[acc.length - 1].split('-')[0] + '-' + row;
+              else acc[acc.length - 1] = `${acc[acc.length - 1].split('-')[0]}-${row}`;
               return acc;
             }, []);
             return `${label} ${ranges.join(', ')}: ${msg}`;

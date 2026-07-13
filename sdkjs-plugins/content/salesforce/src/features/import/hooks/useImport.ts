@@ -27,8 +27,10 @@ import { useModals } from '@store/modal';
 
 import { useTranslation } from '@hooks';
 
-import { insertRecords } from '@api/spreadsheet';
+import { insertRecords, isActiveSheetEmpty } from '@api/spreadsheet';
 import { executeQuery } from '@api/salesforce';
+
+import { SOQL_STORAGE_KEYS } from '@utils/keys';
 
 export type Step = 'object' | 'fields' | 'filters' | 'loading' | 'success' | 'soql';
 
@@ -285,23 +287,36 @@ export function useImport() {
   }, [state.value, t]);
 
   const submit = useCallback(() => {
-    confirm(
-      {
-        title: t('import.title'),
-        message: t('import.replace_warning'),
-        confirmText: t('import.replace'),
-      },
-      () => execute(),
-    );
+    isActiveSheetEmpty().then((empty) => {
+      if (empty) {
+        execute();
+        return;
+      }
+      confirm(
+        { title: t('import.title'), message: t('import.replace_warning'), confirmText: t('import.replace') },
+        () => execute(),
+      );
+    });
   }, [confirm, execute, t]);
 
   const openSoqlEditor = useCallback(() => {
     soqlEditor({ query }, async (q) => {
+      const alreadyConfirmed = localStorage.getItem(SOQL_STORAGE_KEYS.confirmed) === 'true';
+      localStorage.removeItem(SOQL_STORAGE_KEYS.confirmed);
+
+      if (!alreadyConfirmed) {
+        const empty = await isActiveSheetEmpty();
+        if (!empty) {
+          localStorage.setItem(SOQL_STORAGE_KEYS.confirm, t('import.replace_warning'));
+          return { success: false, cancelled: true };
+        }
+      }
+
       const result = await executeSoqlDirect(q);
       setQuery(result.success ? '' : q);
       return result;
     });
-  }, [soqlEditor, query, executeSoqlDirect]);
+  }, [soqlEditor, query, executeSoqlDirect, t]);
 
   const reset = useCallback(() => {
     objects.reset();

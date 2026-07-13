@@ -22,16 +22,11 @@ import { useState, useEffect } from 'preact/hooks';
 import { useTranslation } from '@hooks';
 
 import { registerModal } from '@store/modal';
+import { SOQL_STORAGE_KEYS as STORAGE_KEYS } from '@utils/keys';
 
 import './soql.css';
 
 const PLACEHOLDER = 'SELECT Id, Name FROM Account LIMIT 10';
-const STORAGE_KEYS = {
-  query: '__soql_editor_query__',
-  execute: '__soql_editor_execute__',
-  result: '__soql_editor_result__',
-  cancel: '__soql_editor_cancel__',
-} as const;
 
 const closeModal = () => {
   localStorage.setItem(STORAGE_KEYS.cancel, 'true');
@@ -48,6 +43,7 @@ export function SoqlEditor({ params }: SoqlEditorProps) {
   const [query, setQuery] = useState(params.get('query') || '');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmMessage, setConfirmMessage] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.query, query);
@@ -61,10 +57,18 @@ export function SoqlEditor({ params }: SoqlEditorProps) {
       if (!result) return;
 
       localStorage.removeItem(STORAGE_KEYS.result);
-      const { success, error } = JSON.parse(result);
+      const { success, error, cancelled } = JSON.parse(result);
 
       if (success) {
         closeModal();
+      } else if (cancelled) {
+        const msg = localStorage.getItem(STORAGE_KEYS.confirm);
+        if (msg) {
+          localStorage.removeItem(STORAGE_KEYS.confirm);
+          setConfirmMessage(msg);
+        }
+
+        setIsLoading(false);
       } else {
         setError(error || t('errors.generic'));
         setIsLoading(false);
@@ -79,6 +83,32 @@ export function SoqlEditor({ params }: SoqlEditorProps) {
     setIsLoading(true);
     localStorage.setItem(STORAGE_KEYS.execute, 'true');
   };
+
+  const handleConfirm = () => {
+    localStorage.setItem(STORAGE_KEYS.confirmed, 'true');
+    setConfirmMessage(null);
+    setIsLoading(true);
+    localStorage.setItem(STORAGE_KEYS.execute, 'true');
+  };
+
+  const handleCancelConfirm = () => {
+    setConfirmMessage(null);
+  };
+
+  if (confirmMessage) {
+    return (
+      <div className="soql">
+        <div className="soql__content">
+          <p className="soql__confirmation-message">{confirmMessage}</p>
+        </div>
+        <hr className="soql__divider" />
+        <div className="soql__buttons">
+          <Button variant="primary" onClick={handleConfirm}>{t('import.replace')}</Button>
+          <Button variant="secondary" onClick={handleCancelConfirm}>{t('common.cancel')}</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="soql">

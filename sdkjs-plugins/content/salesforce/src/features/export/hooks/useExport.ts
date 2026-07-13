@@ -52,6 +52,7 @@ function normalizeValue(value: unknown): unknown {
         return parsed;
       }
     } catch {
+      // TODO: Handle invalid JSON
     }
   }
 
@@ -158,9 +159,10 @@ export function useExport() {
 
     const updateRecords = records as { id: string; data: Record<string, unknown> }[];
     const createRecords = records as Record<string, unknown>[];
+    const batchOptions = { timeout: EXPORT_TIMEOUT };
     const res = mapping.operation === 'update'
-      ? await updateRecordsBatch(instance_url, access_token, salesforce.selectedObject, updateRecords, { timeout: EXPORT_TIMEOUT })
-      : await createRecordsBatch(instance_url, access_token, salesforce.selectedObject, createRecords, { timeout: EXPORT_TIMEOUT });
+      ? await updateRecordsBatch(instance_url, access_token, salesforce.selectedObject, updateRecords, batchOptions)
+      : await createRecordsBatch(instance_url, access_token, salesforce.selectedObject, createRecords, batchOptions);
 
     if (res.error) {
       console.error('Export failed:', res.error);

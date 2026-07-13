@@ -17,12 +17,7 @@
  */
 
 import js from '@eslint/js';
-import path from 'node:path';
-
-import { includeIgnoreFile } from '@eslint/compat';
 import { configs, plugins } from 'eslint-config-airbnb-extended';
-
-const gitignorePath = path.resolve('.', '.gitignore');
 
 const jsConfig = [
   {
@@ -101,7 +96,9 @@ const typescriptConfig = [
 ];
 
 export default [
-  includeIgnoreFile(gitignorePath),
+  {
+    ignores: ['dist/**', '.dev/**', 'node_modules/**'],
+  },
   ...jsConfig,
   ...reactConfig,
   ...typescriptConfig,

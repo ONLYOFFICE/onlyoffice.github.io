@@ -80,7 +80,7 @@ export function SearchableSelect<T extends SelectOption>({
           selectedId={selectedOption?.id ?? null}
           onSelect={onSelect}
           emptyMessage={emptyMessage}
-          showEmpty={true}
+          showEmpty
         />
         )}
       </div>

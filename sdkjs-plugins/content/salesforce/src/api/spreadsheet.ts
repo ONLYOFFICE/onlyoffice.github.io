@@ -72,7 +72,7 @@ function runQuery<TResult>(
       false,
       true,
       (result: TResult | { error?: string } | undefined) => {
-        if (!result) {
+        if (result == null) {
           reject(new SpreadsheetError('No response from plugin', 'NO_RESPONSE'));
         } else if (typeof result === 'object' && 'error' in result && result.error) {
           reject(new SpreadsheetError(result.error, 'QUERY_ERROR'));
@@ -94,9 +94,13 @@ export function insertData(data: DataMatrix, options: InsertOptions = {}): Promi
   if (!data.length) return Promise.reject(new SpreadsheetError('Data cannot be empty', 'EMPTY_DATA'));
 
   return runCommand(
-    { data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet', offset: options.offset ?? 0 },
+    {
+      data, target: options.target ?? 'cursor', prefix: options.sheetNamePrefix ?? 'Sheet', offset: options.offset ?? 0,
+    },
     () => {
-      const { data: rows, target, prefix, offset } = Asc.scope as {
+      const {
+        data: rows, target, prefix, offset,
+      } = Asc.scope as {
         data: CellValue[][];
         target: string;
         prefix: string;
@@ -281,6 +285,33 @@ export function getSelectionInfo(): Promise<SelectionInfo> {
       };
     },
   );
+}
+
+export function isActiveSheetEmpty(): Promise<boolean> {
+  return runQuery<boolean>(() => {
+    const sheet = Api.GetActiveSheet();
+    if (!sheet) return true;
+
+    const usedRange = sheet.GetUsedRange();
+    if (!usedRange) return true;
+
+    const rangeAny = usedRange as unknown as {
+      GetAddress: (
+        rowAbs: boolean,
+        colAbs: boolean,
+        refStyle: string,
+        external: boolean,
+      ) => string | null;
+    };
+
+    const address = rangeAny.GetAddress(false, false, 'xlA1', false);
+
+    if (!address) return true;
+    if (address.includes(':')) return false;
+
+    const value = usedRange.GetValue();
+    return value === '' || value === null || value === undefined;
+  });
 }
 
 export function hasValidSelection(): Promise<boolean> {
