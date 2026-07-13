@@ -78,6 +78,11 @@ export function useReports() {
   const submit = useCallback(() => {
     if (!searchHook.selected || !target) return;
 
+    if (target === 'new') {
+      execute();
+      return;
+    }
+
     confirm(
       {
         title: t('reports.title'),

@@ -72,7 +72,7 @@ function runQuery<TResult>(
       false,
       true,
       (result: TResult | { error?: string } | undefined) => {
-        if (!result) {
+        if (result == null) {
           reject(new SpreadsheetError('No response from plugin', 'NO_RESPONSE'));
         } else if (typeof result === 'object' && 'error' in result && result.error) {
           reject(new SpreadsheetError(result.error, 'QUERY_ERROR'));
