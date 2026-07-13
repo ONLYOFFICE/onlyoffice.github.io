@@ -30,6 +30,8 @@ import { useTranslation } from '@hooks';
 import { insertRecords, isActiveSheetEmpty } from '@api/spreadsheet';
 import { executeQuery } from '@api/salesforce';
 
+import { SOQL_STORAGE_KEYS } from '@utils/keys';
+
 export type Step = 'object' | 'fields' | 'filters' | 'loading' | 'success' | 'soql';
 
 const VALID_IDENTIFIER = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
@@ -290,40 +292,31 @@ export function useImport() {
         execute();
         return;
       }
-
       confirm(
-        {
-          title: t('import.title'),
-          message: t('import.replace_warning'),
-          confirmText: t('import.replace'),
-        },
+        { title: t('import.title'), message: t('import.replace_warning'), confirmText: t('import.replace') },
         () => execute(),
       );
     });
   }, [confirm, execute, t]);
 
   const openSoqlEditor = useCallback(() => {
-    const callOpen = () => soqlEditor({ query }, async (q) => {
+    soqlEditor({ query }, async (q) => {
+      const alreadyConfirmed = localStorage.getItem(SOQL_STORAGE_KEYS.confirmed) === 'true';
+      localStorage.removeItem(SOQL_STORAGE_KEYS.confirmed);
+
+      if (!alreadyConfirmed) {
+        const empty = await isActiveSheetEmpty();
+        if (!empty) {
+          localStorage.setItem(SOQL_STORAGE_KEYS.confirm, t('import.replace_warning'));
+          return { success: false, cancelled: true };
+        }
+      }
+
       const result = await executeSoqlDirect(q);
       setQuery(result.success ? '' : q);
       return result;
     });
-
-    isActiveSheetEmpty().then((empty) => {
-      if (!empty) {
-        confirm(
-          {
-            title: t('import.title'),
-            message: t('import.replace_warning'),
-            confirmText: t('import.replace'),
-          },
-          callOpen,
-        );
-      } else {
-        callOpen();
-      }
-    });
-  }, [soqlEditor, query, executeSoqlDirect, confirm, t]);
+  }, [soqlEditor, query, executeSoqlDirect, t]);
 
   const reset = useCallback(() => {
     objects.reset();

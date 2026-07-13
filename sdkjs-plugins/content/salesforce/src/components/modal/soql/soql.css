@@ -156,3 +156,16 @@
 .soql .error-box {
 	margin-top: 10px;
 }
+
+.soql__confirmation-message {
+	margin: auto;
+	width: 100%;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-md);
+	letter-spacing: var(--letter-spacing);
+
+	color: var(--color-text);
+	text-align: center;
+}
