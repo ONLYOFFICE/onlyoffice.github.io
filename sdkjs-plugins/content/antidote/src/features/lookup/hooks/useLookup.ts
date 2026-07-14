@@ -63,7 +63,7 @@ export function useLookup() {
     const currentWord = selected.trim() ? '' : await getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();
     if (tool === 'dictionaries' && !text) {
-      setError(t('main.lookup.noWordWarning'));
+      setError(t('Select some text or place the cursor on a word to look it up.'));
       return;
     }
 
@@ -78,7 +78,9 @@ export function useLookup() {
       if (tool === 'dictionaries') connectix.launchDictionaries();
       else connectix.launchGuides();
     } catch (err) {
-      setError(err instanceof AntidoteError ? t('correction.errors.notDetected') : t('correction.errors.unknown'));
+      setError(err instanceof AntidoteError ? 
+        t('Antidote wasn\'t detected. Make sure Antidote 12 and its Connectix agent are installed and running.') : 
+        t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
     } finally {
       setPending(false);
     }

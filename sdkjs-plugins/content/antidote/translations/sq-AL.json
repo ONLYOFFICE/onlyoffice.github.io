@@ -1,52 +1,35 @@
 {
-  "common": {
-    "error": "Gabim",
-    "reload": "Rifresko",
-    "initializingPlugin": "Duke inicializuar shtesën…",
-    "back": "Mbrapsht",
-    "close": "Mbyll",
-    "ok": "OK",
-    "warning": "Paralajmërim"
-  },
-  "main": {
-    "title": "Antidote",
-    "scopeTitle": "Kontrollo",
-    "scope": {
-      "document": "I gjithë dokumenti",
-      "selection": "Përzgjedhja"
-    },
-    "check": "Korrigjuesi",
-    "check_title": "Nis korrigjuesin",
-    "stop": "Ndalo",
-    "lookup": {
-      "title": "Kërko një fjalë",
-      "placeholder": "Fjalë ose frazë…",
-      "dictionaries": "Fjalorët",
-      "dictionaries_title": "Hap fjalorët për fjalën e përzgjedhur",
-      "guides": "Udhëzuesit",
-      "guides_title": "Hap udhëzuesit",
-      "noWordWarning": "Zgjidhni tekst ose vendosni kursorin mbi një fjalë për ta kërkuar."
-    }
-  },
-  "correction": {
-    "status": {
-      "idle": "Gati për të kontrolluar tekstin tuaj me Antidote.",
-      "connecting": "Duke u lidhur me Antidote…",
-      "connected": "Redaktuesi i Antidote është i hapur.",
-      "error": "Diçka nuk shkoi si duhej."
-    },
-    "errors": {
-      "notDetected": "Antidote nuk u zbulua. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion.",
-      "unknown": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote. Rifreskoni shtesën ose ndryshoni portin në cilësimet."
-    }
-  },
-  "settings": {
-    "title": "Cilësimet",
-    "manualPort": {
-      "label": "Porti WebSocket i Connectix",
-      "hint": "Lëreni bosh për zbulim automatik. Gjeni portin duke ekzekutuar \"AgentConnectixConsole --api\".",
-      "save": "Ruaj",
-      "clear": "Pastro"
-    }
-  }
+  "Loading": "Duke u ngarkuar",
+  "Error": "Gabim",
+  "Reload": "Rifresko",
+  "Initializing plugin": "Duke inicializuar shtesën",
+  "Back": "Mbrapsht",
+  "Close": "Mbyll",
+  "OK": "OK",
+  "Warning": "Paralajmërim",
+  "Antidote": "Antidote",
+  "Check": "Kontrollo",
+  "Whole document": "I gjithë dokumenti",
+  "Selection": "Përzgjedhja",
+  "Corrector": "Korrigjuesi",
+  "Launch the corrector": "Nis korrigjuesin",
+  "Stop": "Ndalo",
+  "Look up a word": "Kërko një fjalë",
+  "Word or phrase": "Fjalë ose frazë…",
+  "Dictionaries": "Fjalorët",
+  "Open the dictionaries to the selected word": "Hap fjalorët për fjalën e përzgjedhur",
+  "Guides": "Udhëzuesit",
+  "Open guides": "Hap udhëzuesit",
+  "Select some text or place the cursor on a word to look it up.": "Zgjidhni tekst ose vendosni kursorin mbi një fjalë për ta kërkuar.",
+  "Ready to check your text with Antidote.": "Gati për të kontrolluar tekstin tuaj me Antidote.",
+  "Connecting to Antidote": "Duke u lidhur me Antidote…",
+  "Antidote corrector is open.": "Redaktuesi i Antidote është i hapur.",
+  "Something went wrong.": "Diçka nuk shkoi si duhej.",
+  "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote nuk u zbulua. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion.",
+  "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote. Rifreskoni shtesën ose ndryshoni portin në cilësimet.",
+  "Settings": "Cilësimet",
+  "Connectix WebSocket port": "Porti WebSocket i Connectix",
+  "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Lëreni bosh për zbulim automatik. Gjeni portin duke ekzekutuar \"AgentConnectixConsole --api\".",
+  "Save": "Ruaj",
+  "Clear": "Pastro"
 }

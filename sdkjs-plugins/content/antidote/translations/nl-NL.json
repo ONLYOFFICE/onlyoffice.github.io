@@ -1,52 +1,35 @@
 {
-  "common": {
-    "error": "Fout",
-    "reload": "Herladen",
-    "initializingPlugin": "Plugin initialiseren…",
-    "back": "Terug",
-    "close": "Sluiten",
-    "ok": "OK",
-    "warning": "Waarschuwing"
-  },
-  "main": {
-    "title": "Antidote",
-    "scopeTitle": "Controleren",
-    "scope": {
-      "document": "Hele document",
-      "selection": "Selectie"
-    },
-    "check": "Corrector",
-    "check_title": "Corrector starten",
-    "stop": "Stoppen",
-    "lookup": {
-      "title": "Zoek een woord",
-      "placeholder": "Woord of zin…",
-      "dictionaries": "Woordenboeken",
-      "dictionaries_title": "Woordenboeken voor het geselecteerde woord openen",
-      "guides": "Gidsen",
-      "guides_title": "Gidsen openen",
-      "noWordWarning": "Selecteer tekst of plaats de cursor op een woord om het op te zoeken."
-    }
-  },
-  "correction": {
-    "status": {
-      "idle": "Klaar om uw tekst te controleren met Antidote.",
-      "connecting": "Verbinding maken met Antidote…",
-      "connected": "Antidote corrector is geopend.",
-      "error": "Er is iets misgegaan."
-    },
-    "errors": {
-      "notDetected": "Antidote werd niet gedetecteerd. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn.",
-      "unknown": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote. Herlaad de plugin of wijzig de poort in de instellingen."
-    }
-  },
-  "settings": {
-    "title": "Instellingen",
-    "manualPort": {
-      "label": "Connectix WebSocket-poort",
-      "hint": "Leeg laten voor automatische detectie. Vind de poort door \"AgentConnectixConsole --api\" uit te voeren.",
-      "save": "Opslaan",
-      "clear": "Wissen"
-    }
-  }
+  "Loading": "Laden",
+  "Error": "Fout",
+  "Reload": "Herladen",
+  "Initializing plugin": "Plugin initialiseren…",
+  "Back": "Terug",
+  "Close": "Sluiten",
+  "OK": "OK",
+  "warning": "Waarschuwing",
+  "Antidote": "Antidote",
+  "Check": "Controleren",
+  "Whole document": "Hele document",
+  "Selection": "Selectie",
+  "Corrector": "Corrector",
+  "Launch the corrector": "Corrector starten",
+  "Stop": "Stoppen",
+  "Look up a word": "Zoek een woord",
+  "Word or phrase": "Woord of zin…",
+  "Dictionaries": "Woordenboeken",
+  "Open the dictionaries to the selected word": "Woordenboeken voor het geselecteerde woord openen",
+  "Guides": "Gidsen",
+  "Open guides": "Gidsen openen",
+  "Select some text or place the cursor on a word to look it up.": "Selecteer tekst of plaats de cursor op een woord om het op te zoeken.",
+  "Ready to check your text with Antidote.": "Klaar om uw tekst te controleren met Antidote.",
+  "Connecting to Antidote": "Verbinding maken met Antidote…",
+  "Antidote corrector is open.": "Antidote corrector is geopend.",
+  "Something went wrong.": "Er is iets misgegaan.",
+  "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote werd niet gedetecteerd. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn.",
+  "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote. Herlaad de plugin of wijzig de poort in de instellingen.",
+  "Settings": "Instellingen",
+  "Connectix WebSocket port": "Connectix WebSocket-poort",
+  "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Leeg laten voor automatische detectie. Vind de poort door \"AgentConnectixConsole --api\" uit te voeren.",
+  "Save": "Opslaan",
+  "Clear": "Wissen"
 }

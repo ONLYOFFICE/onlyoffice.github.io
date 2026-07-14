@@ -38,11 +38,15 @@ export interface LoadingIndicatorProps {
 
 export function LoadingIndicator({ message }: LoadingIndicatorProps): JSX.Element {
   return (
-    <div className="asc-plugin-loader loading">
-      <div className="asc-loader-container">
-        <div className="asc-loader-image" />
-      </div>
-      {message && <div className="asc-loader-title">{message}</div>}
+    <div id="loader" className="loader-container loader-container-main">
+        <div class="loader-bg"></div>
+        <div class="loader-body">
+            <svg class="loader-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" fill="none" stroke="currentColor" stroke-width="1.5" r="7.25"
+                    stroke-dasharray="160%, 40%" />
+            </svg>
+            {message && <div class="loader-title">{message}</div>}
+        </div>
     </div>
   );
 }

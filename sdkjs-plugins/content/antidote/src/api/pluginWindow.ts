@@ -90,11 +90,11 @@ export function showWarning(message: string): void {
 
   pluginWindow.show({
     url: WARNING_WINDOW_URL,
-    description: `${t('common.warning')}!`,
+    description: `${t('Warning')}!`,
     isModal: true,
     isVisual: true,
     EditorsSupport: ['word', 'cell', 'pdf'],
     size: WARNING_WINDOW_SIZE,
-    buttons: [{ text: t('common.ok'), primary: true }],
+    buttons: [{ text: t('OK'), primary: true }],
   });
 }

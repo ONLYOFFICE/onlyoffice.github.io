@@ -31,29 +31,23 @@
  */
 
 import { useEffect, useState } from 'preact/hooks';
-import { initI18n, t, getCurrentLanguage } from '@utils/i18n';
-
-let initPromise: Promise<void> | null = null;
+import { t } from '@utils/i18n';
 
 export function useTranslation(): {
   t: typeof t;
-  isReady: boolean;
-  language: string;
 } {
-  const [isReady, setIsReady] = useState(false);
+  const [, forceUpdate] = useState(0);
 
+  // Force re-render when translation is updated
   useEffect(() => {
-    if (!initPromise) initPromise = initI18n();
-
-    let cancelled = false;
-    initPromise.then(() => {
-      if (!cancelled) setIsReady(true);
-    });
+    Asc.plugin.onTranslate = () => {
+      forceUpdate((n) => n + 1);
+    };
 
     return () => {
-      cancelled = true;
+      Asc.plugin.onTranslate = () => {};
     };
   }, []);
 
-  return { t, isReady, language: getCurrentLanguage() };
+  return { t };
 }

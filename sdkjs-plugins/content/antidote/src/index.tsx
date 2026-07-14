@@ -54,17 +54,17 @@ const modalName = new URLSearchParams(window.location.search).get('modal');
 
 function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) {
   const { ready, error } = usePluginReady();
-  const { t, isReady: translationsReady } = useTranslation();
+  const { t } = useTranslation();
 
   useTheme();
 
   if (error) {
     return (
       <Layout header={null} footer={null}>
-        <ErrorBox title={t('common.error')} message={error} />
+        <ErrorBox title={t('Error')} message={error} />
         <div style={{ marginTop: '16px' }}>
           <Button variant="primary" fullWidth onClick={() => window.location.reload()}>
-            {t('common.reload')}
+            {t('Reload')}
           </Button>
         </div>
       </Layout>
@@ -72,7 +72,7 @@ function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) 
   }
 
   if (!ready) {
-    const message = translationsReady ? t('common.initializingPlugin') : 'Initializing plugin…';
+    const message = `${t('Loading')}…`;
     return (
       <Layout header={null} footer={null}>
         <LoadingIndicator message={message} />

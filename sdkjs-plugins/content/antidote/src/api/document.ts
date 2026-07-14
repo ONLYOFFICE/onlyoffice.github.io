@@ -128,8 +128,12 @@ export function replaceSelectedText(paragraphs: string[]): Promise<boolean> {
   });
 }
 
-// Whole-document scope: word/pdf only (cell has no paragraph object model — see useHasSelection /
-// the correction feature, which restrict this path to editorType === 'word').
+// Whole-document scope: word only in practice — cell/pdf have no paragraph object model this
+// relies on, so `Main.tsx`'s `canCheckWholeDocument` (and useHasSelection's default scope) gate
+// this path to `editorType === 'word'`. Whether PDF's underlying object model could actually
+// support `GetAllParagraphs()` (ONLYOFFICE's PDF editor shares some of Word's document engine)
+// hasn't been tested against a real host — if that's ever verified, `canCheckWholeDocument` is the
+// single place to extend, not this function.
 //
 // `walkStyledContent` (and its `isRun`/`isHyperlink` type guards) have to be declared *inside* the
 // callCommand callback: callCommand runs its argument in the document's sandboxed object-model

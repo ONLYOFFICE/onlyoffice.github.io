@@ -31,7 +31,7 @@
  */
 
 import { useCallback, useRef } from 'preact/hooks';
-import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
+import { Antidote, ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
 import { t } from '@utils/i18n';
@@ -82,8 +82,8 @@ export function useCorrection() {
     } catch (error) {
       connectionState.value = 'error';
       errorMessage.value = error instanceof AntidoteError
-        ? t('correction.errors.notDetected')
-        : t('correction.errors.unknown');
+        ? t("Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.")
+        : t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
     }
   }, []);
 

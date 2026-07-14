@@ -32,39 +32,29 @@
 
 import { useState, useEffect } from 'preact/hooks';
 
-export function usePluginReady(maxAttempts = 20, initialDelay = 50): {
+/*function isPluginAvailable(): boolean {
+  return !!window.Asc?.plugin?.callCommand;
+}*/
+
+export function usePluginReady(initialDelay = 10000): {
   ready: boolean;
   error: string | null;
 } {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let attempts = 0;
-    let timeoutId: ReturnType<typeof setTimeout>;
-
-    const checkPlugin = () => {
-      if (window.Asc?.plugin?.callCommand) {
-        setReady(true);
-        return;
-      }
-
-      attempts++;
-      if (attempts >= maxAttempts) {
-        setError('Plugin API not available. Please reload the plugin.');
-        return;
-      }
-
-      const delay = Math.min(initialDelay * 1.5 ** attempts, 1000);
-      timeoutId = setTimeout(checkPlugin, delay);
-    };
-
-    checkPlugin();
-
-    return () => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  if (window.Asc?.plugin?.callCommand) {
+    setReady(true);
+  } else {
+    Asc.plugin.init = function () {
+      setReady(true);
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [maxAttempts, initialDelay]);
+    timeoutId = setTimeout(() => {
+      setError('Plugin API not available. Please reload the plugin.');
+    }, initialDelay);
+  }
 
   return { ready, error };
 }

@@ -1,52 +1,35 @@
 {
-  "common": {
-    "error": "Erro",
-    "reload": "Recarregar",
-    "initializingPlugin": "Inicializando plugin…",
-    "back": "Voltar",
-    "close": "Fechar",
-    "ok": "OK",
-    "warning": "Aviso"
-  },
-  "main": {
-    "title": "Antidoto",
-    "scopeTitle": "Verificar",
-    "scope": {
-      "document": "Todo o documento",
-      "selection": "Seleção"
-    },
-    "check": "Corretor",
-    "check_title": "Iniciar o corretor",
-    "stop": "Parar",
-    "lookup": {
-      "title": "Procurar uma palavra",
-      "placeholder": "Palavra ou frase…",
-      "dictionaries": "Dicionários",
-      "dictionaries_title": "Abrir dicionários para a palavra selecionada",
-      "guides": "Guias",
-      "guides_title": "Abrir guias",
-      "noWordWarning": "Selecione um texto ou posicione o cursor numa palavra para pesquisá-la."
-    }
-  },
-  "correction": {
-    "status": {
-      "idle": "Pronto para verificar seu texto com o Antidoto.",
-      "connecting": "Conectando ao Antidoto…",
-      "connected": "O corretor do Antidoto está aberto.",
-      "error": "Algo deu errado."
-    },
-    "errors": {
-      "notDetected": "O Antidoto não foi detectado. Certifique-se de que o Antidoto 12 e seu agente Connectix estão instalados e em execução.",
-      "unknown": "Ocorreu um erro inesperado ao se comunicar com o Antidoto. Recarregue o plugin ou altere a porta nas configurações."
-    }
-  },
-  "settings": {
-    "title": "Configurações",
-    "manualPort": {
-      "label": "Porta WebSocket do Connectix",
-      "hint": "Deixe em branco para detecção automática. Encontre a porta executando \"AgentConnectixConsole --api\".",
-      "save": "Salvar",
-      "clear": "Limpar"
-    }
-  }
+  "Loading": "Carregando",
+  "Error": "Erro",
+  "Reload": "Recarregar",
+  "Initializing plugin": "Inicializando plugin",
+  "Back": "Voltar",
+  "Close": "Fechar",
+  "OK": "OK",
+  "Warning": "Aviso",
+  "Antidote": "Antidoto",
+  "Check": "Verificar",
+  "Whole document": "Todo o documento",
+  "Selection": "Seleção",
+  "Corrector": "Corretor",
+  "Launch the corrector": "Iniciar o corretor",
+  "Stop": "Parar",
+  "Look up a word": "Procurar uma palavra",
+  "Word or phrase": "Palavra ou frase…",
+  "Dictionaries": "Dicionários",
+  "Open the dictionaries to the selected word": "Abrir dicionários para a palavra selecionada",
+  "Guides": "Guias",
+  "Open guides": "Abrir guias",
+  "Select some text or place the cursor on a word to look it up.": "Selecione um texto ou posicione o cursor numa palavra para pesquisá-la.",
+  "Ready to check your text with Antidote.": "Pronto para verificar seu texto com o Antidoto.",
+  "Connecting to Antidote": "Conectando ao Antidoto…",
+  "Antidote corrector is open.": "O corretor do Antidoto está aberto.",
+  "Something went wrong.": "Algo deu errado.",
+  "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "O Antidoto não foi detectado. Certifique-se de que o Antidoto 12 e seu agente Connectix estão instalados e em execução.",
+  "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Ocorreu um erro inesperado ao se comunicar com o Antidoto. Recarregue o plugin ou altere a porta nas configurações.",
+  "Settings": "Configurações",
+  "Connectix WebSocket port": "Porta WebSocket do Connectix",
+  "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Deixe em branco para detecção automática. Encontre a porta executando \"AgentConnectixConsole --api\".",
+  "Save": "Salvar",
+  "Clear": "Limpar"
 }

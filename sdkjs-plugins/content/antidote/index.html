@@ -41,32 +41,6 @@
 		<link rel="stylesheet" href="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.css">
 		<script type="text/javascript">
 			(function() {
-				var checkPlugin = setInterval(function() {
-					if (window.Asc && window.Asc.plugin && window.Asc.plugin.info && window.Asc.plugin.info.theme) {
-						clearInterval(checkPlugin);
-						var theme = window.Asc.plugin.info.theme;
-						var isDark = theme.name && (theme.name.includes('dark') || theme.name.includes('night') || theme.name.includes('contrast'));
-
-						var classes = '';
-						if (theme.name) {
-							classes = theme.name + ' theme-type-' + theme.type;
-						} else {
-							classes = 'theme-' + theme.type + ' theme-type-' + theme.type + (isDark ? ' theme-dark' : ' theme-light');
-						}
-
-						document.body.className = classes;
-						document.documentElement.classList.add('theme-ready');
-					}
-				}, 10);
-
-				setTimeout(function() {
-					clearInterval(checkPlugin);
-					if (!document.documentElement.classList.contains('theme-ready')) {
-						document.body.className = 'theme-light theme-type-light';
-						document.documentElement.classList.add('theme-ready');
-					}
-				}, 2000);
-
 				if (!window.Asc || !window.Asc.plugin) return;
 
 				window.Asc.plugin.init = function() {

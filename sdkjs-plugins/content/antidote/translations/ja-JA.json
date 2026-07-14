@@ -1,52 +1,35 @@
 {
-  "common": {
-    "error": "エラー",
-    "reload": "リロード",
-    "initializingPlugin": "プラグインを初期化中…",
-    "back": "戻る",
-    "close": "閉じる",
-    "ok": "OK",
-    "warning": "警告"
-  },
-  "main": {
-    "title": "Antidote",
-    "scopeTitle": "チェック",
-    "scope": {
-      "document": "ドキュメント全体",
-      "selection": "選択範囲"
-    },
-    "check": "校正",
-    "check_title": "校正を開始",
-    "stop": "停止",
-    "lookup": {
-      "title": "単語を検索",
-      "placeholder": "単語またはフレーズ…",
-      "dictionaries": "辞書",
-      "dictionaries_title": "選択した単語の辞書を開く",
-      "guides": "ガイド",
-      "guides_title": "ガイドを開く",
-      "noWordWarning": "検索するテキストを選択するか、単語にカーソルを置いてください。"
-    }
-  },
-  "correction": {
-    "status": {
-      "idle": "Antidoteでテキストをチェックする準備ができています。",
-      "connecting": "Antidoteに接続中…",
-      "connected": "Antidoteの校正ツールが開いています。",
-      "error": "何か問題が発生しました。"
-    },
-    "errors": {
-      "notDetected": "Antidoteが検出されませんでした。Antidote 12およびそのConnectixエージェントがインストールされており、実行されていることを確認してください。",
-      "unknown": "Antidoteとの通信中に予期しないエラーが発生しました。プラグインを再読み込みするか、設定でポートを変更してください。"
-    }
-  },
-  "settings": {
-    "title": "設定",
-    "manualPort": {
-      "label": "Connectix WebSocket ポート",
-      "hint": "空のままにすると自動検出されます。\"AgentConnectixConsole --api\"を実行してポートを見つけます。",
-      "save": "保存",
-      "clear": "クリア"
-    }
-  }
+  "Loading": "読み込み中",
+  "Error": "エラー",
+  "Reload": "リロード",
+  "Initializing plugin": "プラグインを初期化中",
+  "Back": "戻る",
+  "Close": "閉じる",
+  "OK": "OK",
+  "Warning": "警告",
+  "Antidote": "Antidote",
+  "Check": "チェック",
+  "Whole document": "ドキュメント全体",
+  "Selection": "選択範囲",
+  "Corrector": "校正",
+  "Launch the corrector": "校正を開始",
+  "Stop": "停止",
+  "Look up a word": "単語を検索",
+  "Word or phrase": "単語またはフレーズ…",
+  "Dictionaries": "辞書",
+  "Open the dictionaries to the selected word": "選択した単語の辞書を開く",
+  "Guides": "ガイド",
+  "Open guides": "ガイドを開く",
+  "Select some text or place the cursor on a word to look it up.": "検索するテキストを選択するか、単語にカーソルを置いてください。",
+  "Ready to check your text with Antidote.": "Antidoteでテキストをチェックする準備ができています。",
+  "Connecting to Antidote": "Antidoteに接続中…",
+  "Antidote corrector is open.": "Antidoteの校正ツールが開いています。",
+  "Something went wrong.": "何か問題が発生しました。",
+  "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidoteが検出されませんでした。Antidote 12およびそのConnectixエージェントがインストールされており、実行されていることを確認してください。",
+  "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Antidoteとの通信中に予期しないエラーが発生しました。プラグインを再読み込みするか、設定でポートを変更してください。",
+  "Settings": "設定",
+  "Connectix WebSocket port": "Connectix WebSocket ポート",
+  "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "空のままにすると自動検出されます。\"AgentConnectixConsole --api\"を実行してポートを見つけます。",
+  "Save": "保存",
+  "Clear": "クリア"
 }

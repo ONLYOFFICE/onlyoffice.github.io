@@ -1,52 +1,35 @@
 {
-  "common": {
-    "error": "Greška",
-    "reload": "Ponovo učitaj",
-    "initializingPlugin": "Inicijalizacija dodatka…",
-    "back": "Nazad",
-    "close": "Zatvori",
-    "ok": "OK",
-    "warning": "Upozorenje"
-  },
-  "main": {
-    "title": "Antidote",
-    "scopeTitle": "Proveri",
-    "scope": {
-      "document": "Ceo dokument",
-      "selection": "Izbor"
-    },
-    "check": "Korigator",
-    "check_title": "Pokreni korigator",
-    "stop": "Zaustavi",
-    "lookup": {
-      "title": "Pretraži reč",
-      "placeholder": "Reč ili fraza…",
-      "dictionaries": "Rečnici",
-      "dictionaries_title": "Otvori rečnike za izabranu reč",
-      "guides": "Vodiči",
-      "guides_title": "Otvori vodiče",
-      "noWordWarning": "Izaberite tekst ili postavite kursor na reč da biste je potražili."
-    }
-  },
-  "correction": {
-    "status": {
-      "idle": "Spremno za proveru teksta sa Antidote.",
-      "connecting": "Povezivanje sa Antidote…",
-      "connected": "Antidote editor je otvoren.",
-      "error": "Nešto nije prošlo kako treba."
-    },
-    "errors": {
-      "notDetected": "Antidote nije detektovan. Proverite da li je Antidote 12 i njegov Connectix agent instaliran i aktivan.",
-      "unknown": "Došlo je do neočekivane greške prilikom komunikacije sa Antidote. Ponovo učitajte dodatak ili promenite port u podešavanjima."
-    }
-  },
-  "settings": {
-    "title": "Podešavanja",
-    "manualPort": {
-      "label": "Connectix WebSocket port",
-      "hint": "Ostavite prazno za automatsko detekciju. Pronađite port pokretanjem \"AgentConnectixConsole --api\".",
-      "save": "Sačuvaj",
-      "clear": "Očisti"
-    }
-  }
+  "Loading": "Učitavanje",
+  "Error": "Greška",
+  "Reload": "Ponovo učitaj",
+  "Initializing plugin": "Inicijalizacija dodatka",
+  "Back": "Nazad",
+  "Close": "Zatvori",
+  "OK": "OK",
+  "Warning": "Upozorenje",
+  "Antidote": "Antidote",
+  "Check": "Proveri",
+  "Whole document": "Ceo dokument",
+  "Selection": "Izbor",
+  "Corrector": "Korigator",
+  "Launch the corrector": "Pokreni korigator",
+  "Stop": "Zaustavi",
+  "Look up a word": "Pretraži reč",
+  "Word or phrase": "Reč ili fraza…",
+  "Dictionaries": "Rečnici",
+  "Open the dictionaries to the selected word": "Otvori rečnike za izabranu reč",
+  "Guides": "Vodiči",
+  "Open guides": "Otvori vodiče",
+  "Select some text or place the cursor on a word to look it up.": "Izaberite tekst ili postavite kursor na reč da biste je potražili.",
+  "Ready to check your text with Antidote.": "Spremno za proveru teksta sa Antidote.",
+  "Connecting to Antidote": "Povezivanje sa Antidote…",
+  "Antidote corrector is open.": "Antidote editor je otvoren.",
+  "Something went wrong.": "Nešto nije prošlo kako treba.",
+  "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote nije detektovan. Proverite da li je Antidote 12 i njegov Connectix agent instaliran i aktivan.",
+  "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Došlo je do neočekivane greške prilikom komunikacije sa Antidote. Ponovo učitajte dodatak ili promenite port u podešavanjima.",
+  "Settings": "Podešavanja",
+  "Connectix WebSocket port": "Connectix WebSocket port",
+  "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Ostavite prazno za automatsko detekciju. Pronađite port pokretanjem \"AgentConnectixConsole --api\".",
+  "Save": "Sačuvaj",
+  "Clear": "Očisti"
 }

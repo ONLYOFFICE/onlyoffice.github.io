@@ -69,29 +69,29 @@ export function Settings(): JSX.Element {
 
   return (
     <Layout
-      header={<Header title={t('settings.title')} />}
+      header={<Header title={t('Settings')} />}
       footer={<Footer />}
     >
       <div className="antidote-section">
         <TextField
-          label={t('settings.manualPort.label')}
-          caption={t('settings.manualPort.hint')}
+          label={t('Connectix WebSocket port')}
+          caption={t('Leave empty to auto-detect. Find the port by running "AgentConnectixConsole --api".')}
           value={value}
           placeholder="59004"
           clearable
-          clearLabel={t('settings.manualPort.clear')}
+          clearLabel={t('Clear')}
           onInput={setValue}
           onEnter={save}
           onClear={clear}
         />
         <div className="antidote-lookup-row">
-          <Button variant="primary" onClick={save}>{t('settings.manualPort.save')}</Button>
+          <Button variant="primary" onClick={save}>{t('Save')}</Button>
           <Button
             fullWidth
             onClick={() => route('/')}
-            title={t('common.back')}
+            title={t('Back')}
           >
-            {t('common.back')}
+            {t('Back')}
           </Button>
         </div>
       </div>

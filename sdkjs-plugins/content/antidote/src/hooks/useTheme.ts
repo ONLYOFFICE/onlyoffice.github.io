@@ -99,14 +99,12 @@ export function useTheme(): void {
     };
 
     plugin.onThemeChanged = handler;
-    plugin.attachEvent?.('onThemeChanged', handler);
 
     if (plugin.info?.theme) {
       applyTheme(plugin.info.theme);
     }
 
     return () => {
-      plugin.detachEvent?.('onThemeChanged');
       plugin.onThemeChanged = () => {};
     };
   }, []);
