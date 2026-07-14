@@ -35,7 +35,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import {
-  Layout, Header, Footer, Button, TextField, RadioGroup, StatusBanner, IconButton,
+  Layout, Header, Footer, Button, TextField, RadioGroup, StatusBanner, IconButton, LoadingIndicator
 } from '@components';
 import { useHasSelection, useTranslation } from '@hooks';
 import { useCorrection, CorrectionScope } from '@features/correction';
@@ -57,7 +57,7 @@ export function Main(): JSX.Element {
   const {
     connectionState, scope, errorMessage, check, stop,
   } = useCorrection();
-  const { open: openLookup, error: lookupError } = useLookup();
+  const { open: openLookup, error: lookupError, incorrectPort: lookupIncorrectPort } = useLookup();
 
   const [lookupText, setLookupText] = useState('');
 
@@ -79,42 +79,23 @@ export function Main(): JSX.Element {
       return;
     }
     showWarning(lookupError);
-    route('/settings?reason=connectionError');
-    stop();
-    warmUpPort(true);
+    if (lookupIncorrectPort) {
+      route('/settings?reason=connectionError');
+      stop();
+      warmUpPort(true);
+    }
   }, [lookupError]);
 
   useEffect(() => {
-    if (!connectionState || connectionState.value !== 'error') {
-      return;
+
+    if (connectionState.value === 'error') {
+      showWarning(errorMessage.value ?? t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
+      route('/settings?reason=connectionError');
+      stop();
+      warmUpPort(true);
     }
-    showWarning(errorMessage.value ?? t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
-    route('/settings?reason=connectionError');
-    stop();
-    warmUpPort(true);
+    
   }, [connectionState.value]);
-
-  let statusMessage = '';
-  if (connectionState.value !== 'error') {
-    switch (connectionState.value) {
-      case 'idle':
-        statusMessage = t('Ready to check your text with Antidote.');
-        break;
-      case 'connecting':
-        statusMessage = `${t('Connecting to Antidote')}…`;
-        break;
-      case 'connected':
-        statusMessage = t('Antidote corrector is open.');
-        break;
-      default:
-        break;
-    }
-  }
-
-  const handleScopeChange = (nextScope: CorrectionScope) => {
-    if (connectionState.value === 'connecting') return;
-    scope.value = nextScope;
-  };
 
   const scopeOptions = [
     ...(canCheckWholeDocument
@@ -132,29 +113,32 @@ export function Main(): JSX.Element {
       header={<Header title={t('Antidote')} />}
       footer={<Footer />}
     >
-      {connectionState.value !== 'error' && <StatusBanner tone={statusTone(connectionState.value)} message={statusMessage} />}
-
       <div className="antidote-section antidote-section--secondary" hidden={scopeOptions.length <= 1}>
         <div className="antidote-section__title">{t('Check')}</div>
-        <RadioGroup
-          name="scope"
-          value={scope.value}
-          options={scopeOptions}
-          ariaLabel={t('Check')}
-          disabled={connectionState.value === 'connecting'}
-          onChange={handleScopeChange}
-        />
+        <div className="tab-group" role="radiogroup" aria-label={t('Check')}>
+          <label className={`tab-group__option ${scope.value === 'document' ? 'tab-group__option--active' : ''}`}>
+            <span>{t('Whole document')}</span>
+          </label>
+          <label className={`tab-group__option ${scope.value === 'selection' ? 'tab-group__option--active' : ''}`}>
+            <span>{t('Selection')}</span>
+          </label>
+        </div>
       </div>
 
       <div className="antidote-tools">
         <div className="antidote-tools__row">
           {connectionState.value === 'connected' ? (
-            <Button fullWidth onClick={stop}>{t('Stop')}</Button>
+            <Button
+              variant="primary"
+              fullWidth
+              onClick={stop}
+            >
+              {t('Stop')}
+            </Button>
           ) : (
             <Button
               variant="primary"
               fullWidth
-              disabled={connectionState.value === 'connecting'}
               onClick={() => check(scope.value)}
               title={t('Launch the corrector')}
             >
@@ -184,6 +168,8 @@ export function Main(): JSX.Element {
         </Button>
 
       </div>
+
+      {connectionState.value === 'connected' && <StatusBanner tone={statusTone(connectionState.value)} message={t('Antidote corrector is open.')} />}
 
       <div className="antidote-section antidote-section--secondary">
         <div className="antidote-section__title">{t('Look up a word')}</div>

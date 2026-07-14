@@ -48,6 +48,7 @@ export type LookupTool = 'dictionaries' | 'guides';
 // produce anything, a separate PluginWindow warns the user instead of silently doing nothing.
 export function useLookup() {
   const [error, setError] = useState<string | null>(null);
+  const [incorrectPort, setIncorrectPort] = useState(false);
   const [pending, setPending] = useState(false);
 
   const open = useCallback(async (tool: LookupTool, manualText: string) => {
@@ -78,13 +79,16 @@ export function useLookup() {
       if (tool === 'dictionaries') connectix.launchDictionaries();
       else connectix.launchGuides();
     } catch (err) {
-      setError(err instanceof AntidoteError ? 
-        t('Antidote wasn\'t detected. Make sure Antidote 12 and its Connectix agent are installed and running.') : 
-        t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
+      if (err instanceof AntidoteError) {
+        setError(t('Antidote wasn\'t detected. Make sure Antidote 12 and its Connectix agent are installed and running.'))
+      } else {
+        setError(t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
+        setIncorrectPort(true);
+      }
     } finally {
       setPending(false);
     }
   }, []);
 
-  return { open, error, pending };
+  return { open, error, pending, incorrectPort };
 }

@@ -44,7 +44,6 @@ import { Settings } from '@pages/Settings';
 import { Warning } from '@pages/Warning';
 
 import './variables.css';
-import './styles/themes.css';
 
 // showWarning() (src/api/pluginWindow.ts) opens a separate PluginWindow pointed at this same
 // index.html with `?modal=warning` — reusing the one bundle/theme/CSS instead of shipping a

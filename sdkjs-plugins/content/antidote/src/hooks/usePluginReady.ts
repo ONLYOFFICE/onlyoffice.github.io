@@ -32,10 +32,6 @@
 
 import { useState, useEffect } from 'preact/hooks';
 
-/*function isPluginAvailable(): boolean {
-  return !!window.Asc?.plugin?.callCommand;
-}*/
-
 export function usePluginReady(initialDelay = 10000): {
   ready: boolean;
   error: string | null;
@@ -43,7 +39,39 @@ export function usePluginReady(initialDelay = 10000): {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  let timeoutId: ReturnType<typeof setTimeout>;
+  useEffect(() => {
+    if (ready) return undefined;
+ 
+    let timeoutId: ReturnType<typeof setTimeout>;
+ 
+    if (window.Asc?.plugin?.callCommand) {
+      setReady(true);
+    } else {
+      let defaultInit = Asc.plugin.init;
+      Asc.plugin.init = function () {
+        setReady(true);
+        if (timeoutId) clearTimeout(timeoutId);
+        defaultInit?.call(this);
+      };
+      timeoutId = setTimeout(() => {
+        setError('Plugin API not available. Please reload the plugin.');
+      }, initialDelay);
+    }
+ 
+    return () => {
+      clearTimeout(timeoutId);
+      Asc.plugin.init = () => {};
+    };
+  }, [ready, initialDelay]);
+
+  return { ready, error };
+}
+
+export function isPluginAvailable(): boolean {
+  return !!window.Asc?.plugin?.callCommand;
+}
+/** 
+ let timeoutId: ReturnType<typeof setTimeout>;
   if (window.Asc?.plugin?.callCommand) {
     setReady(true);
   } else {
@@ -56,9 +84,5 @@ export function usePluginReady(initialDelay = 10000): {
     }, initialDelay);
   }
 
-  return { ready, error };
-}
-
-export function isPluginAvailable(): boolean {
-  return !!window.Asc?.plugin?.callCommand;
-}
+  
+ */

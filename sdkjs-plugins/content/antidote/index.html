@@ -43,12 +43,7 @@
 			(function() {
 				if (!window.Asc || !window.Asc.plugin) return;
 
-				window.Asc.plugin.init = function() {
-					var theme = window.Asc.plugin.info && window.Asc.plugin.info.theme;
-					if (theme && theme.type === 'dark') {
-						document.body.classList.add('theme-dark');
-					}
-				};
+				window.Asc.plugin.init = function() {};
 
 				window.Asc.plugin.button = function(id, windowId) {
 					window.dispatchEvent(new CustomEvent('plugin:button', { detail: { id: id } }));
@@ -62,7 +57,7 @@
 		<link rel="stylesheet" href="./dist/index.css">
 		<script type="module" src="./dist/index.js"></script>
 	</head>
-	<body class="theme-light theme-type-light">
+	<body class="theme-light theme-type-light noselect">
 		<div id="app"></div>
 	</body>
 </html>
