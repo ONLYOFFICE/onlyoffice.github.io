@@ -1,0 +1,15 @@
+{
+    "excludes": [
+        ".dev/*",
+        "node_modules/*",
+        "src/*",
+        ".DS_Store",
+        ".gitignore",
+        "eslint.config.mjs",
+        "package.json",
+        "package-lock.json",
+        "README.md",
+        "tsconfig.json",
+        "vite.config.ts"
+    ]
+}

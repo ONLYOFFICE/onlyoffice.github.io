@@ -73,5 +73,10 @@
 	"Hide panel": "Fshih panelin",
 	"For this editor": "Për këtë editor",
 	"Download": "Shkarko",
-	"Problem with downloading plugin.": "Problem me shkarkimin e shtojcës."
+	"Problem with downloading plugin.": "Problem me shkarkimin e shtojcës.",
+	"Works with": "Funksionon me",
+	"Document Editor": "Editor dokumentesh",
+	"Spreadsheet Editor": "Editor tabela",
+	"Presentation Editor": "Editor prezantimesh",
+	"PDF Editor": "Editor PDF"
 }
