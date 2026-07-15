@@ -185,12 +185,16 @@ type MenuType = 'left' | 'right';
 
 interface PluginInfo {
     editorType: EditorType;
+    documentCallbackUrl: string;
+    documentId: string;
+    documentTitle: string;
     guid: string;
     isEmbedMode: boolean;
     isMobileMode: boolean;
     isViewMode: boolean;
     jwt: string;
     lang: string;
+    mmToPx: number;
     theme: AscTheme;
     userId: string;
     userName: string;
