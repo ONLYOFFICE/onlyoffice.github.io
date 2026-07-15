@@ -41,6 +41,7 @@ const UI = {
     /** @type {HTMLDivElement | undefined} */
     _loader: undefined,
     //_mainFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="main-filter"]')),
+    _filterByInstalled: /** @type {NodeListOf<HTMLLabelElement> | undefined} */(document.querySelectorAll('.filter-by-installed label')),
     _categoryFilterInputs: /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll('#plugins input[name="category-filter"]')),
     linkNewPlugin: /** @type {HTMLAnchorElement} */(document.getElementById('link_newPlugin')),
     linkNewPluginText: /** @type {HTMLSpanElement} */(document.querySelector('#link_newPlugin .link-text')),
@@ -97,8 +98,9 @@ const UI = {
 
     /**
      * @param {'light' | string} themeType
+     * @param {boolean} independentMode
      * */
-    init: function(themeType) {
+    init: function(themeType, independentMode) {
         const self = this;
         let rule = '\n.asc-plugin-loader{background-color:' + (themeType == 'light' ? '#ffffff' : '#333333') + ';padding: 10px;display: flex;justify-content: center;align-items: center;border-radius: 5px;}\n'
         rule += '.asc-plugin-loader{color:' + (themeType == 'light' ? '#444444' : 'rgba(255,255,255,0.8)') + '}\n';
@@ -150,7 +152,11 @@ const UI = {
 			this.linkNewPlugin.href = (OOIO + "pulls");
 			this.linkNewPlugin.onclick = null;
 		}
-
+        if (independentMode && this._filterByInstalled) {
+            for (let i = 0; i < this._filterByInstalled.length; i++) {
+                this._filterByInstalled[i].classList.add('hidden');
+            }
+        }
     },
 
 
@@ -579,7 +585,9 @@ const UI = {
     _makeActionButtons: function(guid, state) {
         let additional = state.bNotAvailable ? 'disabled title="' + Utils.getTranslatedMessage('versionWarning') + '"'  : '';
         let result = '<button class="btn-text-default ';
-        if (state.bNeedUpdateButton) {
+        if (state.independentMode) {
+            result += 'btn_install" onclick="onClickDownload(\'' + guid + '\', event)" ' + additional + '>'  + Utils.getTranslated("Download");
+        } else if (state.bNeedUpdateButton) {
             result += 'btn_update" onclick="onClickUpdate(\'' + guid + '\', event)" ' + additional + '>' + Utils.getTranslated("Update");
         } else if (state.bNeedRemoveButton) {
             result += 'btn_remove" onclick="onClickRemove(\'' + guid + '\', event)" ' + (state.bNotAvailable ? 'dataDisabled="disabled"' : "") +'>';

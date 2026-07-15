@@ -70,5 +70,13 @@
 	"No updates available.": "Nenhuma atualização disponível.",
 	"All your plugins are up to date.": "Todos os seus plugins estão atualizados.",
 	"Show panel": "Mostrar painel",
-	"Hide panel": "Ocultar painel"
+	"Hide panel": "Ocultar painel",
+	"For this editor": "Para este editor",
+	"Download": "Baixar",
+	"Problem with downloading plugin.": "Problema com o download do plugin.",
+	"Works with": "Funciona com",
+	"Document Editor": "Editor de documentos",
+	"Spreadsheet Editor": "Editor de planilhas",
+	"Presentation Editor": "Editor de apresentações",
+	"PDF Editor": "Editor de PDF"
 }

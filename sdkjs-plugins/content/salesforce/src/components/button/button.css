@@ -1,0 +1,123 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2026
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.btn {
+	--btn-opacity-disabled: 1;
+}
+
+.btn {
+	box-sizing: border-box;
+
+	border: none;
+	border-radius: var(--border-radius-button, 1px);
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-semibold);
+
+	cursor: pointer;
+}
+
+.btn:disabled {
+	cursor: not-allowed;
+}
+
+.btn--primary {
+	gap: 10px;
+	padding: 4px 32px;
+
+	border: none;
+	color: var(--btn-primary-color);
+	background-color: var(--btn-primary-bg);
+}
+
+.btn--primary:hover:not(:disabled) {
+	background-color: var(--btn-primary-bg-hover);
+}
+
+.btn--primary:active:not(:disabled),
+.btn--primary:focus:not(:disabled):active {
+	background-color: var(--btn-primary-bg-active, var(--btn-primary-bg-hover));
+}
+
+body.theme-night.theme-type-dark .btn--primary:active:not(:disabled),
+body.theme-night.theme-type-dark .btn--primary:focus:not(:disabled):active,
+body.theme-white.theme-type-light .btn--primary:active:not(:disabled),
+body.theme-white.theme-type-light .btn--primary:focus:not(:disabled):active {
+	border: 1px solid var(--btn-primary-border-active);
+}
+
+.btn--primary:disabled {
+	background-color: var(--btn-primary-bg-disabled);
+	opacity: var(--btn-opacity-disabled);
+}
+
+.btn--secondary {
+	gap: 8px;
+	padding: 4px 32px;
+
+	border: 1px solid var(--btn-secondary-border);
+
+	color: var(--btn-secondary-color);
+	background-color: var(--btn-secondary-bg);
+}
+
+.btn--secondary:hover:not(:disabled) {
+	background-color: var(--btn-secondary-bg-hover);
+	border-color: var(--btn-secondary-border-hover, var(--btn-secondary-border));
+}
+
+.btn--secondary:active:not(:disabled),
+.btn--secondary:focus:not(:disabled):active {
+	background-color: var(--btn-secondary-bg-active, var(--btn-secondary-bg-hover));
+	border-color: var(--btn-secondary-border-active, var(--btn-secondary-border-hover, var(--btn-secondary-border)));
+}
+
+.btn--secondary:disabled {
+	color: var(--btn-secondary-color-disabled);
+	background-color: var(--btn-secondary-bg-disabled);
+	border-color: var(--btn-secondary-border-disabled);
+}
+
+.btn--link {
+	padding: 0;
+
+	vertical-align: middle;
+
+	text-align: center;
+	font-family: var(--font-family);
+	font-weight: var(--font-weight-normal);
+	font-style: normal;
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-md);
+	letter-spacing: var(--letter-spacing);
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-underline-offset: 2px;
+
+	background: none;
+	color: var(--btn-link-color);
+}
+
+.btn--link:hover:not(:disabled) {
+	color: var(--btn-link-color-hover);
+}
+
+.btn--full-width {
+	width: 100%;
+}

@@ -52,6 +52,8 @@ const PluginCardUI = {
     btnRemove: /** @type {HTMLButtonElement} */ (document.getElementById('btn_remove')),
     /** @type {HTMLButtonElement} */
     btnInstall: /** @type {HTMLButtonElement} */ (document.getElementById('btn_install')),
+    /** @type {HTMLButtonElement} */
+    btnDownload: /** @type {HTMLButtonElement} */ (document.getElementById('btn_download')),
     /** @type {HTMLSpanElement} */
     spanSelectedDescr: /** @type {HTMLSpanElement} */ (document.getElementById('span_selected_description')),
     /** @type {HTMLAnchorElement} */
@@ -72,6 +74,8 @@ const PluginCardUI = {
     divMinVersion: /** @type {HTMLDivElement} */ (document.getElementById('div_min_version')),
     /** @type {HTMLDivElement} */
     divRatingLink: /** @type {HTMLDivElement} */ (document.getElementById('div_rating_link')),
+    /** @type {HTMLDivElement} */
+    divEditorBadges: /** @type {HTMLDivElement} */ (document.getElementById('div_editor_badges')),
     /** @type {HTMLDivElement} */
     divReadme: /** @type {HTMLDivElement} */ (document.getElementById('div_readme_link')),
     /** @type {HTMLDivElement} */
@@ -125,6 +129,7 @@ const PluginCardUI = {
         rule += '#div_changelog_preview li,\n';
         rule += '.pc .span_notification,\n';
         rule += '.pc-sub,\n';
+        rule += '.pc-editor-badges-label,\n';
         rule += '.pc .span_caption{color: ' + (theme["text-secondary"] || 'rgba(0,0,0,0.6)') + ';}\n';
         rule += '#div_changelog_preview li::before{color: ' + (theme["text-tertiary"] || 'rgba(0,0,0,0.4)') + ';}\n';
         rule += '.pc .span_caption:hover{color: ' + (theme["text-normal"] || 'rgba(0,0,0,0.8)') + ';}\n';

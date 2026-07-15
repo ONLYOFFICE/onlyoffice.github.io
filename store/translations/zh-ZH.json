@@ -70,5 +70,13 @@
 	"No updates available.": "没有可用的更新。",
 	"All your plugins are up to date.": "您的所有插件都是最新的。",
 	"Show panel": "显示面板",
-	"Hide panel": "隐藏面板"
+	"Hide panel": "隐藏面板",
+	"For this editor": "对于此编辑器",
+	"Download": "下载",
+	"Problem with downloading plugin.": "下载插件时出现问题。",
+	"Works with": "适用于",
+	"Document Editor": "文档编辑器",
+	"Spreadsheet Editor": "电子表格编辑器",
+	"Presentation Editor": "演示文稿编辑器",
+	"PDF Editor": "PDF编辑器"
 }
