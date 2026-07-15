@@ -30,41 +30,28 @@
  *
  */
 
-import { useState, useEffect } from 'preact/hooks';
-import { Editor } from '@api/editor';
-import { isPluginAvailable } from './usePluginReady';
+import { BaseEditor } from './base';
+import { DocumentEditor } from './document-editor';
+import { SpreadsheetEditor } from './spreadsheet-editor';
 
-const POLL_INTERVAL = 500;
-
-export function useHasSelection(): boolean {
-  const [hasSelection, setHasSelection] = useState(false);
-
-  useEffect(() => {
-    if (!isPluginAvailable()) {
-      setHasSelection(false);
-      return undefined;
+// Central factory: consumers that work across any editor type (e.g. SelectionCorrectionAgent,
+// useHasSelection, useLookup) get their editor instance through here rather than importing
+// DocumentEditor/SpreadsheetEditor directly, so adding a new editor type — e.g. a future
+// PresentationEditor for `editorType === 'slide'` — only means adding one branch here. Code that
+// already knows it's word-only (DocumentCorrectionAgent, gated upstream by Main.tsx) can still
+// import DocumentEditor directly; there's no ambiguity to resolve there.
+export class Editor {
+  static create(): BaseEditor {
+    switch (window.Asc.plugin.info.editorType) {
+      case 'word':
+        return new DocumentEditor();
+      case 'cell':
+        return new SpreadsheetEditor();
+      case 'slide':
+        // TODO: Implement PresentationEditor when needed
+        throw new Error('Presentation editor not implemented yet');
+      default:
+        throw new Error(`Unsupported editor type: ${window.Asc.plugin.info.editorType}`);
     }
-
-    const editor = Editor.create();
-
-    const poll = async () => {
-      if (!isPluginAvailable()) {
-        setHasSelection(false);
-        return;
-      }
-
-      try {
-        setHasSelection(await editor.hasSelection());
-      } catch {
-        setHasSelection(false);
-      }
-    };
-
-    poll();
-    const interval = setInterval(poll, POLL_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return hasSelection;
+  }
 }

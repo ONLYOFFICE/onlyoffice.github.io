@@ -30,41 +30,9 @@
  *
  */
 
-import { useState, useEffect } from 'preact/hooks';
-import { Editor } from '@api/editor';
-import { isPluginAvailable } from './usePluginReady';
-
-const POLL_INTERVAL = 500;
-
-export function useHasSelection(): boolean {
-  const [hasSelection, setHasSelection] = useState(false);
-
-  useEffect(() => {
-    if (!isPluginAvailable()) {
-      setHasSelection(false);
-      return undefined;
-    }
-
-    const editor = Editor.create();
-
-    const poll = async () => {
-      if (!isPluginAvailable()) {
-        setHasSelection(false);
-        return;
-      }
-
-      try {
-        setHasSelection(await editor.hasSelection());
-      } catch {
-        setHasSelection(false);
-      }
-    };
-
-    poll();
-    const interval = setInterval(poll, POLL_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return hasSelection;
+export class DocumentError extends Error {
+  constructor(message: string, public readonly code?: string) {
+    super(message);
+    this.name = 'DocumentError';
+  }
 }

@@ -51,7 +51,7 @@ then loads `dist/index.js` / `dist/index.css` — the built Preact app, entry po
 `src/index.tsx`. **`dist/` is committed to git**; the built output is part of what ships with the
 plugin, so a change isn't "done" until `npm run build` has been re-run.
 
-- `src/api/document.ts` — all ONLYOFFICE document access: selection text, whole-document
+- `src/api/document-editor.ts` — all ONLYOFFICE document access: selection text, whole-document
   paragraphs, per-run style ranges.
 - `src/api/antidote.ts` — resolves the Connectix WebSocket port.
 - `src/features/correction` — the "Corrector" flow: `DocumentCorrectionAgent` (whole document,

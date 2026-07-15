@@ -30,41 +30,16 @@
  *
  */
 
-import { useState, useEffect } from 'preact/hooks';
-import { Editor } from '@api/editor';
-import { isPluginAvailable } from './usePluginReady';
+import { BaseEditor } from './base';
 
-const POLL_INTERVAL = 500;
-
-export function useHasSelection(): boolean {
-  const [hasSelection, setHasSelection] = useState(false);
-
-  useEffect(() => {
-    if (!isPluginAvailable()) {
-      setHasSelection(false);
-      return undefined;
-    }
-
-    const editor = Editor.create();
-
-    const poll = async () => {
-      if (!isPluginAvailable()) {
-        setHasSelection(false);
-        return;
-      }
-
-      try {
-        setHasSelection(await editor.hasSelection());
-      } catch {
-        setHasSelection(false);
-      }
-    };
-
-    poll();
-    const interval = setInterval(poll, POLL_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return hasSelection;
+// Cell — and, provisionally, pdf too (see Editor.create()'s fallback branch: pdf has no object
+// model of its own wired up yet, so it currently reuses this class rather than DocumentEditor's).
+// Everything needed today is already covered by BaseEditor's generic selection get/replace; no
+// spreadsheet-specific object model access (e.g. `Api.GetActiveSheet()`) exists yet. Kept as its
+// own class — rather than instantiating BaseEditor directly — so that behavior has an obvious
+// home to grow into, the same way DocumentEditor holds Word's.
+export class SpreadsheetEditor extends BaseEditor {
+  constructor() {
+    super('spreadsheet');
+  }
 }

@@ -40,19 +40,24 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { getSelectedTextWithStyle, replaceSelectedText, CorrectionStyleRange } from '@api/document';
+import { Editor } from '@/api/editor';
+import { CorrectionStyleRange } from '@/api/base';
 import { BaseCorrectionAgent } from './base';
 
 // Selection scope. Works uniformly across word/cell/pdf since GetSelectedText/ReplaceTextSmart are
-// generic host methods, unlike the paragraph object model used by DocumentCorrectionAgent.
-// styleInfo (bold/italic/etc.) is best-effort, word-only — see getSelectedTextWithStyle.
+// generic host methods, unlike the paragraph object model used by DocumentCorrectionAgent — hence
+// going through Editor.create() rather than a fixed editor class: styleInfo (bold/italic/etc.)
+// comes back populated on word (DocumentEditor.getSelectedTextWithStyle) and empty everywhere else
+// (BaseEditor's default), with no editor-type branching needed here.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
+  private editor = Editor.create();
+
   private text = '';
 
   private styleInfo: CorrectionStyleRange[] = [];
 
   async loadSelection(): Promise<void> {
-    const selected = await getSelectedTextWithStyle();
+    const selected = await this.editor.getSelectedTextWithStyle();
     this.text = selected.text;
     this.styleInfo = selected.styleInfo ?? [];
   }
@@ -83,6 +88,6 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       + this.text.slice(params.positionReplaceEnd);
 
     const paragraphs = this.text.replace(/(?:\r\n)+$/, '').split(/\r\n\r\n/);
-    await replaceSelectedText(paragraphs);
+    await this.editor.replaceSelectedText(paragraphs);
   }
 }

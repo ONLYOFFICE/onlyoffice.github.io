@@ -21,7 +21,7 @@ npm run lint
 
 ## Architecture
 
-- `src/api/document.ts` — ONLYOFFICE document access (selection + whole-document paragraphs)
+- `src/api/document-editor.ts` — ONLYOFFICE document access (selection + whole-document paragraphs)
 - `src/api/antidote.ts` — resolves the Connectix WebSocket port (manual override or auto-detected)
 - `src/features/correction` — the "Corrector" flow: `DocumentCorrectionAgent` (whole document,
   word only) and `SelectionCorrectionAgent` (selection, any editor type), both implementing

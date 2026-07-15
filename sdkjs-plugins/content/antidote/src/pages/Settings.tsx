@@ -48,6 +48,7 @@ export function Settings(): JSX.Element {
   // as if the user had typed it in themselves rather than showing blank while a port is in use.
   const effectivePort = manualPort.value ?? discoveredPort.value;
   const [value, setValue] = useState(effectivePort ? String(effectivePort) : '');
+  const [placeholder, setPlaceholder] = useState(effectivePort ? String(effectivePort) : '59004');
 
   const save = () => {
     const port = Number(value.trim());
@@ -62,8 +63,9 @@ export function Settings(): JSX.Element {
 
   if (query.reason === 'connectionError') {
     if (discoveredPort.value) {
-      setValue(String(discoveredPort.value));
+      setPlaceholder(String(discoveredPort.value));
       setManualPort(discoveredPort.value);
+      setValue('');
     }
   }
 
@@ -77,7 +79,7 @@ export function Settings(): JSX.Element {
           label={t('Connectix WebSocket port')}
           caption={t('Leave empty to auto-detect. Find the port by running "AgentConnectixConsole --api".')}
           value={value}
-          placeholder="59004"
+          placeholder={placeholder}
           clearable
           clearLabel={t('Clear')}
           onInput={setValue}

@@ -34,7 +34,7 @@ import { useCallback, useState } from 'preact/hooks';
 import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, AntidoteError } from '@api/antidote';
-import { getSelectedText, getCurrentWord } from '@api/document';
+import { Editor } from '@api/editor';
 import { t } from '@utils/i18n';
 
 import { LookupAgent } from '../agents/lookupAgent';
@@ -53,15 +53,16 @@ export function useLookup() {
 
   const open = useCallback(async (tool: LookupTool, manualText: string) => {
     setError(null);
+    const editor = Editor.create();
 
     let selected = '';
     try {
-      selected = await getSelectedText();
+      selected = await editor.getSelectedText();
     } catch {
       console.error('Failed to get selected text');
       // no plugin selection API available (e.g. cell/pdf without a selection) — fall back below
     }
-    const currentWord = selected.trim() ? '' : await getCurrentWord();
+    const currentWord = selected.trim() ? '' : await editor.getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();
     if (tool === 'dictionaries' && !text) {
       setError(t('Select some text or place the cursor on a word to look it up.'));
