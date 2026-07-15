@@ -42,6 +42,7 @@ import {
 } from '@druide-informatique/antidote-api-js';
 
 import { Editor, CorrectionStyleRange } from '@api/editor';
+import { loadCorrectionMemory } from '../store/correctionMemoryStore';
 import { BaseCorrectionAgent } from './base';
 
 // Selection scope. Works uniformly across word/cell/pdf since GetSelectedText/ReplaceTextSmart are
@@ -67,6 +68,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       documentTitle: `${this.title} — selection`,
       activeMarkup: DocumentType.text,
       carriageReturn: '\r\n',
+      correctionMemory: loadCorrectionMemory(),
     };
   }
 

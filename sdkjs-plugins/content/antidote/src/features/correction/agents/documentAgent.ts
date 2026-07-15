@@ -42,6 +42,7 @@ import {
 } from '@druide-informatique/antidote-api-js';
 
 import { Editor, CorrectionStyleRange } from '@api/editor';
+import { loadCorrectionMemory } from '../store/correctionMemoryStore';
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
@@ -78,6 +79,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       documentTitle: this.title,
       activeMarkup: DocumentType.text,
       carriageReturn: '\r\n',
+      correctionMemory: loadCorrectionMemory(),
     };
   }
 

@@ -30,7 +30,11 @@
  *
  */
 
-import { WordProcessorAgent, ParamsReplace, ParamsAllowEdit } from '@druide-informatique/antidote-api-js';
+import {
+  WordProcessorAgent, ParamsReplace, ParamsAllowEdit, ParamsNewCorrectionMemory,
+} from '@druide-informatique/antidote-api-js';
+
+import { getDocumentPath, saveCorrectionMemory } from '../store/correctionMemoryStore';
 
 // Antidote requires `correctIntoWordProcessor` to return synchronously, but applying a correction
 // into the ONLYOFFICE document is async (callCommand/executeMethod round-trip). Corrections are
@@ -52,6 +56,19 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   // Antidote's window directly instead.
   sessionEnded(): void {
     this.onSessionEnded?.();
+  }
+
+  // Lets Antidote remember which suggestions were already ignored/applied for this document
+  // across separate Corrector sessions (see correctionMemoryStore.ts) — `documentId` is the only
+  // stable per-document identifier the plugin host exposes.
+  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
+  documentPath(): string {
+    return getDocumentPath();
+  }
+
+  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
+  newCorrectionMemory(params: ParamsNewCorrectionMemory): void {
+    saveCorrectionMemory(params.data);
   }
 
   // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
