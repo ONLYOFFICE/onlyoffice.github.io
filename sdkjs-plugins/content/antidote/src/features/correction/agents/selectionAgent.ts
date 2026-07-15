@@ -33,6 +33,7 @@
 import {
   ParamsGetZonesToCorrect,
   ParamsReplace,
+  ParamsSelect,
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
@@ -79,6 +80,13 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     return [{
       text: this.text, zoneId: '', zoneIsFocused: true, styleInfo,
     }];
+  }
+
+  // Antidote calls this when the user selects text inside its own Corrector window — mirror that
+  // selection back onto the ONLYOFFICE document. Silent no-op on editors without an object model
+  // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
+  selectInterval(params: ParamsSelect): void {
+    this.editor.selectWithinSelection(params.positionStart, params.positionEnd).catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {

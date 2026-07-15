@@ -138,6 +138,28 @@ export abstract class BaseEditor {
     return Promise.resolve([]);
   }
 
+  // Highlights a sub-range of a specific paragraph (paragraph-local `start`/`end`, matching how
+  // `applyCorrection` already slices `paragraph.text` locally). Called when Antidote reports the
+  // user selected text inside its own Corrector window (WordProcessorAgent.selectInterval) — a
+  // real no-op path for editors without a paragraph object model, so it's silent by design (this
+  // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
+  // whole-document scope already keeps out of reach there).
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  selectContentRange(_index: number, _start: number, _end: number): Promise<void> {
+    console.error('selectContentRange is not implemented in this editor');
+    return Promise.resolve();
+  }
+
+  // Highlights a sub-range of the current document selection (`start`/`end` relative to that
+  // selection's own text, matching the positions Antidote was given via
+  // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
+  // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  selectWithinSelection(_start: number, _end: number): Promise<void> {
+    console.error('selectWithinSelection is not implemented in this editor');
+    return Promise.resolve();
+  }
+
   // No run-level style-range extraction outside Word's object model. TextEditor overrides this
   // to add `styleInfo`; every other editor keeps the plain-text default (cosmetic-only data, so
   // dropping it here is always a safe degradation, never a correctness risk for the correction

@@ -266,4 +266,24 @@ export class TextEditor extends BaseEditor {
       Api.ReplaceTextSmart([newText]);
     });
   }
+
+  selectContentRange(index: number, start: number, end: number): Promise<void> {
+    return this.runCommand({ index, start, end }, () => {
+      const { index: paraIndex, start: s, end: e } = Asc.scope as { index: number; start: number; end: number };
+      const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];
+      paragraph.GetRange(s, e).Select();
+    });
+  }
+
+  // Re-fetches the live selection range each call rather than holding onto a stale object-model
+  // handle from an earlier callCommand invocation — those don't survive outside the sandboxed
+  // realm they were created in (see runQuery/runCommand above), only plain data does.
+  selectWithinSelection(start: number, end: number): Promise<void> {
+    return this.runCommand({ start, end }, () => {
+      const { start: s, end: e } = Asc.scope as { start: number; end: number };
+      const range = Api.GetDocument().GetRangeBySelect();
+      if (!range) return;
+      range.GetRange(s, e).Select();
+    });
+  }
 }

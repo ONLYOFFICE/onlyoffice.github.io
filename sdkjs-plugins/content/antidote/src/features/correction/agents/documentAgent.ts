@@ -33,6 +33,7 @@
 import {
   ParamsGetZonesToCorrect,
   ParamsReplace,
+  ParamsSelect,
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
@@ -107,6 +108,17 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       found = paragraph;
     }
     return found;
+  }
+
+  // Antidote calls this when the user selects text inside its own Corrector window — mirror that
+  // selection back onto the ONLYOFFICE document so it stays visible which part is being worked on.
+  selectInterval(params: ParamsSelect): void {
+    const paragraph = this.findParagraphAt(params.positionStart);
+    const localStart = params.positionStart - paragraph.start;
+    const localEnd = params.positionEnd - paragraph.start;
+    this.editor.selectContentRange(paragraph.index, localStart, localEnd).catch(() => {
+      console.error('Failed to select content range');
+    });
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
