@@ -2,7 +2,7 @@
     "name": "Curly",
     "guid": "asc.{CE3A8C7D-2C4F-4E1A-9A5A-C8B1A7D0F2E3}",
     "offered": "Foundasys",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "baseUrl": "",
     "variations": [
         {
@@ -13,7 +13,8 @@
                 "fr": "Transformez n'importe quel document en modèle réutilisable : marquez les parties variables avec des {balises} et remplissez-les depuis le panneau latéral — un document prêt à envoyer en quelques secondes.",
                 "es": "Convierta cualquier documento en una plantilla reutilizable: marque las partes variables con {etiquetas} y rellénelas desde el panel lateral — un documento listo para enviar en segundos.",
                 "pt-BR": "Transforme qualquer documento em um modelo reutilizável: marque as partes variáveis com {tags} e preencha-as no painel lateral — um documento pronto para envio em segundos.",
-                "it": "Trasforma qualsiasi documento in un modello riutilizzabile: contrassegna le parti variabili con {tag} e compilale dal pannello laterale — un documento pronto da inviare in pochi secondi."
+                "it": "Trasforma qualsiasi documento in un modello riutilizzabile: contrassegna le parti variabili con {tag} e compilale dal pannello laterale — un documento pronto da inviare in pochi secondi.",
+                "ru": "Превратите любой документ в многоразовый шаблон: отметьте изменяемые части {тегами} и заполняйте их в боковой панели — готовый к отправке документ за считанные секунды."
             },
             "url": "index.html",
             "icons": ["resources/light/icon.png", "resources/light/icon@2x.png"],
