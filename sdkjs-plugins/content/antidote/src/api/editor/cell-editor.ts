@@ -31,27 +31,15 @@
  */
 
 import { BaseEditor } from './base';
-import { DocumentEditor } from './document-editor';
-import { SpreadsheetEditor } from './spreadsheet-editor';
 
-// Central factory: consumers that work across any editor type (e.g. SelectionCorrectionAgent,
-// useHasSelection, useLookup) get their editor instance through here rather than importing
-// DocumentEditor/SpreadsheetEditor directly, so adding a new editor type — e.g. a future
-// PresentationEditor for `editorType === 'slide'` — only means adding one branch here. Code that
-// already knows it's word-only (DocumentCorrectionAgent, gated upstream by Main.tsx) can still
-// import DocumentEditor directly; there's no ambiguity to resolve there.
-export class Editor {
-  static create(): BaseEditor {
-    switch (window.Asc.plugin.info.editorType) {
-      case 'word':
-        return new DocumentEditor();
-      case 'cell':
-        return new SpreadsheetEditor();
-      case 'slide':
-        // TODO: Implement PresentationEditor when needed
-        throw new Error('Presentation editor not implemented yet');
-      default:
-        throw new Error(`Unsupported editor type: ${window.Asc.plugin.info.editorType}`);
-    }
+// Cell — and, provisionally, pdf too (see Editor.create()'s fallback branch: pdf has no object
+// model of its own wired up yet, so it currently reuses this class rather than TextEditor's).
+// Everything needed today is already covered by BaseEditor's generic selection get/replace; no
+// spreadsheet-specific object model access (e.g. `Api.GetActiveSheet()`) exists yet. Kept as its
+// own class — rather than instantiating BaseEditor directly — so that behavior has an obvious
+// home to grow into, the same way TextEditor holds Word's.
+export class CellEditor extends BaseEditor {
+  constructor() {
+    super('spreadsheet');
   }
 }

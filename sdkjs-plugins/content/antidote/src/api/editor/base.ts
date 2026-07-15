@@ -53,7 +53,7 @@ const SELECTED_TEXT_OPTIONS = {
   TabSymbol: String.fromCharCode(160),
 };
 
-// Every concrete editor (DocumentEditor, SpreadsheetEditor, and future ones — e.g. a Presentation
+// Every concrete editor (TextEditor, CellEditor, and future ones — e.g. a Presentation
 // editor for `editorType === 'slide'`) is created through `Editor.create()` (editor.ts), which
 // picks the subclass from `window.Asc.plugin.info.editorType`. `GetSelectedText`/`ReplaceTextSmart`
 // are generic ONLYOFFICE host methods that work the same in every editor type, so their wrappers
@@ -126,7 +126,7 @@ export abstract class BaseEditor {
     });
   }
 
-  // No caret-word API outside Word's object model. DocumentEditor overrides this with the real
+  // No caret-word API outside Word's object model. TextEditor overrides this with the real
   // `Api.GetDocument().GetCurrentWord()` call; every other editor keeps this empty-string default,
   // which callers (e.g. useLookup's Dictionaries/Guides caret fallback) treat as "nothing found."
   // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
@@ -134,11 +134,21 @@ export abstract class BaseEditor {
     return Promise.resolve('');
   }
 
-  // No run-level style-range extraction outside Word's object model. DocumentEditor overrides this
+  getDocumentContent() {
+    return Promise.resolve([]);
+  }
+
+  // No run-level style-range extraction outside Word's object model. TextEditor overrides this
   // to add `styleInfo`; every other editor keeps the plain-text default (cosmetic-only data, so
   // dropping it here is always a safe degradation, never a correctness risk for the correction
   // itself).
   getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
+    console.error('getSelectedTextWithStyle is not implemented in this editor');
     return this.getSelectedText().then((text) => ({ text }));
+  }
+
+  replaceContent(text: string, index: number): Promise<void> {
+    console.error('replaceContent is not implemented in this editor', { text, index });
+    return Promise.resolve();
   }
 }

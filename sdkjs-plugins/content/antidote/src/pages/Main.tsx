@@ -40,8 +40,8 @@ import {
 import { useHasSelection, useTranslation } from '@hooks';
 import { useCorrection, CorrectionScope } from '@features/correction';
 import { useLookup, LookupTool } from '@features/lookup';
-import { warmUpPort } from '@api/antidote';
 import { showWarning } from '@api/pluginWindow';
+import { warmUpPort } from '@api/antidote';
 
 function statusTone(state: ReturnType<typeof useCorrection>['connectionState']['value']) {
   if (state === 'connected') return 'success' as const;

@@ -40,8 +40,7 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { DocumentEditor } from '@/api/document-editor';
-import { CorrectionStyleRange } from '@/api/base';
+import { Editor, CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
@@ -55,14 +54,14 @@ const PARAGRAPH_SEPARATOR = '\r\n\r\n';
 
 // Whole-document scope. Only valid for editorType "word" — cell/pdf don't expose a paragraph
 // object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word") —
-// so this instantiates DocumentEditor directly rather than going through the generic Editor.create().
+// so this instantiates TextEditor directly rather than going through the generic Editor.create().
 export class DocumentCorrectionAgent extends BaseCorrectionAgent {
-  private editor = new DocumentEditor();
+  private editor = Editor.create();
 
   private paragraphs: ParagraphOffset[] = [];
 
   async loadParagraphs(): Promise<void> {
-    const paragraphs = await this.editor.getDocumentParagraphs();
+    const paragraphs = await this.editor.getDocumentContent();
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
       const offset: ParagraphOffset = {
@@ -116,7 +115,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     const localEnd = params.positionReplaceEnd - paragraph.start;
     const newText = paragraph.text.slice(0, localStart) + params.newString + paragraph.text.slice(localEnd);
 
-    await this.editor.replaceParagraph(paragraph.index, newText);
+    await this.editor.replaceContent(newText, paragraph.index);
 
     const diff = newText.length - paragraph.text.length;
     paragraph.text = newText;

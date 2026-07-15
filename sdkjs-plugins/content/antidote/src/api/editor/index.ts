@@ -30,52 +30,5 @@
  *
  */
 
-import { useState, useEffect } from 'preact/hooks';
-import { Editor } from '@api/editor';
-import { isPluginAvailable } from './usePluginReady';
-
-const POLL_INTERVAL = 500;
-
-export function useHasSelection(): boolean {
-  const [hasSelection, setHasSelection] = useState(false);
-
-  useEffect(() => {
-    if (!isPluginAvailable()) {
-      setHasSelection(false);
-      return undefined;
-    }
-
-    const editor = Editor.create();
-    let timeoutId: ReturnType<typeof setTimeout>;
-    let cancelled = false;
-
-    const poll = async () => {
-      if (!isPluginAvailable()) {
-        setHasSelection(false);
-        return;
-      }
-
-      try {
-        const hasSelection = await editor.hasSelection();
-        if (!cancelled) setHasSelection(hasSelection);
-      } catch {
-        if (!cancelled) setHasSelection(false);
-      }
-
-      if (!cancelled) {
-        timeoutId = setTimeout(poll, POLL_INTERVAL);
-      }
-    };
-
-    poll();
-
-    return () => {
-      cancelled = true;
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, []);
-
-  return hasSelection;
-}
+export { CorrectionStyleRange } from './base';
+export { Editor } from './editor';

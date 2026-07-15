@@ -49,7 +49,7 @@ export interface DocumentParagraph {
 // Word only: everything here is built on `Api.GetDocument()`'s paragraph object model, which
 // isn't exposed for cell/pdf (see BaseEditor for the generic selection-based capabilities every
 // editor type shares instead).
-export class DocumentEditor extends BaseEditor {
+export class TextEditor extends BaseEditor {
   constructor() {
     super('document');
   }
@@ -64,11 +64,11 @@ export class DocumentEditor extends BaseEditor {
   // be declared *inside* the callCommand callback: callCommand runs its argument in the document's
   // sandboxed object-model context by serializing the function, so it can only see `Api`/
   // `Asc.scope` and whatever it declares itself — any outer closure (including a module-level or
-  // class-level helper) is invisible there, same reason replaceParagraph below smuggles data
+  // class-level helper) is invisible there, same reason replaceContent below smuggles data
   // through `Asc.scope` instead of a normal closure. Only the *types* (ApiParagraph/ApiRun/
   // ApiHyperlink, imported above) can come from outside, since those are erased at compile time
   // and never need to survive into the serialized runtime function.
-  getDocumentParagraphs(): Promise<DocumentParagraph[]> {
+  getDocumentContent(): Promise<DocumentParagraph[]> {
     return this.runQuery<DocumentParagraph[]>(() => {
       type StyledContainer = ApiParagraph | ApiHyperlink;
 
@@ -158,7 +158,7 @@ export class DocumentEditor extends BaseEditor {
 
     try {
       const styled = await this.runQuery<{ text: string; styleInfo: CorrectionStyleRange[] } | null>(() => {
-        // See getDocumentParagraphs above for why this is declared here rather than shared.
+        // See getDocumentContent above for why this is declared here rather than shared.
         type StyledContainer = ApiParagraph | ApiHyperlink;
 
         function isRun(element: ParagraphContent): element is ApiRun {
@@ -258,7 +258,7 @@ export class DocumentEditor extends BaseEditor {
     return { text };
   }
 
-  replaceParagraph(index: number, text: string): Promise<void> {
+  replaceContent(text: string, index: number): Promise<void> {
     return this.runCommand({ index, text }, () => {
       const { index: paraIndex, text: newText } = Asc.scope as { index: number; text: string };
       const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];

@@ -53,6 +53,7 @@ export function useCorrection() {
     connectionState.value = 'idle';
   }, []);
 
+  /** Corrector launcher */
   const check = useCallback(async (targetScope: CorrectionScope = scope.value) => {
     errorMessage.value = null;
     connectionState.value = 'connecting';
