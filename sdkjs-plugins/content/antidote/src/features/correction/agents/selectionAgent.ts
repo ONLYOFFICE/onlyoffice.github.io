@@ -34,6 +34,7 @@ import {
   ParamsGetZonesToCorrect,
   ParamsReplace,
   ParamsSelect,
+  ParamsAllowEdit,
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
@@ -50,12 +51,14 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
 
   private styleInfo: CorrectionStyleRange[] = [];
 
-  async loadSelection(): Promise<void> {
+  private selectionStart: number | null = null;
+
+  async loadText(): Promise<void> {
     await this.preloadCorrectionMemory();
     const selected = await this.editor.getSelectedTextWithStyle();
-
     this.text = selected.text;
     this.styleInfo = selected.styleInfo ?? [];
+    this.selectionStart = await this.editor.getSelectionStart();
   }
 
   configuration(): WordProcessorConfiguration {
@@ -79,14 +82,22 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     }];
   }
 
+  // See BaseCorrectionAgent.allowEdit — no paragraph indexing here, just a straight slice of the
+  // one flat cached string.
+  allowEdit(params: ParamsAllowEdit): boolean {
+    return this.text.slice(params.positionStart, params.positionEnd) === params.context;
+  }
+
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that
   // selection back onto the ONLYOFFICE document. Silent no-op on editors without an object model
   // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
   selectInterval(params: ParamsSelect): void {
-    this.editor.selectWithinSelection(params.positionStart, params.positionEnd).catch(() => {});
+    if (this.selectionStart === null) return;
+    this.editor.selectWithinSelection(this.selectionStart, params.positionStart, params.positionEnd).catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
+    console.log('applyCorrection', params);
     this.text = this.text.slice(0, params.positionStartReplace)
       + params.newString
       + this.text.slice(params.positionReplaceEnd);

@@ -34,6 +34,7 @@ import {
   ParamsGetZonesToCorrect,
   ParamsReplace,
   ParamsSelect,
+  ParamsAllowEdit,
   TextZoneConnectix,
   WordProcessorConfiguration,
   DocumentType,
@@ -53,13 +54,44 @@ interface ParagraphOffset {
 
 const PARAGRAPH_SEPARATOR = '\r\n\r\n';
 
+// How long to wait after a document-content-change event before resyncing — batches a burst of
+// several rapid edits (e.g. fast typing) into one resync instead of one per keystroke.
+const RESYNC_DEBOUNCE_MS = 500;
+
 // Whole-document scope. Only valid for editorType "word" — cell/pdf don't expose a paragraph
 // object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word").
 export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   private paragraphs: ParagraphOffset[] = [];
 
-  async loadParagraphs(): Promise<void> {
-    await this.preloadCorrectionMemory();
+  private resyncTimer: ReturnType<typeof setTimeout> | null = null;
+
+  // Watches for edits happening concurrently with this correction session — another collaborator,
+  // or the user typing directly in the document while Corrector is open — so `this.paragraphs`
+  // (index + offset bookkeeping `applyCorrection`/`selectInterval` rely on) gets resynced instead
+  // of silently drifting out of sync with the real document. Ignores changes caused by our own
+  // corrections (`isApplyingCorrections`) — those already update `this.paragraphs` incrementally
+  // in `applyCorrection` and don't need a full resync.
+  sessionStarted(): void {
+    this.editor.watchContentChanges(this.scheduleResync);
+  }
+
+  sessionEnded(): void {
+    this.editor.stopWatchingContentChanges();
+    if (this.resyncTimer) clearTimeout(this.resyncTimer);
+    super.sessionEnded();
+  }
+
+  private scheduleResync = (): void => {
+    if (this.isApplyingCorrections) return;
+    if (this.resyncTimer) clearTimeout(this.resyncTimer);
+    this.resyncTimer = setTimeout(() => {
+      this.resyncTimer = null;
+      if (this.isApplyingCorrections) return;
+      this.loadParagraphs().catch(() => {});
+    }, RESYNC_DEBOUNCE_MS);
+  };
+
+  private async loadParagraphs(): Promise<void> {
     const paragraphs = await this.editor.getDocumentContent();
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
@@ -69,6 +101,10 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       start += paragraph.text.length + PARAGRAPH_SEPARATOR.length;
       return offset;
     });
+  }
+
+  async loadText(): Promise<void> {
+    await Promise.all([this.preloadCorrectionMemory(), this.loadParagraphs()]);
   }
 
   configuration(): WordProcessorConfiguration {
@@ -107,6 +143,18 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       found = paragraph;
     }
     return found;
+  }
+
+  // See BaseCorrectionAgent.allowEdit — confirms the text at [positionStart, positionEnd) still
+  // matches what Antidote expects (`context`) before letting the replacement through. Locating a
+  // paragraph outside the current bounds (e.g. one was just deleted concurrently and a resync
+  // hasn't caught up yet) can't match a slice at all, so this fails closed on any lookup issue.
+  allowEdit(params: ParamsAllowEdit): boolean {
+    const paragraph = this.findParagraphAt(params.positionStart);
+    if (!paragraph) return false;
+    const localStart = params.positionStart - paragraph.start;
+    const localEnd = params.positionEnd - paragraph.start;
+    return paragraph.text.slice(localStart, localEnd) === params.context;
   }
 
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that

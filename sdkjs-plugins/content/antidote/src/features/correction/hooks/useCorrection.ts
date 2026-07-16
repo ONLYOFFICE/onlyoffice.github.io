@@ -70,8 +70,7 @@ export function useCorrection() {
         ? new DocumentCorrectionAgent(DOCUMENT_TITLE, handleSessionEnded)
         : new SelectionCorrectionAgent(DOCUMENT_TITLE, handleSessionEnded);
 
-      if (agent instanceof DocumentCorrectionAgent) await agent.loadParagraphs();
-      else await agent.loadSelection();
+      await agent.loadText();
 
       const connectix = new ConnectixAgent(agent, portProvider);
       await connectix.connectWithAntidote();

@@ -36,6 +36,7 @@ import type {
 
 import {
   BaseEditor, CorrectionStyleRange, SelectedTextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+  PluginWithEditorEvents, CONTENT_CHANGE_EVENTS,
 } from './base';
 
 export interface DocumentParagraph {
@@ -138,6 +139,9 @@ export class TextEditor extends BaseEditor {
           styleInfo: (styled && styled.text === text) ? styled.styleInfo : undefined,
         };
       });
+    }).then((result) => {
+      console.log('getDocumentContent result:', result);
+      return result;
     });
   }
 
@@ -244,15 +248,24 @@ export class TextEditor extends BaseEditor {
         return { text: joinedText, styleInfo: joinedStyleInfo };
       });
 
-      if (styled && styled.text === text) return { text, styleInfo: styled.styleInfo };
+      if (styled && styled.text === text) {
+        console.log('getSelectedTextWithStyle matched', { styled, text });
+        return { text, styleInfo: styled.styleInfo };
+      }
     } catch {
       // Object-model access failed (e.g. no selection to build a range from) — fall back below.
       console.error('Failed to get selected text with style info');
     }
-
+    console.log('getSelectedTextWithStyle fallback', { text });
     return { text };
   }
 
+  // NOTE: tried reading back the paragraph's actual post-replace text here (to guard against
+  // `ReplaceTextSmart` producing something other than `text`) but that made things worse in
+  // practice — replace stopped working and the selection jumped to the start of the document,
+  // so the `paragraph` reference obtained before `ReplaceTextSmart` is apparently not safe to call
+  // `.GetText()` on afterward (likely invalidated/rebuilt by the replace). Reverted to trusting
+  // `text` as-is; revisit only with a way to actually verify against a live host.
   replaceContent(text: string, index: number): Promise<void> {
     return this.runCommand(() => {
       const { index: paraIndex, text: newText } = Asc.scope as { index: number; text: string };
@@ -263,6 +276,7 @@ export class TextEditor extends BaseEditor {
   }
 
   selectContentRange(index: number, start: number, end: number): Promise<void> {
+    console.log('selectContentRange', { index, start, end });
     return this.runCommand(() => {
       const { index: paraIndex, start: s, end: e } = Asc.scope as { index: number; start: number; end: number };
       const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];
@@ -270,24 +284,22 @@ export class TextEditor extends BaseEditor {
     }, { index, start, end });
   }
 
-  // Re-fetches the live selection range each call rather than holding onto a stale object-model
-  // handle from an earlier callCommand invocation — those don't survive outside the sandboxed
-  // realm they were created in (see runQuery/runCommand above), only plain data does.
-  selectWithinSelection(start: number, end: number): Promise<void> {
+  // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
+  selectWithinSelection(selectionStart: number, start: number, end: number): Promise<void> {
     return this.runCommand(() => {
-      const { start: s, end: e } = Asc.scope as { start: number; end: number };
-      const range = Api.GetDocument().GetRangeBySelect();
-      if (!range) return;
-      range.GetRange(s, e).Select();
-    }, { start, end });
+      const { selectionStart: offset, start: s, end: e } = Asc.scope as { selectionStart: number; start: number; end: number };
+      Api.GetDocument().GetRange(offset + s, offset + e).Select();
+    }, { selectionStart, start, end });
   }
 
-  // `ApiDocument.GetCustomProperties()` isn't in the generated ambient types yet (confirmed against
-  // ONLYOFFICE's own docs: https://api.onlyoffice.com/docs/office-api/usage-api/document-api/
-  // ApiDocument/Methods/GetCustomProperties/) — hence the local cast rather than a proper type.
-  // Stores the correction-memory blob as a custom document property, so it's part of the saved
-  // file itself and any collaborator opening it later picks up where the last session left off,
-  // rather than being scoped to one browser (localStorage).
+  getSelectionStart(): Promise<number | null> {
+    return this.runQuery<number | null>(() => {
+      const range = Api.GetDocument().GetRangeBySelect();
+      return range ? range.GetStartPos() : null;
+    }).catch(() => null);
+  }
+
+  // Stores correction memory as a custom document property so it travels with the file.
   loadCorrectionMemory(): Promise<string> {
     return this.runQuery<string>(() => {
       const { CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { CORRECTION_MEMORY_PROPERTY: string };
@@ -309,5 +321,15 @@ export class TextEditor extends BaseEditor {
       const doc = Api.GetDocument() as unknown as { GetCustomProperties(): CustomProperties };
       doc.GetCustomProperties().Add(property, value);
     }, { data, CORRECTION_MEMORY_PROPERTY });
+  }
+
+  watchContentChanges(onChange: () => void): void {
+    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.attachEditorEvent(eventName, () => onChange()));
+  }
+
+  stopWatchingContentChanges(): void {
+    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.detachEditorEvent(eventName));
   }
 }

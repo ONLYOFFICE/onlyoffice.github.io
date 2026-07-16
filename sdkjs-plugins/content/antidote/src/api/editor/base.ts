@@ -61,6 +61,20 @@ export interface CustomProperties {
 
 export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
 
+// `attachEditorEvent`/`detachEditorEvent` (distinct from the plugin-window-level
+// `attachEvent`/`detachEvent` used elsewhere, e.g. useTheme.ts's `onThemeChanged`) aren't in the
+// generated ambient types either — same situation as CustomProperties above.
+export interface PluginWithEditorEvents {
+  attachEditorEvent(eventName: string, callback: (data: unknown) => void): void;
+  detachEditorEvent(eventName: string): void;
+}
+
+// The three editor-content-mutation events TextEditor listens for to detect changes happening
+// concurrently with an active correction session — text edited within an existing paragraph, or
+// paragraphs added/removed (which would otherwise silently shift DocumentCorrectionAgent's
+// index-based paragraph bookkeeping out of sync).
+export const CONTENT_CHANGE_EVENTS = ['onParagraphText', 'onParagraphAdd', 'onParagraphRemove'] as const;
+
 // Generic host methods live here; editor-specific object-model methods belong in subclasses.
 export abstract class BaseEditor {
   protected name: string;
@@ -136,10 +150,12 @@ export abstract class BaseEditor {
   // which callers (e.g. useLookup's Dictionaries/Guides caret fallback) treat as "nothing found."
   // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
   getCurrentWord(): Promise<string> {
+    console.error('getCurrentWord is not implemented in this editor');
     return Promise.resolve('');
   }
 
   getDocumentContent() {
+    console.error('getDocumentContent is not implemented in this editor');
     return Promise.resolve([]);
   }
 
@@ -160,9 +176,14 @@ export abstract class BaseEditor {
   // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
   // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectWithinSelection(_start: number, _end: number): Promise<void> {
+  selectWithinSelection(_selectionStart: number, _start: number, _end: number): Promise<void> {
     console.error('selectWithinSelection is not implemented in this editor');
     return Promise.resolve();
+  }
+
+  getSelectionStart(): Promise<number | null> {
+    console.error('getSelectionStart is not implemented in this editor');
+    return Promise.resolve(null);
   }
 
   // No run-level style-range extraction outside Word's object model. TextEditor overrides this
@@ -180,18 +201,25 @@ export abstract class BaseEditor {
   }
 
   // Lets Antidote remember which suggestions were already ignored/applied for this document
-  // across separate Corrector sessions — stored as a custom document property (GetCustomProperties)
-  // rather than localStorage, so it travels with the file for any collaborator to pick up, not
-  // just this browser. TextEditor/CellEditor override with the real per-editor-type call; every
-  // other editor keeps this memory-less default (Antidote just won't remember previous
-  // corrections — a safe degradation, not a correctness risk).
-  // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
+  // across multiple Corrector sessions — stored as a custom document property (GetCustomProperties)
   loadCorrectionMemory(): Promise<string> {
+    console.error('loadCorrectionMemory is not implemented in this editor');
     return Promise.resolve('');
   }
 
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by subclasses; base is a no-op
   saveCorrectionMemory(_data: string): Promise<void> {
+    console.error('saveCorrectionMemory is not implemented in this editor');
     return Promise.resolve();
   }
+
+  // Notifies `onChange` whenever the document's content changes (text edited, paragraphs
+  // added/removed) — used to detect edits that happen concurrently with an active correction
+  // session (another collaborator, or the user typing directly) so cached positions can be
+  // resynced instead of silently drifting. No-op outside Word's editor-event API; every other
+  // editor just has no concurrent-edit detection yet.
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  watchContentChanges(_onChange: () => void): void {}
+
+  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
+  stopWatchingContentChanges(): void {}
 }

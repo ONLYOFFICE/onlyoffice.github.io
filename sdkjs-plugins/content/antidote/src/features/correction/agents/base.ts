@@ -51,10 +51,21 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
 
   protected editor: BaseEditor = Editor.create();
 
-  // Populated by `preloadCorrectionMemory()` (call from `loadParagraphs`/`loadSelection`, which
+  // Populated by `preloadCorrectionMemory()` (call from `loadText`, which
   // already run before the session starts) so the synchronous `configuration()` has it ready —
   // reading it from the document itself is async and can't happen inside `configuration()`.
   protected correctionMemory: string | undefined;
+
+  // True for as long as at least one of our own corrections is queued/applying — lets subclasses
+  // that watch for external document-content-change events (see TextEditor.watchContentChanges)
+  // tell "the document just changed because Antidote's own correction wrote it" apart from a
+  // genuine concurrent edit (another collaborator, or the user typing directly) they need to react
+  // to. A count rather than a bool since corrections can queue up faster than they apply.
+  protected get isApplyingCorrections(): boolean {
+    return this.pendingCorrections > 0;
+  }
+
+  private pendingCorrections = 0;
 
   private queue: Promise<void> = Promise.resolve();
 
@@ -103,13 +114,20 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
-  allowEdit(_params: ParamsAllowEdit): boolean {
-    return true;
-  }
+  // Verifies the text Antidote thinks is at [positionStart, positionEnd) (`context`) still matches
+  // what we actually have cached — our best defense against a correction landing in the wrong
+  // place after a concurrent edit (another collaborator, or the user typing directly) that
+  // resyncing (see DocumentCorrectionAgent.scheduleResync) didn't catch or hasn't run yet. Each
+  // subclass checks against its own text representation (paragraph-indexed vs. one flat string).
+  abstract allowEdit(params: ParamsAllowEdit): boolean;
 
   correctIntoWordProcessor(params: ParamsReplace): boolean {
-    this.queue = this.queue.then(() => this.applyCorrection(params));
+    this.pendingCorrections += 1;
+    this.queue = this.queue
+      .then(() => this.applyCorrection(params))
+      .finally(() => {
+        this.pendingCorrections -= 1;
+      });
     return true;
   }
 
