@@ -1,36 +1,82 @@
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
+const { spawnSync } = require('child_process');
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
-const API_REPO = 'ONLYOFFICE/office-js-api-declarations';
-const API_BRANCH = 'master';
-const API_FILES = ['word.json', 'cell.json', 'slide.json', 'forms.json'];
-const FILE_MAP = {
-  'word': 'word',
-  'cell': 'cell',
-  'slide': 'slide',
-  'forms': 'forms'
+const EDITORS = {
+  word: { code: 'CDE', sources: ['word/apiBuilder.js'] },
+  cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js'] },
+  slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js'] },
+  forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js'] },
 };
 
-function downloadFile(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = '';
-      res.on('data', (chunk) => data += chunk);
-      res.on('end', () => resolve(JSON.parse(data)));
-      res.on('error', reject);
-    }).on('error', reject);
-  });
+function readOption(name) {
+  const index = process.argv.indexOf(`--${name}`);
+  return index === -1 ? undefined : process.argv[index + 1];
 }
 
-async function fetchApiDefinitions() {
+function resolveSdkjsPaths() {
+  const sdkjs = readOption('sdkjs') || process.env.SDKJS_PATH;
+  if (!sdkjs) throw new Error('Set SDKJS_PATH or pass --sdkjs <path-to-sdkjs>.');
+
+  const resolvedSdkjs = path.resolve(sdkjs);
+  if (!fs.existsSync(resolvedSdkjs)) throw new Error(`sdkjs directory does not exist: ${resolvedSdkjs}`);
+
+  const sdkjsForms = readOption('sdkjs-forms') || process.env.SDKJS_FORMS_PATH || path.resolve(resolvedSdkjs, '..', 'sdkjs-forms');
+  const resolvedSdkjsForms = path.resolve(sdkjsForms);
+  if (!fs.existsSync(resolvedSdkjsForms)) throw new Error(`sdkjs-forms directory does not exist: ${resolvedSdkjsForms}`);
+
+  return { sdkjs: resolvedSdkjs, sdkjsForms: resolvedSdkjsForms };
+}
+
+function getSourcePaths(editor, paths) {
+  return EDITORS[editor].sources.map((source) => (source.startsWith('../sdkjs-forms/')
+    ? path.join(paths.sdkjsForms, source.slice('../sdkjs-forms/'.length))
+    : path.join(paths.sdkjs, source)));
+}
+
+function runJsdoc(sources) {
+  const jsdoc = require.resolve('jsdoc/jsdoc.js');
+  const result = spawnSync(process.execPath, [jsdoc, '-X', ...sources], {
+    encoding: 'utf8',
+    maxBuffer: 100 * 1024 * 1024,
+  });
+
+  if (result.status !== 0) throw new Error(result.stderr || 'JSDoc failed to generate doclets.');
+  return JSON.parse(result.stdout);
+}
+
+function cleanName(name) {
+  return name ? name.replace('<anonymous>~', '').replaceAll('"', '') : name;
+}
+
+function hasEditorTag(item, editorCode) {
+  return item.tags?.some((tag) => tag.title === 'typeofeditors' && tag.value.includes(editorCode));
+}
+
+function filterDoclets(doclets, editorCode) {
+  return doclets.filter((item) => {
+    if (item.kind === 'typedef' || item.kind === 'class') return !item.name?.startsWith('_');
+    if (item.kind !== 'function' && item.kind !== 'method') return false;
+    return item.scope !== 'inner' && !item.longname?.includes('private') && hasEditorTag(item, editorCode);
+  }).map((item) => ({
+    ...item,
+    name: cleanName(item.name),
+    memberof: cleanName(item.memberof),
+    longname: cleanName(item.longname),
+  }));
+}
+
+function fetchApiDefinitions() {
+  const paths = resolveSdkjsPaths();
   const results = {};
-  for (const file of API_FILES) {
-    const url = `https://raw.githubusercontent.com/${API_REPO}/${API_BRANCH}/office-js-api/${file}`;
-    console.log(`Fetching ${file}...`);
-    results[file.replace('.json', '')] = await downloadFile(url);
+
+  for (const [editor, config] of Object.entries(EDITORS)) {
+    const sources = getSourcePaths(editor, paths);
+    console.log(`Reading ${editor} JSDoc from ${sources.join(', ')}...`);
+    results[editor] = filterDoclets(runJsdoc(sources), config.code);
   }
+
   return results;
 }
 
@@ -55,6 +101,12 @@ function splitTopLevel(str, sep) {
 function parseTypeName(n) {
   if (!n || n === 'null') return 'null';
   if (n.startsWith('?')) return parseTypeName(n.slice(1));  // JSDoc nullable: ?Type -> Type
+  if (n.endsWith(')[]') && n.startsWith('(')) return `(${parseTypeName(n.slice(1, -3))})[]`;
+  if (n.endsWith('[]')) return `${parseTypeName(n.slice(0, -2))}[]`;
+  if (n.startsWith('(') && n.endsWith(')')) return `(${parseTypeName(n.slice(1, -1))})`;
+  if (n.startsWith('Array.<') && n.endsWith('>')) return `${parseTypeName(n.slice(7, -1))}[]`;
+  if (n.startsWith('Array.')) return `${parseTypeName(n.slice(6))}[]`;
+  if (n.includes('|')) return splitTopLevel(n, '|').map(parseTypeName).join(' | ');
   if (n === 'undefined') return 'undefined';
   if (n === 'Number') return 'number';
   if (n === 'String') return 'string';
@@ -108,7 +160,7 @@ function extractClasses(data) {
   }
   
   for (const item of data) {
-    if (item.kind === 'function' && item.name && item.memberof) {
+    if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof) {
       const className = item.memberof.replace('#', '');
       if (classes[className]) {
         // office-js-api-declarations sometimes lists the same method twice for a class — once with
@@ -273,7 +325,7 @@ function collectReferencedApiTypes(classes, typedefs) {
 function generateDtsFile(data, typeName) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let output = 'export {};\n\n';
-  output += `// Auto-generated from ${API_REPO}\n`;
+  output += '// Auto-generated from ONLYOFFICE/sdkjs JSDoc\n';
   output += `// Editor type: ${editorName}\n\n`;
   
   const typedefs = extractTypedefs(data);

@@ -64,13 +64,27 @@ window.Asc.plugin.getSelectedText(function(text) {
 
 ## Generating Types
 
-Run the generation script to update the Office API types:
+Run the generation script against a local `sdkjs` checkout:
 
 ```bash
+SDKJS_PATH=/path/to/sdkjs npm run generate
+```
+
+If `sdkjs-forms` is not next to `sdkjs`, set `SDKJS_FORMS_PATH` as well:
+
+```bash
+SDKJS_PATH=/path/to/sdkjs SDKJS_FORMS_PATH=/path/to/sdkjs-forms npm run generate
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:SDKJS_PATH = 'E:\onlyoffice\repo\sdkjs'
+$env:SDKJS_FORMS_PATH = 'E:\onlyoffice\repo\sdkjs-forms'
 npm run generate
 ```
 
-This fetches the latest API definitions from `ONLYOFFICE/office-js-api-declarations`.
+The generator reads JSDoc directly from the `apiBuilder.js` sources and writes the Office API types to `src/generated/`. It no longer depends on `ONLYOFFICE/office-js-api-declarations`.
 
 ## Project Structure
 
