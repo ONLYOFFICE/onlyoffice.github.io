@@ -70,19 +70,3 @@ export function usePluginReady(initialDelay = 10000): {
 export function isPluginAvailable(): boolean {
   return !!window.Asc?.plugin?.callCommand;
 }
-/** 
- let timeoutId: ReturnType<typeof setTimeout>;
-  if (window.Asc?.plugin?.callCommand) {
-    setReady(true);
-  } else {
-    Asc.plugin.init = function () {
-      setReady(true);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-    timeoutId = setTimeout(() => {
-      setError('Plugin API not available. Please reload the plugin.');
-    }, initialDelay);
-  }
-
-  
- */

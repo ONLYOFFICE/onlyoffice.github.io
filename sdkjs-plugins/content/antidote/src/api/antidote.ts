@@ -41,19 +41,9 @@ export class AntidoteError extends Error {
   }
 }
 
-// `AntidoteConnector.isDetected()` only recognizes the Antidote *browser extension* (Firefox/
-// Chrome/Safari) — it's never present inside ONLYOFFICE Desktop's webview. There is also no way to
-// ask Connectix for its WebSocket port from plugin JS: `AgentConnectixConsole --api` is a CLI tool.
-// So on desktop we fall back to probing the ephemeral port range Connectix binds to, same approach
-// used by other Antidote/word-processor desktop integrations.
-//
-// The deterministic alternative — read `HKLM\SOFTWARE\Druide informatique inc.\Connectix` for the
-// install path, then spawn `AgentConnectixConsole --api` and parse its `{"port":N}` stdout — is what
-// Obsidian's Antidote plugin does (see AgentConnectix.ts/Registry.ts in
-// https://github.com/Heziode/obsidian-antidote/tree/main/src/lib/antidote). It needs Node's
-// `child_process`/registry access, which a sandboxed ONLYOFFICE plugin iframe doesn't have, so it's
-// not an option here — confirms probing + the manual-port Settings fallback is the ceiling for this
-// environment, not a workaround we should keep trying to replace.
+// isDetected() only recognizes the browser extension, unavailable in ONLYOFFICE's webview.
+// The sandbox cannot query Connectix's port or run AgentConnectixConsole, so the plugin probes
+// Connectix's ephemeral range and provides a manual-port fallback.
 const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
 const PROBE_TIMEOUT_MS = 500;

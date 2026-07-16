@@ -62,14 +62,7 @@ export class TextEditor extends BaseEditor {
     return this.runQuery<string>(() => Api.GetDocument().GetCurrentWord()).catch(() => '');
   }
 
-  // Whole-document scope. `walkStyledContent` (and its `isRun`/`isHyperlink` type guards) have to
-  // be declared *inside* the callCommand callback: callCommand runs its argument in the document's
-  // sandboxed object-model context by serializing the function, so it can only see `Api`/
-  // `Asc.scope` and whatever it declares itself — any outer closure (including a module-level or
-  // class-level helper) is invisible there, same reason replaceContent below smuggles data
-  // through `Asc.scope` instead of a normal closure. Only the *types* (ApiParagraph/ApiRun/
-  // ApiHyperlink, imported above) can come from outside, since those are erased at compile time
-  // and never need to survive into the serialized runtime function.
+  // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
   getDocumentContent(): Promise<DocumentParagraph[]> {
     return this.runQuery<DocumentParagraph[]>(() => {
       type StyledContainer = ApiParagraph | ApiHyperlink;

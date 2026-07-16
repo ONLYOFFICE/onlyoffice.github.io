@@ -33,13 +33,7 @@
 import { JSX } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-// Rendered in the separate PluginWindow opened by showWarning() (src/api/pluginWindow.ts), loaded
-// from the same index.html/dist bundle via a `?modal=warning` query flag — that flag only selects
-// which page to mount (see index.tsx), it carries no user-facing data. The actual message text
-// arrives through PluginWindow's own message channel (`onWarning`/`onWindowReady`, the same
-// attachEvent/command pair other ONLYOFFICE plugins in this repo use — e.g. Zotero's
-// info-window.html), not a URL param: it avoids encoding/length concerns for arbitrary text and
-// keeps the payload out of the (however short-lived) window.location/history.
+// Rendered in PluginWindow via ?modal=warning; message text arrives through its message channel.
 export function Warning(): JSX.Element {
   const [message, setMessage] = useState('');
 
@@ -50,11 +44,7 @@ export function Warning(): JSX.Element {
     const handleWarning = (text: unknown) => setMessage(typeof text === 'string' ? text : '');
     plugin.attachEvent?.('onWarning', handleWarning);
 
-    // `sendToPlugin` must fire from inside `plugin.init` — that's the host's actual "the message
-    // channel to this window is up" signal, called on the host's own schedule (typically well
-    // after this effect runs). Chain onto whatever init index.html's boot script already assigned
-    // (its dark-theme-class logic) rather than clobbering it — same requirement the other
-    // info/warning windows in this repo (e.g. Zotero's info-window.html) rely on.
+    // Send only after the host calls plugin.init; preserve the boot script's existing handler.
     const previousInit = plugin.init;
     plugin.init = () => {
       previousInit?.();
@@ -67,10 +57,7 @@ export function Warning(): JSX.Element {
     };
   }, []);
 
-  // Reports content height once the message has actually rendered (state updates are async, so
-  // this can't happen inside the `onWarning` handler itself) — the opener's `onUpdateHeight`
-  // listener (src/api/pluginWindow.ts) resizes the window to fit, same handshake Zotero's
-  // additional-window.js/info-window.html use for their info/warning windows.
+  // Report height after rendering so the opener can resize the window.
   useEffect(() => {
     if (!message) return;
     window.Asc.plugin.sendToPlugin?.('onUpdateHeight', document.body.scrollHeight);

@@ -60,7 +60,6 @@ export function useLookup() {
       selected = await editor.getSelectedText();
     } catch {
       console.error('Failed to get selected text');
-      // no plugin selection API available (e.g. cell/pdf without a selection) — fall back below
     }
     const currentWord = selected.trim() ? '' : await editor.getCurrentWord();
     const text = selected.trim() || currentWord.trim() || manualText.trim();

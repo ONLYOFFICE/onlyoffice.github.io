@@ -37,10 +37,7 @@ import { t } from '@utils/i18n';
 // overriding/restoring `window.Asc.plugin.button` ourselves.
 const PLUGIN_BUTTON_EVENT = 'plugin:button';
 
-// The warning is rendered by this same app/bundle (src/pages/Warning.tsx via a `?modal=warning`
-// query flag checked in index.tsx) — no separate static HTML page to keep in sync with the panel's
-// CSS/theme/translations. `modal=warning` only selects which page to mount; it carries no
-// user-facing data.
+// Warning windows reuse this bundle; modal only selects the page to mount.
 const WARNING_WINDOW_URL = `${new URL('index.html', window.location.href).href}?modal=warning`;
 
 let activeWindow: InstanceType<typeof window.Asc.PluginWindow> | null = null;
@@ -50,15 +47,8 @@ function closeWarning(): void {
   activeWindow = null;
 }
 
-// Opens a small separate PluginWindow (not an in-panel banner) with a warning message — used when
-// there's nothing to act on (e.g. Dictionaries/Guides clicked with no selection and no word at the
-// cursor). The message itself travels over PluginWindow's own message channel — `command()` once
-// the child signals `onWindowReady` (Warning.tsx's `attachEvent('onWarning', ...)` receives it) —
-// the same attachEvent/command pair other ONLYOFFICE plugins in this repo use for info/warning
-// windows (e.g. Zotero's info-window.html), rather than a URL query param: no encoding/length
-// concerns for arbitrary text, and the payload never touches window.location/history.
-// Initial guess only — `onUpdateHeight` below resizes the window to the actual rendered content
-// once Warning.tsx reports it, so a wrong guess here just means a brief resize, not clipped text.
+// Warning text travels through PluginWindow's message channel rather than URL parameters.
+// onUpdateHeight resizes the initial window to its rendered content.
 const WARNING_WINDOW_SIZE: [number, number] = [340, 74];
 
 export function showWarning(message: string): void {

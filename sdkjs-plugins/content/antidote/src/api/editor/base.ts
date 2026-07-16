@@ -53,11 +53,7 @@ const SELECTED_TEXT_OPTIONS = {
   TabSymbol: String.fromCharCode(160),
 };
 
-// `GetCustomProperties()` (on ApiDocument/ApiWorkbook/ApiPresentation) isn't in the generated
-// ambient types yet, hence this local shape rather than importing a real one — confirmed against
-// ONLYOFFICE's own docs (e.g. https://api.onlyoffice.com/docs/office-api/usage-api/document-api/
-// ApiDocument/Methods/GetCustomProperties/). Shared by TextEditor/CellEditor's
-// loadCorrectionMemory/saveCorrectionMemory.
+// `GetCustomProperties()` isn't in the generated ambient types yet, hence this local shape.
 export interface CustomProperties {
   Add(name: string, value: unknown): void;
   Get(name: string): unknown;
@@ -65,13 +61,7 @@ export interface CustomProperties {
 
 export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
 
-// Every concrete editor (TextEditor, CellEditor, and future ones — e.g. a Presentation
-// editor for `editorType === 'slide'`) is created through `Editor.create()` (editor.ts), which
-// picks the subclass from `window.Asc.plugin.info.editorType`. `GetSelectedText`/`ReplaceTextSmart`
-// are generic ONLYOFFICE host methods that work the same in every editor type, so their wrappers
-// live here; anything that needs a specific object model (`Api.GetDocument()`,
-// `Api.GetActiveSheet()`, ...) belongs in the subclass that actually has it, either as an override
-// of the no-op/plain-text defaults below or as an editor-specific extra method.
+// Generic host methods live here; editor-specific object-model methods belong in subclasses.
 export abstract class BaseEditor {
   protected name: string;
 
@@ -110,8 +100,7 @@ export abstract class BaseEditor {
     });
   }
 
-  // Same sandboxing caveat as runQuery — `command` must stay self-contained; data crosses into it
-  // via `Asc.scope`, not closure.
+  // See runQuery for the callCommand sandboxing constraints.
   protected runCommand<T extends Record<string, unknown>>(command: () => void, scope: T): Promise<void> {
     this.ensurePlugin();
     return new Promise((resolve) => {

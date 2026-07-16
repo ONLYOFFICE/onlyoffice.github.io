@@ -44,11 +44,7 @@ import {
 import { CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
-// Selection scope. Works uniformly across word/cell/pdf since GetSelectedText/ReplaceTextSmart are
-// generic host methods, unlike the paragraph object model used by DocumentCorrectionAgent — hence
-// going through Editor.create() (BaseCorrectionAgent.editor) rather than a fixed editor class:
-// styleInfo (bold/italic/etc.) comes back populated on word (TextEditor.getSelectedTextWithStyle)
-// and empty everywhere else (BaseEditor's default), with no editor-type branching needed here.
+// Selection scope works across word/cell/pdf through generic host methods; styleInfo is Word-only.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   private text = '';
 

@@ -45,10 +45,7 @@ import { Warning } from '@pages/Warning';
 
 import './variables.css';
 
-// showWarning() (src/api/pluginWindow.ts) opens a separate PluginWindow pointed at this same
-// index.html with `?modal=warning` — reusing the one bundle/theme/CSS instead of shipping a
-// second hand-rolled static HTML page. `modal` only selects which page to mount below; the actual
-// message text is delivered separately over PluginWindow's own message channel (see Warning.tsx).
+// Warning PluginWindows reuse this bundle; modal selects the page and its message arrives separately.
 const modalName = new URLSearchParams(window.location.search).get('modal');
 
 function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) {

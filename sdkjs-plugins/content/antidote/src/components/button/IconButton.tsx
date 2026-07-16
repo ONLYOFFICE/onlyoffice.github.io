@@ -34,9 +34,6 @@ import { ComponentChildren, JSX } from 'preact';
 
 export interface IconButtonProps {
   ariaLabel: string;
-  /** `ghost` (default) has no visible border/background until hover/active/focus,
-   * `outline` always shows its border/background,
-   * `icon-only` removes padding and border/background. */
   variant?: 'ghost' | 'outline' | 'icon-only';
   disabled?: boolean;
   active?: boolean;
