@@ -34,7 +34,14 @@ import {
   WordProcessorAgent, ParamsReplace, ParamsAllowEdit, ParamsNewCorrectionMemory,
 } from '@druide-informatique/antidote-api-js';
 
-import { getDocumentPath, saveCorrectionMemory } from '../store/correctionMemoryStore';
+import { Editor } from '@api/editor';
+import { BaseEditor } from '@api/editor/base';
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 1) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
 
 // Antidote requires `correctIntoWordProcessor` to return synchronously, but applying a correction
 // into the ONLYOFFICE document is async (callCommand/executeMethod round-trip). Corrections are
@@ -43,11 +50,27 @@ import { getDocumentPath, saveCorrectionMemory } from '../store/correctionMemory
 export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   protected title: string;
 
+  protected editor: BaseEditor = Editor.create();
+
+  // Populated by `preloadCorrectionMemory()` (call from `loadParagraphs`/`loadSelection`, which
+  // already run before the session starts) so the synchronous `configuration()` has it ready —
+  // reading it from the document itself is async and can't happen inside `configuration()`.
+  protected correctionMemory: string | undefined;
+
   private queue: Promise<void> = Promise.resolve();
 
   constructor(title: string, private readonly onSessionEnded?: () => void) {
     super();
     this.title = title;
+  }
+
+  // Lets Antidote remember which suggestions were already ignored/applied for this document
+  // across separate Corrector sessions — see BaseEditor.loadCorrectionMemory/saveCorrectionMemory
+  // (stored as a custom document property, so it travels with the file for any collaborator to
+  // pick up, rather than staying local to this browser).
+  protected async preloadCorrectionMemory(): Promise<string> {
+    this.correctionMemory = await this.editor.loadCorrectionMemory();
+    return this.correctionMemory;
   }
 
   // Antidote calls this when the correction window (or Antidote itself) closes on its own — not
@@ -58,17 +81,19 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
     this.onSessionEnded?.();
   }
 
-  // Lets Antidote remember which suggestions were already ignored/applied for this document
-  // across separate Corrector sessions (see correctionMemoryStore.ts) — `documentId` is the only
-  // stable per-document identifier the plugin host exposes.
+  // `documentId` is the one stable per-document identifier the plugin host exposes — separate
+  // from (and in addition to) the correctionMemory blob itself, in case Antidote's own cache also
+  // keys off this.
   // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   documentPath(): string {
-    return getDocumentPath();
+    return window.Asc?.plugin?.info?.documentId ?? '';
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   newCorrectionMemory(params: ParamsNewCorrectionMemory): void {
-    saveCorrectionMemory(params.data);
+    const data = typeof params.data === 'string' ? params.data : bytesToBase64(params.data);
+    this.editor.saveCorrectionMemory(data).catch((err) => {
+      console.error('Failed to save correction memory:', err);
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method

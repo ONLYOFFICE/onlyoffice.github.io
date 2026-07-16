@@ -41,24 +41,23 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { Editor, CorrectionStyleRange } from '@api/editor';
-import { loadCorrectionMemory } from '../store/correctionMemoryStore';
+import { CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
 // Selection scope. Works uniformly across word/cell/pdf since GetSelectedText/ReplaceTextSmart are
 // generic host methods, unlike the paragraph object model used by DocumentCorrectionAgent — hence
-// going through Editor.create() rather than a fixed editor class: styleInfo (bold/italic/etc.)
-// comes back populated on word (TextEditor.getSelectedTextWithStyle) and empty everywhere else
-// (BaseEditor's default), with no editor-type branching needed here.
+// going through Editor.create() (BaseCorrectionAgent.editor) rather than a fixed editor class:
+// styleInfo (bold/italic/etc.) comes back populated on word (TextEditor.getSelectedTextWithStyle)
+// and empty everywhere else (BaseEditor's default), with no editor-type branching needed here.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
-  private editor = Editor.create();
-
   private text = '';
 
   private styleInfo: CorrectionStyleRange[] = [];
 
   async loadSelection(): Promise<void> {
+    await this.preloadCorrectionMemory();
     const selected = await this.editor.getSelectedTextWithStyle();
+
     this.text = selected.text;
     this.styleInfo = selected.styleInfo ?? [];
   }
@@ -68,7 +67,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       documentTitle: `${this.title} — selection`,
       activeMarkup: DocumentType.text,
       carriageReturn: '\r\n',
-      correctionMemory: loadCorrectionMemory(),
+      correctionMemory: this.correctionMemory,
     };
   }
 

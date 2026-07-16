@@ -53,6 +53,18 @@ const SELECTED_TEXT_OPTIONS = {
   TabSymbol: String.fromCharCode(160),
 };
 
+// `GetCustomProperties()` (on ApiDocument/ApiWorkbook/ApiPresentation) isn't in the generated
+// ambient types yet, hence this local shape rather than importing a real one — confirmed against
+// ONLYOFFICE's own docs (e.g. https://api.onlyoffice.com/docs/office-api/usage-api/document-api/
+// ApiDocument/Methods/GetCustomProperties/). Shared by TextEditor/CellEditor's
+// loadCorrectionMemory/saveCorrectionMemory.
+export interface CustomProperties {
+  Add(name: string, value: unknown): void;
+  Get(name: string): unknown;
+}
+
+export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
+
 // Every concrete editor (TextEditor, CellEditor, and future ones — e.g. a Presentation
 // editor for `editorType === 'slide'`) is created through `Editor.create()` (editor.ts), which
 // picks the subclass from `window.Asc.plugin.info.editorType`. `GetSelectedText`/`ReplaceTextSmart`
@@ -77,9 +89,12 @@ export abstract class BaseEditor {
   // serialized and re-evaluated in that separate realm, so it can only see `Api`/`Asc.scope` and
   // whatever it declares itself; `this` and any outer closure (including this very method) are
   // invisible there. Subclasses passing a command to this must not reference `this` inside it.
-  protected runQuery<TResult>(command: () => TResult | { error: string }): Promise<TResult> {
+  protected runQuery<TResult>(command: () => TResult | { error: string }, scope?: Record<string, unknown>): Promise<TResult> {
     this.ensurePlugin();
     return new Promise((resolve, reject) => {
+      if (scope) {
+        window.Asc.scope = scope;
+      }
       window.Asc.plugin.callCommand(command, false, true, (result: unknown) => {
         if (result === undefined) {
           reject(new DocumentError('No response from plugin', 'NO_RESPONSE'));
@@ -90,17 +105,18 @@ export abstract class BaseEditor {
           return;
         }
         resolve(result as TResult);
+        return result;
       });
     });
   }
 
   // Same sandboxing caveat as runQuery — `command` must stay self-contained; data crosses into it
   // via `Asc.scope`, not closure.
-  protected runCommand<T extends Record<string, unknown>>(scope: T, command: () => void): Promise<void> {
+  protected runCommand<T extends Record<string, unknown>>(command: () => void, scope: T): Promise<void> {
     this.ensurePlugin();
     return new Promise((resolve) => {
       window.Asc.scope = scope;
-      window.Asc.plugin.callCommand(command, false, true, () => resolve());
+      window.Asc.plugin.callCommand(command, false, true, resolve);
     });
   }
 
@@ -171,6 +187,22 @@ export abstract class BaseEditor {
 
   replaceContent(text: string, index: number): Promise<void> {
     console.error('replaceContent is not implemented in this editor', { text, index });
+    return Promise.resolve();
+  }
+
+  // Lets Antidote remember which suggestions were already ignored/applied for this document
+  // across separate Corrector sessions — stored as a custom document property (GetCustomProperties)
+  // rather than localStorage, so it travels with the file for any collaborator to pick up, not
+  // just this browser. TextEditor/CellEditor override with the real per-editor-type call; every
+  // other editor keeps this memory-less default (Antidote just won't remember previous
+  // corrections — a safe degradation, not a correctness risk).
+  // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
+  loadCorrectionMemory(): Promise<string> {
+    return Promise.resolve('');
+  }
+
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by subclasses; base is a no-op
+  saveCorrectionMemory(_data: string): Promise<void> {
     return Promise.resolve();
   }
 }

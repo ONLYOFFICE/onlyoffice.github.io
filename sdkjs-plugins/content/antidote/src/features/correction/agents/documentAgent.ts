@@ -41,8 +41,7 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { Editor, CorrectionStyleRange } from '@api/editor';
-import { loadCorrectionMemory } from '../store/correctionMemoryStore';
+import { CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
@@ -55,14 +54,12 @@ interface ParagraphOffset {
 const PARAGRAPH_SEPARATOR = '\r\n\r\n';
 
 // Whole-document scope. Only valid for editorType "word" — cell/pdf don't expose a paragraph
-// object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word") —
-// so this instantiates TextEditor directly rather than going through the generic Editor.create().
+// object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word").
 export class DocumentCorrectionAgent extends BaseCorrectionAgent {
-  private editor = Editor.create();
-
   private paragraphs: ParagraphOffset[] = [];
 
   async loadParagraphs(): Promise<void> {
+    await this.preloadCorrectionMemory();
     const paragraphs = await this.editor.getDocumentContent();
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
@@ -79,7 +76,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       documentTitle: this.title,
       activeMarkup: DocumentType.text,
       carriageReturn: '\r\n',
-      correctionMemory: loadCorrectionMemory(),
+      correctionMemory: this.correctionMemory,
     };
   }
 

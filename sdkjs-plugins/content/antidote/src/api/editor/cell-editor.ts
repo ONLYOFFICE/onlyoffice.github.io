@@ -30,7 +30,9 @@
  *
  */
 
-import { BaseEditor } from './base';
+import {
+  BaseEditor, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+} from './base';
 
 // Cell — and, provisionally, pdf too (see Editor.create()'s fallback branch: pdf has no object
 // model of its own wired up yet, so it currently reuses this class rather than TextEditor's).
@@ -38,8 +40,34 @@ import { BaseEditor } from './base';
 // spreadsheet-specific object model access (e.g. `Api.GetActiveSheet()`) exists yet. Kept as its
 // own class — rather than instantiating BaseEditor directly — so that behavior has an obvious
 // home to grow into, the same way TextEditor holds Word's.
+// Neither `Api.GetActiveWorkbook()` nor `GetCustomProperties()` are in the generated ambient types
+// yet, hence this local shape — confirmed against ONLYOFFICE's own docs:
+// https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetCustomProperties/
+interface ApiWithActiveWorkbook {
+  GetActiveWorkbook(): { GetCustomProperties(): CustomProperties };
+}
+
 export class CellEditor extends BaseEditor {
   constructor() {
     super('spreadsheet');
+  }
+
+  // Mirrors TextEditor's word implementation: stores the correction-memory blob as a custom
+  // property on the workbook itself, so it travels with the file for any collaborator to pick up.
+  loadCorrectionMemory(): Promise<string> {
+    return this.runQuery<string>(() => {
+      const { CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { CORRECTION_MEMORY_PROPERTY: string };
+      const workbook = (Api as unknown as ApiWithActiveWorkbook).GetActiveWorkbook();
+      const value = workbook.GetCustomProperties().Get(property);
+      return typeof value === 'string' ? value : '';
+    }, { CORRECTION_MEMORY_PROPERTY }).then((value) => value ?? '').catch(() => '');
+  }
+
+  saveCorrectionMemory(data: string): Promise<void> {
+    return this.runCommand(() => {
+      const { data: value, CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { data: string; CORRECTION_MEMORY_PROPERTY: string };
+      const workbook = (Api as unknown as ApiWithActiveWorkbook).GetActiveWorkbook();
+      workbook.GetCustomProperties().Add(property, value);
+    }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 }
