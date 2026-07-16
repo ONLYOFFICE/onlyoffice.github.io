@@ -237,6 +237,15 @@ const PluginCard = {
             PluginCardUI.divMinVersion.classList.add("hidden");
         }
 
+        const editorBadgesHtml = this._buildEditorBadgesHtml(this.config.variations && this.config.variations[0]);
+        if (editorBadgesHtml) {
+            PluginCardUI.divEditorBadges.innerHTML = editorBadgesHtml;
+            PluginCardUI.divEditorBadges.classList.remove("hidden");
+        } else {
+            PluginCardUI.divEditorBadges.innerHTML = "";
+            PluginCardUI.divEditorBadges.classList.add("hidden");
+        }
+
         this._loadAndShowChangelog(baseUrl);
 
         let pluginUrl = baseUrl.replace(
@@ -598,6 +607,38 @@ const PluginCard = {
         PluginCardUI.divSelectedImage.style.height = height;
         PluginCardUI.divSelectedImage.style.maxHeight = height;
 
+    },
+
+    /**
+     * Builds the "supported editor" badge row (Document/Spreadsheet/Presentation/PDF Editor).
+     * @param {VariationConfig} [variation]
+     * @returns {string}
+     */
+    _buildEditorBadgesHtml: function(variation) {
+        const editorsSupport = variation && variation.store && variation.EditorsSupport;
+        if (!editorsSupport || !Array.isArray(editorsSupport) || !editorsSupport.length) {
+            return '';
+        }
+        /** @type {Object<EditorType, {icon: string, title: string}>} */
+        const badgesInfo = {
+            word: { icon: 'docx', title: Utils.getTranslated('Document Editor') },
+            cell: { icon: 'xlsx', title: Utils.getTranslated('Spreadsheet Editor') },
+            slide: { icon: 'pptx', title: Utils.getTranslated('Presentation Editor') },
+            pdf: { icon: 'pdf', title: Utils.getTranslated('PDF Editor') }
+        };
+        let icons = '';
+        ['word', 'cell', 'slide', 'pdf'].forEach(function(type) {
+            if (editorsSupport.indexOf(type) === -1) {
+                return;
+            }
+            const info = badgesInfo[type];
+            const title = Utils.getTranslated(info.title);
+            icons += '<img class="editor-badge" src="./resources/img/editors/icon_' + info.icon + '.svg" title="' + title + '" alt="' + title + '">';
+        });
+        if (!icons) {
+            return '';
+        }
+        return '<span class="pc-editor-badges-label i18n">' + Utils.getTranslated('Works with') + '</span>' + icons;
     },
 
     /**

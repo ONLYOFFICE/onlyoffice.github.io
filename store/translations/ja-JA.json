@@ -73,5 +73,10 @@
 	"Hide panel": "パネルを非表示",
 	"For this editor": "このエディタ用",
 	"Download": "ダウンロード",
-	"Problem with downloading plugin.": "プラグインのダウンロードに問題があります。"
+	"Problem with downloading plugin.": "プラグインのダウンロードに問題があります。",
+	"Works with": "動作環境",
+	"Document Editor": "ドキュメントエディタ",
+	"Spreadsheet Editor": "スプレッドシートエディタ",
+	"Presentation Editor": "プレゼンテーションエディタ",
+	"PDF Editor": "PDFエディタ"
 }

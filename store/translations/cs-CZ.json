@@ -73,5 +73,10 @@
 	"Hide panel": "Skrýt panel",
 	"For this editor": "Pro tento editor",
 	"Download": "Stáhnout",
-	"Problem with downloading plugin.": "Problém s stahováním pluginu."
+	"Problem with downloading plugin.": "Problém s stahováním pluginu.",
+	"Works with": "Funguje s",
+	"Document Editor": "Editor dokumentů",
+	"Spreadsheet Editor": "Editor tabulek",
+	"Presentation Editor": "Editor prezentací",
+	"PDF Editor": "Editor PDF"
 }

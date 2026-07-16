@@ -73,5 +73,10 @@
 	"Hide panel": "Masquer le panneau",
 	"For this editor": "Pour cet éditeur",
 	"Download": "Télécharger",
-	"Problem with downloading plugin.": "Problème avec le téléchargement du plugin."
+	"Problem with downloading plugin.": "Problème avec le téléchargement du plugin.",
+	"Works with": "Fonctionne avec",
+	"Document Editor": "Éditeur de documents",
+	"Spreadsheet Editor": "Éditeur de feuilles de calcul",
+	"Presentation Editor": "Éditeur de présentations",
+	"PDF Editor": "Éditeur PDF"
 }

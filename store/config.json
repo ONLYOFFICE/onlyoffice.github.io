@@ -44,5 +44,7 @@
 	{ "name": "odata", "discussion": "" },
 	{"name": "lizardtypst", "discussion": ""},
 	{"name": "chineseconvertor", "discussion": ""},
-	{"name": "chineseautoformattool", "discussion": ""}
+	{"name": "chineseautoformattool", "discussion": ""},
+	{"name": "salesforce", "discussion": ""},
+	{"name": "curly", "discussion": "607"}
 ]

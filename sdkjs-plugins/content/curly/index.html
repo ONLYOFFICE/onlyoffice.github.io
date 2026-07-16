@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Curly</title>
+    <!--
+      OnlyOffice plugin bootstrap. The plugin SDK exposes Asc.plugin to us.
+      We then load our React bundle which auto-detects Asc.plugin and uses
+      the OnlyOfficeAdapter.
+    -->
+    <script src="https://onlyoffice.github.io/sdkjs-plugins/v1/plugins.js"></script>
+    <script src="pluginCode.js"></script>
+    <link rel="stylesheet" href="bundle/addin.css" />
+</head>
+<body>
+    <div id="app"></div>
+    <script type="module" src="bundle/addin.js"></script>
+</body>
+</html>
