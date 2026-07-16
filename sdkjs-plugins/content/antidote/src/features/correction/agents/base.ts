@@ -34,8 +34,7 @@ import {
   WordProcessorAgent, ParamsReplace, ParamsAllowEdit, ParamsNewCorrectionMemory,
 } from '@druide-informatique/antidote-api-js';
 
-import { Editor } from '@api/editor';
-import { BaseEditor } from '@api/editor/base';
+import { Editor, BaseEditor } from '@api/editor';
 
 function bytesToBase64(bytes: Uint8Array): string {
   let binary = '';
@@ -90,7 +89,15 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   }
 
   newCorrectionMemory(params: ParamsNewCorrectionMemory): void {
-    const data = typeof params.data === 'string' ? params.data : bytesToBase64(params.data);
+    let data = '';
+    if (typeof params === 'string') {
+      data = params;
+    } else if (params && typeof params === 'object' && 'data' in params) {
+      data = typeof params.data === 'string' ? params.data : bytesToBase64(params.data);
+    }
+    if (!data) {
+      return;
+    }
     this.editor.saveCorrectionMemory(data).catch((err) => {
       console.error('Failed to save correction memory:', err);
     });
