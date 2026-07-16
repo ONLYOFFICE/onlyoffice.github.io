@@ -23,7 +23,7 @@ Before processing any image in your document, you must first activate the plugin
 1. Navigate to the **Plugins** tab on the top toolbar.
 2. Click on the **BG Remover** icon (*as shown by **Arrow 1***) to open the plugin's sidebar panel on the left.
 
-![Step 1: Open plugin](assets/1.png)
+![Step 1: Open plugin](resources/store/screenshots/1.png)
 
 ### Step 2: Select or Upload an Image
 Once the plugin panel is open, you have two options to load an image:
@@ -42,7 +42,7 @@ Once the plugin panel is open, you have two options to load an image:
 - The plugin will automatically start processing your image.
 - A "**Processing...**" loader will appear in the sidebar while the AI analyzes the image and removes its background.
 
-![Step 3: Processing the image](assets/2.png)
+![Step 3: Processing the image](resources/store/screenshots/2.png)
 
 ---
 
@@ -50,7 +50,7 @@ Once the plugin panel is open, you have two options to load an image:
 - When processing is complete, the transparent image preview will be displayed over a checkered grid in the sidebar.
 - Click the **Insert** button (the purple icon with the image and up-arrow, *as shown by **Arrow 3***) to place the background-removed image directly into your document.
 
-![Step 4: Insert background-removed image](assets/3.png)
+![Step 4: Insert background-removed image](resources/store/screenshots/3.png)
 
 #### Sidebar Toolbar Options:
 * 🗑️ **Discard (Red Trash)**: Discard the processed image.
