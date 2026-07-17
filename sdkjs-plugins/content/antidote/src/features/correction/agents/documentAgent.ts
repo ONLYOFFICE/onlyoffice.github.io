@@ -92,6 +92,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
 
   private async loadParagraphs(): Promise<void> {
     const paragraphs = await this.editor.getDocumentContent();
+
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
       const offset: ParagraphOffset = {
@@ -103,7 +104,8 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   async loadText(): Promise<void> {
-    await Promise.all([this.preloadCorrectionMemory(), this.loadParagraphs()]);
+    await this.preloadCorrectionMemory();
+    await this.loadParagraphs();
   }
 
   configuration(): WordProcessorConfiguration {
@@ -160,9 +162,11 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   // selection back onto the ONLYOFFICE document so it stays visible which part is being worked on.
   selectInterval(params: ParamsSelect): void {
     const paragraph = this.findParagraphAt(params.positionStart);
+    const textLength = paragraph.text.length;
+    const separatorLength = PARAGRAPH_SEPARATOR.length;
     const localStart = params.positionStart - paragraph.start;
     const localEnd = params.positionEnd - paragraph.start;
-    this.editor.selectContentRange(paragraph.index, localStart, localEnd).catch(() => {
+    this.editor.selectContentRange(paragraph.index, localStart, localEnd, textLength, separatorLength).catch(() => {
       console.error('Failed to select content range');
     });
   }

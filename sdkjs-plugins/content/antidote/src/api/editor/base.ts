@@ -90,21 +90,18 @@ export abstract class BaseEditor {
   // invisible there. Subclasses passing a command to this must not reference `this` inside it.
   protected runQuery<TResult>(command: () => TResult | { error: string }, scope?: Record<string, unknown>): Promise<TResult> {
     this.ensurePlugin();
-    return new Promise((resolve, reject) => {
+    return new Promise(function(resolve, reject) {
       if (scope) {
         window.Asc.scope = scope;
       }
-      window.Asc.plugin.callCommand(command, false, true, (result: unknown) => {
+      window.Asc.plugin.callCommand(command, false, true, function(result: unknown) {
         if (result === undefined) {
           reject(new DocumentError('No response from plugin', 'NO_RESPONSE'));
-          return;
-        }
-        if (typeof result === 'object' && result !== null && 'error' in result && (result as { error?: string }).error) {
+        } else if (typeof result === 'object' && result !== null && 'error' in result && (result as { error?: string }).error) {
           reject(new DocumentError((result as { error: string }).error, 'QUERY_ERROR'));
-          return;
+        } else {
+          resolve(result as TResult);
         }
-        resolve(result as TResult);
-        return result;
       });
     });
   }
@@ -161,7 +158,7 @@ export abstract class BaseEditor {
   // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
   // whole-document scope already keeps out of reach there).
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectContentRange(_index: number, _start: number, _end: number): Promise<void> {
+  selectContentRange(_index: number, _start: number, _end: number, _textLength?: number, _separatorLength?: number): Promise<void> {
     console.error('selectContentRange is not implemented in this editor');
     return Promise.resolve();
   }

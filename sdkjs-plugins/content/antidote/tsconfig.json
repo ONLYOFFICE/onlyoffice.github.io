@@ -9,7 +9,7 @@
 		"baseUrl": ".",
 		"jsx": "react-jsx",
 		"jsxImportSource": "preact",
-		"skipLibCheck": true,
+		"skipLibCheck": false,
 		"paths": {
 			"react": ["./node_modules/preact/compat/"],
 			"react-dom": ["./node_modules/preact/compat/"],

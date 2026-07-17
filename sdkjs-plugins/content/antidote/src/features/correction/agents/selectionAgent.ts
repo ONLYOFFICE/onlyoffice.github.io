@@ -75,7 +75,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       positionEnd: range.positionEnd,
       style: range.style as TextStyle,
     }));
-
+    console.warn('zonesToCorrect', this.text.replace(/\r\n\r\n/g, '\r\n'));
     return [{
       text: this.text, zoneId: '', zoneIsFocused: true, styleInfo,
     }];
@@ -91,17 +91,21 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   // selection back onto the ONLYOFFICE document. Silent no-op on editors without an object model
   // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
   selectInterval(params: ParamsSelect): void {
+    console.log(this.text);
+    console.log('styleInfo', this.styleInfo);
     if (this.selectionStart === null) return;
     this.editor.selectWithinSelection(this.selectionStart, params.positionStart, params.positionEnd).catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
-    console.log('applyCorrection', params);
     this.text = this.text.slice(0, params.positionStartReplace)
       + params.newString
       + this.text.slice(params.positionReplaceEnd);
 
     const paragraphs = this.text.replace(/(?:\r\n)+$/, '').split(/\r\n\r\n/);
+    console.log('applyCorrection paragraphs', paragraphs);
+    console.log(this.text);
+    console.log('applyCorrection params', params);
     await this.editor.replaceSelectedText(paragraphs);
   }
 }

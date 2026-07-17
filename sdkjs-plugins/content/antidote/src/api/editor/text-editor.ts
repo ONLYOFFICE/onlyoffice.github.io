@@ -66,9 +66,9 @@ export class TextEditor extends BaseEditor {
 
   // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
   getDocumentContent(): Promise<DocumentParagraph[]> {
-    return this.runQuery<DocumentParagraph[]>(() => {
+    return this.runQuery<DocumentParagraph[]>(function() {
+      const { textStyle: TextStyle } = Asc.scope as { textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
       type StyledContainer = ApiParagraph | ApiHyperlink;
-
       function isRun(element: ParagraphContent): element is ApiRun {
         return element.GetClassType() === 'run';
       }
@@ -131,19 +131,26 @@ export class TextEditor extends BaseEditor {
       }
 
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      return paragraphs.map((paragraph, index) => {
+      const result = paragraphs.map((paragraph, index) => {
         const text = paragraph.GetText({ Numbering: false });
         const styled = walkStyledContent(paragraph);
         return {
           index,
-          text,
-          styleInfo: (styled && styled.text === text) ? styled.styleInfo : undefined,
+          text: text.replace(/\r\n$/, ''),
+          styleInfo: (styled) ? styled.styleInfo : undefined,
         };
       });
-    }).then((result) => {
-      console.log('getDocumentContent result:', result);
       return result;
-    });
+    }, { textStyle: {
+        bold: TextStyle.bold,
+        italic: TextStyle.italic,
+        strike: TextStyle.strike,
+        superscript: TextStyle.superscript,
+        subscript: TextStyle.subscript,
+      } }).then((result) => {
+        console.log('getDocumentContent res:', result);
+        return result;
+      });
   }
 
   // Selection scope: walks the paragraphs touched by the selection via the object model to build
@@ -158,6 +165,7 @@ export class TextEditor extends BaseEditor {
 
     try {
       const styled = await this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
+        const { textStyle: TextStyle } = Asc.scope as { textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
         // See getDocumentContent above for why this is declared here rather than shared.
         type StyledContainer = ApiParagraph | ApiHyperlink;
 
@@ -230,6 +238,7 @@ export class TextEditor extends BaseEditor {
           const paragraph = paragraphs[i];
           const paragraphText = paragraph.GetText({ Numbering: false });
           const styledParagraph = walkStyledContent(paragraph);
+          console.warn('styledParagraph', styledParagraph);
           const start = joinedText.length;
 
           if (styledParagraph && styledParagraph.text === paragraphText) {
@@ -247,7 +256,13 @@ export class TextEditor extends BaseEditor {
         }
 
         return { text: joinedText, styleInfo: joinedStyleInfo };
-      });
+      }, { textStyle: {
+        bold: TextStyle.bold,
+        italic: TextStyle.italic,
+        strike: TextStyle.strike,
+        superscript: TextStyle.superscript,
+        subscript: TextStyle.subscript,
+      } });
 
       if (styled && styled.text === text) {
         console.log('getSelectedTextWithStyle matched', { styled, text });
@@ -268,6 +283,7 @@ export class TextEditor extends BaseEditor {
   // `.GetText()` on afterward (likely invalidated/rebuilt by the replace). Reverted to trusting
   // `text` as-is; revisit only with a way to actually verify against a live host.
   replaceContent(text: string, index: number): Promise<void> {
+    console.log('replaceContent', { text, index });
     return this.runCommand(() => {
       const { index: paraIndex, text: newText } = Asc.scope as { index: number; text: string };
       const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];
@@ -276,17 +292,84 @@ export class TextEditor extends BaseEditor {
     }, { index, text });
   }
 
-  selectContentRange(index: number, start: number, end: number): Promise<void> {
-    console.log('selectContentRange', { index, start, end });
+  selectContentRange(index: number, start: number, end: number, textLength?: number, separatorLength?: number): Promise<void> {
+    
     return this.runCommand(() => {
-      const { index: paraIndex, start: s, end: e } = Asc.scope as { index: number; start: number; end: number };
-      const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];
-      paragraph.GetRange(s, e).Select();
-    }, { index, start, end });
+      let { 
+        index: paraIndex,
+        start: s,
+        end: e,
+        textLength: tl,
+        separatorLength: sl
+      } = Asc.scope as { index: number; start: number; end: number; textLength: number; separatorLength: number };
+      const doc = Api.GetDocument();
+      const paragraphs = doc.GetAllParagraphs();
+      const paragraph = paragraphs[paraIndex];
+      // ↓↓↓ Doesn't work well in areas with formatting
+      // paragraph.GetRange(s, e).Select();
+      // ↓↓↓ Workaround ↑↑↑
+      console.log('selectContentRange', { paraIndex, s, e, tl, sl });
+      if (s > tl) {
+        let minusOffset = s;
+        let index = paraIndex;
+        let numOfP = 0;
+        while (minusOffset > 0) {
+          const pLen = paragraphs[index].GetText().length;
+          minusOffset -= pLen;
+          minusOffset -= sl;
+          index++;
+          if (minusOffset >= 0) {
+            numOfP++;
+          }
+        }
+        console.log('numOfP', numOfP);
+        if (numOfP > 0) {
+         for (let i = 0; i < numOfP; i++) {
+          s -= sl;
+         }
+        }
+      }
+      if (e > tl) {
+        let minusOffset = e;
+        let index = paraIndex;
+        let numOfP = 0;
+        while (minusOffset > 0) {
+          const pLen = paragraphs[index].GetText().length;
+          minusOffset -= pLen;
+          minusOffset -= sl;
+          index++;
+          if (minusOffset >= 0) {
+            numOfP++;
+          }
+        }
+        console.log('numOfP', numOfP);
+        if (numOfP > 0) {
+         for (let i = 0; i < numOfP; i++) {
+          e -= sl;
+         }
+        }
+      }
+      /*if (e > tl && e <= tl + sl) {
+        console.warn('trim e');
+        e = tl;
+      }
+      if (s > tl && s <= tl + sl) {
+        console.warn('trim s');
+        s = tl;
+      }*/
+      paragraph.GetRange(0, 0).Select();
+      doc.MoveCursorRight(s, true);
+      doc.RemoveSelection();
+      
+      if (e > s) {
+        doc.MoveCursorRight(e - s, true);
+      }
+    }, { index, start, end, textLength, separatorLength });
   }
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
   selectWithinSelection(selectionStart: number, start: number, end: number): Promise<void> {
+    console.log('selectWithinSelection', { selectionStart, start, end });
     return this.runCommand(() => {
       const { selectionStart: offset, start: s, end: e } = Asc.scope as { selectionStart: number; start: number; end: number };
       // ↓↓↓ Doesn't work well in areas with formatting
@@ -304,6 +387,7 @@ export class TextEditor extends BaseEditor {
   }
 
   getSelectionStart(): Promise<number | null> {
+    console.log('getSelectionStart');
     return this.runQuery<number | null>(() => {
       const range = Api.GetDocument().GetRangeBySelect();
       return range ? range.GetStartPos() : null;
