@@ -297,8 +297,8 @@ export class TextEditor extends BaseEditor {
     return this.runCommand(() => {
       let { 
         index: paraIndex,
-        start: s,
-        end: e,
+        start: paraStart,
+        end: paraEnd,
         textLength: tl,
         separatorLength: sl
       } = Asc.scope as { index: number; start: number; end: number; textLength: number; separatorLength: number };
@@ -306,63 +306,69 @@ export class TextEditor extends BaseEditor {
       const paragraphs = doc.GetAllParagraphs();
       const paragraph = paragraphs[paraIndex];
       // ↓↓↓ Doesn't work well in areas with formatting
-      // paragraph.GetRange(s, e).Select();
+      // paragraph.GetRange(paraStart, paraEnd).Select();
       // ↓↓↓ Workaround ↑↑↑
-      console.log('selectContentRange', { paraIndex, s, e, tl, sl });
-      if (s > tl) {
-        let minusOffset = s;
+      console.log('selectContentRange', { paraIndex, paraStart, paraEnd, tl, sl });
+      if (paraStart > tl) {
+        let minusOffset = paraStart;
         let index = paraIndex;
         let numOfP = 0;
-        while (minusOffset > 0) {
-          const pLen = paragraphs[index].GetText().length;
-          minusOffset -= pLen;
-          minusOffset -= sl;
+        let p = paragraphs[index];
+        let pLen = p.GetText().replace(/\r\n$/, '').length;
+        while (minusOffset >= pLen && p) {
+          minusOffset -= (pLen + sl);
           index++;
           if (minusOffset >= 0) {
             numOfP++;
           }
+          p = paragraphs[index];
+          if (!p) break;
+          pLen = p.GetText().replace(/\r\n$/, '').length;
         }
-        console.log('numOfP', numOfP);
+        if (minusOffset < 0) {
+          paraStart -= (sl + minusOffset);
+        }
         if (numOfP > 0) {
          for (let i = 0; i < numOfP; i++) {
-          s -= sl;
+          paraStart -= sl;
          }
         }
       }
-      if (e > tl) {
-        let minusOffset = e;
+      if (paraEnd > tl) {
+        let minusOffset = paraEnd;
         let index = paraIndex;
         let numOfP = 0;
-        while (minusOffset > 0) {
-          const pLen = paragraphs[index].GetText().length;
-          minusOffset -= pLen;
-          minusOffset -= sl;
+        let p = paragraphs[index];
+        let pLen = p.GetText().replace(/\r\n$/, '').length;
+        while (minusOffset >= pLen && p) {
+          minusOffset -= (pLen + sl);
           index++;
           if (minusOffset >= 0) {
             numOfP++;
           }
+          p = paragraphs[index];
+          if (!p) break;
+          pLen = p.GetText().replace(/\r\n$/, '').length;
         }
-        console.log('numOfP', numOfP);
+        if (minusOffset < 0) {
+          paraEnd -= (sl + minusOffset);
+        }
         if (numOfP > 0) {
-         for (let i = 0; i < numOfP; i++) {
-          e -= sl;
-         }
+          if (paraStart > 0) {
+            paraEnd += 1; // to select gap 
+          }
+          for (let i = 0; i < numOfP; i++) {
+            paraEnd -= sl;
+          }
         }
       }
-      /*if (e > tl && e <= tl + sl) {
-        console.warn('trim e');
-        e = tl;
-      }
-      if (s > tl && s <= tl + sl) {
-        console.warn('trim s');
-        s = tl;
-      }*/
+
       paragraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(s, true);
+      doc.MoveCursorRight(paraStart, true);
       doc.RemoveSelection();
       
-      if (e > s) {
-        doc.MoveCursorRight(e - s, true);
+      if (paraEnd > paraStart) {
+        doc.MoveCursorRight((paraEnd - paraStart), true);
       }
     }, { index, start, end, textLength, separatorLength });
   }
