@@ -609,6 +609,7 @@ class CitationDocService {
                             
                             for (let i = 0; i < paragraph.GetElementsCount(); i++) {
                                  let margin = paragraph.GetElement(i);
+                                 if (!margin || typeof margin.GetText !== 'function') continue;
                                  if (margin.GetText() === numberText) {
                                     margin.AddTabStop();
                                     margin.SetItalic(false);
@@ -616,6 +617,7 @@ class CitationDocService {
                                  }
                             }
                             let margin = paragraph.Search(Asc.scope.hash, true)[0];
+                            if (!margin) return;
                             margin.Delete();
 
                             paragraph.SetIndLeft(style.maxoffset * 120);
