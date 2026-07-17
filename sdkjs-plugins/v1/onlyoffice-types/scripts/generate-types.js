@@ -185,8 +185,15 @@ function extractClasses(data) {
             name = `${name}_${i}`;
           }
           seenNames.add(name);
-          if (p.optional || p.defaultvalue !== undefined) hasOptional = true;
-          return { name, type: parseType(p.type), optional: hasOptional, defaultValue: p.defaultvalue };
+          const acceptsUndefined = p.type?.names?.includes('undefined');
+          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined) hasOptional = true;
+          const names = acceptsUndefined ? p.type.names.filter(type => type !== 'undefined') : p.type?.names;
+          return {
+            name,
+            type: parseType(names?.length ? { ...p.type, names } : p.type),
+            optional: hasOptional,
+            defaultValue: p.defaultvalue,
+          };
         }) : [];
 
         const returnType = item.returns && item.returns.length > 0

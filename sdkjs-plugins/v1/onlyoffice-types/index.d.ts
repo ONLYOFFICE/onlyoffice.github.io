@@ -1,6 +1,6 @@
-import type { ApiCell } from "./src/generated/cell";
-import type { ApiSlide } from "./src/generated/slide";
-import type { ApiWord } from "./src/generated/word";
+import type { Api as ApiCell } from "./src/generated/cell";
+import type { Api as ApiSlide } from "./src/generated/slide";
+import type { Api as ApiWord } from "./src/generated/word";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";

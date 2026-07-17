@@ -1152,7 +1152,7 @@ export interface ApiParaPr {
   SetIndLeft(nValue: number): boolean;
   SetIndRight(nValue: number): boolean;
   SetJc(sJc: "left" | "right" | "both" | "center"): boolean;
-  SetOutlineLvl(lvl?: number | null | undefined): boolean;
+  SetOutlineLvl(lvl?: number | null): boolean;
   SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
   SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
   SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
@@ -1207,7 +1207,7 @@ export interface ApiParagraph {
   SetIndRight(nValue: number): boolean;
   SetItalic(isItalic: boolean): ApiParagraph;
   SetJc(sJc: "left" | "right" | "both" | "center"): boolean;
-  SetOutlineLvl(lvl?: number | null | undefined): boolean;
+  SetOutlineLvl(lvl?: number | null): boolean;
   SetSmallCaps(isSmallCaps: boolean): ApiParagraph;
   SetSpacing(nSpacing: number): ApiParagraph;
   SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;

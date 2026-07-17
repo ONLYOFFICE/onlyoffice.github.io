@@ -1137,9 +1137,9 @@ export interface ApiDocument {
   GetCurrentPage(): number;
   GetCurrentParagraph(): ApiParagraph;
   GetCurrentRun(): ApiRun;
-  GetCurrentSentence(sPart: undefined | "before" | "after"): string;
+  GetCurrentSentence(sPart?: "before" | "after"): string;
   GetCurrentVisiblePages(): number[];
-  GetCurrentWord(sWordPart: undefined | "before" | "after"): string;
+  GetCurrentWord(sWordPart?: "before" | "after"): string;
   GetCustomProperties(): ApiCustomProperties;
   GetCustomXmlParts(): ApiCustomXmlParts | null;
   GetDefaultParaPr(): ApiParaPr;
@@ -1197,8 +1197,8 @@ export interface ApiDocument {
   RemoveSelection(): boolean;
   RemoveWatermark(): boolean;
   ReplaceCurrentImage(sImageUrl: string, Width: number, Height: number): boolean;
-  ReplaceCurrentSentence(sReplace: string, sPart: undefined | "before" | "after"): boolean;
-  ReplaceCurrentWord(sReplace: string, sPart: undefined | "before" | "after"): boolean;
+  ReplaceCurrentSentence(sReplace: string, sPart?: "before" | "after"): boolean;
+  ReplaceCurrentWord(sReplace: string, sPart?: "before" | "after"): boolean;
   ReplaceDrawing(oOldDrawing: ApiDrawing, oNewDrawing: ApiDrawing, bSaveOldDrawingPr?: boolean): boolean;
   Search(sText: string, isMatchCase: boolean): ApiRange[];
   SearchAndReplace(oProperties: object, oProperties_searchString: string, oProperties_replaceString: string, oProperties_matchCase?: string): boolean;
@@ -1716,7 +1716,7 @@ export interface ApiParaPr {
   SetKeepNext(isKeepNext: boolean): boolean;
   SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
   SetNumPr(oNumPr: ApiNumbering, nLvl?: number): boolean;
-  SetOutlineLvl(lvl?: number | null | undefined): boolean;
+  SetOutlineLvl(lvl?: number | null): boolean;
   SetPageBreakBefore(isPageBreakBefore: boolean): boolean;
   SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
   SetShd(type: ShdType, color: ApiColor): boolean;
@@ -1833,7 +1833,7 @@ export interface ApiParagraph {
   SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
   SetNumPr(oNumPr: ApiNumbering, nLvl?: number): boolean;
   SetNumbering(oNumberingLevel: ApiNumberingLevel): boolean;
-  SetOutlineLvl(lvl?: number | null | undefined): boolean;
+  SetOutlineLvl(lvl?: number | null): boolean;
   SetPageBreakBefore(isPageBreakBefore: boolean): boolean;
   SetParaId(paraId: number): boolean;
   SetPosition(nPosition: hps): ApiParagraph;
