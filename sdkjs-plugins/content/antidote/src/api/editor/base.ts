@@ -30,19 +30,14 @@
  *
  */
 
+import { StyleInfo } from '@druide-informatique/antidote-api-js';
 import { DocumentError } from './errors';
 
 export type CorrectionStyle = 'bold' | 'italic' | 'superscript' | 'subscript' | 'strike';
 
-export interface CorrectionStyleRange {
-  positionStart: number;
-  positionEnd: number;
-  style: CorrectionStyle;
-}
-
 export interface SelectedTextWithStyle {
   text: string;
-  styleInfo?: CorrectionStyleRange[];
+  styleInfo?: StyleInfo[];
 }
 
 const SELECTED_TEXT_OPTIONS = {

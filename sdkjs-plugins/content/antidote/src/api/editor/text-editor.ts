@@ -30,12 +30,13 @@
  *
  */
 
+import { StyleInfo, TextStyle } from '@druide-informatique/antidote-api-js';
 import type {
   ApiParagraph, ApiRun, ApiHyperlink, ParagraphContent,
 } from 'onlyoffice-plugins-api';
 
 import {
-  BaseEditor, CorrectionStyleRange, SelectedTextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+  BaseEditor, SelectedTextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
   PluginWithEditorEvents, CONTENT_CHANGE_EVENTS,
 } from './base';
 
@@ -46,7 +47,7 @@ export interface DocumentParagraph {
   // text matched `text` exactly (see walkStyledContent) — paragraphs with forms, fields,
   // footnotes, or math bail out to `undefined` rather than risk style ranges drifting out of
   // sync with the positions Antidote corrects against.
-  styleInfo?: CorrectionStyleRange[];
+  styleInfo?: StyleInfo[];
 }
 
 // Word only: everything here is built on `Api.GetDocument()`'s paragraph object model, which
@@ -82,9 +83,9 @@ export class TextEditor extends BaseEditor {
       // positions drifting out of sync with the correction text.
       function walkStyledContent(
         container: StyledContainer,
-      ): { text: string; styleInfo: CorrectionStyleRange[] } | null {
+      ): { text: string; styleInfo: StyleInfo[] } | null {
         let text = '';
-        const styleInfo: CorrectionStyleRange[] = [];
+        const styleInfo: StyleInfo[] = [];
         const count = container.GetElementsCount();
 
         for (let i = 0; i < count; i += 1) {
@@ -97,12 +98,12 @@ export class TextEditor extends BaseEditor {
             const end = start + runText.length;
             const textPr = element.GetTextPr();
 
-            if (textPr.GetBold()) styleInfo.push({ positionStart: start, positionEnd: end, style: 'bold' });
-            if (textPr.GetItalic()) styleInfo.push({ positionStart: start, positionEnd: end, style: 'italic' });
-            if (textPr.GetStrikeout()) styleInfo.push({ positionStart: start, positionEnd: end, style: 'strike' });
+            if (textPr.GetBold()) styleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.bold });
+            if (textPr.GetItalic()) styleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.italic });
+            if (textPr.GetStrikeout()) styleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.strike });
             const vertAlign = textPr.GetVertAlign();
             if (vertAlign === 'superscript' || vertAlign === 'subscript') {
-              styleInfo.push({ positionStart: start, positionEnd: end, style: vertAlign });
+              styleInfo.push({ positionStart: start, positionEnd: end, style: vertAlign === 'superscript' ? TextStyle.superscript : TextStyle.subscript });
             }
 
             text += runText;
@@ -156,7 +157,7 @@ export class TextEditor extends BaseEditor {
     if (!text) return { text };
 
     try {
-      const styled = await this.runQuery<{ text: string; styleInfo: CorrectionStyleRange[] } | null>(() => {
+      const styled = await this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
         // See getDocumentContent above for why this is declared here rather than shared.
         type StyledContainer = ApiParagraph | ApiHyperlink;
 
@@ -169,9 +170,9 @@ export class TextEditor extends BaseEditor {
 
         function walkStyledContent(
           container: StyledContainer,
-        ): { text: string; styleInfo: CorrectionStyleRange[] } | null {
+        ): { text: string; styleInfo: StyleInfo[] } | null {
           let elementText = '';
-          const elementStyleInfo: CorrectionStyleRange[] = [];
+          const elementStyleInfo: StyleInfo[] = [];
           const count = container.GetElementsCount();
 
           for (let i = 0; i < count; i += 1) {
@@ -184,12 +185,12 @@ export class TextEditor extends BaseEditor {
               const end = start + runText.length;
               const textPr = element.GetTextPr();
 
-              if (textPr.GetBold()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: 'bold' });
-              if (textPr.GetItalic()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: 'italic' });
-              if (textPr.GetStrikeout()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: 'strike' });
+              if (textPr.GetBold()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.bold });
+              if (textPr.GetItalic()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.italic });
+              if (textPr.GetStrikeout()) elementStyleInfo.push({ positionStart: start, positionEnd: end, style: TextStyle.strike });
               const vertAlign = textPr.GetVertAlign();
               if (vertAlign === 'superscript' || vertAlign === 'subscript') {
-                elementStyleInfo.push({ positionStart: start, positionEnd: end, style: vertAlign });
+                elementStyleInfo.push({ positionStart: start, positionEnd: end, style: vertAlign === 'superscript' ? TextStyle.superscript : TextStyle.subscript });
               }
 
               elementText += runText;
@@ -221,7 +222,7 @@ export class TextEditor extends BaseEditor {
 
         const paragraphs = range.GetAllParagraphs();
         let joinedText = '';
-        const joinedStyleInfo: CorrectionStyleRange[] = [];
+        const joinedStyleInfo: StyleInfo[] = [];
 
         for (let i = 0; i < paragraphs.length; i += 1) {
           if (i > 0) joinedText += '\r\n\r\n';
@@ -288,7 +289,17 @@ export class TextEditor extends BaseEditor {
   selectWithinSelection(selectionStart: number, start: number, end: number): Promise<void> {
     return this.runCommand(() => {
       const { selectionStart: offset, start: s, end: e } = Asc.scope as { selectionStart: number; start: number; end: number };
-      Api.GetDocument().GetRange(offset + s, offset + e).Select();
+      // ↓↓↓ Doesn't work well in areas with formatting
+      // Api.GetDocument().GetRange(offset + s, offset + e).Select();
+      // ↓↓↓ Workaround ↑↑↑
+      const doc = Api.GetDocument();
+      doc.GetRange(offset, offset).Select();
+      doc.MoveCursorRight(s, true);
+      doc.RemoveSelection();
+      if (e > s) {
+        doc.MoveCursorRight(e - s, true);
+      }
+
     }, { selectionStart, start, end });
   }
 

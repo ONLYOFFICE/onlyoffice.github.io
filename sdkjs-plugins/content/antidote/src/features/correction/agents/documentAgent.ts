@@ -42,14 +42,13 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
   index: number;
   start: number;
   text: string;
-  styleInfo?: CorrectionStyleRange[];
+  styleInfo?: StyleInfo[];
 }
 
 const PARAGRAPH_SEPARATOR = '\r\n\r\n';

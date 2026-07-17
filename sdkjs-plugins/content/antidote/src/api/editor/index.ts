@@ -30,5 +30,5 @@
  *
  */
 
-export { CorrectionStyleRange, BaseEditor } from './base';
+export { BaseEditor } from './base';
 export { Editor } from './editor';

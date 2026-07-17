@@ -42,14 +42,13 @@ import {
   TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
-import { CorrectionStyleRange } from '@api/editor';
 import { BaseCorrectionAgent } from './base';
 
 // Selection scope works across word/cell/pdf through generic host methods; styleInfo is Word-only.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   private text = '';
 
-  private styleInfo: CorrectionStyleRange[] = [];
+  private styleInfo: StyleInfo[] = [];
 
   private selectionStart: number | null = null;
 
