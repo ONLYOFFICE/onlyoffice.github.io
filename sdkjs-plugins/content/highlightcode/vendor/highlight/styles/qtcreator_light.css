@@ -90,15 +90,15 @@ p {
 .content::selection {
   background: #c5c8c6;
 }
-  
+
 .content::-moz-selection {
   background: #c5c8c6;
 }
-  
+
 span::selection {
   background: #c5c8c6;
 }
-  
+
 span::-moz-selection {
   background: #c5c8c6;
 }

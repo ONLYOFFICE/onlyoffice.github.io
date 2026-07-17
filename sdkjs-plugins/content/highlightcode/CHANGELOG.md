@@ -17,3 +17,8 @@
 ## 1.0.3
 
 * Update jquery version.
+
+## 1.0.4
+
+* Update the bundled `highlight.js` assets to the full language catalog.
+* Improve language picker alias matching and document the available formatting targets.
