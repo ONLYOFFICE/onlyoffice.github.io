@@ -1,0 +1,290 @@
+:root {
+  --page-bg: #ffffff;
+  --page-fg: rgba(0, 0, 0, 0.8);
+  --page-border: rgba(0, 0, 0, 0.1);
+  --page-surface: #f7f7f7;
+  --page-surface-alt: #efefef;
+  --page-muted: rgba(0, 0, 0, 0.6);
+  --page-accent: #0b6dff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page-bg);
+  color: var(--page-fg);
+}
+
+#storybook-root {
+  padding: 0;
+  margin: 0;
+}
+
+.sb-show-main.sb-main-padded {
+  padding: 0 !important;
+}
+
+.sbdocs,
+.sbdocs-wrapper,
+.sbdocs-content {
+  background: var(--page-bg) !important;
+  color: var(--page-fg) !important;
+}
+
+.sbdocs .docs-story,
+.sbdocs .sb-story,
+.sbdocs .sb-story > div,
+.sbdocs .docs-story > div {
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.sbdocs .sb-story > div,
+.sbdocs .docs-story > div,
+.sbdocs .sb-story > div > div,
+.sbdocs .docs-story > div > div {
+  display: block !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+}
+
+.sbdocs .docs-story {
+  padding: 12px !important;
+}
+
+.sbdocs .sb-story,
+.sbdocs .docs-story > div {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.sbdocs h1,
+.sbdocs h2,
+.sbdocs h3,
+.sbdocs h4,
+.sbdocs h5,
+.sbdocs h6,
+.sbdocs p,
+.sbdocs li,
+.sbdocs td,
+.sbdocs th,
+.sbdocs label,
+.sbdocs code,
+.sbdocs strong {
+  color: var(--page-fg) !important;
+}
+
+.sbdocs small,
+.sbdocs .sbdocs-hint,
+.sbdocs [class*="subtitle"],
+.sbdocs [class*="description"] {
+  color: var(--page-muted) !important;
+}
+
+.sbdocs .sbdocs-preview {
+  background: var(--page-bg) !important;
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .docs-story,
+.sbdocs .sb-story,
+.sbdocs .docs-story > div,
+.sbdocs .sb-story > div {
+  background: transparent !important;
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .docblock-argstable,
+.sbdocs .docblock-argstable table,
+.sbdocs .docblock-argstable-head,
+.sbdocs .docblock-argstable-body {
+  background: var(--page-surface) !important;
+  color: var(--page-fg) !important;
+}
+
+.sbdocs .docblock-argstable-head tr,
+.sbdocs .docblock-argstable-head th {
+  background: var(--page-surface) !important;
+  color: var(--page-fg) !important;
+}
+
+.sbdocs .docblock-argstable-body tr:nth-child(odd) td {
+  background: var(--page-bg) !important;
+}
+
+.sbdocs .docblock-argstable-body tr:nth-child(even) td {
+  background: var(--page-surface-alt) !important;
+}
+
+.sbdocs .docblock-argstable,
+.sbdocs .docblock-argstable table,
+.sbdocs .docblock-argstable-body tr,
+.sbdocs .docblock-argstable-head tr,
+.sbdocs .docblock-argstable-body td,
+.sbdocs .docblock-argstable-head th {
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .docblock-argstable code,
+.sbdocs .docblock-argstable pre,
+.sbdocs .docblock-argstable .token {
+  color: var(--page-fg) !important;
+  background: transparent !important;
+}
+
+.sbdocs table th,
+.sbdocs table td,
+.sbdocs table td *,
+.sbdocs table th * {
+  color: var(--page-fg) !important;
+}
+
+.sbdocs table td:nth-child(2) small,
+.sbdocs table td:nth-child(2) [class*="hint"],
+.sbdocs table td:nth-child(2) [class*="secondary"] {
+  color: var(--page-muted) !important;
+}
+
+.sbdocs table td:nth-child(3),
+.sbdocs table td:nth-child(3) * {
+  color: var(--page-fg) !important;
+  opacity: 1 !important;
+}
+
+/* Reset Storybook-injected white backgrounds on type/default badge spans */
+.sbdocs .docblock-argstable-body td:nth-child(2) span,
+.sbdocs .docblock-argstable-body td:nth-child(3) span {
+  background-color: transparent !important;
+}
+
+.sbdocs table td code,
+.sbdocs table td pre,
+.sbdocs table td [class*="code"] {
+  color: var(--page-fg) !important;
+  background: var(--page-surface-alt) !important;
+  border: 1px solid var(--page-border) !important;
+  border-radius: 4px !important;
+}
+
+.sbdocs :not(pre) > code {
+  color: var(--page-fg) !important;
+  background: var(--page-surface-alt) !important;
+  border: 1px solid var(--page-border) !important;
+  border-radius: 4px !important;
+}
+
+.sbdocs [class*="description"] code,
+.sbdocs [class*="description"] code * {
+  color: var(--page-fg) !important;
+}
+
+.sbdocs .docblock-argstable input:not([type="checkbox"]),
+.sbdocs .docblock-argstable select,
+.sbdocs .docblock-argstable textarea {
+  background: var(--page-bg) !important;
+  color: var(--page-fg) !important;
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .docblock-argstable button {
+  background: rgba(0, 0, 0, 0.07) !important;
+  color: var(--page-fg) !important;
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .docblock-argstable input::placeholder,
+.sbdocs .docblock-argstable textarea::placeholder {
+  color: var(--page-muted) !important;
+}
+
+/* ── Per-theme text colour overrides ─────────────────────────────────────────
+   Our manager uses base:'dark', so Storybook injects white text into the preview
+   frame. var(--page-fg) is set correctly by the decorator, but Storybook's own
+   CSS may win in the cascade. Using the data-plugin-theme attribute (set by the
+   decorator on <html>) gives us selectors Storybook cannot override. */
+
+html[data-plugin-theme="light"] .sbdocs,
+html[data-plugin-theme="light-classic"] .sbdocs,
+html[data-plugin-theme="modern-light"] .sbdocs {
+  color: var(--page-fg) !important;
+}
+
+html[data-plugin-theme="light"] .sbdocs table th,
+html[data-plugin-theme="light"] .sbdocs table td,
+html[data-plugin-theme="light"] .sbdocs table td *,
+html[data-plugin-theme="light"] .sbdocs table th *,
+html[data-plugin-theme="light-classic"] .sbdocs table th,
+html[data-plugin-theme="light-classic"] .sbdocs table td,
+html[data-plugin-theme="light-classic"] .sbdocs table td *,
+html[data-plugin-theme="light-classic"] .sbdocs table th *,
+html[data-plugin-theme="modern-light"] .sbdocs table th,
+html[data-plugin-theme="modern-light"] .sbdocs table td,
+html[data-plugin-theme="modern-light"] .sbdocs table td *,
+html[data-plugin-theme="modern-light"] .sbdocs table th * {
+  color: var(--page-fg) !important;
+}
+
+html[data-plugin-theme="dark"] .sbdocs table th,
+html[data-plugin-theme="dark"] .sbdocs table td,
+html[data-plugin-theme="dark"] .sbdocs table td *,
+html[data-plugin-theme="dark"] .sbdocs table th *,
+html[data-plugin-theme="dark-contrast"] .sbdocs table th,
+html[data-plugin-theme="dark-contrast"] .sbdocs table td,
+html[data-plugin-theme="dark-contrast"] .sbdocs table td *,
+html[data-plugin-theme="dark-contrast"] .sbdocs table th *,
+html[data-plugin-theme="modern-dark"] .sbdocs table th,
+html[data-plugin-theme="modern-dark"] .sbdocs table td,
+html[data-plugin-theme="modern-dark"] .sbdocs table td *,
+html[data-plugin-theme="modern-dark"] .sbdocs table th * {
+  color: var(--page-fg) !important;
+}
+
+/* Storybook boolean switch: keep native shape, but tune contrast for dark docs pages. */
+html[data-plugin-theme="dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]),
+html[data-plugin-theme="dark-contrast"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]),
+html[data-plugin-theme="modern-dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) {
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: inset 0 0 0 1px var(--page-border) !important;
+}
+
+html[data-plugin-theme="dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) span,
+html[data-plugin-theme="dark-contrast"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) span,
+html[data-plugin-theme="modern-dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) span {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+html[data-plugin-theme="dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:checked ~ span:last-of-type,
+html[data-plugin-theme="dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:not(:checked) ~ span:first-of-type,
+html[data-plugin-theme="dark-contrast"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:checked ~ span:last-of-type,
+html[data-plugin-theme="dark-contrast"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:not(:checked) ~ span:first-of-type,
+html[data-plugin-theme="modern-dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:checked ~ span:last-of-type,
+html[data-plugin-theme="modern-dark"] .sbdocs .docblock-argstable label:has(input[type="checkbox"][role="switch"]) input:not(:checked) ~ span:first-of-type {
+  background: rgba(255, 255, 255, 0.94) !important;
+  color: #1e1e1e !important;
+  box-shadow: none !important;
+}
+
+.sbdocs .docblock-code-toggle,
+.sbdocs .docblock-code-toggle > button {
+  background: var(--page-bg) !important;
+  color: var(--page-fg) !important;
+  border-color: var(--page-border) !important;
+}
+
+.sbdocs .toc-wrapper,
+.sbdocs .toc-wrapper a,
+.sbdocs .table-of-contents,
+.sbdocs .table-of-contents a,
+.sbdocs [class*="toc"] a {
+  color: var(--page-fg) !important;
+}
+
+.sbdocs .toc-wrapper a:hover,
+.sbdocs .table-of-contents a:hover,
+.sbdocs [class*="toc"] a:hover,
+.sbdocs .toc-wrapper a[aria-current="true"],
+.sbdocs .table-of-contents a[aria-current="true"] {
+  color: var(--page-accent) !important;
+}

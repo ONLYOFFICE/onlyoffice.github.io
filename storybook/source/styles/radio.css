@@ -1,0 +1,18 @@
+.ui-radio {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ui-radio svg {
+  display: block;
+}
+
+.ui-radio:not(.ui-radio--disabled):active {
+  transform: translateY(0.5px);
+}
+
+.ui-radio--disabled {
+  cursor: default;
+}
