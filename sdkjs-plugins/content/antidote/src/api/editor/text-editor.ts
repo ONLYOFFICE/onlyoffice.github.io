@@ -41,7 +41,7 @@ import {
 } from './base';
 
 export interface DocumentParagraph {
-  index: number;
+  id: string;
   text: string;
   // Present only when the paragraph's content could be walked run-by-run and the reconstructed
   // text matched `text` exactly (see walkStyledContent) — paragraphs with forms, fields,
@@ -132,11 +132,11 @@ export class TextEditor extends BaseEditor {
       }
 
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      const result = paragraphs.map((paragraph, index) => {
+      const result = paragraphs.map((paragraph) => {
         const text = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
         const styled = walkStyledContent(paragraph);
         return {
-          index,
+          id: paragraph.GetInternalId(),
           text: text,
           styleInfo: (styled) ? styled.styleInfo : undefined,
         };
@@ -284,27 +284,30 @@ export class TextEditor extends BaseEditor {
   // so the `paragraph` reference obtained before `ReplaceTextSmart` is apparently not safe to call
   // `.GetText()` on afterward (likely invalidated/rebuilt by the replace). Reverted to trusting
   // `text` as-is; revisit only with a way to actually verify against a live host.
-  replaceContent(text: string, index: number): Promise<void> {
-    console.log('replaceContent', { text, index });
+  replaceContent(text: string, id: string): Promise<void> {
+    console.log('replaceContent', { text, id });
     return this.runCommand(() => {
-      const { index: paraIndex, text: newText } = Asc.scope as { index: number; text: string };
-      const paragraph = Api.GetDocument().GetAllParagraphs()[paraIndex];
+      const { id: paraId, text: newText } = Asc.scope as { id: string; text: string };
+      const paragraph = Api.GetDocument().GetAllParagraphs().find((p) => p.GetInternalId() === paraId);
+      if (!paragraph) return;
       paragraph.Select();
       Api.ReplaceTextSmart([newText]);
-    }, { index, text });
+    }, { id, text });
   }
 
-  selectContentRange(_index: number, _start: number, _end: number, separatorLength?: number): Promise<void> {
-    console.log('selectContentRange', { _index, _start, _end, separatorLength });
+  selectContentRange(_id: string, _start: number, _end: number, separatorLength?: number): Promise<void> {
+    console.log('selectContentRange', { _id, _start, _end, separatorLength });
     return this.runCommand(() => {
-      let { 
-        _index: index,
+      let {
+        _id: paraId,
         _start: start,
         _end: end,
         separatorLength: sl
-      } = Asc.scope as { _index: number; _start: number; _end: number; separatorLength: number };
+      } = Asc.scope as { _id: string; _start: number; _end: number; separatorLength: number };
       const doc = Api.GetDocument();
       const paragraphs = doc.GetAllParagraphs();
+      const index = paragraphs.findIndex((p) => p.GetInternalId() === paraId);
+      if (index === -1) return;
       const paragraph = paragraphs[index];
       const tl = paragraph.GetText().replace(/\r\n$/, '').length;
       // ↓↓↓ Doesn't work well in areas with formatting
@@ -371,7 +374,7 @@ export class TextEditor extends BaseEditor {
       if (end > start) {
         doc.MoveCursorRight((end - start), true);
       }
-    }, { _index, _start, _end, separatorLength });
+    }, { _id, _start, _end, separatorLength });
   }
 
   selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {
@@ -389,7 +392,6 @@ export class TextEditor extends BaseEditor {
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
-    console.log('selectWithinSelection', { _selectionStart, _selectionEnd, _start, _end });
     return this.runCommand(() => {
       // TODO: replace with actual separator length
       const sl = 4;
@@ -475,7 +477,6 @@ export class TextEditor extends BaseEditor {
           }
         }
       }
-      console.log('res', { index, start, end });
       paragraph.GetRange(0, 0).Select();
       doc.MoveCursorRight(start, true);
       doc.RemoveSelection();

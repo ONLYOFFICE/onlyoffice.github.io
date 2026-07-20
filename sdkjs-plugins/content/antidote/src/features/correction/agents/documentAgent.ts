@@ -45,7 +45,7 @@ import {
 import { BaseCorrectionAgent } from './base';
 
 interface ParagraphOffset {
-  index: number;
+  id: string;
   start: number;
   text: string;
   styleInfo?: StyleInfo[];
@@ -96,7 +96,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     let start = 0;
     this.paragraphs = paragraphs.map((paragraph) => {
       const offset: ParagraphOffset = {
-        index: paragraph.index, start, text: paragraph.text, styleInfo: paragraph.styleInfo,
+        id: paragraph.id, start, text: paragraph.text, styleInfo: paragraph.styleInfo,
       };
       start += paragraph.text.length + PARAGRAPH_SEPARATOR.length;
       return offset;
@@ -166,7 +166,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     const separatorLength = PARAGRAPH_SEPARATOR.length;
     const localStart = params.positionStart - paragraph.start;
     const localEnd = params.positionEnd - paragraph.start;
-    this.editor.selectContentRange(paragraph.index, localStart, localEnd, separatorLength).catch(() => {
+    this.editor.selectContentRange(paragraph.id, localStart, localEnd, separatorLength).catch(() => {
       console.error('Failed to select content range');
     });
   }
@@ -177,7 +177,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     const localEnd = params.positionReplaceEnd - paragraph.start;
     const newText = paragraph.text.slice(0, localStart) + params.newString + paragraph.text.slice(localEnd);
 
-    await this.editor.replaceContent(newText, paragraph.index);
+    await this.editor.replaceContent(newText, paragraph.id);
 
     const diff = newText.length - paragraph.text.length;
     paragraph.text = newText;

@@ -138,8 +138,8 @@ export abstract class BaseEditor {
     return Promise.resolve('');
   }
 
-  replaceContent(text: string, index: number): Promise<void> {
-    console.error('replaceContent is not implemented in this editor', { text, index });
+  replaceContent(text: string, id: string): Promise<void> {
+    console.error('replaceContent is not implemented in this editor', { text, id });
     return Promise.resolve();
   }
 
@@ -194,7 +194,7 @@ export abstract class BaseEditor {
   // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
   // whole-document scope already keeps out of reach there).
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectContentRange(_index: number, _start: number, _end: number, _separatorLength?: number): Promise<void> {
+  selectContentRange(_id: string, _start: number, _end: number, _separatorLength?: number): Promise<void> {
     console.error('selectContentRange is not implemented in this editor');
     return Promise.resolve();
   }
