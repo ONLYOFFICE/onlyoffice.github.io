@@ -859,6 +859,7 @@
 		this.itemType = ItemType.WindowHeader;
 		this.align = "right";
 		this.isTitle = false;
+		this.isLabel = false;
 
 		Asc.Buttons.ButtonsWindowHeader.push(this);
 	}
@@ -879,6 +880,8 @@
 			item.align = this.align;
 		if (this.isTitle)
 			item.isTitle = true;
+		if (this.isLabel)
+			item.isLabel = true;
 		return item;
 	};
 
