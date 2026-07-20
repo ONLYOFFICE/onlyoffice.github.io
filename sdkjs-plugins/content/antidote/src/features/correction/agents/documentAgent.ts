@@ -155,7 +155,8 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     if (!paragraph) return false;
     const localStart = params.positionStart - paragraph.start;
     const localEnd = params.positionEnd - paragraph.start;
-    return paragraph.text.slice(localStart, localEnd) === params.context;
+    const actualText = paragraph.text.slice(localStart, localEnd);
+    return actualText === params.context;
   }
 
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that

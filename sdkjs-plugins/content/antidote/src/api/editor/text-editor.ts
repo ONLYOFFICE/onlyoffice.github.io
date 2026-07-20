@@ -133,11 +133,11 @@ export class TextEditor extends BaseEditor {
 
       const paragraphs = Api.GetDocument().GetAllParagraphs();
       const result = paragraphs.map((paragraph, index) => {
-        const text = paragraph.GetText({ Numbering: false });
+        const text = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
         const styled = walkStyledContent(paragraph);
         return {
           index,
-          text: text.replace(/\r\n$/, ''),
+          text: text,
           styleInfo: (styled) ? styled.styleInfo : undefined,
         };
       });
@@ -238,7 +238,7 @@ export class TextEditor extends BaseEditor {
           if (i > 0) joinedText += '\r\n\r\n';
 
           const paragraph = paragraphs[i];
-          const paragraphText = paragraph.GetText({ Numbering: false });
+          const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
           const styledParagraph = walkStyledContent(paragraph);
           console.warn('styledParagraph', styledParagraph);
           const start = joinedText.length;
@@ -409,11 +409,13 @@ export class TextEditor extends BaseEditor {
       
 
       let paragraph = paragraphs[index];
+      if (!paragraph) return;
       let tl = paragraph.GetText().replace(/\r\n$/, '').length;
       while (start >= tl + sl) {
         start -= (tl + sl);
         end -= (tl + sl);
         paragraphs.shift();
+        if (!paragraphs[index]) break;
         paragraph = paragraphs[index];
         tl = paragraph.GetText().replace(/\r\n$/, '').length;
       }
