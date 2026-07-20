@@ -1,11 +1,10 @@
 {
-	"Tesseract.js lets recognize text in pictures (png, jpg)": "Tesseract.js 可用于识别图片（png、jpg）中的文本",
+	"Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)": "Tesseract.js 可用于识别图片（bmp、jpg、png、webp、gif）中的文本",
 	"Choose language": "选择语言",
 	"Load File": "加载文件",
 	"English": "英语",
 	"Chinese": "中文",
 	"Russian": "俄语",
-	"Meme": "Meme",
 	"Thai": "泰语",
 	"German": "德语",
 	"Japanese": "日语",
@@ -65,6 +64,6 @@
 	"Slovak": "斯洛伐克语",
 	"Recognize": "识别",
 	"Tesseract.js Add-on": "Tesseract.js 附加组件",
-	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages." : "Tesseract.js 是 <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR 引擎</a>的纯 JavaScript 版本，可对英语、中文、俄语、Meme 等 60 余种语言进行识别。",
+	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian and 60 other languages." : "Tesseract.js 是 <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR 引擎</a>的纯 JavaScript 版本，可对英语、中文、俄语等 60 余种语言进行识别。",
 	"Source code": "源代码"
 }
