@@ -1,0 +1,21 @@
+Curly plugin for ONLYOFFICE
+Copyright (c) 2026 Foundasys. All rights reserved.
+
+Permission is granted, free of charge, to install and use this plugin with
+ONLYOFFICE editors and compatible forks.
+
+Redistribution of this plugin, unmodified, as part of the ONLYOFFICE plugin
+marketplace (github.com/ONLYOFFICE/onlyoffice.github.io) and its official
+distribution channels is permitted. Any other redistribution or modification
+requires prior written permission from Foundasys.
+
+The plugin connects to the Curly service (https://curly.io). Use of the
+service is governed by the Curly Terms of Service (https://curly.io/terms)
+and Privacy Policy (https://curly.io/privacy). The plugin itself is free;
+the service is a commercial subscription with a free trial.
+
+The compiled bundle includes third-party open-source components (React,
+Radix UI, and others), each used under its respective license (MIT and
+similar permissive licenses).
+
+Contact: support@curly.io
