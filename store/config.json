@@ -42,10 +42,10 @@
 	{ "name": "bergamot", "discussion": "" },
 	{ "name": "textcleaner", "discussion": "" },
 	{ "name": "odata", "discussion": "" },
-	{"name": "antidote", "discussion": ""},
-	{"name": "lizardtypst", "discussion": ""},
-	{"name": "chineseconvertor", "discussion": ""},
-	{"name": "chineseautoformattool", "discussion": ""},
-	{"name": "salesforce", "discussion": ""},
-	{"name": "curly", "discussion": "607"}
+	{ "name": "antidote", "discussion": "" },
+	{ "name": "lizardtypst", "discussion": "" },
+	{ "name": "chineseconvertor", "discussion": "" },
+	{ "name": "chineseautoformattool", "discussion": "" },
+	{ "name": "salesforce", "discussion": "" },
+	{ "name": "curly", "discussion": "607" }
 ]
