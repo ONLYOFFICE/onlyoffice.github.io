@@ -168,13 +168,18 @@ export abstract class BaseEditor {
   // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
   // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectWithinSelection(_selectionStart: number, _start: number, _end: number): Promise<void> {
+  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
     console.error('selectWithinSelection is not implemented in this editor');
     return Promise.resolve();
   }
 
   getSelectionStart(): Promise<number | null> {
     console.error('getSelectionStart is not implemented in this editor');
+    return Promise.resolve(null);
+  }
+
+  getSelectionEnd(): Promise<number | null> {
+    console.error('getSelectionEnd is not implemented in this editor');
     return Promise.resolve(null);
   }
 

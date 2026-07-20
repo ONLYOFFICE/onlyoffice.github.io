@@ -373,22 +373,101 @@ export class TextEditor extends BaseEditor {
   }
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
-  selectWithinSelection(selectionStart: number, start: number, end: number): Promise<void> {
-    console.log('selectWithinSelection', { selectionStart, start, end });
+  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
+    console.log('selectWithinSelection', { _selectionStart, _selectionEnd, _start, _end });
     return this.runCommand(() => {
-      const { selectionStart: offset, start: s, end: e } = Asc.scope as { selectionStart: number; start: number; end: number };
+      const sl = 4;
+      let { 
+        _selectionStart: selectionStart,
+        _selectionEnd: selectionEnd,
+        _start: start,
+        _end: end
+      } = Asc.scope as { _selectionStart: number; _selectionEnd: number; _start: number; _end: number };
       // ↓↓↓ Doesn't work well in areas with formatting
-      // Api.GetDocument().GetRange(offset + s, offset + e).Select();
+      // Api.GetDocument().GetRange(selectionStart + s, selectionStart + e).Select();
       // ↓↓↓ Workaround ↑↑↑
       const doc = Api.GetDocument();
-      doc.GetRange(offset, offset).Select();
-      doc.MoveCursorRight(s, true);
+      const sourceRange = doc.GetRange(selectionStart, selectionEnd);
+      const paragraphs = sourceRange.GetAllParagraphs();
+      const index = 0;
+      
+
+      let paragraph = paragraphs[index];
+      let tl = paragraph.GetText().replace(/\r\n$/, '').length;
+      while (start >= tl + sl) {
+        start -= (tl + sl);
+        end -= (tl + sl);
+        paragraphs.shift();
+        paragraph = paragraphs[index];
+        tl = paragraph.GetText().replace(/\r\n$/, '').length;
+      }
+      // ↓↓↓ Doesn't work well in areas with formatting
+      // paragraph.GetRange(start, end).Select();
+      // ↓↓↓ Workaround ↑↑↑
+      console.log('select', { index, start, end, tl, sl });
+      if (start > tl) {
+        let minusOffset = start;
+        let id = index;
+        let numOfP = 0;
+        let p = paragraphs[id];
+        let pLen = p.GetText().replace(/\r\n$/, '').length;
+        while (minusOffset >= pLen && p) {
+          minusOffset -= (pLen + sl);
+          id++;
+          if (minusOffset >= 0) {
+            numOfP++;
+          }
+          p = paragraphs[id];
+          if (!p) break;
+          pLen = p.GetText().replace(/\r\n$/, '').length;
+        }
+        if (minusOffset < 0) {
+          start -= (sl + minusOffset);
+        }
+        if (numOfP > 0) {
+         for (let i = 0; i < numOfP; i++) {
+          start -= sl;
+         }
+        }
+      }
+      if (end > tl) {
+        let minusOffset = end;
+        let id = index;
+        let numOfP = 0;
+        let p = paragraphs[id];
+        let pLen = p.GetText().replace(/\r\n$/, '').length;
+        while (minusOffset >= pLen && p) {
+          minusOffset -= (pLen + sl);
+          id++;
+          if (minusOffset >= 0) {
+            numOfP++;
+          }
+          p = paragraphs[id];
+          if (!p) break;
+          pLen = p.GetText().replace(/\r\n$/, '').length;
+        }
+        if (minusOffset < 0) {
+          end -= (sl + minusOffset);
+        }
+        if (numOfP > 0) {
+          if (start > 0) {
+            end += 1; // to select gap 
+          }
+          for (let i = 0; i < numOfP; i++) {
+            end -= sl;
+          }
+        }
+      }
+      console.log('res', { index, start, end });
+      paragraph.GetRange(0, 0).Select();
+      doc.MoveCursorRight(start, true);
       doc.RemoveSelection();
-      if (e > s) {
-        doc.MoveCursorRight(e - s, true);
+      
+      if (end > start) {
+        doc.MoveCursorRight((end - start), true);
       }
 
-    }, { selectionStart, start, end });
+    }, { _selectionStart, _selectionEnd, _start, _end });
   }
 
   getSelectionStart(): Promise<number | null> {
@@ -396,6 +475,14 @@ export class TextEditor extends BaseEditor {
     return this.runQuery<number | null>(() => {
       const range = Api.GetDocument().GetRangeBySelect();
       return range ? range.GetStartPos() : null;
+    }).catch(() => null);
+  }
+
+  getSelectionEnd(): Promise<number | null> {
+    console.log('getSelectionEnd');
+    return this.runQuery<number | null>(() => {
+      const range = Api.GetDocument().GetRangeBySelect();
+      return range ? range.GetEndPos() : null;
     }).catch(() => null);
   }
 

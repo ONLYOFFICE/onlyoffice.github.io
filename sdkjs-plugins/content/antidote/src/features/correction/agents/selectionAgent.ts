@@ -51,6 +51,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   private styleInfo: StyleInfo[] = [];
 
   private selectionStart: number | null = null;
+  private selectionEnd: number | null = null;
 
   async loadText(): Promise<void> {
     await this.preloadCorrectionMemory();
@@ -58,6 +59,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     this.text = selected.text;
     this.styleInfo = selected.styleInfo ?? [];
     this.selectionStart = await this.editor.getSelectionStart();
+    this.selectionEnd = await this.editor.getSelectionEnd();
   }
 
   configuration(): WordProcessorConfiguration {
@@ -93,8 +95,8 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   selectInterval(params: ParamsSelect): void {
     console.log(this.text);
     console.log('styleInfo', this.styleInfo);
-    if (this.selectionStart === null) return;
-    this.editor.selectWithinSelection(this.selectionStart, params.positionStart, params.positionEnd).catch(() => {});
+    if (this.selectionStart === null || this.selectionEnd === null) return;
+    this.editor.selectWithinSelection(this.selectionStart, this.selectionEnd, params.positionStart, params.positionEnd).catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
