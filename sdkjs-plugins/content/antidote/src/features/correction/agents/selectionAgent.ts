@@ -44,6 +44,10 @@ import {
 
 import { BaseCorrectionAgent } from './base';
 
+// How long to wait after a document-content-change event before resyncing — batches a burst of
+// several rapid edits (e.g. fast typing) into one resync instead of one per keystroke.
+const RESYNC_DEBOUNCE_MS = 200;
+
 // Selection scope works across word/cell/pdf through generic host methods; styleInfo is Word-only.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   private text = '';
@@ -52,6 +56,43 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
 
   private selectionStart: number | null = null;
   private selectionEnd: number | null = null;
+
+  private resyncTimer: ReturnType<typeof setTimeout> | null = null;
+
+  // Same concurrent-edit resilience as DocumentCorrectionAgent — see its sessionStarted for the
+  // full rationale. Here it also covers the selection itself being edited directly (not just
+  // through Antidote), keeping `this.text`/`this.styleInfo`/selection bounds in sync.
+  sessionStarted(): void {
+    this.editor.watchContentChanges(this.scheduleResync);
+  }
+
+  sessionEnded(): void {
+    this.editor.stopWatchingContentChanges();
+    if (this.resyncTimer) clearTimeout(this.resyncTimer);
+    super.sessionEnded();
+  }
+
+  private scheduleResync = (): void => {
+    if (this.isApplyingCorrections) return;
+    if (this.resyncTimer) clearTimeout(this.resyncTimer);
+    this.resyncTimer = setTimeout(() => {
+      this.resyncTimer = null;
+      if (this.isApplyingCorrections) return;
+      this.resyncSelection().catch(() => {});
+    }, RESYNC_DEBOUNCE_MS);
+  };
+
+  // Re-reads text/style for the zone's own tracked bounds (selectionStart/selectionEnd) without
+  // touching the document's live selection — unlike selecting the range first, this doesn't steal
+  // the cursor away from whatever the user is currently typing elsewhere in the document. The
+  // actual `.Select()` only happens where it's unavoidable: right before applyCorrection replaces
+  // the zone, or when Antidote itself asks via selectInterval.
+  private async resyncSelection(): Promise<void> {
+    if (this.selectionStart === null || this.selectionEnd === null) return;
+    const range = await this.editor.getRangeTextWithStyle(this.selectionStart, this.selectionEnd);
+    this.text = range.text;
+    this.styleInfo = range.styleInfo ?? [];
+  }
 
   async loadText(): Promise<void> {
     await this.preloadCorrectionMemory();
@@ -101,6 +142,13 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     this.text = this.text.slice(0, params.positionStartReplace)
       + params.newString
       + this.text.slice(params.positionReplaceEnd);
+
+    // Keep the tracked zone bounds accurate as its length changes, since resyncSelection reselects
+    // [selectionStart, selectionEnd] to re-read text/style — a stale end would select the wrong range.
+    if (this.selectionEnd !== null) {
+      const diff = params.newString.length - (params.positionReplaceEnd - params.positionStartReplace);
+      this.selectionEnd += diff;
+    }
 
     const paragraphs = this.text.replace(/(?:\r\n)+$/, '').split(/\r\n\r\n/);
     console.log('applyCorrection paragraphs', paragraphs);

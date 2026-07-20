@@ -115,6 +115,16 @@ export abstract class BaseEditor {
     return this.getSelectedText().then((text) => ({ text }));
   }
 
+  // Non-selecting counterpart to getSelectedTextWithStyle — reads text/style at an explicit
+  // absolute range without touching the live document selection. TextEditor overrides this with a
+  // real object-model implementation; every other editor keeps this empty-text default (used only
+  // when getSelectionStart/End are non-null, which they aren't outside TextEditor).
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  getRangeTextWithStyle(_start: number, _end: number): Promise<SelectedTextWithStyle> {
+    console.error('getRangeTextWithStyle is not implemented in this editor');
+    return Promise.resolve({ text: '' });
+  }
+
   getSelectionEnd(): Promise<number | null> {
     console.error('getSelectionEnd is not implemented in this editor');
     return Promise.resolve(null);

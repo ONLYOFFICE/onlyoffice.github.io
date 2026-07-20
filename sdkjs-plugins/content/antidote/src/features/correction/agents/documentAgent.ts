@@ -55,7 +55,7 @@ const PARAGRAPH_SEPARATOR = '\r\n\r\n';
 
 // How long to wait after a document-content-change event before resyncing — batches a burst of
 // several rapid edits (e.g. fast typing) into one resync instead of one per keystroke.
-const RESYNC_DEBOUNCE_MS = 500;
+const RESYNC_DEBOUNCE_MS = 200;
 
 // Whole-document scope. Only valid for editorType "word" — cell/pdf don't expose a paragraph
 // object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word").
