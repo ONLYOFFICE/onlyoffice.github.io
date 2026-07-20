@@ -162,11 +162,10 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   // selection back onto the ONLYOFFICE document so it stays visible which part is being worked on.
   selectInterval(params: ParamsSelect): void {
     const paragraph = this.findParagraphAt(params.positionStart);
-    const textLength = paragraph.text.length;
     const separatorLength = PARAGRAPH_SEPARATOR.length;
     const localStart = params.positionStart - paragraph.start;
     const localEnd = params.positionEnd - paragraph.start;
-    this.editor.selectContentRange(paragraph.index, localStart, localEnd, textLength, separatorLength).catch(() => {
+    this.editor.selectContentRange(paragraph.index, localStart, localEnd, separatorLength).catch(() => {
       console.error('Failed to select content range');
     });
   }

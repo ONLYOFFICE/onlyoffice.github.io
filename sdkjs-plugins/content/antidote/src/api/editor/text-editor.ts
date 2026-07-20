@@ -264,7 +264,7 @@ export class TextEditor extends BaseEditor {
         subscript: TextStyle.subscript,
       } });
 
-      if (styled && styled.text === text) {
+      if (styled && styled.text) {
         console.log('getSelectedTextWithStyle matched', { styled, text });
         return { text, styleInfo: styled.styleInfo };
       }
@@ -292,85 +292,84 @@ export class TextEditor extends BaseEditor {
     }, { index, text });
   }
 
-  selectContentRange(index: number, start: number, end: number, textLength?: number, separatorLength?: number): Promise<void> {
-    
+  selectContentRange(_index: number, _start: number, _end: number, separatorLength?: number): Promise<void> {
     return this.runCommand(() => {
       let { 
-        index: paraIndex,
-        start: paraStart,
-        end: paraEnd,
-        textLength: tl,
+        _index: index,
+        _start: start,
+        _end: end,
         separatorLength: sl
-      } = Asc.scope as { index: number; start: number; end: number; textLength: number; separatorLength: number };
+      } = Asc.scope as { _index: number; _start: number; _end: number; separatorLength: number };
       const doc = Api.GetDocument();
       const paragraphs = doc.GetAllParagraphs();
-      const paragraph = paragraphs[paraIndex];
+      const paragraph = paragraphs[index];
+      const tl = paragraph.GetText().replace(/\r\n$/, '').length;
       // ↓↓↓ Doesn't work well in areas with formatting
-      // paragraph.GetRange(paraStart, paraEnd).Select();
+      // paragraph.GetRange(start, end).Select();
       // ↓↓↓ Workaround ↑↑↑
-      console.log('selectContentRange', { paraIndex, paraStart, paraEnd, tl, sl });
-      if (paraStart > tl) {
-        let minusOffset = paraStart;
-        let index = paraIndex;
+      console.log('selectContentRange', { index, start, end, tl, sl });
+      if (start > tl) {
+        let minusOffset = start;
+        let id = index;
         let numOfP = 0;
-        let p = paragraphs[index];
+        let p = paragraphs[id];
         let pLen = p.GetText().replace(/\r\n$/, '').length;
         while (minusOffset >= pLen && p) {
           minusOffset -= (pLen + sl);
-          index++;
+          id++;
           if (minusOffset >= 0) {
             numOfP++;
           }
-          p = paragraphs[index];
+          p = paragraphs[id];
           if (!p) break;
           pLen = p.GetText().replace(/\r\n$/, '').length;
         }
         if (minusOffset < 0) {
-          paraStart -= (sl + minusOffset);
+          start -= (sl + minusOffset);
         }
         if (numOfP > 0) {
          for (let i = 0; i < numOfP; i++) {
-          paraStart -= sl;
+          start -= sl;
          }
         }
       }
-      if (paraEnd > tl) {
-        let minusOffset = paraEnd;
-        let index = paraIndex;
+      if (end > tl) {
+        let minusOffset = end;
+        let id = index;
         let numOfP = 0;
-        let p = paragraphs[index];
+        let p = paragraphs[id];
         let pLen = p.GetText().replace(/\r\n$/, '').length;
         while (minusOffset >= pLen && p) {
           minusOffset -= (pLen + sl);
-          index++;
+          id++;
           if (minusOffset >= 0) {
             numOfP++;
           }
-          p = paragraphs[index];
+          p = paragraphs[id];
           if (!p) break;
           pLen = p.GetText().replace(/\r\n$/, '').length;
         }
         if (minusOffset < 0) {
-          paraEnd -= (sl + minusOffset);
+          end -= (sl + minusOffset);
         }
         if (numOfP > 0) {
-          if (paraStart > 0) {
-            paraEnd += 1; // to select gap 
+          if (start > 0) {
+            end += 1; // to select gap 
           }
           for (let i = 0; i < numOfP; i++) {
-            paraEnd -= sl;
+            end -= sl;
           }
         }
       }
 
       paragraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(paraStart, true);
+      doc.MoveCursorRight(start, true);
       doc.RemoveSelection();
       
-      if (paraEnd > paraStart) {
-        doc.MoveCursorRight((paraEnd - paraStart), true);
+      if (end > start) {
+        doc.MoveCursorRight((end - start), true);
       }
-    }, { index, start, end, textLength, separatorLength });
+    }, { _index, _start, _end, separatorLength });
   }
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
