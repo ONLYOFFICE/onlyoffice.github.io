@@ -66,6 +66,7 @@ export class TextEditor extends BaseEditor {
 
   // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
   getDocumentContent(): Promise<DocumentParagraph[]> {
+    console.log('get doc content');
     return this.runQuery<DocumentParagraph[]>(function() {
       const { textStyle: TextStyle } = Asc.scope as { textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
       type StyledContainer = ApiParagraph | ApiHyperlink;
@@ -160,6 +161,7 @@ export class TextEditor extends BaseEditor {
   // that starts/ends mid-paragraph — or spans a table — won't reconstruct identically; those cases
   // just fall back to plain text, same as the BaseEditor default this overrides.
   async getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
+    console.log('get selected text with style');
     const text = await this.getSelectedText();
     if (!text) return { text };
 
@@ -293,6 +295,7 @@ export class TextEditor extends BaseEditor {
   }
 
   selectContentRange(_index: number, _start: number, _end: number, separatorLength?: number): Promise<void> {
+    console.log('selectContentRange', { _index, _start, _end, separatorLength });
     return this.runCommand(() => {
       let { 
         _index: index,
@@ -307,7 +310,6 @@ export class TextEditor extends BaseEditor {
       // ↓↓↓ Doesn't work well in areas with formatting
       // paragraph.GetRange(start, end).Select();
       // ↓↓↓ Workaround ↑↑↑
-      console.log('selectContentRange', { index, start, end, tl, sl });
       if (start > tl) {
         let minusOffset = start;
         let id = index;
@@ -372,10 +374,24 @@ export class TextEditor extends BaseEditor {
     }, { _index, _start, _end, separatorLength });
   }
 
+  selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {
+    console.log('selectSourceRange', { _selectionStart, _selectionEnd });
+   return this.runCommand(() => {
+      let { 
+        _selectionStart: selectionStart,
+        _selectionEnd: selectionEnd,
+      } = Asc.scope as { _selectionStart: number; _selectionEnd: number };
+
+      const doc = Api.GetDocument();
+      doc.GetRange(selectionStart, selectionEnd).Select();
+    }, { _selectionStart, _selectionEnd});
+  }
+
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
     console.log('selectWithinSelection', { _selectionStart, _selectionEnd, _start, _end });
     return this.runCommand(() => {
+      // TODO: replace with actual separator length
       const sl = 4;
       let { 
         _selectionStart: selectionStart,
@@ -404,7 +420,6 @@ export class TextEditor extends BaseEditor {
       // ↓↓↓ Doesn't work well in areas with formatting
       // paragraph.GetRange(start, end).Select();
       // ↓↓↓ Workaround ↑↑↑
-      console.log('select', { index, start, end, tl, sl });
       if (start > tl) {
         let minusOffset = start;
         let id = index;

@@ -77,7 +77,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       positionEnd: range.positionEnd,
       style: range.style as TextStyle,
     }));
-    console.warn('zonesToCorrect', this.text.replace(/\r\n\r\n/g, '\r\n'));
+    console.warn('zonesToCorrect', this.text.replace(/\r\n\r\n/g, '\r\n'), _params);
     return [{
       text: this.text, zoneId: '', zoneIsFocused: true, styleInfo,
     }];
@@ -108,6 +108,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     console.log('applyCorrection paragraphs', paragraphs);
     console.log(this.text);
     console.log('applyCorrection params', params);
+    await this.editor.selectSourceRange(this.selectionStart, this.selectionEnd);
     await this.editor.replaceSelectedText(paragraphs);
   }
 }

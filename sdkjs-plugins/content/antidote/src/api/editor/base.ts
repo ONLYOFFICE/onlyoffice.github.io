@@ -83,6 +83,82 @@ export abstract class BaseEditor {
     if (!window.Asc?.plugin?.callCommand) throw new DocumentError('Plugin API unavailable', 'PLUGIN_UNAVAILABLE');
   }
 
+  // No caret-word API outside Word's object model. TextEditor overrides this with the real
+  // `Api.GetDocument().GetCurrentWord()` call; every other editor keeps this empty-string default,
+  // which callers (e.g. useLookup's Dictionaries/Guides caret fallback) treat as "nothing found."
+  // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
+  getCurrentWord(): Promise<string> {
+    console.error('getCurrentWord is not implemented in this editor');
+    return Promise.resolve('');
+  }
+
+  getDocumentContent() {
+    console.error('getDocumentContent is not implemented in this editor');
+    return Promise.resolve([]);
+  }
+
+  // executeMethod calls a built-in host method directly (works uniformly across word/cell/pdf,
+  // unlike Api.GetDocument() which is word-specific).
+  getSelectedText(): Promise<string> {
+    this.ensurePlugin();
+    return new Promise((resolve) => {
+      window.Asc.plugin.executeMethod('GetSelectedText', [SELECTED_TEXT_OPTIONS], (text) => resolve(text ?? ''));
+    });
+  }
+
+  // No run-level style-range extraction outside Word's object model. TextEditor overrides this
+  // to add `styleInfo`; every other editor keeps the plain-text default (cosmetic-only data, so
+  // dropping it here is always a safe degradation, never a correctness risk for the correction
+  // itself).
+  getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
+    console.error('getSelectedTextWithStyle is not implemented in this editor');
+    return this.getSelectedText().then((text) => ({ text }));
+  }
+
+  getSelectionEnd(): Promise<number | null> {
+    console.error('getSelectionEnd is not implemented in this editor');
+    return Promise.resolve(null);
+  }
+
+  getSelectionStart(): Promise<number | null> {
+    console.error('getSelectionStart is not implemented in this editor');
+    return Promise.resolve(null);
+  }
+
+  hasSelection(): Promise<boolean> {
+    return this.getSelectedText()
+      .then((text) => text.trim().length > 0)
+      .catch(() => false);
+  }
+
+  // Lets Antidote remember which suggestions were already ignored/applied for this document
+  // across multiple Corrector sessions — stored as a custom document property (GetCustomProperties)
+  loadCorrectionMemory(): Promise<string> {
+    console.error('loadCorrectionMemory is not implemented in this editor');
+    return Promise.resolve('');
+  }
+
+  replaceContent(text: string, index: number): Promise<void> {
+    console.error('replaceContent is not implemented in this editor', { text, index });
+    return Promise.resolve();
+  }
+
+  replaceSelectedText(paragraphs: string[]): Promise<boolean> {
+    this.ensurePlugin();
+    return new Promise((resolve) => {
+      window.Asc.plugin.executeMethod('ReplaceTextSmart', [paragraphs, undefined, String.fromCharCode(160)], (ok) => resolve(Boolean(ok)));
+    });
+  }
+
+  // See runQuery for the callCommand sandboxing constraints.
+  protected runCommand<T extends Record<string, unknown>>(command: () => void, scope: T): Promise<void> {
+    this.ensurePlugin();
+    return new Promise((resolve) => {
+      window.Asc.scope = scope;
+      window.Asc.plugin.callCommand(command, false, true, resolve);
+    });
+  }
+
   // callCommand runs `command` inside the document's sandboxed object-model context, where the
   // global `Api`/`Asc.scope` are available. `command` itself must stay self-contained — it's
   // serialized and re-evaluated in that separate realm, so it can only see `Api`/`Asc.scope` and
@@ -106,49 +182,9 @@ export abstract class BaseEditor {
     });
   }
 
-  // See runQuery for the callCommand sandboxing constraints.
-  protected runCommand<T extends Record<string, unknown>>(command: () => void, scope: T): Promise<void> {
-    this.ensurePlugin();
-    return new Promise((resolve) => {
-      window.Asc.scope = scope;
-      window.Asc.plugin.callCommand(command, false, true, resolve);
-    });
-  }
-
-  // executeMethod calls a built-in host method directly (works uniformly across word/cell/pdf,
-  // unlike Api.GetDocument() which is word-specific).
-  getSelectedText(): Promise<string> {
-    this.ensurePlugin();
-    return new Promise((resolve) => {
-      window.Asc.plugin.executeMethod('GetSelectedText', [SELECTED_TEXT_OPTIONS], (text) => resolve(text ?? ''));
-    });
-  }
-
-  hasSelection(): Promise<boolean> {
-    return this.getSelectedText()
-      .then((text) => text.trim().length > 0)
-      .catch(() => false);
-  }
-
-  replaceSelectedText(paragraphs: string[]): Promise<boolean> {
-    this.ensurePlugin();
-    return new Promise((resolve) => {
-      window.Asc.plugin.executeMethod('ReplaceTextSmart', [paragraphs, undefined, String.fromCharCode(160)], (ok) => resolve(Boolean(ok)));
-    });
-  }
-
-  // No caret-word API outside Word's object model. TextEditor overrides this with the real
-  // `Api.GetDocument().GetCurrentWord()` call; every other editor keeps this empty-string default,
-  // which callers (e.g. useLookup's Dictionaries/Guides caret fallback) treat as "nothing found."
-  // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
-  getCurrentWord(): Promise<string> {
-    console.error('getCurrentWord is not implemented in this editor');
-    return Promise.resolve('');
-  }
-
-  getDocumentContent() {
-    console.error('getDocumentContent is not implemented in this editor');
-    return Promise.resolve([]);
+  saveCorrectionMemory(_data: string): Promise<void> {
+    console.error('saveCorrectionMemory is not implemented in this editor');
+    return Promise.resolve();
   }
 
   // Highlights a sub-range of a specific paragraph (paragraph-local `start`/`end`, matching how
@@ -173,39 +209,8 @@ export abstract class BaseEditor {
     return Promise.resolve();
   }
 
-  getSelectionStart(): Promise<number | null> {
-    console.error('getSelectionStart is not implemented in this editor');
-    return Promise.resolve(null);
-  }
-
-  getSelectionEnd(): Promise<number | null> {
-    console.error('getSelectionEnd is not implemented in this editor');
-    return Promise.resolve(null);
-  }
-
-  // No run-level style-range extraction outside Word's object model. TextEditor overrides this
-  // to add `styleInfo`; every other editor keeps the plain-text default (cosmetic-only data, so
-  // dropping it here is always a safe degradation, never a correctness risk for the correction
-  // itself).
-  getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
-    console.error('getSelectedTextWithStyle is not implemented in this editor');
-    return this.getSelectedText().then((text) => ({ text }));
-  }
-
-  replaceContent(text: string, index: number): Promise<void> {
-    console.error('replaceContent is not implemented in this editor', { text, index });
-    return Promise.resolve();
-  }
-
-  // Lets Antidote remember which suggestions were already ignored/applied for this document
-  // across multiple Corrector sessions — stored as a custom document property (GetCustomProperties)
-  loadCorrectionMemory(): Promise<string> {
-    console.error('loadCorrectionMemory is not implemented in this editor');
-    return Promise.resolve('');
-  }
-
-  saveCorrectionMemory(_data: string): Promise<void> {
-    console.error('saveCorrectionMemory is not implemented in this editor');
+  selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {
+    console.error('selectSourceRange is not implemented in this editor');
     return Promise.resolve();
   }
 
