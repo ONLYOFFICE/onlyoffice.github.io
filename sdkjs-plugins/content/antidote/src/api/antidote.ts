@@ -46,7 +46,7 @@ export class AntidoteError extends Error {
 // Connectix's ephemeral range and provides a manual-port fallback.
 const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
-const PROBE_TIMEOUT_MS = 500;
+const PROBE_TIMEOUT_MS = 200;
 
 // The port found by the last successful scan/probe, exposed so Settings can display it as the
 // effective port even when the user hasn't set a manual override — as if they had typed it in.

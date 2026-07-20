@@ -230,7 +230,7 @@ export abstract class BaseEditor {
   // resynced instead of silently drifting. No-op outside Word's editor-event API; every other
   // editor just has no concurrent-edit detection yet.
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  watchContentChanges(_onChange: () => void): void {}
+  watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {}
 
   // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   stopWatchingContentChanges(): void {}

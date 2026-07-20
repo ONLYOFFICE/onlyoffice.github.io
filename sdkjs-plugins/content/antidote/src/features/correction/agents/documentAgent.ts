@@ -80,7 +80,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     super.sessionEnded();
   }
 
-  private scheduleResync = (): void => {
+  private scheduleResync = (eventName: string, event?: Event): void => {
     if (this.isApplyingCorrections) return;
     if (this.resyncTimer) clearTimeout(this.resyncTimer);
     this.resyncTimer = setTimeout(() => {

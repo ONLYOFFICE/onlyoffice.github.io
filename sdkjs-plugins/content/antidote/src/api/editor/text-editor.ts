@@ -418,6 +418,7 @@ export class TextEditor extends BaseEditor {
       const index = paragraphs.findIndex((p) => p.GetInternalId() === paraId);
       if (index === -1) return;
       const paragraph = paragraphs[index];
+      if (!paragraph) return;
       const tl = paragraph.GetText().replace(/\r\n$/, '').length;
       // ↓↓↓ Doesn't work well in areas with formatting
       // paragraph.GetRange(start, end).Select();
@@ -637,9 +638,9 @@ export class TextEditor extends BaseEditor {
     }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 
-  watchContentChanges(onChange: () => void): void {
+  watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {
     const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
-    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.attachEditorEvent(eventName, () => onChange()));
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
   }
 
   stopWatchingContentChanges(): void {

@@ -506,6 +506,11 @@
   margin-bottom: 12px;
 }
 
+.antidote-tools .button--full-width {
+  gap: 8px;
+  justify-content: start;
+}
+
 .antidote-tools__row {
   display: flex;
   gap: 8px;
