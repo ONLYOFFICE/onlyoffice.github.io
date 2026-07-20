@@ -52,7 +52,10 @@ const PROBE_TIMEOUT_MS = 200;
 // effective port even when the user hasn't set a manual override — as if they had typed it in.
 export const discoveredPort = signal<number | null>(null);
 
-function probePort(port: number): Promise<boolean> {
+// Exported so callers can re-check reachability of a specific, already-connected port later (e.g.
+// useCorrection distinguishing a genuine connection drop from the user just closing the Corrector
+// window — sessionEnded() fires identically for both, so this is the only way to tell them apart).
+export function probePort(port: number): Promise<boolean> {
   return new Promise((resolve) => {
     let settled = false;
     const socket = new WebSocket(`ws://localhost:${port}`);

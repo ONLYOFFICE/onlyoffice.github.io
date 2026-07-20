@@ -33,7 +33,7 @@
 import { useCallback, useRef } from 'preact/hooks';
 import { Antidote, ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
-import { getPortProvider, AntidoteError } from '@api/antidote';
+import { getPortProvider, probePort, AntidoteError } from '@api/antidote';
 import { t } from '@utils/i18n';
 
 import { DocumentCorrectionAgent } from '../agents/documentAgent';
@@ -46,8 +46,16 @@ const DOCUMENT_TITLE = 'ONLYOFFICE';
 
 export function useCorrection() {
   const connectixRef = useRef<ConnectixAgent | null>(null);
+  // Set right before we ourselves tear down the connection (stop()), so handleSessionEnded can
+  // tell "we asked for this" apart from Antidote/Connectix ending the session on its own.
+  const stoppingRef = useRef(false);
+  // Port actually used by the current session, captured as portProvider resolves it — re-probed
+  // on an unexpected sessionEnded to tell a genuine connection drop from the user just closing the
+  // Corrector window themselves (sessionEnded fires identically for both; see antidote.ts's probePort).
+  const activePortRef = useRef<number | null>(null);
 
   const stop = useCallback(() => {
+    stoppingRef.current = true;
     connectixRef.current?.close();
     connectixRef.current = null;
     connectionState.value = 'idle';
@@ -60,10 +68,30 @@ export function useCorrection() {
 
     try {
       const portProvider = getPortProvider();
+      const trackedPortProvider = async () => {
+        const port = await portProvider();
+        activePortRef.current = port;
+        return port;
+      };
 
       const handleSessionEnded = () => {
         connectixRef.current = null;
-        connectionState.value = 'idle';
+
+        if (stoppingRef.current) {
+          stoppingRef.current = false;
+          connectionState.value = 'idle';
+          return;
+        }
+
+        const port = activePortRef.current;
+        (port !== null ? probePort(port) : Promise.resolve(false)).then((reachable) => {
+          if (reachable) {
+            connectionState.value = 'idle';
+          } else {
+            connectionState.value = 'error';
+            errorMessage.value = t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
+          }
+        });
       };
 
       const agent = targetScope === 'document'
@@ -72,7 +100,7 @@ export function useCorrection() {
 
       await agent.loadText();
 
-      const connectix = new ConnectixAgent(agent, portProvider);
+      const connectix = new ConnectixAgent(agent, trackedPortProvider);
       await connectix.connectWithAntidote();
       connectix.launchCorrector();
 

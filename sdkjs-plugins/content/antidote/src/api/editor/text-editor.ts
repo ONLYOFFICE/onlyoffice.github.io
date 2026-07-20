@@ -240,7 +240,6 @@ export class TextEditor extends BaseEditor {
           const paragraph = paragraphs[i];
           const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
           const styledParagraph = walkStyledContent(paragraph);
-          console.warn('styledParagraph', styledParagraph);
           const start = joinedText.length;
 
           if (styledParagraph && styledParagraph.text === paragraphText) {
