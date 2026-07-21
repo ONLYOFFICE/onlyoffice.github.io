@@ -132,15 +132,19 @@ export class TextEditor extends BaseEditor {
       }
 
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      const result = paragraphs.map((paragraph) => {
-        const text = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
-        const styled = walkStyledContent(paragraph);
-        return {
-          id: paragraph.GetInternalId(),
-          text: text,
-          styleInfo: (styled) ? styled.styleInfo : undefined,
-        };
-      });
+      // Table cells get their own paragraphs from GetAllParagraphs() too — excluded so Antidote
+      // never sees (and so can never propose edits touching) table content.
+      const result = paragraphs
+        //.filter((paragraph) => !paragraph.GetParentTable())
+        .map((paragraph) => {
+          const text = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
+          const styled = walkStyledContent(paragraph);
+          return {
+            id: paragraph.GetInternalId(),
+            text: text,
+            styleInfo: (styled) ? styled.styleInfo : undefined,
+          };
+        });
       return result;
     }, { textStyle: {
         bold: TextStyle.bold,
@@ -466,6 +470,7 @@ export class TextEditor extends BaseEditor {
         if (minusOffset < 0) {
           end -= (sl + minusOffset);
         }
+        console.warn({numOfP, start, end, tl});
         if (numOfP > 0) {
           if (start > 0) {
             end += 1; // to select gap 
@@ -473,6 +478,12 @@ export class TextEditor extends BaseEditor {
           for (let i = 0; i < numOfP; i++) {
             end -= sl;
           }
+        } else if (
+          Asc.scope._start < Asc.scope._end && 
+          Asc.scope._end < tl + sl && 
+          Asc.scope._start === tl && 
+          minusOffset < 0) {
+          end += 1; // to select gap 
         }
       }
 
