@@ -204,7 +204,7 @@ export abstract class BaseEditor {
   // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
   // whole-document scope already keeps out of reach there).
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number, _separatorLength?: number): Promise<void> {
+  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
     console.error('selectContentRange is not implemented in this editor');
     return Promise.resolve();
   }
@@ -214,7 +214,7 @@ export abstract class BaseEditor {
   // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
   // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
+  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength?: number): Promise<void> {
     console.error('selectWithinSelection is not implemented in this editor');
     return Promise.resolve();
   }

@@ -51,8 +51,6 @@ interface ParagraphOffset {
   styleInfo?: StyleInfo[];
 }
 
-const PARAGRAPH_SEPARATOR = '\r\n\r\n';
-
 // How long to wait after a document-content-change event before resyncing — batches a burst of
 // several rapid edits (e.g. fast typing) into one resync instead of one per keystroke.
 const RESYNC_DEBOUNCE_MS = 200;
@@ -91,6 +89,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   };
 
   private async loadParagraphs(): Promise<void> {
+    console.error('load paragraphs');
     const paragraphs = await this.editor.getDocumentContent();
 
     let start = 0;
@@ -98,7 +97,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       const offset: ParagraphOffset = {
         id: paragraph.id, start, text: paragraph.text, styleInfo: paragraph.styleInfo,
       };
-      start += paragraph.text.length + PARAGRAPH_SEPARATOR.length;
+      start += paragraph.text.length + this.PARAGRAPH_SEPARATOR.length;
       return offset;
     });
   }
@@ -130,7 +129,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     });
 
     return [{
-      text: this.paragraphs.map((paragraph) => paragraph.text).join(PARAGRAPH_SEPARATOR),
+      text: this.paragraphs.map((paragraph) => paragraph.text).join(this.PARAGRAPH_SEPARATOR),
       zoneId: '',
       zoneIsFocused: true,
       styleInfo,
@@ -164,10 +163,9 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   selectInterval(params: ParamsSelect): void {
     const firstParagraph = this.findParagraphAt(params.positionStart);
     const lastParagraph = this.findParagraphAt(params.positionEnd);
-    const separatorLength = PARAGRAPH_SEPARATOR.length;
     const localStart = params.positionStart - firstParagraph.start;
     const localEnd = params.positionEnd - lastParagraph.start;
-    this.editor.selectContentRange(firstParagraph.id, lastParagraph.id, localStart, localEnd, separatorLength).catch(() => {
+    this.editor.selectContentRange(firstParagraph.id, lastParagraph.id, localStart, localEnd).catch(() => {
       console.error('Failed to select content range');
     });
   }

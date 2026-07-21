@@ -135,7 +135,8 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
   selectInterval(params: ParamsSelect): void {
     if (this.selectionStart === null || this.selectionEnd === null) return;
-    this.editor.selectWithinSelection(this.selectionStart, this.selectionEnd, params.positionStart, params.positionEnd).catch(() => {});
+    const separatorLength = this.PARAGRAPH_SEPARATOR.length;
+    this.editor.selectWithinSelection(this.selectionStart, this.selectionEnd, params.positionStart, params.positionEnd, separatorLength).catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {

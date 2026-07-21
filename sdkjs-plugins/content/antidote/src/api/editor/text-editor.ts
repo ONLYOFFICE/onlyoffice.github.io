@@ -135,7 +135,7 @@ export class TextEditor extends BaseEditor {
       const result = paragraphs
         //.filter((paragraph) => !paragraph.GetParentTable())
         .map((paragraph) => {
-          const text = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
+          const text = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
           const styled = walkStyledContent(paragraph);
           return {
             id: paragraph.GetInternalId(),
@@ -236,7 +236,7 @@ export class TextEditor extends BaseEditor {
         if (i > 0) joinedText += '\r\n\r\n';
 
         const paragraph = paragraphs[i];
-        const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
+        const paragraphText = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
         const styledParagraph = walkStyledContent(paragraph);
         const start2 = joinedText.length;
         if (styledParagraph && styledParagraph.text === paragraphText) {
@@ -349,7 +349,7 @@ export class TextEditor extends BaseEditor {
           if (i > 0) joinedText += '\r\n\r\n';
 
           const paragraph = paragraphs[i];
-          const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
+          const paragraphText = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
           const styledParagraph = walkStyledContent(paragraph);
           const start = joinedText.length;
 
@@ -445,16 +445,15 @@ export class TextEditor extends BaseEditor {
     }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 
-  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number, separatorLength?: number): Promise<void> {
-    console.log('selectContentRange', { _idFirstParagraph, _idLastParagraph, _start, _end, separatorLength });
+  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
+    console.log('selectContentRange', { _idFirstParagraph, _idLastParagraph, _start, _end });
     return this.runCommand(() => {
       let {
         _idFirstParagraph: paraIdFirst,
         _idLastParagraph: paraIdLast,
         _start: start,
         _end: end,
-        separatorLength: sl
-      } = Asc.scope as { _idFirstParagraph: string; _idLastParagraph: string; _start: number; _end: number; separatorLength: number };
+      } = Asc.scope as { _idFirstParagraph: string; _idLastParagraph: string; _start: number; _end: number };
       const doc = Api.GetDocument();
       const paragraphs = doc.GetAllParagraphs();
       const indexFirstParagraph = paragraphs.findIndex((p) => p.GetInternalId() === paraIdFirst);
@@ -463,8 +462,8 @@ export class TextEditor extends BaseEditor {
       const firstParagraph = paragraphs[indexFirstParagraph];
       const lastParagraph = paragraphs[indexLastParagraph];
       if (!firstParagraph || !lastParagraph) return;
-      const fpLen = firstParagraph.GetText().replace(/\r\n$/, '').length;
-      const lpLen = lastParagraph.GetText().replace(/\r\n$/, '').length;
+      const fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
+      const lpLen = lastParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
 
       if (start > fpLen) {
         start = fpLen;
@@ -480,13 +479,13 @@ export class TextEditor extends BaseEditor {
       lastParagraph.GetRange(0, 0).Select();
       doc.MoveCursorRight(end, true);
       end = doc.GetRangeBySelect().GetEndPos();
+      doc.RemoveSelection();
       Api.GetDocument().GetRange(start, end).Select();
 
-    }, { _idFirstParagraph, _idLastParagraph, _start, _end, separatorLength });
+    }, { _idFirstParagraph, _idLastParagraph, _start, _end });
   }
 
   selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {
-    console.log('selectSourceRange', { _selectionStart, _selectionEnd });
    return this.runCommand(() => {
       let { 
         _selectionStart: selectionStart,
@@ -499,101 +498,86 @@ export class TextEditor extends BaseEditor {
   }
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
-  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number): Promise<void> {
+  selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength = 4): Promise<void> {
+    console.log('selectWithinSelection', { _selectionStart, _selectionEnd, _start, _end, _separatorLength });
     return this.runCommand(() => {
-      // TODO: replace with actual separator length
-      const sl = 4;
       let { 
         _selectionStart: selectionStart,
         _selectionEnd: selectionEnd,
         _start: start,
-        _end: end
-      } = Asc.scope as { _selectionStart: number; _selectionEnd: number; _start: number; _end: number };
+        _end: end,
+        _separatorLength: sl,
+      } = Asc.scope as { _selectionStart: number; _selectionEnd: number; _start: number; _end: number; _separatorLength: number };
       // ↓↓↓ Doesn't work well in areas with formatting
       // Api.GetDocument().GetRange(selectionStart + s, selectionStart + e).Select();
       // ↓↓↓ Workaround ↑↑↑
       const doc = Api.GetDocument();
       const sourceRange = doc.GetRange(selectionStart, selectionEnd);
       const paragraphs = sourceRange.GetAllParagraphs();
-      const index = 0;
-      
+      if (!paragraphs || paragraphs.length === 0) return;
+      let firstParagraph = paragraphs[0];
+      let firstParagraphStart = firstParagraph.GetRange(0, 0).GetStartPos();
+      let fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
 
-      let paragraph = paragraphs[index];
-      if (!paragraph) return;
-      let tl = paragraph.GetText().replace(/\r\n$/, '').length;
-      while (start >= tl + sl) {
-        start -= (tl + sl);
-        end -= (tl + sl);
+      let firstAppendixRange = doc.GetRange(firstParagraphStart, selectionStart);
+      selectionStart = firstParagraphStart;
+      const firstParagraphAppendixLength = firstAppendixRange.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
+      console.warn('firstParagraphStart', firstParagraphStart, 'selectionStart', selectionStart);
+      console.log('firstParagraphAppendixLength', firstParagraphAppendixLength, 'selectionEnd', selectionEnd);
+
+      start += firstParagraphAppendixLength;
+      end += firstParagraphAppendixLength;
+      while (start >= fpLen + sl) {
+        start -= (fpLen + sl);
+        end -= (fpLen + sl);
         paragraphs.shift();
-        if (!paragraphs[index]) break;
-        paragraph = paragraphs[index];
-        tl = paragraph.GetText().replace(/\r\n$/, '').length;
-      }
-      // ↓↓↓ Doesn't work well in areas with formatting
-      // paragraph.GetRange(start, end).Select();
-      // ↓↓↓ Workaround ↑↑↑
-      if (start > tl) {
-        let minusOffset = start;
-        let id = index;
-        let numOfP = 0;
-        let p = paragraphs[id];
-        let pLen = p.GetText().replace(/\r\n$/, '').length;
-        while (minusOffset >= pLen && p) {
-          minusOffset -= (pLen + sl);
-          id++;
-          if (minusOffset >= 0) {
-            numOfP++;
-          }
-          p = paragraphs[id];
-          if (!p) break;
-          pLen = p.GetText().replace(/\r\n$/, '').length;
-        }
-        if (minusOffset < 0) {
-          start -= (sl + minusOffset);
-        }
-        if (numOfP > 0) {
-         for (let i = 0; i < numOfP; i++) {
-          start -= sl;
-         }
-        }
-      }
-      if (end > tl) {
-        let minusOffset = end;
-        let id = index;
-        let numOfP = 0;
-        let p = paragraphs[id];
-        let pLen = p.GetText().replace(/\r\n$/, '').length;
-        while (minusOffset >= pLen && p) {
-          minusOffset -= (pLen + sl);
-          id++;
-          if (minusOffset >= 0) {
-            numOfP++;
-          }
-          p = paragraphs[id];
-          if (!p) break;
-          pLen = p.GetText().replace(/\r\n$/, '').length;
-        }
-        if (minusOffset < 0) {
-          end -= (sl + minusOffset);
-        }
-        if (numOfP > 0) {
-          if (start > 0) {
-            end += 1; // to select gap 
-          }
-          for (let i = 0; i < numOfP; i++) {
-            end -= sl;
-          }
-        }
-      }
-      paragraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(start, true);
-      doc.RemoveSelection();
-      
-      if (end > start) {
-        doc.MoveCursorRight((end - start), true);
+        firstParagraph = paragraphs[0];
+        fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
       }
 
-    }, { _selectionStart, _selectionEnd, _start, _end });
+      console.log('s = ' + start + ' e = ' + end);
+      function findParagraphAt(pos: number, paragraphs: ApiParagraph[], sl: number): ApiParagraph {
+        let startPos = 0;
+        for (let i = 0; i < paragraphs.length; i++) {
+          const paragraph = paragraphs[i];
+          const pLen = paragraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length + sl;
+          startPos += pLen;
+          if (startPos > pos) {
+            return paragraph;
+          }
+        }
+        return paragraphs[0];
+      }
+
+
+      let lastParagraph = findParagraphAt(end, paragraphs, sl);
+      let lpLen = lastParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
+      const index = paragraphs.indexOf(lastParagraph);
+      for (let i = 0; i < index; i++) {
+        const paragraph = paragraphs[i];
+        end -= paragraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length + sl;
+      }
+
+      if (start > fpLen) {
+        start = fpLen;
+      }
+      if (end > lpLen) {
+        end = lpLen;
+      }
+      console.warn('fpLen', fpLen, 'lpLen', lpLen);
+      console.error(start, end);
+      firstParagraph.GetRange(0, 0).Select();
+      doc.MoveCursorRight(start, true);
+      start = doc.GetRangeBySelect().GetEndPos();
+      lastParagraph.GetRange(0, 0).Select();
+      doc.MoveCursorRight(end, true);
+      end = doc.GetRangeBySelect().GetEndPos();
+      doc.RemoveSelection();
+      console.warn('select Range', { start, end, s: Asc.scope._start, e: Asc.scope._end });
+      Api.GetDocument().GetRange(start, end).Select();
+
+
+    }, { _selectionStart, _selectionEnd, _start, _end, _separatorLength });
   }
 
   stopWatchingContentChanges(): void {
