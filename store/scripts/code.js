@@ -997,6 +997,33 @@ function onClickPluginPlate(guid) {
 	return Promise.resolve(true);
 }
 
+/** @returns {boolean} whether the plugin card should render as a centered popup instead of taking over the full page */
+function _isPluginCardModalMode() {
+	const documentElement = document.documentElement;
+	const width = window.innerWidth || documentElement.clientWidth || document.body.clientWidth;
+	const height = window.innerHeight || documentElement.clientHeight || document.body.clientHeight;
+	return width >= 721 && height >= 601;
+}
+
+/** @param {boolean} independentMode */
+function _syncPluginCardModalState(independentMode) {
+	let pluginCardDiv = document.getElementById('plugin_card_panel');
+	let marketplaceDiv = document.getElementById('plugins');
+	let overlayDiv = document.getElementById('plugin_card_overlay');
+	if (!pluginCardDiv || !marketplaceDiv || !overlayDiv || pluginCardDiv.classList.contains('hidden')) {
+		return;
+	}
+	const needModal = _isPluginCardModalMode() && independentMode;
+	console.log('needModal', needModal, independentMode);
+	if (needModal) {
+		marketplaceDiv.classList.remove('hidden');
+		overlayDiv.classList.remove('hidden');
+	} else {
+		marketplaceDiv.classList.add('hidden');
+		overlayDiv.classList.add('hidden');
+	}
+}
+
 /**
  * @param {PluginCardWindowParams} data
  */
@@ -1005,8 +1032,8 @@ function showPluginCard(data) {
 	let marketplaceDiv = document.getElementById('plugins');
 	if (pluginCardDiv && marketplaceDiv) {
 		pluginCardDiv.classList.remove('hidden');
-		marketplaceDiv.classList.add('hidden');
 	}
+	_syncPluginCardModalState(data.independentMode);
 
 	PluginCard.init(data);
 
@@ -1018,9 +1045,13 @@ function showPluginCard(data) {
 function hidePluginCard(blockForwardHistory) {
 	let pluginCardDiv = document.getElementById('plugin_card_panel');
 	let marketplaceDiv = document.getElementById('plugins');
+	let overlayDiv = document.getElementById('plugin_card_overlay');
 	if (pluginCardDiv && marketplaceDiv) {
 		pluginCardDiv.classList.add('hidden');
 		marketplaceDiv.classList.remove('hidden');
+		if (overlayDiv) {
+			overlayDiv.classList.add('hidden');
+		}
 	}
 	window.onresize = Scale.onResize.bind(Scale, false);
 	if (blockForwardHistory) {
@@ -1111,14 +1142,16 @@ function changeAfterInstallUpdateRemove(bInstall, guid, bHasLocal) {
 
 function setThemeForBrowserTabMode() {
 	// theme data is kept in a separate file and loaded on demand only when the marketplace is opened in an independent browser tab
-	if (typeof ThemeDefaultMessage !== 'undefined') {
-		_onMessageTheme(ThemeDefaultMessage);
+	if (typeof ThemeMessage !== 'undefined') {
+		const themeMessage = Utils.themeType === 'dark' ? ThemeMessage.dark : ThemeMessage.light;
+		_onMessageTheme(themeMessage);
 		return;
 	}
 	var script = document.createElement('script');
 	script.src = 'scripts/marketplace/theme-default.js';
 	script.onload = function() {
-		_onMessageTheme(ThemeDefaultMessage);
+		const themeMessage = Utils.themeType === 'dark' ? ThemeMessage.dark : ThemeMessage.light;
+		_onMessageTheme(themeMessage);
 	};
 	document.head.appendChild(script);
 }

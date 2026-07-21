@@ -74,7 +74,12 @@ const PluginCard = {
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
-        window.onresize = this.setDivHeight;
+        window.onresize = function() {
+            self.setDivHeight();
+            if (typeof _syncPluginCardModalState === 'function') {
+                _syncPluginCardModalState(data.independentMode);
+            }
+        };
         this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
