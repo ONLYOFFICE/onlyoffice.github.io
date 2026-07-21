@@ -2,7 +2,7 @@
 
 ## 1.2.0
 
-* New (beta): Form fields. An opt-in setting lists the document's native form controls in their own tab — text and rich text fields (including block-level rich text controls), checkboxes, dropdown lists, combo boxes (free text supported), and date pickers with a real date control. Controls marked "contents cannot be edited" appear locked and are never modified; wrappers that group other controls are left untouched.
+* New (beta): Form fields. An opt-in setting lists the document's native form controls in their own tab — text fields, checkboxes, dropdown lists, combo boxes (free text supported), and date pickers with a real date control. Rich-content containers are shown read-only (their multi-paragraph content is edited in the document, not through a form input); controls marked "contents cannot be edited" appear locked, and wrappers that group other controls are left untouched.
 * Text and combo controls show their current content as a hint inside the input: typing replaces it, leaving it empty keeps the control unchanged.
 * Fix: a stray { in one paragraph and a } in a later paragraph are no longer detected together as one placeholder.
 * Fix: replacing placeholders can no longer alter text inside native form controls.
