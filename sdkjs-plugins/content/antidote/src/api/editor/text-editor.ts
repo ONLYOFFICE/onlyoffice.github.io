@@ -158,6 +158,115 @@ export class TextEditor extends BaseEditor {
       });
   }
 
+  // Same reconstruction as getSelectedTextWithStyle, but for an explicit absolute [start, end)
+  // range instead of the live selection — doesn't call `.Select()`, so it doesn't touch whatever
+  // the user is currently doing in the document (used by SelectionCorrectionAgent's background
+  // resync, which must not steal the cursor/selection away from someone actively typing).
+  getRangeTextWithStyle(start: number, end: number): Promise<SelectedTextWithStyle> {
+    console.log('getRangeTextWithStyle', { start, end });
+    return this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
+      const {
+        start: rangeStart, end: rangeEnd, textStyle: TextStyle,
+      } = Asc.scope as { start: number; end: number; textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
+      // See getDocumentContent above for why this is declared here rather than shared.
+      type StyledContainer = ApiParagraph | ApiHyperlink;
+
+      function isRun(element: ParagraphContent): element is ApiRun {
+        return element.GetClassType() === 'run';
+      }
+      function isHyperlink(element: ParagraphContent): element is ApiHyperlink {
+        return element.GetClassType() === 'hyperlink';
+      }
+
+      function walkStyledContent(
+        container: StyledContainer,
+      ): { text: string; styleInfo: StyleInfo[] } | null {
+        let elementText = '';
+        const elementStyleInfo: StyleInfo[] = [];
+        const count = container.GetElementsCount();
+
+        for (let i = 0; i < count; i += 1) {
+          const element = container.GetElement(i);
+          if (!element) return null;
+
+          if (isRun(element)) {
+            const runText = element.GetText();
+            const start2 = elementText.length;
+            const end2 = start2 + runText.length;
+            const textPr = element.GetTextPr();
+
+            if (textPr.GetBold()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.bold });
+            if (textPr.GetItalic()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.italic });
+            if (textPr.GetStrikeout()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.strike });
+            const vertAlign = textPr.GetVertAlign();
+            if (vertAlign === 'superscript' || vertAlign === 'subscript') {
+              elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: vertAlign === 'superscript' ? TextStyle.superscript : TextStyle.subscript });
+            }
+
+            elementText += runText;
+          } else if (isHyperlink(element)) {
+            const nested = walkStyledContent(element);
+            if (!nested) return null;
+
+            const offset = elementText.length;
+            for (let j = 0; j < nested.styleInfo.length; j += 1) {
+              const range = nested.styleInfo[j];
+              elementStyleInfo.push({
+                positionStart: range.positionStart + offset,
+                positionEnd: range.positionEnd + offset,
+                style: range.style,
+              });
+            }
+
+            elementText += nested.text;
+          } else {
+            return null;
+          }
+        }
+
+        return { text: elementText, styleInfo: elementStyleInfo };
+      }
+
+      const range = Api.GetDocument().GetRange(rangeStart, rangeEnd);
+      if (!range) return null;
+
+      const paragraphs = range.GetAllParagraphs();
+      let joinedText = '';
+      const joinedStyleInfo: StyleInfo[] = [];
+
+      for (let i = 0; i < paragraphs.length; i += 1) {
+        if (i > 0) joinedText += '\r\n\r\n';
+
+        const paragraph = paragraphs[i];
+        const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
+        const styledParagraph = walkStyledContent(paragraph);
+        const start2 = joinedText.length;
+        if (styledParagraph && styledParagraph.text === paragraphText) {
+          for (let j = 0; j < styledParagraph.styleInfo.length; j += 1) {
+            const range2 = styledParagraph.styleInfo[j];
+            joinedStyleInfo.push({
+              positionStart: range2.positionStart + start2,
+              positionEnd: range2.positionEnd + start2,
+              style: range2.style,
+            });
+          }
+        }
+
+        joinedText += paragraphText;
+      }
+
+      return { text: joinedText, styleInfo: joinedStyleInfo };
+    }, {
+      start, end, textStyle: {
+        bold: TextStyle.bold,
+        italic: TextStyle.italic,
+        strike: TextStyle.strike,
+        superscript: TextStyle.superscript,
+        subscript: TextStyle.subscript,
+      },
+    }).then((styled) => (styled ?? { text: '' })).catch(() => ({ text: '' }));
+  }
+
   // Selection scope: walks the paragraphs touched by the selection via the object model to build
   // styleInfo, then verifies the reconstruction matches `getSelectedText()` (the host-level
   // method, always correct, used everywhere else) byte-for-byte before trusting it. `GetAllParagraphs`
@@ -281,113 +390,36 @@ export class TextEditor extends BaseEditor {
     return { text };
   }
 
-  // Same reconstruction as getSelectedTextWithStyle, but for an explicit absolute [start, end)
-  // range instead of the live selection — doesn't call `.Select()`, so it doesn't touch whatever
-  // the user is currently doing in the document (used by SelectionCorrectionAgent's background
-  // resync, which must not steal the cursor/selection away from someone actively typing).
-  getRangeTextWithStyle(start: number, end: number): Promise<SelectedTextWithStyle> {
-    console.log('getRangeTextWithStyle', { start, end });
-    return this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
-      const {
-        start: rangeStart, end: rangeEnd, textStyle: TextStyle,
-      } = Asc.scope as { start: number; end: number; textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
-      // See getDocumentContent above for why this is declared here rather than shared.
-      type StyledContainer = ApiParagraph | ApiHyperlink;
+  getSelectionEnd(): Promise<number | null> {
+    console.log('getSelectionEnd');
+    return this.runQuery<number | null>(() => {
+      const range = Api.GetDocument().GetRangeBySelect();
+      return range ? range.GetEndPos() : null;
+    }).catch(() => null);
+  }
 
-      function isRun(element: ParagraphContent): element is ApiRun {
-        return element.GetClassType() === 'run';
-      }
-      function isHyperlink(element: ParagraphContent): element is ApiHyperlink {
-        return element.GetClassType() === 'hyperlink';
-      }
+  getSelectionStart(): Promise<number | null> {
+    console.log('getSelectionStart');
+    return this.runQuery<number | null>(() => {
+      const range = Api.GetDocument().GetRangeBySelect();
+      return range ? range.GetStartPos() : null;
+    }).catch(() => null);
+  }
 
-      function walkStyledContent(
-        container: StyledContainer,
-      ): { text: string; styleInfo: StyleInfo[] } | null {
-        let elementText = '';
-        const elementStyleInfo: StyleInfo[] = [];
-        const count = container.GetElementsCount();
-
-        for (let i = 0; i < count; i += 1) {
-          const element = container.GetElement(i);
-          if (!element) return null;
-
-          if (isRun(element)) {
-            const runText = element.GetText();
-            const start2 = elementText.length;
-            const end2 = start2 + runText.length;
-            const textPr = element.GetTextPr();
-
-            if (textPr.GetBold()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.bold });
-            if (textPr.GetItalic()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.italic });
-            if (textPr.GetStrikeout()) elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: TextStyle.strike });
-            const vertAlign = textPr.GetVertAlign();
-            if (vertAlign === 'superscript' || vertAlign === 'subscript') {
-              elementStyleInfo.push({ positionStart: start2, positionEnd: end2, style: vertAlign === 'superscript' ? TextStyle.superscript : TextStyle.subscript });
-            }
-
-            elementText += runText;
-          } else if (isHyperlink(element)) {
-            const nested = walkStyledContent(element);
-            if (!nested) return null;
-
-            const offset = elementText.length;
-            for (let j = 0; j < nested.styleInfo.length; j += 1) {
-              const range = nested.styleInfo[j];
-              elementStyleInfo.push({
-                positionStart: range.positionStart + offset,
-                positionEnd: range.positionEnd + offset,
-                style: range.style,
-              });
-            }
-
-            elementText += nested.text;
-          } else {
-            return null;
-          }
-        }
-
-        return { text: elementText, styleInfo: elementStyleInfo };
-      }
-
-      const range = Api.GetDocument().GetRange(rangeStart, rangeEnd);
-      if (!range) return null;
-
-      const paragraphs = range.GetAllParagraphs();
-      let joinedText = '';
-      const joinedStyleInfo: StyleInfo[] = [];
-
-      for (let i = 0; i < paragraphs.length; i += 1) {
-        if (i > 0) joinedText += '\r\n\r\n';
-
-        const paragraph = paragraphs[i];
-        const paragraphText = paragraph.GetText({ Numbering: false }).replace(/\r\n$/, '');
-        const styledParagraph = walkStyledContent(paragraph);
-        const start2 = joinedText.length;
-        if (styledParagraph && styledParagraph.text === paragraphText) {
-          for (let j = 0; j < styledParagraph.styleInfo.length; j += 1) {
-            const range2 = styledParagraph.styleInfo[j];
-            joinedStyleInfo.push({
-              positionStart: range2.positionStart + start2,
-              positionEnd: range2.positionEnd + start2,
-              style: range2.style,
-            });
-          }
-        }
-
-        joinedText += paragraphText;
-      }
-
-      return { text: joinedText, styleInfo: joinedStyleInfo };
-    }, {
-      start, end, textStyle: {
-        bold: TextStyle.bold,
-        italic: TextStyle.italic,
-        strike: TextStyle.strike,
-        superscript: TextStyle.superscript,
-        subscript: TextStyle.subscript,
-      },
-    }).then((styled) => (styled ?? { text: '' })).catch(() => ({ text: '' }));
+  // Stores correction memory as a custom document property so it travels with the file.
+  loadCorrectionMemory(): Promise<string> {
+    return this.runQuery<string>(() => {
+      const { CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { CORRECTION_MEMORY_PROPERTY: string };
+      const doc = Api.GetDocument();
+      const props = doc.GetCustomProperties();
+      if (!props) return '';
+      const value = props.Get(property);
+      return value && typeof value === 'string' ? value : '';
+    }, { CORRECTION_MEMORY_PROPERTY }).then((value) => {
+      return value;
+    }).catch(() => {
+      return '';
+    });
   }
 
   // NOTE: tried reading back the paragraph's actual post-replace text here (to guard against
@@ -405,6 +437,14 @@ export class TextEditor extends BaseEditor {
       paragraph.Select();
       Api.ReplaceTextSmart([newText]);
     }, { id, text });
+  }
+
+  saveCorrectionMemory(data: string): Promise<void> {
+    return this.runCommand(() => {
+      const { data: value, CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { data: string; CORRECTION_MEMORY_PROPERTY: string };
+      const doc = Api.GetDocument() as unknown as { GetCustomProperties(): CustomProperties };
+      doc.GetCustomProperties().Add(property, value);
+    }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 
   selectContentRange(_id: string, _start: number, _end: number, separatorLength?: number): Promise<void> {
@@ -608,53 +648,13 @@ export class TextEditor extends BaseEditor {
     }, { _selectionStart, _selectionEnd, _start, _end });
   }
 
-  getSelectionStart(): Promise<number | null> {
-    console.log('getSelectionStart');
-    return this.runQuery<number | null>(() => {
-      const range = Api.GetDocument().GetRangeBySelect();
-      return range ? range.GetStartPos() : null;
-    }).catch(() => null);
+  stopWatchingContentChanges(): void {
+    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.detachEditorEvent(eventName));
   }
-
-  getSelectionEnd(): Promise<number | null> {
-    console.log('getSelectionEnd');
-    return this.runQuery<number | null>(() => {
-      const range = Api.GetDocument().GetRangeBySelect();
-      return range ? range.GetEndPos() : null;
-    }).catch(() => null);
-  }
-
-  // Stores correction memory as a custom document property so it travels with the file.
-  loadCorrectionMemory(): Promise<string> {
-    return this.runQuery<string>(() => {
-      const { CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { CORRECTION_MEMORY_PROPERTY: string };
-      const doc = Api.GetDocument();
-      const props = doc.GetCustomProperties();
-      if (!props) return '';
-      const value = props.Get(property);
-      return value && typeof value === 'string' ? value : '';
-    }, { CORRECTION_MEMORY_PROPERTY }).then((value) => {
-      return value;
-    }).catch(() => {
-      return '';
-    });
-  }
-
-  saveCorrectionMemory(data: string): Promise<void> {
-    return this.runCommand(() => {
-      const { data: value, CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { data: string; CORRECTION_MEMORY_PROPERTY: string };
-      const doc = Api.GetDocument() as unknown as { GetCustomProperties(): CustomProperties };
-      doc.GetCustomProperties().Add(property, value);
-    }, { data, CORRECTION_MEMORY_PROPERTY });
-  }
-
   watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {
     const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
     CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
   }
 
-  stopWatchingContentChanges(): void {
-    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
-    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.detachEditorEvent(eventName));
-  }
 }
