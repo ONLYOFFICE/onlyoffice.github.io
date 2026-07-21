@@ -132,8 +132,6 @@ export class TextEditor extends BaseEditor {
       }
 
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      // Table cells get their own paragraphs from GetAllParagraphs() too — excluded so Antidote
-      // never sees (and so can never propose edits touching) table content.
       const result = paragraphs
         //.filter((paragraph) => !paragraph.GetParentTable())
         .map((paragraph) => {
@@ -447,94 +445,44 @@ export class TextEditor extends BaseEditor {
     }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 
-  selectContentRange(_id: string, _start: number, _end: number, separatorLength?: number): Promise<void> {
-    console.log('selectContentRange', { _id, _start, _end, separatorLength });
+  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number, separatorLength?: number): Promise<void> {
+    console.log('selectContentRange', { _idFirstParagraph, _idLastParagraph, _start, _end, separatorLength });
     return this.runCommand(() => {
       let {
-        _id: paraId,
+        _idFirstParagraph: paraIdFirst,
+        _idLastParagraph: paraIdLast,
         _start: start,
         _end: end,
         separatorLength: sl
-      } = Asc.scope as { _id: string; _start: number; _end: number; separatorLength: number };
+      } = Asc.scope as { _idFirstParagraph: string; _idLastParagraph: string; _start: number; _end: number; separatorLength: number };
       const doc = Api.GetDocument();
       const paragraphs = doc.GetAllParagraphs();
-      const index = paragraphs.findIndex((p) => p.GetInternalId() === paraId);
-      if (index === -1) return;
-      const paragraph = paragraphs[index];
-      if (!paragraph) return;
-      const tl = paragraph.GetText().replace(/\r\n$/, '').length;
-      // ↓↓↓ Doesn't work well in areas with formatting
-      // paragraph.GetRange(start, end).Select();
-      // ↓↓↓ Workaround ↑↑↑
-      if (start > tl) {
-        let minusOffset = start;
-        let id = index;
-        let numOfP = 0;
-        let p = paragraphs[id];
-        let pLen = p.GetText().replace(/\r\n$/, '').length;
-        while (minusOffset >= pLen && p) {
-          minusOffset -= (pLen + sl);
-          id++;
-          if (minusOffset >= 0) {
-            numOfP++;
-          }
-          p = paragraphs[id];
-          if (!p) break;
-          pLen = p.GetText().replace(/\r\n$/, '').length;
-        }
-        if (minusOffset < 0) {
-          start -= (sl + minusOffset);
-        }
-        if (numOfP > 0) {
-         for (let i = 0; i < numOfP; i++) {
-          start -= sl;
-         }
-        }
+      const indexFirstParagraph = paragraphs.findIndex((p) => p.GetInternalId() === paraIdFirst);
+      const indexLastParagraph = paragraphs.findIndex((p) => p.GetInternalId() === paraIdLast);
+      if (indexFirstParagraph === -1 || indexLastParagraph === -1) return;
+      const firstParagraph = paragraphs[indexFirstParagraph];
+      const lastParagraph = paragraphs[indexLastParagraph];
+      if (!firstParagraph || !lastParagraph) return;
+      const fpLen = firstParagraph.GetText().replace(/\r\n$/, '').length;
+      const lpLen = lastParagraph.GetText().replace(/\r\n$/, '').length;
+
+      if (start > fpLen) {
+        start = fpLen;
       }
-      if (end > tl) {
-        let minusOffset = end;
-        let id = index;
-        let numOfP = 0;
-        let p = paragraphs[id];
-        let pLen = p.GetText().replace(/\r\n$/, '').length;
-        while (minusOffset >= pLen && p) {
-          minusOffset -= (pLen + sl);
-          id++;
-          if (minusOffset >= 0) {
-            numOfP++;
-          }
-          p = paragraphs[id];
-          if (!p) break;
-          pLen = p.GetText().replace(/\r\n$/, '').length;
-        }
-        if (minusOffset < 0) {
-          end -= (sl + minusOffset);
-        }
-        console.warn({numOfP, start, end, tl});
-        if (numOfP > 0) {
-          if (start > 0) {
-            end += 1; // to select gap 
-          }
-          for (let i = 0; i < numOfP; i++) {
-            end -= sl;
-          }
-        } else if (
-          Asc.scope._start < Asc.scope._end && 
-          Asc.scope._end < tl + sl && 
-          Asc.scope._start === tl && 
-          minusOffset < 0) {
-          end += 1; // to select gap 
-        }
+      if (end > lpLen) {
+        end = lpLen;
       }
 
-      paragraph.GetRange(0, 0).Select();
+      firstParagraph.GetRange(0, 0).Select();
       doc.MoveCursorRight(start, true);
-      doc.RemoveSelection();
+      start = doc.GetRangeBySelect().GetEndPos();
       
-      if (end > start) {
-        doc.MoveCursorRight((end - start), true);
-      }
-    }, { _id, _start, _end, separatorLength });
+      lastParagraph.GetRange(0, 0).Select();
+      doc.MoveCursorRight(end, true);
+      end = doc.GetRangeBySelect().GetEndPos();
+      Api.GetDocument().GetRange(start, end).Select();
+
+    }, { _idFirstParagraph, _idLastParagraph, _start, _end, separatorLength });
   }
 
   selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {

@@ -162,11 +162,12 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that
   // selection back onto the ONLYOFFICE document so it stays visible which part is being worked on.
   selectInterval(params: ParamsSelect): void {
-    const paragraph = this.findParagraphAt(params.positionStart);
+    const firstParagraph = this.findParagraphAt(params.positionStart);
+    const lastParagraph = this.findParagraphAt(params.positionEnd);
     const separatorLength = PARAGRAPH_SEPARATOR.length;
-    const localStart = params.positionStart - paragraph.start;
-    const localEnd = params.positionEnd - paragraph.start;
-    this.editor.selectContentRange(paragraph.id, localStart, localEnd, separatorLength).catch(() => {
+    const localStart = params.positionStart - firstParagraph.start;
+    const localEnd = params.positionEnd - lastParagraph.start;
+    this.editor.selectContentRange(firstParagraph.id, lastParagraph.id, localStart, localEnd, separatorLength).catch(() => {
       console.error('Failed to select content range');
     });
   }
