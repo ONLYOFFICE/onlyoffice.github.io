@@ -46,5 +46,6 @@
 	{"name": "chineseconvertor", "discussion": ""},
 	{"name": "chineseautoformattool", "discussion": ""},
 	{"name": "salesforce", "discussion": ""},
-	{"name": "curly", "discussion": "607"}
+	{"name": "curly", "discussion": "607"},
+	{ "name": "onlymath", "discussion": "" }
 ]

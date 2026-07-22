@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OnlyMath Settings</title>
+    <link rel="stylesheet" href="./../v1/plugins.css" />
+    <script type="text/javascript" src="./../v1/plugins.js"></script>
+    <script type="text/javascript" src="./../v1/plugins-ui.js"></script>
+    <style>
+      /*
+       * Match ONLYOFFICE right-side settings panels (e.g. Image Settings):
+       * native .btn-text-default / .form-control from plugins.css — content-
+       * sized controls (not full-width fill), 22px height, 2px radius,
+       * 11px Helvetica, bold section headers, thin dividers.
+       * Theme colours from applyTheme() in panel.ts override the fallbacks.
+       */
+      :root {
+        color-scheme: light dark;
+        --om-text:      var(--text-normal, #444);
+        --om-text-2:    var(--text-secondary, rgba(0, 0, 0, 0.6));
+        --om-text-3:    var(--text-tertiary, rgba(0, 0, 0, 0.4));
+        --om-bg:        var(--background-normal, #fff);
+        --om-border:    var(--border-regular-control, #cfcfcf);
+        --om-divider:   var(--border-divider, #eaeaea);
+        --om-hover:     var(--highlight-button-hover, #d8dadc);
+        --om-accent:    var(--background-accent-button, #4473ca);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 11px;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 12px 16px 16px;
+        background: var(--om-bg);
+        color: var(--om-text);
+        font: 11px/1.35 "Helvetica Neue", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Content-sized stack — same pattern as Actual Size / Fit to margin. */
+      .om-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .om-actions .btn-text-default {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: auto;
+        max-width: 100%;
+        height: 22px;
+        padding: 0 10px;
+        margin: 0;
+        color: var(--om-text);
+        background: var(--om-bg);
+        border: 1px solid var(--om-border);
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+      .om-actions .btn-text-default:hover { background: var(--om-hover); }
+      .om-actions .btn-text-default .sc {
+        color: var(--om-text-3);
+        margin-left: 14px;
+        font-weight: 400;
+      }
+
+      .fn-heading {
+        font-weight: 700;
+        font-size: 11px;
+        color: var(--om-text);
+        margin: 0 0 8px;
+      }
+      .fn-entry {
+        font-size: 11px;
+        line-height: 1.55;
+        color: var(--om-text-2);
+        word-break: break-word;
+      }
+
+      .var-radio-row { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+      .var-radio-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--om-text);
+        cursor: pointer;
+      }
+      .var-radio-label input[type="radio"] {
+        accent-color: var(--om-accent);
+        cursor: pointer;
+        margin: 0;
+      }
+
+      /* Combobox — same field chrome as .form-control / Crop split-button. */
+      .om-combo { position: relative; display: inline-block; max-width: 100%; }
+      .om-combo-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: auto;
+        min-width: 140px;
+        max-width: 100%;
+        height: 22px;
+        padding: 0 2px 0 8px;
+        margin: 0;
+        font: inherit;
+        color: var(--om-text);
+        background: var(--om-bg);
+        border: 1px solid var(--om-border);
+        border-radius: 2px;
+        cursor: pointer;
+        text-align: left;
+      }
+      .om-combo-btn:hover { background: var(--om-hover); }
+      .om-combo-btn:focus { outline: 0; border-color: #848484; }
+      .om-combo[data-open="true"] .om-combo-btn { border-color: var(--om-accent); }
+      .om-combo-label {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .om-combo-caret {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 18px;
+        margin-left: 4px;
+        border-left: 1px solid var(--om-border);
+        color: var(--om-text-2);
+        font-size: 9px;
+        line-height: 1;
+      }
+      .om-combo-menu {
+        position: absolute;
+        left: 0;
+        top: calc(100% + 2px);
+        z-index: 50;
+        min-width: 100%;
+        width: max-content;
+        max-width: 280px;
+        max-height: 220px;
+        overflow-y: auto;
+        background: var(--om-bg);
+        border: 1px solid var(--om-border);
+        border-radius: 2px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        padding: 2px 0;
+      }
+      .om-combo-menu[hidden] { display: none; }
+      .om-combo-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 14px 3px 6px;
+        font-size: 11px;
+        color: var(--om-text);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .om-combo-item:hover { background: var(--om-hover); }
+      .om-combo-item .om-check {
+        width: 12px;
+        flex-shrink: 0;
+        color: var(--om-accent);
+        visibility: hidden;
+      }
+      .om-combo-item[aria-selected="true"] .om-check { visibility: visible; }
+
+      #var-picker {
+        display: none;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--om-divider);
+      }
+      #fn-list {
+        display: none;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--om-divider);
+      }
+      #precision-picker {
+        display: block;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--om-divider);
+      }
+
+      #status {
+        margin-top: 10px;
+        font-size: 11px;
+        color: var(--om-text-2);
+        min-height: 1.3em;
+        word-break: break-word;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/panel-DHCljpqs.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-gntJaLmD.js">
+  </head>
+  <body>
+    <div id="var-picker"></div>
+    <div class="om-actions">
+      <button type="button" class="btn-text-default" id="btn-math"><span class="label">Insert MathField</span><span class="sc">Alt+M</span></button>
+      <button type="button" class="btn-text-default" id="btn-calc"><span class="label">Calculate</span><span class="sc">Alt+B</span></button>
+      <button type="button" class="btn-text-default" id="btn-solve"><span class="label">Solve</span><span class="sc">Alt+L</span></button>
+      <button type="button" class="btn-text-default" id="btn-undef"><span class="label">Undefine all</span></button>
+    </div>
+    <div id="fn-list"></div>
+    <div id="status"></div>
+    <div id="precision-picker"></div>
+  </body>
+</html>
