@@ -74,7 +74,12 @@ const PluginCard = {
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
-        window.onresize = this.setDivHeight;
+        window.onresize = function() {
+            self.setDivHeight();
+            if (typeof _syncPluginCardModalState === 'function') {
+                _syncPluginCardModalState(data.independentMode);
+            }
+        };
         this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
@@ -92,7 +97,9 @@ const PluginCard = {
         Utils.setTranslations(data.translate);
         Utils.translateAll();
         PluginCardUI.init(Utils.themeType);
-        PluginCardUI.toggleLoader(true, 'Loading');
+        if (!data.independentMode && (data.pluginVersion && data.pluginVersion > 1000005)) {
+            PluginCardUI.toggleLoader(true, 'Loading');
+        }
         return Utils.waitForRepaint().then(function() {
             self._show(data);
             PluginCardUI.toggleLoader(false);
