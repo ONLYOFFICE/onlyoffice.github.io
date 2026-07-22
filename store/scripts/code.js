@@ -1014,7 +1014,6 @@ function _syncPluginCardModalState(independentMode) {
 		return;
 	}
 	const needModal = _isPluginCardModalMode() && independentMode;
-	console.log('needModal', needModal, independentMode);
 	if (needModal) {
 		marketplaceDiv.classList.remove('hidden');
 		overlayDiv.classList.remove('hidden');

@@ -97,7 +97,9 @@ const PluginCard = {
         Utils.setTranslations(data.translate);
         Utils.translateAll();
         PluginCardUI.init(Utils.themeType);
-        PluginCardUI.toggleLoader(true, 'Loading');
+        if (!data.independentMode) {
+            PluginCardUI.toggleLoader(true, 'Loading');
+        }
         return Utils.waitForRepaint().then(function() {
             self._show(data);
             PluginCardUI.toggleLoader(false);

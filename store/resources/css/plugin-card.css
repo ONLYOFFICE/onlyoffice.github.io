@@ -288,19 +288,11 @@ a.link {
 }
 
 #plugin_card_overlay {
-	display: block;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
 	visibility: hidden;
 	opacity: 0;
 	pointer-events: none;
-	background-color: rgba(0, 0, 0, 0.2);
 	transition: visibility 0.15s ease, opacity 0.15s ease;
 	will-change: opacity;
-	z-index: 1000;
 }
 #plugin_card_overlay:not(.hidden) {
 	visibility: visible;
@@ -309,21 +301,20 @@ a.link {
 }
 
 .pc-close.btn-text-default {
-	min-width: auto;
 	display: none;
-    position: absolute;
-    top: 24px;
-    right: 16px;
-    width: 24px;
-    height: 24px;
-    min-width: 0;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    z-index: 1;
 }
 
 @media (min-width: 721px) and (min-height: 601px) {
+	#plugin_card_overlay {
+		display: block !important;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.2);
+		z-index: 1000;
+	}
 	.independent-mode #plugin_card_panel.pc {
 		display: flex !important;
 		position: fixed;
@@ -356,10 +347,20 @@ a.link {
 
 	.independent-mode .pc-close.btn-text-default {
 		display: flex;
+		position: absolute;
+		top: 24px;
+		right: 16px;
+		width: 24px;
+		height: 24px;
+		min-width: auto;
+		align-items: center;
+		justify-content: center;
+		font-size: 20px;
+		z-index: 1;
 	}
 
-	.independent-mode #plugin_card_panel:not(.hidden) ~ #loader-container,
-	.independent-mode #plugin_card_panel:not(.hidden) ~ #div_error {
+	.independent-mode #plugin_card_panel ~ #loader-container,
+	.independent-mode #plugin_card_panel ~ #div_error {
 		z-index: 1002;
 	}
 }
