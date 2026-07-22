@@ -86,7 +86,7 @@
       "isInsideMode": true,
       "isModal": false,
       "isViewer": false,
-      "isActivated": true,
+      "isActivated": false,
       "initDataType": "none",
       "initData": ""
     }
