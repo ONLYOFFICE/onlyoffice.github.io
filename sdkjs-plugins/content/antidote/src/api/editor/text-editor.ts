@@ -527,7 +527,7 @@ export class TextEditor extends BaseEditor {
 
       start += firstParagraphAppendixLength;
       end += firstParagraphAppendixLength;
-      while (start >= fpLen + sl) {
+      while (start >= fpLen + sl && paragraphs.length > 1) {
         start -= (fpLen + sl);
         end -= (fpLen + sl);
         paragraphs.shift();
