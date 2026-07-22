@@ -982,6 +982,7 @@ function onClickPluginPlate(guid) {
 		OOIO: OOIO,
 		ioUrl: ioUrl,
 		pluginName: Utils.getTranslatedName(config),
+		pluginVersion: pluginVersion,
 		pluginDescription: config.variations ? Utils.getTranslatedDescription(config.variations[0]) : '',
 		translate: Utils.translate,
 		removed: available ? !!available.removed : false,

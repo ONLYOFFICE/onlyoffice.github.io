@@ -97,7 +97,7 @@ const PluginCard = {
         Utils.setTranslations(data.translate);
         Utils.translateAll();
         PluginCardUI.init(Utils.themeType);
-        if (!data.independentMode) {
+        if (!data.independentMode && (data.pluginVersion && data.pluginVersion > 1000005)) {
             PluginCardUI.toggleLoader(true, 'Loading');
         }
         return Utils.waitForRepaint().then(function() {
