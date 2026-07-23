@@ -41,17 +41,24 @@
     };
     
     function escapeHtml(string) {
-        var res = string;
-        res = res.replace(/[\', \", \\,]/g, function (sSymbol) {
-            return '\\' + sSymbol;
-        });
-        return res;
+        return String(string)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function updateInsertButtonState() {
+        const hasRecognizedText = document.getElementById('text-container-div').textContent.trim().length > 0;
+        window.Asc.plugin.executeMethod('SetButtonDisabled', [0, !hasRecognizedText]);
     }
 
     var arrParsedData = [];
 
     window.Asc.plugin.init = function(){
         this.resizeWindow(592, 100, 592, 100, 592, 100);
+        this.executeMethod('SetButtonDisabled', [0, true]);
         var nStartFilesCount = 0, arrImages;
         $( window ).resize(function(){
             updateScroll();
@@ -190,7 +197,8 @@
                 document.getElementById('recognize-button').setAttribute('disabled', '');
                 document.getElementById('lang-select').setAttribute('disabled', '');
                 document.getElementById('load-file-button-id').setAttribute('disabled', '');
-				
+				window.Asc.plugin.executeMethod('SetButtonDisabled', [0, true]);
+
 				const fTesseractCall = async function () {
 					const langSelect = document.getElementById('lang-select');
 					const sLang = langSelect.options[langSelect.selectedIndex].value;
@@ -202,7 +210,21 @@
 							statusLabel.textContent = 'Recognizing: ' + percent + '%';
 						}
 					};
-					const worker = await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, { logger: showProgress });
+
+					const langsWithoutBestInt = {
+						'tgl': true,
+						'equ': true
+					};
+
+					const worker = langsWithoutBestInt[sLang]
+						? await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, {
+							logger: showProgress,
+							langPath: 'https://cdn.jsdelivr.net/npm/@tesseract.js-data/' + sLang + '/4.0.0/',
+						})
+						: await Tesseract.createWorker(sLang, Tesseract.OEM.DEFAULT, {
+							logger: showProgress
+							// uses '/4.0.0_best_int/' langPath by default
+						});
 
 					const image = arrImagesCopy.splice(0, 1)[0];
 					const recognitionParams = { tessedit_pageseg_mode: Tesseract.PSM.AUTO };
@@ -223,21 +245,65 @@
 						document.getElementById('recognize-button').removeAttribute('disabled');
 						document.getElementById('lang-select').removeAttribute('disabled');
 						document.getElementById('load-file-button-id').removeAttribute('disabled', '');
+						updateInsertButtonState();
 					}
 				};
 
                 $('#status-label').text('Recognizing: 0%');
-                fTesseractCall();
+                // fTesseractCall();
+
+				fTesseractCall()
+					.catch(function (err) {
+						document.getElementById('status-label').textContent = '';
+						document.getElementById('recognize-button').removeAttribute('disabled');
+						document.getElementById('lang-select').removeAttribute('disabled');
+						document.getElementById('load-file-button-id').removeAttribute('disabled');
+						updateInsertButtonState();
+						console.error(err);
+					});
             }
         );
-    
+
+        window.Asc.plugin.executeMethod('GetImageDataFromSelection', [], function(result) {
+            if (result && result.src) {
+                loadSelectedImage(result.src);
+            }
+        });
+
+        function loadSelectedImage(src) {
+            window.Asc.plugin.resizeWindow(800, 571, 800, 571);
+
+            const imagesContainer = document.getElementById('image-container-div');
+            while (imagesContainer.firstChild) {
+                imagesContainer.removeChild(imagesContainer.firstChild);
+            }
+            const textContainer = document.getElementById('text-container-div');
+            while (textContainer.firstChild) {
+                textContainer.removeChild(textContainer.firstChild);
+            }
+            arrParsedData.length = 0;
+
+            const imgElement = document.createElement('img');
+            imgElement.src = src;
+            imgElement.style.width = '100%';
+            arrImages = [imgElement];
+            imagesContainer.appendChild(imgElement);
+
+            document.getElementById('lang-select').removeAttribute('disabled');
+            document.getElementById('recognize-button').removeAttribute('disabled');
+            nStartFilesCount = 1;
+            $('#status-label').text('');
+            $('#scrollable-image-text-div').css('display', 'inline-block');
+            updateScroll();
+        }
+
 		function generateHTMLByData(oData) {
 			let sResult = "<div>";
 			function commitSpan(sLastSpanText, oLastWord) {
 				if(sLastSpanText.length > 0 && oLastWord) {
 					let sStyle = "";
 					if(oLastWord.font_name && oLastWord.font_name.length > 0) {
-						sStyle += ("font-family:" + oLastWord.font_name + ";");
+						sStyle += ("font-family:" + escapeHtml(oLastWord.font_name) + ";");
 					}
 					//if(oLastWord.font_size) {
 					//}
@@ -255,7 +321,7 @@
 					if(oLastWord.is_underlined) {
 						sStyle += ("text-decoration:underline;");
 					}
-					sResult += "<span lang=\"" + oLastWord.language +"\" style=\"" + sStyle + "\">" + sLastSpanText + "</span>";
+					sResult += "<span lang=\"" + escapeHtml(oLastWord.language) +"\" style=\"" + sStyle + "\">" + escapeHtml(sLastSpanText) + "</span>";
 				}
 			}
 			
@@ -353,7 +419,7 @@
 	window.Asc.plugin.onTranslate = function(){
 		var elem = document.getElementById("label1");
 		if (elem){
-			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets recognize text in pictures (png, jpg)");
+			elem.innerHTML = window.Asc.plugin.tr("Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)");
 		}
 		elem = document.getElementById("load-file-button-id");
 		if (elem){

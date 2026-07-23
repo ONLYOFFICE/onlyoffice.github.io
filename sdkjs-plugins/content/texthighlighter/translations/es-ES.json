@@ -1,5 +1,5 @@
 {
-  "TextHighlighter": "Resaltador de Texto",
+  "TextHighlighter": "Resaltador de texto",
   "PluginInstructions": "Introduce o selecciona <b>una palabra o frase</b> para buscar en el texto del documento, y configura los ajustes necesarios.",
   
   "TextToSearch": "Texto a buscar:",
@@ -35,7 +35,7 @@
 
   "LoadingMessage": "Procesando...",
 
-  "AboutTitle": "Resaltador de Texto",
+  "AboutTitle": "Resaltador de texto",
   "AboutVersion": "Versión 1.0.0",
   "AboutDescription": "Este complemento te permite buscar texto y aplicar resaltado, color y estilos de formato en tu documento.",
   "AboutCopyright": "© 2025 Complemento ONLYOFFICE"
