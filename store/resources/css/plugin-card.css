@@ -79,7 +79,7 @@ a.link {
     line-height: 1;
     flex-shrink: 0;
 }
-.pc button.btn-text-default:not(.hidden) {
+.pc-header button.btn-text-default:not(.hidden) {
 	height: 24px;
 	min-width: 100px;
 	border-radius: 3px;
@@ -285,4 +285,82 @@ a.link {
 	font-size: 14px;
 	/* color: red; */
 	font-weight: bold;
+}
+
+#plugin_card_overlay {
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+	transition: visibility 0.15s ease, opacity 0.15s ease;
+	will-change: opacity;
+}
+#plugin_card_overlay:not(.hidden) {
+	visibility: visible;
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.pc-close.btn-text-default {
+	display: none;
+}
+
+@media (min-width: 721px) and (min-height: 601px) {
+	#plugin_card_overlay {
+		display: block !important;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: rgba(0, 0, 0, 0.2);
+		z-index: 1000;
+	}
+	.independent-mode #plugin_card_panel.pc {
+		display: flex !important;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 90vw;
+		max-width: 771px;
+		height: 85vh;
+		max-height: 680px;
+		border-radius: 8px;
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+		background-color: inherit;
+		z-index: 1001;
+		visibility: hidden;
+		opacity: 0;
+		transition: visibility 0.15s ease, opacity 0.15s ease;
+		will-change: opacity;
+	}
+
+	.independent-mode #plugin_card_panel.pc:not(.hidden) {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	.independent-mode .pc-header {
+		padding-top: 24px;
+        padding-right: 48px;
+	}
+
+	.independent-mode .pc-close.btn-text-default {
+		display: flex;
+		position: absolute;
+		top: 24px;
+		right: 16px;
+		width: 24px;
+		height: 24px;
+		min-width: auto;
+		align-items: center;
+		justify-content: center;
+		font-size: 20px;
+		z-index: 1;
+	}
+
+	.independent-mode #plugin_card_panel ~ #loader-container,
+	.independent-mode #plugin_card_panel ~ #div_error {
+		z-index: 1002;
+	}
 }

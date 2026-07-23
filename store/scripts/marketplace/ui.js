@@ -152,10 +152,14 @@ const UI = {
 			this.linkNewPlugin.href = (OOIO + "pulls");
 			this.linkNewPlugin.onclick = null;
 		}
-        if (independentMode && this._filterByInstalled) {
-            for (let i = 0; i < this._filterByInstalled.length; i++) {
-                this._filterByInstalled[i].classList.add('hidden');
+        if (independentMode) {
+            document.body.classList.add('independent-mode');
+            if (this._filterByInstalled) {
+                for (let i = 0; i < this._filterByInstalled.length; i++) {
+                    this._filterByInstalled[i].classList.add('hidden');
+                }
             }
+            
         }
     },
 
