@@ -363,6 +363,11 @@ const PluginCard = {
                 const changelog = Utils.makeChangeLogHtml(response);
 				PluginCardUI.spanChangelog.classList.remove("hidden");
 				PluginCardUI.divChangelogPreview.innerHTML = changelog;
+                const links = PluginCardUI.divChangelogPreview.querySelectorAll('a');
+                for (let i = 0; i < links.length; i++) {
+                    links[i].setAttribute('target', '_blank');
+                    links[i].setAttribute('rel', 'noopener noreferrer');
+                }
                 self._updateScroll();
 			})
             .onFailure(function() {
