@@ -89,7 +89,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     }, RESYNC_DEBOUNCE_MS);
   };
 
-  private buildZone(zoneId: string, paragraphs: { id: string; text: string; styleInfo?: StyleInfo[] }[]): Zone {
+  private buildZone(zoneId: string, paragraphs: { id: string; text: string; styleInfo?: StyleInfo[] }[]): DocumentZone {
     let start = 0;
     const offsets = paragraphs.map((paragraph) => {
       const offset: ParagraphOffset = {
@@ -103,10 +103,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
 
   private async loadZones(): Promise<void> {
     const content = await this.editor.getDocumentContent();
-    this.zones = [
-      this.buildZone('', content.paragraphs),
-      ...content.tableZones.map((zone) => this.buildZone(zone.zoneId, zone.paragraphs)),
-    ];
+    this.zones = content.zones.map((zone) => this.buildZone(zone.zoneId, zone.paragraphs));
   }
 
   async loadText(): Promise<void> {
@@ -124,7 +121,7 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
-    return this.zones.map((zone) => {
+    return this.zones.map((zone, index) => {
       const styleInfo: StyleInfo[] = [];
       zone.paragraphs.forEach((paragraph) => {
         (paragraph.styleInfo ?? []).forEach((range) => {
@@ -139,15 +136,16 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
       return {
         text: zone.paragraphs.map((paragraph) => paragraph.text).join(this.PARAGRAPH_SEPARATOR),
         zoneId: zone.zoneId,
-        // Only the main document body starts focused — table-cell zones are secondary, passive
-        // text Antidote can still check/correct but shouldn't assume has keyboard focus.
-        zoneIsFocused: zone.zoneId === '',
+        // Only the very first zone in document order starts focused — the rest (later main-text
+        // segments, table cells) are passive text Antidote can still check/correct but shouldn't
+        // assume has keyboard focus.
+        zoneIsFocused: index === 0,
         styleInfo,
       };
     });
   }
 
-  private findZone(zoneId: string): Zone | undefined {
+  private findZone(zoneId: string): DocumentZone | undefined {
     return this.zones.find((zone) => zone.zoneId === zoneId);
   }
 

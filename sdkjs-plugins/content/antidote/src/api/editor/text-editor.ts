@@ -40,8 +40,9 @@ import {
   PluginWithEditorEvents, CONTENT_CHANGE_EVENTS, DocumentContent,
 } from './base';
 
-// Prefix for the zoneId of a table cell's own zone (see getDocumentContent) — DocumentCorrectionAgent
-// strips it back off only to log/debug; the id after it is the cell's own GetInternalId().
+// zoneId prefixes used by getDocumentContent — MAIN_ZONE_PREFIX is followed by that segment's
+// index (document order), TABLE_ZONE_PREFIX by the cell's own GetInternalId().
+export const MAIN_ZONE_PREFIX = 'main:';
 export const TABLE_ZONE_PREFIX = 'table-cell:';
 
 // Word only: everything here is built on `Api.GetDocument()`'s paragraph object model, which
@@ -59,13 +60,15 @@ export class TextEditor extends BaseEditor {
   }
 
   // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
-  // Table cells get their own zone each (grouped by their containing cell's own stable id) so a
-  // table correction never shares position bookkeeping with the surrounding document body — see
-  // DocumentCorrectionAgent, which is the only consumer of the tableZones this returns.
+  // Zones come back in document order: the main text is split into its own zone around each
+  // table, and each table cell gets its own zone too, so Antidote's Corrector window lists a table
+  // where it actually occurs instead of always lumping every table at the very end — see
+  // DocumentCorrectionAgent, the only consumer of the zones this returns.
   getDocumentContent(): Promise<DocumentContent> {
     console.log('get doc content');
     return this.runQuery<DocumentContent>(function() {
-      const { tableZonePrefix, textStyle: TextStyle } = Asc.scope as {
+      const { mainZonePrefix, tableZonePrefix, textStyle: TextStyle } = Asc.scope as {
+        mainZonePrefix: string;
         tableZonePrefix: string;
         textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle;
       };
@@ -133,9 +136,28 @@ export class TextEditor extends BaseEditor {
 
       type Entry = { id: string; text: string; styleInfo: StyleInfo[] | undefined };
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      const mainParagraphs: Entry[] = [];
-      const cellOrder: string[] = [];
-      const cellParagraphs: Record<string, Entry[]> = {};
+      const zones: { zoneId: string; paragraphs: Entry[] }[] = [];
+
+      let mainIndex = 0;
+      let currentMain: Entry[] = [];
+      let currentCellId: string | null = null;
+      let currentCell: Entry[] = [];
+
+      function flushMain() {
+        if (currentMain.length) {
+          zones.push({ zoneId: mainZonePrefix + mainIndex, paragraphs: currentMain });
+          mainIndex += 1;
+        }
+        currentMain = [];
+      }
+
+      function flushCell() {
+        if (currentCellId && currentCell.length) {
+          zones.push({ zoneId: tableZonePrefix + currentCellId, paragraphs: currentCell });
+        }
+        currentCellId = null;
+        currentCell = [];
+      }
 
       for (let i = 0; i < paragraphs.length; i += 1) {
         const paragraph = paragraphs[i];
@@ -150,23 +172,26 @@ export class TextEditor extends BaseEditor {
         const cell = paragraph.GetParentTableCell();
         if (cell) {
           const cellId = cell.GetInternalId();
-          if (!cellParagraphs[cellId]) {
-            cellParagraphs[cellId] = [];
-            cellOrder.push(cellId);
+          if (currentCellId !== cellId) {
+            // Entering a different cell (or the first cell of a table) — whatever main-text run
+            // came before it is now done, and so is the previous cell's own zone if any.
+            flushCell();
+            flushMain();
+            currentCellId = cellId;
           }
-          cellParagraphs[cellId].push(entry);
+          currentCell.push(entry);
         } else {
-          mainParagraphs.push(entry);
+          // Back in the main body — close off whatever cell zone was in progress.
+          flushCell();
+          currentMain.push(entry);
         }
       }
+      flushCell();
+      flushMain();
 
-      const tableZones = cellOrder.map((cellId) => ({
-        zoneId: tableZonePrefix + cellId,
-        paragraphs: cellParagraphs[cellId],
-      }));
-
-      return { paragraphs: mainParagraphs, tableZones };
+      return { zones };
     }, {
+      mainZonePrefix: MAIN_ZONE_PREFIX,
       tableZonePrefix: TABLE_ZONE_PREFIX,
       textStyle: {
         bold: TextStyle.bold,

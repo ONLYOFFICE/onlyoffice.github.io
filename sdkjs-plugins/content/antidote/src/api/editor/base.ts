@@ -44,17 +44,19 @@ export interface DocumentParagraph extends TextWithStyle {
   id: string;
 }
 
-// A table cell's own paragraphs, kept out of the main document zone and passed to Antidote as
-// their own independent zone instead — so a correction inside a table cell never has to share
-// position bookkeeping with the surrounding document body (see DocumentCorrectionAgent).
+// A table cell's own paragraphs, kept out of the surrounding main-text zone and passed to Antidote
+// as their own independent zone instead — so a correction inside a table cell never has to share
+// position bookkeeping with the main text (see DocumentCorrectionAgent).
 export interface DocumentZone {
   zoneId: string;
   paragraphs: DocumentParagraph[];
 }
 
+// Zones in document order — the main text is split into its own zone around each table (rather
+// than one zone for all the main text followed by all table zones), so Antidote's Corrector window
+// lists the table where it actually occurs instead of always at the bottom.
 export interface DocumentContent {
-  paragraphs: DocumentParagraph[];
-  tableZones: DocumentZone[];
+  zones: DocumentZone[];
 }
 
 const SELECTED_TEXT_OPTIONS = {
@@ -111,7 +113,7 @@ export abstract class BaseEditor {
 
   getDocumentContent(): Promise<DocumentContent> {
     console.error('getDocumentContent is not implemented in this editor');
-    return Promise.resolve({ paragraphs: [], tableZones: [] });
+    return Promise.resolve({ zones: [] });
   }
 
   // executeMethod calls a built-in host method directly (works uniformly across word/cell/pdf,
