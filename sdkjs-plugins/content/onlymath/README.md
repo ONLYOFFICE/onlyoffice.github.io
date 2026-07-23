@@ -7,9 +7,8 @@ account, everything runs locally in your browser/editor.
 ## Features
 
 - **Insert math** with `Alt+M`.
-- **Calculate** arithmetic and symbolic expressions.
-- **Solve** equations.
-- **Differentiate** and **integrate** functions.
+- **Calculate** with `Alt+C` (arithmetic and symbolic expressions).
+- **Solve** with `Alt+L` (equations; also differentiate / integrate via Solve).
 - **Precision control** in the right-side Settings panel, including a symbolic
   "Mathematical" mode that keeps `π`, `√2`, `e` exact instead of rounding.
 - Danish high-school conventions: decimal comma, integration constant `k`,
@@ -24,7 +23,8 @@ Worker. The engine is bundled with the plugin, so OnlyMath works fully offline.
 
 1. Open a text document.
 2. Press `Alt+M` (or use the Plugins tab) to insert a math field.
-3. Type an expression; use the Plugins menu / panel actions to calculate or solve.
+3. Type an expression; press `Alt+C` to calculate or `Alt+L` to solve
+   (or use the panel / context-menu actions).
 4. Adjust output precision in the OnlyMath **Settings** panel on the right.
 
 ## License
