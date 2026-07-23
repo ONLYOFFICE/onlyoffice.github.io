@@ -30,5 +30,5 @@
  *
  */
 
-export { BaseEditor } from './base';
+export { BaseEditor, DocumentZone, DocumentParagraph } from './base';
 export { Editor } from './editor';

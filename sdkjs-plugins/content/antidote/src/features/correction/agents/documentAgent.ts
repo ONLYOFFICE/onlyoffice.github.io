@@ -43,6 +43,7 @@ import {
 } from '@druide-informatique/antidote-api-js';
 
 import { BaseCorrectionAgent } from './base';
+import { DocumentZone } from '@/api/editor';
 
 interface ParagraphOffset {
   id: string;
@@ -58,15 +59,15 @@ const RESYNC_DEBOUNCE_MS = 200;
 // Whole-document scope. Only valid for editorType "word" — cell/pdf don't expose a paragraph
 // object model the same way (see useHasSelection / Main.tsx, which restrict this scope to "word").
 export class DocumentCorrectionAgent extends BaseCorrectionAgent {
-  private paragraphs: ParagraphOffset[] = [];
+  private zones: DocumentZone[] = [];
 
   private resyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   // Watches for edits happening concurrently with this correction session — another collaborator,
-  // or the user typing directly in the document while Corrector is open — so `this.paragraphs`
-  // (index + offset bookkeeping `applyCorrection`/`selectInterval` rely on) gets resynced instead
-  // of silently drifting out of sync with the real document. Ignores changes caused by our own
-  // corrections (`isApplyingCorrections`) — those already update `this.paragraphs` incrementally
+  // or the user typing directly in the document while Corrector is open — so `this.zones`
+  // (offset bookkeeping `applyCorrection`/`selectInterval` rely on) gets resynced instead of
+  // silently drifting out of sync with the real document. Ignores changes caused by our own
+  // corrections (`isApplyingCorrections`) — those already update the affected zone incrementally
   // in `applyCorrection` and don't need a full resync.
   sessionStarted(): void {
     this.editor.watchContentChanges(this.scheduleResync);
@@ -84,27 +85,33 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
     this.resyncTimer = setTimeout(() => {
       this.resyncTimer = null;
       if (this.isApplyingCorrections) return;
-      this.loadParagraphs().catch(() => {});
+      this.loadZones().catch(() => {});
     }, RESYNC_DEBOUNCE_MS);
   };
 
-  private async loadParagraphs(): Promise<void> {
-    console.error('load paragraphs');
-    const paragraphs = await this.editor.getDocumentContent();
-
+  private buildZone(zoneId: string, paragraphs: { id: string; text: string; styleInfo?: StyleInfo[] }[]): Zone {
     let start = 0;
-    this.paragraphs = paragraphs.map((paragraph) => {
+    const offsets = paragraphs.map((paragraph) => {
       const offset: ParagraphOffset = {
         id: paragraph.id, start, text: paragraph.text, styleInfo: paragraph.styleInfo,
       };
       start += paragraph.text.length + this.PARAGRAPH_SEPARATOR.length;
       return offset;
     });
+    return { zoneId, paragraphs: offsets };
+  }
+
+  private async loadZones(): Promise<void> {
+    const content = await this.editor.getDocumentContent();
+    this.zones = [
+      this.buildZone('', content.paragraphs),
+      ...content.tableZones.map((zone) => this.buildZone(zone.zoneId, zone.paragraphs)),
+    ];
   }
 
   async loadText(): Promise<void> {
     await this.preloadCorrectionMemory();
-    await this.loadParagraphs();
+    await this.loadZones();
   }
 
   configuration(): WordProcessorConfiguration {
@@ -117,28 +124,38 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
-    const styleInfo: StyleInfo[] = [];
-    this.paragraphs.forEach((paragraph) => {
-      (paragraph.styleInfo ?? []).forEach((range) => {
-        styleInfo.push({
-          positionStart: range.positionStart + paragraph.start,
-          positionEnd: range.positionEnd + paragraph.start,
-          style: range.style as TextStyle,
+    return this.zones.map((zone) => {
+      const styleInfo: StyleInfo[] = [];
+      zone.paragraphs.forEach((paragraph) => {
+        (paragraph.styleInfo ?? []).forEach((range) => {
+          styleInfo.push({
+            positionStart: range.positionStart + paragraph.start,
+            positionEnd: range.positionEnd + paragraph.start,
+            style: range.style as TextStyle,
+          });
         });
       });
-    });
 
-    return [{
-      text: this.paragraphs.map((paragraph) => paragraph.text).join(this.PARAGRAPH_SEPARATOR),
-      zoneId: '',
-      zoneIsFocused: true,
-      styleInfo,
-    }];
+      return {
+        text: zone.paragraphs.map((paragraph) => paragraph.text).join(this.PARAGRAPH_SEPARATOR),
+        zoneId: zone.zoneId,
+        // Only the main document body starts focused — table-cell zones are secondary, passive
+        // text Antidote can still check/correct but shouldn't assume has keyboard focus.
+        zoneIsFocused: zone.zoneId === '',
+        styleInfo,
+      };
+    });
   }
 
-  private findParagraphAt(position: number): ParagraphOffset {
-    let found = this.paragraphs[0];
-    for (const paragraph of this.paragraphs) {
+  private findZone(zoneId: string): Zone | undefined {
+    return this.zones.find((zone) => zone.zoneId === zoneId);
+  }
+
+  private findParagraphAt(zoneId: string, position: number): ParagraphOffset | undefined {
+    const zone = this.findZone(zoneId);
+    if (!zone) return undefined;
+    let found = zone.paragraphs[0];
+    for (const paragraph of zone.paragraphs) {
       if (paragraph.start > position) break;
       found = paragraph;
     }
@@ -148,9 +165,10 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   // See BaseCorrectionAgent.allowEdit — confirms the text at [positionStart, positionEnd) still
   // matches what Antidote expects (`context`) before letting the replacement through. Locating a
   // paragraph outside the current bounds (e.g. one was just deleted concurrently and a resync
-  // hasn't caught up yet) can't match a slice at all, so this fails closed on any lookup issue.
+  // hasn't caught up yet), or a zone that no longer exists (a table cell removed concurrently),
+  // can't match a slice at all, so this fails closed on any lookup issue.
   allowEdit(params: ParamsAllowEdit): boolean {
-    const paragraph = this.findParagraphAt(params.positionStart);
+    const paragraph = this.findParagraphAt(params.zoneId, params.positionStart);
     if (!paragraph) return false;
     const localStart = params.positionStart - paragraph.start;
     const localEnd = params.positionEnd - paragraph.start;
@@ -161,8 +179,9 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   // Antidote calls this when the user selects text inside its own Corrector window — mirror that
   // selection back onto the ONLYOFFICE document so it stays visible which part is being worked on.
   selectInterval(params: ParamsSelect): void {
-    const firstParagraph = this.findParagraphAt(params.positionStart);
-    const lastParagraph = this.findParagraphAt(params.positionEnd);
+    const firstParagraph = this.findParagraphAt(params.zoneId, params.positionStart);
+    const lastParagraph = this.findParagraphAt(params.zoneId, params.positionEnd);
+    if (!firstParagraph || !lastParagraph) return;
     const localStart = params.positionStart - firstParagraph.start;
     const localEnd = params.positionEnd - lastParagraph.start;
     this.editor.selectContentRange(firstParagraph.id, lastParagraph.id, localStart, localEnd).catch(() => {
@@ -171,7 +190,8 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
-    const paragraph = this.findParagraphAt(params.positionStartReplace);
+    const paragraph = this.findParagraphAt(params.zoneId, params.positionStartReplace);
+    if (!paragraph) return;
     const localStart = params.positionStartReplace - paragraph.start;
     const localEnd = params.positionReplaceEnd - paragraph.start;
     const newText = paragraph.text.slice(0, localStart) + params.newString + paragraph.text.slice(localEnd);
@@ -180,8 +200,9 @@ export class DocumentCorrectionAgent extends BaseCorrectionAgent {
 
     const diff = newText.length - paragraph.text.length;
     paragraph.text = newText;
-    for (const other of this.paragraphs) {
+    const zone = this.findZone(params.zoneId);
+    zone?.paragraphs.forEach((other) => {
       if (other.start > paragraph.start) other.start += diff;
-    }
+    });
   }
 }

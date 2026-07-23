@@ -36,19 +36,13 @@ import type {
 } from 'onlyoffice-plugins-api';
 
 import {
-  BaseEditor, SelectedTextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
-  PluginWithEditorEvents, CONTENT_CHANGE_EVENTS,
+  BaseEditor, TextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+  PluginWithEditorEvents, CONTENT_CHANGE_EVENTS, DocumentContent,
 } from './base';
 
-export interface DocumentParagraph {
-  id: string;
-  text: string;
-  // Present only when the paragraph's content could be walked run-by-run and the reconstructed
-  // text matched `text` exactly (see walkStyledContent) — paragraphs with forms, fields,
-  // footnotes, or math bail out to `undefined` rather than risk style ranges drifting out of
-  // sync with the positions Antidote corrects against.
-  styleInfo?: StyleInfo[];
-}
+// Prefix for the zoneId of a table cell's own zone (see getDocumentContent) — DocumentCorrectionAgent
+// strips it back off only to log/debug; the id after it is the cell's own GetInternalId().
+export const TABLE_ZONE_PREFIX = 'table-cell:';
 
 // Word only: everything here is built on `Api.GetDocument()`'s paragraph object model, which
 // isn't exposed for cell/pdf (see BaseEditor for the generic selection-based capabilities every
@@ -65,10 +59,16 @@ export class TextEditor extends BaseEditor {
   }
 
   // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
-  getDocumentContent(): Promise<DocumentParagraph[]> {
+  // Table cells get their own zone each (grouped by their containing cell's own stable id) so a
+  // table correction never shares position bookkeeping with the surrounding document body — see
+  // DocumentCorrectionAgent, which is the only consumer of the tableZones this returns.
+  getDocumentContent(): Promise<DocumentContent> {
     console.log('get doc content');
-    return this.runQuery<DocumentParagraph[]>(function() {
-      const { textStyle: TextStyle } = Asc.scope as { textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle };
+    return this.runQuery<DocumentContent>(function() {
+      const { tableZonePrefix, textStyle: TextStyle } = Asc.scope as {
+        tableZonePrefix: string;
+        textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle;
+      };
       type StyledContainer = ApiParagraph | ApiHyperlink;
       function isRun(element: ParagraphContent): element is ApiRun {
         return element.GetClassType() === 'run';
@@ -131,26 +131,51 @@ export class TextEditor extends BaseEditor {
         return { text, styleInfo };
       }
 
+      type Entry = { id: string; text: string; styleInfo: StyleInfo[] | undefined };
       const paragraphs = Api.GetDocument().GetAllParagraphs();
-      const result = paragraphs
-        //.filter((paragraph) => !paragraph.GetParentTable())
-        .map((paragraph) => {
-          const text = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
-          const styled = walkStyledContent(paragraph);
-          return {
-            id: paragraph.GetInternalId(),
-            text: text,
-            styleInfo: (styled) ? styled.styleInfo : undefined,
-          };
-        });
-      return result;
-    }, { textStyle: {
+      const mainParagraphs: Entry[] = [];
+      const cellOrder: string[] = [];
+      const cellParagraphs: Record<string, Entry[]> = {};
+
+      for (let i = 0; i < paragraphs.length; i += 1) {
+        const paragraph = paragraphs[i];
+        const text = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
+        const styled = walkStyledContent(paragraph);
+        const entry = {
+          id: paragraph.GetInternalId(),
+          text: text,
+          styleInfo: (styled) ? styled.styleInfo : undefined,
+        };
+
+        const cell = paragraph.GetParentTableCell();
+        if (cell) {
+          const cellId = cell.GetInternalId();
+          if (!cellParagraphs[cellId]) {
+            cellParagraphs[cellId] = [];
+            cellOrder.push(cellId);
+          }
+          cellParagraphs[cellId].push(entry);
+        } else {
+          mainParagraphs.push(entry);
+        }
+      }
+
+      const tableZones = cellOrder.map((cellId) => ({
+        zoneId: tableZonePrefix + cellId,
+        paragraphs: cellParagraphs[cellId],
+      }));
+
+      return { paragraphs: mainParagraphs, tableZones };
+    }, {
+      tableZonePrefix: TABLE_ZONE_PREFIX,
+      textStyle: {
         bold: TextStyle.bold,
         italic: TextStyle.italic,
         strike: TextStyle.strike,
         superscript: TextStyle.superscript,
         subscript: TextStyle.subscript,
-      } }).then((result) => {
+      },
+    }).then((result) => {
         console.log('getDocumentContent res:', result);
         return result;
       });
@@ -160,7 +185,7 @@ export class TextEditor extends BaseEditor {
   // range instead of the live selection — doesn't call `.Select()`, so it doesn't touch whatever
   // the user is currently doing in the document (used by SelectionCorrectionAgent's background
   // resync, which must not steal the cursor/selection away from someone actively typing).
-  getRangeTextWithStyle(start: number, end: number): Promise<SelectedTextWithStyle> {
+  getRangeTextWithStyle(start: number, end: number): Promise<TextWithStyle> {
     console.log('getRangeTextWithStyle', { start, end });
     return this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
       const {
@@ -271,7 +296,7 @@ export class TextEditor extends BaseEditor {
   // on a range returns whole paragraphs rather than text clipped to the selection, so a selection
   // that starts/ends mid-paragraph — or spans a table — won't reconstruct identically; those cases
   // just fall back to plain text, same as the BaseEditor default this overrides.
-  async getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
+  async getSelectedTextWithStyle(): Promise<TextWithStyle> {
     console.log('get selected text with style');
     const text = await this.getSelectedText();
     if (!text) return { text };

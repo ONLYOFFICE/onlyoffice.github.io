@@ -35,9 +35,26 @@ import { DocumentError } from './errors';
 
 export type CorrectionStyle = 'bold' | 'italic' | 'superscript' | 'subscript' | 'strike';
 
-export interface SelectedTextWithStyle {
+export interface TextWithStyle {
   text: string;
   styleInfo?: StyleInfo[];
+}
+
+export interface DocumentParagraph extends TextWithStyle {
+  id: string;
+}
+
+// A table cell's own paragraphs, kept out of the main document zone and passed to Antidote as
+// their own independent zone instead — so a correction inside a table cell never has to share
+// position bookkeeping with the surrounding document body (see DocumentCorrectionAgent).
+export interface DocumentZone {
+  zoneId: string;
+  paragraphs: DocumentParagraph[];
+}
+
+export interface DocumentContent {
+  paragraphs: DocumentParagraph[];
+  tableZones: DocumentZone[];
 }
 
 const SELECTED_TEXT_OPTIONS = {
@@ -92,9 +109,9 @@ export abstract class BaseEditor {
     return Promise.resolve('');
   }
 
-  getDocumentContent() {
+  getDocumentContent(): Promise<DocumentContent> {
     console.error('getDocumentContent is not implemented in this editor');
-    return Promise.resolve([]);
+    return Promise.resolve({ paragraphs: [], tableZones: [] });
   }
 
   // executeMethod calls a built-in host method directly (works uniformly across word/cell/pdf,
@@ -110,7 +127,7 @@ export abstract class BaseEditor {
   // to add `styleInfo`; every other editor keeps the plain-text default (cosmetic-only data, so
   // dropping it here is always a safe degradation, never a correctness risk for the correction
   // itself).
-  getSelectedTextWithStyle(): Promise<SelectedTextWithStyle> {
+  getSelectedTextWithStyle(): Promise<TextWithStyle> {
     console.error('getSelectedTextWithStyle is not implemented in this editor');
     return this.getSelectedText().then((text) => ({ text }));
   }
@@ -120,7 +137,7 @@ export abstract class BaseEditor {
   // real object-model implementation; every other editor keeps this empty-text default (used only
   // when getSelectionStart/End are non-null, which they aren't outside TextEditor).
   // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
-  getRangeTextWithStyle(_start: number, _end: number): Promise<SelectedTextWithStyle> {
+  getRangeTextWithStyle(_start: number, _end: number): Promise<TextWithStyle> {
     console.error('getRangeTextWithStyle is not implemented in this editor');
     return Promise.resolve({ text: '' });
   }
