@@ -226,12 +226,14 @@ class CitationService {
 
                 const paragraphStart = '<div class="csl-entry">';
                 const paragraphEnd = '</div>';
+                if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
+                    bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
+                }
+
                 if (!bibObject[0]['second-field-align']) {
                     bibText = bibText.replace(/(<div class="csl-left-margin">[\s\S]*?<\/div>)/, '$1\t');
                     bibText = bibText.replace(/<\/?div[^>]*>/g, '');
                     bibText = "<p>" + bibText + "</p>";
-                } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
-                    bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
                 }
                 if (window.Asc.scope.editorVersion < 9004000) {
                     bibText += '\n';
