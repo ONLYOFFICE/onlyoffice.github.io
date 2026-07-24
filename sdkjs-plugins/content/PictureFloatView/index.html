@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>图片预览</title>
+    <script type="text/javascript" src="../v1/plugins.js"></script>
+    <script type="text/javascript" src="../v1/plugins-ui.js"></script>
+    <link rel="stylesheet" href="../v1/plugins.css">
+    <style>
+        html, body { 
+            height: 100%; 
+            width: 100%; 
+            margin: 0; 
+            padding: 0; 
+            background: #333333; /* 背景修改为深灰色 */
+            overflow: hidden; 
+        }
+        .wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100%; 
+            width: 100%; 
+        }
+        #img_display { 
+            max-width: 95%; 
+            max-height: 90%; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+            border: 1px solid #444; 
+            background: white; 
+            display: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .empty-hint { color: #eee; font-family: sans-serif; font-size: 14px; }
+    </style>
+</head>
+<body class="defaultlable">
+    <div class="wrapper">
+        <img id="img_display" />
+        <div id="msg" class="empty-hint">请在文档中选中一张图片</div>
+    </div>
+    <script type='text/javascript' src='scripts/code.js'></script>
+</body>
+</html>
