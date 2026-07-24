@@ -227,6 +227,7 @@ class CitationService {
                 const paragraphStart = '<div class="csl-entry">';
                 const paragraphEnd = '</div>';
                 if (!bibObject[0]['second-field-align']) {
+                    bibText = bibText.replace(/(<div class="csl-left-margin">[\s\S]*?<\/div>)/, '$1\t');
                     bibText = bibText.replace(/<\/?div[^>]*>/g, '');
                     bibText = "<p>" + bibText + "</p>";
                 } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
@@ -238,7 +239,6 @@ class CitationService {
                 bibItems.push(bibText);
             }
             const htmlBibliography = bibItems.join("").trim();
-
             Asc.scope.bibStyle = bibObject[0];
             return htmlBibliography;
         } catch (e) {
