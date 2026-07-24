@@ -3030,7 +3030,7 @@ function Ht() {
 			var i = r(K, this, Yt).call(this, t[1][n]);
 			i = i.replaceAll("\n", "").replaceAll("\r", "").replace(/\s+/g, " ").trim();
 			var a = "<div class=\"csl-entry\">", o = "</div>";
-			t[0]["second-field-align"] ? i.indexOf(a) === 0 && i.endsWith(o) && (i = a + i.substring(a.length, i.length - o.length).trim() + o) : (i = i.replace(/(<div class="csl-left-margin">[\s\S]*?<\/div>)/, "$1	"), i = i.replace(/<\/?div[^>]*>/g, ""), i = "<p>" + i + "</p>"), window.Asc.scope.editorVersion < 9004e3 && (i += "\n"), e.push(i);
+			i.indexOf(a) === 0 && i.endsWith(o) && (i = a + i.substring(a.length, i.length - o.length).trim() + o), t[0]["second-field-align"] || (i = i.replace(/(<div class="csl-left-margin">[\s\S]*?<\/div>)/, "$1	"), i = i.replace(/<\/?div[^>]*>/g, ""), i = "<p>" + i + "</p>"), window.Asc.scope.editorVersion < 9004e3 && (i += "\n"), e.push(i);
 		}
 		var s = e.join("").trim();
 		return Asc.scope.bibStyle = t[0], s;
