@@ -39,7 +39,7 @@
       "isViewer": false,
       "initDataType": "none",
       "initData": "",
-      "events": ["onDocumentContentReady", "onContextMenuShow", "onContextMenuClick"],
+      "events": ["onDocumentContentReady", "onContextMenuShow", "onContextMenuClick", "onToolbarMenuClick"],
       "store": {
         "background": { "light": "#282C33", "dark": "#282C33" },
         "screenshots": [
