@@ -690,7 +690,7 @@ class CitationService {
 
     /**
      * @param {boolean} [bHardRefresh]
-     * @returns {Promise<void>}
+     * @returns {Promise<Array<string>>}
      */
     async updateCslItems(bHardRefresh) {
         try {
@@ -725,6 +725,7 @@ class CitationService {
             if (updatedFields && updatedFields.length) {
                 return this.citationDocService.updateAddinFields(updatedFields);
             }
+            return [];
         } catch (e) {
             throw e;
         }
@@ -769,7 +770,7 @@ class CitationService {
     /**
      * @param {Object & {citationID: string}} updatedField
      * @param {"footnotes" | "endnotes"} [notesStyle]
-     * @returns {Promise<void>}
+     * @returns {Promise<Array<string>>}
      */
     async updateItem(updatedField, notesStyle) {
         try {
@@ -815,6 +816,7 @@ class CitationService {
             if (updatedFields && updatedFields.length) {
                 return this.citationDocService.updateAddinFields(updatedFields);
             }
+            return [];
         } catch (e) {
             throw e;
         }
