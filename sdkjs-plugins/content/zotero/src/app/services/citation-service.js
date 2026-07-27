@@ -50,6 +50,8 @@ import { AdditionalWindow } from "../pages/additional-window";
 class CitationService {
     /** @type {AdditionalWindow} */
     #additionalWindow;
+    /** @type {boolean} */
+    #skipUrlForPaperArticles;
 
     /**
      * @param {LocalesManager} localesManager
@@ -78,6 +80,7 @@ class CitationService {
             this._bibSuffixNew,
         );
         this.#additionalWindow = new AdditionalWindow();
+        this.#skipUrlForPaperArticles = false; // true only for bibliography
     }
 
     /**
@@ -212,9 +215,17 @@ class CitationService {
     #makeBibliography() {
         try {
             const bibItems = new Array(this._storage.size);
+            this.#skipUrlForPaperArticles = !this._cslStylesManager.getIncludeUrlForPaperArticles();
+            if (this.#skipUrlForPaperArticles) {
+                this.#updateFormatter();
+            }
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
-
+            if (this.#skipUrlForPaperArticles) {
+                this.#skipUrlForPaperArticles = false;
+                this.#updateFormatter();
+            }
+            
             for (let i = 0; i < bibObject[1].length; i++) {
                 /** @type {string} */
                 let bibText = this.#unEscapeHtml(bibObject[1][i]);
@@ -532,7 +543,7 @@ class CitationService {
                     const item = self._storage.getItem(id);
                     let index = self._storage.getItemIndex(id);
                     if (!item) return null;
-                    return item.toFlatJSON(index);
+                    return item.toFlatJSON(index, self.#skipUrlForPaperArticles);
                 },
             },
             this._cslStylesManager.cached(

@@ -55,6 +55,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastNotesStyleKey = "zoteroNotesStyleId";
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
+    this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles";
 
     this._defaultStyles = [
         "american-anthropological-association",
@@ -271,12 +272,17 @@ CslStylesManager.prototype.getStylesInfo = function () {
 };
 
 CslStylesManager.prototype._getStylesJson = function () {
-    let url = this._STYLES_JSON_LOCAL;
+    const localUrl = this._STYLES_JSON_LOCAL
+    let url = localUrl;
     if (this._isOnlineAvailable) {
         url = this._STYLES_JSON_URL;
     }
     return fetch(url).then(function (resp) {
         return resp.json();
+    }).catch(function (error) {
+        return fetch(localUrl).then(function (resp) {
+            return resp.json();
+        })
     });
 };
 
@@ -379,6 +385,26 @@ CslStylesManager.prototype._saveLastUsedStyle = function (
  */
 CslStylesManager.prototype.saveLastUsedNotesStyle = function (notesStyle) {
     localStorage.setItem(this._lastNotesStyleKey, notesStyle);
+};
+
+/**
+ * @returns {boolean}
+ */
+CslStylesManager.prototype.getIncludeUrlForPaperArticles = function () {
+    return (
+        localStorage.getItem(this._lastIncludeUrlForPaperArticlesKey) !==
+        "false"
+    );
+};
+
+/**
+ * @param {boolean} value
+ */
+CslStylesManager.prototype.saveIncludeUrlForPaperArticles = function (value) {
+    localStorage.setItem(
+        this._lastIncludeUrlForPaperArticlesKey,
+        value ? "true" : "false"
+    );
 };
 
 /**

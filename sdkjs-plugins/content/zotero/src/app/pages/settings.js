@@ -40,11 +40,13 @@ import {
     Button,
     SelectBox,
     Radio,
+    Checkbox,
     Message,
     Loader,
 } from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
+import { CslStylesParser } from "../csl/styles/style-parser";
 import { LocalesManager } from "../csl/locales";
 
 /**
@@ -53,6 +55,7 @@ import { LocalesManager } from "../csl/locales";
  * @property {string} style
  * @property {NoteStyle} notesStyle
  * @property {StyleFormat} styleFormat
+ * @property {boolean} includeUrlForPaperArticles
  */
 
 /**
@@ -89,6 +92,15 @@ function SettingsPage(router, displayNoneClass) {
     });
     this._endNotes = new Radio("endNotes", {
         label: "Endnotes",
+    });
+
+    this._includeUrlWrapper = document.getElementById("includeUrlWrapper");
+    if (!this._includeUrlWrapper) {
+        throw new Error("includeUrlWrapper not found");
+    }
+
+    this._includeUrlCheckbox = new Checkbox("includeUrlForPaperArticles", {
+        label: "Include URLs of paper articles",
     });
 
     this._cslFileInput = document.getElementById("cslFileInput");
@@ -177,6 +189,7 @@ function SettingsPage(router, displayNoneClass) {
         style: "",
         notesStyle: "footnotes",
         styleFormat: "numeric",
+        includeUrlForPaperArticles: false,
     };
 }
 
@@ -302,6 +315,17 @@ SettingsPage.prototype._addEventListeners = function () {
             promises.push(self._onStyleChange(selectedStyleId));
         }
 
+        const includeUrlChecked = self._includeUrlCheckbox.getState().checked;
+        if (
+            self._stateSettings.includeUrlForPaperArticles !==
+            includeUrlChecked
+        ) {
+            self._cslStylesManager.saveIncludeUrlForPaperArticles(
+                includeUrlChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
         if (promises.length) {
             self._showLoader();
             Promise.all(promises)
@@ -314,6 +338,7 @@ SettingsPage.prototype._addEventListeners = function () {
                         style: selectedStyleId || "ieee",
                         notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
+                        includeUrlForPaperArticles: includeUrlChecked,
                     };
 
                     self._onChangeState(newState, oldState);
@@ -426,6 +451,9 @@ SettingsPage.prototype._addEventListeners = function () {
     this._endNotes.subscribe(function (event) {
         self._somethingWasChanged();
     });
+    this._includeUrlCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+    });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -443,13 +471,20 @@ SettingsPage.prototype.show = function () {
         style: this._cslStylesManager.getLastUsedStyleIdOrDefault(),
         notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
         styleFormat: this._cslStylesManager.getLastUsedFormat(),
+        includeUrlForPaperArticles:
+            this._cslStylesManager.getIncludeUrlForPaperArticles(),
     };
     this._saveBtn.disable();
     this._router.openSettings();
     if (this._stateSettings.notesStyle === this._endNotes.getState().value) {
-        this._endNotes.check();
+        this._endNotes.check(true);
     } else {
-        this._footNotes.check();
+        this._footNotes.check(true);
+    }
+    if (this._stateSettings.includeUrlForPaperArticles) {
+        this._includeUrlCheckbox.check(true);
+    } else {
+        this._includeUrlCheckbox.uncheck(true);
     }
 };
 
@@ -521,6 +556,22 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 );
             } else {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
+            }
+
+            const canUseIncludeUrl = Boolean(
+                styleInfo.content &&
+                    CslStylesParser.bibliographyUsesUrlOrAccessed(
+                        styleInfo.content
+                    )
+            );
+            if (canUseIncludeUrl) {
+                self._includeUrlWrapper.classList.remove(
+                    self._displayNoneClass
+                );
+            } else {
+                self._includeUrlWrapper.classList.add(
+                    self._displayNoneClass
+                );
             }
 
             isClick && self._hideLoader();
