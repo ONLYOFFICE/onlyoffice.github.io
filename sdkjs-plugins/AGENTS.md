@@ -126,9 +126,6 @@ instead.
 | Communicate with another window belonging to the same plugin | `Asc.PluginWindow`, `Asc.plugin.sendToPlugin()`, `Asc.plugin.attachEvent()` |
 | Call editor APIs | `Asc.plugin.executeMethod()` |
 
-If you cannot find an SDK method for your use case, ask instead of implementing unsupported
-cross-frame communication.
-
 ---
 
 ## 9. Verify both themes
@@ -152,5 +149,3 @@ Avoid hardcoded colors whenever possible.
 - Follow the structure of existing plugins.
 - Don't invent new `config.json` fields.
 - Don't assume browser-only APIs work in desktop editors.
-- Don't access another plugin iframe directly.
-- When unsure, ask rather than guessing.
