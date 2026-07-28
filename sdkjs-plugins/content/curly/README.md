@@ -45,7 +45,8 @@ Licenses can be shared with team members from the dashboard at
 
 ## License
 
-See [LICENSE.txt](LICENSE.txt). The plugin is free to install and use; the
-Curly service it connects to is governed by the
-[Terms of Service](https://curly.io/terms) and
-[Privacy Policy](https://curly.io/privacy).
+The plugin is free to install and use; the Curly service it connects to is
+governed by the [Terms of Service](https://curly.io/terms) and
+[Privacy Policy](https://curly.io/privacy). Licenses for bundled open-source
+components are listed in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
