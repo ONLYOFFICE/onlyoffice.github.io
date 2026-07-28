@@ -1,84 +1,156 @@
+# ONLYOFFICE Plugin Repository Guide
+
 This repository hosts ONLYOFFICE plugins (`content/<plugin-name>/`) served from the public
 `onlyoffice.github.io/sdkjs-plugins` CDN and consumed by web, desktop, and self-hosted editors.
-This guide is for AI agents writing a plugin here. Most of it is about the plugin manager UI
-in the editor — a plugin isn't just code, it's also what a user sees about it before and while
-installing it, and that part gets skipped more often than the code does.
 
-The full plugin development documentation is at
-[api.onlyoffice.com/docs/plugins/get-started](https://api.onlyoffice.com/docs/plugins/get-started/).
-This file only covers what's most commonly missed — read the docs for anything not covered here.
+This guide is intended for AI agents contributing plugins to this repository. It complements the
+official ONLYOFFICE plugin documentation by covering repository conventions and the issues most
+commonly found during review. For everything else, refer to the official documentation:
 
-## 1. `translations/langs.json`
+https://api.onlyoffice.com/docs/plugins/get-started/
 
-Add `translations/langs.json` even if your plugin only ships English strings — it's what the
-plugin manager uses to show users which languages a plugin supports, independent of whether
-you actually localize the UI text yourself (some plugins load i18n from an external service
-instead of bundling per-language JSON, but the manager still needs to know which languages are
-covered). Format — a flat array of locale codes, e.g. `content/zotero/translations/langs.json`:
+Whenever possible, use an existing plugin in `content/` as a reference instead of inventing your
+own project structure or `config.json` layout.
 
-```json
-["cs-CS", "de-DE", "es-ES", "fr-FR", "ru-RU", "ja-JA", "pt-BR", "it-IT", "ar-SA"]
-```
+---
 
-English is required as a baseline. Every other language is optional.
+## 1. Add `translations/langs.json`
 
-## 2. `README.md`
+Always include `translations/langs.json`, even if your plugin only ships English strings.
 
-The plugin's `README.md` is shown in the plugin manager too, not just on GitHub — write it
-for an end user deciding whether to install the plugin, not only for a future contributor
-reading the source.
+The plugin manager uses this file to determine which languages the plugin supports. This is
+independent of how your plugin performs localization internally (for example, some plugins load
+translations from an external service instead of bundling JSON files).
 
-## 3. `config.json`: fill in `offered`
-
-`offered` is the author/vendor name shown in the plugin manager so users know who published
-the plugin. Don't leave it blank or as a placeholder:
+Example:
 
 ```json
-"offered": "YourNameOrOrg"
+[
+  "en-EN",
+  "de-DE",
+  "fr-FR",
+  "es-ES",
+  "ru-RU"
+]
 ```
 
-## 4. Icons
+English is required. All other languages are optional.
 
-You need icon sets for both places a plugin appears: the toolbar (if the plugin is launched
-from there) and the plugin manager listing (`resources/store/icons`, referenced from
-`config.json`'s `store.icons`). Look at an existing plugin's `resources/` and `config.json`
-for the exact sizes/scales expected (`icons2` with `100%`/`125%`/`150%`/`175%`/`200%`,
-light/dark variants) rather than guessing.
+---
 
-## 5. `CHANGELOG.md`
+## 2. Write `README.md` for users
 
-Keep one. It's shown in the plugin manager so users can see what changed between versions —
-not just a nice-to-have for the repo.
+The plugin manager renders this file directly.
 
-## 6. Third-party code: `licenses/` + `3rd-Party.txt`
+Write it for someone deciding whether to install the plugin, not only for developers reading the
+repository. Include what the plugin does, its capabilities, and any setup steps users should know.
 
-If the plugin bundles third-party code (React, Radix UI, a specific npm package, etc.), add:
+---
 
-- `licenses/<Name>.license` — one file per dependency, containing that dependency's license text.
-- `3rd-Party.txt` in the plugin root, listing each dependency: name, short description, link,
-  license type, and which file in `licenses/` it corresponds to.
+## 3. Fill in `config.json`
 
-Follow the existing format exactly — see `content/drawio/3rd-Party.txt` and
-`content/drawio/licenses/` for a real example with multiple dependencies.
+At minimum, make sure the following field is present:
 
-## 7. Licensing
+```json
+"offered": "YourNameOrOrganization"
+```
 
-The repository root `LICENSE` is AGPLv3. Your plugin is covered by it unless you add your own
-`LICENSE`/`LICENSE.txt` in the plugin's own folder — and if you do, it must not conflict with
-the AGPLv3 terms above it (e.g. don't ship a plugin-level license that tries to forbid
-redistribution the root license already permits).
+This value is displayed in the plugin manager as the plugin publisher.
 
-## 8. Cross-window communication
+Also make sure `guid` is unique to your plugin — generate a fresh one, don't copy it from the
+example plugin you used as a reference. It's how the plugin manager and the editor tell plugins
+apart internally, so a copied or reused `guid` will collide with the plugin it was copied from.
 
-Every plugin window — background script, settings panel, any popup — runs in its own iframe.
-Don't reach into another window directly; use the SDK's own message-passing API:
+```json
+"guid": "asc.{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}"
+```
 
-- Editor events (key presses, selection changes, etc.): `Asc.plugin.attachEditorEvent(name, cb)`.
-- Talking between two windows that belong to the *same* plugin (e.g. a background script and a
-  window it opened): `Asc.PluginWindow` (`.attachEvent`/`.command()` on the side that owns/opened
-  the window) paired with `Asc.plugin.sendToPlugin()` / `Asc.plugin.attachEvent()` on the window's
-  own side.
-- Anything else host-facing: `Asc.plugin.executeMethod(name, args, cb)`.
+When creating `config.json`, prefer copying an existing plugin over writing one from scratch.
 
-If you can't find an existing method for what you're trying to do, ask rather than working
-around it — there's almost always a sanctioned way to do it.
+---
+
+## 4. Provide complete icon sets
+
+Plugins require icons in two places:
+
+- Toolbar icons (`icons`, `icons2`)
+- Plugin manager icons (`resources/store/icons`)
+
+Support all required DPI scales (`100%`, `125%`, `150%`, `175%`, `200%`) as well as both light
+and dark themes. Missing dark-theme assets are one of the most common review issues.
+
+When unsure about sizes or directory layout, copy an existing plugin.
+
+---
+
+## 5. Maintain `CHANGELOG.md`
+
+Include a changelog describing changes between releases.
+
+The plugin manager displays this file so users can easily see what's new before updating.
+
+---
+
+## 6. Include third-party licenses
+
+If your plugin bundles third-party software (React, Radix UI, npm packages, etc.), include:
+
+- `licenses/<Package>.license` — the full license text for each dependency.
+- `3rd-Party.txt` — listing each dependency, its purpose, homepage, license type, and the
+  corresponding license file.
+
+Follow the format used by existing plugins (for example, `content/zotero`).
+
+---
+
+## 7. Plugin licensing
+
+The repository itself is licensed under AGPLv3.
+
+If you include a plugin-specific `LICENSE` or `LICENSE.txt`, make sure it is compatible with the
+repository's licensing requirements and does not introduce conflicting redistribution terms.
+
+---
+
+## 8. Use the SDK for communication
+
+Each plugin component (background script, settings window, popup, etc.) runs inside its own
+iframe.
+
+Do not communicate by directly accessing another window's JavaScript objects. Use the SDK APIs
+instead.
+
+| Task | API |
+|------|-----|
+| Listen for editor events | `Asc.plugin.attachEditorEvent()` |
+| Communicate with another window belonging to the same plugin | `Asc.PluginWindow`, `Asc.plugin.sendToPlugin()`, `Asc.plugin.attachEvent()` |
+| Call editor APIs | `Asc.plugin.executeMethod()` |
+
+If you cannot find an SDK method for your use case, ask instead of implementing unsupported
+cross-frame communication.
+
+---
+
+## 9. Verify both themes
+
+Before submitting a plugin, verify that it works correctly in both light and dark editor themes.
+
+Pay particular attention to:
+
+- icons;
+- text colors;
+- borders;
+- backgrounds;
+- custom UI components.
+
+Avoid hardcoded colors whenever possible.
+
+---
+
+## General advice
+
+- Follow the structure of existing plugins.
+- Don't invent new `config.json` fields.
+- Don't assume browser-only APIs work in desktop editors.
+- Don't access another plugin iframe directly.
+- When unsure, ask rather than guessing.
