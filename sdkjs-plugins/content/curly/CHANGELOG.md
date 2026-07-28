@@ -5,6 +5,9 @@
 * Sign in with just your email address — Curly emails you a 6-digit code to confirm it, and you're in. License keys are gone (existing activations keep working unchanged, nobody has to reactivate).
 * New emails start a free 14-day trial automatically; known emails simply sign in — one flow for everyone.
 * If your email belongs to more than one workspace, a picker lets you choose which one to use on this device.
+* New: Insert tag — type a name and Curly drops the {placeholder} at your cursor, with a live preview. Date-like names (e.g. {Invoice date}) are detected automatically and get a real date picker at fill time, with a "type freely" escape for anything unusual.
+* Form fields (beta) improvements: filling now identifies each control directly instead of by position, so documents whose fields were edited or reordered fill reliably; and when the document's fields changed since the last scan, the pane says so and asks for a Refresh instead of silently updating nothing.
+* Fix: the Insert tag action did nothing in OnlyOffice.
 
 ## 1.2.0
 
