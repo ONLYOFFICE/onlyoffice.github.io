@@ -59,15 +59,26 @@ export class TextEditor extends BaseEditor {
     return this.runQuery<string>(() => Api.GetDocument().GetCurrentWord()).catch(() => '');
   }
 
-  // Whole-document scope. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
+  // Word is the only editor with a real paragraph object model — see BaseEditor.supportsZones.
+  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
+  supportsZones(): boolean {
+    return true;
+  }
+
+  // Whole document by default, or a sub-range (SelectionCorrectionAgent's zone mode) when `range`
+  // is given. Helpers stay inside callCommand due to its sandbox boundary; see BaseEditor.runQuery.
   // Zones come back in document order: the main text is split into its own zone around each
   // table, and each table cell gets its own zone too, so Antidote's Corrector window lists a table
   // where it actually occurs instead of always lumping every table at the very end — see
-  // DocumentCorrectionAgent, the only consumer of the zones this returns.
-  getDocumentContent(): Promise<DocumentContent> {
-    console.log('get doc content');
+  // DocumentCorrectionAgent (whole document) and SelectionCorrectionAgent (a range), the only
+  // consumers of the zones this returns.
+  getDocumentContent(range?: { start: number; end: number }): Promise<DocumentContent> {
+    console.log('get doc content', range);
     return this.runQuery<DocumentContent>(function() {
-      const { mainZonePrefix, tableZonePrefix, textStyle: TextStyle } = Asc.scope as {
+      const {
+        range: docRange, mainZonePrefix, tableZonePrefix, textStyle: TextStyle,
+      } = Asc.scope as {
+        range?: { start: number; end: number };
         mainZonePrefix: string;
         tableZonePrefix: string;
         textStyle: typeof import('@druide-informatique/antidote-api-js').TextStyle;
@@ -134,9 +145,30 @@ export class TextEditor extends BaseEditor {
         return { text, styleInfo };
       }
 
-      type Entry = { id: string; text: string; styleInfo: StyleInfo[] | undefined };
-      const paragraphs = Api.GetDocument().GetAllParagraphs();
+      type Entry = {
+        id: string; text: string; styleInfo: StyleInfo[] | undefined; prefix?: string; suffix?: string;
+      };
+      const paragraphs = docRange
+        ? Api.GetDocument().GetRange(docRange.start, docRange.end).GetAllParagraphs()
+        : Api.GetDocument().GetAllParagraphs();
       const zones: { zoneId: string; paragraphs: Entry[] }[] = [];
+
+      // GetRange(...).GetAllParagraphs() returns whole paragraph objects, not text clipped to
+      // [docRange.start, docRange.end) — without this, a selection starting/ending mid-paragraph
+      // would leak the rest of that paragraph into the zone sent to Antidote. Same technique
+      // already used in selectWithinSelection for the same underlying object-model quirk.
+      let prefixTrim = 0;
+      let suffixTrim = 0;
+      if (docRange && paragraphs.length > 0) {
+        const first = paragraphs[0];
+        const firstStart = first.GetRange(0, 0).GetStartPos();
+        prefixTrim = Math.max(0, docRange.start - firstStart);
+
+        const last = paragraphs[paragraphs.length - 1];
+        const lastStart = last.GetRange(0, 0).GetStartPos();
+        const lastFullLen = last.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+        suffixTrim = Math.max(0, (lastStart + lastFullLen) - docRange.end);
+      }
 
       let mainIndex = 0;
       let currentMain: Entry[] = [];
@@ -161,12 +193,33 @@ export class TextEditor extends BaseEditor {
 
       for (let i = 0; i < paragraphs.length; i += 1) {
         const paragraph = paragraphs[i];
-        const text = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
+        let text = paragraph.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '');
         const styled = walkStyledContent(paragraph);
+        let styleInfo = (styled) ? styled.styleInfo : undefined;
+        let prefix: string | undefined;
+        let suffix: string | undefined;
+
+        const isFirst = i === 0;
+        const isLast = i === paragraphs.length - 1;
+        if ((isFirst && prefixTrim > 0) || (isLast && suffixTrim > 0)) {
+          if (isFirst && prefixTrim > 0) {
+            prefix = text.slice(0, prefixTrim);
+            text = text.slice(prefixTrim);
+          }
+          if (isLast && suffixTrim > 0) {
+            suffix = text.slice(text.length - suffixTrim);
+            text = text.slice(0, text.length - suffixTrim);
+          }
+          // Trimmed paragraph — drop styleInfo rather than risk ranges misaligned with the cut text.
+          styleInfo = undefined;
+        }
+
         const entry = {
           id: paragraph.GetInternalId(),
           text: text,
-          styleInfo: (styled) ? styled.styleInfo : undefined,
+          prefix,
+          suffix,
+          styleInfo: styleInfo,
         };
 
         const cell = paragraph.GetParentTableCell();
@@ -191,6 +244,7 @@ export class TextEditor extends BaseEditor {
 
       return { zones };
     }, {
+      range,
       mainZonePrefix: MAIN_ZONE_PREFIX,
       tableZonePrefix: TABLE_ZONE_PREFIX,
       textStyle: {

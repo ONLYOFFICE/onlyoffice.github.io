@@ -39,29 +39,43 @@ import {
   WordProcessorConfiguration,
   DocumentType,
   StyleInfo,
-  TextStyle,
 } from '@druide-informatique/antidote-api-js';
 
 import { BaseCorrectionAgent } from './base';
+import {
+  Zone, buildZone, allowEditInZones, selectIntervalInZones, applyCorrectionInZones, zonesToTextZones,
+} from './zones';
 
 // How long to wait after a document-content-change event before resyncing — batches a burst of
 // several rapid edits (e.g. fast typing) into one resync instead of one per keystroke.
 const RESYNC_DEBOUNCE_MS = 200;
 
-// Selection scope works across word/cell/pdf through generic host methods; styleInfo is Word-only.
+// Selection scope works across word/cell/pdf. On Word (editor.supportsZones()) it gets the same
+// table-aware, per-zone treatment as DocumentCorrectionAgent — the selected range is split into
+// zones (main-text segments + one per table cell) via zones.ts, so a correction inside a table
+// cell within the selection never shares position math with the rest of it. Cell/pdf (and Word
+// if zones aren't available for some reason) fall back to the original single flat string built
+// from the generic cross-editor selection methods — styleInfo there is Word-only regardless.
 export class SelectionCorrectionAgent extends BaseCorrectionAgent {
+  private useZones = false;
+
+  // Zone mode (word)
+  private zones: Zone[] = [];
+
+  // Flat mode (cell/pdf)
   private text = '';
 
   private styleInfo: StyleInfo[] = [];
 
   private selectionStart: number | null = null;
+
   private selectionEnd: number | null = null;
 
   private resyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   // Same concurrent-edit resilience as DocumentCorrectionAgent — see its sessionStarted for the
   // full rationale. Here it also covers the selection itself being edited directly (not just
-  // through Antidote), keeping `this.text`/`this.styleInfo`/selection bounds in sync.
+  // through Antidote), keeping the cached zones/text and selection bounds in sync.
   sessionStarted(): void {
     this.editor.watchContentChanges(this.scheduleResync);
   }
@@ -78,17 +92,24 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     this.resyncTimer = setTimeout(() => {
       this.resyncTimer = null;
       if (this.isApplyingCorrections) return;
-      this.resyncSelection().catch(() => {});
+      this.resync().catch(() => {});
     }, RESYNC_DEBOUNCE_MS);
   };
 
-  // Re-reads text/style for the zone's own tracked bounds (selectionStart/selectionEnd) without
-  // touching the document's live selection — unlike selecting the range first, this doesn't steal
-  // the cursor away from whatever the user is currently typing elsewhere in the document. The
-  // actual `.Select()` only happens where it's unavoidable: right before applyCorrection replaces
-  // the zone, or when Antidote itself asks via selectInterval.
-  private async resyncSelection(): Promise<void> {
+  // Re-reads content for the tracked bounds (selectionStart/selectionEnd) without touching the
+  // document's live selection — unlike selecting the range first, this doesn't steal the cursor
+  // away from whatever the user is currently typing elsewhere in the document. The actual
+  // `.Select()` only happens where it's unavoidable: right before applyCorrection replaces
+  // something, or when Antidote itself asks via selectInterval.
+  private async resync(): Promise<void> {
     if (this.selectionStart === null || this.selectionEnd === null) return;
+
+    if (this.useZones) {
+      const content = await this.editor.getDocumentContent({ start: this.selectionStart, end: this.selectionEnd });
+      this.zones = content.zones.map((zone) => buildZone(zone.zoneId, zone.paragraphs, this.PARAGRAPH_SEPARATOR));
+      return;
+    }
+
     const range = await this.editor.getRangeTextWithStyle(this.selectionStart, this.selectionEnd);
     this.text = range.text;
     this.styleInfo = range.styleInfo ?? [];
@@ -96,11 +117,18 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
 
   async loadText(): Promise<void> {
     await this.preloadCorrectionMemory();
+    this.useZones = this.editor.supportsZones();
+    this.selectionStart = await this.editor.getSelectionStart();
+    this.selectionEnd = await this.editor.getSelectionEnd();
+
+    if (this.useZones) {
+      await this.resync();
+      return;
+    }
+
     const selected = await this.editor.getSelectedTextWithStyle();
     this.text = selected.text;
     this.styleInfo = selected.styleInfo ?? [];
-    this.selectionStart = await this.editor.getSelectionStart();
-    this.selectionEnd = await this.editor.getSelectionEnd();
   }
 
   configuration(): WordProcessorConfiguration {
@@ -112,11 +140,15 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     };
   }
 
-  zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
+  zonesToCorrect(params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
+    if (this.useZones) {
+      return zonesToTextZones(this.zones, this.PARAGRAPH_SEPARATOR, params);
+    }
+
     const styleInfo: StyleInfo[] = this.styleInfo.map((range) => ({
       positionStart: range.positionStart,
       positionEnd: range.positionEnd,
-      style: range.style as TextStyle,
+      style: range.style,
     }));
 
     return [{
@@ -124,9 +156,8 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     }];
   }
 
-  // See BaseCorrectionAgent.allowEdit — no paragraph indexing here, just a straight slice of the
-  // one flat cached string.
   allowEdit(params: ParamsAllowEdit): boolean {
+    if (this.useZones) return allowEditInZones(this.zones, params);
     return this.text.slice(params.positionStart, params.positionEnd) === params.context;
   }
 
@@ -134,27 +165,39 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
   // selection back onto the ONLYOFFICE document. Silent no-op on editors without an object model
   // for it (see BaseEditor.selectWithinSelection) — expected on cell, not a bug.
   selectInterval(params: ParamsSelect): void {
+    if (this.useZones) {
+      selectIntervalInZones(this.zones, this.editor, params);
+      return;
+    }
+
     if (this.selectionStart === null || this.selectionEnd === null) return;
+    const { positionStart, positionEnd } = params;
     const separatorLength = this.PARAGRAPH_SEPARATOR.length;
-    this.editor.selectWithinSelection(this.selectionStart, this.selectionEnd, params.positionStart, params.positionEnd, separatorLength).catch(() => {});
+    const { selectionStart, selectionEnd } = this;
+    this.editor
+      .selectWithinSelection(selectionStart, selectionEnd, positionStart, positionEnd, separatorLength)
+      .catch(() => {});
   }
 
   protected async applyCorrection(params: ParamsReplace): Promise<void> {
+    if (this.useZones) {
+      const diff = await applyCorrectionInZones(this.zones, this.editor, params);
+      if (this.selectionEnd !== null) this.selectionEnd += diff;
+      return;
+    }
+
     this.text = this.text.slice(0, params.positionStartReplace)
       + params.newString
       + this.text.slice(params.positionReplaceEnd);
 
-    // Keep the tracked zone bounds accurate as its length changes, since resyncSelection reselects
-    // [selectionStart, selectionEnd] to re-read text/style — a stale end would select the wrong range.
+    // Keep the tracked bounds accurate as the text's length changes, since resync() re-reads
+    // exactly [selectionStart, selectionEnd] — a stale end would read/select the wrong range.
     if (this.selectionEnd !== null) {
       const diff = params.newString.length - (params.positionReplaceEnd - params.positionStartReplace);
       this.selectionEnd += diff;
     }
 
     const paragraphs = this.text.replace(/(?:\r\n)+$/, '').split(/\r\n\r\n/);
-    console.log('applyCorrection paragraphs', paragraphs);
-    console.log(this.text);
-    console.log('applyCorrection params', params);
     await this.editor.selectSourceRange(this.selectionStart, this.selectionEnd);
     await this.editor.replaceSelectedText(paragraphs);
   }

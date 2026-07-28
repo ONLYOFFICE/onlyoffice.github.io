@@ -42,6 +42,13 @@ export interface TextWithStyle {
 
 export interface DocumentParagraph extends TextWithStyle {
   id: string;
+  // Present only when `text` is a sub-range clip of this paragraph's real, full text
+  // (getDocumentContent's `range` param — SelectionCorrectionAgent's zone mode, for whichever
+  // paragraph the selection starts/ends mid-way through): the part of the real text that sits
+  // before/after `text`. Needed to offset selection positions back to the real paragraph, and to
+  // reconstruct the full paragraph (rather than lose the untouched prefix/suffix) on replace.
+  prefix?: string;
+  suffix?: string;
 }
 
 // A table cell's own paragraphs, kept out of the surrounding main-text zone and passed to Antidote
@@ -111,9 +118,21 @@ export abstract class BaseEditor {
     return Promise.resolve('');
   }
 
-  getDocumentContent(): Promise<DocumentContent> {
+  // `range` scopes this to a sub-range of the document (SelectionCorrectionAgent's zone mode);
+  // omitted, it covers the whole document (DocumentCorrectionAgent).
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  getDocumentContent(_range?: { start: number; end: number }): Promise<DocumentContent> {
     console.error('getDocumentContent is not implemented in this editor');
     return Promise.resolve({ zones: [] });
+  }
+
+  // Whether this editor can group content into independent zones (table cells kept apart from the
+  // surrounding main text — see getDocumentContent) via a real paragraph object model. False by
+  // default; only TextEditor (Word) has one. SelectionCorrectionAgent uses this to pick between
+  // its zone-aware mode and its generic cross-editor flat-string fallback.
+  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is always false
+  supportsZones(): boolean {
+    return false;
   }
 
   // executeMethod calls a built-in host method directly (works uniformly across word/cell/pdf,
