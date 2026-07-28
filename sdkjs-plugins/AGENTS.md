@@ -140,8 +140,6 @@ Pay particular attention to:
 - backgrounds;
 - custom UI components.
 
-Avoid hardcoded colors whenever possible.
-
 ---
 
 ## General advice
