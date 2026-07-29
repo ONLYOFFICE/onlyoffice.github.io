@@ -576,15 +576,37 @@ export class TextEditor extends BaseEditor {
         end = lpLen;
       }
 
-      firstParagraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(start, true);
-      start = doc.GetRangeBySelect().GetEndPos();
-      
-      lastParagraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(end, true);
-      end = doc.GetRangeBySelect().GetEndPos();
+      let range = firstParagraph.GetRange(0, 0);
+      range.Select();
+      let selectedText = range.GetText();
+      while (start > 0) {
+        doc.MoveCursorRight(1, true);
+        range = doc.GetRangeBySelect();
+        let newText = range.GetText();
+        if (newText === selectedText) {
+          start++;
+        }
+        selectedText = newText;
+        start--;
+      }
+      let posStartInDoc = range.GetEndPos();
+
+      range = lastParagraph.GetRange(0, 0);
+      range.Select();
+      selectedText = range.GetText();
+      while (end > 0) {
+        doc.MoveCursorRight(1, true);
+        range = doc.GetRangeBySelect();
+        let newText = range.GetText();
+        if (newText === selectedText) {
+          end++;
+        }
+        selectedText = newText;
+        end--;
+      }
+      let posEndInDoc = range.GetEndPos();
       doc.RemoveSelection();
-      Api.GetDocument().GetRange(start, end).Select();
+      Api.GetDocument().GetRange(posStartInDoc, posEndInDoc).Select();
 
     }, { _idFirstParagraph, _idLastParagraph, _start, _end });
   }
@@ -668,19 +690,45 @@ export class TextEditor extends BaseEditor {
       if (end > lpLen) {
         end = lpLen;
       }
-      console.warn('fpLen', fpLen, 'lpLen', lpLen);
-      console.error(start, end);
-      firstParagraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(start, true);
-      start = doc.GetRangeBySelect().GetEndPos();
-      lastParagraph.GetRange(0, 0).Select();
-      doc.MoveCursorRight(end, true);
-      end = doc.GetRangeBySelect().GetEndPos();
+
+      let protection = start * 10;
+      let range = firstParagraph.GetRange(0, 0);
+      range.Select();
+      let selectedText = range.GetText();
+      while (start > 0 && protection > 0) {
+        doc.MoveCursorRight(1, true);
+        range = doc.GetRangeBySelect();
+        let newText = range.GetText();
+        if (newText === selectedText) {
+          start++;
+        }
+        selectedText = newText;
+        start--;
+        protection--;
+      }
+      let posStartInDoc = range.GetEndPos();
+
+      protection = end * 10;
+      range = lastParagraph.GetRange(0, 0);
+      range.Select();
+      selectedText = range.GetText();
+      while (end > 0) {
+        doc.MoveCursorRight(1, true);
+        range = doc.GetRangeBySelect();
+        let newText = range.GetText();
+        if (newText === selectedText) {
+          end++;
+        }
+        selectedText = newText;
+        end--;
+        protection--;
+      }
+      if (protection <= 0) {
+        console.error('Protection limit reached while finding end position');
+      }
+      let posEndInDoc = range.GetEndPos();
       doc.RemoveSelection();
-      console.warn('select Range', { start, end, s: Asc.scope._start, e: Asc.scope._end });
-      Api.GetDocument().GetRange(start, end).Select();
-
-
+      Api.GetDocument().GetRange(posStartInDoc, posEndInDoc).Select();
     }, { _selectionStart, _selectionEnd, _start, _end, _separatorLength });
   }
 
