@@ -31,15 +31,10 @@
  */
 
 import {
-  BaseEditor, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+  BaseEditor, CustomProperties, CORRECTION_MEMORY_PROPERTY, DocumentContent,
 } from './base';
 
-// Cell — and, provisionally, pdf too (see Editor.create()'s fallback branch: pdf has no object
-// model of its own wired up yet, so it currently reuses this class rather than TextEditor's).
-// Everything needed today is already covered by BaseEditor's generic selection get/replace; no
-// spreadsheet-specific object model access (e.g. `Api.GetActiveSheet()`) exists yet. Kept as its
-// own class — rather than instantiating BaseEditor directly — so that behavior has an obvious
-// home to grow into, the same way TextEditor holds Word's.
+// Cell only (see Editor.create() — pdf actually reuses TextEditor, not this class).
 // Neither `Api.GetActiveWorkbook()` nor `GetCustomProperties()` are in the generated ambient types
 // yet, hence this local shape — confirmed against ONLYOFFICE's own docs:
 // https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetCustomProperties/
@@ -47,9 +42,118 @@ interface ApiWithActiveWorkbook {
   GetActiveWorkbook(): { GetCustomProperties(): CustomProperties };
 }
 
+// zoneId prefix for a cell's own zone (see getDocumentContent) — the id after it is the cell's
+// own address (e.g. "A1"), which doubles as the DocumentParagraph id replaceContent/
+// selectContentRange resolve back to a real cell via Api.GetActiveSheet().GetRange(address).
+const CELL_ZONE_PREFIX = 'cell:';
+
 export class CellEditor extends BaseEditor {
   constructor() {
     super('spreadsheet');
+  }
+
+  // Mirrors TextEditor's word implementation for Dictionaries/Guides: falls back to a word when
+  // nothing's explicitly selected. A spreadsheet cell has no in-text caret position to read (only
+  // Word exposes GetCurrentWord()), so "the current word" here is just the active cell's first word.
+  getCurrentWord(): Promise<string> {
+    return this.runQuery<string>(() => {
+      const sheet = Api.GetActiveSheet();
+      const cell = sheet.GetActiveCell();
+      if (!cell) return '';
+      const value = cell.GetText();
+      const text = typeof value === 'string' ? value : '';
+      const match = text.match(/[\p{L}\p{N}]+/u);
+      return match ? match[0] : '';
+    }).catch(() => '');
+  }
+
+  // Spreadsheets have a real per-cell object model (unlike a single linear document), so each
+  // selected cell becomes its own independent zone — one cell selected means one zone, several
+  // selected cells mean one zone each. See BaseEditor.supportsZones.
+  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
+  supportsZones(): boolean {
+    return true;
+  }
+
+  // Word's absolute-character-position model (getSelectionStart/End + a getDocumentContent range)
+  // doesn't map onto a spreadsheet selection at all — there's no single linear text to offset
+  // into. getDocumentContent below always reflects whatever's currently selected regardless of any
+  // range passed to it, so these two only need to return distinct non-null values: just enough for
+  // SelectionCorrectionAgent's "is there a tracked selection" null-checks to pass.
+  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
+  getSelectionStart(): Promise<number | null> {
+    return Promise.resolve(0);
+  }
+
+  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
+  getSelectionEnd(): Promise<number | null> {
+    return Promise.resolve(1);
+  }
+
+  // Ignores `_range` (see getSelectionStart/End above) — always reflects the sheet's current
+  // selection. One zone per selected cell, each with a single "paragraph" entry (a cell has no
+  // paragraph structure of its own) whose id is the cell's address.
+  getDocumentContent(_range?: { start: number; end: number }): Promise<DocumentContent> {
+    return this.runQuery<DocumentContent>(() => {
+      const { cellZonePrefix } = Asc.scope as { cellZonePrefix: string };
+      const sheet = Api.GetActiveSheet();
+      const selection = sheet.GetSelection();
+      const rows = selection.GetRowsCount();
+      const cols = selection.GetColumnsCount();
+      const zones: { zoneId: string; paragraphs: { id: string; text: string }[] }[] = [];
+
+      // GetAddress needs a "relative to" ApiRange argument we have no use for here, so the
+      // address is built directly from the cell's own (0-based) row/col instead.
+      function colToLetter(col: number): string {
+        let n = col + 1;
+        let letters = '';
+        while (n > 0) {
+          const rem = (n - 1) % 26;
+          letters = String.fromCharCode(65 + rem) + letters;
+          n = Math.floor((n - 1) / 26);
+        }
+        return letters;
+      }
+
+      for (let row = 0; row < rows; row += 1) {
+        for (let col = 0; col < cols; col += 1) {
+          const cell = selection.GetCells(row, col);
+          if (!cell) continue;
+          const address = colToLetter(cell.GetCol()) + (cell.GetRow() + 1);
+          // A cell range obtained via selection.GetCells(row, col) reports its own row/col
+          // correctly but its GetText()/GetValue() come back empty — re-fetching the same address
+          // directly (the same lookup replaceContent/selectContentRange already rely on) instead.
+          const realCell = Api.GetRange(address);
+          const value = realCell ? realCell.GetText() : '';
+          const text = typeof value === 'string' ? value : String(value ?? '');
+          zones.push({ zoneId: cellZonePrefix + address, paragraphs: [{ id: address, text }] });
+        }
+      }
+
+      return { zones };
+    }, { cellZonePrefix: CELL_ZONE_PREFIX });
+  }
+
+  // Overwrites the whole cell's value — a cell has no sub-paragraph structure to preserve outside
+  // the correction (unlike Word's replaceContent, which must be careful not to clobber untouched
+  // text elsewhere in the paragraph).
+  replaceContent(text: string, id: string): Promise<void> {
+    return this.runCommand(() => {
+      const { text: newText, id: address } = Asc.scope as { text: string; id: string };
+      const cell = Api.GetRange(address);
+      if (cell) cell.SetValue(newText);
+    }, { text, id });
+  }
+
+  // Each zone is exactly one cell (see getDocumentContent), so idFirstParagraph/idLastParagraph
+  // are always the same cell address here — start/end aren't used, selecting the whole cell is
+  // the closest spreadsheet equivalent of highlighting the corrected sub-range.
+  selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
+    return this.runCommand(() => {
+      const { _idFirstParagraph: address } = Asc.scope as { _idFirstParagraph: string };
+      const cell = Api.GetRange(address);
+      if (cell) cell.Select();
+    }, { _idFirstParagraph });
   }
 
   // Mirrors TextEditor's word implementation: stores the correction-memory blob as a custom
