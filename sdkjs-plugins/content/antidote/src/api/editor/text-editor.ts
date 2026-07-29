@@ -73,7 +73,6 @@ export class TextEditor extends BaseEditor {
   // DocumentCorrectionAgent (whole document) and SelectionCorrectionAgent (a range), the only
   // consumers of the zones this returns.
   getDocumentContent(range?: { start: number; end: number }): Promise<DocumentContent> {
-    console.log('get doc content', range);
     return this.runQuery<DocumentContent>(function() {
       const {
         range: docRange, mainZonePrefix, tableZonePrefix, textStyle: TextStyle,
@@ -264,7 +263,6 @@ export class TextEditor extends BaseEditor {
         subscript: TextStyle.subscript,
       },
     }).then((result) => {
-        console.log('getDocumentContent res:', result);
         return result;
       });
   }
@@ -274,7 +272,6 @@ export class TextEditor extends BaseEditor {
   // the user is currently doing in the document (used by SelectionCorrectionAgent's background
   // resync, which must not steal the cursor/selection away from someone actively typing).
   getRangeTextWithStyle(start: number, end: number): Promise<TextWithStyle> {
-    console.log('getRangeTextWithStyle', { start, end });
     return this.runQuery<{ text: string; styleInfo: StyleInfo[] } | null>(() => {
       const {
         start: rangeStart, end: rangeEnd, textStyle: TextStyle,
@@ -385,7 +382,6 @@ export class TextEditor extends BaseEditor {
   // that starts/ends mid-paragraph — or spans a table — won't reconstruct identically; those cases
   // just fall back to plain text, same as the BaseEditor default this overrides.
   async getSelectedTextWithStyle(): Promise<TextWithStyle> {
-    console.log('get selected text with style');
     const text = await this.getSelectedText();
     if (!text) return { text };
 
@@ -490,19 +486,16 @@ export class TextEditor extends BaseEditor {
       } });
 
       if (styled && styled.text) {
-        console.log('getSelectedTextWithStyle matched', { styled, text });
         return { text, styleInfo: styled.styleInfo };
       }
     } catch {
       // Object-model access failed (e.g. no selection to build a range from) — fall back below.
       console.error('Failed to get selected text with style info');
     }
-    console.log('getSelectedTextWithStyle fallback', { text });
     return { text };
   }
 
   getSelectionEnd(): Promise<number | null> {
-    console.log('getSelectionEnd');
     return this.runQuery<number | null>(() => {
       const range = Api.GetDocument().GetRangeBySelect();
       return range ? range.GetEndPos() : null;
@@ -510,7 +503,6 @@ export class TextEditor extends BaseEditor {
   }
 
   getSelectionStart(): Promise<number | null> {
-    console.log('getSelectionStart');
     return this.runQuery<number | null>(() => {
       const range = Api.GetDocument().GetRangeBySelect();
       return range ? range.GetStartPos() : null;
@@ -540,7 +532,6 @@ export class TextEditor extends BaseEditor {
   // `.GetText()` on afterward (likely invalidated/rebuilt by the replace). Reverted to trusting
   // `text` as-is; revisit only with a way to actually verify against a live host.
   replaceContent(text: string, id: string): Promise<void> {
-    console.log('replaceContent', { text, id });
     return this.runCommand(() => {
       const { id: paraId, text: newText } = Asc.scope as { id: string; text: string };
       const paragraph = Api.GetDocument().GetAllParagraphs().find((p) => p.GetInternalId() === paraId);
@@ -559,7 +550,6 @@ export class TextEditor extends BaseEditor {
   }
 
   selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
-    console.log('selectContentRange', { _idFirstParagraph, _idLastParagraph, _start, _end });
     return this.runCommand(() => {
       let {
         _idFirstParagraph: paraIdFirst,
@@ -634,7 +624,6 @@ export class TextEditor extends BaseEditor {
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength = 4): Promise<void> {
-    console.log('selectWithinSelection', { _selectionStart, _selectionEnd, _start, _end, _separatorLength });
     return this.runCommand(() => {
       let { 
         _selectionStart: selectionStart,
@@ -657,8 +646,6 @@ export class TextEditor extends BaseEditor {
       let firstAppendixRange = doc.GetRange(firstParagraphStart, selectionStart);
       selectionStart = firstParagraphStart;
       const firstParagraphAppendixLength = firstAppendixRange.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
-      console.warn('firstParagraphStart', firstParagraphStart, 'selectionStart', selectionStart);
-      console.log('firstParagraphAppendixLength', firstParagraphAppendixLength, 'selectionEnd', selectionEnd);
 
       start += firstParagraphAppendixLength;
       end += firstParagraphAppendixLength;
@@ -670,7 +657,6 @@ export class TextEditor extends BaseEditor {
         fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
       }
 
-      console.log('s = ' + start + ' e = ' + end);
       function findParagraphAt(pos: number, paragraphs: ApiParagraph[], sl: number): ApiParagraph {
         let startPos = 0;
         for (let i = 0; i < paragraphs.length; i++) {
