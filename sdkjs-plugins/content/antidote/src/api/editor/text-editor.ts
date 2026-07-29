@@ -160,14 +160,23 @@ export class TextEditor extends BaseEditor {
       let prefixTrim = 0;
       let suffixTrim = 0;
       if (docRange && paragraphs.length > 0) {
+        const doc = Api.GetDocument();
+
+        // Subtracting positions (GetStartPos()/GetEndPos()) doesn't reliably give a plain character
+        // count — measuring the actual text of the in-between range does (same technique already
+        // used in selectWithinSelection's firstParagraphAppendixLength for the same reason).
         const first = paragraphs[0];
         const firstStart = first.GetRange(0, 0).GetStartPos();
-        prefixTrim = Math.max(0, docRange.start - firstStart);
+        if (docRange.start > firstStart) {
+          prefixTrim = doc.GetRange(firstStart, docRange.start).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+        }
 
         const last = paragraphs[paragraphs.length - 1];
-        const lastStart = last.GetRange(0, 0).GetStartPos();
         const lastFullLen = last.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
-        suffixTrim = Math.max(0, (lastStart + lastFullLen) - docRange.end);
+        const lastEnd = last.GetRange(0, lastFullLen).GetEndPos();
+        if (docRange.end < lastEnd) {
+          suffixTrim = doc.GetRange(docRange.end, lastEnd).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+        }
       }
 
       let mainIndex = 0;
