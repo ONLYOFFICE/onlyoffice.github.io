@@ -31,9 +31,12 @@
  */
 
 import { StyleInfo, TextStyle } from '@druide-informatique/antidote-api-js';
-import type {
-  ApiParagraph, ApiRun, ApiHyperlink, ParagraphContent,
-} from 'onlyoffice-plugins-api';
+import type { Word } from 'onlyoffice-plugins-api';
+
+type ApiParagraph = Word.ApiParagraph;
+type ApiRun = Word.ApiRun;
+type ApiHyperlink = Word.ApiHyperlink;
+type ParagraphContent = Word.ParagraphContent;
 
 import {
   BaseEditor, TextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
