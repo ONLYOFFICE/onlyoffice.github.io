@@ -40,7 +40,7 @@ type ParagraphContent = Word.ParagraphContent;
 
 import {
   BaseEditor, TextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
-  PluginWithEditorEvents, CONTENT_CHANGE_EVENTS, DocumentContent,
+  CONTENT_CHANGE_EVENTS, DocumentContent,
 } from './base';
 
 // zoneId prefixes used by getDocumentContent — MAIN_ZONE_PREFIX is followed by that segment's
@@ -748,12 +748,10 @@ export class TextEditor extends BaseEditor {
   }
 
   stopWatchingContentChanges(): void {
-    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
-    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.detachEditorEvent(eventName));
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.detachEditorEvent(eventName));
   }
   watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {
-    const plugin = window.Asc.plugin as unknown as PluginWithEditorEvents;
-    CONTENT_CHANGE_EVENTS.forEach((eventName) => plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
   }
 
 }

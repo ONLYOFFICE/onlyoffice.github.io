@@ -82,14 +82,6 @@ export interface CustomProperties {
 
 export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
 
-// `attachEditorEvent`/`detachEditorEvent` (distinct from the plugin-window-level
-// `attachEvent`/`detachEvent` used elsewhere, e.g. useTheme.ts's `onThemeChanged`) aren't in the
-// generated ambient types either — same situation as CustomProperties above.
-export interface PluginWithEditorEvents {
-  attachEditorEvent(eventName: string, callback: (data: unknown) => void): void;
-  detachEditorEvent(eventName: string): void;
-}
-
 // The three editor-content-mutation events TextEditor listens for to detect changes happening
 // concurrently with an active correction session — text edited within an existing paragraph, or
 // paragraphs added/removed (which would otherwise silently shift DocumentCorrectionAgent's
