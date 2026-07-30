@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const { spawnSync } = require('child_process');
+
+const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
 const EDITORS = {
@@ -101,6 +104,88 @@ function fetchApiDefinitions() {
   return results;
 }
 
+function downloadJson(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        res.resume();
+        reject(new Error(`HTTP ${res.statusCode} for ${url}`));
+        return;
+      }
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
+function buildLegacyLookup(data) {
+  const classes = {};
+  const typedefs = {};
+
+  for (const item of data) {
+    if (item.kind === 'class' && item.name && item.description) {
+      classes[item.name] = classes[item.name] || { description: '', methods: {} };
+      classes[item.name].description = item.description;
+    }
+    if (item.kind === 'typedef' && item.name && item.description) {
+      typedefs[item.name] = item.description;
+    }
+  }
+  for (const item of data) {
+    if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof && item.description) {
+      const className = item.memberof.replace('#', '');
+      classes[className] = classes[className] || { description: '', methods: {} };
+      // office-js-api-declarations has the same duplicate-entry quirk sdkjs does (see the comment
+      // in extractClasses) - keep whichever description was recorded first for a given method.
+      if (!classes[className].methods[item.name]) {
+        classes[className].methods[item.name] = item.description;
+      }
+    }
+  }
+
+  return { classes, typedefs };
+}
+
+// office-js-api-declarations (a periodically-regenerated snapshot of ONLYOFFICE's public API docs
+// site) has richer prose than sdkjs's own JSDoc comments - notably a "## Try it" runnable example
+// in almost every description. sdkjs is still the structural source of truth (it's the one place
+// that can't drift from the actual runtime), but its descriptions are enriched from this second
+// source, keyed by the same class/method names, wherever a match exists. This is a soft dependency:
+// generation must still work offline, just with plainer sdkjs-only descriptions.
+async function fetchLegacyDescriptions(editor) {
+  const url = `https://raw.githubusercontent.com/${LEGACY_DECLARATIONS_REPO}/master/office-js-api/${editor}.json`;
+  try {
+    const data = await downloadJson(url);
+    return buildLegacyLookup(data);
+  } catch (err) {
+    console.warn(`Could not fetch legacy descriptions for ${editor} (${err.message}) - continuing with sdkjs-only descriptions.`);
+    return null;
+  }
+}
+
+function applyLegacyDescriptions(classes, typedefs, legacy) {
+  if (!legacy) return;
+
+  for (const [className, classData] of Object.entries(classes)) {
+    const legacyClass = legacy.classes[className];
+    if (legacyClass && legacyClass.description) classData.description = legacyClass.description;
+    for (const [methodName, method] of Object.entries(classData.methods)) {
+      const legacyDescription = legacyClass && legacyClass.methods[methodName];
+      if (legacyDescription) method.description = legacyDescription;
+    }
+  }
+  for (const [name, typedefData] of Object.entries(typedefs)) {
+    if (legacy.typedefs[name]) typedefData.description = legacy.typedefs[name];
+  }
+}
+
 function splitTopLevel(str, sep) {
   const parts = [];
   let depth = 0;
@@ -174,6 +259,12 @@ function extractClasses(data) {
       const className = item.name;
       classes[className] = {
         description: item.description || '',
+        // sdkjs classes commonly do `ApiOleObject.prototype = Object.create(ApiDrawing.prototype)`
+        // and JSDoc-tag the relationship with `@extends {ApiDrawing}` (-> `augments` here) -
+        // without modeling that as a real TS `extends`, every method tagged `@memberof ApiDrawing`
+        // (there are dozens, shared across every drawing-like class in each editor) would silently
+        // be missing from ApiOleObject/ApiShape/ApiImage/etc.
+        extends: item.augments || [],
         methods: {},
         properties: {}
       };
@@ -207,7 +298,12 @@ function extractClasses(data) {
           }
           seenNames.add(name);
           const acceptsUndefined = p.type?.names?.includes('undefined');
-          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined) hasOptional = true;
+          // JSDoc's `?type` nullable prefix (e.g. `@param {?number} nIndex`) is how sdkjs marks
+          // "may be omitted, behaves sensibly if so" in practice (see ApiPresentation#AddSlide:
+          // "@param {?number} nIndex - ... If not specified, the slide will be added to the end"),
+          // even though strict JSDoc semantics would call that "nullable", not "optional".
+          const isNullable = p.type?.names?.some(n => typeof n === 'string' && n.startsWith('?'));
+          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined || isNullable) hasOptional = true;
           const names = acceptsUndefined ? p.type.names.filter(type => type !== 'undefined') : p.type?.names;
           return {
             name,
@@ -312,13 +408,34 @@ function generateEventArgsType(events) {
   return output;
 }
 
-function generateInterface(className, classData) {
+function generateInterface(className, classData, allClasses) {
   let output = '';
 
   if (classData.description) {
     output += `/** ${classData.description.replace(/\n/g, ' ')} */\n`;
   }
-  output += `export interface ${className} {\n`;
+
+  const ownMemberNames = new Set([
+    ...Object.keys(classData.methods),
+    ...Object.keys(classData.properties),
+  ]);
+  const extendsList = (classData.extends || []).map((baseClassName) => {
+    const base = allClasses[baseClassName];
+    if (!base) return baseClassName;
+    const overriddenNames = [
+      ...Object.keys(base.methods),
+      ...Object.keys(base.properties),
+    ].filter((name) => ownMemberNames.has(name));
+    // A subclass re-declaring a base member with an incompatible type (almost always
+    // GetClassType(): "someMoreSpecificLiteral" vs the base's own GetClassType(): "baseLiteral")
+    // makes a plain `extends BaseClass` fail with "incorrectly extends" - Omit the member(s) the
+    // subclass already redeclares itself, since its own declaration (below) already covers them.
+    return overriddenNames.length > 0
+      ? `Omit<${baseClassName}, ${overriddenNames.map((n) => `"${n}"`).join(' | ')}>`
+      : baseClassName;
+  });
+  const extendsClause = extendsList.length > 0 ? ` extends ${extendsList.join(', ')}` : '';
+  output += `export interface ${className}${extendsClause} {\n`;
 
   const propertyNames = Object.keys(classData.properties).sort();
   for (const propName of propertyNames) {
@@ -380,6 +497,7 @@ function collectCustomTypeRefs(str) {
 function collectReferencedApiTypes(classes, typedefs, events) {
   const refs = new Set();
   for (const classData of Object.values(classes)) {
+    for (const baseClass of classData.extends || []) refs.add(baseClass);
     for (const method of Object.values(classData.methods)) {
       collectCustomTypeRefs(method.returnType).forEach(t => refs.add(t));
       for (const p of method.params) collectCustomTypeRefs(p.type).forEach(t => refs.add(t));
@@ -398,18 +516,20 @@ function collectReferencedApiTypes(classes, typedefs, events) {
   return refs;
 }
 
-function generateDtsFile(data, typeName, namespaceName) {
+function generateDtsFile(data, typeName, namespaceName, legacy) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let body = '';
 
   const typedefs = extractTypedefs(data);
+  const classes = extractClasses(data);
+  applyLegacyDescriptions(classes, typedefs, legacy);
+
   const typedefNames = Object.keys(typedefs).sort();
   for (const name of typedefNames) {
     body += generateTypedef(name, typedefs[name]);
     body += '\n';
   }
 
-  const classes = extractClasses(data);
   const classNames = Object.keys(classes).sort();
 
   const events = extractEvents(data, MANUAL_EVENTS[typeName]);
@@ -433,7 +553,7 @@ function generateDtsFile(data, typeName, namespaceName) {
   // would collide; nesting them under Word/Cell/Slide/Forms makes every type
   // importable from every editor without ambiguity.
   for (const className of classNames) {
-    body += generateInterface(className, classes[className]);
+    body += generateInterface(className, classes[className], classes);
     body += '\n';
   }
 
@@ -467,7 +587,9 @@ async function main() {
   const apiData = await fetchApiDefinitions();
 
   for (const [typeName, data] of Object.entries(apiData)) {
-    const content = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName]);
+    console.log(`Fetching legacy descriptions for ${typeName}...`);
+    const legacy = await fetchLegacyDescriptions(typeName);
+    const content = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
     const filename = `${typeName}.ts`;
     fs.writeFileSync(path.join(OUTPUT_DIR, filename), content);
     console.log(`Generated ${filename} with ${Object.keys(extractClasses(data)).length} classes`);
