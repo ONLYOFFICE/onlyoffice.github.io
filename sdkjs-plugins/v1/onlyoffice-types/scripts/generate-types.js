@@ -1,11 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
+const crypto = require('crypto');
 const { spawnSync } = require('child_process');
 
+const PACKAGE_ROOT = path.join(__dirname, '..');
 const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
+const LEGACY_DECLARATIONS_COMMIT = '7ab23357042d8cc2510a9b4c84f3f0e5e99626a3';
 
-const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
+const OUTPUT_DIR = path.join(PACKAGE_ROOT, 'src', 'generated');
+const LEGACY_SNAPSHOT_DIR = path.join(__dirname, 'legacy-api');
 const EDITORS = {
   word: { code: 'CDE', sources: ['word/apiBuilder.js', 'word/plugin-events.js'] },
   cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
@@ -106,27 +109,6 @@ function fetchApiDefinitions() {
   return results;
 }
 
-function downloadJson(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        res.resume();
-        reject(new Error(`HTTP ${res.statusCode} for ${url}`));
-        return;
-      }
-      let data = '';
-      res.on('data', (chunk) => { data += chunk; });
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (err) {
-          reject(err);
-        }
-      });
-    }).on('error', reject);
-  });
-}
-
 function buildLegacyLookup(data) {
   const classes = {};
   const typedefs = {};
@@ -158,20 +140,21 @@ function buildLegacyLookup(data) {
 // office-js-api-declarations (a periodically-regenerated snapshot of ONLYOFFICE's public API docs
 // site) has richer prose than sdkjs's own JSDoc comments - notably a "## Try it" runnable example
 // in almost every description. sdkjs is still the structural source of truth (it's the one place
-// that can't drift from the actual runtime), but its descriptions are enriched from this second
-// source, keyed by the same class/method names, wherever a match exists. This is a soft dependency:
-// generation must still work offline, just with plainer sdkjs-only descriptions.
+// that can't drift from the actual runtime), but its descriptions are enriched from the local pinned
+// snapshots keyed by the same class/method names, wherever a match exists.
 async function fetchLegacyDescriptions(editor) {
-  // office-js-api-declarations does not publish a PDF snapshot. PDF descriptions come directly
-  // from sdkjs/pdf/apiBuilder.js instead of producing a guaranteed 404 request.
+  // PDF has no office-js-api-declarations snapshot. Its descriptions come directly from sdkjs.
   if (editor === 'pdf') return null;
-  const url = `https://raw.githubusercontent.com/${LEGACY_DECLARATIONS_REPO}/master/office-js-api/${editor}.json`;
+
+  const snapshotPath = path.join(LEGACY_SNAPSHOT_DIR, `${editor}.json`);
+  if (!fs.existsSync(snapshotPath)) {
+    throw new Error(`Missing legacy API snapshot: ${snapshotPath}`);
+  }
+
   try {
-    const data = await downloadJson(url);
-    return buildLegacyLookup(data);
+    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')));
   } catch (err) {
-    console.warn(`Could not fetch legacy descriptions for ${editor} (${err.message}) - continuing with sdkjs-only descriptions.`);
-    return null;
+    throw new Error(`Could not read legacy API snapshot ${snapshotPath}: ${err.message}`);
   }
 }
 
@@ -604,11 +587,83 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
   };
 }
 
+function runGit(repo, args) {
+  const result = spawnSync('git', ['-C', repo, ...args], {encoding: 'utf8'});
+  return result.status === 0 ? result.stdout.trim() : null;
+}
+
+function getGitMetadata(repo) {
+  if (!fs.existsSync(path.join(repo, '.git'))) return {commit: null, dirty: null};
+  const commit = runGit(repo, ['rev-parse', 'HEAD']);
+  const unstaged = spawnSync('git', ['-C', repo, 'diff', '--quiet'], {stdio: 'ignore'}).status;
+  const staged = spawnSync('git', ['-C', repo, 'diff', '--cached', '--quiet'], {stdio: 'ignore'}).status;
+  return {commit, dirty: unstaged !== 0 || staged !== 0};
+}
+
+function sha256File(filePath) {
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function packageVersion(packageName) {
+  try {
+    return require(`${packageName}/package.json`).version;
+  } catch {
+    return null;
+  }
+}
+
+function buildGenerationManifest(paths) {
+  const repositories = {
+    sdkjs: getGitMetadata(paths.sdkjs),
+    sdkjsForms: getGitMetadata(paths.sdkjsForms),
+  };
+  if (process.argv.includes('--require-clean-sources') &&
+      Object.values(repositories).some(repo => repo.dirty)) {
+    throw new Error('Source checkout is dirty; --require-clean-sources requires clean sdkjs and sdkjs-forms repositories.');
+  }
+
+  const sourceFiles = [];
+  const seen = new Set();
+
+  for (const editor of Object.keys(EDITORS)) {
+    for (const sourcePath of getSourcePaths(editor, paths)) {
+      if (seen.has(sourcePath)) continue;
+      seen.add(sourcePath);
+      const sourceRepo = sourcePath.startsWith(paths.sdkjsForms)
+        ? paths.sdkjsForms
+        : paths.sdkjs;
+      sourceFiles.push({
+        repository: sourceRepo === paths.sdkjsForms ? 'sdkjs-forms' : 'sdkjs',
+        path: path.relative(sourceRepo, sourcePath),
+        sha256: sha256File(sourcePath),
+      });
+    }
+  }
+
+  return {
+    generator: {
+      packageVersion: JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version,
+      node: process.version,
+      jsdoc: packageVersion('jsdoc'),
+      typescript: packageVersion('typescript'),
+    },
+    repositories: {
+      ...repositories,
+      officeApiDescriptions: {
+        repository: `https://github.com/${LEGACY_DECLARATIONS_REPO}.git`,
+        commit: LEGACY_DECLARATIONS_COMMIT,
+      },
+    },
+    sourceFiles,
+  };
+}
+
 async function main() {
   if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
+  const paths = resolveSdkjsPaths();
   const apiData = await fetchApiDefinitions();
   const report = {};
 
@@ -623,7 +678,9 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'api-report.json'), `${JSON.stringify(report, null, 2)}\n`);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths), null, 2)}\n`);
   console.log(`Wrote ${path.join(OUTPUT_DIR, 'api-report.json')}`);
+  console.log(`Wrote ${path.join(OUTPUT_DIR, 'generation-manifest.json')}`);
   console.log('Done!');
 }
 

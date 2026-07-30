@@ -127,17 +127,28 @@ entries with a corrupted return type).
 SDKJS_PATH=/path/to/sdkjs npm run generate
 ```
 
+PowerShell:
+
+```powershell
+$env:SDKJS_PATH = "C:\path\to\sdkjs"
+$env:SDKJS_FORMS_PATH = "C:\path\to\sdkjs-forms"
+npm run generate
+```
+
 `sdkjs-forms` is expected next to `sdkjs` by default (`SDKJS_PATH/../sdkjs-forms`); override with
 `SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
-the env var too.
+the env var too. The generator records source commits and file hashes in
+`src/generated/generation-manifest.json`.
+
+The legacy documentation snapshots are stored in `scripts/legacy-api/` and pinned to the commit
+recorded in `src/generated/generation-manifest.json`. Generation is fully offline and fails if a
+snapshot is missing or invalid. To update the snapshots, download the four JSON files from the new
+pinned commit, review the diff, regenerate the types, and commit the snapshots together with the
+updated manifest.
 
 sdkjs is the structural source of truth (classes, methods, params - it can't drift from the actual
-runtime), but its own JSDoc descriptions are terser than ONLYOFFICE's public docs. The generator
-also fetches `office-js-api-declarations` (the docs site's own snapshot) over the network and uses
-its descriptions - which usually include a runnable `## Try it` example - wherever a class/method
-name matches; anything unmatched keeps its plainer sdkjs description. This second source is a soft
-dependency: if the fetch fails (offline, rate-limited, ...) generation still completes with a
-warning, just without the richer descriptions.
+runtime), while the local `office-js-api-declarations` snapshots provide richer descriptions and
+runnable examples wherever a class/method name matches.
 
 ## Type-checking
 

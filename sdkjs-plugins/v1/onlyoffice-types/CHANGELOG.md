@@ -10,6 +10,7 @@ Initial public release.
 - Added a separate `Pdf` namespace and PDF Plugin API method definitions, including `GetPageImage`, `GoToPage`, and `ReplacePageContent`; `Forms` remains the Form API namespace.
 - Fixed generated type reference detection so string enum values and object property names no longer produce fake type stubs. Generated files now contain no `any` occurrences; unresolved references are reported in `src/generated/api-report.json`.
 - PDF is now included in the generator and shared Word API sources are loaded for PDF cross-references.
+- Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.
