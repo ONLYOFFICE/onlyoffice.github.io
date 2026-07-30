@@ -168,16 +168,22 @@ export class TextEditor extends BaseEditor {
         // count — measuring the actual text of the in-between range does (same technique already
         // used in selectWithinSelection's firstParagraphAppendixLength for the same reason).
         const first = paragraphs[0];
-        const firstStart = first.GetRange(0, 0).GetStartPos();
-        if (docRange.start > firstStart) {
-          prefixTrim = doc.GetRange(firstStart, docRange.start).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+        let firstRange = first.GetRange(0, 0);
+        if (firstRange) {
+          const firstStart = firstRange.GetStartPos();
+          if (docRange.start > firstStart) {
+            prefixTrim = doc.GetRange(firstStart, docRange.start).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+          }
         }
 
         const last = paragraphs[paragraphs.length - 1];
         const lastFullLen = last.GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
-        const lastEnd = last.GetRange(0, lastFullLen).GetEndPos();
-        if (docRange.end < lastEnd) {
-          suffixTrim = doc.GetRange(docRange.end, lastEnd).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+        const lastRange = last.GetRange(0, lastFullLen);
+        if (lastRange) {
+          const lastEnd = lastRange.GetEndPos();
+          if (docRange.end < lastEnd) {
+            suffixTrim = doc.GetRange(docRange.end, lastEnd).GetText({ Numbering: false }).replace(/[\t\r\n\v\f]+$/, '').length;
+          }
         }
       }
 
@@ -579,11 +585,13 @@ export class TextEditor extends BaseEditor {
       }
 
       let range = firstParagraph.GetRange(0, 0);
+      if (!range) return;
       range.Select();
       let selectedText = range.GetText();
       while (start > 0) {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
+        if (!range) return;
         let newText = range.GetText();
         if (newText === selectedText) {
           start++;
@@ -594,11 +602,13 @@ export class TextEditor extends BaseEditor {
       let posStartInDoc = range.GetEndPos();
 
       range = lastParagraph.GetRange(0, 0);
+      if (!range) return;
       range.Select();
       selectedText = range.GetText();
       while (end > 0) {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
+        if (!range) return;
         let newText = range.GetText();
         if (newText === selectedText) {
           end++;
@@ -643,7 +653,10 @@ export class TextEditor extends BaseEditor {
       const paragraphs = sourceRange.GetAllParagraphs();
       if (!paragraphs || paragraphs.length === 0) return;
       let firstParagraph = paragraphs[0];
-      let firstParagraphStart = firstParagraph.GetRange(0, 0).GetStartPos();
+      const firstRange = firstParagraph.GetRange(0, 0);
+      if (!firstRange) return;
+      let firstParagraphStart = firstRange.GetStartPos();
+      if (!firstParagraphStart) return;
       let fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
 
       let firstAppendixRange = doc.GetRange(firstParagraphStart, selectionStart);
@@ -691,11 +704,13 @@ export class TextEditor extends BaseEditor {
 
       let protection = start * 10;
       let range = firstParagraph.GetRange(0, 0);
+      if (!range) return;
       range.Select();
       let selectedText = range.GetText();
       while (start > 0 && protection > 0) {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
+        if (!range) return;
         let newText = range.GetText();
         if (newText === selectedText) {
           start++;
@@ -708,11 +723,13 @@ export class TextEditor extends BaseEditor {
 
       protection = end * 10;
       range = lastParagraph.GetRange(0, 0);
+      if (!range) return;
       range.Select();
       selectedText = range.GetText();
       while (end > 0) {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
+        if (!range) return;
         let newText = range.GetText();
         if (newText === selectedText) {
           end++;
