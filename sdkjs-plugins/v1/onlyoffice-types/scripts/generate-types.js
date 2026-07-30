@@ -1,19 +1,27 @@
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { spawnSync } = require('child_process');
 
-const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
+const PACKAGE_ROOT = path.join(__dirname, '..');
+const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
+const LEGACY_DECLARATIONS_COMMIT = '7ab23357042d8cc2510a9b4c84f3f0e5e99626a3';
+
+const OUTPUT_DIR = path.join(PACKAGE_ROOT, 'src', 'generated');
+const LEGACY_SNAPSHOT_DIR = path.join(__dirname, 'legacy-api');
 const EDITORS = {
   word: { code: 'CDE', sources: ['word/apiBuilder.js', 'word/plugin-events.js'] },
   cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
   slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'slide/plugin-events.js'] },
   forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js', '../sdkjs-forms/plugin-events.js'] },
+  pdf: { code: 'PDFE', sources: ['word/apiBuilder.js', 'pdf/apiBuilder.js', 'pdf/plugin-events.js'] },
 };
 const NAMESPACE_MAP = {
   word: 'Word',
   cell: 'Cell',
   slide: 'Slide',
   forms: 'Forms',
+  pdf: 'Pdf',
 };
 
 // A handful of real, working editor events aren't documented via a `@event` JSDoc block anywhere
@@ -101,6 +109,71 @@ function fetchApiDefinitions() {
   return results;
 }
 
+function buildLegacyLookup(data) {
+  const classes = {};
+  const typedefs = {};
+
+  for (const item of data) {
+    if (item.kind === 'class' && item.name && item.description) {
+      classes[item.name] = classes[item.name] || { description: '', methods: {} };
+      classes[item.name].description = item.description;
+    }
+    if (item.kind === 'typedef' && item.name && item.description) {
+      typedefs[item.name] = item.description;
+    }
+  }
+  for (const item of data) {
+    if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof && item.description) {
+      const className = item.memberof.replace('#', '');
+      classes[className] = classes[className] || { description: '', methods: {} };
+      // office-js-api-declarations has the same duplicate-entry quirk sdkjs does (see the comment
+      // in extractClasses) - keep whichever description was recorded first for a given method.
+      if (!classes[className].methods[item.name]) {
+        classes[className].methods[item.name] = item.description;
+      }
+    }
+  }
+
+  return { classes, typedefs };
+}
+
+// office-js-api-declarations (a periodically-regenerated snapshot of ONLYOFFICE's public API docs
+// site) has richer prose than sdkjs's own JSDoc comments - notably a "## Try it" runnable example
+// in almost every description. sdkjs is still the structural source of truth (it's the one place
+// that can't drift from the actual runtime), but its descriptions are enriched from the local pinned
+// snapshots keyed by the same class/method names, wherever a match exists.
+async function fetchLegacyDescriptions(editor) {
+  // PDF has no office-js-api-declarations snapshot. Its descriptions come directly from sdkjs.
+  if (editor === 'pdf') return null;
+
+  const snapshotPath = path.join(LEGACY_SNAPSHOT_DIR, `${editor}.json`);
+  if (!fs.existsSync(snapshotPath)) {
+    throw new Error(`Missing legacy API snapshot: ${snapshotPath}`);
+  }
+
+  try {
+    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')));
+  } catch (err) {
+    throw new Error(`Could not read legacy API snapshot ${snapshotPath}: ${err.message}`);
+  }
+}
+
+function applyLegacyDescriptions(classes, typedefs, legacy) {
+  if (!legacy) return;
+
+  for (const [className, classData] of Object.entries(classes)) {
+    const legacyClass = legacy.classes[className];
+    if (legacyClass && legacyClass.description) classData.description = legacyClass.description;
+    for (const [methodName, method] of Object.entries(classData.methods)) {
+      const legacyDescription = legacyClass && legacyClass.methods[methodName];
+      if (legacyDescription) method.description = legacyDescription;
+    }
+  }
+  for (const [name, typedefData] of Object.entries(typedefs)) {
+    if (legacy.typedefs[name]) typedefData.description = legacy.typedefs[name];
+  }
+}
+
 function splitTopLevel(str, sep) {
   const parts = [];
   let depth = 0;
@@ -133,10 +206,10 @@ function parseTypeName(n) {
   if (n === 'String') return 'string';
   if (n === 'Boolean') return 'boolean';
   if (n === 'bool') return 'boolean';
-  if (n === 'Array' || n === 'array') return 'any[]';
+  if (n === 'Array' || n === 'array') return 'unknown[]';
   if (n === 'Object') return 'object';
   if (n === 'any') return 'any';
-  if (n === 'function' || n === 'Function') return '(...args: any[]) => any';
+  if (n === 'function' || n === 'Function') return '(...args: unknown[]) => unknown';
   if (n === 'byte') return 'number';
   if (n === 'twips') return 'number';
   if (n === 'EMU') return 'number';
@@ -145,7 +218,7 @@ function parseTypeName(n) {
   if (n === 'rad') return 'number';
   if (n === 'JSON') return 'object';
   if (n === 'base64img') return 'string';
-  if (n === 'range') return 'any';
+  if (n === 'range') return 'unknown';
   if (n.startsWith('"') && n.endsWith('"')) return n;
   if (n.startsWith('Array.<') && n.endsWith('>')) {
     const inner = n.slice(7, -1);
@@ -155,14 +228,14 @@ function parseTypeName(n) {
     const inner = n.slice(8, -1);
     const parts = splitTopLevel(inner, ',');
     const keyType = parts[0] ? parseTypeName(parts[0]) : 'string';
-    const valType = parts[1] ? parseTypeName(parts[1]) : 'any';
+    const valType = parts[1] ? parseTypeName(parts[1]) : 'unknown';
     return `Record<${keyType}, ${valType}>`;
   }
   return n;
 }
 
 function parseType(typeObj) {
-  if (!typeObj || !typeObj.names) return 'any';
+  if (!typeObj || !typeObj.names) return 'unknown';
   return typeObj.names.map(parseTypeName).join(' | ');
 }
 
@@ -174,6 +247,12 @@ function extractClasses(data) {
       const className = item.name;
       classes[className] = {
         description: item.description || '',
+        // sdkjs classes commonly do `ApiOleObject.prototype = Object.create(ApiDrawing.prototype)`
+        // and JSDoc-tag the relationship with `@extends {ApiDrawing}` (-> `augments` here) -
+        // without modeling that as a real TS `extends`, every method tagged `@memberof ApiDrawing`
+        // (there are dozens, shared across every drawing-like class in each editor) would silently
+        // be missing from ApiOleObject/ApiShape/ApiImage/etc.
+        extends: item.augments || [],
         methods: {},
         properties: {}
       };
@@ -207,7 +286,12 @@ function extractClasses(data) {
           }
           seenNames.add(name);
           const acceptsUndefined = p.type?.names?.includes('undefined');
-          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined) hasOptional = true;
+          // JSDoc's `?type` nullable prefix (e.g. `@param {?number} nIndex`) is how sdkjs marks
+          // "may be omitted, behaves sensibly if so" in practice (see ApiPresentation#AddSlide:
+          // "@param {?number} nIndex - ... If not specified, the slide will be added to the end"),
+          // even though strict JSDoc semantics would call that "nullable", not "optional".
+          const isNullable = p.type?.names?.some(n => typeof n === 'string' && n.startsWith('?'));
+          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined || isNullable) hasOptional = true;
           const names = acceptsUndefined ? p.type.names.filter(type => type !== 'undefined') : p.type?.names;
           return {
             name,
@@ -312,13 +396,34 @@ function generateEventArgsType(events) {
   return output;
 }
 
-function generateInterface(className, classData) {
+function generateInterface(className, classData, allClasses) {
   let output = '';
 
   if (classData.description) {
     output += `/** ${classData.description.replace(/\n/g, ' ')} */\n`;
   }
-  output += `export interface ${className} {\n`;
+
+  const ownMemberNames = new Set([
+    ...Object.keys(classData.methods),
+    ...Object.keys(classData.properties),
+  ]);
+  const extendsList = (classData.extends || []).map((baseClassName) => {
+    const base = allClasses[baseClassName];
+    if (!base) return baseClassName;
+    const overriddenNames = [
+      ...Object.keys(base.methods),
+      ...Object.keys(base.properties),
+    ].filter((name) => ownMemberNames.has(name));
+    // A subclass re-declaring a base member with an incompatible type (almost always
+    // GetClassType(): "someMoreSpecificLiteral" vs the base's own GetClassType(): "baseLiteral")
+    // makes a plain `extends BaseClass` fail with "incorrectly extends" - Omit the member(s) the
+    // subclass already redeclares itself, since its own declaration (below) already covers them.
+    return overriddenNames.length > 0
+      ? `Omit<${baseClassName}, ${overriddenNames.map((n) => `"${n}"`).join(' | ')}>`
+      : baseClassName;
+  });
+  const extendsClause = extendsList.length > 0 ? ` extends ${extendsList.join(', ')}` : '';
+  output += `export interface ${className}${extendsClause} {\n`;
 
   const propertyNames = Object.keys(classData.properties).sort();
   for (const propName of propertyNames) {
@@ -370,8 +475,14 @@ const TS_BUILTINS = new Set([
 ]);
 
 function collectCustomTypeRefs(str) {
+  // Only collect identifiers that can be type references. String literal enum values such as
+  // "Area" and "BarClustered" must not become fake cross-file type stubs. Object-literal property
+  // names such as `InternalId: string` are not type references either.
+  const withoutStrings = str
+    .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '')
+    .replace(/\b[A-Z][a-zA-Z0-9]+\b(?=\s*:)/g, '');
   const refs = [];
-  for (const m of (str.match(/\b[A-Z][a-zA-Z0-9]+\b/g) || [])) {
+  for (const m of (withoutStrings.match(/\b[A-Z][a-zA-Z0-9]+\b/g) || [])) {
     if (!TS_BUILTINS.has(m)) refs.push(m);
   }
   return refs;
@@ -380,6 +491,7 @@ function collectCustomTypeRefs(str) {
 function collectReferencedApiTypes(classes, typedefs, events) {
   const refs = new Set();
   for (const classData of Object.values(classes)) {
+    for (const baseClass of classData.extends || []) refs.add(baseClass);
     for (const method of Object.values(classData.methods)) {
       collectCustomTypeRefs(method.returnType).forEach(t => refs.add(t));
       for (const p of method.params) collectCustomTypeRefs(p.type).forEach(t => refs.add(t));
@@ -398,18 +510,20 @@ function collectReferencedApiTypes(classes, typedefs, events) {
   return refs;
 }
 
-function generateDtsFile(data, typeName, namespaceName) {
+function generateDtsFile(data, typeName, namespaceName, legacy) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let body = '';
 
   const typedefs = extractTypedefs(data);
+  const classes = extractClasses(data);
+  applyLegacyDescriptions(classes, typedefs, legacy);
+
   const typedefNames = Object.keys(typedefs).sort();
   for (const name of typedefNames) {
     body += generateTypedef(name, typedefs[name]);
     body += '\n';
   }
 
-  const classes = extractClasses(data);
   const classNames = Object.keys(classes).sort();
 
   const events = extractEvents(data, MANUAL_EVENTS[typeName]);
@@ -420,9 +534,10 @@ function generateDtsFile(data, typeName, namespaceName) {
   if (stubs.length > 0) {
     body += `// Cross-file type stubs\n`;
     for (const stub of stubs) {
-      body += `export type ${stub} = any;\n`;
+      body += `export type ${stub} = unknown;\n`;
     }
     body += '\n';
+    console.warn(`[${namespaceName}] unresolved API types (${stubs.length}): ${stubs.join(', ')}`);
   }
 
   // The entry-point class is always literally named "Api" in the source data
@@ -433,7 +548,7 @@ function generateDtsFile(data, typeName, namespaceName) {
   // would collide; nesting them under Word/Cell/Slide/Forms makes every type
   // importable from every editor without ambiguity.
   for (const className of classNames) {
-    body += generateInterface(className, classes[className]);
+    body += generateInterface(className, classes[className], classes);
     body += '\n';
   }
 
@@ -456,7 +571,91 @@ function generateDtsFile(data, typeName, namespaceName) {
     .join('\n');
   output += '}\n';
 
-  return output;
+  const codeOnly = output
+    .split('\n')
+    .filter(line => !/^\s*(?:\/\/|\/\*|\*)/.test(line))
+    .join('\n');
+  const anyOccurrences = (codeOnly.match(/\bany\b/g) || []).length;
+  return {
+    content: output,
+    stats: {
+      classes: classNames.length,
+      typedefs: typedefNames.length,
+      unresolvedTypes: stubs,
+      anyOccurrences,
+    },
+  };
+}
+
+function runGit(repo, args) {
+  const result = spawnSync('git', ['-C', repo, ...args], {encoding: 'utf8'});
+  return result.status === 0 ? result.stdout.trim() : null;
+}
+
+function getGitMetadata(repo) {
+  if (!fs.existsSync(path.join(repo, '.git'))) return {commit: null, dirty: null};
+  const commit = runGit(repo, ['rev-parse', 'HEAD']);
+  const unstaged = spawnSync('git', ['-C', repo, 'diff', '--quiet'], {stdio: 'ignore'}).status;
+  const staged = spawnSync('git', ['-C', repo, 'diff', '--cached', '--quiet'], {stdio: 'ignore'}).status;
+  return {commit, dirty: unstaged !== 0 || staged !== 0};
+}
+
+function sha256File(filePath) {
+  return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function packageVersion(packageName) {
+  try {
+    return require(`${packageName}/package.json`).version;
+  } catch {
+    return null;
+  }
+}
+
+function buildGenerationManifest(paths) {
+  const repositories = {
+    sdkjs: getGitMetadata(paths.sdkjs),
+    sdkjsForms: getGitMetadata(paths.sdkjsForms),
+  };
+  if (process.argv.includes('--require-clean-sources') &&
+      Object.values(repositories).some(repo => repo.dirty)) {
+    throw new Error('Source checkout is dirty; --require-clean-sources requires clean sdkjs and sdkjs-forms repositories.');
+  }
+
+  const sourceFiles = [];
+  const seen = new Set();
+
+  for (const editor of Object.keys(EDITORS)) {
+    for (const sourcePath of getSourcePaths(editor, paths)) {
+      if (seen.has(sourcePath)) continue;
+      seen.add(sourcePath);
+      const sourceRepo = sourcePath.startsWith(paths.sdkjsForms)
+        ? paths.sdkjsForms
+        : paths.sdkjs;
+      sourceFiles.push({
+        repository: sourceRepo === paths.sdkjsForms ? 'sdkjs-forms' : 'sdkjs',
+        path: path.relative(sourceRepo, sourcePath),
+        sha256: sha256File(sourcePath),
+      });
+    }
+  }
+
+  return {
+    generator: {
+      packageVersion: JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version,
+      node: process.version,
+      jsdoc: packageVersion('jsdoc'),
+      typescript: packageVersion('typescript'),
+    },
+    repositories: {
+      ...repositories,
+      officeApiDescriptions: {
+        repository: `https://github.com/${LEGACY_DECLARATIONS_REPO}.git`,
+        commit: LEGACY_DECLARATIONS_COMMIT,
+      },
+    },
+    sourceFiles,
+  };
 }
 
 async function main() {
@@ -464,15 +663,24 @@ async function main() {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
 
+  const paths = resolveSdkjsPaths();
   const apiData = await fetchApiDefinitions();
+  const report = {};
 
   for (const [typeName, data] of Object.entries(apiData)) {
-    const content = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName]);
+    console.log(`Fetching legacy descriptions for ${typeName}...`);
+    const legacy = await fetchLegacyDescriptions(typeName);
+    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
     const filename = `${typeName}.ts`;
-    fs.writeFileSync(path.join(OUTPUT_DIR, filename), content);
-    console.log(`Generated ${filename} with ${Object.keys(extractClasses(data)).length} classes`);
+    fs.writeFileSync(path.join(OUTPUT_DIR, filename), generated.content);
+    report[typeName] = generated.stats;
+    console.log(`Generated ${filename} with ${generated.stats.classes} classes`);
   }
 
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'api-report.json'), `${JSON.stringify(report, null, 2)}\n`);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths), null, 2)}\n`);
+  console.log(`Wrote ${path.join(OUTPUT_DIR, 'api-report.json')}`);
+  console.log(`Wrote ${path.join(OUTPUT_DIR, 'generation-manifest.json')}`);
   console.log('Done!');
 }
 

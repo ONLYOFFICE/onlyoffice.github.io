@@ -1,8 +1,51 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "onlyoffice-plugins-api",
-  "version": "0.8.0",
-  "types": "index.d.ts",
+  "version": "0.8.3",
   "description": "TypeScript definitions for OnlyOffice plugins",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts"
+    },
+    "./word": {
+      "types": "./src/editors/word.d.ts"
+    },
+    "./cell": {
+      "types": "./src/editors/cell.d.ts"
+    },
+    "./slide": {
+      "types": "./src/editors/slide.d.ts"
+    },
+    "./pdf": {
+      "types": "./src/editors/pdf.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "word": ["src/editors/word.d.ts"],
+      "cell": ["src/editors/cell.d.ts"],
+      "slide": ["src/editors/slide.d.ts"],
+      "pdf": ["src/editors/pdf.d.ts"]
+    }
+  },
+  "files": [
+    "index.d.ts",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io.git",
+    "directory": "sdkjs-plugins/v1/onlyoffice-types"
+  },
+  "homepage": "https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/v1/onlyoffice-types#readme",
+  "bugs": {
+    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types"
+  },
   "license": "AGPL-3.0-or-later",
   "keywords": [
     "onlyoffice",
@@ -12,6 +55,8 @@
   ],
   "scripts": {
     "generate": "node scripts/generate-types.js",
+    "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
+    "check-runtime": "node scripts/check-runtime-contract.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsc --noEmit -p tsconfig.typecheck.json"
   },

@@ -9,5 +9,5 @@
     "checkJs": true,
     "strict": false
   },
-  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts", "example.js", "test/**/*.js"]
+  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts", "example.js", "test/**/*.d.ts", "test/**/*.js"]
 }

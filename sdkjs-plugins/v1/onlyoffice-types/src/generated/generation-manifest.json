@@ -1,0 +1,74 @@
+{
+  "generator": {
+    "packageVersion": "0.8.3",
+    "node": "v24.2.0",
+    "jsdoc": "4.0.5",
+    "typescript": "5.9.3"
+  },
+  "repositories": {
+    "sdkjs": {
+      "commit": "26a4b3d7adc5ff6d6c009752507b41348e31f8bc",
+      "dirty": false
+    },
+    "sdkjsForms": {
+      "commit": "55c335430f18ff16ebf7ece2db79558cb61ab260",
+      "dirty": false
+    },
+    "officeApiDescriptions": {
+      "repository": "https://github.com/ONLYOFFICE/office-js-api-declarations.git",
+      "commit": "7ab23357042d8cc2510a9b4c84f3f0e5e99626a3"
+    }
+  },
+  "sourceFiles": [
+    {
+      "repository": "sdkjs",
+      "path": "word\\apiBuilder.js",
+      "sha256": "cbc29da6d41c2cfe1664f08b683c1c929f18dab598d286851296ac47e2a6f0a4"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "word\\plugin-events.js",
+      "sha256": "df1bda2784f2de9d88ffebc08760ed0fb5e86b35051860fa2988f78c381ba9de"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "slide\\apiBuilder.js",
+      "sha256": "5b7d1049a30e0bbd4e382c62ccb25000a75f05a86829de7e43ddb1c0f466a507"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "cell\\apiBuilder.js",
+      "sha256": "a160db088d606f4fb7c1fc237a27d3b933ae22b0f524161d22e22641808c1334"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "cell\\plugin-events.js",
+      "sha256": "781a39f5548534428b3c935e8d7c102b093bccf9fd23ad55bcafd8ad29e7282f"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "slide\\plugin-events.js",
+      "sha256": "8429b2f63672d14772aa9f0dac206c736a416e1ba60a0dcd070d9f7587707bd8"
+    },
+    {
+      "repository": "sdkjs-forms",
+      "path": "apiBuilder.js",
+      "sha256": "7f46b866a5cc3acd6d23c4be4787d23f1ed5b459c3fc705447b0eab466bee02e"
+    },
+    {
+      "repository": "sdkjs-forms",
+      "path": "plugin-events.js",
+      "sha256": "ddaf87041c1c86af47143eed8a227763ef7fac0c6f65f9d6f3dc3d23882a6c93"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "pdf\\apiBuilder.js",
+      "sha256": "b1dfb3abd74e1859d19964dcbf959cb68778bcea5c1a3aa17738d8e6389e4959"
+    },
+    {
+      "repository": "sdkjs",
+      "path": "pdf\\plugin-events.js",
+      "sha256": "294890d55ebab7c4fd668d52578493ce1c0499cc2a096bd3f5c774b64090bc0b"
+    }
+  ]
+}

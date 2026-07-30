@@ -12,20 +12,22 @@ npm install onlyoffice-plugins-api
 
 ### For Plugins
 
-Add to your `tsconfig.json`:
+Add the root package and the entry point for the editor your plugin supports to your `tsconfig.json`:
 
 ```json
 {
   "compilerOptions": {
-    "types": ["onlyoffice-plugins-api"]
+    "types": ["onlyoffice-plugins-api", "onlyoffice-plugins-api/word"]
   }
 }
 ```
 
-Or reference directly in your TypeScript files:
+Use `/word`, `/cell`, `/slide`, or `/pdf`. The editor entry point declares the matching global `Api` type inside `callCommand`; the root package intentionally does not declare a cross-editor `Api` intersection.
+
+Alternatively, reference the entry point directly in a TypeScript file:
 
 ```typescript
-/// <reference types="onlyoffice-plugins-api" />
+/// <reference types="onlyoffice-plugins-api/word" />
 ```
 
 ### Example Plugin
@@ -58,26 +60,30 @@ window.Asc.plugin.getSelectedText(function(text) {
 ## API Types
 
 - **Plugin API**: `window.Asc.plugin` - Main plugin interface (`window.Api` inside `callCommand`)
+- **Plugin menus**: `Asc.Buttons`, `ButtonContextMenu`, `ButtonToolbar`, `ButtonContentControl`, and `ButtonWindowHeader`
 - **Word namespace**: Types for text documents (generated from the ONLYOFFICE `sdkjs` JSDoc)
 - **Cell namespace**: Types for spreadsheets
 - **Slide namespace**: Types for presentations
-- **Forms namespace**: Types for PDF/OForm form fields
+- **Forms namespace**: Types for form fields and Form API objects
+- **PDF namespace**: PDF Editor object model and PDF-specific `executeMethod` methods
 
-Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`),
-so any type from any editor is importable regardless of which editor the current plugin targets -
-same-named classes across editors (e.g. `ApiParagraph` exists in all four) don't collide, and you
+Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`, `Pdf`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
+
+Any type from any editor is importable regardless of which editor the current plugin targets -
+same-named classes across editors don't collide, and you
 can reference another editor's types from shared/helper code:
 
 ```typescript
-import type { Word, Cell, Slide } from "onlyoffice-plugins-api";
+import type { Word, Cell, Slide, Pdf } from "onlyoffice-plugins-api";
 
 function logParagraph(p: Word.ApiParagraph) { /* ... */ }
 function fillCell(r: Cell.ApiRange) { /* ... */ }
 function firstSlide(pres: Slide.ApiPresentation): Slide.ApiSlide { /* ... */ }
+function usePdfApi(api: Pdf.Api) { return api.GetDocument(); }
 ```
 
 `Api<T>` resolves the entry-point class for a given editor kind (`"word" | "cell" | "slide" | "pdf"`),
-equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Forms.Api`:
+equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Pdf.Api`:
 
 ```typescript
 import type { Api } from "onlyoffice-plugins-api";
@@ -87,7 +93,7 @@ function useWordApi(api: Api<"word">) {
 }
 ```
 
-`window.Asc.plugin.executeMethod`/`executeMethodAsync` are typed for Word, Cell, and Slide method
+`window.Asc.plugin.executeMethod` is typed for Word, Cell, and Slide method
 names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs` in `src/`).
 
 > `GetMacros` (all three editors) returns a raw JSON **string** - parse it yourself with
@@ -105,9 +111,10 @@ window.Asc.plugin.attachEditorEvent("onParagraphAdd", (data) => {
 });
 ```
 
-Events not modeled yet (the low-level common/UI ones shared across editors - `onContextMenuShow`,
-`onClick`, `onKeyDown`, ...) fall back to a loose `(eventName: string, callback: (...args) => void)`
-overload.
+Common plugin event names such as `onContextMenuShow`, `onWindowResize`, and input-helper events
+are represented in `PluginEventMap`. `onContextMenuShow` has a documented payload shape; events whose
+payload varies by editor version use `unknown` until their runtime contract is confirmed. Unknown
+event names retain a fallback overload with `unknown[]` arguments rather than `any`.
 
 ## Generating Types
 
@@ -120,19 +127,45 @@ entries with a corrupted return type).
 SDKJS_PATH=/path/to/sdkjs npm run generate
 ```
 
+PowerShell:
+
+```powershell
+$env:SDKJS_PATH = "C:\path\to\sdkjs"
+$env:SDKJS_FORMS_PATH = "C:\path\to\sdkjs-forms"
+npm run generate
+```
+
 `sdkjs-forms` is expected next to `sdkjs` by default (`SDKJS_PATH/../sdkjs-forms`); override with
 `SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
-the env var too.
+the env var too. The generator records source commits and file hashes in
+`src/generated/generation-manifest.json`.
+
+The legacy documentation snapshots are stored in `scripts/legacy-api/` and pinned to the commit
+recorded in `src/generated/generation-manifest.json`. Generation is fully offline and fails if a
+snapshot is missing or invalid. To update the snapshots, download the four JSON files from the new
+pinned commit, review the diff, regenerate the types, and commit the snapshots together with the
+updated manifest.
+
+sdkjs is the structural source of truth (classes, methods, params - it can't drift from the actual
+runtime), while the local `office-js-api-declarations` snapshots provide richer descriptions and
+runnable examples wherever a class/method name matches.
 
 ## Type-checking
 
 ```bash
-npm run typecheck   # checks index.d.ts + src/generated/*.ts + src/*.d.ts
-npm test            # also type-checks example.js and test/*.js against the library
+npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.js
+npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
+npm test               # also type-checks example.js and test/*.js against the library
 ```
 
+`check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
+`windowID`, event handlers, and registration methods), `Asc.Buttons`, button constructors, and
+`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch
+an editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop
+Editor smoke test.
+
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
-**off** in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
+off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
 actually exported) surface immediately instead of being silently ignored.
 
 ## Project Structure
@@ -145,10 +178,13 @@ onlyoffice-types/
 │   │   ├── word.ts        # namespace Word { ... }
 │   │   ├── cell.ts        # namespace Cell { ... }
 │   │   ├── slide.ts       # namespace Slide { ... }
-│   │   └── forms.ts       # namespace Forms { ... }
+│   │   ├── forms.ts       # namespace Forms { ... }
+│   │   ├── pdf.ts         # namespace Pdf { ... }
+│   │   └── api-report.json # unresolved type and any report
 │   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
 │   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
-│   └── slide-methods.d.ts # executeMethod names/args/returns for Slide
+│   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
+│   └── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
 ├── scripts/
 │   └── generate-types.js
 ├── tsconfig.json           # builds/typechecks the library itself

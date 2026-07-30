@@ -53,10 +53,10 @@ interface CellInstallPluginConfig {
 }
 
 interface CellImageData {
-    Data: string;
-    Width?: number;
-    Height?: number;
-    FromUrl?: boolean;
+    src: string;
+    width: number;
+    height: number;
+    fromUrl?: boolean;
 }
 
 /** "none" - nothing selected, "text" - cell(s) selected, "drawing" - drawing selected */
@@ -85,10 +85,19 @@ type CellMethodArgs = {
     GetFontList: [null?];
     GetImageDataFromSelection: [];
     GetInstalledPlugins: [null?];
-    GetMacros: [];
-    GetSelectedContent: [];
+    /**
+     * The docs Parameters section says this method takes no parameters, but the
+     * page's own Example passes [JSON.stringify(Content)] as the first arg
+     * (verified against both the live docs page and the source .md in
+     * ONLYOFFICE/api.onlyoffice.com - looks like a copy/paste leftover from the
+     * SetMacros example). Made optional so both the documented no-arg usage and
+     * the real (if likely erroneous) doc example type-check.
+     */
+    GetMacros: [data?: any];
+    /** docs: `prop` is a required object; `prop.type` ("text" | "html", default "text") is optional */
+    GetSelectedContent: [prop: { type?: "text" | "html" }];
     GetSelectedOleObjects: [];
-    GetSelectedText: [oPr?: { TabSymbol?: string }];
+    GetSelectedText: [oPr?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; ParaSeparator?: string; TabSymbol?: string }];
     GetSelectionType: [];
     GetVBAMacros: [];
     GetVersion: [];

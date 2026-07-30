@@ -1,0 +1,43 @@
+{
+  "word": {
+    "classes": 66,
+    "typedefs": 102,
+    "unresolvedTypes": [
+      "ApiTableOfContents",
+      "ApiTableOfFigures",
+      "TextAnnotation",
+      "TextAnnotationRange"
+    ],
+    "anyOccurrences": 0
+  },
+  "cell": {
+    "classes": 114,
+    "typedefs": 163,
+    "unresolvedTypes": [
+      "ApiHyperlinks",
+      "ApiListObject",
+      "PTCondition"
+    ],
+    "anyOccurrences": 0
+  },
+  "slide": {
+    "classes": 83,
+    "typedefs": 107,
+    "unresolvedTypes": [],
+    "anyOccurrences": 0
+  },
+  "forms": {
+    "classes": 67,
+    "typedefs": 112,
+    "unresolvedTypes": [],
+    "anyOccurrences": 0
+  },
+  "pdf": {
+    "classes": 100,
+    "typedefs": 140,
+    "unresolvedTypes": [
+      "BulletType"
+    ],
+    "anyOccurrences": 0
+  }
+}

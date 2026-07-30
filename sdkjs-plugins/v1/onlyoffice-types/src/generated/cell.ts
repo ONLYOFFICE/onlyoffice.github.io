@@ -2,10 +2,10 @@
 // Editor type: cell
 
 export namespace Cell {
-  /** A numeric value that specifies which function should be used to aggregate identical time values in the timeline data range.<b>1</b> (or omitted) - AVERAGE.<b>2</b> - COUNT.<b>3</b> - COUNTA.<b>4</b> - MAX.<b>5</b> - MEDIAN.<b>6</b> - MIN.<b>7</b> - SUM. */
+  /** A numeric value that specifies which function should be used to aggregate identical time values in the timeline data range. <b>1</b> (or omitted) - AVERAGE. <b>2</b> - COUNT. <b>3</b> - COUNTA. <b>4</b> - MAX. <b>5</b> - MEDIAN. <b>6</b> - MIN. <b>7</b> - SUM. */
   export type Aggregation = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-  /** Specifies the range angle. */
+  /** Specifies the range angle.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("A1").SetOrientation("xlUpward"); ``` */
   export type Angle = "xlDownward" | "xlHorizontal" | "xlUpward" | "xlVertical";
 
   /** Animation effect type. */
@@ -14,16 +14,16 @@ export namespace Cell {
   /** Animation trigger type. */
   export type AnimationTriggerType = "onclick" | "withprevious" | "afterprevious";
 
-  /** Types of all supported forms. */
+  /** Types of all supported forms.  ## Try it   ```js document-builder={"documentType": "cell"} let copyTextForm = textForm.Copy(); ``` */
   export type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm;
 
-  /** Axis position in the chart. */
+  /** Axis position in the chart.  ## Try it   ```js document-builder={"documentType": "cell"} chart.SetAxieNumFormat("top", "0.00"); ``` */
   export type AxisPos = "top" | "bottom" | "right" | "left";
 
   /** The Base64 image string. */
   export type Base64Img = string;
 
-  /** The type of a fill which uses an image as a background.<b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.<b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface. */
+  /** The type of a fill which uses an image as a background. <b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface. <b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.  ## Try it   ```js document-builder={"documentType": "cell"} let blipFill = Api.CreateBlipFill("https://example.com/myimage.png", "tile"); ``` */
   export type BlipFillType = "tile" | "stretch";
 
   /** The border properties object. */
@@ -34,25 +34,25 @@ export namespace Cell {
     Color: ApiColor;
   }
 
-  /** A border type. */
+  /** A border type.  ## Try it   ```js document-builder={"documentType": "cell"} paraPr.SetBottomBorder("single", 24, 0, 0, 255, 0); ``` */
   export type BorderType = "none" | "single";
 
-  /** Specifies the cell border position. */
+  /** Specifies the cell border position.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("E2").SetBorders("Bottom", "Dotted", Api.CreateColorFromRGB(0, 0, 0)); ``` */
   export type BordersIndex = "DiagonalDown" | "DiagonalUp" | "Bottom" | "Left" | "Right" | "Top" | "InsideHorizontal" | "InsideVertical";
 
-  /** A bullet type which will be added to the paragraph in spreadsheet or presentation. */
+  /** A bullet type which will be added to the paragraph in spreadsheet or presentation.  ## Try it   ```js document-builder={"documentType": "cell"} // The paragraph will be starting with the Arabic numeral which has parenthesis let bullet = Api.CreateNumbering("ArabicParenR"); ``` */
   export type BulletType = "None" | "ArabicPeriod" | "ArabicParenR" | "RomanUcPeriod" | "RomanLcPeriod" | "AlphaLcParenR" | "AlphaLcPeriod" | "AlphaUcParenR" | "AlphaUcPeriod";
 
-  /** Possible values for the caption label. */
+  /** Possible values for the caption label.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddCaptionCrossRef("Table", "pageNum", caption); ``` */
   export type CaptionLabel = "Table" | "Equation" | "Figure";
 
-  /** Possible values for the caption numbering format.<b>"ALPHABETIC"</b> - upper letter.<b>"alphabetic"</b> - lower letter.<b>"Roman"</b> - upper Roman.<b>"roman"</b> - lower Roman.<b>"Arabic"</b> - arabic. */
+  /** Possible values for the caption numbering format. <b>"ALPHABETIC"</b> - upper letter. <b>"alphabetic"</b> - lower letter. <b>"Roman"</b> - upper Roman. <b>"roman"</b> - lower Roman. <b>"Arabic"</b> - arabic.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen"); ``` */
   export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
-  /** Possible values for the caption separator.<b>"hyphen"</b> - the "-" punctuation mark.<b>"period"</b> - the "." punctuation mark.<b>"colon"</b> - the ":" punctuation mark.<b>"longDash"</b> - the "—" punctuation mark.<b>"dash"</b> - the "-" punctuation mark. */
+  /** Possible values for the caption separator. <b>"hyphen"</b> - the "-" punctuation mark. <b>"period"</b> - the "." punctuation mark. <b>"colon"</b> - the ":" punctuation mark. <b>"longDash"</b> - the "—" punctuation mark. <b>"dash"</b> - the "-" punctuation mark.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen"); ``` */
   export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
-  /** This type specifies the available chart types which can be used to create a new chart. */
+  /** This type specifies the available chart types which can be used to create a new chart.  ## Try it   ```js document-builder={"documentType": "cell"} // ChartType used in text documents // The resulting chart will have a 'bar3D' type: var chart = Api.CreateChart("bar3D", [[200, 240, 280],[250, 260, 280]], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);  // ChartType used in spreadsheets // The resulting chart will have a 'bar3D' type: var chart = worksheet.AddChart("'Sheet1'!$A$1:$D$3", true, "bar3D", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000); ``` */
   export type ChartType = "ColumnClustered" | "ColumnStacked" | "ColumnStacked100" | "3DColumnClustered" | "3DColumnStacked" | "3DColumnStacked100" | "3DColumn" | "BarClustered" | "BarStacked" | "BarStacked100" | "3DBarClustered" | "3DBarStacked" | "3DBarStacked100" | "Line" | "LineStacked" | "LineStacked100" | "LineMarkers" | "LineMarkersStacked" | "LineMarkersStacked100" | "3DLine" | "Pie" | "3DPie" | "Doughnut" | "XYScatter" | "XYScatterLines" | "XYScatterLinesNoMarkers" | "XYScatterSmooth" | "XYScatterSmoothNoMarkers" | "StockHLC" | "StockOHLC" | "StockVHLC" | "StockVOHLC" | "Area" | "AreaStacked" | "AreaStacked100" | "Combo" | "ComboColumnClusteredLine" | "ComboColumnClusteredLineSecondaryAxis" | "Radar" | "RadarMarkers" | "RadarFilled" | "unknown";
 
   /** This type specifies the legacy chart type names which are kept for backward compatibility. */
@@ -67,12 +67,12 @@ export namespace Cell {
     label: string;
   }
 
-  /** A dictionary of users and their comments. */
+  /** Report on all comments. This is a dictionary where the keys are usernames.  ## Try it   ```js document-builder={"documentType": "cell"} let commentsReport = oDocument.GetCommentsReport(); ``` */
   export interface CommentReport {
     username?: UserComments;
   }
 
-  /** Represents a single comment record. */
+  /** Record of one comment.  ## Try it   ```js document-builder={"documentType": "cell"} let commentsReport = oDocument.GetCommentsReport(); ``` */
   export interface CommentReportRecord {
     IsAnswer: boolean;
     CommentMessage: string;
@@ -115,10 +115,10 @@ export namespace Cell {
   /** Specifies how to shift cells to replace deleted cells. */
   export type DeleteShiftDirection = "up" | "left";
 
-  /** Specifies the direction of end in the specified range. */
+  /** Specifies the direction of end in the specified range.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("C4:D5").End("xlToLeft").SetFillColor(Api.CreateColorFromRGB(255, 224, 204)); ``` */
   export type Direction = "xlUp" | "xlDown" | "xlToRight" | "xlToLeft";
 
-  /** Any valid element which can be added to the document structure. */
+  /** Any valid element which can be added to the document structure.  ## Try it   ```js document-builder={"documentType": "cell"} doc.AddElement(paragraph); ``` */
   export type DocumentElement = ApiParagraph;
 
   /** Any valid drawing element. */
@@ -127,7 +127,7 @@ export namespace Cell {
   /** Available drawing element for grouping. */
   export type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
 
-  /** This type specifies the type of drawing lock. */
+  /** This type specifies the type of drawing lock.  ## Try it   ```js document-builder={"documentType": "cell"} let lockValue = drawing.GetLockValue("noSelect"); ``` */
   export type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
 
   /** English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs. */
@@ -136,7 +136,7 @@ export namespace Cell {
   /** The available slide transition effects (similar to PowerPoint VBA ppEffect). */
   export type EntryEffect = "effectAppear" | "effectBlindsHorizontal" | "effectBlindsVertical" | "effectBoxDown" | "effectBoxIn" | "effectBoxLeft" | "effectBoxOut" | "effectBoxRight" | "effectBoxUp" | "effectCheckerboardAcross" | "effectCheckerboardDown" | "effectCircleOut" | "effectCombHorizontal" | "effectCombVertical" | "effectConveyorLeft" | "effectConveyorRight" | "effectCoverDown" | "effectCoverLeft" | "effectCoverLeftDown" | "effectCoverLeftUp" | "effectCoverRight" | "effectCoverRightDown" | "effectCoverRightUp" | "effectCoverUp" | "effectCubeDown" | "effectCubeLeft" | "effectCubeRight" | "effectCubeUp" | "effectCut" | "effectCutThroughBlack" | "effectDiamondOut" | "effectDissolve" | "effectDoorsHorizontal" | "effectDoorsVertical" | "effectFade" | "effectFadeSmoothly" | "effectFerrisWheelLeft" | "effectFerrisWheelRight" | "effectFlashbulb" | "effectFlipDown" | "effectFlipLeft" | "effectFlipRight" | "effectFlipUp" | "effectFlyThroughIn" | "effectFlyThroughInBounce" | "effectFlyThroughOut" | "effectFlyThroughOutBounce" | "effectGalleryLeft" | "effectGalleryRight" | "effectGlitterDiamondDown" | "effectGlitterDiamondLeft" | "effectGlitterDiamondRight" | "effectGlitterDiamondUp" | "effectGlitterHexagonDown" | "effectGlitterHexagonLeft" | "effectGlitterHexagonRight" | "effectGlitterHexagonUp" | "effectHoneycomb" | "effectNewsflash" | "effectOrbitDown" | "effectOrbitLeft" | "effectOrbitRight" | "effectOrbitUp" | "effectPanDown" | "effectPanLeft" | "effectPanRight" | "effectPanUp" | "effectPlusOut" | "effectPushDown" | "effectPushLeft" | "effectPushRight" | "effectPushUp" | "effectRandom" | "effectRandomBarsHorizontal" | "effectRandomBarsVertical" | "effectRevealBlackLeft" | "effectRevealBlackRight" | "effectRevealSmoothLeft" | "effectRevealSmoothRight" | "effectRippleCenter" | "effectRippleLeftDown" | "effectRippleLeftUp" | "effectRippleRightDown" | "effectRippleRightUp" | "effectRotateDown" | "effectRotateLeft" | "effectRotateRight" | "effectRotateUp" | "effectShredRectangleIn" | "effectShredRectangleOut" | "effectShredStripsIn" | "effectShredStripsOut" | "effectSplitHorizontalIn" | "effectSplitHorizontalOut" | "effectSplitVerticalIn" | "effectSplitVerticalOut" | "effectStripsDownLeft" | "effectStripsDownRight" | "effectStripsLeftDown" | "effectStripsLeftUp" | "effectStripsRightDown" | "effectStripsRightUp" | "effectStripsUpLeft" | "effectStripsUpRight" | "effectSwitchDown" | "effectSwitchLeft" | "effectSwitchRight" | "effectSwitchUp" | "effectUncoverDown" | "effectUncoverLeft" | "effectUncoverLeftDown" | "effectUncoverLeftUp" | "effectUncoverRight" | "effectUncoverRightDown" | "effectUncoverRightUp" | "effectUncoverUp" | "effectVortexDown" | "effectVortexLeft" | "effectVortexRight" | "effectVortexUp" | "effectWarpIn" | "effectWarpOut" | "effectWedge" | "effectWheel1Spoke" | "effectWheel2Spokes" | "effectWheel3Spokes" | "effectWheel4Spokes" | "effectWheel8Spokes" | "effectWheelReverse1Spoke" | "effectWindowHorizontal" | "effectWindowVertical" | "effectWipeDown" | "effectWipeLeft" | "effectWipeRight" | "effectWipeUp" | "effectNone" | "effectCrawlFromDown" | "effectCrawlFromLeft" | "effectCrawlFromRight" | "effectCrawlFromUp" | "effectFlashOnceFast" | "effectFlashOnceMedium" | "effectFlashOnceSlow" | "effectFlyFromBottom" | "effectFlyFromBottomLeft" | "effectFlyFromBottomRight" | "effectFlyFromLeft" | "effectFlyFromRight" | "effectFlyFromTop" | "effectFlyFromTopLeft" | "effectFlyFromTopRight" | "effectMixed" | "effectPeekFromDown" | "effectPeekFromLeft" | "effectPeekFromRight" | "effectPeekFromUp" | "effectSpiral" | "effectStretchAcross" | "effectStretchDown" | "effectStretchLeft" | "effectStretchRight" | "effectStretchUp" | "effectSwivel" | "effectZoomBottom" | "effectZoomCenter" | "effectZoomIn" | "effectZoomInSlightly" | "effectZoomOut" | "effectZoomOutSlightly";
 
-  /** The error value.* <b>"#NULL!"</b> - 1* <b>"#DIV/0!"</b> - 2* <b>"#VALUE!"</b> - 3* <b>"#REF!"</b> - 4* <b>"#NAME?"</b> - 5* <b>"#NUM!"</b> - 6* <b>"#N/A"</b> - 7* <b>"#GETTING_DATA"</b> - 8* <b>"Other"</b> - "#N/A" */
+  /** The error value. * <b>"#NULL!"</b> - 1 * <b>"#DIV/0!"</b> - 2 * <b>"#VALUE!"</b> - 3 * <b>"#REF!"</b> - 4 * <b>"#NAME?"</b> - 5 * <b>"#NUM!"</b> - 6 * <b>"#N/A"</b> - 7 * <b>"#GETTING_DATA"</b> - 8 * <b>"Other"</b> - "#N/A" */
   export type ErrorValue = "#NULL!" | "#DIV/0!" | "#VALUE!" | "#REF!" | "#NAME?" | "#NUM!" | "#N/A" | "#GETTING_DATA";
 
   /** Specifies how the report filter fields are located. */
@@ -145,7 +145,7 @@ export namespace Cell {
   /** The available fill types. */
   export type FillType = "solid" | "gradient" | "pattern" | "blip" | "nofill";
 
-  /** Form data. */
+  /** Form data.  ## Try it   ```js document-builder={"documentType": "cell"} let formData = {key: "CompanyName", value: "OnlyOffice", type: "text"}; ``` */
   export interface FormData {
     key: string;
     value: string | boolean;
@@ -159,13 +159,13 @@ export namespace Cell {
     lang?: string;
   }
 
-  /** The specific form type. */
+  /** The specific form type.  ## Try it   ```js document-builder={"documentType": "cell"} let formsData = doc.GetFormsData(); ``` */
   export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio" | "complex" | "signature";
 
-  /** Form type.The available form types. */
+  /** Form type. The available form types.  ## Try it   ```js document-builder={"documentType": "cell"} let formType = textForm.GetFormType(); ``` */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
-  /** Specifies a type of freeze panes. */
+  /** Specifies a type of freeze panes.  ## Try it   ```js document-builder={"documentType": "cell"} builder.CreateFile("xlsx"); Api.SetFreezePanesType('column'); let worksheet = Api.GetActiveSheet(); let freezePanes = worksheet.GetFreezePanes(); let range = freezePanes.GetLocation(); worksheet.GetRange("A1").SetValue("Location: "); worksheet.GetRange("B1").SetValue(range.GetAddress()); builder.SaveFile("xlsx", "FreezePanes.xlsx"); builder.CloseFile(); ``` */
   export type FreezePaneType = "row" | "column" | "cell" | null;
 
   /** The coordinate value for the geometry paths.Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
@@ -174,7 +174,7 @@ export namespace Cell {
   /** This type specifies the formula type that will be used for a geometry guide. */
   export type GeometryFormulaType = "*/" | "+-" | "+/" | "?:" | "abs" | "at2" | "cat2" | "cos" | "max" | "min" | "mod" | "pin" | "sat2" | "sin" | "sqrt" | "tan" | "val";
 
-  /** Header and footer types which can be applied to the document sections.<b>"default"</b> - a header or footer which can be applied to any default page.<b>"title"</b> - a header or footer which is applied to the title page.<b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default). */
+  /** Header and footer types which can be applied to the document sections. <b>"default"</b> - a header or footer which can be applied to any default page. <b>"title"</b> - a header or footer which is applied to the title page. <b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).  ## Try it   ```js document-builder={"documentType": "cell"} let docContent = finalSection.RemoveHeader("title"); ``` */
   export type HdrFtrType = "default" | "title" | "even";
 
   /** The layout subtotal location. */
@@ -189,28 +189,28 @@ export namespace Cell {
   /** The line end type. */
   export type LineEndType = "none" | "arrow" | "diamond" | "oval" | "stealth" | "triangle";
 
-  /** Specifies the line style used to form the cell border. */
+  /** Specifies the line style used to form the cell border.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("E2").SetBorders("Bottom", "Dotted", Api.CreateColorFromRGB(0, 0, 0)); ``` */
   export type LineStyle = "None" | "Double" | "Hair" | "DashDotDot" | "DashDot" | "Dotted" | "Dashed" | "Thin" | "MediumDashDotDot" | "SlantDashDot" | "MediumDashDot" | "MediumDashed" | "Medium" | "Thick";
 
-  /** The match type.* <b>-1</b> - The values must be sorted in descending order. If the exact match is not found, the function will return the smallest value that is greater than the searched value.* <b>0</b> - The values can be sorted in any order. If the exact match is not found, the function will return the *#N/A* error.* <b>1</b> (or omitted) - The values must be sorted in ascending order. If the exact match is not found, the function will return the largest value that is less than the searched value. */
+  /** The match type. * <b>-1</b> - The values must be sorted in descending order. If the exact match is not found, the function will return the smallest value that is greater than the searched value. * <b>0</b> - The values can be sorted in any order. If the exact match is not found, the function will return the <em>#N/A</em> error. * <b>1</b> (or omitted) - The values must be sorted in ascending order. If the exact match is not found, the function will return the largest value that is less than the searched value. */
   export type MatchType = "-1" | "0" | "1";
 
-  /** Standard numeric format. */
+  /** Standard numeric format.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("A1").SetOrientation("xlUpward"); ``` */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
-  /** The page orientation type. */
+  /** The page orientation type.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.SetPageOrientation("xlPortrait"); ``` */
   export type PageOrientation = "xlLandscape" | "xlPortrait";
 
   /** The paper size, specified as a value of the Excel <b>xlPaperSize</b> enumeration. */
   export type PaperSize = "xlPaperLetter" | "xlPaperLetterSmall" | "xlPaperTabloid" | "xlPaperLedger" | "xlPaperLegal" | "xlPaperStatement" | "xlPaperExecutive" | "xlPaperA3" | "xlPaperA4" | "xlPaperA4Small" | "xlPaperA5" | "xlPaperB4" | "xlPaperB5" | "xlPaperFolio" | "xlPaperQuarto" | "xlPaper10x14" | "xlPaper11x17" | "xlPaperNote" | "xlPaperEnvelope9" | "xlPaperEnvelope10" | "xlPaperEnvelope11" | "xlPaperEnvelope12" | "xlPaperEnvelope14" | "xlPaperCsheet" | "xlPaperDsheet" | "xlPaperEsheet" | "xlPaperEnvelopeDL" | "xlPaperEnvelopeC5" | "xlPaperEnvelopeC3" | "xlPaperEnvelopeC4" | "xlPaperEnvelopeC6" | "xlPaperEnvelopeC65" | "xlPaperEnvelopeB4" | "xlPaperEnvelopeB5" | "xlPaperEnvelopeB6" | "xlPaperEnvelopeItaly" | "xlPaperEnvelopeMonarch" | "xlPaperEnvelopePersonal" | "xlPaperFanfoldUS" | "xlPaperFanfoldStdGerman" | "xlPaperFanfoldLegalGerman";
 
-  /** The types of elements that can be added to the paragraph structure. */
+  /** The types of elements that can be added to the paragraph structure.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddElement(run, 0); ``` */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
-  /** The mathematical operation which will be applied to the copied data. */
+  /** The mathematical operation which will be applied to the copied data.  ## Try it   ```js document-builder={"documentType": "cell"} range.PasteSpecial("xlPasteAll", "xlPasteSpecialOperationAdd"); ``` */
   export type PasteSpecialOperation = "xlPasteSpecialOperationAdd" | "xlPasteSpecialOperationDivide" | "xlPasteSpecialOperationMultiply" | "xlPasteSpecialOperationNone" | "xlPasteSpecialOperationSubtract";
 
-  /** Specifies the part of the range to be pasted. */
+  /** Specifies the part of the range to be pasted.  ## Try it   ```js document-builder={"documentType": "cell"} range.PasteSpecial("xlPasteAll"); ``` */
   export type PasteType = "xlPasteAll" | "xlPasteAllExceptBorders" | "xlPasteColumnWidths" | "xlPasteComments" | "xlPasteFormats" | "xlPasteFormulas" | "xlPasteFormulasAndNumberFormats" | "xlPasteValues" | "xlPasteValuesAndNumberFormats";
 
   /** The path command types. */
@@ -219,7 +219,7 @@ export namespace Cell {
   /** The path fill type. */
   export type PathFillType = "none" | "norm" | "lighten" | "lightenLess" | "darken" | "darkenLess";
 
-  /** The available preset patterns which can be used for the fill. */
+  /** The available preset patterns which can be used for the fill.  ## Try it   ```js document-builder={"documentType": "cell"} let fill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0)); ``` */
   export type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
 
   /** The pivot field orientation type. */
@@ -266,28 +266,28 @@ export namespace Cell {
   /** Available placeholder types. */
   export type PlaceholderType = "body" | "chart" | "clipArt" | "ctrTitle" | "diagram" | "date" | "footer" | "header" | "media" | "object" | "picture" | "sldImage" | "sldNumber" | "subTitle" | "table" | "title";
 
-  /** 60000th of a degree (5400000 = 90 degrees). */
+  /** 60000th of a degree (5400000 = 90 degrees).  ## Try it   ```js document-builder={"documentType": "cell"} let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000); ``` */
   export type PositiveFixedAngle = number;
 
-  /** The 1000th of a percent (100000 = 100%). */
+  /** The 1000th of a percent (100000 = 100%).  ## Try it   ```js document-builder={"documentType": "cell"} let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000); ``` */
   export type PositivePercentage = number;
 
-  /** The available preset color names. */
+  /** The available preset color names.  ## Try it   ```js document-builder={"documentType": "cell"} let schemeColor = Api.CreatePresetColor("lightYellow"); ``` */
   export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
-  /** Specifies the user type of the protected range. */
+  /** Specifies the user type of the protected range.  ## Try it   ```js document-builder={"documentType": "cell"} protectedRange.SetAnyoneType("NotView"); ``` */
   export type ProtectedRangeUserType = "CanEdit" | "CanView" | "NotView";
 
   /** The reading order (left-to-right or right-to-left). */
   export type ReadingOrder = "ltr" | "rtl";
 
-  /** The cell reference type. */
+  /** The cell reference type.  ## Try it   ```js document-builder={"documentType": "cell"} builder.CreateFile("xlsx"); let worksheet = Api.GetActiveSheet(); worksheet.GetRange("A1").SetValue(Api.GetReferenceStyle()); builder.SaveFile("xlsx", "ReferenceStyle.xlsx"); builder.CloseFile(); ``` */
   export type ReferenceStyle = 'xlA1' | 'xlR1C1';
 
-  /** The possible values for the base which the relative horizontal positioning of an object will be calculated from. */
+  /** The possible values for the base which the relative horizontal positioning of an object will be calculated from.  ## Try it   ```js document-builder={"documentType": "cell"} drawing.SetHorAlign("page", "center"); ``` */
   export type RelFromH = "character" | "column" | "insideMargin" | "leftMargin" | "rightMargin" | "margin" | "outsideMargin" | "page";
 
-  /** The possible values for the base which the relative vertical positioning of an object will be calculated from. */
+  /** The possible values for the base which the relative vertical positioning of an object will be calculated from.  ## Try it   ```js document-builder={"documentType": "cell"} drawing.SetVerAlign("page", "center"); ``` */
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
   /** Properties to make search and replace. */
@@ -301,12 +301,12 @@ export namespace Cell {
     ReplaceAll: boolean;
   }
 
-  /** A dictionary of users and their review changes. */
+  /** Report on all review changes. This is a dictionary where the keys are usernames.  ## Try it   ```js document-builder={"documentType": "cell"} let reviewRecord = { 	"John Smith" : [{Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}, 					{Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}], 	"Mark Pottato" : [{Type: "ParaRem", Date: 1679941755942}, 					{Type: "TextPr", Date: 1679941757832}] } ``` */
   export interface ReviewReport {
     username?: UserReviewChanges;
   }
 
-  /** Represents a single review change record. */
+  /** Record of one review change.  ## Try it   ```js document-builder={"documentType": "cell"} let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}; let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}; let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942}; let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832}; let reviewRecord = { 	"John Smith" : [reviewReportRecord1, reviewReportRecord2], 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4] }; ``` */
   export interface ReviewReportRecord {
     Type: ReviewReportRecordType;
     Value?: string;
@@ -314,16 +314,16 @@ export namespace Cell {
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
-  /** Review record type. */
+  /** Review record type.  ## Try it   ```js document-builder={"documentType": "cell"} let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161}; let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}; let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942}; let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832}; let reviewRecord = { 	"John Smith" : [reviewReportRecord1, reviewReportRecord2], 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4] }; ``` */
   export type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
 
-  /** The condition to scale an image in the picture form. */
+  /** The condition to scale an image in the picture form.  ## Try it   ```js document-builder={"documentType": "cell"} pictureForm.SetScaleFlag("tooBig"); ``` */
   export type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
 
-  /** The available color scheme identifiers. */
+  /** The available color scheme identifiers.  ## Try it   ```js document-builder={"documentType": "cell"} let schemeColor = Api.CreateSchemeColor("accent2"); ``` */
   export type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
 
-  /** The lock type of the content control. */
+  /** The lock type of the content control.  ## Try it   ```js document-builder={"documentType": "cell"} inlineLvlSdt.SetLock("sdtContentLocked"); ``` */
   export type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
 
   /** Properties to make search. */
@@ -337,7 +337,7 @@ export namespace Cell {
     MatchCase: boolean;
   }
 
-  /** The section break type which defines how the contents of the current section are placed relative to the previous section.WordprocessingML supports five distinct types of section breaks:<b>Next page</b> ("nextPage") - starts a new section on the next page (the default value).<b>Odd</b> ("oddPage") - starts a new section on the next odd-numbered page.<b>Even</b> ("evenPage") - starts a new section on the next even-numbered page.<b>Continuous</b> ("continuous") - starts a new section in the next paragraph.This means that continuous section breaks might not specify certain page-level section properties,since they shall be inherited from the following section.However, these breaks can specify other section properties, such as line numbering and footnote/endnote settings.<b>Column</b> ("nextColumn") - starts a new section in the next column on the page. */
+  /** The section break type which defines how the contents of the current section are placed relative to the previous section. WordprocessingML supports five distinct types of section breaks: <b>Next page</b> ("nextPage") - starts a new section on the next page (the default value). <b>Odd</b> ("oddPage") - starts a new section on the next odd-numbered page. <b>Even</b> ("evenPage") - starts a new section on the next even-numbered page. <b>Continuous</b> ("continuous") - starts a new section in the next paragraph. This means that continuous section breaks might not specify certain page-level section properties, since they shall be inherited from the following section. However, these breaks can specify other section properties, such as line numbering and footnote/endnote settings. <b>Column</b> ("nextColumn") - starts a new section in the next column on the page. */
   export type SectionBreakType = "nextPage" | "oddPage" | "evenPage" | "continuous" | "nextColumn";
 
   /** Represents the type of objects in a selection. */
@@ -353,7 +353,7 @@ export namespace Cell {
     rotateWithShape?: boolean;
   }
 
-  /** This type specifies the preset shape geometry that will be used for a shape. */
+  /** This type specifies the preset shape geometry that will be used for a shape.  ## Try it   ```js document-builder={"documentType": "cell"} let drawing = Api.CreateShape("diamond", 100 * 36000, 100 * 36000, fill, stroke); ``` */
   export type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
 
   /** The shading information object. */
@@ -362,7 +362,7 @@ export namespace Cell {
     Color: ApiColor;
   }
 
-  /** A shade type which can be added to the document element. */
+  /** A shade type which can be added to the document element.  ## Try it   ```js document-builder={"documentType": "cell"} tablePr.SetShd("clear", 0, 255, 0, false); ``` */
   export type ShdType = "nil" | "clear";
 
   /** The possible values for the base which the relative horizontal size of an object will be calculated from. */
@@ -371,22 +371,22 @@ export namespace Cell {
   /** The possible values for the base which the relative vertical size of an object will be calculated from. */
   export type SizeRelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page";
 
-  /** Specifies whether the first row of the sort range contains the header information. */
+  /** Specifies whether the first row of the sort range contains the header information.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("A1:C5").SetSort("A1:A5", "xlAscending", "B1:B5", "xlDescending", "C1:C5", "xlAscending", "xlYes", "xlSortColumns"); ``` */
   export type SortHeader = "xlNo" | "xlYes";
 
-  /** Specifies the sort order. */
+  /** Specifies the sort order.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("A1:C5").SetSort("A1:A5", "xlAscending", "B1:B5", "xlDescending", "C1:C5", "xlAscending", "xlYes", "xlSortColumns"); ``` */
   export type SortOrder = "xlAscending" | "xlDescending";
 
-  /** Specifies if the sort should be by row or column. */
+  /** Specifies if the sort should be by row or column.  ## Try it   ```js document-builder={"documentType": "cell"} worksheet.GetRange("A1:C5").SetSort("A1:A5", "xlAscending", "B1:B5", "xlDescending", "C1:C5", "xlAscending", "xlYes", "xlSortColumns"); ``` */
   export type SortOrientation = "xlSortColumns" | "xlSortRows";
 
-  /** A numeric value between 1 and 8 that specifies which statistic will be returned.<b>1</b> - Alpha parameter of ETS algorithm - the base value parameter.<b>2</b> - Beta parameter of ETS algorithm - the trend value parameter.<b>3</b> - Gamma parameter of ETS algorithm - the seasonality value parameter.<b>4</b> - MASE (mean absolute scaled error) metric - a measure of the accuracy of forecasts.<b>5</b> - SMAPE (symmetric mean absolute percentage error) metric - a measure of the accuracy based on percentage errors.<b>6</b> - MAE (mean absolute error) metric - a measure of the accuracy of forecasts.<b>7</b> - RMSE (root mean squared error) metric - a measure of the differences between predicted and observed values.<b>8</b> - Step size detected in the timeline. */
+  /** A numeric value between 1 and 8 that specifies which statistic will be returned. <b>1</b> - Alpha parameter of ETS algorithm - the base value parameter. <b>2</b> - Beta parameter of ETS algorithm - the trend value parameter. <b>3</b> - Gamma parameter of ETS algorithm - the seasonality value parameter. <b>4</b> - MASE (mean absolute scaled error) metric - a measure of the accuracy of forecasts. <b>5</b> - SMAPE (symmetric mean absolute percentage error) metric - a measure of the accuracy based on percentage errors. <b>6</b> - MAE (mean absolute error) metric - a measure of the accuracy of forecasts. <b>7</b> - RMSE (root mean squared error) metric - a measure of the differences between predicted and observed values. <b>8</b> - Step size detected in the timeline. */
   export type StatisticType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-  /** The style type used for the document element. */
+  /** The style type used for the document element.  ## Try it   ```js document-builder={"documentType": "cell"} let normalStyle = doc.GetDefaultStyle("paragraph"); ``` */
   export type StyleType = "paragraph" | "table" | "run" | "numbering";
 
-  /** Types of custom tab. */
+  /** Types of custom tab.  ## Try it   ```js document-builder={"documentType": "cell"} paraPr.SetTabs([1000, 1500, 3000], ["center", "left", "right"]); ``` */
   export type TabJc = "clear" | "left" | "right" | "center";
 
   /** A paragraph tab stop. */
@@ -405,10 +405,10 @@ export namespace Cell {
     bandVer: boolean;
   }
 
-  /** This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.<b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell.<b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell.<b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell.<b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell.<b>"firstRow"</b> - specifies that the table formatting is applied to the first row.<b>"lastRow"</b> - specifies that the table formatting is applied to the last row.<b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.<b>"lastColumn"</b> - specifies that the table formatting is applied to the last column.<b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows.<b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows.<b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns.<b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns.<b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table. */
+  /** This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used. <b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell. <b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell. <b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell. <b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell. <b>"firstRow"</b> - specifies that the table formatting is applied to the first row. <b>"lastRow"</b> - specifies that the table formatting is applied to the last row. <b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format. <b>"lastColumn"</b> - specifies that the table formatting is applied to the last column. <b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows. <b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows. <b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns. <b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns. <b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table.  ## Try it   ```js document-builder={"documentType": "cell"} tableStyle.GetConditionalTableStyle("topLeftCell").GetTableCellPr().SetShd("clear", 255, 0, 0); ``` */
   export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
-  /** The possible values for the units of the width property are defined by a specific table or table cell width property.<b>"auto"</b> - sets the table or table cell width to auto width.<b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point.<b>"nul"</b> - sets the table or table cell width to be of a zero value.<b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container. */
+  /** The possible values for the units of the width property are defined by a specific table or table cell width property. <b>"auto"</b> - sets the table or table cell width to auto width. <b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point. <b>"nul"</b> - sets the table or table cell width to be of a zero value. <b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container.  ## Try it   ```js document-builder={"documentType": "cell"} tableCell.SetWidth("twips", 2000); ``` */
   export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
   /** The available text autofit types inside a shape. */
@@ -423,13 +423,13 @@ export namespace Cell {
     value?: string;
   }
 
-  /** Text transform type. */
+  /** Text transform type.  ## Try it   ```js document-builder={"documentType": "cell"} let textArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", fill, stroke, 0, 150 * 36000, 50 * 36000); ``` */
   export type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
 
-  /** Possible values for the position of chart tick labels (either horizontal or vertical).<b>"none"</b> - does not display the selected tick labels.<b>"nextTo"</b> - sets the position of the selected tick labels next to the main label.<b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values.<b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values. */
+  /** Possible values for the position of chart tick labels (either horizontal or vertical). <b>"none"</b> - does not display the selected tick labels. <b>"nextTo"</b> - sets the position of the selected tick labels next to the main label. <b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values. <b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values.  ## Try it   ```js document-builder={"documentType": "cell"} chart.SetVertAxisTickLabelPosition("nextTo"); ``` */
   export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
-  /** The type of tick mark appearance. */
+  /** The type of tick mark appearance.  ## Try it   ```js document-builder={"documentType": "cell"} chart.SetVertAxisMajorTickMark("cross"); ``` */
   export type TickMark = "cross" | "in" | "none" | "out";
 
   /** Options for converting document content to an HTML string. */
@@ -440,17 +440,17 @@ export namespace Cell {
     RenderHTMLTags?: boolean;
   }
 
-  /** Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles. */
+  /** Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.  ## Try it   ```js document-builder={"documentType": "cell"} let tocBuildFromPr = {"OutlineLvls": 9}; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": tocBuildFromPr, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
   export interface TocBuildFromPr {
     OutlineLvlStart?: number;
     OutlineLvls?: number;
     StylesLvls: TocStyleLvl[];
   }
 
-  /** Possible values for the table of contents leader:<b>"dot"</b> - "......."<b>"dash"</b> - "-------"<b>"underline"</b> - "_______" */
+  /** Possible values for the table of contents leader: <b>"dot"</b> - "......." <b>"dash"</b> - "-------" <b>"underline"</b> - "_______"  ## Try it   ```js document-builder={"documentType": "cell"} let tocLeader = "dot"; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": tocLeader, "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
   export type TocLeader = "dot" | "dash" | "underline" | "none";
 
-  /** Table of contents properties. */
+  /** Table of contents properties.  ## Try it   ```js document-builder={"documentType": "cell"} let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
   export interface TocPr {
     ShowPageNums?: boolean;
     RightAlgn?: boolean;
@@ -460,16 +460,16 @@ export namespace Cell {
     TocStyle?: TocStyle;
   }
 
-  /** Possible values for the table of contents style. */
+  /** Possible values for the table of contents style.  ## Try it   ```js document-builder={"documentType": "cell"} let tocStyle = "standard"; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": tocStyle}; doc.AddTableOfContents(tocPr); ``` */
   export type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
 
-  /** Table of contents style levels. */
+  /** Table of contents style levels.  ## Try it   ```js document-builder={"documentType": "cell"} let tocStyleLvl = [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}]; let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"StylesLvls": tocStyleLvl}, "TocStyle": "standard"}; doc.AddTableOfContents(tocPr); ``` */
   export interface TocStyleLvl {
     Name: string;
     Lvl: number;
   }
 
-  /** Table of figures properties. */
+  /** Table of figures properties.  ## Try it   ```js document-builder={"documentType": "cell"} let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": "distinctive"}; doc.AddTableOfFigures(tofPr); ``` */
   export interface TofPr {
     ShowPageNums?: boolean;
     RightAlgn?: boolean;
@@ -480,7 +480,7 @@ export namespace Cell {
     TofStyle?: TofStyle;
   }
 
-  /** Possible values for the table of figures style. */
+  /** Possible values for the table of figures style.  ## Try it   ```js document-builder={"documentType": "cell"} let tofStyle = "distinctive"; let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": tofStyle}; doc.AddTableOfFigures(tofPr); ``` */
   export type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
 
   /** The available slide transition speed values (similar to PowerPoint VBA ppTransitionSpeed). */
@@ -505,13 +505,13 @@ export namespace Cell {
   /** The validation type. */
   export type ValidationType = "xlValidateInputOnly" | "xlValidateWholeNumber" | "xlValidateDecimal" | "xlValidateList" | "xlValidateDate" | "xlValidateTime" | "xlValidateTextLength" | "xlValidateCustom";
 
-  /** The available text vertical alignment (used to align text in a shape with a placement for text inside it). */
+  /** The available text vertical alignment (used to align text in a shape with a placement for text inside it).  ## Try it   ```js document-builder={"documentType": "cell"} drawing.SetVerticalTextAlign("top"); ``` */
   export type VerticalTextAlign = "top" | "center" | "bottom";
 
-  /** The watermark direction. */
+  /** The watermark direction.  ## Try it   ```js document-builder={"documentType": "cell"} watermarkSettings.SetDirection("clockwise45"); ``` */
   export type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45" | "clockwise90" | "counterclockwise90";
 
-  /** The watermark type. */
+  /** The watermark type.  ## Try it   ```js document-builder={"documentType": "cell"} watermarkSettings.SetType("text"); ``` */
   export type WatermarkType = "none" | "text" | "image";
 
   /** Filter type. */
@@ -538,7 +538,7 @@ export namespace Cell {
   /** Specifies the filter criterion. */
   export type XlDynamicFilterCriteria = "xlFilterAboveAverage" | "xlFilterAllDatesInPeriodApril" | "xlFilterAllDatesInPeriodAugust" | "xlFilterAllDatesInPeriodDecember" | "xlFilterAllDatesInPeriodFebruary" | "xlFilterAllDatesInPeriodJanuary" | "xlFilterAllDatesInPeriodJuly" | "xlFilterAllDatesInPeriodJune" | "xlFilterAllDatesInPeriodMarch" | "xlFilterAllDatesInPeriodMay" | "xlFilterAllDatesInPeriodNovember" | "xlFilterAllDatesInPeriodOctober" | "xlFilterAllDatesInPeriodQuarter1" | "xlFilterAllDatesInPeriodQuarter2" | "xlFilterAllDatesInPeriodQuarter3" | "xlFilterAllDatesInPeriodQuarter4" | "xlFilterBelowAverage" | "xlFilterLastMonth" | "xlFilterLastQuarter" | "xlFilterLastWeek" | "xlFilterLastYear" | "xlFilterNextMonth" | "xlFilterNextQuarter" | "xlFilterNextWeek" | "xlFilterNextYear" | "xlFilterThisMonth" | "xlFilterThisQuarter" | "xlFilterThisWeek" | "xlFilterThisYear" | "xlFilterToday" | "xlFilterTomorrow" | "xlFilterYearToDate" | "xlFilterYesterday";
 
-  /** Search data type (formulas or values). */
+  /** Search data type (formulas or values).  ## Try it   ```js document-builder={"documentType": "cell"} let searchRange = range.Find( { What: "200", After: oWorksheet.GetRange("B1"), LookIn: "xlValues", LookAt: "xlWhole",	SearchOrder: "xlByColumns", SearchDirection: "xlNext", MatchCase: true } ); ``` */
   export type XlFindLookIn = "xlFormulas" | "xlValues";
 
   /** The format condition operator. */
@@ -553,7 +553,7 @@ export namespace Cell {
   /** The icon set types for conditional formatting. */
   export type XlIconSet = "xl3Arrows" | "xl3ArrowsGray" | "xl3Flags" | "xl3TrafficLights1" | "xl3TrafficLights2" | "xl3Signs" | "xl3Symbols" | "xl3Symbols2" | "xl4Arrows" | "xl4ArrowsGray" | "xl4RedToBlack" | "xl4CRV" | "xl4TrafficLights" | "xl5Arrows" | "xl5ArrowsGray" | "xl5CRV" | "xl5Quarters" | "xl3Stars" | "xl3Triangles" | "xl5Boxes";
 
-  /** Specifies whether the whole search text or any part of the search text is matched. */
+  /** Specifies whether the whole search text or any part of the search text is matched.  ## Try it   ```js document-builder={"documentType": "cell"} let searchRange = range.Find( { What: "200", After: oWorksheet.GetRange("B1"), LookIn: "xlValues", LookAt: "xlWhole",	SearchOrder: "xlByColumns", SearchDirection: "xlNext", MatchCase: true } ); ``` */
   export type XlLookAt = "xlWhole" | "xlPart";
 
   /** The scope for pivot table conditional formatting rules. */
@@ -565,10 +565,10 @@ export namespace Cell {
   /** The reading order for data bars. */
   export type XlReadingOrder = "xlLTR" | "xlRTL" | "xlContext";
 
-  /** Range search direction - next match or previous match. */
+  /** Range search direction - next match or previous match.  ## Try it   ```js document-builder={"documentType": "cell"} let searchRange = range.Find( { What: "200", After: oWorksheet.GetRange("B1"), LookIn: "xlValues", LookAt: "xlWhole",	SearchOrder: "xlByColumns", SearchDirection: "xlNext", MatchCase: true } ); ``` */
   export type XlSearchDirection = "xlNext" | "xlPrevious";
 
-  /** Range search order - by rows or by columns. */
+  /** Range search order - by rows or by columns.  ## Try it   ```js document-builder={"documentType": "cell"} let searchRange = range.Find( { What: "200", After: oWorksheet.GetRange("B1"), LookIn: "xlValues", LookAt: "xlWhole",	SearchOrder: "xlByColumns", SearchDirection: "xlNext", MatchCase: true } ); ``` */
   export type XlSearchOrder = "xlByRows" | "xlByColumns";
 
   /** The time period for conditional formatting. */
@@ -577,7 +577,7 @@ export namespace Cell {
   /** The top/bottom type for conditional formatting rules. */
   export type XlTopBottom = "xlTop10Top" | "xlTop10Bottom";
 
-  /** Underline type. */
+  /** Underline type.  ## Try it   ```js document-builder={"documentType": "cell"} font.SetUnderline("xlUnderlineStyleSingle"); ``` */
   export type XlUnderlineStyle = "xlUnderlineStyleDouble" | "xlUnderlineStyleDoubleAccounting" | "xlUnderlineStyleNone" | "xlUnderlineStyleSingle" | "xlUnderlineStyleSingleAccounting";
 
   /** This element specifies the information which shall be used to establish a mapping to an XML element stored within a Custom XML. */
@@ -587,175 +587,61 @@ export namespace Cell {
     storeItemID: string;
   }
 
-  /** Available values of the "bookmark" reference type:<b>"text"</b> - the entire bookmark text;<b>"pageNum"</b> - the bookmark page number;<b>"paraNum"</b> - the bookmark paragraph number;<b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);<b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1";<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "bookmark" reference type: <b>"text"</b> - the entire bookmark text; <b>"pageNum"</b> - the bookmark page number; <b>"paraNum"</b> - the bookmark paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1"; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddBookmarkCrossRef("pageNum", bookmark); ``` */
   export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
-  /** A numeric value from 0 to 255. */
+  /** A numeric value from 0 to 255.  ## Try it   ```js document-builder={"documentType": "cell"} // The resulting color is green, the bytes are measured in decimal numbers: let rgbColorGreen = Api.CreateRGBColor(0, 255, 0); // The resulting color is red, the bytes are measured in hexadecimal numbers: let rgbColorRed = Api.CreateRGBColor(0xff, 0, 0); ``` */
   export type byte = number;
 
-  /** Available values of the "equation"/"figure"/"table" reference type:<b>"entireCaption"</b>- the entire caption text;<b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1";<b>"captionText"</b> - the caption text only;<b>"pageNum"</b> - the page number containing the referenced object;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "equation"/"figure"/"table" reference type: <b>"entireCaption"</b>- the entire caption text; <b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1"; <b>"captionText"</b> - the caption text only; <b>"pageNum"</b> - the page number containing the referenced object; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddCaptionCrossRef("table", "pageNum", caption); ``` */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
-  /** Available values of the "endnote" reference type:<b>"endnoteNum"</b> - the endnote number;<b>"pageNum"</b> - the endnote page number;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position;<b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected. */
+  /** Available values of the "endnote" reference type: <b>"endnoteNum"</b> - the endnote number; <b>"pageNum"</b> - the endnote page number; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position; <b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddEndnoteCrossRef("pageNum", endnoteParagraph); ``` */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
-  /** Available values of the "footnote" reference type:<b>"footnoteNum"</b> - the footnote number;<b>"pageNum"</b> - the page number of the footnote;<b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item;<b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected. */
+  /** Available values of the "footnote" reference type: <b>"footnoteNum"</b> - the footnote number; <b>"pageNum"</b> - the page number of the footnote; <b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item; <b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddFootnoteCrossRef("pageNum", footnoteParagraph); ``` */
   export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
-  /** Available values of the "heading" reference type:<b>"text"</b> - the entire heading text;<b>"pageNum"</b> - the heading page number;<b>"headingNum"</b> - the heading sequence number;<b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only;<b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "heading" reference type: <b>"text"</b> - the entire heading text; <b>"pageNum"</b> - the heading page number; <b>"headingNum"</b> - the heading sequence number; <b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only; <b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddHeadingCrossRef("pageNum", headingParagraph); ``` */
   export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
-  /** Available highlight colors. */
+  /** Available highlight colors.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.SetHighlight("green"); ``` */
   export type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
 
-  /** Half-points (2 half-points = 1 point). */
+  /** Half-points (2 half-points = 1 point).  ## Try it   ```js document-builder={"documentType": "cell"} textPr.SetFontSize(22); ``` */
   export type hps = number;
 
-  /** 240ths of a line. */
+  /** 240ths of a line.  ## Try it   ```js document-builder={"documentType": "cell"} paraPr.SetSpacingLine(240, "auto"); ``` */
   export type line240 = number;
 
-  /** 1 millimetre equals 1/10th of a centimetre. */
+  /** 1 millimetre equals 1/10th of a centimetre.  ## Try it   ```js document-builder={"documentType": "cell"} textForm.SetCellWidth(7); ``` */
   export type mm = number;
 
-  /** Available values of the "numbered" reference type:<b>"pageNum"</b> - the numbered item page number;<b>"paraNum"</b> - the numbered item paragraph number;<b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);<b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1";<b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "numbered" reference type: <b>"pageNum"</b> - the numbered item page number; <b>"paraNum"</b> - the numbered item paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1"; <b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position.  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.AddNumberedCrossRef("pageNum", numberedParagraph, true, true); ``` */
   export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
-  /** Value from 0 to 100. */
+  /** Value from 0 to 100.  ## Try it   ```js document-builder={"documentType": "cell"} pictureForm.SetPicturePosition(70, 70); ``` */
   export type percentage = number;
 
-  /** A point. */
+  /** A point.  ## Try it   ```js document-builder={"documentType": "cell"} paraPr.SetBottomBorder("single", 24, 1, 0, 255, 0); ``` */
   export type pt = number;
 
-  /** Eighths of a point (24 eighths of a point = 3 points). */
+  /** Eighths of a point (24 eighths of a point = 3 points).  ## Try it   ```js document-builder={"documentType": "cell"} paraPr.SetBottomBorder("single", 48, 0, 0, 255, 0); ``` */
   export type pt_8 = number;
 
-  /** Twentieths of a point (equivalent to 1/1440th of an inch). */
+  /** Twentieths of a point (equivalent to 1/1440th of an inch).  ## Try it   ```js document-builder={"documentType": "cell"} paragraph.SetEqualColumns(2, 720); ``` */
   export type twips = number;
 
   // Cross-file type stubs
-  export type ALPHABETIC = any;
-  export type AM = any;
-  export type AlphaLcParenR = any;
-  export type AlphaLcPeriod = any;
-  export type AlphaUcParenR = any;
-  export type AlphaUcPeriod = any;
-  export type ApiHyperlinks = any;
-  export type ApiListObject = any;
-  export type Arabic = any;
-  export type ArabicParenR = any;
-  export type ArabicPeriod = any;
-  export type Area = any;
-  export type AreaStacked = any;
-  export type AreaStacked100 = any;
-  export type Average = any;
-  export type BarClustered = any;
-  export type BarStacked = any;
-  export type BarStacked100 = any;
-  export type Begin = any;
-  export type Bottom = any;
-  export type CanEdit = any;
-  export type CanView = any;
-  export type ColumnClustered = any;
-  export type ColumnStacked = any;
-  export type ColumnStacked100 = any;
-  export type Columns = any;
-  export type Combo = any;
-  export type ComboColumnClusteredLine = any;
-  export type ComboColumnClusteredLineSecondaryAxis = any;
-  export type Count = any;
-  export type CountNumbers = any;
-  export type DIV = any;
-  export type DashDot = any;
-  export type DashDotDot = any;
-  export type Dashed = any;
-  export type DiagonalDown = any;
-  export type DiagonalUp = any;
-  export type Dotted = any;
-  export type Double = any;
-  export type Doughnut = any;
-  export type Down = any;
-  export type DownThenOver = any;
-  export type End = any;
-  export type Equation = any;
-  export type Figure = any;
-  export type Fill = any;
-  export type Filters = any;
-  export type General = any;
-  export type Hair = any;
-  export type Hidden = any;
-  export type InsideHorizontal = any;
-  export type InsideVertical = any;
-  export type Left = any;
-  export type Line = any;
-  export type LineMarkers = any;
-  export type LineMarkersStacked = any;
-  export type LineMarkersStacked100 = any;
-  export type LineStacked = any;
-  export type LineStacked100 = any;
-  export type Max = any;
-  export type Medium = any;
-  export type MediumDashDot = any;
-  export type MediumDashDotDot = any;
-  export type MediumDashed = any;
-  export type Min = any;
-  export type NAME = any;
-  export type NULL = any;
-  export type NUM = any;
-  export type No = any;
-  export type None = any;
-  export type NotView = any;
-  export type Outline = any;
-  export type OverThenDown = any;
-  export type PM = any;
-  export type PTCondition = any;
-  export type ParaAdd = any;
-  export type ParaPr = any;
-  export type ParaRem = any;
-  export type Pie = any;
-  export type Product = any;
-  export type REF = any;
-  export type Radar = any;
-  export type RadarFilled = any;
-  export type RadarMarkers = any;
-  export type Red = any;
-  export type Right = any;
-  export type Roman = any;
-  export type RomanLcPeriod = any;
-  export type RomanUcPeriod = any;
-  export type Rows = any;
-  export type SlantDashDot = any;
-  export type StdDev = any;
-  export type StdDevP = any;
-  export type StockHLC = any;
-  export type StockOHLC = any;
-  export type StockVHLC = any;
-  export type StockVOHLC = any;
-  export type Sum = any;
-  export type Table = any;
-  export type Tabular = any;
-  export type TextAdd = any;
-  export type TextPr = any;
-  export type TextRem = any;
-  export type Thick = any;
-  export type Thin = any;
-  export type Top = any;
-  export type Unknown = any;
-  export type Up = any;
-  export type VALUE = any;
-  export type Values = any;
-  export type Var = any;
-  export type VarP = any;
-  export type XYScatter = any;
-  export type XYScatterLines = any;
-  export type XYScatterLinesNoMarkers = any;
-  export type XYScatterSmooth = any;
-  export type XYScatterSmoothNoMarkers = any;
+  export type ApiHyperlinks = unknown;
+  export type ApiListObject = unknown;
+  export type PTCondition = unknown;
 
   /** Base class. */
   export interface Api {
     AddComment(sText: string, sAuthor: string): ApiComment | null;
-    AddCustomFunction(fCustom: (...args: any[]) => any): void;
-    AddCustomFunctionLibrary(sName: string, Func: (...args: any[]) => any): void;
+    AddCustomFunction(fCustom: (...args: unknown[]) => unknown): void;
+    AddCustomFunctionLibrary(sName: string, Func: (...args: unknown[]) => unknown): void;
     AddDefName(sName: string, sRef: string, isHidden: boolean): boolean;
     AddSheet(sName: string): ApiWorksheet;
     Calculate(): boolean;
@@ -832,7 +718,7 @@ export namespace Cell {
     PointsToTwips(pt: number): number;
     RGB(r: number, g: number, b: number): ApiColor;
     RGBA(r: number, g: number, b: number, a: number): ApiColor;
-    RecalculateAllFormulas(fLogger?: (...args: any[]) => any): boolean;
+    RecalculateAllFormulas(fLogger?: (...args: unknown[]) => unknown): boolean;
     RefreshAllPivots(): void;
     RemoveCustomFunction(sName: string): boolean;
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
@@ -843,12 +729,12 @@ export namespace Cell {
     SetThemeColors(sTheme: string): boolean;
     ThemeColor(name?: SchemeColorId): ApiColor;
     TwipsToPoints(twips: number): number;
-    attachEvent(eventName: string, callback: (...args: any[]) => any): void;
+    attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): void;
     detachEvent(eventName: string): void;
   }
 
   /** Class representing an above average conditional formatting rule. */
-  export interface ApiAboveAverage {
+  export interface ApiAboveAverage extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAboveBelow(): boolean;
     GetAppliesTo(): ApiRange | null;
@@ -936,9 +822,9 @@ export namespace Cell {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "SetTitle" | "GetTitle"> {
     AddSeria(sNameRange: string, sValuesRange: string, sXValuesRange?: string): void;
-    ApplyChartStyle(nStyleId: any): boolean;
+    ApplyChartStyle(nStyleId: unknown): boolean;
     GetAllSeries(): ApiChartSeries[];
     GetChartType(): ChartTypeLegacy;
     GetClassType(): "chart";
@@ -999,7 +885,7 @@ export namespace Cell {
   }
 
   /** Class representing a document checkbox / radio button. */
-  export interface ApiCheckBoxForm {
+  export interface ApiCheckBoxForm extends ApiFormBase {
   }
 
   /** Class representing a base class for the color types. */
@@ -1015,7 +901,7 @@ export namespace Cell {
   }
 
   /** Class representing a color scale conditional formatting rule. */
-  export interface ApiColorScale {
+  export interface ApiColorScale extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAppliesTo(): ApiRange | null;
     GetColorScaleCriteria(): ApiColorScaleCriterion[] | null;
@@ -1059,7 +945,7 @@ export namespace Cell {
   }
 
   /** Class representing a document combo box / drop-down list. */
-  export interface ApiComboBoxForm {
+  export interface ApiComboBoxForm extends ApiFormBase {
   }
 
   /** Class representing a comment. */
@@ -1102,7 +988,7 @@ export namespace Cell {
   }
 
   /** Class representing a complex field. */
-  export interface ApiComplexForm {
+  export interface ApiComplexForm extends ApiFormBase {
   }
 
   /** Class representing a list of values of the combo box / drop-down list content control. */
@@ -1204,7 +1090,7 @@ export namespace Cell {
   }
 
   /** Class representing a data bar conditional formatting rule. */
-  export interface ApiDatabar {
+  export interface ApiDatabar extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAppliesTo(): ApiRange | null;
     GetAxisColor(): ApiColor | null;
@@ -1267,11 +1153,11 @@ export namespace Cell {
   }
 
   /** Class representing a document date field. */
-  export interface ApiDateForm {
+  export interface ApiDateForm extends ApiFormBase {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument {
+  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetAllParagraphs" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "AddText"> {
     AddElement(nPos: number, oElement: DocumentElement): boolean;
     AddText(text: string): ApiRun;
     GetAllParagraphs(): ApiParagraph[];
@@ -1466,7 +1352,7 @@ export namespace Cell {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
     GetClassType(): "group";
     GetParentSheet(): ApiWorksheet;
     Ungroup(): ApiDrawing[] | null;
@@ -1478,7 +1364,7 @@ export namespace Cell {
     SetText(sText: string): boolean;
   }
 
-  /** Class representing a hyperlink. */
+  /** Class representing a Paragraph hyperlink. */
   export interface ApiHyperlink {
     Delete(): void;
     GetAddress(): string;
@@ -1515,7 +1401,7 @@ export namespace Cell {
   }
 
   /** Class representing an icon set conditional formatting rule. */
-  export interface ApiIconSetCondition {
+  export interface ApiIconSetCondition extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAppliesTo(): ApiRange | null;
     GetDateOperator(): XlTimePeriods | null;
@@ -1557,7 +1443,7 @@ export namespace Cell {
   }
 
   /** Class representing an image. */
-  export interface ApiImage {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
     GetClassType(): "image";
     GetParentSheet(): ApiWorksheet;
   }
@@ -1603,7 +1489,7 @@ export namespace Cell {
   }
 
   /** Class representing an OLE object. */
-  export interface ApiOleObject {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
     GetApplicationId(): string;
     GetClassType(): "oleObject";
     GetData(): string;
@@ -1713,7 +1599,7 @@ export namespace Cell {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
     AddElement(oElement: ParagraphContent, nPos?: number): boolean;
     AddLineBreak(): ApiRun;
     AddTabStop(): ApiRun;
@@ -1811,11 +1697,11 @@ export namespace Cell {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiPictureForm {
+  export interface ApiPictureForm extends ApiFormBase {
   }
 
   /** Class representing a pivot table data field. */
-  export interface ApiPivotDataField {
+  export interface ApiPivotDataField extends Omit<ApiPivotField, "ClearAllFilters" | "ClearLabelFilters" | "ClearManualFilters" | "ClearValueFilters" | "GetPivotItems" | "Move" | "Remove" | "GetPosition" | "SetPosition" | "GetOrientation" | "SetOrientation" | "GetValue" | "SetValue" | "GetCaption" | "SetCaption" | "GetName" | "SetName" | "GetSourceName" | "GetIndex" | "GetTable" | "GetParent" | "GetLayoutCompactRow" | "SetLayoutCompactRow" | "GetLayoutForm" | "SetLayoutForm" | "GetLayoutPageBreak" | "SetLayoutPageBreak" | "GetShowingInAxis" | "GetRepeatLabels" | "SetRepeatLabels" | "GetLayoutBlankLine" | "SetLayoutBlankLine" | "GetShowAllItems" | "SetShowAllItems" | "GetLayoutSubtotals" | "SetLayoutSubtotals" | "GetLayoutSubtotalLocation" | "SetLayoutSubtotalLocation" | "GetSubtotalName" | "SetSubtotalName" | "GetSubtotals" | "SetSubtotals" | "GetDragToColumn" | "SetDragToColumn" | "GetDragToRow" | "SetDragToRow" | "GetDragToData" | "SetDragToData" | "GetDragToPage" | "SetDragToPage" | "GetCurrentPage" | "GetPivotFilters" | "AutoSort"> {
     AutoSort(order: SortOrder, field: string): void;
     ClearAllFilters(): void;
     ClearLabelFilters(): void;
@@ -2020,7 +1906,7 @@ export namespace Cell {
   }
 
   /** Class representing a Preset Color. */
-  export interface ApiPresetColor {
+  export interface ApiPresetColor extends Omit<ApiUniColor, "GetClassType"> {
     GetClassType(): "presetColor";
   }
 
@@ -2043,7 +1929,7 @@ export namespace Cell {
   }
 
   /** Class representing an RGB Color. */
-  export interface ApiRGBColor {
+  export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType"> {
     GetClassType(): "rgbColor";
   }
 
@@ -2062,7 +1948,7 @@ export namespace Cell {
     Find(oSearchData: SearchData): ApiRange | null;
     FindNext(After: ApiRange): ApiRange | null;
     FindPrevious(Before: ApiRange): ApiRange | null;
-    ForEach(fCallback: (...args: any[]) => any): boolean;
+    ForEach(fCallback: (...args: unknown[]) => unknown): boolean;
     GetAddress(RowAbs: boolean, ColAbs: boolean, RefStyle: string, External: boolean, RelativeTo: ApiRange): string | null;
     GetAreas(): ApiAreas;
     GetCells(row: number, col: number): ApiRange;
@@ -2133,7 +2019,7 @@ export namespace Cell {
     UnMerge(): boolean;
   }
 
-  export interface ApiRangeTextPr {
+  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
     GetBold(): boolean;
     GetCaps(): boolean;
     GetClassType(): "textPr";
@@ -2165,7 +2051,7 @@ export namespace Cell {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
     AddLineBreak(): boolean;
     AddTabStop(): boolean;
     AddText(text: string | number[], widths?: number[]): boolean;
@@ -2207,7 +2093,7 @@ export namespace Cell {
   }
 
   /** Class representing a Scheme Color. */
-  export interface ApiSchemeColor {
+  export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType"> {
     GetClassType(): "schemeColor";
   }
 
@@ -2226,7 +2112,7 @@ export namespace Cell {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "GetLine"> {
     GetClassType(): "shape";
     GetContent(): ApiDocumentContent;
     GetDocContent(): ApiDocumentContent;
@@ -2241,7 +2127,7 @@ export namespace Cell {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiSignatureForm {
+  export interface ApiSignatureForm extends ApiFormBase {
   }
 
   /** Class representing a slide. */
@@ -2253,7 +2139,7 @@ export namespace Cell {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
     GetClassType(): "smartArt";
     GetParentSheet(): ApiWorksheet;
   }
@@ -2275,7 +2161,7 @@ export namespace Cell {
   }
 
   /** Class representing a table. */
-  export interface ApiTable {
+  export interface ApiTable extends Omit<ApiDrawing, "GetParentSheet">, ApiTablePr {
     GetParentSheet(): ApiWorksheet;
   }
 
@@ -2292,7 +2178,7 @@ export namespace Cell {
   }
 
   /** Class representing a table row. */
-  export interface ApiTableRow {
+  export interface ApiTableRow extends ApiTableRowPr {
   }
 
   /** Class representing the table row properties. */
@@ -2304,7 +2190,7 @@ export namespace Cell {
   }
 
   /** Class representing a document text field. */
-  export interface ApiTextForm {
+  export interface ApiTextForm extends ApiFormBase {
   }
 
   /** Class representing the text properties. */
@@ -2366,7 +2252,7 @@ export namespace Cell {
   }
 
   /** Class representing a top 10 conditional formatting rule. */
-  export interface ApiTop10 {
+  export interface ApiTop10 extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAppliesTo(): ApiRange | null;
     GetDateOperator(): XlTimePeriods | null;
@@ -2409,7 +2295,7 @@ export namespace Cell {
   }
 
   /** Class representing a unique values conditional formatting rule. */
-  export interface ApiUniqueValues {
+  export interface ApiUniqueValues extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
     Delete(): void;
     GetAppliesTo(): ApiRange | null;
     GetDateOperator(): XlTimePeriods | null;
