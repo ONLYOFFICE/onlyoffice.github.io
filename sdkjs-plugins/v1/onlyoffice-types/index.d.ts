@@ -92,6 +92,11 @@ type PluginEventName = 'onExternalMouseUp' | 'onClickBack' | 'onWindowResize' | 
 
 type PluginEventCallback<T = any> = (data: T) => void;
 
+/** Editor content events (paragraph/page changes) - a distinct registry from PluginEventName, which covers plugin-window-level events (theme, resize, ...) */
+type PluginEditorEventName = 'onChangeCurrentPage' | 'onParagraphText' | 'onPargraphAdd' | 'onParagraphRemove' | string;
+
+type PluginEditorEventCallback<T = any> = (data: T) => void;
+
 interface Asc {
     plugin: AscPlugin;
     scope: PluginScope;
@@ -101,9 +106,11 @@ interface Asc {
 }
 
 interface AscPlugin {
+    attachEditorEvent: (eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void;
     attachEvent: (eventName: PluginEventName, callback: PluginEventCallback) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
+    detachEditorEvent: (eventName: PluginEditorEventName) => void;
     detachEvent: (eventName: PluginEventName) => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
@@ -815,6 +822,8 @@ export type {
     PluginScope,
     PluginEventName,
     PluginEventCallback,
+    PluginEditorEventName,
+    PluginEditorEventCallback,
     ButtonConfig,
     StoreConfig,
     IconConfig,
