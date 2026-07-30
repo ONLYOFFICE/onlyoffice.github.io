@@ -1,22 +1,13 @@
-import type { Api as ApiCell } from "./src/generated/cell";
-import type { Api as ApiSlide } from "./src/generated/slide";
-import type { Api as ApiWord } from "./src/generated/word";
+import type { Cell } from "./src/generated/cell";
+import type { Slide } from "./src/generated/slide";
+import type { Word } from "./src/generated/word";
+import type { Forms } from "./src/generated/forms";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
+import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "./src/slide-methods";
 
-// Word-only content types, re-exported by name for consumers that need to type a callCommand
-// callback walking paragraph content (e.g. runs/hyperlinks for style ranges), not just the
-// top-level Api object. Deliberately not re-exporting the cell/slide equivalents under the same
-// names here — each generated file has its own slightly different shape, so importing "the"
-// ApiParagraph from this package would be ambiguous once more than one editor's version is exposed.
-export type {
-  ApiParagraph,
-  ApiRun,
-  ApiTextPr,
-  ApiHyperlink,
-  ParagraphContent,
-} from "./src/generated/word";
+export type { Word, Cell, Slide, Forms };
 
 
 
@@ -84,8 +75,13 @@ declare global {
     var Asc: Asc;
     var AscDesktopEditor: AscDesktopEditor | undefined;
     var AscSimpleRequest: AscSimpleRequest | undefined;
-    /** Available inside callCommand callback - editor API for current editor type */
-    var Api: ApiWord & ApiCell & ApiSlide;
+    /**
+     * Available inside callCommand callback - editor API for the current editor type.
+     * Typed as the intersection of all editors' entry points since the type checker
+     * cannot know which editor a given plugin runs in; use {@link Api} (the generic
+     * helper type) to narrow to a single editor when you do know it.
+     */
+    var Api: Word.Api & Cell.Api & Slide.Api & Forms.Api;
 }
 
 export {};
@@ -112,11 +108,13 @@ interface AscPlugin {
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
-        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
+        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void);
     executeMethodAsync: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
-        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void);
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
+        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
@@ -823,8 +821,9 @@ export type {
     IconScale
 };
 
-export type EditorApi<T extends EditorType> =
-    T extends "cell" ? ApiCell :
-    T extends "slide" ? ApiSlide :
-    T extends "word" ? ApiWord :
+export type Api<T extends EditorType> =
+    T extends "cell" ? Cell.Api :
+    T extends "slide" ? Slide.Api :
+    T extends "word" ? Word.Api :
+    T extends "pdf" ? Forms.Api :
     never;

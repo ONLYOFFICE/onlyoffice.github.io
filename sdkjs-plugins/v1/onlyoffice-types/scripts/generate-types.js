@@ -9,6 +9,12 @@ const EDITORS = {
   slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js'] },
   forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js'] },
 };
+const NAMESPACE_MAP = {
+  word: 'Word',
+  cell: 'Cell',
+  slide: 'Slide',
+  forms: 'Forms',
+};
 
 function readOption(name) {
   const index = process.argv.indexOf(`--${name}`);
@@ -147,7 +153,7 @@ function parseType(typeObj) {
 
 function extractClasses(data) {
   const classes = {};
-  
+
   for (const item of data) {
     if (item.kind === 'class' && item.name && !item.name.startsWith('_')) {
       const className = item.name;
@@ -158,7 +164,7 @@ function extractClasses(data) {
       };
     }
   }
-  
+
   for (const item of data) {
     if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof) {
       const className = item.memberof.replace('#', '');
@@ -207,7 +213,7 @@ function extractClasses(data) {
         };
       }
     }
-    
+
     if (item.kind === 'member' && item.name && item.memberof) {
       const className = item.memberof.replace('#', '');
       if (classes[className]) {
@@ -219,7 +225,7 @@ function extractClasses(data) {
       }
     }
   }
-  
+
   return classes;
 }
 
@@ -249,32 +255,29 @@ function generateInterface(className, classData) {
   if (classData.description) {
     output += `/** ${classData.description.replace(/\n/g, ' ')} */\n`;
   }
-  // Every class is exported, not just the main per-editor one: consumers need to be able to name
-  // helper types like ApiParagraph/ApiRun/ApiHyperlink (e.g. to type a callCommand callback that
-  // walks paragraph content), not just the top-level Api object.
   output += `export interface ${className} {\n`;
-  
+
   const propertyNames = Object.keys(classData.properties).sort();
   for (const propName of propertyNames) {
     const prop = classData.properties[propName];
     const optional = prop.optional ? '?' : '';
     output += `  ${propName}${optional}: ${prop.type};\n`;
   }
-  
+
   if (propertyNames.length > 0 && Object.keys(classData.methods).length > 0) {
     output += '\n';
   }
-  
+
   const methodNames = Object.keys(classData.methods).sort();
   for (const methodName of methodNames) {
     const method = classData.methods[methodName];
     const params = method.params
       .map(p => p.optional ? `${p.name}?: ${p.type}` : `${p.name}: ${p.type}`)
       .join(', ');
-    
+
     output += `  ${methodName}(${params}): ${method.returnType};\n`;
   }
-  
+
   output += '}\n';
   return output;
 }
@@ -329,17 +332,15 @@ function collectReferencedApiTypes(classes, typedefs) {
   return refs;
 }
 
-function generateDtsFile(data, typeName) {
+function generateDtsFile(data, typeName, namespaceName) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
-  let output = 'export {};\n\n';
-  output += '// Auto-generated from ONLYOFFICE/sdkjs JSDoc\n';
-  output += `// Editor type: ${editorName}\n\n`;
-  
+  let body = '';
+
   const typedefs = extractTypedefs(data);
   const typedefNames = Object.keys(typedefs).sort();
   for (const name of typedefNames) {
-    output += generateTypedef(name, typedefs[name]);
-    output += '\n';
+    body += generateTypedef(name, typedefs[name]);
+    body += '\n';
   }
 
   const classes = extractClasses(data);
@@ -349,18 +350,34 @@ function generateDtsFile(data, typeName) {
   const referenced = collectReferencedApiTypes(classes, typedefs);
   const stubs = [...referenced].filter(t => !definedNames.has(t)).sort();
   if (stubs.length > 0) {
-    output += `// Cross-file type stubs\n`;
+    body += `// Cross-file type stubs\n`;
     for (const stub of stubs) {
-      output += `type ${stub} = any;\n`;
+      body += `export type ${stub} = any;\n`;
     }
-    output += '\n';
+    body += '\n';
   }
 
+  // The entry-point class is always literally named "Api" in the source data
+  // (e.g. Api.GetDocument(), Api.GetActiveSheet(), Api.GetPresentation()).
+  // Namespacing per editor (Word.Api, Cell.Api, ...) keeps it and every other
+  // type reachable and disambiguated across editors - same-named classes like
+  // ApiParagraph exist in every editor with a different shape, so a flat export
+  // would collide; nesting them under Word/Cell/Slide/Forms makes every type
+  // importable from every editor without ambiguity.
   for (const className of classNames) {
-    output += generateInterface(className, classes[className]);
-    output += '\n';
+    body += generateInterface(className, classes[className]);
+    body += '\n';
   }
-  
+
+  let output = `// Auto-generated from ONLYOFFICE/sdkjs JSDoc\n`;
+  output += `// Editor type: ${editorName}\n\n`;
+  output += `export namespace ${namespaceName} {\n`;
+  output += body
+    .split('\n')
+    .map(line => (line ? `  ${line}` : line))
+    .join('\n');
+  output += '}\n';
+
   return output;
 }
 
@@ -368,16 +385,16 @@ async function main() {
   if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
   }
-  
+
   const apiData = await fetchApiDefinitions();
-  
+
   for (const [typeName, data] of Object.entries(apiData)) {
-    const content = generateDtsFile(data, typeName);
+    const content = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName]);
     const filename = `${typeName}.ts`;
     fs.writeFileSync(path.join(OUTPUT_DIR, filename), content);
     console.log(`Generated ${filename} with ${Object.keys(extractClasses(data)).length} classes`);
   }
-  
+
   console.log('Done!');
 }
 

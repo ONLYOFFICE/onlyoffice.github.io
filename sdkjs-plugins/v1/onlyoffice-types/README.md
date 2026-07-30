@@ -5,7 +5,7 @@ TypeScript type definitions for OnlyOffice plugins.
 ## Installation
 
 ```bash
-npm install @types/onlyoffice-plugins-api
+npm install onlyoffice-plugins-api
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ Add to your `tsconfig.json`:
 ```json
 {
   "compilerOptions": {
-    "types": ["types-onlyoffice-plugins-api"]
+    "types": ["onlyoffice-plugins-api"]
   }
 }
 ```
@@ -25,7 +25,7 @@ Add to your `tsconfig.json`:
 Or reference directly in your TypeScript files:
 
 ```typescript
-/// <reference types="types-onlyoffice-plugins-api" />
+/// <reference types="onlyoffice-plugins-api" />
 ```
 
 ### Example Plugin
@@ -57,47 +57,88 @@ window.Asc.plugin.getSelectedText(function(text) {
 
 ## API Types
 
-- **Plugin API**: `window.Asc.plugin` - Main plugin interface
-- **Word API**: Types for text documents (generated from office-js-api-declarations)
-- **Cell API**: Types for spreadsheets
-- **Slide API**: Types for presentations
+- **Plugin API**: `window.Asc.plugin` - Main plugin interface (`window.Api` inside `callCommand`)
+- **Word namespace**: Types for text documents (generated from the ONLYOFFICE `sdkjs` JSDoc)
+- **Cell namespace**: Types for spreadsheets
+- **Slide namespace**: Types for presentations
+- **Forms namespace**: Types for PDF/OForm form fields
+
+Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`),
+so any type from any editor is importable regardless of which editor the current plugin targets -
+same-named classes across editors (e.g. `ApiParagraph` exists in all four) don't collide, and you
+can reference another editor's types from shared/helper code:
+
+```typescript
+import type { Word, Cell, Slide } from "onlyoffice-plugins-api";
+
+function logParagraph(p: Word.ApiParagraph) { /* ... */ }
+function fillCell(r: Cell.ApiRange) { /* ... */ }
+function firstSlide(pres: Slide.ApiPresentation): Slide.ApiSlide { /* ... */ }
+```
+
+`Api<T>` resolves the entry-point class for a given editor kind (`"word" | "cell" | "slide" | "pdf"`),
+equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Forms.Api`:
+
+```typescript
+import type { Api } from "onlyoffice-plugins-api";
+
+function useWordApi(api: Api<"word">) {
+    const doc = api.GetDocument();
+}
+```
+
+`window.Asc.plugin.executeMethod`/`executeMethodAsync` are typed for Word, Cell, and Slide method
+names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs` in `src/`).
+
+> `GetMacros` (all three editors) returns a raw JSON **string** - parse it yourself with
+> `JSON.parse(result)` to get `{ current: number, macrosArray: {...}[] }`, matching the official
+> docs example.
 
 ## Generating Types
 
-Run the generation script against a local `sdkjs` checkout:
+The generator parses the JSDoc comments straight out of a local `sdkjs` (and `sdkjs-forms`) checkout
+using the `jsdoc` package, rather than fetching a prebuilt snapshot over the network - this picks up
+API changes immediately and avoids a few data-quality bugs in stale snapshots (e.g. duplicated method
+entries with a corrupted return type).
 
 ```bash
 SDKJS_PATH=/path/to/sdkjs npm run generate
 ```
 
-If `sdkjs-forms` is not next to `sdkjs`, set `SDKJS_FORMS_PATH` as well:
+`sdkjs-forms` is expected next to `sdkjs` by default (`SDKJS_PATH/../sdkjs-forms`); override with
+`SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
+the env var too.
+
+## Type-checking
 
 ```bash
-SDKJS_PATH=/path/to/sdkjs SDKJS_FORMS_PATH=/path/to/sdkjs-forms npm run generate
+npm run typecheck   # checks index.d.ts + src/generated/*.ts + src/*.d.ts
+npm test            # also type-checks example.js and test/*.js against the library
 ```
 
-On Windows PowerShell:
-
-```powershell
-$env:SDKJS_PATH = 'E:\onlyoffice\repo\sdkjs'
-$env:SDKJS_FORMS_PATH = 'E:\onlyoffice\repo\sdkjs-forms'
-npm run generate
-```
-
-The generator reads JSDoc directly from the `apiBuilder.js` sources and writes the Office API types to `src/generated/`. It no longer depends on `ONLYOFFICE/office-js-api-declarations`.
+Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
+**off** in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
+actually exported) surface immediately instead of being silently ignored.
 
 ## Project Structure
 
 ```
 onlyoffice-types/
-├── index.d.ts          # Main plugin API types
-├── src/generated/      # Auto-generated Office API types
-│   ├── word.ts
-│   ├── cell.ts
-│   └── slide.ts
+├── index.d.ts            # Main plugin API types (Asc, Api global, Word/Cell/Slide/Forms exports)
+├── src/
+│   ├── generated/        # Auto-generated Office API types, one namespace per editor
+│   │   ├── word.ts        # namespace Word { ... }
+│   │   ├── cell.ts        # namespace Cell { ... }
+│   │   ├── slide.ts       # namespace Slide { ... }
+│   │   └── forms.ts       # namespace Forms { ... }
+│   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
+│   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
+│   └── slide-methods.d.ts # executeMethod names/args/returns for Slide
 ├── scripts/
 │   └── generate-types.js
-├── example.ts          # Usage examples
-├── package.json
-└── tsconfig.json
+├── tsconfig.json           # builds/typechecks the library itself
+├── tsconfig.typecheck.json # also typechecks example.js + test/*.js
+├── example.js             # Usage examples
+├── test/                  # Call-shape smoke tests copied from the official docs
+└── package.json
 ```
