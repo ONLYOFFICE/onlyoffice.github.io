@@ -12,20 +12,22 @@ npm install onlyoffice-plugins-api
 
 ### For Plugins
 
-Add to your `tsconfig.json`:
+Add the root package and the entry point for the editor your plugin supports to your `tsconfig.json`:
 
 ```json
 {
   "compilerOptions": {
-    "types": ["onlyoffice-plugins-api"]
+    "types": ["onlyoffice-plugins-api", "onlyoffice-plugins-api/word"]
   }
 }
 ```
 
-Or reference directly in your TypeScript files:
+Use `/word`, `/cell`, `/slide`, or `/pdf`. The editor entry point declares the matching global `Api` type inside `callCommand`; the root package intentionally does not declare a cross-editor `Api` intersection.
+
+Alternatively, reference the entry point directly in a TypeScript file:
 
 ```typescript
-/// <reference types="onlyoffice-plugins-api" />
+/// <reference types="onlyoffice-plugins-api/word" />
 ```
 
 ### Example Plugin
@@ -58,13 +60,15 @@ window.Asc.plugin.getSelectedText(function(text) {
 ## API Types
 
 - **Plugin API**: `window.Asc.plugin` - Main plugin interface (`window.Api` inside `callCommand`)
+- **Plugin menus**: `Asc.Buttons`, `ButtonContextMenu`, `ButtonToolbar`, `ButtonContentControl`, and `ButtonWindowHeader`
 - **Word namespace**: Types for text documents (generated from the ONLYOFFICE `sdkjs` JSDoc)
 - **Cell namespace**: Types for spreadsheets
 - **Slide namespace**: Types for presentations
 - **Forms namespace**: Types for PDF/OForm form fields
 
-Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`),
-so any type from any editor is importable regardless of which editor the current plugin targets -
+Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
+
+Any type from any editor is importable regardless of which editor the current plugin targets -
 same-named classes across editors (e.g. `ApiParagraph` exists in all four) don't collide, and you
 can reference another editor's types from shared/helper code:
 
@@ -87,7 +91,7 @@ function useWordApi(api: Api<"word">) {
 }
 ```
 
-`window.Asc.plugin.executeMethod`/`executeMethodAsync` are typed for Word, Cell, and Slide method
+`window.Asc.plugin.executeMethod` is typed for Word, Cell, and Slide method
 names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs` in `src/`).
 
 > `GetMacros` (all three editors) returns a raw JSON **string** - parse it yourself with
@@ -105,9 +109,10 @@ window.Asc.plugin.attachEditorEvent("onParagraphAdd", (data) => {
 });
 ```
 
-Events not modeled yet (the low-level common/UI ones shared across editors - `onContextMenuShow`,
-`onClick`, `onKeyDown`, ...) fall back to a loose `(eventName: string, callback: (...args) => void)`
-overload.
+Common plugin event names such as `onContextMenuShow`, `onWindowResize`, and input-helper events
+are represented in `PluginEventMap`. `onContextMenuShow` has a documented payload shape; events whose
+payload varies by editor version use `unknown` until their runtime contract is confirmed. Unknown
+event names retain a fallback overload with `unknown[]` arguments rather than `any`.
 
 ## Generating Types
 

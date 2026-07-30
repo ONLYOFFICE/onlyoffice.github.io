@@ -4,12 +4,15 @@
 
 Initial public release.
 
+- The root package no longer declares a cross-editor global `Api` intersection. Editor-specific entry points (`/word`, `/cell`, `/slide`, `/pdf`) now declare the matching `Api` type for `callCommand`.
+- Added public plugin menu APIs: context menu, toolbar, window header, and content-control button registration plus click handlers.
+- Added a typed plugin event map for common events, with an `unknown[]` fallback for undocumented event names.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.
 - Word, Cell, Slide, and Forms are each namespaced (`Word.*`, `Cell.*`, `Slide.*`, `Forms.*`), so
   every type is reachable and disambiguated regardless of which editor a plugin targets.
-- `window.Asc.plugin.executeMethod`/`executeMethodAsync` typed per method name and argument tuple
+- `window.Asc.plugin.executeMethod` typed per method name and argument tuple
   for Word, Cell, and Slide (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs`).
 - `window.Asc.plugin.attachEditorEvent`/`detachEditorEvent` typed per editor event name and payload
   (`Word.EditorEventArgs`/`Cell.EditorEventArgs`/`Slide.EditorEventArgs`/`Forms.EditorEventArgs`),

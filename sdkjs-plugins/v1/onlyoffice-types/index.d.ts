@@ -76,32 +76,57 @@ declare global {
     var AscDesktopEditor: AscDesktopEditor | undefined;
     var AscSimpleRequest: AscSimpleRequest | undefined;
     /**
-     * Available inside callCommand callback - editor API for the current editor type.
-     * Typed as the intersection of all editors' entry points since the type checker
-     * cannot know which editor a given plugin runs in; use {@link Api} (the generic
-     * helper type) to narrow to a single editor when you do know it.
+     * The editor API is declared by an editor-specific entry point:
+     * `onlyoffice-plugins-api/word`, `/cell`, `/slide`, or `/pdf`.
+     * It is intentionally not declared by the root package because the runtime
+     * shape depends on the editor hosting the plugin.
      */
-    var Api: Word.Api & Cell.Api & Slide.Api & Forms.Api;
 }
 
 export {};
 
 type PluginScope = Record<string, any>;
 
-type PluginEventName = 'onExternalMouseUp' | 'onClickBack' | 'onWindowResize' | 'onDocumentContentReady' | 'onTargetPositionChanged' | string;
+interface ContextMenuShowEvent {
+    /** The context type used by the editor, for example `All`. */
+    type: string;
+}
 
-type PluginEventCallback<T = any> = (data: T) => void;
+/** Event arguments are tuples so events with no payload can be represented as `[]`. */
+type PluginEventMap = {
+    onContextMenuShow: [event: ContextMenuShowEvent];
+    /** Payload is not documented consistently across editor versions. */
+    onWindowResize: [event: unknown];
+    /** Payload is not documented consistently across editor versions. */
+    onInputHelperInput: [event: unknown];
+    onInputHelperClear: [];
+    onExternalMouseUp: [];
+    onClickBack: [];
+    onDocumentContentReady: [];
+    onTargetPositionChanged: [];
+    /** Payload shape is not documented consistently across editor versions. */
+    onClick: [event: unknown];
+    /** Payload shape is not documented consistently across editor versions. */
+    onKeyDown: [event: unknown];
+};
+
+type PluginEventName = keyof PluginEventMap | (string & {});
+type PluginEventCallback<T = unknown> = (...args: T[]) => void;
+type PluginEventHandler<K extends keyof PluginEventMap> = (...args: PluginEventMap[K]) => void;
 
 /** Editor content events (paragraph/page changes) - a distinct registry from PluginEventName, which covers plugin-window-level events (theme, resize, ...) */
 type PluginEditorEventName = 'onChangeCurrentPage' | 'onParagraphText' | 'onPargraphAdd' | 'onParagraphRemove' | string;
 
-type PluginEditorEventCallback<T = any> = (data: T) => void;
+type PluginEditorEventCallback<T = unknown> = (...args: T[]) => void;
 
 interface Asc {
     plugin: AscPlugin;
     scope: PluginScope;
     PluginWindow: new () => PluginWindow;
-    ButtonContextMenu: new () => ButtonContextMenu;
+    ButtonContextMenu: new (parent?: ButtonBase | null, id?: string) => ButtonContextMenu;
+    ButtonToolbar: new (parent?: ButtonBase | null, id?: string) => ButtonToolbar;
+    ButtonContentControl: new (parent?: ButtonBase | null, id?: string) => ButtonContentControl;
+    ButtonWindowHeader: new (parent?: ButtonBase | null, id?: string) => ButtonWindowHeader;
     Buttons: Buttons;
 }
 
@@ -116,7 +141,11 @@ interface AscPlugin {
         (<T extends Slide.EditorEventName>(eventName: T, callback: (...args: Slide.EditorEventArgs[T]) => void) => void) &
         (<T extends Forms.EditorEventName>(eventName: T, callback: (...args: Forms.EditorEventArgs[T]) => void) => void) &
         ((eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void);
-    attachEvent: (eventName: PluginEventName, callback: PluginEventCallback) => void;
+    attachContextMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
+    attachEvent: (<T extends keyof PluginEventMap>(eventName: T, callback: (...args: PluginEventMap[T]) => void) => void) &
+        ((eventName: string, callback: (...args: unknown[]) => void) => void);
+    attachToolbarMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
+    attachWindowHeaderMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
     detachEditorEvent: (<T extends Word.EditorEventName>(eventName: T) => void) &
@@ -124,13 +153,20 @@ interface AscPlugin {
         (<T extends Slide.EditorEventName>(eventName: T) => void) &
         (<T extends Forms.EditorEventName>(eventName: T) => void) &
         ((eventName: PluginEditorEventName) => void);
-    detachEvent: (eventName: PluginEventName) => void;
+    detachEvent: (<T extends keyof PluginEventMap>(eventName: T) => void) &
+        ((eventName: string) => void);
+    event_onContextMenuShow?: PluginEventHandler<"onContextMenuShow">;
+    event_onWindowResize?: PluginEventHandler<"onWindowResize">;
+    event_onInputHelperInput?: PluginEventHandler<"onInputHelperInput">;
+    event_onInputHelperClear?: PluginEventHandler<"onInputHelperClear">;
+    event_onExternalMouseUp?: PluginEventHandler<"onExternalMouseUp">;
+    event_onClickBack?: PluginEventHandler<"onClickBack">;
+    event_onDocumentContentReady?: PluginEventHandler<"onDocumentContentReady">;
+    event_onTargetPositionChanged?: PluginEventHandler<"onTargetPositionChanged">;
+    event_onClick?: PluginEventHandler<"onClick">;
+    event_onKeyDown?: PluginEventHandler<"onKeyDown">;
+    onDestroy?: () => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
-        ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
-        (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
-        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
-        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void);
-    executeMethodAsync: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
@@ -164,14 +200,73 @@ interface PluginWindow {
     command: (methodName: string, payload?: unknown) => void;
 }
 
-interface Buttons {
-    registerContextMenu: () => void;
+type CustomMenuClickCallback = (data?: string) => void;
+
+type ToolbarButtonType = "button" | "big-button";
+
+interface ButtonMenuItem {
+    id: string;
+    text: string;
+    hint?: string;
+    items?: ButtonMenuItem[];
+    onclick?: CustomMenuClickCallback;
 }
 
-interface ButtonContextMenu {
+interface ButtonBase {
+    id: string;
+    editors: EditorType[];
+    icons: IconConfig | string[] | string | null;
     text: string;
-    attachOnClick: (callback: () => void) => void;
-    addCheckers: (key: string, value?: string) => void;
+    hint: string | null;
+    data: string;
+    separator: boolean;
+    lockInViewMode: boolean;
+    enableToggle: boolean;
+    disabled: boolean;
+    removed: boolean;
+    parent: ButtonBase | null;
+    childs: ButtonBase[] | null;
+    menu?: ButtonMenuItem[];
+    split?: boolean;
+    pressed?: boolean;
+    attachOnClick: (callback: CustomMenuClickCallback) => void;
+    copy?: () => ButtonBase;
+}
+
+interface ButtonContextMenu extends ButtonBase {
+    showOnOptionsType: string[];
+    addCheckers: (...keys: string[]) => void;
+}
+
+interface ButtonToolbar extends ButtonBase {
+    type: ToolbarButtonType;
+    tab: string;
+}
+
+interface ButtonContentControl extends ButtonBase {
+    checker?: (contentControlId: string) => boolean | Promise<boolean>;
+    addChecker: (checker: (contentControlId: string) => boolean | Promise<boolean>) => void;
+}
+
+interface ButtonWindowHeader extends ButtonBase {
+    align: "left" | "center" | "right" | string;
+    isLabel: boolean;
+    isTitle: boolean;
+}
+
+interface Buttons {
+    registerContextMenu: () => void;
+    registerToolbarMenu: () => void;
+    updateToolbarMenu: (id: string, text: string, buttons: ButtonToolbar[]) => void;
+    registerWindowHeader: (id: string, buttons: ButtonWindowHeader[], frame?: WindowHeaderFrameOptions) => void;
+    updateWindowHeader: (id: string, buttons: ButtonWindowHeader[], add?: boolean, frame?: WindowHeaderFrameOptions) => void;
+    registerContentControl: () => void;
+}
+
+interface WindowHeaderFrameOptions {
+    align?: "left" | "center" | "right" | string;
+    isLabel?: boolean;
+    isTitle?: boolean;
 }
 
 interface ExecuteCommandCallback {
@@ -833,11 +928,22 @@ export type {
     PluginConfig,
     InstalledPluginInfo,
     PluginScope,
+    PluginEventMap,
+    PluginEventHandler,
+    ContextMenuShowEvent,
     PluginEventName,
     PluginEventCallback,
     PluginEditorEventName,
     PluginEditorEventCallback,
     ButtonConfig,
+    ButtonBase,
+    ButtonContextMenu,
+    ButtonToolbar,
+    ButtonContentControl,
+    ButtonWindowHeader,
+    ButtonMenuItem,
+    Buttons,
+    WindowHeaderFrameOptions,
     StoreConfig,
     IconConfig,
     IconScale

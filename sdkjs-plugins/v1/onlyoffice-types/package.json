@@ -3,6 +3,32 @@
   "version": "0.8.0",
   "description": "TypeScript definitions for OnlyOffice plugins",
   "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts"
+    },
+    "./word": {
+      "types": "./src/editors/word.d.ts"
+    },
+    "./cell": {
+      "types": "./src/editors/cell.d.ts"
+    },
+    "./slide": {
+      "types": "./src/editors/slide.d.ts"
+    },
+    "./pdf": {
+      "types": "./src/editors/pdf.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "word": ["src/editors/word.d.ts"],
+      "cell": ["src/editors/cell.d.ts"],
+      "slide": ["src/editors/slide.d.ts"],
+      "pdf": ["src/editors/pdf.d.ts"]
+    }
+  },
   "files": [
     "index.d.ts",
     "src",

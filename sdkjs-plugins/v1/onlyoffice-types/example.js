@@ -5,6 +5,11 @@
 
 /// <reference path="./index.d.ts" />
 
+// This file demonstrates multiple editor variants in one smoke-test file. In a real plugin,
+// select exactly one editor entry point (`onlyoffice-plugins-api/word`, `/cell`, or `/slide`).
+/** @type {any} */
+var Api;
+
 // Example 1: Basic plugin initialization
 function basicPluginExample() {
     window.Asc.plugin.init = function() {
@@ -19,7 +24,7 @@ function basicPluginExample() {
 // Example 2: Using callCommand with document API (Word)
 function documentPluginExample() {
     window.Asc.plugin.init = function() {
-        // Use JSDoc to specify Api type: /** @type {import("./index").ApiWord} */
+        // In a Word plugin, include `onlyoffice-plugins-api/word` in tsconfig.json.
         window.Asc.plugin.callCommand(function() {
             var oDocument = Api.GetDocument();
             var oParagraph = Api.CreateParagraph();
@@ -41,8 +46,10 @@ function documentPluginExample() {
 function spreadsheetPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            var activeSheet = Api.GetActiveSheet();
-            Api.GetRange("A1").SetValue("Hello from plugin!");
+            /** @type {import("./src/generated/cell").Cell.Api} */
+            var cellApi = Api;
+            var activeSheet = cellApi.GetActiveSheet();
+            cellApi.GetRange("A1").SetValue("Hello from plugin!");
         }, true);
     };
 }
@@ -51,8 +58,10 @@ function spreadsheetPluginExample() {
 function presentationPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            var oPresentation = Api.GetPresentation();
-            var oSlide = Api.CreateSlide();
+            /** @type {import("./src/generated/slide").Slide.Api} */
+            var slideApi = Api;
+            var oPresentation = slideApi.GetPresentation();
+            var oSlide = slideApi.CreateSlide();
             oPresentation.AddSlide(oSlide, 0);
         }, true);
     };
