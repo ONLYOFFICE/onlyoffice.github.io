@@ -1,9 +1,9 @@
 {
   "name": "onlyoffice-plugins-api",
-  "version": "0.1.0",
+  "version": "0.8.0",
   "types": "index.d.ts",
   "description": "TypeScript definitions for OnlyOffice plugins",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "keywords": [
     "onlyoffice",
     "plugin",
@@ -11,7 +11,9 @@
     "types"
   ],
   "scripts": {
-    "generate": "node scripts/generate-types.js"
+    "generate": "node scripts/generate-types.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsc --noEmit -p tsconfig.typecheck.json"
   },
   "peerDependencies": {
     "typescript": ">=4.0.0"

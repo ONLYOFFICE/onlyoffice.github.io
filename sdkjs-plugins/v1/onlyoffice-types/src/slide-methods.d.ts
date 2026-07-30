@@ -1,25 +1,25 @@
 /**
- * ONLYOFFICE Spreadsheet API Methods Type Definitions
- * Source: https://api.onlyoffice.com/docs/plugin-and-macros/interacting-with-editors/spreadsheet-api/Methods/
+ * ONLYOFFICE Presentation API Methods Type Definitions
+ * Source: https://api.onlyoffice.com/docs/plugins/interacting-with-editors/presentation-api/Methods/
  */
 
-interface CellCommentData {
+interface SlideCommentData {
     UserName: string;
     Text: string;
     QuoteText?: string;
     Time?: string;
     Solved?: boolean;
-    Replies?: CellCommentReply[];
+    Replies?: SlideCommentReply[];
 }
 
-interface CellCommentReply {
+interface SlideCommentReply {
     UserName: string;
     Text: string;
     Time?: string;
     Solved?: boolean;
 }
 
-interface CellOLEProperties {
+interface SlideOLEProperties {
     data?: string;
     imgSrc?: string;
     guid?: string;
@@ -37,7 +37,7 @@ interface CellOLEProperties {
     HeightPix?: number;
 }
 
-interface CellInstallPluginConfig {
+interface SlideInstallPluginConfig {
     guid: string;
     name: string;
     nameLocale?: Record<string, string>;
@@ -52,50 +52,57 @@ interface CellInstallPluginConfig {
     Variations?: any[];
 }
 
-interface CellImageData {
+interface SlideImageData {
     Data: string;
     Width?: number;
     Height?: number;
     FromUrl?: boolean;
 }
 
-/** "none" - nothing selected, "text" - cell(s) selected, "drawing" - drawing selected */
-type CellSelectionType = "none" | "text" | "drawing";
+/** "none" - nothing selected, "text" - text selected, "shape"/"image"/"chart"/"table" - drawing selected */
+type SlideSelectionType = "none" | "text" | "shape" | "image" | "chart" | "table" | string;
 
-type CellMethodArgs = {
+type SlideMethodArgs = {
     // Methods A
-    AddComment: [oCommentData: CellCommentData];
-    AddOleObject: [data: CellOLEProperties];
+    AddComment: [oCommentData: SlideCommentData];
+    AddOleObject: [data: SlideOLEProperties];
+    ApplyTheme: [themeIndexOrName: number | string];
 
     // Methods C
-    ChangeComment: [sCommentId: string, oCommentData: CellCommentData];
+    ChangeComment: [sCommentId: string, oCommentData: SlideCommentData];
     CoAuthoringChatSendMessage: [message: any];
 
     // Methods E
-    EditOleObject: [data: CellOLEProperties];
-    EndAction: [sType: string, description?: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
+    EditOleObject: [data: SlideOLEProperties];
+    EndAction: [sType: string, description?: string | { scrollToTarget?: boolean }, sCustomMessage?: string];
+    EndSlideShow: [];
 
     // Methods F
     FocusEditor: [];
 
     // Methods G
     GetAllComments: [null?];
-    GetCustomFunctions: [];
-    GetFileToDownload: [sFormat: "xlsx" | "pdf" | "csv" | "ods" | "xls" | "txt" | "html" | string];
+    GetDocumentLang: [];
+    GetEditorThemes: [null?];
+    GetFileToDownload: [sFormat: "pptx" | "pdf" | "odp" | "png" | "jpg" | string];
     GetFontList: [null?];
     GetImageDataFromSelection: [];
     GetInstalledPlugins: [null?];
     GetMacros: [];
     GetSelectedContent: [];
     GetSelectedOleObjects: [];
-    GetSelectedText: [oPr?: { TabSymbol?: string }];
+    GetSelectedText: [oPr?: { ParaSeparator?: string; TabSymbol?: string }];
     GetSelectionType: [];
     GetVBAMacros: [];
     GetVersion: [];
+    GoToNextSlideInSlideShow: [];
+    GoToPreviousSlideInSlideShow: [];
+    GoToSlide: [slideNumber: number];
+    GoToSlideInSlideShow: [nSlideIndex: number];
 
     // Methods I
     InputText: [sText: string, sText2?: string];
-    InstallPlugin: [oConfig?: CellInstallPluginConfig];
+    InstallPlugin: [oConfig?: SlideInstallPluginConfig];
 
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
@@ -104,58 +111,60 @@ type CellMethodArgs = {
     // Methods O
     OnDropEvent: [oData: { type?: string; x?: number; y?: number; html?: string; text?: string; files?: any[] }];
     OnEncryption: [oData: { type: string; password?: string; docinfo?: string; hash?: string }];
-    OpenFile: [aBytes: any, aParams: any[]];
 
     // Methods P
     PasteHtml: [sHtml: string];
     PasteText: [sText: string];
+    PauseSlideShow: [];
     PutImageDataToSelection: [oImageData: { src: string; width: number; height: number; fromUrl?: boolean }];
 
     // Methods R
     RemoveComments: [aIds: string[]];
     RemoveOleObject: [sInternalId: string];
     RemovePlugin: [sGuid: string, sBackup: string];
-    ReplaceTextSmart: [aStrings: string[], sTabSymbol?: string, sNewLineSeparator?: string];
-    ResizeWindow: [sWindowId: string, aSize: number[]];
+    ReplaceTextSmart: [aStrings: string[], sParaSeparator?: string, sTabSymbol?: string];
+    ResumeSlideShow: [];
 
     // Methods S
-    SetCustomFunctions: [sCode: string];
     SetMacros: [sData: string];
     SetPluginsOptions: [oData: any];
     SetProperties: [oProps: any];
     ShowButton: [sBtn: string, bVisible: boolean, sAlign?: string];
     ShowError: [sType: string, sDescription: string, sMethod?: string];
     ShowInputHelper: [sGuid: string, w: number, h: number, isKeyboardTake: boolean];
-    StartAction: [sType: "Information" | "Block" | "GroupActions", description?: string | { lockScroll?: boolean; keepSelection?: boolean }];
+    StartAction: [sType: string, description?: string | { lockScroll?: boolean; keepSelection?: boolean }];
+    StartSlideShow: [];
 
     // Methods U
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
-    UpdatePlugin: [oConfig?: CellInstallPluginConfig];
+    UpdatePlugin: [oConfig?: SlideInstallPluginConfig];
 };
 
-type CellMethodName = keyof CellMethodArgs;
+type SlideMethodName = keyof SlideMethodArgs;
 
-type CellMethodReturn<T extends CellMethodName> =
+type SlideMethodReturn<T extends SlideMethodName> =
     T extends "AddComment" ? string | null :
+    T extends "ApplyTheme" | "ReplaceTextSmart" ? boolean :
     T extends "ChangeComment" ? boolean :
-    T extends "GetSelectedText" | "GetCustomFunctions" | "GetFileToDownload" | "GetVersion" | "GetSelectedContent" ? string :
+    T extends "GetSelectedText" | "GetFileToDownload" | "GetVersion" | "GetSelectedContent" | "GetDocumentLang" ? string :
     T extends "GetVBAMacros" ? string | null :
-    T extends "GetSelectionType" ? CellSelectionType :
+    T extends "GetSelectionType" ? SlideSelectionType :
     /** Raw JSON string - the caller must JSON.parse() it into { current: number, macrosArray: {...}[] } */
     T extends "GetMacros" ? string :
-    T extends "GetImageDataFromSelection" ? CellImageData :
-    T extends "GetSelectedOleObjects" ? CellOLEProperties[] :
+    T extends "GetImageDataFromSelection" ? SlideImageData :
+    T extends "GetSelectedOleObjects" ? SlideOLEProperties[] :
+    T extends "GetAllComments" ? SlideCommentData[] :
+    T extends "GetEditorThemes" ? object[] :
     T extends "InstallPlugin" | "UpdatePlugin" | "RemovePlugin" ? object :
-    T extends "ReplaceTextSmart" ? boolean :
     any;
 
-    export {
-        CellMethodArgs,
-        CellMethodName,
-        CellMethodReturn,
-    }
+export {
+    SlideMethodArgs,
+    SlideMethodName,
+    SlideMethodReturn,
+}
 
-    export {
-        CellCommentData,
-        CellOLEProperties,
-    }
+export {
+    SlideCommentData,
+    SlideOLEProperties,
+}

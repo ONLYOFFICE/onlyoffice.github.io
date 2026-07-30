@@ -53,7 +53,7 @@ function presentationPluginExample() {
         window.Asc.plugin.callCommand(function() {
             var oPresentation = Api.GetPresentation();
             var oSlide = Api.CreateSlide();
-            oPresentation.AddSlide(oSlide);
+            oPresentation.AddSlide(oSlide, 0);
         }, true);
     };
 }

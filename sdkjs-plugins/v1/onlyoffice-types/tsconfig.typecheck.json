@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "allowJs": true,
+    "checkJs": true,
+    "strict": false
+  },
+  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts", "example.js", "test/**/*.js"]
+}

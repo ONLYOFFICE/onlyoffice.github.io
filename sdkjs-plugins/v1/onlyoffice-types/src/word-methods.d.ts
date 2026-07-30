@@ -38,7 +38,7 @@ interface ContentControlProperties {
     Color?: Color;
     InternalId?: string;
     Lock?: ContentControlLock;
-    PlaceHolderText: string;
+    PlaceHolderText?: string;
     Shd?: {Color: Color};
 }
 
@@ -403,7 +403,7 @@ type WordMethodArgs = {
     InputText: [sText: string, sText2?: string];
     InsertAndReplaceContentControls: [aDocuments: any[]];
     InsertOleObject: [oOleObj: OLEProperties, bIsAdd?: boolean];
-    InstallPlugin: [oConfig: any, guid?: string];
+    InstallPlugin: [oConfig?: any];
     
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
@@ -437,7 +437,7 @@ type WordMethodArgs = {
     ResizeWindow: [sWindowId: string, aSize: number[]];
     RemoveOleObject: [sInternalId: string];
     RemoveOleObjects: [aIds: any[]];
-    RemovePlugin: [sGuid: string, bBackup?: boolean];
+    RemovePlugin: [sGuid: string, sBackup: string];
     RemoveSelectedContent: [];
     ReplaceCurrentSentence: [sText: string, sScope?: string];
     ReplaceCurrentWord: [sText: string, sScope?: string];
@@ -465,7 +465,7 @@ type WordMethodArgs = {
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
     Undo: [];
     UpdateAddinFields: [aData: AddinFieldData[]];
-    UpdatePlugin: [oConfig: any, guid?: string];
+    UpdatePlugin: [oConfig?: any];
 
     // Common plugin methods
     CloseWindow: [windowId: string | number];
@@ -482,7 +482,8 @@ type WordMethodReturn<T extends WordMethodName> =
     T extends "InstallPlugin" | "UpdatePlugin" | "RemovePlugin" ? object :
     T extends "RemoveContentControl" ? any :
     T extends "InsertAndReplaceContentControls" ? any[] :
-    T extends "GetMacros" ? {current: number, macrosArray: string[]} : any;
+    /** Raw JSON string - the caller must JSON.parse() it into { current: number, macrosArray: {...}[] } */
+    T extends "GetMacros" ? string : any;
 
 
     export {
