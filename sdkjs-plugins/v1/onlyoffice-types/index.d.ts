@@ -95,7 +95,12 @@ declare global {
 
 export {};
 
-type PluginScope = Record<string, any>;
+interface PluginScope {
+    [key: string]: any;
+    prototype: {
+        clear(): void;
+    };
+}
 
 interface ContextMenuShowEvent {
     /** The context type used by the editor, for example `All`. */
@@ -141,7 +146,18 @@ interface Asc {
 }
 
 interface AscPlugin {
+    /** Plugin GUID from config.json. */
+    guid?: string;
+    /** Window identifier assigned when the plugin is opened in a separate window. */
+    windowID?: string;
+    /** Handler for context-menu item clicks registered with attachContextMenuClickEvent. */
+    event_onContextMenuClick?: (id?: string) => void;
+    /** Handler for toolbar-menu item clicks registered with attachToolbarMenuClickEvent. */
+    event_onToolbarMenuClick?: (id?: string) => void;
+    /** Handler for window-header item clicks registered with attachWindowHeaderMenuClickEvent. */
+    event_onWindowHeaderMenuClick?: (id?: string) => void;
     /**
+
      * Per-editor overloads (typed from each editor's own plugin-events.js) come first so a known
      * event name gets its real payload type; the final overload is a loose fallback for events
      * not modeled yet (e.g. the low-level common/UI ones - onContextMenuShow, onClick, onKeyDown, ...).

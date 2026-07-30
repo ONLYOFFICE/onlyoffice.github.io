@@ -6,6 +6,11 @@ const DEFAULT_RUNTIME = path.resolve(PACKAGE_ROOT, '..', 'plugins.js');
 const DECLARATIONS = path.join(PACKAGE_ROOT, 'index.d.ts');
 
 const RUNTIME_PLUGIN_MEMBERS = [
+  'guid',
+  'windowID',
+  'event_onContextMenuClick',
+  'event_onToolbarMenuClick',
+  'event_onWindowHeaderMenuClick',
   'attachContextMenuClickEvent',
   'attachEvent',
   'attachEditorEvent',
@@ -110,6 +115,15 @@ function main() {
     }
   }
   console.log(`Asc constructors: ${RUNTIME_CONSTRUCTORS.length} runtime constructors verified`);
+
+  const scopeBody = extractInterfaceBody(declarations, 'PluginScope');
+  if (!/prototype\s*:\s*\{[\s\S]*?\bclear\s*\(\s*\)\s*:\s*\(?.*?\)?\s*void/.test(scopeBody)) {
+    throw new Error('PluginScope: missing prototype.clear declaration');
+  }
+  if (!/b\.Asc\.scope\.prototype\s*=\s*\{[^}]*\bclear\s*:/.test(runtime)) {
+    throw new Error('PluginScope: missing runtime prototype.clear assignment in plugins.js');
+  }
+  console.log('Asc.scope.prototype.clear: runtime member verified');
 }
 
 try {

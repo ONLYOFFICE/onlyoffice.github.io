@@ -158,10 +158,11 @@ npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
 npm test               # also type-checks example.js and test/*.js against the library
 ```
 
-`check-runtime` is a static Level 2 check: it verifies public `Asc.plugin`, `Asc.Buttons`, and
-button-constructor names against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch an
-editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop Editor
-smoke test.
+`check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
+`windowID`, event handlers, and registration methods), `Asc.Buttons`, button constructors, and
+`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch
+an editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop
+Editor smoke test.
 
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't

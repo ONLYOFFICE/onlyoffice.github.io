@@ -1,6 +1,6 @@
 {
   "generator": {
-    "packageVersion": "0.8.1",
+    "packageVersion": "0.8.3",
     "node": "v24.2.0",
     "jsdoc": "4.0.5",
     "typescript": "5.9.3"

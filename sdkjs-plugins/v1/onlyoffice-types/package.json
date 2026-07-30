@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "onlyoffice-plugins-api",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "TypeScript definitions for OnlyOffice plugins",
   "types": "index.d.ts",
   "exports": {
