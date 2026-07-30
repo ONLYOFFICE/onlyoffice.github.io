@@ -11,6 +11,7 @@ Initial public release.
 - Fixed generated type reference detection so string enum values and object property names no longer produce fake type stubs. Generated files now contain no `any` occurrences; unresolved references are reported in `src/generated/api-report.json`.
 - PDF is now included in the generator and shared Word API sources are loaded for PDF cross-references.
 - Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
+- Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, and button constructors against `plugins.js`.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.

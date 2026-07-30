@@ -153,12 +153,18 @@ runnable examples wherever a class/method name matches.
 ## Type-checking
 
 ```bash
-npm run typecheck   # checks index.d.ts + src/generated/*.ts + src/*.d.ts
-npm test            # also type-checks example.js and test/*.js against the library
+npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.js
+npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
+npm test               # also type-checks example.js and test/*.js against the library
 ```
 
+`check-runtime` is a static Level 2 check: it verifies public `Asc.plugin`, `Asc.Buttons`, and
+button-constructor names against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch an
+editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop Editor
+smoke test.
+
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
-**off** in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
+off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
 actually exported) surface immediately instead of being silently ignored.
 
 ## Project Structure

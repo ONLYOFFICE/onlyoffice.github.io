@@ -176,6 +176,7 @@ interface AscPlugin {
     event_onClick?: PluginEventHandler<"onClick">;
     event_onKeyDown?: PluginEventHandler<"onKeyDown">;
     onDestroy?: () => void;
+    onEvent: (eventName: string, payload?: unknown) => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
