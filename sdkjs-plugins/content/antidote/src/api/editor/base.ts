@@ -74,12 +74,6 @@ const SELECTED_TEXT_OPTIONS = {
   TabSymbol: String.fromCharCode(160),
 };
 
-// `GetCustomProperties()` isn't in the generated ambient types yet, hence this local shape.
-export interface CustomProperties {
-  Add(name: string, value: unknown): void;
-  Get(name: string): unknown;
-}
-
 export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
 
 // The three editor-content-mutation events TextEditor listens for to detect changes happening

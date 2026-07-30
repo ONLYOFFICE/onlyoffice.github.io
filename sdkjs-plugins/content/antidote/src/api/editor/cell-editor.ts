@@ -30,17 +30,16 @@
  *
  */
 
+import type { Cell } from 'onlyoffice-plugins-api';
+
 import {
-  BaseEditor, CustomProperties, CORRECTION_MEMORY_PROPERTY, DocumentContent,
+  BaseEditor, CORRECTION_MEMORY_PROPERTY, DocumentContent,
 } from './base';
 
-// Cell only (see Editor.create() — pdf actually reuses TextEditor, not this class).
-// Neither `Api.GetActiveWorkbook()` nor `GetCustomProperties()` are in the generated ambient types
-// yet, hence this local shape — confirmed against ONLYOFFICE's own docs:
-// https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetCustomProperties/
-interface ApiWithActiveWorkbook {
-  GetActiveWorkbook(): { GetCustomProperties(): CustomProperties };
-}
+// This file only ever calls Cell's Api - see the class comment below. Shadows the ambient global
+// `Api` (typed as the intersection of every editor's entry point) with the precise type for this
+// file only; no runtime effect. Same technique used in text-editor.ts.
+declare const Api: Cell.Api;
 
 // zoneId prefix for a cell's own zone (see getDocumentContent) — the id after it is the cell's
 // own address (e.g. "A1"), which doubles as the DocumentParagraph id replaceContent/
@@ -161,7 +160,7 @@ export class CellEditor extends BaseEditor {
   loadCorrectionMemory(): Promise<string> {
     return this.runQuery<string>(() => {
       const { CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { CORRECTION_MEMORY_PROPERTY: string };
-      const workbook = (Api as unknown as ApiWithActiveWorkbook).GetActiveWorkbook();
+      const workbook = Api.GetActiveWorkbook();
       const value = workbook.GetCustomProperties().Get(property);
       return typeof value === 'string' ? value : '';
     }, { CORRECTION_MEMORY_PROPERTY }).then((value) => value ?? '').catch(() => '');
@@ -170,7 +169,7 @@ export class CellEditor extends BaseEditor {
   saveCorrectionMemory(data: string): Promise<void> {
     return this.runCommand(() => {
       const { data: value, CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { data: string; CORRECTION_MEMORY_PROPERTY: string };
-      const workbook = (Api as unknown as ApiWithActiveWorkbook).GetActiveWorkbook();
+      const workbook = Api.GetActiveWorkbook();
       workbook.GetCustomProperties().Add(property, value);
     }, { data, CORRECTION_MEMORY_PROPERTY });
   }

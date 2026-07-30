@@ -39,7 +39,7 @@ type ApiHyperlink = Word.ApiHyperlink;
 type ParagraphContent = Word.ParagraphContent;
 
 import {
-  BaseEditor, TextWithStyle, CustomProperties, CORRECTION_MEMORY_PROPERTY,
+  BaseEditor, TextWithStyle, CORRECTION_MEMORY_PROPERTY,
   CONTENT_CHANGE_EVENTS, DocumentContent,
 } from './base';
 
@@ -553,8 +553,7 @@ export class TextEditor extends BaseEditor {
   saveCorrectionMemory(data: string): Promise<void> {
     return this.runCommand(() => {
       const { data: value, CORRECTION_MEMORY_PROPERTY: property } = Asc.scope as { data: string; CORRECTION_MEMORY_PROPERTY: string };
-      const doc = Api.GetDocument() as unknown as { GetCustomProperties(): CustomProperties };
-      doc.GetCustomProperties().Add(property, value);
+      Api.GetDocument().GetCustomProperties().Add(property, value);
     }, { data, CORRECTION_MEMORY_PROPERTY });
   }
 
