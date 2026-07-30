@@ -81,7 +81,7 @@ export const CORRECTION_MEMORY_PROPERTY = 'AntidoteCorrectionMemory';
 // concurrently with an active correction session — text edited within an existing paragraph, or
 // paragraphs added/removed (which would otherwise silently shift DocumentCorrectionAgent's
 // index-based paragraph bookkeeping out of sync).
-export const CONTENT_CHANGE_EVENTS: PluginEditorEventName[] = ['onChangeCurrentPage', 'onParagraphText', 'onPargraphAdd', 'onParagraphRemove'] as const;
+export const CONTENT_CHANGE_EVENTS: PluginEditorEventName[] = ['onChangeCurrentPage', 'onParagraphText', 'onParagraphAdd', 'onParagraphRemove'] as const;
 
 // Generic host methods live here; editor-specific object-model methods belong in subclasses.
 export abstract class BaseEditor {
