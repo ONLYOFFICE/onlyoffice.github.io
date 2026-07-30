@@ -9,6 +9,19 @@ import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "./src/
 
 export type { Word, Cell, Slide, Forms };
 
+// Word-only content types, re-exported by name for consumers that need to type a callCommand
+// callback walking paragraph content (e.g. runs/hyperlinks for style ranges), not just the
+// top-level Api object - and for existing plugins (e.g. antidote) already importing these flatly.
+// Deliberately not re-exporting the cell/slide equivalents under the same names here - each
+// generated file has its own slightly different shape, so importing "the" ApiParagraph from this
+// package would be ambiguous once more than one editor's version is exposed; use the Word/Cell/
+// Slide namespaces above (Word.ApiParagraph, Cell.ApiParagraph, ...) to disambiguate.
+export type ApiParagraph = Word.ApiParagraph;
+export type ApiRun = Word.ApiRun;
+export type ApiTextPr = Word.ApiTextPr;
+export type ApiHyperlink = Word.ApiHyperlink;
+export type ParagraphContent = Word.ParagraphContent;
+
 
 
 type DesktopDialogType = 'plugin' | 'images' | 'cell' | 'word' | 'slide';
