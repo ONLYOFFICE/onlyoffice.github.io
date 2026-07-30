@@ -38,6 +38,13 @@ type ApiRun = Word.ApiRun;
 type ApiHyperlink = Word.ApiHyperlink;
 type ParagraphContent = Word.ParagraphContent;
 
+// This file only ever calls Word's Api (see the class comment below), but the package no longer
+// declares a cross-editor global (see onlyoffice-plugins-api's CHANGELOG - use the editor-specific
+// entry point instead, e.g. `import "onlyoffice-plugins-api/word"`). Since this file is a module
+// (it has imports/exports), a module-scoped declaration shadows the ambient global for type-
+// checking purposes only - no runtime effect, the real Api injected by the editor is unchanged.
+declare const Api: Word.Api;
+
 import {
   BaseEditor, TextWithStyle, CORRECTION_MEMORY_PROPERTY,
   CONTENT_CHANGE_EVENTS, DocumentContent,
