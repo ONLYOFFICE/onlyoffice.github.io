@@ -2,12 +2,22 @@ import type { Cell } from "./src/generated/cell";
 import type { Slide } from "./src/generated/slide";
 import type { Word } from "./src/generated/word";
 import type { Forms } from "./src/generated/forms";
+import type { Pdf } from "./src/pdf";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
 import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "./src/slide-methods";
+import type {
+    PdfMethodName,
+    PdfMethodArgs,
+    PdfMethodReturn,
+    PdfPageImageOptions,
+    PdfReplacePageContentOptions,
+    PdfReplaceXmlOptions,
+    PdfReplaceHtmlOptions,
+} from "./src/pdf-methods";
 
-export type { Word, Cell, Slide, Forms };
+export type { Word, Cell, Slide, Forms, Pdf };
 
 
 
@@ -170,7 +180,8 @@ interface AscPlugin {
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
-        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void);
+        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) &
+        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;
@@ -944,6 +955,13 @@ export type {
     ButtonMenuItem,
     Buttons,
     WindowHeaderFrameOptions,
+    PdfMethodArgs,
+    PdfMethodName,
+    PdfMethodReturn,
+    PdfPageImageOptions,
+    PdfReplacePageContentOptions,
+    PdfReplaceXmlOptions,
+    PdfReplaceHtmlOptions,
     StoreConfig,
     IconConfig,
     IconScale
@@ -953,5 +971,5 @@ export type Api<T extends EditorType> =
     T extends "cell" ? Cell.Api :
     T extends "slide" ? Slide.Api :
     T extends "word" ? Word.Api :
-    T extends "pdf" ? Forms.Api :
+    T extends "pdf" ? Pdf.Api :
     never;

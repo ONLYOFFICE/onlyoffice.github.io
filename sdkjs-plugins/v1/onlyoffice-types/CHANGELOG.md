@@ -7,6 +7,7 @@ Initial public release.
 - The root package no longer declares a cross-editor global `Api` intersection. Editor-specific entry points (`/word`, `/cell`, `/slide`, `/pdf`) now declare the matching `Api` type for `callCommand`.
 - Added public plugin menu APIs: context menu, toolbar, window header, and content-control button registration plus click handlers.
 - Added a typed plugin event map for common events, with an `unknown[]` fallback for undocumented event names.
+- Added a separate `Pdf` namespace and PDF Plugin API method definitions, including `GetPageImage`, `GoToPage`, and `ReplacePageContent`; `Forms` remains the Form API namespace.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.

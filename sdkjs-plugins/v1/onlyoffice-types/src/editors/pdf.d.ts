@@ -1,15 +1,14 @@
-import type { Forms } from "../generated/forms";
+import type { Pdf } from "../pdf";
 
 declare global {
     interface Window {
-        Api: Forms.Api;
+        Api: Pdf.Api;
     }
 
-    var Api: Forms.Api;
+    var Api: Pdf.Api;
 }
 
-export type PdfApi = Forms.Api;
-export type FormsApi = Forms.Api;
-export type { Forms };
+export type PdfApi = Pdf.Api;
+export type { Pdf };
 
 export {};

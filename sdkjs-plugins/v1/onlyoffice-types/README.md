@@ -64,24 +64,26 @@ window.Asc.plugin.getSelectedText(function(text) {
 - **Word namespace**: Types for text documents (generated from the ONLYOFFICE `sdkjs` JSDoc)
 - **Cell namespace**: Types for spreadsheets
 - **Slide namespace**: Types for presentations
-- **Forms namespace**: Types for PDF/OForm form fields
+- **Forms namespace**: Types for form fields and Form API objects
+- **PDF namespace**: PDF Editor object model and PDF-specific `executeMethod` methods
 
-Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
+Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`, `Pdf`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
 
 Any type from any editor is importable regardless of which editor the current plugin targets -
-same-named classes across editors (e.g. `ApiParagraph` exists in all four) don't collide, and you
+same-named classes across editors don't collide, and you
 can reference another editor's types from shared/helper code:
 
 ```typescript
-import type { Word, Cell, Slide } from "onlyoffice-plugins-api";
+import type { Word, Cell, Slide, Pdf } from "onlyoffice-plugins-api";
 
 function logParagraph(p: Word.ApiParagraph) { /* ... */ }
 function fillCell(r: Cell.ApiRange) { /* ... */ }
 function firstSlide(pres: Slide.ApiPresentation): Slide.ApiSlide { /* ... */ }
+function usePdfApi(api: Pdf.Api) { return api.GetDocument(); }
 ```
 
 `Api<T>` resolves the entry-point class for a given editor kind (`"word" | "cell" | "slide" | "pdf"`),
-equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Forms.Api`:
+equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Pdf.Api`:
 
 ```typescript
 import type { Api } from "onlyoffice-plugins-api";
