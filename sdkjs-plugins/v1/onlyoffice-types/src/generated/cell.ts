@@ -202,7 +202,7 @@ export namespace Cell {
   export type PageOrientation = "xlLandscape" | "xlPortrait";
 
   /** The paper size, specified as a value of the Excel <b>xlPaperSize</b> enumeration. */
-  export type PaperSize = "xlPaperLetter" | "xlPaperLetterSmall" | "xlPaperTabloid" | "xlPaperLedger" | "xlPaperLegal" | "xlPaperStatement" | "xlPaperExecutive" | "xlPaperA3" | "xlPaperA4" | "xlPaperA4Small" | "xlPaperA5" | "xlPaperB4" | "xlPaperB5" | "xlPaperFolio" | "xlPaperQuarto" | "xlPaper10x14" | "xlPaper11x17" | "xlPaperNote" | "xlPaperEnvelope9" | "xlPaperEnvelope10" | "xlPaperEnvelope11" | "xlPaperEnvelope12" | "xlPaperEnvelope14" | "xlPaperCsheet" | "xlPaperDsheet" | "xlPaperEsheet" | "xlPaperEnvelopeDL" | "xlPaperEnvelopeC5" | "xlPaperEnvelopeC3" | "xlPaperEnvelopeC4" | "xlPaperEnvelopeC6" | "xlPaperEnvelopeC65" | "xlPaperEnvelopeB4" | "xlPaperEnvelopeB5" | "xlPaperEnvelopeB6" | "xlPaperEnvelopeItaly" | "xlPaperEnvelopeMonarch" | "xlPaperEnvelopePersonal" | "xlPaperFanfoldUS" | "xlPaperFanfoldStdGerman" | "xlPaperFanfoldLegalGerman" | "xlPaperUser";
+  export type PaperSize = "xlPaperLetter" | "xlPaperLetterSmall" | "xlPaperTabloid" | "xlPaperLedger" | "xlPaperLegal" | "xlPaperStatement" | "xlPaperExecutive" | "xlPaperA3" | "xlPaperA4" | "xlPaperA4Small" | "xlPaperA5" | "xlPaperB4" | "xlPaperB5" | "xlPaperFolio" | "xlPaperQuarto" | "xlPaper10x14" | "xlPaper11x17" | "xlPaperNote" | "xlPaperEnvelope9" | "xlPaperEnvelope10" | "xlPaperEnvelope11" | "xlPaperEnvelope12" | "xlPaperEnvelope14" | "xlPaperCsheet" | "xlPaperDsheet" | "xlPaperEsheet" | "xlPaperEnvelopeDL" | "xlPaperEnvelopeC5" | "xlPaperEnvelopeC3" | "xlPaperEnvelopeC4" | "xlPaperEnvelopeC6" | "xlPaperEnvelopeC65" | "xlPaperEnvelopeB4" | "xlPaperEnvelopeB5" | "xlPaperEnvelopeB6" | "xlPaperEnvelopeItaly" | "xlPaperEnvelopeMonarch" | "xlPaperEnvelopePersonal" | "xlPaperFanfoldUS" | "xlPaperFanfoldStdGerman" | "xlPaperFanfoldLegalGerman";
 
   /** The types of elements that can be added to the paragraph structure. */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
@@ -758,6 +758,7 @@ export namespace Cell {
     AddCustomFunctionLibrary(sName: string, Func: (...args: any[]) => any): void;
     AddDefName(sName: string, sRef: string, isHidden: boolean): boolean;
     AddSheet(sName: string): ApiWorksheet;
+    Calculate(): boolean;
     CentimetersToPoints(cm: number): number;
     ClearCustomFunctions(): boolean;
     Color(r: number | string | number | SchemeColorId | PresetColor, g?: number, b?: number, a?: number): ApiColor;
@@ -768,6 +769,7 @@ export namespace Cell {
     CreateCustomGeometry(): ApiGeometry;
     CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop;
     CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill;
+    CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
     CreateNewHistoryPoint(): boolean;
     CreateNoFill(): ApiFill;
     CreateNumbering(numType: BulletType, startAt: number): ApiBullet;
@@ -1330,7 +1332,7 @@ export namespace Cell {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetPosition(nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): void;
     SetRotation(nRotAngle: number): boolean;
     SetShadow(shadow: ApiShadow): boolean;
@@ -1574,6 +1576,8 @@ export namespace Cell {
 
   /** Class representing a mathematical equation. */
   export interface ApiMath {
+    GetClassType(): "math";
+    GetText(format?: "unicode" | "latex"): string;
   }
 
   /** Class representing a name. */
@@ -2478,6 +2482,7 @@ export namespace Cell {
 
   /** Class representing the currently active workbook */
   export interface ApiWorkbook {
+    Calculate(): boolean;
     GetActiveChart(): ApiChart | null;
     GetActiveSheet(): ApiWorksheet;
     GetAllPivotTables(): ApiPivotTable[];
@@ -2981,5 +2986,12 @@ export namespace Cell {
   /** Class representing an animation effect. */
   export interface g_nApiEffectIdCounter {
   }
+
+  export type EditorEventArgs = {
+    /** The function called when the current sheet has changed. */
+    onChangeCurrentSheet: [index: number];
+  };
+
+  export type EditorEventName = keyof EditorEventArgs;
 
 }

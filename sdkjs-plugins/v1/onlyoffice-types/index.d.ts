@@ -106,11 +106,24 @@ interface Asc {
 }
 
 interface AscPlugin {
-    attachEditorEvent: (eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void;
+    /**
+     * Per-editor overloads (typed from each editor's own plugin-events.js) come first so a known
+     * event name gets its real payload type; the final overload is a loose fallback for events
+     * not modeled yet (e.g. the low-level common/UI ones - onContextMenuShow, onClick, onKeyDown, ...).
+     */
+    attachEditorEvent: (<T extends Word.EditorEventName>(eventName: T, callback: (...args: Word.EditorEventArgs[T]) => void) => void) &
+        (<T extends Cell.EditorEventName>(eventName: T, callback: (...args: Cell.EditorEventArgs[T]) => void) => void) &
+        (<T extends Slide.EditorEventName>(eventName: T, callback: (...args: Slide.EditorEventArgs[T]) => void) => void) &
+        (<T extends Forms.EditorEventName>(eventName: T, callback: (...args: Forms.EditorEventArgs[T]) => void) => void) &
+        ((eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void);
     attachEvent: (eventName: PluginEventName, callback: PluginEventCallback) => void;
     button: (id: number, text: string) => void;
     callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
-    detachEditorEvent: (eventName: PluginEditorEventName) => void;
+    detachEditorEvent: (<T extends Word.EditorEventName>(eventName: T) => void) &
+        (<T extends Cell.EditorEventName>(eventName: T) => void) &
+        (<T extends Slide.EditorEventName>(eventName: T) => void) &
+        (<T extends Forms.EditorEventName>(eventName: T) => void) &
+        ((eventName: PluginEditorEventName) => void);
     detachEvent: (eventName: PluginEventName) => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &

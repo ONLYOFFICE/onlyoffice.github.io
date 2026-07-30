@@ -49,6 +49,15 @@ export namespace Word {
     label: string;
   }
 
+  /** The comment data. */
+  export interface CommentData {
+    UserName: string;
+    Text: string;
+    Time: string;
+    Solved: boolean;
+    Replies: CommentData[];
+  }
+
   /** A dictionary of users and their comments. */
   export interface CommentReport {
     username?: UserComments;
@@ -61,6 +70,22 @@ export namespace Word {
     Date: number;
     DateUTC: number;
     QuoteText?: string;
+  }
+
+  /** The content control object. */
+  export interface ContentControl {
+    Tag: string;
+    Id: string;
+    Lock: ContentControlLock;
+    InternalId: string;
+    Alias: string;
+    Appearance: 1 | 2;
+    FormKey?: string;
+    RadioGroup?: string;
+    FormValue?: string | boolean | Date;
+    Color?: object;
+    Border?: object;
+    Shd?: object;
   }
 
   /** The checkbox content control properties */
@@ -81,6 +106,9 @@ export namespace Word {
     display: string;
     value: string;
   }
+
+  /** Defines the access restrictions for a content control.Possible values:<b>0</b> - only deleting,<b>1</b> - disable deleting or editing,<b>2</b> - only editing,<b>3</b> - full access. */
+  export type ContentControlLock = 0 | 1 | 2 | 3;
 
   /** Represents an attribute of an XML node. */
   export interface CustomXmlNodeAttribute {
@@ -148,7 +176,7 @@ export namespace Word {
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
   /** The types of elements that can be added to the paragraph structure. */
-  export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+  export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
@@ -365,6 +393,12 @@ export namespace Word {
   /** Available values of the "equation"/"figure"/"table" reference type:<b>"entireCaption"</b>- the entire caption text;<b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1";<b>"captionText"</b> - the caption text only;<b>"pageNum"</b> - the page number containing the referenced object;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
+  /** The comment object. */
+  export interface comment {
+    Id: string;
+    Data: CommentData;
+  }
+
   /** Available values of the "endnote" reference type:<b>"endnoteNum"</b> - the endnote number;<b>"pageNum"</b> - the endnote page number;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position;<b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected. */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
@@ -423,6 +457,7 @@ export namespace Word {
   export type Equation = any;
   export type Figure = any;
   export type General = any;
+  export type InternalId = any;
   export type Line = any;
   export type LineMarkers = any;
   export type LineMarkersStacked = any;
@@ -445,6 +480,8 @@ export namespace Word {
   export type StockVOHLC = any;
   export type Table = any;
   export type TextAdd = any;
+  export type TextAnnotation = any;
+  export type TextAnnotationRange = any;
   export type TextPr = any;
   export type TextRem = any;
   export type Unknown = any;
@@ -578,7 +615,7 @@ export namespace Word {
     Push(element: DocumentElement): boolean;
     RemoveAllElements(): boolean;
     ReplaceByElement(oElement: DocumentElement): boolean;
-    Search(text: string, isMatchCase: boolean): ApiRange[];
+    Search(text: string | RegExp, isMatchCase: boolean): ApiRange[];
     Select(): boolean;
     SetAlias(alias: string): boolean;
     SetAppearance(type: "boundingBox" | "hidden"): void;
@@ -687,7 +724,7 @@ export namespace Word {
     SetMinorHorizontalGridlines(oStroke: ApiStroke): boolean;
     SetMinorVerticalGridlines(oStroke: ApiStroke): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetPlotAreaFill(oFill: ApiFill): boolean;
     SetPlotAreaOutLine(oStroke: ApiStroke): boolean;
     SetPointDataLabelTextPr(seriesIndex: number, pointIndex: number, textPr: ApiTextPr): boolean;
@@ -1202,7 +1239,7 @@ export namespace Word {
     ReplaceCurrentSentence(sReplace: string, sPart?: "before" | "after"): boolean;
     ReplaceCurrentWord(sReplace: string, sPart?: "before" | "after"): boolean;
     ReplaceDrawing(oOldDrawing: ApiDrawing, oNewDrawing: ApiDrawing, bSaveOldDrawingPr?: boolean): boolean;
-    Search(sText: string, isMatchCase: boolean): ApiRange[];
+    Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[];
     SearchAndReplace(oProperties: object, oProperties_searchString: string, oProperties_replaceString: string, oProperties_matchCase?: string): boolean;
     SelectCurrentWord(): object;
     SelectNoteReference(): boolean;
@@ -1301,7 +1338,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
     SetRotation(nRotAngle: number): boolean;
@@ -1444,7 +1481,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
     SetRotation(nRotAngle: number): boolean;
@@ -1523,7 +1560,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
     SetRotation(nRotAngle: number): boolean;
@@ -1607,6 +1644,7 @@ export namespace Word {
   /** Class representing a mathematical equation. */
   export interface ApiMath {
     GetClassType(): "math";
+    GetText(format?: "unicode" | "latex"): string;
   }
 
   /** Class representing the numbering properties. */
@@ -1680,7 +1718,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
     SetRotation(nRotAngle: number): boolean;
@@ -1828,7 +1866,7 @@ export namespace Word {
     RemoveAllElements(): boolean;
     RemoveElement(nPos: number): boolean;
     ReplaceByElement(oElement: DocumentElement): boolean;
-    Search(sText: string, isMatchCase: boolean): ApiRange[];
+    Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[];
     Select(): boolean;
     SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
     SetBold(isBold: boolean): ApiParagraph;
@@ -2234,7 +2272,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
@@ -2335,7 +2373,7 @@ export namespace Word {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
     SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
     SetRotation(nRotAngle: number): boolean;
@@ -2409,6 +2447,7 @@ export namespace Word {
     GetRange(Start: number, End: number): ApiRange;
     GetRow(rowIndex: number): ApiTableRow;
     GetRowsCount(): number;
+    GetSelectedCells(): ApiTableCell[];
     GetSelectedColumnsCells(): ApiTableCell[];
     GetSelectedRows(): ApiTableRow[];
     GetTableDescription(): string;
@@ -2420,8 +2459,9 @@ export namespace Word {
     RemoveColumn(oCell: ApiTableCell): boolean;
     RemoveRow(oCell: ApiTableCell): boolean;
     ReplaceByElement(oElement: DocumentElement): boolean;
-    Search(sText: string, isMatchCase: boolean): ApiRange[];
+    Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[];
     Select(): boolean;
+    SelectRange(startCellIndex: number, startRowIndex: number, endCellIndex: number, endRowIndex: number): boolean;
     SetBackgroundColor(color?: ApiColor): boolean;
     SetCellSpacing(nValue: number): boolean;
     SetColumnWidth(columnIndex: number, width: number): number | null;
@@ -2477,7 +2517,7 @@ export namespace Word {
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
     RemoveColumn(): boolean;
     RemoveRow(): boolean;
-    Search(sText: string, isMatchCase: boolean): ApiRange[];
+    Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[];
     SetBackgroundColor(color?: ApiColor): boolean;
     SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
     SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
@@ -2563,7 +2603,7 @@ export namespace Word {
     GetPrevious(): ApiTableRow | null;
     MergeCells(): ApiTableCell | null;
     Remove(): boolean;
-    Search(sText: string, isMatchCase: boolean): ApiRange[];
+    Search(sText: string | RegExp, isMatchCase: boolean): ApiRange[];
     SetBackgroundColor(color?: ApiColor): boolean;
     SetHeight(sHRule: "auto" | "atLeast", nValue?: number): boolean;
     SetRowPr(oApiTableRowPr: ApiTableRowPr): boolean;
@@ -2725,5 +2765,48 @@ export namespace Word {
     SetTextPr(oTextPr: ApiTextPr): boolean;
     SetType(sType: WatermarkType): boolean;
   }
+
+  export type EditorEventArgs = {
+    /** The function called when a comment is added to the document with the {@link /docs/plugins/interacting-with-editors/document-api/Methods/AddComment AddComment} method. */
+    onAddComment: [comment: comment];
+    /** The function called when an annotation loses focus. */
+    onBlurAnnotation: [annotation: TextAnnotation];
+    /** The function called to show which content control has been blurred. */
+    onBlurContentControl: [control: ContentControl];
+    /** The function called when the specified comment is changed with the {@link /docs/plugins/interacting-with-editors/document-api/Methods/ChangeComment ChangeComment} method. */
+    onChangeCommentData: [comment: comment];
+    /** The function called to show which content control has been changed. */
+    onChangeContentControl: [control: ContentControl];
+    /** The function called when the current page has changed. */
+    onChangeCurrentPage: [index: number];
+    /** The function called when the user clicks an annotation. */
+    onClickAnnotation: [annotation: TextAnnotation];
+    /** Fired when a content control is added to the document. */
+    onContentControlAdd: [control: ContentControl];
+    /** Fired when a content control is removed from the document. */
+    onContentControlRemove: [control: ContentControl];
+    /** The function called when an annotation receives focus. */
+    onFocusAnnotation: [annotation: TextAnnotation];
+    /** The function called to show which content control has been focused. */
+    onFocusContentControl: [control: ContentControl];
+    /** The function called when the content control loses focus in the document. */
+    onHideContentControlTrack: [ids: string[]];
+    /** The function called when one or more OLE objects are inserted into the document. */
+    onInsertOleObjects: [data: object[]];
+    /** Fired when a paragraph is added to the document. */
+    onParagraphAdd: [data: { InternalId: string }];
+    /** Fired when a paragraph is removed from the document. */
+    onParagraphRemove: [data: { InternalId: string }];
+    /** The function called when the paragraph text is updated in the document. */
+    onParagraphText: [data: { paragraphId: string; recalcId: string; text: string; annotations: TextAnnotationRange[] }];
+    /** The function called when the specified comment is removed with the {@link /docs/plugins/interacting-with-editors/document-api/Methods/RemoveComments RemoveComments} method. */
+    onRemoveComment: [comment: comment];
+    /** The function called when the content control receives focus and its track appears. */
+    onShowContentControlTrack: [ids: string[]];
+    /** The function called when the user clicks the "Complete & Submit" button. */
+    onSubmitForm: [];
+  };
+
+  export type EditorEventName = keyof EditorEventArgs;
 
 }

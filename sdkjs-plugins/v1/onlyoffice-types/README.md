@@ -94,6 +94,21 @@ names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodA
 > `JSON.parse(result)` to get `{ current: number, macrosArray: {...}[] }`, matching the official
 > docs example.
 
+`window.Asc.plugin.attachEditorEvent`/`detachEditorEvent` are typed the same way, per editor, from
+each editor's own `plugin-events.js` (`Word.EditorEventArgs`/`Cell.EditorEventArgs`/
+`Slide.EditorEventArgs`/`Forms.EditorEventArgs`) - a known event name gives its callback the real
+payload shape instead of `any`:
+
+```typescript
+window.Asc.plugin.attachEditorEvent("onParagraphAdd", (data) => {
+    console.log(data.InternalId); // data: { InternalId: string }
+});
+```
+
+Events not modeled yet (the low-level common/UI ones shared across editors - `onContextMenuShow`,
+`onClick`, `onKeyDown`, ...) fall back to a loose `(eventName: string, callback: (...args) => void)`
+overload.
+
 ## Generating Types
 
 The generator parses the JSDoc comments straight out of a local `sdkjs` (and `sdkjs-forms`) checkout
