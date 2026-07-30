@@ -476,57 +476,6 @@ export namespace Forms {
   /** Twentieths of a point (equivalent to 1/1440th of an inch).  ## Try it   ```js document-builder={"documentType": "pdf"} paragraph.SetEqualColumns(2, 720); ``` */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ALPHABETIC = any;
-  export type AM = any;
-  export type Arabic = any;
-  export type Area = any;
-  export type AreaStacked = any;
-  export type AreaStacked100 = any;
-  export type BarClustered = any;
-  export type BarStacked = any;
-  export type BarStacked100 = any;
-  export type ColumnClustered = any;
-  export type ColumnStacked = any;
-  export type ColumnStacked100 = any;
-  export type Combo = any;
-  export type ComboColumnClusteredLine = any;
-  export type ComboColumnClusteredLineSecondaryAxis = any;
-  export type Doughnut = any;
-  export type Equation = any;
-  export type Figure = any;
-  export type General = any;
-  export type Line = any;
-  export type LineMarkers = any;
-  export type LineMarkersStacked = any;
-  export type LineMarkersStacked100 = any;
-  export type LineStacked = any;
-  export type LineStacked100 = any;
-  export type PM = any;
-  export type ParaAdd = any;
-  export type ParaPr = any;
-  export type ParaRem = any;
-  export type Pie = any;
-  export type Radar = any;
-  export type RadarFilled = any;
-  export type RadarMarkers = any;
-  export type Red = any;
-  export type Roman = any;
-  export type StockHLC = any;
-  export type StockOHLC = any;
-  export type StockVHLC = any;
-  export type StockVOHLC = any;
-  export type Table = any;
-  export type TextAdd = any;
-  export type TextPr = any;
-  export type TextRem = any;
-  export type Unknown = any;
-  export type XYScatter = any;
-  export type XYScatterLines = any;
-  export type XYScatterLinesNoMarkers = any;
-  export type XYScatterSmooth = any;
-  export type XYScatterSmoothNoMarkers = any;
-
   /** Base class */
   export interface Api {
     ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;

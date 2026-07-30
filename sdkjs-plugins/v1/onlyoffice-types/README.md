@@ -160,10 +160,13 @@ onlyoffice-types/
 │   │   ├── word.ts        # namespace Word { ... }
 │   │   ├── cell.ts        # namespace Cell { ... }
 │   │   ├── slide.ts       # namespace Slide { ... }
-│   │   └── forms.ts       # namespace Forms { ... }
+│   │   ├── forms.ts       # namespace Forms { ... }
+│   │   ├── pdf.ts         # namespace Pdf { ... }
+│   │   └── api-report.json # unresolved type and any report
 │   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
 │   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
-│   └── slide-methods.d.ts # executeMethod names/args/returns for Slide
+│   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
+│   └── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
 ├── scripts/
 │   └── generate-types.js
 ├── tsconfig.json           # builds/typechecks the library itself

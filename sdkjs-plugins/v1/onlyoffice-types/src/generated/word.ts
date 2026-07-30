@@ -436,60 +436,10 @@ export namespace Word {
   export type twips = number;
 
   // Cross-file type stubs
-  export type ALPHABETIC = any;
-  export type AM = any;
-  export type ApiTableOfContents = any;
-  export type ApiTableOfFigures = any;
-  export type Arabic = any;
-  export type Area = any;
-  export type AreaStacked = any;
-  export type AreaStacked100 = any;
-  export type BarClustered = any;
-  export type BarStacked = any;
-  export type BarStacked100 = any;
-  export type ColumnClustered = any;
-  export type ColumnStacked = any;
-  export type ColumnStacked100 = any;
-  export type Combo = any;
-  export type ComboColumnClusteredLine = any;
-  export type ComboColumnClusteredLineSecondaryAxis = any;
-  export type Doughnut = any;
-  export type Equation = any;
-  export type Figure = any;
-  export type General = any;
-  export type InternalId = any;
-  export type Line = any;
-  export type LineMarkers = any;
-  export type LineMarkersStacked = any;
-  export type LineMarkersStacked100 = any;
-  export type LineStacked = any;
-  export type LineStacked100 = any;
-  export type PM = any;
-  export type ParaAdd = any;
-  export type ParaPr = any;
-  export type ParaRem = any;
-  export type Pie = any;
-  export type Radar = any;
-  export type RadarFilled = any;
-  export type RadarMarkers = any;
-  export type Red = any;
-  export type Roman = any;
-  export type StockHLC = any;
-  export type StockOHLC = any;
-  export type StockVHLC = any;
-  export type StockVOHLC = any;
-  export type Table = any;
-  export type TextAdd = any;
-  export type TextAnnotation = any;
-  export type TextAnnotationRange = any;
-  export type TextPr = any;
-  export type TextRem = any;
-  export type Unknown = any;
-  export type XYScatter = any;
-  export type XYScatterLines = any;
-  export type XYScatterLinesNoMarkers = any;
-  export type XYScatterSmooth = any;
-  export type XYScatterSmoothNoMarkers = any;
+  export type ApiTableOfContents = unknown;
+  export type ApiTableOfFigures = unknown;
+  export type TextAnnotation = unknown;
+  export type TextAnnotationRange = unknown;
 
   /** Base class */
   export interface Api {
@@ -525,7 +475,7 @@ export namespace Word {
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
     CreateRGBColor(r: number, g: number, b: number): ApiRGBColor;
     CreateRadialGradientFill(gradientStops: number[]): ApiFill;
-    CreateRange(element: any, start: any, end: any): ApiRange | null;
+    CreateRange(element: unknown, start: unknown, end: unknown): ApiRange | null;
     CreateRun(): ApiRun;
     CreateSchemeColor(schemeColorId: SchemeColorId): ApiSchemeColor;
     CreateShadow(settings: ShadowSettings): ApiShadow;
@@ -574,7 +524,7 @@ export namespace Word {
     Save(): boolean;
     ThemeColor(name?: SchemeColorId): ApiColor;
     TwipsToPoints(twips: number): number;
-    attachEvent(eventName: string, callback: (...args: any[]) => any): boolean;
+    attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): boolean;
     detachEvent(eventName: string): boolean;
   }
 
@@ -590,7 +540,7 @@ export namespace Word {
     GetAllContentControls(): ApiBlockLvlSdt[] | ApiInlineLvlSdt[];
     GetAllDrawingObjects(): Drawing[];
     GetAllParagraphs(): ApiParagraph[];
-    GetAllTablesOnPage(page: any): ApiTable[];
+    GetAllTablesOnPage(page: unknown): ApiTable[];
     GetAppearance(): "boundingBox" | "hidden";
     GetBackgroundColor(): ApiColor;
     GetBorderColor(): ApiColor;
@@ -652,7 +602,7 @@ export namespace Word {
   /** Class representing a chart. */
   export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
     AddBreak(breakType: number, position: string): boolean;
-    ApplyChartStyle(nStyleId: any): boolean;
+    ApplyChartStyle(nStyleId: unknown): boolean;
     Copy(): ApiDrawing | null;
     Delete(): boolean;
     Fill(oFill: ApiFill): boolean;

@@ -428,66 +428,6 @@ export namespace Slide {
   /** Twentieths of a point (equivalent to 1/1440th of an inch).  ## Try it   ```js document-builder={"documentType": "slide"} paragraph.SetEqualColumns(2, 720); ``` */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ALPHABETIC = any;
-  export type AM = any;
-  export type AlphaLcParenR = any;
-  export type AlphaLcPeriod = any;
-  export type AlphaUcParenR = any;
-  export type AlphaUcPeriod = any;
-  export type Arabic = any;
-  export type ArabicParenR = any;
-  export type ArabicPeriod = any;
-  export type Area = any;
-  export type AreaStacked = any;
-  export type AreaStacked100 = any;
-  export type BarClustered = any;
-  export type BarStacked = any;
-  export type BarStacked100 = any;
-  export type ColumnClustered = any;
-  export type ColumnStacked = any;
-  export type ColumnStacked100 = any;
-  export type Combo = any;
-  export type ComboColumnClusteredLine = any;
-  export type ComboColumnClusteredLineSecondaryAxis = any;
-  export type Doughnut = any;
-  export type Equation = any;
-  export type Figure = any;
-  export type General = any;
-  export type Line = any;
-  export type LineMarkers = any;
-  export type LineMarkersStacked = any;
-  export type LineMarkersStacked100 = any;
-  export type LineStacked = any;
-  export type LineStacked100 = any;
-  export type None = any;
-  export type PM = any;
-  export type ParaAdd = any;
-  export type ParaPr = any;
-  export type ParaRem = any;
-  export type Pie = any;
-  export type Radar = any;
-  export type RadarFilled = any;
-  export type RadarMarkers = any;
-  export type Red = any;
-  export type Roman = any;
-  export type RomanLcPeriod = any;
-  export type RomanUcPeriod = any;
-  export type StockHLC = any;
-  export type StockOHLC = any;
-  export type StockVHLC = any;
-  export type StockVOHLC = any;
-  export type Table = any;
-  export type TextAdd = any;
-  export type TextPr = any;
-  export type TextRem = any;
-  export type Unknown = any;
-  export type XYScatter = any;
-  export type XYScatterLines = any;
-  export type XYScatterLinesNoMarkers = any;
-  export type XYScatterSmooth = any;
-  export type XYScatterSmoothNoMarkers = any;
-
   export interface Api {
     CentimetersToPoints(cm: number): number;
     Color(r: number | string | number | SchemeColorId | PresetColor, g?: number, b?: number, a?: number): ApiColor;
@@ -521,7 +461,7 @@ export namespace Slide {
     CreateSlideShowTransition(): ApiSlideShowTransition;
     CreateSolidFill(color: ApiColor): ApiFill;
     CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
-    CreateTable(rows: any, cols: any): ApiTable;
+    CreateTable(rows: unknown, cols: unknown): ApiTable;
     CreateTableRowPr(): ApiTableRowPr;
     CreateTextPr(): ApiTextPr;
     CreateTheme(sName: string, oMaster: ApiMaster, oClrScheme: ApiThemeColorScheme, oFormatScheme: ApiThemeFormatScheme, oFontScheme: ApiThemeFontScheme): ApiTheme | null;
@@ -558,7 +498,7 @@ export namespace Slide {
     Save(): void;
     ThemeColor(name?: SchemeColorId): ApiColor;
     TwipsToPoints(twips: number): number;
-    attachEvent(eventName: string, callback: (...args: any[]) => any): void;
+    attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): void;
     detachEvent(eventName: string): void;
   }
 
@@ -604,7 +544,7 @@ export namespace Slide {
 
   /** Class representing a chart. */
   export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "SetTitle" | "GetTitle" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
-    ApplyChartStyle(nStyleId: any): boolean;
+    ApplyChartStyle(nStyleId: unknown): boolean;
     CreateTextRange(): ApiTextRange | null;
     GetAllSeries(): ApiChartSeries[];
     GetChartType(): ChartTypeLegacy;

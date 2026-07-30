@@ -11,12 +11,14 @@ const EDITORS = {
   cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
   slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'slide/plugin-events.js'] },
   forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js', '../sdkjs-forms/plugin-events.js'] },
+  pdf: { code: 'PDFE', sources: ['word/apiBuilder.js', 'pdf/apiBuilder.js', 'pdf/plugin-events.js'] },
 };
 const NAMESPACE_MAP = {
   word: 'Word',
   cell: 'Cell',
   slide: 'Slide',
   forms: 'Forms',
+  pdf: 'Pdf',
 };
 
 // A handful of real, working editor events aren't documented via a `@event` JSDoc block anywhere
@@ -160,6 +162,9 @@ function buildLegacyLookup(data) {
 // source, keyed by the same class/method names, wherever a match exists. This is a soft dependency:
 // generation must still work offline, just with plainer sdkjs-only descriptions.
 async function fetchLegacyDescriptions(editor) {
+  // office-js-api-declarations does not publish a PDF snapshot. PDF descriptions come directly
+  // from sdkjs/pdf/apiBuilder.js instead of producing a guaranteed 404 request.
+  if (editor === 'pdf') return null;
   const url = `https://raw.githubusercontent.com/${LEGACY_DECLARATIONS_REPO}/master/office-js-api/${editor}.json`;
   try {
     const data = await downloadJson(url);
@@ -218,10 +223,10 @@ function parseTypeName(n) {
   if (n === 'String') return 'string';
   if (n === 'Boolean') return 'boolean';
   if (n === 'bool') return 'boolean';
-  if (n === 'Array' || n === 'array') return 'any[]';
+  if (n === 'Array' || n === 'array') return 'unknown[]';
   if (n === 'Object') return 'object';
   if (n === 'any') return 'any';
-  if (n === 'function' || n === 'Function') return '(...args: any[]) => any';
+  if (n === 'function' || n === 'Function') return '(...args: unknown[]) => unknown';
   if (n === 'byte') return 'number';
   if (n === 'twips') return 'number';
   if (n === 'EMU') return 'number';
@@ -230,7 +235,7 @@ function parseTypeName(n) {
   if (n === 'rad') return 'number';
   if (n === 'JSON') return 'object';
   if (n === 'base64img') return 'string';
-  if (n === 'range') return 'any';
+  if (n === 'range') return 'unknown';
   if (n.startsWith('"') && n.endsWith('"')) return n;
   if (n.startsWith('Array.<') && n.endsWith('>')) {
     const inner = n.slice(7, -1);
@@ -240,14 +245,14 @@ function parseTypeName(n) {
     const inner = n.slice(8, -1);
     const parts = splitTopLevel(inner, ',');
     const keyType = parts[0] ? parseTypeName(parts[0]) : 'string';
-    const valType = parts[1] ? parseTypeName(parts[1]) : 'any';
+    const valType = parts[1] ? parseTypeName(parts[1]) : 'unknown';
     return `Record<${keyType}, ${valType}>`;
   }
   return n;
 }
 
 function parseType(typeObj) {
-  if (!typeObj || !typeObj.names) return 'any';
+  if (!typeObj || !typeObj.names) return 'unknown';
   return typeObj.names.map(parseTypeName).join(' | ');
 }
 
@@ -487,8 +492,14 @@ const TS_BUILTINS = new Set([
 ]);
 
 function collectCustomTypeRefs(str) {
+  // Only collect identifiers that can be type references. String literal enum values such as
+  // "Area" and "BarClustered" must not become fake cross-file type stubs. Object-literal property
+  // names such as `InternalId: string` are not type references either.
+  const withoutStrings = str
+    .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '')
+    .replace(/\b[A-Z][a-zA-Z0-9]+\b(?=\s*:)/g, '');
   const refs = [];
-  for (const m of (str.match(/\b[A-Z][a-zA-Z0-9]+\b/g) || [])) {
+  for (const m of (withoutStrings.match(/\b[A-Z][a-zA-Z0-9]+\b/g) || [])) {
     if (!TS_BUILTINS.has(m)) refs.push(m);
   }
   return refs;
@@ -540,9 +551,10 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
   if (stubs.length > 0) {
     body += `// Cross-file type stubs\n`;
     for (const stub of stubs) {
-      body += `export type ${stub} = any;\n`;
+      body += `export type ${stub} = unknown;\n`;
     }
     body += '\n';
+    console.warn(`[${namespaceName}] unresolved API types (${stubs.length}): ${stubs.join(', ')}`);
   }
 
   // The entry-point class is always literally named "Api" in the source data
@@ -576,7 +588,20 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
     .join('\n');
   output += '}\n';
 
-  return output;
+  const codeOnly = output
+    .split('\n')
+    .filter(line => !/^\s*(?:\/\/|\/\*|\*)/.test(line))
+    .join('\n');
+  const anyOccurrences = (codeOnly.match(/\bany\b/g) || []).length;
+  return {
+    content: output,
+    stats: {
+      classes: classNames.length,
+      typedefs: typedefNames.length,
+      unresolvedTypes: stubs,
+      anyOccurrences,
+    },
+  };
 }
 
 async function main() {
@@ -585,16 +610,20 @@ async function main() {
   }
 
   const apiData = await fetchApiDefinitions();
+  const report = {};
 
   for (const [typeName, data] of Object.entries(apiData)) {
     console.log(`Fetching legacy descriptions for ${typeName}...`);
     const legacy = await fetchLegacyDescriptions(typeName);
-    const content = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
+    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
     const filename = `${typeName}.ts`;
-    fs.writeFileSync(path.join(OUTPUT_DIR, filename), content);
-    console.log(`Generated ${filename} with ${Object.keys(extractClasses(data)).length} classes`);
+    fs.writeFileSync(path.join(OUTPUT_DIR, filename), generated.content);
+    report[typeName] = generated.stats;
+    console.log(`Generated ${filename} with ${generated.stats.classes} classes`);
   }
 
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'api-report.json'), `${JSON.stringify(report, null, 2)}\n`);
+  console.log(`Wrote ${path.join(OUTPUT_DIR, 'api-report.json')}`);
   console.log('Done!');
 }
 
