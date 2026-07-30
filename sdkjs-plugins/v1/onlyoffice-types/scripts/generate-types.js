@@ -4,16 +4,30 @@ const { spawnSync } = require('child_process');
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
 const EDITORS = {
-  word: { code: 'CDE', sources: ['word/apiBuilder.js'] },
-  cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js'] },
-  slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js'] },
-  forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js'] },
+  word: { code: 'CDE', sources: ['word/apiBuilder.js', 'word/plugin-events.js'] },
+  cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
+  slide: { code: 'CPE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'slide/plugin-events.js'] },
+  forms: { code: 'CFE', sources: ['word/apiBuilder.js', '../sdkjs-forms/apiBuilder.js', '../sdkjs-forms/plugin-events.js'] },
 };
 const NAMESPACE_MAP = {
   word: 'Word',
   cell: 'Cell',
   slide: 'Slide',
   forms: 'Forms',
+};
+
+// A handful of real, working editor events aren't documented via a `@event` JSDoc block anywhere
+// (unlike everything plugin-events.js does document) - confirmed instead against the exact sdkjs
+// call site that dispatches each one via `window.g_asc_plugins.onPluginEvent(name, ...)`.
+const MANUAL_EVENTS = {
+  word: {
+    // word/Editor/Document.js CDocument.prototype.OnAttachParagraph/OnDetachParagraph
+    onParagraphAdd: { params: [{ name: 'data', type: '{ InternalId: string }' }], description: 'Fired when a paragraph is added to the document.' },
+    onParagraphRemove: { params: [{ name: 'data', type: '{ InternalId: string }' }], description: 'Fired when a paragraph is removed from the document.' },
+    // word/Editor/Document.js CDocument.prototype.OnAttachContentControl/OnDetachContentControl
+    onContentControlAdd: { params: [{ name: 'control', type: 'ContentControl' }], description: 'Fired when a content control is added to the document.' },
+    onContentControlRemove: { params: [{ name: 'control', type: 'ContentControl' }], description: 'Fired when a content control is removed from the document.' },
+  },
 };
 
 function readOption(name) {
@@ -63,6 +77,7 @@ function hasEditorTag(item, editorCode) {
 function filterDoclets(doclets, editorCode) {
   return doclets.filter((item) => {
     if (item.kind === 'typedef' || item.kind === 'class') return !item.name?.startsWith('_');
+    if (item.kind === 'event') return hasEditorTag(item, editorCode);
     if (item.kind !== 'function' && item.kind !== 'method') return false;
     return item.scope !== 'inner' && !item.longname?.includes('private') && hasEditorTag(item, editorCode);
   }).map((item) => ({
@@ -249,6 +264,54 @@ function extractTypedefs(data) {
   return typedefs;
 }
 
+function extractEvents(data, manualEvents) {
+  const events = { ...manualEvents };
+
+  for (const item of data) {
+    if (item.kind !== 'event' || !item.name) continue;
+
+    // A nested field of an object param shows up two different ways depending on which JSDoc tag
+    // documented it: a repeated `@param {number} data.slideIndex` lands in `params` (dotted name),
+    // while `@property {string} data.paragraphId` (used alongside a single `@param {Object} data`)
+    // lands in the separate `properties` array instead - merge both before grouping.
+    const allParams = [...(item.params || []), ...(item.properties || [])];
+    const topLevel = allParams.filter((p) => !p.name.includes('.'));
+    const nested = allParams.filter((p) => p.name.includes('.'));
+
+    const params = topLevel.map((p) => {
+      const ownNested = nested.filter((np) => np.name.startsWith(`${p.name}.`));
+      if (ownNested.length > 0) {
+        const props = ownNested
+          .map((np) => `${np.name.slice(p.name.length + 1)}: ${parseType(np.type)}`)
+          .join('; ');
+        return { name: p.name, type: `{ ${props} }` };
+      }
+      return { name: p.name, type: parseType(p.type) };
+    });
+
+    events[item.name] = { params, description: item.description || '' };
+  }
+
+  return events;
+}
+
+function generateEventArgsType(events) {
+  const eventNames = Object.keys(events).sort();
+  if (eventNames.length === 0) return '';
+
+  let output = 'export type EditorEventArgs = {\n';
+  for (const name of eventNames) {
+    const event = events[name];
+    if (event.description) {
+      output += `  /** ${event.description.replace(/\n/g, ' ')} */\n`;
+    }
+    const tuple = event.params.map((p) => `${p.name}: ${p.type}`).join(', ');
+    output += `  ${name}: [${tuple}];\n`;
+  }
+  output += '};\n\nexport type EditorEventName = keyof EditorEventArgs;\n';
+  return output;
+}
+
 function generateInterface(className, classData) {
   let output = '';
 
@@ -314,7 +377,7 @@ function collectCustomTypeRefs(str) {
   return refs;
 }
 
-function collectReferencedApiTypes(classes, typedefs) {
+function collectReferencedApiTypes(classes, typedefs, events) {
   const refs = new Set();
   for (const classData of Object.values(classes)) {
     for (const method of Object.values(classData.methods)) {
@@ -328,6 +391,9 @@ function collectReferencedApiTypes(classes, typedefs) {
   for (const td of Object.values(typedefs)) {
     if (td.type) collectCustomTypeRefs(td.type).forEach(t => refs.add(t));
     for (const prop of td.properties) collectCustomTypeRefs(prop.type).forEach(t => refs.add(t));
+  }
+  for (const event of Object.values(events || {})) {
+    for (const p of event.params) collectCustomTypeRefs(p.type).forEach(t => refs.add(t));
   }
   return refs;
 }
@@ -346,8 +412,10 @@ function generateDtsFile(data, typeName, namespaceName) {
   const classes = extractClasses(data);
   const classNames = Object.keys(classes).sort();
 
+  const events = extractEvents(data, MANUAL_EVENTS[typeName]);
+
   const definedNames = new Set([...classNames, ...typedefNames]);
-  const referenced = collectReferencedApiTypes(classes, typedefs);
+  const referenced = collectReferencedApiTypes(classes, typedefs, events);
   const stubs = [...referenced].filter(t => !definedNames.has(t)).sort();
   if (stubs.length > 0) {
     body += `// Cross-file type stubs\n`;
@@ -366,6 +434,16 @@ function generateDtsFile(data, typeName, namespaceName) {
   // importable from every editor without ambiguity.
   for (const className of classNames) {
     body += generateInterface(className, classes[className]);
+    body += '\n';
+  }
+
+  // executeMethod-style event args map, parsed from plugin-events.js (+ MANUAL_EVENTS above for
+  // the small number of real events that aren't documented via a JSDoc @event block anywhere) -
+  // lets attachEditorEvent/detachEditorEvent be typed per event name/payload the same way
+  // executeMethod already is per method name/args.
+  const eventArgsType = generateEventArgsType(events);
+  if (eventArgsType) {
+    body += eventArgsType;
     body += '\n';
   }
 

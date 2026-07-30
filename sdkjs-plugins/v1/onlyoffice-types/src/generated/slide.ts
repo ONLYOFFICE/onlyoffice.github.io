@@ -502,6 +502,7 @@ export namespace Slide {
     CreateLayout(oMaster?: ApiMaster): ApiLayout;
     CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill;
     CreateMaster(oTheme?: ApiTheme): ApiMaster;
+    CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
     CreateNoFill(): ApiFill;
     CreateNumbering(numType: BulletType, startAt: number): ApiBullet;
     CreateOleObject(sImageSrc: string, nWidth: number, nHeight: number, sData: string, sAppId: string): ApiOleObject;
@@ -918,14 +919,14 @@ export namespace Slide {
     SetLockAspect(bAspect: boolean): boolean;
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
     SetName(name: string): boolean;
-    SetOutLine(oStroke: ApiStroke): boolean;
+    SetOutLine(stroke: ApiStroke): boolean;
     SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean;
     SetPosX(posX: number): boolean;
     SetPosY(posY: number): boolean;
     SetPosition(nPosX: number, nPosY: number): void;
     SetRotation(nRotAngle: number): boolean;
     SetShadow(shadow: ApiShadow): boolean;
-    SetSize(nWidth: number, nHeight: number): void;
+    SetSize(nWidth: number, nHeight: number): boolean;
     SetTitle(title: string): boolean;
     ToJSON(): object;
     Unselect(): boolean;
@@ -1091,6 +1092,8 @@ export namespace Slide {
 
   /** Class representing a mathematical equation. */
   export interface ApiMath {
+    GetClassType(): "math";
+    GetText(format?: "unicode" | "latex"): string;
   }
 
   /** Class representing a notes page. */
@@ -1614,7 +1617,7 @@ export namespace Slide {
     RemoveColumn(oCell: ApiTableCell): boolean;
     RemoveRow(oCell: ApiTableCell): boolean;
     ReplacePlaceholder(drawing: Drawing): boolean;
-    Select(): true;
+    SelectRange(startCellIndex: number, startRowIndex: number, endCellIndex: number, endRowIndex: number): boolean;
     SetBackgroundColor(color?: ApiColor): boolean;
     SetCellSpacing(nValue: number): boolean;
     SetColumnWidth(columnIndex: number, width: number): number | null;
@@ -1626,7 +1629,7 @@ export namespace Slide {
     SetPosY(posY: number): boolean;
     SetPosition(nPosX: number, nPosY: number): void;
     SetShd(sType: ShdType | ApiFill, r: number, g: number, b: number): void;
-    SetSize(width: number, height: number): void;
+    SetSize(width: number, height: number): boolean;
     SetStyle(oStyle: ApiStyle): boolean;
     SetStyleColBandSize(nCount: number): boolean;
     SetStyleRowBandSize(nCount: number): boolean;
@@ -1792,7 +1795,7 @@ export namespace Slide {
     IntersectWith(oRange: ApiTextRange): ApiTextRange | null;
     MoveCursorToPos(nPos?: number): boolean;
     Replace(sFindWhat: string, sReplaceWith: string, bMatchCase?: boolean, bWholeWords?: boolean): ApiTextRange;
-    Select(): boolean;
+    Select(update?: boolean): boolean;
     SetBold(isBold: boolean): ApiTextRange;
     SetCaps(isCaps: boolean): ApiTextRange;
     SetColor(color: ApiColor): ApiTextRange;
@@ -1880,5 +1883,20 @@ export namespace Slide {
   /** Class representing an animation effect. */
   export interface g_nApiEffectIdCounter {
   }
+
+  export type EditorEventArgs = {
+    /** The function called when the current slide has changed. */
+    onChangeCurrentSlide: [index: number];
+    /** The function called when a slide show presentation starts. */
+    onSlideShowBegin: [];
+    /** The function called when a slide show presentation ends. */
+    onSlideShowEnd: [];
+    /** The function called after a slide has been changed and displayed during a slide show presentation.Fires before the slide content is actually displayed. */
+    onSlideShowNextSlide: [];
+    /** The function called when slide changes during a slide show presentation. Provides information about both the current and previous slide. */
+    onSlideShowSlideChanged: [data: { slideIndex: number; previousSlideIndex: number }];
+  };
+
+  export type EditorEventName = keyof EditorEventArgs;
 
 }

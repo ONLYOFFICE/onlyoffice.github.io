@@ -191,7 +191,7 @@ export namespace Forms {
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
   /** The types of elements that can be added to the paragraph structure. */
-  export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+  export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
@@ -1156,5 +1156,12 @@ export namespace Forms {
   /** Class representing the settings which are used to create a watermark. */
   export interface ApiWatermarkSettings {
   }
+
+  export type EditorEventArgs = {
+    /** The function called when the user clicks the "Complete & Submit" button. */
+    onSubmitForm: [];
+  };
+
+  export type EditorEventName = keyof EditorEventArgs;
 
 }
