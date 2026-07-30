@@ -97,7 +97,14 @@ export {};
 
 interface PluginScope {
     [key: string]: any;
-    prototype: {
+    /**
+     * Only present on the initial `Asc.scope` the runtime bootstraps (`plugins.dev.js` sets it once
+     * at startup as a convenience for plugin authors - the runtime itself never calls it). Plugins
+     * routinely replace `Asc.scope` wholesale with a plain data payload before `callCommand`
+     * (`window.Asc.scope = { foo: 1 }`) so that data is readable inside the sandboxed callback -
+     * that payload has no reason to carry `prototype.clear`, so it must stay optional here.
+     */
+    prototype?: {
         clear(): void;
     };
 }

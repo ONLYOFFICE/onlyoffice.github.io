@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 const PACKAGE_ROOT = path.join(__dirname, '..');
-const DEFAULT_RUNTIME = path.resolve(PACKAGE_ROOT, '..', 'plugins.js');
+// plugins.dev.js, not the minified plugins.js: the minifier assigns short variable names
+// (`b.Asc.plugin`, `e.Buttons`, ...) that shift on every rebuild, which makes matching against
+// them by hardcoded prefix fragile - plugins.dev.js keeps the real `window.Asc.plugin`/`Asc.Buttons`
+// qualified names stable across rebuilds.
+const DEFAULT_RUNTIME = path.resolve(PACKAGE_ROOT, '..', 'plugins.dev.js');
 const DECLARATIONS = path.join(PACKAGE_ROOT, 'index.d.ts');
 
 const RUNTIME_PLUGIN_MEMBERS = [
@@ -76,7 +80,7 @@ function checkGroup({name, expected, declared, runtime, runtimeObject}) {
     throw new Error(`${name}: missing declarations: ${missingDeclarations.join(', ')}`);
   }
   if (missingRuntime.length > 0) {
-    throw new Error(`${name}: missing runtime assignments in plugins.js: ${missingRuntime.join(', ')}`);
+    throw new Error(`${name}: missing runtime assignments in plugins.dev.js: ${missingRuntime.join(', ')}`);
   }
 
   console.log(`${name}: ${expected.length} runtime members verified`);
@@ -95,14 +99,14 @@ function main() {
     expected: RUNTIME_PLUGIN_MEMBERS,
     declared: declaredMembers(declarations, 'AscPlugin'),
     runtime,
-    runtimeObject: 'b\\.Asc\\.plugin',
+    runtimeObject: '(?:window\\.)?Asc\\.plugin',
   });
   checkGroup({
     name: 'Asc.Buttons',
     expected: RUNTIME_BUTTON_MEMBERS,
     declared: declaredMembers(declarations, 'Buttons'),
     runtime,
-    runtimeObject: 'e\\.Buttons',
+    runtimeObject: '(?:window\\.)?Asc\\.Buttons',
   });
 
   const ascBody = extractInterfaceBody(declarations, 'Asc');
@@ -110,18 +114,18 @@ function main() {
     if (!new RegExp(`\\b${escapeRegExp(constructor)}\\s*:`).test(ascBody)) {
       throw new Error(`Asc: missing constructor declaration: ${constructor}`);
     }
-    if (!new RegExp(`e\\.${escapeRegExp(constructor)}\\s*=`).test(runtime)) {
-      throw new Error(`Asc: missing runtime constructor assignment in plugins.js: ${constructor}`);
+    if (!new RegExp(`(?:window\\.)?Asc\\.${escapeRegExp(constructor)}\\s*=`).test(runtime)) {
+      throw new Error(`Asc: missing runtime constructor assignment in plugins.dev.js: ${constructor}`);
     }
   }
   console.log(`Asc constructors: ${RUNTIME_CONSTRUCTORS.length} runtime constructors verified`);
 
   const scopeBody = extractInterfaceBody(declarations, 'PluginScope');
-  if (!/prototype\s*:\s*\{[\s\S]*?\bclear\s*\(\s*\)\s*:\s*\(?.*?\)?\s*void/.test(scopeBody)) {
+  if (!/prototype\??\s*:\s*\{[\s\S]*?\bclear\s*\(\s*\)\s*:\s*\(?.*?\)?\s*void/.test(scopeBody)) {
     throw new Error('PluginScope: missing prototype.clear declaration');
   }
-  if (!/b\.Asc\.scope\.prototype\s*=\s*\{[^}]*\bclear\s*:/.test(runtime)) {
-    throw new Error('PluginScope: missing runtime prototype.clear assignment in plugins.js');
+  if (!/(?:window\.)?Asc\.scope\.prototype\s*=\s*\{[^}]*\bclear\s*:/.test(runtime)) {
+    throw new Error('PluginScope: missing runtime prototype.clear assignment in plugins.dev.js');
   }
   console.log('Asc.scope.prototype.clear: runtime member verified');
 }

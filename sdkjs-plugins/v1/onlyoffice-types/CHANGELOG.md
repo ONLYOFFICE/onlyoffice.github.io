@@ -4,14 +4,15 @@
 
 Initial public release.
 
-- The root package no longer declares a cross-editor global `Api` intersection. Editor-specific entry points (`/word`, `/cell`, `/slide`, `/pdf`) now declare the matching `Api` type for `callCommand`.
+- The root package no longer declares a cross-editor global `Api` intersection. Editor-specific entry points (`/word`, `/cell`, `/slide`, `/pdf`) now declare the matching `Api` type for `callCommand`. **If your code referenced the bare global `Api`, add a local `declare const Api: Word.Api;` (or Cell/Slide/Pdf) to each file that uses it, or `import "onlyoffice-plugins-api/<editor>"` once for its ambient global.**
+- `PluginScope.prototype` is optional, not required - plugins routinely replace `Asc.scope` wholesale with a plain data payload before `callCommand` (`window.Asc.scope = { foo: 1 }`), and that payload has no reason to carry `prototype.clear` (it's only ever set once at runtime bootstrap as an author convenience, never read back by the runtime itself).
 - Added public plugin menu APIs: context menu, toolbar, window header, and content-control button registration plus click handlers.
 - Added a typed plugin event map for common events, with an `unknown[]` fallback for undocumented event names.
 - Added a separate `Pdf` namespace and PDF Plugin API method definitions, including `GetPageImage`, `GoToPage`, and `ReplacePageContent`; `Forms` remains the Form API namespace.
 - Fixed generated type reference detection so string enum values and object property names no longer produce fake type stubs. Generated files now contain no `any` occurrences; unresolved references are reported in `src/generated/api-report.json`.
 - PDF is now included in the generator and shared Word API sources are loaded for PDF cross-references.
 - Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
-- Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, button constructors, and `Asc.scope.prototype.clear` against `plugins.js`.
+- Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, button constructors, and `Asc.scope.prototype.clear` against `plugins.dev.js` (the unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds, unlike the minified `plugins.js`'s single-letter aliases).
 - Added `Asc.plugin.guid`, `windowID`, and custom menu click handler properties to the runtime declarations.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
