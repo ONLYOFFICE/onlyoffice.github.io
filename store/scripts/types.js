@@ -14,6 +14,7 @@
  * @typedef {Object} PluginCardWindowParams
  * @property {'showPluginCard'} type
  * @property {string} pluginName
+ * @property {number} pluginVersion
  * @property {string} pluginDescription
  * @property {string} OOMarketplaceUrl
  * @property {string} OOIO

@@ -442,12 +442,12 @@
 			window.Asc.plugin.executeMethod("UpdateToolbarMenuItem", [items]);
 	};
 
-	Asc.Buttons.registerWindowHeader = function(windowId, buttons)
+	Asc.Buttons.registerWindowHeader = function(windowId, buttons, options)
 	{
-		Asc.Buttons.updateWindowHeader(windowId, buttons, true);
+		Asc.Buttons.updateWindowHeader(windowId, buttons, true, options);
 	};
 
-	Asc.Buttons.updateWindowHeader = function(windowId, buttons, isAdd)
+	Asc.Buttons.updateWindowHeader = function(windowId, buttons, isAdd, options)
 	{
 		let items = {
 			guid : window.Asc.plugin.guid,
@@ -456,6 +456,12 @@
 				items : []
 			}]
 		};
+
+		if (options) {
+			items.frames.forEach(function(frame) {
+				Object.assign(frame, options);
+			});
+		}
 
 		for (let i = 0, len = buttons.length; i < len; i++)
 		{
@@ -859,6 +865,7 @@
 		this.itemType = ItemType.WindowHeader;
 		this.align = "right";
 		this.isTitle = false;
+		this.isLabel = false;
 
 		Asc.Buttons.ButtonsWindowHeader.push(this);
 	}
@@ -879,6 +886,8 @@
 			item.align = this.align;
 		if (this.isTitle)
 			item.isTitle = true;
+		if (this.isLabel)
+			item.isLabel = true;
 		return item;
 	};
 

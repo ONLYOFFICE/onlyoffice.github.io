@@ -74,7 +74,12 @@ const PluginCard = {
     /** @param {PluginCardWindowParams} data */
     init: function(data) {
         const self = this;
-        window.onresize = this.setDivHeight;
+        window.onresize = function() {
+            self.setDivHeight();
+            if (typeof _syncPluginCardModalState === 'function') {
+                _syncPluginCardModalState(data.independentMode);
+            }
+        };
         this._resetDom();
         this.plugin = data.plugin;
         this.installed = data.installed;
@@ -92,7 +97,9 @@ const PluginCard = {
         Utils.setTranslations(data.translate);
         Utils.translateAll();
         PluginCardUI.init(Utils.themeType);
-        PluginCardUI.toggleLoader(true, 'Loading');
+        if (!data.independentMode && (data.pluginVersion && data.pluginVersion > 1000005)) {
+            PluginCardUI.toggleLoader(true, 'Loading');
+        }
         return Utils.waitForRepaint().then(function() {
             self._show(data);
             PluginCardUI.toggleLoader(false);
@@ -356,6 +363,11 @@ const PluginCard = {
                 const changelog = Utils.makeChangeLogHtml(response);
 				PluginCardUI.spanChangelog.classList.remove("hidden");
 				PluginCardUI.divChangelogPreview.innerHTML = changelog;
+                const links = PluginCardUI.divChangelogPreview.querySelectorAll('a');
+                for (let i = 0; i < links.length; i++) {
+                    links[i].setAttribute('target', '_blank');
+                    links[i].setAttribute('rel', 'noopener noreferrer');
+                }
                 self._updateScroll();
 			})
             .onFailure(function() {
