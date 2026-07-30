@@ -124,6 +124,14 @@ SDKJS_PATH=/path/to/sdkjs npm run generate
 `SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
 the env var too.
 
+sdkjs is the structural source of truth (classes, methods, params - it can't drift from the actual
+runtime), but its own JSDoc descriptions are terser than ONLYOFFICE's public docs. The generator
+also fetches `office-js-api-declarations` (the docs site's own snapshot) over the network and uses
+its descriptions - which usually include a runnable `## Try it` example - wherever a class/method
+name matches; anything unmatched keeps its plainer sdkjs description. This second source is a soft
+dependency: if the fetch fails (offline, rate-limited, ...) generation still completes with a
+warning, just without the richer descriptions.
+
 ## Type-checking
 
 ```bash

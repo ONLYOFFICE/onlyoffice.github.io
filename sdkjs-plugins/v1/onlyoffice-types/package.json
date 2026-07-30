@@ -1,8 +1,24 @@
 {
   "name": "onlyoffice-plugins-api",
   "version": "0.8.0",
-  "types": "index.d.ts",
   "description": "TypeScript definitions for OnlyOffice plugins",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io.git",
+    "directory": "sdkjs-plugins/v1/onlyoffice-types"
+  },
+  "homepage": "https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/v1/onlyoffice-types#readme",
+  "bugs": {
+    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types"
+  },
   "license": "AGPL-3.0-or-later",
   "keywords": [
     "onlyoffice",

@@ -84,9 +84,11 @@ var pluginConfig = {
         'ja': '私のプラグイン',
 
     },
+    offered: 'John Doe',
     description: 'A sample plugin',
     guid: 'asc.{12345678-1234-1234-1234-123456789012}',
-    minVersion: '7.0.0'
+    version: '1.0.0',
+    minVersion: '8.2.0'
 };
 
 export { 
