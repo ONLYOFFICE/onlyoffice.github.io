@@ -173,6 +173,7 @@ interface AscPlugin {
         (<T extends Cell.EditorEventName>(eventName: T, callback: (...args: Cell.EditorEventArgs[T]) => void) => void) &
         (<T extends Slide.EditorEventName>(eventName: T, callback: (...args: Slide.EditorEventArgs[T]) => void) => void) &
         (<T extends Forms.EditorEventName>(eventName: T, callback: (...args: Forms.EditorEventArgs[T]) => void) => void) &
+        (<T extends Pdf.EditorEventName>(eventName: T, callback: (...args: Pdf.EditorEventArgs[T]) => void) => void) &
         ((eventName: PluginEditorEventName, callback: PluginEditorEventCallback) => void);
     attachContextMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
     attachEvent: (<T extends keyof PluginEventMap>(eventName: T, callback: (...args: PluginEventMap[T]) => void) => void) &
@@ -185,6 +186,7 @@ interface AscPlugin {
         (<T extends Cell.EditorEventName>(eventName: T) => void) &
         (<T extends Slide.EditorEventName>(eventName: T) => void) &
         (<T extends Forms.EditorEventName>(eventName: T) => void) &
+        (<T extends Pdf.EditorEventName>(eventName: T) => void) &
         ((eventName: PluginEditorEventName) => void);
     detachEvent: (<T extends keyof PluginEventMap>(eventName: T) => void) &
         ((eventName: string) => void);
