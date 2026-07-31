@@ -193,6 +193,32 @@ sibling directory, which only exists inside this checkout. A small `KNOWN_ISSUES
 script tracks the couple of plugins whose `config.json` has a genuine mistake (a misplaced field, a
 typo) rather than a schema gap; anything else that fails is a real regression.
 
+## Modular entry points
+
+The root package remains the compatibility entry point. The same runtime types are also available by
+layer for better discoverability and smaller imports:
+
+```typescript
+import type { AscPlugin } from "onlyoffice-plugins-api/plugin/asc-plugin";
+import type { PluginEventMap } from "onlyoffice-plugins-api/plugin/events";
+import type { PluginConfig } from "onlyoffice-plugins-api/config";
+import type { AscDesktopEditor } from "onlyoffice-plugins-api/services/desktop-editor";
+```
+
+Available layer entry points:
+
+```text
+onlyoffice-plugins-api/plugin
+onlyoffice-plugins-api/plugin/events
+onlyoffice-plugins-api/plugin/menus
+onlyoffice-plugins-api/plugin/windows
+onlyoffice-plugins-api/config
+onlyoffice-plugins-api/services
+```
+
+These are type-only re-exports of the same declarations used by the root package, so existing root
+imports remain compatible.
+
 ## Project Structure
 
 ```
@@ -209,7 +235,12 @@ onlyoffice-types/
 │   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
 │   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
 │   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
-│   └── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
+│   ├── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
+│   ├── plugin/             # Asc runtime, events, menus, windows
+│   ├── config/             # PluginConfig and config entry points
+│   └── services/           # Desktop editor and simple request entry points
+├── schemas/
+│   └── config.schema.json
 ├── scripts/
 │   └── generate-types.js
 ├── tsconfig.json           # builds/typechecks the library itself

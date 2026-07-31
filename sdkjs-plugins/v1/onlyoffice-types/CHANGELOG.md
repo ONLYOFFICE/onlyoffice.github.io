@@ -14,6 +14,7 @@ Initial public release.
 - Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
 - Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, button constructors, and `Asc.scope.prototype.clear` against `plugins.dev.js` (the unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds, unlike the minified `plugins.js`'s single-letter aliases).
 - Added `Asc.plugin.guid`, `windowID`, and custom menu click handler properties to the runtime declarations.
+- Added modular type-only entry points for `plugin`, `config`, and `services` while preserving the root API.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.

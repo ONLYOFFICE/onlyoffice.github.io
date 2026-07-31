@@ -20,6 +20,19 @@
     "./pdf": {
       "types": "./src/editors/pdf.d.ts"
     },
+    "./plugin": {
+      "types": "./src/plugin/index.d.ts"
+    },
+    "./plugin/*": {
+      "types": "./src/plugin/*.d.ts"
+    },
+    "./config": {
+      "types": "./src/config/index.d.ts"
+    },
+    "./services": {
+      "types": "./src/services/index.d.ts"
+    },
+    "./config/schema.json": "./schemas/config.schema.json",
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -35,6 +48,18 @@
       ],
       "pdf": [
         "src/editors/pdf.d.ts"
+      ],
+      "plugin": [
+        "src/plugin/index.d.ts"
+      ],
+      "plugin/*": [
+        "src/plugin/*"
+      ],
+      "config": [
+        "src/config/index.d.ts"
+      ],
+      "services": [
+        "src/services/index.d.ts"
       ]
     }
   },

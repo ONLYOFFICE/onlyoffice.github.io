@@ -982,9 +982,15 @@ interface VariationConfig {
 type VariationType = 'window' | 'panel' | 'panelRight' | 'background' | 'system';
 
 export type {
+    Asc,
+    AscPlugin,
+    AscDesktopEditor,
+    AscSimpleRequest,
+    AscSimpleRequestOptions,
     EditorType,
     AscTheme,
     VariationConfig,
+    VariationType,
     PluginWindow,
     PluginConfig,
     InstalledPluginInfo,
