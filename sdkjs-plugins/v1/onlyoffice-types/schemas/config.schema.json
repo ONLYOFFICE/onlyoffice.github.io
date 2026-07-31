@@ -1,0 +1,397 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "baseUrl": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "discussion": {
+      "type": "string"
+    },
+    "guid": {
+      "type": "string"
+    },
+    "help": {
+      "type": "string",
+      "description": "A help/support link for the plugin."
+    },
+    "onlyofficeScheme": {
+      "type": "boolean",
+      "description": "Marks the plugin as belonging to ONLYOFFICE's own scheme/catalog rather than a third party."
+    },
+    "manifestVersion": {
+      "type": "string",
+      "description": "Version of the config.json format itself, distinct from the plugin's own `version`."
+    },
+    "minVersion": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "nameLocale": {
+      "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+    },
+    "offered": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "variations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/VariationConfig"
+      }
+    },
+    "version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "guid",
+    "name",
+    "variations"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "Record<string,string>": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "VariationConfig": {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ButtonConfig"
+          },
+          "description": "Defaults to no buttons (an empty toolbar) when omitted - routinely omitted in practice."
+        },
+        "cryptoDisabledForExternalCloud": {
+          "type": "string"
+        },
+        "cryptoDisabledForInternalCloud": {
+          "type": "string"
+        },
+        "cryptoDisabledOnStart": {
+          "type": "string"
+        },
+        "cryptoMode": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "descriptionLocale": {
+          "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+        },
+        "EditorsSupport": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EditorType"
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fixedSize": {
+          "type": "boolean"
+        },
+        "icons": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IconConfig"
+              }
+            }
+          ],
+          "description": "Some plugins use the same rich per-scale shape here as `icons2` instead of a plain path/map."
+        },
+        "icons2": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IconConfig"
+          }
+        },
+        "initData": {
+          "type": "string"
+        },
+        "initDataType": {
+          "$ref": "#/definitions/InitDataType"
+        },
+        "initOnSelectionChanged": {
+          "type": "boolean"
+        },
+        "isCanDocked": {
+          "type": "boolean"
+        },
+        "isCustomWindow": {
+          "type": "boolean"
+        },
+        "isDisplayedInViewer": {
+          "type": "boolean"
+        },
+        "isInsideMode": {
+          "type": "boolean"
+        },
+        "isModal": {
+          "type": "boolean"
+        },
+        "isNeedNumbering": {
+          "type": "boolean",
+          "description": "Whether the variation's content needs sequential numbering (used by some panel plugins)."
+        },
+        "isSystem": {
+          "type": "boolean"
+        },
+        "isTargeted": {
+          "type": "boolean"
+        },
+        "isUpdateOleOnResize": {
+          "type": "boolean"
+        },
+        "isViewer": {
+          "type": "boolean"
+        },
+        "isVisual": {
+          "type": "boolean",
+          "description": "Omitted in practice about as often as it's set explicitly."
+        },
+        "menu": {
+          "$ref": "#/definitions/MenuType"
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "executeMethod names this variation calls - purely descriptive/documentation, not enforced."
+        },
+        "name": {
+          "type": "string"
+        },
+        "nameLocale": {
+          "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+        },
+        "screens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Store listing screenshots for this specific variation (see also StoreConfig.screenshots)."
+        },
+        "size": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "store": {
+          "$ref": "#/definitions/StoreConfig"
+        },
+        "type": {
+          "$ref": "#/definitions/VariationType"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "EditorsSupport",
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "ButtonConfig": {
+      "type": "object",
+      "properties": {
+        "isViewer": {
+          "type": "boolean"
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "text": {
+          "type": "string"
+        },
+        "textLocale": {
+          "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "EditorType": {
+      "type": "string",
+      "enum": [
+        "word",
+        "cell",
+        "slide",
+        "pdf"
+      ]
+    },
+    "IconConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "description": "Light/dark icon set variant - real-world config.json files pair this with `theme`."
+        },
+        "theme": {
+          "type": "string",
+          "description": "Icon theme name, e.g. `\"flat\"`/`\"flatDark\"` - not a fixed enum in practice."
+        },
+        "default": {
+          "$ref": "#/definitions/IconScaleEntry",
+          "description": "Fallback used for any scale not otherwise listed."
+        },
+        "100%": {
+          "$ref": "#/definitions/IconScaleEntry"
+        },
+        "125%": {
+          "$ref": "#/definitions/IconScaleEntry"
+        },
+        "150%": {
+          "$ref": "#/definitions/IconScaleEntry"
+        },
+        "175%": {
+          "$ref": "#/definitions/IconScaleEntry"
+        },
+        "200%": {
+          "$ref": "#/definitions/IconScaleEntry"
+        }
+      }
+    },
+    "IconScaleEntry": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "string"
+        },
+        "hover": {
+          "type": "string"
+        },
+        "normal": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "normal"
+      ],
+      "additionalProperties": false
+    },
+    "InitDataType": {
+      "type": "string",
+      "enum": [
+        "text",
+        "html",
+        "ole",
+        "desktop",
+        "desktop-external",
+        "none",
+        "sign"
+      ]
+    },
+    "MenuType": {
+      "type": "string",
+      "enum": [
+        "left",
+        "right"
+      ]
+    },
+    "StoreConfig": {
+      "type": "object",
+      "properties": {
+        "background": {
+          "type": "object",
+          "properties": {
+            "dark": {
+              "type": "string"
+            },
+            "light": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "dark",
+            "light"
+          ],
+          "additionalProperties": false
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "icons": {
+          "type": "object",
+          "properties": {
+            "dark": {
+              "type": "string"
+            },
+            "light": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "dark",
+            "light"
+          ],
+          "additionalProperties": false
+        },
+        "screenshots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "VariationType": {
+      "type": "string",
+      "enum": [
+        "window",
+        "panel",
+        "panelRight",
+        "background",
+        "system"
+      ]
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/schemas/config.schema.json",
+  "title": "ONLYOFFICE Plugin config.json",
+  "description": "Generated from PluginConfig (and the types it references) in index.d.ts - do not hand-edit, run `npm run generate-schema` instead."
+}

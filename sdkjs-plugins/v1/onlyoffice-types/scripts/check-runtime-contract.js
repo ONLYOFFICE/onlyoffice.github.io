@@ -8,6 +8,10 @@ const PACKAGE_ROOT = path.join(__dirname, '..');
 // qualified names stable across rebuilds.
 const DEFAULT_RUNTIME = path.resolve(PACKAGE_ROOT, '..', 'plugins.dev.js');
 const DECLARATIONS = path.join(PACKAGE_ROOT, 'index.d.ts');
+// AscPlugin/Buttons/Asc/PluginScope live in src/plugin/*.d.ts, not index.d.ts itself -
+// index.d.ts is just a barrel that re-exports them. Concatenate every .d.ts module so the
+// interface lookup below doesn't care which physical file declares a given interface.
+const DECLARATION_GLOB_DIRS = ['src/plugin', 'src/config', 'src/theme', 'src/services'];
 
 const RUNTIME_PLUGIN_MEMBERS = [
   'guid',
@@ -54,9 +58,27 @@ function hasAssignment(source, objectExpression, member) {
   return new RegExp(`${objectExpression}\\.${escapeRegExp(member)}\\s*=`).test(source);
 }
 
+function collectDeclarationFiles() {
+  const files = [DECLARATIONS];
+  for (const dir of DECLARATION_GLOB_DIRS) {
+    const absDir = path.join(PACKAGE_ROOT, dir);
+    if (!fs.existsSync(absDir)) continue;
+    for (const entry of fs.readdirSync(absDir)) {
+      if (entry.endsWith('.d.ts')) files.push(path.join(absDir, entry));
+    }
+  }
+  return files;
+}
+
+function readAllDeclarations() {
+  return collectDeclarationFiles()
+    .map(file => fs.readFileSync(file, 'utf8'))
+    .join('\n');
+}
+
 function extractInterfaceBody(source, name) {
   const match = source.match(new RegExp(`interface\\s+${name}\\s*\\{`));
-  if (!match) throw new Error(`Could not find interface ${name} in ${DECLARATIONS}`);
+  if (!match) throw new Error(`Could not find interface ${name} in index.d.ts or ${DECLARATION_GLOB_DIRS.join(', ')}`);
 
   let depth = 1;
   for (let index = match.index + match[0].length; index < source.length; index += 1) {
@@ -64,7 +86,7 @@ function extractInterfaceBody(source, name) {
     if (source[index] === '}') depth -= 1;
     if (depth === 0) return source.slice(match.index + match[0].length, index);
   }
-  throw new Error(`Unclosed interface ${name} in ${DECLARATIONS}`);
+  throw new Error(`Unclosed interface ${name}`);
 }
 
 function declaredMembers(source, interfaceName) {
@@ -92,7 +114,7 @@ function main() {
   if (!fs.existsSync(DECLARATIONS)) throw new Error(`Declarations file does not exist: ${DECLARATIONS}`);
 
   const runtime = fs.readFileSync(runtimePath, 'utf8');
-  const declarations = fs.readFileSync(DECLARATIONS, 'utf8');
+  const declarations = readAllDeclarations();
 
   checkGroup({
     name: 'Asc.plugin',

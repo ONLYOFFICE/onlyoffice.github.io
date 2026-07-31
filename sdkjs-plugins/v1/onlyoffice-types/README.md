@@ -153,26 +153,77 @@ runnable examples wherever a class/method name matches.
 ## Type-checking
 
 ```bash
-npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.js
+npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
 npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
 npm test               # also type-checks example.js and test/*.js against the library
 ```
 
 `check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
 `windowID`, event handlers, and registration methods), `Asc.Buttons`, button constructors, and
-`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch
-an editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop
-Editor smoke test.
+`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.dev.js` (the
+unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds,
+unlike the minified `plugins.js`'s single-letter aliases). It does not launch an editor or verify
+host-provided `executeMethod` behavior; those require a real browser/Desktop Editor smoke test.
 
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
 actually exported) surface immediately instead of being silently ignored.
 
+## config.json Schema
+
+`schemas/config.schema.json` is a JSON Schema for a plugin's `config.json`, generated straight from
+`PluginConfig`/`VariationConfig`/`ButtonConfig`/etc. in `index.d.ts` (`npm run generate-schema`) -
+it can't drift from the TS types describing the same shape. Point your editor at it for validation
+and autocomplete by adding a `$schema` field to your `config.json`:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/schemas/config.schema.json",
+  "name": "My Plugin",
+  ...
+}
+```
+
+or, without editing every `config.json`, map the pattern once in your editor's settings (VS Code:
+`json.schemas` in `settings.json`, pointing the schema at `sdkjs-plugins/content/*/config.json`).
+
+`npm run validate-schema` checks the schema against every real `config.json` already in this
+monorepo (`sdkjs-plugins/content/*/config.json`) - not part of `npm test` since it needs that
+sibling directory, which only exists inside this checkout. A small `KNOWN_ISSUES` allowlist in the
+script tracks the couple of plugins whose `config.json` has a genuine mistake (a misplaced field, a
+typo) rather than a schema gap; anything else that fails is a real regression.
+
+## Modular entry points
+
+The root package remains the compatibility entry point. The same runtime types are also available by
+layer for better discoverability and smaller imports:
+
+```typescript
+import type { AscPlugin } from "onlyoffice-plugins-api/plugin/asc-plugin";
+import type { PluginEventMap } from "onlyoffice-plugins-api/plugin/events";
+import type { PluginConfig } from "onlyoffice-plugins-api/config";
+import type { AscDesktopEditor } from "onlyoffice-plugins-api/services/desktop-editor";
+```
+
+Available layer entry points:
+
+```text
+onlyoffice-plugins-api/plugin
+onlyoffice-plugins-api/plugin/events
+onlyoffice-plugins-api/plugin/menus
+onlyoffice-plugins-api/plugin/windows
+onlyoffice-plugins-api/config
+onlyoffice-plugins-api/services
+```
+
+These are type-only re-exports of the same declarations used by the root package, so existing root
+imports remain compatible.
+
 ## Project Structure
 
 ```
 onlyoffice-types/
-├── index.d.ts            # Main plugin API types (Asc, Api global, Word/Cell/Slide/Forms exports)
+├── index.d.ts            # Barrel file: imports every module below and re-exports the public API
 ├── src/
 │   ├── generated/        # Auto-generated Office API types, one namespace per editor
 │   │   ├── word.ts        # namespace Word { ... }
@@ -184,7 +235,22 @@ onlyoffice-types/
 │   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
 │   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
 │   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
-│   └── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
+│   ├── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
+│   ├── theme/
+│   │   └── theme.d.ts      # AscTheme, KnownThemeName
+│   ├── config/
+│   │   └── plugin-config.d.ts # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
+│   ├── plugin/
+│   │   ├── events.d.ts     # PluginEventMap and plugin-window-level event types
+│   │   ├── buttons.d.ts    # Buttons, ButtonBase and its Toolbar/ContextMenu/... subtypes
+│   │   ├── plugin.d.ts     # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo (the hub module)
+│   │   └── index.d.ts, asc.d.ts, asc-plugin.d.ts, menus.d.ts, windows.d.ts # modular entry-point facades (see below)
+│   └── services/
+│       ├── desktop-editor.d.ts  # AscDesktopEditor
+│       ├── simple-request.d.ts  # AscSimpleRequest
+│       └── index.d.ts           # modular entry-point facade
+├── schemas/
+│   └── config.schema.json
 ├── scripts/
 │   └── generate-types.js
 ├── tsconfig.json           # builds/typechecks the library itself
@@ -193,3 +259,10 @@ onlyoffice-types/
 ├── test/                  # Call-shape smoke tests copied from the official docs
 └── package.json
 ```
+
+Each interface/type is physically declared in exactly one module (e.g. `AscPlugin` lives in
+`src/plugin/plugin.d.ts`, `AscTheme` in `src/theme/theme.d.ts`); `index.d.ts` only imports and
+re-exports them, so it stays a genuine barrel file rather than a second copy of the same content.
+The `src/plugin/asc.d.ts`/`asc-plugin.d.ts`/`menus.d.ts`/`windows.d.ts`/`services/index.d.ts` files
+are the pre-existing [modular entry points](#modular-entry-points) - thin facades kept for the
+`onlyoffice-plugins-api/plugin/*` import paths, re-exporting from the modules above.

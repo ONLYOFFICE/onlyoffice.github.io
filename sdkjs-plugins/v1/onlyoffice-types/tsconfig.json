@@ -12,6 +12,6 @@
     "sourceMap": true,
     "lib": ["ES2020", "DOM"]
   },
-  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["index.d.ts", "src/generated/*.ts", "src/*.d.ts", "src/plugin/**/*.d.ts", "src/config/**/*.d.ts", "src/services/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "src/editors"]
 }

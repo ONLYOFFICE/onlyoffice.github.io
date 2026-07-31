@@ -14,6 +14,7 @@ Initial public release.
 - Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
 - Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, button constructors, and `Asc.scope.prototype.clear` against `plugins.dev.js` (the unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds, unlike the minified `plugins.js`'s single-letter aliases).
 - Added `Asc.plugin.guid`, `windowID`, and custom menu click handler properties to the runtime declarations.
+- Added modular type-only entry points for `plugin`, `config`, and `services` while preserving the root API.
 - Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
   form object models), enriched with `office-js-api-declarations`' richer descriptions and
   runnable examples where a class/method name matches.
@@ -33,3 +34,22 @@ Initial public release.
   examples.js`) - caught and fixed several signature mismatches against the live docs along the way
   (e.g. `Slide.ShowError`'s params, `GetSelectedText`'s options shape, `GetImageDataFromSelection`'s
   return shape for Cell and Slide).
+- Added `attachEditorEvent`/`detachEditorEvent` overloads for `Pdf.EditorEventName` (`onSelectionEnd`,
+  `onSelectionCancel`) - previously only Word/Cell/Slide/Forms were covered, so PDF fell through to
+  the untyped fallback.
+- Physically split `AscPlugin`, `PluginEventMap`, `PluginWindow`, `Buttons`, `PluginConfig`,
+  `VariationConfig`, `AscDesktopEditor`, `AscSimpleRequest`, and `AscTheme` (and their supporting
+  types) out of `index.d.ts` into dedicated modules (`src/plugin/plugin.d.ts`, `src/plugin/events.d.ts`,
+  `src/plugin/buttons.d.ts`, `src/config/plugin-config.d.ts`, `src/theme/theme.d.ts`,
+  `src/services/desktop-editor.d.ts`, `src/services/simple-request.d.ts`). `index.d.ts` is now a
+  genuine barrel file (127 lines, down from 1031) that only imports and re-exports; each type has
+  exactly one physical home instead of being declared inline with the earlier modules re-exporting it.
+- Added `schemas/config.schema.json`, a JSON Schema for `config.json` generated from
+  `PluginConfig`/`VariationConfig`/`ButtonConfig`/`IconConfig` (`npm run generate-schema`). Validating
+  it against every real `config.json` in this monorepo (`npm run validate-schema`) surfaced and fixed
+  real gaps in those types: `VariationConfig.buttons`/`isVisual` are optional (routinely omitted in
+  practice), `icons2` entries can carry `style`/`theme`/`default`, `VariationConfig` can carry
+  `methods`/`screens`/`isNeedNumbering`, `icons` can hold the same rich per-scale shape as `icons2`,
+  and `PluginConfig` can carry `help`/`onlyofficeScheme`/`manifestVersion`. 51/53 real config.json
+  files now validate cleanly; the remaining 2 have genuine mistakes in those specific plugins,
+  tracked in `validate-config-schema.js`'s `KNOWN_ISSUES`.
