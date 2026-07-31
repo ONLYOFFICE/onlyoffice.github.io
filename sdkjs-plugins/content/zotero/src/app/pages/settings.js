@@ -47,7 +47,36 @@ import {
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
 import { CslStylesParser } from "../csl/styles/style-parser";
+import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
+
+const PREVIEW_ITEMS = [
+    {
+        id: "preview-book",
+        type: "book",
+        title: "The Art of Scientific Writing",
+        author: [{ family: "Miller", given: "Alex" }],
+        issued: { "date-parts": [[2022]] },
+        publisher: "North Star Press",
+        "publisher-place": "New York",
+        edition: "2",
+        volume: "1",
+        URL: "https://example.com/scientific-writing",
+        accessed: { "date-parts": [[2024, 3, 15]] },
+    },
+    {
+        id: "preview-article",
+        type: "article-journal",
+        title: "Designing Better Research Workflows",
+        author: [{ family: "Giannis", given: "Dimitris" }],
+        issued: { "date-parts": [[2021, 6, 10]] },
+        "container-title": "Journal of Digital Research",
+        volume: "14",
+        issue: "3",
+        page: "45-58",
+        DOI: "10.1234/jdr.2021.14.3.45",
+    },
+];
 
 /**
  * @typedef {Object} Settings
@@ -111,6 +140,11 @@ function SettingsPage(router, displayNoneClass) {
     this._languageSelect = new SelectBox("styleLangList", {
         placeholder: "Select language",
     });
+
+    this._previewWrapper = document.getElementById("previewWrapper");
+    if (!this._previewWrapper) {
+        throw new Error("previewWrapper not found");
+    }
 
     this._cslStylesManager = new CslStylesManager("zoteroStyleId");
     this._localesManager = new LocalesManager();
@@ -231,13 +265,13 @@ SettingsPage.prototype.init = function () {
     this._addEventListeners();
     this._languageSelect.addItems(this._LANGUAGES, savedLang);
 
-    const promises = [
-        this._onStyleChange(lastStyle),
-        this._localesManager.loadLocale(savedLang),
-        this._loadStyles(),
-    ];
+    const previewPromise = this._localesManager
+        .loadLocale(savedLang)
+        .then(function () {
+            return self._onStyleChange(lastStyle);
+        });
 
-    return Promise.all(promises);
+    return Promise.all([previewPromise, this._loadStyles()]);
 };
 
 /**
@@ -537,6 +571,111 @@ SettingsPage.prototype._somethingWasChanged = function () {
 };
 
 /**
+ * @param {string|null} styleContent
+ * @param {string} language
+ */
+SettingsPage.prototype._showPreview = function (styleContent, language) {
+    if (!styleContent) {
+        this._previewWrapper.classList.add(this._displayNoneClass);
+        this._previewWrapper.innerHTML = "";
+        return;
+    }
+
+    try {
+        const previewItems = Object.fromEntries(
+            PREVIEW_ITEMS.map(function (item) {
+                return [item.id, item];
+            })
+        );
+        const localesManager = this._localesManager;
+        // @ts-ignore citeproc does not expose an Engine constructor declaration.
+        const formatter = new CSL.Engine(
+            {
+                retrieveLocale: function (/** @type {string} */ id) {
+                    return (
+                        localesManager.getLocale(id) ||
+                        localesManager.getLocale(language) ||
+                        localesManager.getLocale()
+                    );
+                },
+                retrieveItem: function (/** @type {string} */ id) {
+                    return previewItems[id] || null;
+                },
+            },
+            styleContent,
+            language,
+            true
+        );
+        formatter.updateItems(PREVIEW_ITEMS.map((item) => item.id));
+        const bibliography = formatter.makeBibliography();
+        const bibMeta = bibliography && bibliography[0];
+        const entries = bibliography && bibliography[1];
+
+        if (!entries || !entries.length) {
+            this._previewWrapper.classList.add(this._displayNoneClass);
+            this._previewWrapper.innerHTML = "";
+            return;
+        }
+
+        const title = document.createElement("div");
+        title.className = "preview-title";
+        title.textContent = translate("Bibliography preview");
+        const content = document.createElement("div");
+        content.className = "preview-content";
+        content.innerHTML = CslHtmlParser.purifyHtml(entries.join(""));
+        this._applyBibliographyStyles(content, bibMeta);
+        this._previewWrapper.innerHTML = "";
+        this._previewWrapper.appendChild(title);
+        this._previewWrapper.appendChild(content);
+        this._previewWrapper.classList.remove(this._displayNoneClass);
+    } catch (error) {
+        console.error("Failed to render bibliography preview:", error);
+        this._previewWrapper.classList.add(this._displayNoneClass);
+        this._previewWrapper.innerHTML = "";
+    }
+};
+
+/**
+ * citeproc only returns bibliography formatting (hanging indent,
+ * left-margin/right-inline layout, entry/line spacing) as metadata in
+ * `makeBibliography()[0]` — the returned HTML entries carry classes
+ * (csl-entry, csl-left-margin, csl-right-inline) but no styling. Apply
+ * that metadata as inline styles so the preview actually reflects it.
+ * @param {HTMLElement} container
+ * @param {Object|null} [meta]
+ */
+SettingsPage.prototype._applyBibliographyStyles = function (container, meta) {
+    if (!meta) return;
+
+    const entries = container.querySelectorAll(".csl-entry");
+    entries.forEach(function (entry) {
+        entry.style.clear = "both";
+        if (meta.entryspacing) {
+            entry.style.marginBottom = meta.entryspacing + "em";
+        }
+        if (meta.linespacing) {
+            entry.style.lineHeight = String(meta.linespacing);
+        }
+        if (meta.hangingindent && !meta["second-field-align"]) {
+            entry.style.marginLeft = "2em";
+            entry.style.textIndent = "-2em";
+        }
+    });
+
+    if (meta["second-field-align"]) {
+        const marginWidthEm = (meta.maxoffset || 0) + 0.5;
+        container.querySelectorAll(".csl-left-margin").forEach(function (el) {
+            el.style.float = "left";
+            el.style.minWidth = marginWidthEm + "em";
+        });
+        container.querySelectorAll(".csl-right-inline").forEach(function (el) {
+            el.style.display = "block";
+            el.style.marginLeft = marginWidthEm + "em";
+        });
+    }
+};
+
+/**
  * @param {String} styleName - The name of the selected style.
  * @param {Boolean} [isClick] - Whether the style was selected manually or not.
  * @returns {Promise<void>}
@@ -557,6 +696,11 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
             } else {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
             }
+
+            self._showPreview(
+                styleInfo.content,
+                self._localesManager.getLastUsedLanguage()
+            );
 
             const canUseIncludeUrl = Boolean(
                 styleInfo.content &&
