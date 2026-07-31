@@ -188,6 +188,22 @@ div::-moz-selection {
     }
 }
 
+#previewWrapper {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    padding: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 11px;
+    line-height: 1.35;
+
+    .preview-title {
+        font-weight: bold;
+        margin-bottom: 6px;
+    }
+}
+
 #styleSelectedListOther {
     position: absolute;
     .selectbox-header {
