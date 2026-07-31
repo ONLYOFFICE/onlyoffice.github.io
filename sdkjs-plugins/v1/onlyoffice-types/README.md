@@ -153,20 +153,45 @@ runnable examples wherever a class/method name matches.
 ## Type-checking
 
 ```bash
-npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.js
+npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
 npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
 npm test               # also type-checks example.js and test/*.js against the library
 ```
 
 `check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
 `windowID`, event handlers, and registration methods), `Asc.Buttons`, button constructors, and
-`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.js`. It does not launch
-an editor or verify host-provided `executeMethod` behavior; those require a real browser/Desktop
-Editor smoke test.
+`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.dev.js` (the
+unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds,
+unlike the minified `plugins.js`'s single-letter aliases). It does not launch an editor or verify
+host-provided `executeMethod` behavior; those require a real browser/Desktop Editor smoke test.
 
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
 actually exported) surface immediately instead of being silently ignored.
+
+## config.json Schema
+
+`schemas/config.schema.json` is a JSON Schema for a plugin's `config.json`, generated straight from
+`PluginConfig`/`VariationConfig`/`ButtonConfig`/etc. in `index.d.ts` (`npm run generate-schema`) -
+it can't drift from the TS types describing the same shape. Point your editor at it for validation
+and autocomplete by adding a `$schema` field to your `config.json`:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/schemas/config.schema.json",
+  "name": "My Plugin",
+  ...
+}
+```
+
+or, without editing every `config.json`, map the pattern once in your editor's settings (VS Code:
+`json.schemas` in `settings.json`, pointing the schema at `sdkjs-plugins/content/*/config.json`).
+
+`npm run validate-schema` checks the schema against every real `config.json` already in this
+monorepo (`sdkjs-plugins/content/*/config.json`) - not part of `npm test` since it needs that
+sibling directory, which only exists inside this checkout. A small `KNOWN_ISSUES` allowlist in the
+script tracks the couple of plugins whose `config.json` has a genuine mistake (a misplaced field, a
+typo) rather than a schema gap; anything else that fails is a real regression.
 
 ## Project Structure
 

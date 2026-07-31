@@ -33,3 +33,15 @@ Initial public release.
   examples.js`) - caught and fixed several signature mismatches against the live docs along the way
   (e.g. `Slide.ShowError`'s params, `GetSelectedText`'s options shape, `GetImageDataFromSelection`'s
   return shape for Cell and Slide).
+- Added `attachEditorEvent`/`detachEditorEvent` overloads for `Pdf.EditorEventName` (`onSelectionEnd`,
+  `onSelectionCancel`) - previously only Word/Cell/Slide/Forms were covered, so PDF fell through to
+  the untyped fallback.
+- Added `schemas/config.schema.json`, a JSON Schema for `config.json` generated from
+  `PluginConfig`/`VariationConfig`/`ButtonConfig`/`IconConfig` (`npm run generate-schema`). Validating
+  it against every real `config.json` in this monorepo (`npm run validate-schema`) surfaced and fixed
+  real gaps in those types: `VariationConfig.buttons`/`isVisual` are optional (routinely omitted in
+  practice), `icons2` entries can carry `style`/`theme`/`default`, `VariationConfig` can carry
+  `methods`/`screens`/`isNeedNumbering`, `icons` can hold the same rich per-scale shape as `icons2`,
+  and `PluginConfig` can carry `help`/`onlyofficeScheme`/`manifestVersion`. 51/53 real config.json
+  files now validate cleanly; the remaining 2 have genuine mistakes in those specific plugins,
+  tracked in `validate-config-schema.js`'s `KNOWN_ISSUES`.
