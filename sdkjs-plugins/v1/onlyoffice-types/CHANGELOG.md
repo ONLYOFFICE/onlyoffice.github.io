@@ -37,6 +37,13 @@ Initial public release.
 - Added `attachEditorEvent`/`detachEditorEvent` overloads for `Pdf.EditorEventName` (`onSelectionEnd`,
   `onSelectionCancel`) - previously only Word/Cell/Slide/Forms were covered, so PDF fell through to
   the untyped fallback.
+- Physically split `AscPlugin`, `PluginEventMap`, `PluginWindow`, `Buttons`, `PluginConfig`,
+  `VariationConfig`, `AscDesktopEditor`, `AscSimpleRequest`, and `AscTheme` (and their supporting
+  types) out of `index.d.ts` into dedicated modules (`src/plugin/plugin.d.ts`, `src/plugin/events.d.ts`,
+  `src/plugin/buttons.d.ts`, `src/config/plugin-config.d.ts`, `src/theme/theme.d.ts`,
+  `src/services/desktop-editor.d.ts`, `src/services/simple-request.d.ts`). `index.d.ts` is now a
+  genuine barrel file (127 lines, down from 1031) that only imports and re-exports; each type has
+  exactly one physical home instead of being declared inline with the earlier modules re-exporting it.
 - Added `schemas/config.schema.json`, a JSON Schema for `config.json` generated from
   `PluginConfig`/`VariationConfig`/`ButtonConfig`/`IconConfig` (`npm run generate-schema`). Validating
   it against every real `config.json` in this monorepo (`npm run validate-schema`) surfaced and fixed
