@@ -46,9 +46,9 @@ import {
 } from "../shared/components";
 import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
-import { CslStylesParser } from "../csl/styles/style-parser";
 import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
+import { CitationItemData } from "../csl/citation/citation-item-data";
 
 const PREVIEW_ITEMS = [
     {
@@ -75,6 +75,8 @@ const PREVIEW_ITEMS = [
         issue: "3",
         page: "45-58",
         DOI: "10.1234/jdr.2021.14.3.45",
+        URL: "https://example.com/research-workflows",
+        accessed: { "date-parts": [[2024, 3, 15]] },
     },
 ];
 
@@ -217,6 +219,9 @@ function SettingsPage(router, displayNoneClass) {
     ];
 
     this._bNumFormat = false;
+
+    /** @type {string|null} */
+    this._currentStyleContent = null;
 
     /** @type {Settings} */
     this._stateSettings = {
@@ -487,6 +492,12 @@ SettingsPage.prototype._addEventListeners = function () {
     });
     this._includeUrlCheckbox.subscribe(function (event) {
         self._somethingWasChanged();
+        if (self._currentStyleContent) {
+            self._showPreview(
+                self._currentStyleContent,
+                self._localesManager.getLastUsedLanguage()
+            );
+        }
     });
 };
 
@@ -519,6 +530,13 @@ SettingsPage.prototype.show = function () {
         this._includeUrlCheckbox.check(true);
     } else {
         this._includeUrlCheckbox.uncheck(true);
+    }
+    if (this._currentStyleContent) {
+        this._showPreview(
+            this._currentStyleContent,
+            this._stateSettings.language ||
+                this._localesManager.getLastUsedLanguage()
+        );
     }
 };
 
@@ -582,6 +600,9 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
     }
 
     try {
+        const skipUrlForPaperArticles =
+            !this._includeUrlCheckbox.getState().checked;
+
         const previewItems = Object.fromEntries(
             PREVIEW_ITEMS.map(function (item) {
                 return [item.id, item];
@@ -599,7 +620,11 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
                     );
                 },
                 retrieveItem: function (/** @type {string} */ id) {
-                    return previewItems[id] || null;
+                    const raw = previewItems[id];
+                    if (!raw) return null;
+                    const itemData = new CitationItemData(id);
+                    itemData.fillFromObject(raw);
+                    return itemData.toJSON(skipUrlForPaperArticles);
                 },
             },
             styleContent,
@@ -642,13 +667,14 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
  * (csl-entry, csl-left-margin, csl-right-inline) but no styling. Apply
  * that metadata as inline styles so the preview actually reflects it.
  * @param {HTMLElement} container
- * @param {Object|null} [meta]
+ * @param {{entryspacing?: number, linespacing?: number, hangingindent?: boolean, "second-field-align"?: boolean, maxoffset?: number}} [meta]
  */
 SettingsPage.prototype._applyBibliographyStyles = function (container, meta) {
     if (!meta) return;
 
     const entries = container.querySelectorAll(".csl-entry");
-    entries.forEach(function (entry) {
+    for (let i = 0; i < entries.length; i++) {
+        const entry = /** @type {HTMLDivElement} */ (entries[i]);
         entry.style.clear = "both";
         if (meta.entryspacing) {
             entry.style.marginBottom = meta.entryspacing + "em";
@@ -660,18 +686,90 @@ SettingsPage.prototype._applyBibliographyStyles = function (container, meta) {
             entry.style.marginLeft = "2em";
             entry.style.textIndent = "-2em";
         }
-    });
+    }
 
     if (meta["second-field-align"]) {
         const marginWidthEm = (meta.maxoffset || 0) + 0.5;
-        container.querySelectorAll(".csl-left-margin").forEach(function (el) {
+        const elemsLeftMargin = container.querySelectorAll(".csl-left-margin");
+        for (let i = 0; i < elemsLeftMargin.length; i++) {
+            const el = /** @type {HTMLDivElement} */ (elemsLeftMargin[i]);
             el.style.float = "left";
             el.style.minWidth = marginWidthEm + "em";
-        });
-        container.querySelectorAll(".csl-right-inline").forEach(function (el) {
+        }
+        
+        const elemsRightInline = container.querySelectorAll(".csl-right-inline");
+        for (let i = 0; i < elemsRightInline.length; i++) {
+            const el = /** @type {HTMLDivElement} */ (elemsRightInline[i]);
             el.style.display = "block";
             el.style.marginLeft = marginWidthEm + "em";
-        });
+        }
+    }
+};
+
+/**
+ * Empirically checks whether "Include URLs of paper articles" changes the
+ * rendered bibliography for this style: renders the synthetic paginated
+ * preview article through the real CSL engine with the setting on and off
+ * and diffs the output. A static XML heuristic can't do this reliably,
+ * since CSL condition trees can gate URL/accessed on anything (DOI, ISBN,
+ * container-title, ...) - running the actual engine is the only way to get
+ * an exact answer.
+ * @param {string} styleContent
+ * @param {string} language
+ * @returns {boolean}
+ */
+SettingsPage.prototype._styleRespondsToIncludeUrlToggle = function (
+    styleContent,
+    language
+) {
+    const localesManager = this._localesManager;
+    const previewItems = Object.fromEntries(
+        PREVIEW_ITEMS.map(function (item) {
+            return [item.id, item];
+        })
+    );
+
+    /**
+     * @param {boolean} skipUrlForPaperArticles
+     * @returns {string}
+     */
+    function render(skipUrlForPaperArticles) {
+        // @ts-ignore citeproc does not expose an Engine constructor declaration.
+        const formatter = new CSL.Engine(
+            {
+                retrieveLocale: function (/** @type {string} */ id) {
+                    return (
+                        localesManager.getLocale(id) ||
+                        localesManager.getLocale(language) ||
+                        localesManager.getLocale()
+                    );
+                },
+                retrieveItem: function (/** @type {string} */ id) {
+                    const raw = previewItems[id];
+                    if (!raw) return null;
+                    const itemData = new CitationItemData(id);
+                    itemData.fillFromObject(raw);
+                    return itemData.toJSON(skipUrlForPaperArticles);
+                },
+            },
+            styleContent,
+            language,
+            true
+        );
+        formatter.updateItems(PREVIEW_ITEMS.map((item) => item.id));
+        const bibliography = formatter.makeBibliography();
+        console.log("bibliography", bibliography);
+        const entries = bibliography && bibliography[1];
+        return entries ? entries.join("") : "";
+    }
+
+    try {
+        const withUrl = render(false);
+        const withoutUrl = render(true);
+        return withoutUrl !== withUrl;
+    } catch (error) {
+        console.error("Failed to probe include-URL toggle:", error);
+        return true;
     }
 };
 
@@ -697,6 +795,8 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 self._notesStyleWrapper.classList.add(self._displayNoneClass);
             }
 
+            self._currentStyleContent = styleInfo.content;
+
             self._showPreview(
                 styleInfo.content,
                 self._localesManager.getLastUsedLanguage()
@@ -704,8 +804,9 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
 
             const canUseIncludeUrl = Boolean(
                 styleInfo.content &&
-                    CslStylesParser.bibliographyUsesUrlOrAccessed(
-                        styleInfo.content
+                    self._styleRespondsToIncludeUrlToggle(
+                        styleInfo.content,
+                        self._localesManager.getLastUsedLanguage()
                     )
             );
             if (canUseIncludeUrl) {

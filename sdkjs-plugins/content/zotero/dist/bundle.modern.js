@@ -213,9 +213,9 @@ y.prototype[typeof Symbol == "function" && Symbol.asyncIterator || "@@asyncItera
 var te = {
 	addStylesForComponents: function(e) {
 		var t = "";
-		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
+		e["background-toolbar"] && (t += ".loader-body,\n.loader-bg { background-color: " + e["background-toolbar"] + "; }\n", t += ".loader-body {     box-shadow: 0 0 99px 99px " + e["background-toolbar"] + "; }\n"), e["background-loader"] && (t += ".loader-image { color: " + e["background-loader"] + "; }\n"), e["background-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.input-field-element,\n.selectbox-search-input,\n.selectbox-header,\n.selectbox-dropdown,\n.radio-visual, \n.checkbox-visual, \n#previewWrapper, \n.message { background-color: " + e["background-normal"] + "; }\n"), e["text-inverse"] && (t += ".custom-button-primary { color: " + e["text-inverse"] + "; }\n"), e["border-regular-control"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.input-field-element,\n.checkbox-visual,\n.radio-visual,\n.selectbox-header,\n.selectbox-dropdown,\n.selectbox-search-input:focus,\n#previewWrapper,\n.message { border-color: " + e["border-regular-control"] + "; }\n", t += ".selectbox-search,\n.selectbox-option-divider { border-color: " + e["border-regular-control"] + " !important; }\n"), e["border-error"] && (t += ".input-field-invalid .input-field-element { border-color: " + e["border-error"] + "; }\n"), e["border-control-focus"] && (t += ".custom-button-icon-only:focus:not(:active):not(:hover),\n.custom-button-secondary-icon:focus:not(:active):not(:hover),\n.custom-button-secondary:focus:not(:active):not(:hover),\n.input-field-element:focus,\n.input-field-focused .input-field-element,\n.selectbox-header:active,\n.selectbox-header:focus,\n.selectbox-header-open { border-color: " + e["border-control-focus"] + "; }\n"), e["highlight-button-hover"] && (t += ".custom-button-icon-only:hover:not(.custom-button-disabled),\n.custom-button-secondary-icon:hover:not(.custom-button-disabled),\n.custom-button-secondary:hover:not(.custom-button-disabled),\n.selectbox-custom-option:hover,\n.selectbox-option:hover { background-color: " + e["highlight-button-hover"] + "; }\n"), e["highlight-button-pressed"] && (t += ".custom-button-icon-only:active:not(.custom-button-disabled),\n.custom-button-secondary-icon:active:not(.custom-button-disabled),\n.custom-button-secondary:active:not(.custom-button-disabled),\n.selectbox-option-selected:hover,\n.selectbox-option-selected { background-color: " + e["highlight-button-pressed"] + "; }\n", t += ".selectbox-dropdown { box-shadow: 1px 1px 4px -1px " + e["highlight-button-pressed"] + "; }\n"), e["highlight-primary-dialog-button-hover"] && (t += ".custom-button-primary:hover:not(.custom-button-disabled) { background-color: " + e["highlight-primary-dialog-button-hover"] + "; border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n"), e["background-primary-dialog-button"] && (t += ".checkbox-indeterminate,\n.custom-button-primary { background-color: " + e["background-primary-dialog-button"] + "; border-color: " + e["background-primary-dialog-button"] + "; }\n"), e["background-toolbar-additional"] && (t += ".custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled { background-color: " + e["background-toolbar-additional"] + "; border-color: " + e["background-toolbar-additional"] + "; }\n"), e["text-normal"] && (t += ".custom-button-secondary-icon,\n.custom-button-secondary,\n.custom-button-secondary-icon,\n.custom-button-icon-only,\n.selectbox-search-input,\n.loader-image,\n.input-field-element { color: " + e["text-normal"] + "; }\n", t += ".input-field-search-icon svg { fill: " + e["text-normal"] + "; }\n", t += ".selectbox-arrow b { border-color: " + e["text-normal"] + "; }\n"), e["text-secondary"] && (t += ".message-close:hover,\n.input-field-clear:hover { color: " + e["text-secondary"] + "; }\n"), e["text-tertiary"] && (t += ".input-field-clear,\n.message-container:hover .message-close,\n.custom-button-secondary-icon:disabled,\n.custom-button-secondary-icon.custom-button-disabled,\n.custom-button-secondary:disabled,\n.custom-button-secondary.custom-button-disabled,\n.input-field-element::placeholder,\n.selectbox-search-input::placeholder { color: " + e["text-tertiary"] + "; }\n");
 		var n = "11px";
-		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
+		["theme-white", "theme-night"].indexOf(e.name) !== -1 || ["theme-white", "theme-night"].indexOf(e.Name) !== -1 ? (n = "12px", t += ".message,\n#previewWrapper,\n.custom-button,\n.selectbox-header,\n.input-field-element { border-radius: 4px; }\n", t += ".radio--checked .radio-visual { border-width: 4px; }\n", t += ".checkbox-checkmark { color: " + e["text-inverse"] + "; }\n", t += ".checkbox--checked .checkbox-visual { background-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio--checked .radio-visual,\n.checkbox--checked .checkbox-visual { border-color: " + e["background-primary-dialog-button"] + "; }\n", t += ".radio-button-container:hover:not(.radio--checked) .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { background-color: " + e["highlight-button-hover"] + "; }\n", t += ".checkbox--checked:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; background-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += ".radio--checked:hover:not(.radio--disabled) .radio-visual { border-color: " + e["highlight-primary-dialog-button-hover"] + "; }\n", t += "body { font-size: 12px; }\n") : (t += ".checkbox-checkmark { color: " + e["text-normal"] + "; }\n", t += ".radio--checked .radio-visual { background-color: " + e["text-normal"] + ";\n box-shadow: 0 0 0 2px" + e["background-normal"] + " inset; }\n", t += ".radio-button-container:hover .radio-visual,\n.checkbox-container:hover:not(.checkbox--disabled) .checkbox-visual { border-color: " + e["border-control-focus"] + "; }\n"), t += "body, input, textarea, select, button { font-size: " + n + "; }\n";
 		var r = document.getElementById("componentsStyles");
 		return r ? (r.innerHTML = t, t) : (r = document.createElement("style"), r.id = "componentsStyles", r.innerHTML = t, document.getElementsByTagName("head")[0].appendChild(r), t);
 	},
@@ -3217,31 +3217,6 @@ var Zt = class {
 	},
 	isStyleContainBibliography: function(e) {
 		return e.indexOf("<bibliography") > -1;
-	},
-	bibliographyUsesUrlOrAccessed: function(e) {
-		var t = new DOMParser().parseFromString(e, "text/xml"), n = t.querySelector("style > bibliography");
-		if (!n) return !1;
-		function r(e) {
-			for (var t = e.querySelectorAll("[variable]"), n = 0; n < t.length; n++) {
-				var r = (t[n].getAttribute("variable") || "").split(/\s+/);
-				if (r.indexOf("URL") > -1 || r.indexOf("accessed") > -1) return !0;
-			}
-			return !1;
-		}
-		var i = /* @__PURE__ */ new Set();
-		function a(e) {
-			if (r(e)) return !0;
-			for (var n = e.querySelectorAll("[macro]"), o = 0; o < n.length; o++) {
-				var s = n[o].getAttribute("macro");
-				if (!(!s || i.has(s))) {
-					i.add(s);
-					var c = t.querySelector("style > macro[name=\"" + s + "\"]");
-					if (c && a(c)) return !0;
-				}
-			}
-			return !1;
-		}
-		return a(n);
 	}
 };
 //#endregion
@@ -3431,6 +3406,50 @@ X.prototype.loadLocale = function(e) {
 };
 //#endregion
 //#region src/app/pages/settings.js
+var en = [{
+	id: "preview-book",
+	type: "book",
+	title: "The Art of Scientific Writing",
+	author: [{
+		family: "Miller",
+		given: "Alex"
+	}],
+	issued: { "date-parts": [[2022]] },
+	publisher: "North Star Press",
+	"publisher-place": "New York",
+	edition: "2",
+	volume: "1",
+	URL: "https://example.com/scientific-writing",
+	accessed: { "date-parts": [[
+		2024,
+		3,
+		15
+	]] }
+}, {
+	id: "preview-article",
+	type: "article-journal",
+	title: "Designing Better Research Workflows",
+	author: [{
+		family: "Giannis",
+		given: "Dimitris"
+	}],
+	issued: { "date-parts": [[
+		2021,
+		6,
+		10
+	]] },
+	"container-title": "Journal of Digital Research",
+	volume: "14",
+	issue: "3",
+	page: "45-58",
+	DOI: "10.1234/jdr.2021.14.3.45",
+	URL: "https://example.com/research-workflows",
+	accessed: { "date-parts": [[
+		2024,
+		3,
+		15
+	]] }
+}];
 function Z(e, t) {
 	if (this._router = e, this._displayNoneClass = t, this._saveBtn = new D("saveSettingsBtn", { variant: "primary" }), this._cancelBtn = new D("cancelBtn", { variant: "secondary" }), this._styleSelect = new Ae("styleSelectList", {
 		placeholder: "Enter style name",
@@ -3441,7 +3460,8 @@ function Z(e, t) {
 	}), this._notesStyleWrapper = document.getElementById("notesStyle"), !this._notesStyleWrapper) throw Error("notesStyleWrapper not found");
 	if (this._footNotes = new xe("footNotes", { label: "Footnotes" }), this._endNotes = new xe("endNotes", { label: "Endnotes" }), this._includeUrlWrapper = document.getElementById("includeUrlWrapper"), !this._includeUrlWrapper) throw Error("includeUrlWrapper not found");
 	if (this._includeUrlCheckbox = new ke("includeUrlForPaperArticles", { label: "Include URLs of paper articles" }), this._cslFileInput = document.getElementById("cslFileInput"), !this._cslFileInput) throw Error("cslFileInput not found");
-	this._languageSelect = new Ae("styleLangList", { placeholder: "Select language" }), this._cslStylesManager = new Y("zoteroStyleId"), this._localesManager = new X(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new _e("styleMessage", { type: "error" }), this._langMessage = new _e("langMessage", { type: "error" }), this._LANGUAGES = [
+	if (this._languageSelect = new Ae("styleLangList", { placeholder: "Select language" }), this._previewWrapper = document.getElementById("previewWrapper"), !this._previewWrapper) throw Error("previewWrapper not found");
+	this._cslStylesManager = new Y("zoteroStyleId"), this._localesManager = new X(), this._selectLists = [], this._onChangeState = function(e, t) {}, this._styleMessage = new _e("styleMessage", { type: "error" }), this._langMessage = new _e("langMessage", { type: "error" }), this._LANGUAGES = [
 		["af-ZA", "Afrikaans"],
 		["ar", "Arabic"],
 		["bg-BG", "Bulgarian"],
@@ -3495,7 +3515,7 @@ function Z(e, t) {
 		["vi-VN", "Vietnamese"],
 		["zh-CN", "Chinese (PRC)"],
 		["zh-TW", "Chinese (Taiwan)"]
-	], this._bNumFormat = !1, this._stateSettings = {
+	], this._bNumFormat = !1, this._currentStyleContent = null, this._stateSettings = {
 		style: "",
 		notesStyle: "footnotes",
 		styleFormat: "numeric",
@@ -3511,14 +3531,12 @@ Z.prototype.getLocalesManager = function() {
 }, Z.prototype.getLastUsedStyleId = function() {
 	return this._cslStylesManager.getLastUsedStyleId();
 }, Z.prototype.init = function() {
-	var e = this._cslStylesManager.getLastUsedStyleId() || "ieee", t = this._localesManager.getLastUsedLanguage();
-	this._addEventListeners(), this._languageSelect.addItems(this._LANGUAGES, t);
-	var n = [
-		this._onStyleChange(e),
-		this._localesManager.loadLocale(t),
-		this._loadStyles()
-	];
-	return Promise.all(n);
+	var e = this, t = this._cslStylesManager.getLastUsedStyleId() || "ieee", n = this._localesManager.getLastUsedLanguage();
+	this._addEventListeners(), this._languageSelect.addItems(this._LANGUAGES, n);
+	var r = this._localesManager.loadLocale(n).then(function() {
+		return e._onStyleChange(t);
+	});
+	return Promise.all([r, this._loadStyles()]);
 }, Z.prototype.onChangeState = function(e) {
 	this._onChangeState = e;
 }, Z.prototype.setDesktopApiAvailable = function(e) {
@@ -3600,7 +3618,7 @@ Z.prototype.getLocalesManager = function() {
 	}), this._endNotes.subscribe(function(t) {
 		e._somethingWasChanged();
 	}), this._includeUrlCheckbox.subscribe(function(t) {
-		e._somethingWasChanged();
+		e._somethingWasChanged(), e._currentStyleContent && e._showPreview(e._currentStyleContent, e._localesManager.getLastUsedLanguage());
 	});
 }, Z.prototype._hideAllMessages = function() {
 	this._langMessage.close(), this._styleMessage.close();
@@ -3613,7 +3631,7 @@ Z.prototype.getLocalesManager = function() {
 		notesStyle: this._cslStylesManager.getLastUsedNotesStyle(),
 		styleFormat: this._cslStylesManager.getLastUsedFormat(),
 		includeUrlForPaperArticles: this._cslStylesManager.getIncludeUrlForPaperArticles()
-	}, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check(!0) : this._footNotes.check(!0), this._stateSettings.includeUrlForPaperArticles ? this._includeUrlCheckbox.check(!0) : this._includeUrlCheckbox.uncheck(!0);
+	}, this._saveBtn.disable(), this._router.openSettings(), this._stateSettings.notesStyle === this._endNotes.getState().value ? this._endNotes.check(!0) : this._footNotes.check(!0), this._stateSettings.includeUrlForPaperArticles ? this._includeUrlCheckbox.check(!0) : this._includeUrlCheckbox.uncheck(!0), this._currentStyleContent && this._showPreview(this._currentStyleContent, this._stateSettings.language || this._localesManager.getLastUsedLanguage());
 }, Z.prototype._loadStyles = function() {
 	var e = this;
 	return this._cslStylesManager.getStylesInfo().then(function(t) {
@@ -3630,11 +3648,88 @@ Z.prototype.getLocalesManager = function() {
 	this._styleSelect.addItems(i, n), this._styleSelectListOther.addItems(r, n);
 }, Z.prototype._somethingWasChanged = function() {
 	this._saveBtn.enable();
+}, Z.prototype._showPreview = function(e, t) {
+	if (!e) {
+		this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+		return;
+	}
+	try {
+		var n = !this._includeUrlCheckbox.getState().checked, r = Object.fromEntries(en.map(function(e) {
+			return [e.id, e];
+		})), i = this._localesManager, a = new CSL.Engine({
+			retrieveLocale: function(e) {
+				return i.getLocale(e) || i.getLocale(t) || i.getLocale();
+			},
+			retrieveItem: function(e) {
+				var t = r[e];
+				if (!t) return null;
+				var i = new V(e);
+				return i.fillFromObject(t), i.toJSON(n);
+			}
+		}, e, t, !0);
+		a.updateItems(en.map((e) => e.id));
+		var o = a.makeBibliography(), s = o && o[0], c = o && o[1];
+		if (!c || !c.length) {
+			this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+			return;
+		}
+		var l = document.createElement("div");
+		l.className = "preview-title", l.textContent = I("Bibliography preview");
+		var u = document.createElement("div");
+		u.className = "preview-content", u.innerHTML = Ye.purifyHtml(c.join("")), this._applyBibliographyStyles(u, s), this._previewWrapper.innerHTML = "", this._previewWrapper.appendChild(l), this._previewWrapper.appendChild(u), this._previewWrapper.classList.remove(this._displayNoneClass);
+	} catch (e) {
+		console.error("Failed to render bibliography preview:", e), this._previewWrapper.classList.add(this._displayNoneClass), this._previewWrapper.innerHTML = "";
+	}
+}, Z.prototype._applyBibliographyStyles = function(e, t) {
+	if (t) {
+		for (var n = e.querySelectorAll(".csl-entry"), r = 0; r < n.length; r++) {
+			var i = n[r];
+			i.style.clear = "both", t.entryspacing && (i.style.marginBottom = t.entryspacing + "em"), t.linespacing && (i.style.lineHeight = String(t.linespacing)), t.hangingindent && !t["second-field-align"] && (i.style.marginLeft = "2em", i.style.textIndent = "-2em");
+		}
+		if (t["second-field-align"]) {
+			for (var a = (t.maxoffset || 0) + .5, o = e.querySelectorAll(".csl-left-margin"), s = 0; s < o.length; s++) {
+				var c = o[s];
+				c.style.float = "left", c.style.minWidth = a + "em";
+			}
+			for (var l = e.querySelectorAll(".csl-right-inline"), u = 0; u < l.length; u++) {
+				var d = l[u];
+				d.style.display = "block", d.style.marginLeft = a + "em";
+			}
+		}
+	}
+}, Z.prototype._styleRespondsToIncludeUrlToggle = function(e, t) {
+	var n = this._localesManager, r = Object.fromEntries(en.map(function(e) {
+		return [e.id, e];
+	}));
+	function i(i) {
+		var a = new CSL.Engine({
+			retrieveLocale: function(e) {
+				return n.getLocale(e) || n.getLocale(t) || n.getLocale();
+			},
+			retrieveItem: function(e) {
+				var t = r[e];
+				if (!t) return null;
+				var n = new V(e);
+				return n.fillFromObject(t), n.toJSON(i);
+			}
+		}, e, t, !0);
+		a.updateItems(en.map((e) => e.id));
+		var o = a.makeBibliography();
+		console.log("bibliography", o);
+		var s = o && o[1];
+		return s ? s.join("") : "";
+	}
+	try {
+		var a = i(!1);
+		return i(!0) !== a;
+	} catch (e) {
+		return console.error("Failed to probe include-URL toggle:", e), !0;
+	}
 }, Z.prototype._onStyleChange = function(e, t) {
 	var n = this;
 	return t && n._showLoader(), n._cslStylesManager.getStyle(e, !t).then(function(e) {
 		var r = e.styleFormat;
-		n._bNumFormat = r == "numeric", r === "note" ? n._notesStyleWrapper.classList.remove(n._displayNoneClass) : n._notesStyleWrapper.classList.add(n._displayNoneClass), e.content && Qt.bibliographyUsesUrlOrAccessed(e.content) ? n._includeUrlWrapper.classList.remove(n._displayNoneClass) : n._includeUrlWrapper.classList.add(n._displayNoneClass), t && n._hideLoader();
+		n._bNumFormat = r == "numeric", r === "note" ? n._notesStyleWrapper.classList.remove(n._displayNoneClass) : n._notesStyleWrapper.classList.add(n._displayNoneClass), n._currentStyleContent = e.content, n._showPreview(e.content, n._localesManager.getLastUsedLanguage()), e.content && n._styleRespondsToIncludeUrlToggle(e.content, n._localesManager.getLastUsedLanguage()) ? n._includeUrlWrapper.classList.remove(n._displayNoneClass) : n._includeUrlWrapper.classList.add(n._displayNoneClass), t && n._hideLoader();
 	}).catch(function(e) {
 		throw console.error(e), typeof e == "string" && n._styleMessage.show(I(e)), t && n._hideLoader(), e;
 	});
@@ -3719,7 +3814,7 @@ Q.prototype.init = function() {
 };
 //#endregion
 //#region src/app/shared/ui/search-filter.js
-function en() {
+function tn() {
 	this._searchField = new ge("searchField", {
 		type: "text",
 		autofocus: !0,
@@ -3733,7 +3828,7 @@ function en() {
 		description: I("Search in:")
 	}), this._subscribers = [], this._addEventListeners();
 }
-en.prototype._addEventListeners = function() {
+tn.prototype._addEventListeners = function() {
 	var e = this;
 	this._searchField.subscribe(function(t) {
 		if (t.type === "inputfield:blur" || t.type === "inputfield:submit") {
@@ -3745,7 +3840,7 @@ en.prototype._addEventListeners = function() {
 	}), this._filterButton.subscribe(function(t) {
 		t.type === "button:click" && (e._librarySelectList.isOpen || (t.detail.originalEvent && t.detail.originalEvent.stopPropagation(), e._librarySelectList.openDropdown()));
 	});
-}, en.prototype.addGroups = function(e) {
+}, tn.prototype.addGroups = function(e) {
 	var t = this, n = localStorage.getItem("selectedGroups"), r = n ? JSON.parse(n).map(function(e) {
 		return e.toString();
 	}) : ["my_library", "group_libraries"], i = !1;
@@ -3778,19 +3873,19 @@ en.prototype._addEventListeners = function() {
 		}
 		this._selectedGroupsWatcher(a, e);
 	}
-}, en.prototype._getSelectedGroups = function() {
+}, tn.prototype._getSelectedGroups = function() {
 	var e = this, t = this._librarySelectList.getSelectedValues();
 	return (Array.isArray(t) === !1 || t.length === 0) && setTimeout(function() {
 		e._librarySelectList.openDropdown();
 	}, 500), t === null || typeof t == "string" ? [] : t;
-}, en.prototype.subscribe = function(e) {
+}, tn.prototype.subscribe = function(e) {
 	var t = this;
 	return this._subscribers.push(e), { unsubscribe: function() {
 		t._subscribers = t._subscribers.filter(function(t) {
 			return t !== e;
 		});
 	} };
-}, en.prototype._selectedGroupsWatcher = function(e, t) {
+}, tn.prototype._selectedGroupsWatcher = function(e, t) {
 	var n = this;
 	this._librarySelectList instanceof Ae && this._librarySelectList.subscribe(function(r) {
 		if (r.type === "selectbox:change") {
@@ -3809,7 +3904,7 @@ en.prototype._addEventListeners = function() {
 };
 //#endregion
 //#region src/app/shared/constants/locator-values.js
-var tn = [
+var nn = [
 	["appendix", "Appendix"],
 	["article", "Article"],
 	["book", "Book"],
@@ -3937,7 +4032,7 @@ $.prototype._init = function() {
 		usePortal: !0,
 		translate: I
 	});
-	tn.forEach(function(e) {
+	nn.forEach(function(e) {
 		var n = e[0] === t;
 		m.addItem(e[0], e[1], n), n && (d = e[1]);
 	});
@@ -4034,7 +4129,7 @@ $.prototype._init = function() {
 		if (!t) throw Error("errorWrapper not found");
 		var n = document.getElementById("mainState");
 		if (!n) throw Error("mainState not found");
-		c = new en(), l = new $(e, oe, se), u = new D("saveAsTextBtn", { variant: "secondary" }), d = new D("insertLinkBtn", { disabled: !0 }), f = new D("settingsBtn", {
+		c = new tn(), l = new $(e, oe, se), u = new D("saveAsTextBtn", { variant: "secondary" }), d = new D("insertLinkBtn", { disabled: !0 }), f = new D("settingsBtn", {
 			variant: "icon-only",
 			size: "small"
 		}), p = new D("insertBibBtn", { variant: "secondary" }), m = new D("refreshBtn", { variant: "secondary" }), g = {
