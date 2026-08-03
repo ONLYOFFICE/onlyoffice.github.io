@@ -126,67 +126,6 @@ const CslStylesParser = {
     isStyleContainBibliography: function (styleContent) {
         return styleContent.indexOf("<bibliography") > -1;
     },
-    /**
-     * Checks whether the style's bibliography layout renders the URL or
-     * accessed-date variables, resolving macro references transitively.
-     * Styles that never render these variables have no use for the
-     * "Include URLs of paper articles" toggle.
-     * @param {string} styleContent
-     * @returns {boolean}
-     */
-    bibliographyUsesUrlOrAccessed: function (styleContent) {
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(styleContent, "text/xml");
-
-        const bibliography = xmlDoc.querySelector("style > bibliography");
-        if (!bibliography) return false;
-
-        /**
-         * @param {Element} el
-         * @returns {boolean}
-         */
-        function usesUrlVariable(el) {
-            const withVariable = el.querySelectorAll("[variable]");
-            for (let i = 0; i < withVariable.length; i++) {
-                const tokens = (
-                    withVariable[i].getAttribute("variable") || ""
-                ).split(/\s+/);
-                if (
-                    tokens.indexOf("URL") > -1 ||
-                    tokens.indexOf("accessed") > -1
-                ) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        const visitedMacros = new Set();
-
-        /**
-         * @param {Element} el
-         * @returns {boolean}
-         */
-        function resolve(el) {
-            if (usesUrlVariable(el)) return true;
-
-            const macroRefs = el.querySelectorAll("[macro]");
-            for (let i = 0; i < macroRefs.length; i++) {
-                const macroName = macroRefs[i].getAttribute("macro");
-                if (!macroName || visitedMacros.has(macroName)) continue;
-                visitedMacros.add(macroName);
-
-                const macroDef = xmlDoc.querySelector(
-                    'style > macro[name="' + macroName + '"]'
-                );
-                if (macroDef && resolve(macroDef)) return true;
-            }
-
-            return false;
-        }
-
-        return resolve(bibliography);
-    },
 };
 
 export { CslStylesParser };
