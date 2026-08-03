@@ -2803,10 +2803,8 @@ function It() {
 //#endregion
 //#region src/app/services/citation-service.js
 var Lt = /*#__PURE__*/ new WeakMap(), Rt = /*#__PURE__*/ new WeakMap(), zt = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakSet(), Bt = class {
-	constructor(e, t, n, i) {
-		u(this, K), c(this, Lt, void 0), c(this, Rt, void 0), c(this, zt, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = t, this._storage = new yt(), this._formatter, this.citationDocService = new ot(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), l(Lt, this, new Pt()), l(Rt, this, !1), l(zt, this, i), s(zt, this).load().then(() => {
-			this._cslStylesManager.getAbbreviateJournalTitles() && r(K, this, J).call(this);
-		});
+	constructor(e, t, n, r) {
+		u(this, K), c(this, Lt, void 0), c(this, Rt, void 0), c(this, zt, void 0), this._bibPlaceholderIfEmpty = "Please insert some citation into the document.", this._citPrefixNew = "ZOTERO_ITEM", this._citSuffixNew = "CSL_CITATION", this._citPrefix = "ZOTERO_CITATION", this._bibPrefixNew = "ZOTERO_BIBL", this._bibSuffixNew = "CSL_BIBLIOGRAPHY", this._bibPrefix = "ZOTERO_BIBLIOGRAPHY", this._sdk = n, this._localesManager = e, this._cslStylesManager = t, this._storage = new yt(), this._formatter, this.citationDocService = new ot(this._citPrefixNew, this._citSuffixNew, this._bibPrefixNew, this._bibSuffixNew), l(Lt, this, new Pt()), l(Rt, this, !1), l(zt, this, r), s(zt, this).load();
 	}
 	getCurrentField() {
 		var e = this;
@@ -3168,7 +3166,7 @@ var Qt = class {
 	}
 }, $t = {
 	getStyleInfo: function(e, t) {
-		var n = new DOMParser().parseFromString(t, "text/xml"), r = {
+		var n = {
 			categories: {
 				fields: [],
 				format: ""
@@ -3178,42 +3176,52 @@ var Qt = class {
 			name: e,
 			title: "",
 			updated: ""
-		}, i = n.querySelector("info title");
-		i && (r.title = i.textContent);
-		var a = n.querySelector("info link[rel=\"self\"]");
-		if (a) {
-			var o = a.getAttribute("href");
-			o && (r.href = o);
+		};
+		try {
+			var r = new DOMParser().parseFromString(t, "text/xml"), i = r.querySelector("info title");
+			i && (n.title = i.textContent);
+			var a = r.querySelector("info link[rel=\"self\"]");
+			if (a) {
+				var o = a.getAttribute("href");
+				o && (n.href = o);
+			}
+			var s = r.querySelector("info link[rel=\"independent-parent\"]");
+			if (s) {
+				var c = s.getAttribute("href");
+				c && (n.parent = c), n.dependent = 1;
+			}
+			var l = r.querySelector("info updated");
+			l && (n.updated = l.textContent);
+			var u = r.querySelector("info category[citation-format]");
+			if (u) {
+				var d = u.getAttribute("citation-format");
+				d && (n.categories.format = d);
+			}
+			var f = r.querySelectorAll("info category[field]");
+			f && f.forEach(function(e) {
+				var t = e.getAttribute("field");
+				t && n.categories.fields.push(t);
+			});
+		} catch (e) {
+			console.error("Invalid style format"), console.error(e);
 		}
-		var s = n.querySelector("info link[rel=\"independent-parent\"]");
-		if (s) {
-			var c = s.getAttribute("href");
-			c && (r.parent = c), r.dependent = 1;
-		}
-		var l = n.querySelector("info updated");
-		l && (r.updated = l.textContent);
-		var u = n.querySelector("info category[citation-format]");
-		if (u) {
-			var d = u.getAttribute("citation-format");
-			d && (r.categories.format = d);
-		}
-		var f = n.querySelectorAll("info category[field]");
-		return f && f.forEach(function(e) {
-			var t = e.getAttribute("field");
-			t && r.categories.fields.push(t);
-		}), r;
+		return n;
 	},
 	getCitationFormat: function(e) {
-		var t = new DOMParser().parseFromString(e, "text/xml").querySelector("info category[citation-format]");
-		if (!t) throw Error("Citation format not found");
-		var n = t.getAttribute("citation-format");
-		if (!n) throw Error("Citation format not found");
-		switch (n) {
-			case "note":
-			case "numeric":
-			case "author":
-			case "author-date":
-			case "label": return n;
+		try {
+			var t = new DOMParser().parseFromString(e, "text/xml").querySelector("info category[citation-format]");
+			if (!t) throw Error("Citation format not found");
+			var n = t.getAttribute("citation-format");
+			if (!n) throw Error("Citation format not found");
+			switch (n) {
+				case "note":
+				case "numeric":
+				case "author":
+				case "author-date":
+				case "label": return n;
+			}
+		} catch (e) {
+			console.error("Invalid citation format"), console.error(e);
 		}
 		throw Error("Invalid citation format");
 	},
