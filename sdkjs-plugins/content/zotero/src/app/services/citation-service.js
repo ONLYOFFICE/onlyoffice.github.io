@@ -227,7 +227,7 @@ class CitationService {
 
     #makeBibliography() {
         try {
-            const bibItems = new Array(this._storage.size);
+            const bibItems = new Array();
             this.#skipUrlForPaperArticles = !this._cslStylesManager.getIncludeUrlForPaperArticles();
             if (this.#skipUrlForPaperArticles) {
                 this.#updateFormatter();
@@ -241,8 +241,7 @@ class CitationService {
             
             for (let i = 0; i < bibObject[1].length; i++) {
                 /** @type {string} */
-                let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                bibText = bibText
+                let bibText = this.#unEscapeHtml(bibObject[1][i])
                     .replaceAll('\n', '')
                     .replaceAll('\r', '')
                     .replace(/\s+/g, ' ')
@@ -255,10 +254,16 @@ class CitationService {
                 }
 
                 if (!bibObject[0]['second-field-align']) {
-                    bibText = bibText.replace(/(<div class="csl-left-margin">[\s\S]*?<\/div>)/, '$1\t');
-                    bibText = bibText.replace(/<\/?div[^>]*>/g, '');
+                    bibText = bibText.replace(/<div class=\"csl-left-margin\">([\s\S]*?)<\/div>/, '$1\t');
+                    bibText = bibText.replace(/<div class=\"csl-block\">([\s\S]*?)<\/div>/, '$1\n\r');
+                    bibText = bibText.replace(/<\/?div[^>]*>/g, ' ');
                     bibText = "<p>" + bibText + "</p>";
                 }
+                bibText = bibText
+                    .split('\n')
+                    .map(line => line.replace(/[ ]{2,}/g, ' ').trim())
+                    .join('\n');
+
                 if (window.Asc.scope.editorVersion < 9004000) {
                     bibText += '\n';
                 }
