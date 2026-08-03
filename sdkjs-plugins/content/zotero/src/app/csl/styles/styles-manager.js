@@ -56,6 +56,7 @@ function CslStylesManager(lastStyleKey) {
     this._lastFormatKey = "zoteroFormatId";
     this._lastUsedStyleContainBibliographyKey = "zoteroContainBibliography";
     this._lastIncludeUrlForPaperArticlesKey = "zoteroIncludeUrlForPaperArticles";
+    this._lastAbbreviateJournalTitlesKey = "zoteroAbbreviateJournalTitles";
 
     this._defaultStyles = [
         "american-anthropological-association",
@@ -403,6 +404,25 @@ CslStylesManager.prototype.getIncludeUrlForPaperArticles = function () {
 CslStylesManager.prototype.saveIncludeUrlForPaperArticles = function (value) {
     localStorage.setItem(
         this._lastIncludeUrlForPaperArticlesKey,
+        value ? "true" : "false"
+    );
+};
+
+/**
+ * @returns {boolean}
+ */
+CslStylesManager.prototype.getAbbreviateJournalTitles = function () {
+    return (
+        localStorage.getItem(this._lastAbbreviateJournalTitlesKey) === "true"
+    );
+};
+
+/**
+ * @param {boolean} value
+ */
+CslStylesManager.prototype.saveAbbreviateJournalTitles = function (value) {
+    localStorage.setItem(
+        this._lastAbbreviateJournalTitlesKey,
         value ? "true" : "false"
     );
 };

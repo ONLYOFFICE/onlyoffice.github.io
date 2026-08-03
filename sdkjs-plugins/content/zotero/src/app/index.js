@@ -138,7 +138,8 @@ import "../styles.css";
         citationService = new CitationService(
             settings.getLocalesManager(),
             settings.getStyleManager(),
-            sdk
+            sdk,
+            settings.getAbbreviationsManager()
         );
         let isInit = false;
 
