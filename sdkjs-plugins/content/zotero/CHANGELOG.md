@@ -54,3 +54,11 @@
 ## 1.0.9
 
 * Fixed a bibliography formatting issue.
+
+## 1.1.0
+
+* Improved the styling of the bibliography.
+* Add MEDLINE journal title abbreviation option.
+* Add option to include URLs of paper articles.
+* Add bibliography preview to the settings page.
+
