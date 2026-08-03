@@ -86,14 +86,7 @@ class CitationService {
         this.#additionalWindow = new AdditionalWindow();
         this.#skipUrlForPaperArticles = false; // true only for bibliography
         this.#abbreviationsManager = abbreviationsManager;
-        // Fire-and-forget: once the MEDLINE table is loaded, refresh the
-        // engine so abbreviations apply without waiting for the next
-        // unrelated citation edit to happen to rebuild it.
-        this.#abbreviationsManager.load().then(() => {
-            if (this._cslStylesManager.getAbbreviateJournalTitles()) {
-                this.#updateFormatter();
-            }
-        });
+        this.#abbreviationsManager.load();
     }
 
     /**
