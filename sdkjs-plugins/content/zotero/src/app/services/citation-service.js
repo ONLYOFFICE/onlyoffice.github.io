@@ -39,6 +39,7 @@
  * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
  * @typedef {import('../zotero/zotero').ZoteroSdk} ZoteroSdk
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
+ * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  */
 
@@ -52,13 +53,16 @@ class CitationService {
     #additionalWindow;
     /** @type {boolean} */
     #skipUrlForPaperArticles;
+    /** @type {AbbreviationsManager} */
+    #abbreviationsManager;
 
     /**
      * @param {LocalesManager} localesManager
      * @param {CslStylesManager} cslStylesManager
      * @param {ZoteroSdk} sdk
+     * @param {AbbreviationsManager} abbreviationsManager
      */
-    constructor(localesManager, cslStylesManager, sdk) {
+    constructor(localesManager, cslStylesManager, sdk, abbreviationsManager) {
         this._bibPlaceholderIfEmpty =
             "Please insert some citation into the document.";
         this._citPrefixNew = "ZOTERO_ITEM";
@@ -81,6 +85,15 @@ class CitationService {
         );
         this.#additionalWindow = new AdditionalWindow();
         this.#skipUrlForPaperArticles = false; // true only for bibliography
+        this.#abbreviationsManager = abbreviationsManager;
+        // Fire-and-forget: once the MEDLINE table is loaded, refresh the
+        // engine so abbreviations apply without waiting for the next
+        // unrelated citation edit to happen to rebuild it.
+        this.#abbreviationsManager.load().then(() => {
+            if (this._cslStylesManager.getAbbreviateJournalTitles()) {
+                this.#updateFormatter();
+            }
+        });
     }
 
     /**
@@ -528,24 +541,35 @@ class CitationService {
         this._storage.forEachItem(function (item, id) {
             arrIds.push(id);
         });
+
+        /** @type {Object<string, any>} */
+        const sys = {
+            /** @param {string} id */
+            retrieveLocale: function (id) {
+                if (self._localesManager.getLocale(id)) {
+                    return self._localesManager.getLocale(id);
+                }
+                return self._localesManager.getLocale();
+            },
+            /** @param {string} id */
+            retrieveItem: function (id) {
+                const item = self._storage.getItem(id);
+                let index = self._storage.getItemIndex(id);
+                if (!item) return null;
+                return item.toFlatJSON(index, self.#skipUrlForPaperArticles);
+            },
+        };
+
+        if (
+            this.#abbreviationsManager.isLoaded() &&
+            this._cslStylesManager.getAbbreviateJournalTitles()
+        ) {
+            sys.getAbbreviation = this.#abbreviationsManager.createCiteprocHook();
+        }
+
         // @ts-ignore
         this._formatter = new CSL.Engine(
-            {
-                /** @param {string} id */
-                retrieveLocale: function (id) {
-                    if (self._localesManager.getLocale(id)) {
-                        return self._localesManager.getLocale(id);
-                    }
-                    return self._localesManager.getLocale();
-                },
-                /** @param {string} id */
-                retrieveItem: function (id) {
-                    const item = self._storage.getItem(id);
-                    let index = self._storage.getItemIndex(id);
-                    if (!item) return null;
-                    return item.toFlatJSON(index, self.#skipUrlForPaperArticles);
-                },
-            },
+            sys,
             this._cslStylesManager.cached(
                 this._cslStylesManager.getLastUsedStyleIdOrDefault(),
             ),

@@ -48,6 +48,7 @@ import { translate } from "../services";
 import { CslStylesManager } from "../csl/styles";
 import { CslHtmlParser } from "../services/csl-html-parser";
 import { LocalesManager } from "../csl/locales";
+import { AbbreviationsManager } from "../csl/abbreviations";
 import { CitationItemData } from "../csl/citation/citation-item-data";
 
 const PREVIEW_ITEMS = [
@@ -70,7 +71,7 @@ const PREVIEW_ITEMS = [
         title: "Designing Better Research Workflows",
         author: [{ family: "Giannis", given: "Dimitris" }],
         issued: { "date-parts": [[2021, 6, 10]] },
-        "container-title": "Journal of Digital Research",
+        "container-title": "Journal of Computational Biology",
         volume: "14",
         issue: "3",
         page: "45-58",
@@ -87,6 +88,7 @@ const PREVIEW_ITEMS = [
  * @property {NoteStyle} notesStyle
  * @property {StyleFormat} styleFormat
  * @property {boolean} includeUrlForPaperArticles
+ * @property {boolean} abbreviateJournalTitles
  */
 
 /**
@@ -134,6 +136,20 @@ function SettingsPage(router, displayNoneClass) {
         label: "Include URLs of paper articles",
     });
 
+    this._abbreviateJournalTitlesWrapper = document.getElementById(
+        "abbreviateJournalTitlesWrapper"
+    );
+    if (!this._abbreviateJournalTitlesWrapper) {
+        throw new Error("abbreviateJournalTitlesWrapper not found");
+    }
+
+    this._abbreviateJournalTitlesCheckbox = new Checkbox(
+        "abbreviateJournalTitles",
+        {
+            label: "Use MEDLINE journal abbreviations",
+        }
+    );
+
     this._cslFileInput = document.getElementById("cslFileInput");
     if (!this._cslFileInput) {
         throw new Error("cslFileInput not found");
@@ -150,6 +166,7 @@ function SettingsPage(router, displayNoneClass) {
 
     this._cslStylesManager = new CslStylesManager("zoteroStyleId");
     this._localesManager = new LocalesManager();
+    this._abbreviationsManager = new AbbreviationsManager();
 
     /** @type {HTMLElement[]} */
     this._selectLists = [];
@@ -229,6 +246,7 @@ function SettingsPage(router, displayNoneClass) {
         notesStyle: "footnotes",
         styleFormat: "numeric",
         includeUrlForPaperArticles: false,
+        abbreviateJournalTitles: false,
     };
 }
 
@@ -244,6 +262,13 @@ SettingsPage.prototype.getLocalesManager = function () {
  */
 SettingsPage.prototype.getStyleManager = function () {
     return this._cslStylesManager;
+};
+
+/**
+ * @returns {AbbreviationsManager}
+ */
+SettingsPage.prototype.getAbbreviationsManager = function () {
+    return this._abbreviationsManager;
 };
 
 /**
@@ -270,11 +295,12 @@ SettingsPage.prototype.init = function () {
     this._addEventListeners();
     this._languageSelect.addItems(this._LANGUAGES, savedLang);
 
-    const previewPromise = this._localesManager
-        .loadLocale(savedLang)
-        .then(function () {
-            return self._onStyleChange(lastStyle);
-        });
+    const previewPromise = Promise.all([
+        this._localesManager.loadLocale(savedLang),
+        this._abbreviationsManager.load(),
+    ]).then(function () {
+        return self._onStyleChange(lastStyle);
+    });
 
     return Promise.all([previewPromise, this._loadStyles()]);
 };
@@ -365,6 +391,18 @@ SettingsPage.prototype._addEventListeners = function () {
             promises.push(Promise.resolve());
         }
 
+        const abbreviateJournalTitlesChecked =
+            self._abbreviateJournalTitlesCheckbox.getState().checked;
+        if (
+            self._stateSettings.abbreviateJournalTitles !==
+            abbreviateJournalTitlesChecked
+        ) {
+            self._cslStylesManager.saveAbbreviateJournalTitles(
+                abbreviateJournalTitlesChecked
+            );
+            promises.push(Promise.resolve());
+        }
+
         if (promises.length) {
             self._showLoader();
             Promise.all(promises)
@@ -378,6 +416,7 @@ SettingsPage.prototype._addEventListeners = function () {
                         notesStyle: noteValue,
                         styleFormat: self._cslStylesManager.getLastUsedFormat(),
                         includeUrlForPaperArticles: includeUrlChecked,
+                        abbreviateJournalTitles: abbreviateJournalTitlesChecked,
                     };
 
                     self._onChangeState(newState, oldState);
@@ -499,6 +538,15 @@ SettingsPage.prototype._addEventListeners = function () {
             );
         }
     });
+    this._abbreviateJournalTitlesCheckbox.subscribe(function (event) {
+        self._somethingWasChanged();
+        if (self._currentStyleContent) {
+            self._showPreview(
+                self._currentStyleContent,
+                self._localesManager.getLastUsedLanguage()
+            );
+        }
+    });
 };
 
 SettingsPage.prototype._hideAllMessages = function () {
@@ -518,6 +566,8 @@ SettingsPage.prototype.show = function () {
         styleFormat: this._cslStylesManager.getLastUsedFormat(),
         includeUrlForPaperArticles:
             this._cslStylesManager.getIncludeUrlForPaperArticles(),
+        abbreviateJournalTitles:
+            this._cslStylesManager.getAbbreviateJournalTitles(),
     };
     this._saveBtn.disable();
     this._router.openSettings();
@@ -530,6 +580,11 @@ SettingsPage.prototype.show = function () {
         this._includeUrlCheckbox.check(true);
     } else {
         this._includeUrlCheckbox.uncheck(true);
+    }
+    if (this._stateSettings.abbreviateJournalTitles) {
+        this._abbreviateJournalTitlesCheckbox.check(true);
+    } else {
+        this._abbreviateJournalTitlesCheckbox.uncheck(true);
     }
     if (this._currentStyleContent) {
         this._showPreview(
@@ -609,28 +664,31 @@ SettingsPage.prototype._showPreview = function (styleContent, language) {
             })
         );
         const localesManager = this._localesManager;
-        // @ts-ignore citeproc does not expose an Engine constructor declaration.
-        const formatter = new CSL.Engine(
-            {
-                retrieveLocale: function (/** @type {string} */ id) {
-                    return (
-                        localesManager.getLocale(id) ||
-                        localesManager.getLocale(language) ||
-                        localesManager.getLocale()
-                    );
-                },
-                retrieveItem: function (/** @type {string} */ id) {
-                    const raw = previewItems[id];
-                    if (!raw) return null;
-                    const itemData = new CitationItemData(id);
-                    itemData.fillFromObject(raw);
-                    return itemData.toJSON(skipUrlForPaperArticles);
-                },
+        /** @type {Object<string, any>} */
+        const sys = {
+            retrieveLocale: function (/** @type {string} */ id) {
+                return (
+                    localesManager.getLocale(id) ||
+                    localesManager.getLocale(language) ||
+                    localesManager.getLocale()
+                );
             },
-            styleContent,
-            language,
-            true
-        );
+            retrieveItem: function (/** @type {string} */ id) {
+                const raw = previewItems[id];
+                if (!raw) return null;
+                const itemData = new CitationItemData(id);
+                itemData.fillFromObject(raw);
+                return itemData.toJSON(skipUrlForPaperArticles);
+            },
+        };
+        if (
+            this._abbreviationsManager.isLoaded() &&
+            this._abbreviateJournalTitlesCheckbox.getState().checked
+        ) {
+            sys.getAbbreviation = this._abbreviationsManager.createCiteprocHook();
+        }
+        // @ts-ignore citeproc does not expose an Engine constructor declaration.
+        const formatter = new CSL.Engine(sys, styleContent, language, true);
         formatter.updateItems(PREVIEW_ITEMS.map((item) => item.id));
         const bibliography = formatter.makeBibliography();
         const bibMeta = bibliography && bibliography[0];
@@ -758,7 +816,6 @@ SettingsPage.prototype._styleRespondsToIncludeUrlToggle = function (
         );
         formatter.updateItems(PREVIEW_ITEMS.map((item) => item.id));
         const bibliography = formatter.makeBibliography();
-        console.log("bibliography", bibliography);
         const entries = bibliography && bibliography[1];
         return entries ? entries.join("") : "";
     }
@@ -769,6 +826,84 @@ SettingsPage.prototype._styleRespondsToIncludeUrlToggle = function (
         return withoutUrl !== withUrl;
     } catch (error) {
         console.error("Failed to probe include-URL toggle:", error);
+        return true;
+    }
+};
+
+/**
+ * Empirically checks whether "Use MEDLINE journal abbreviations" changes
+ * the rendered bibliography for this style: renders the synthetic preview
+ * article through the real CSL engine with and without the MEDLINE
+ * abbreviation hook and diffs the output. Whether a style requests the
+ * short form of `container-title` can depend on item type or other
+ * conditions (e.g. Chicago only abbreviates periodicals in some contexts),
+ * so a static XML check can't answer this reliably - same reasoning as
+ * _styleRespondsToIncludeUrlToggle.
+ * @param {string} styleContent
+ * @param {string} language
+ * @returns {boolean}
+ */
+SettingsPage.prototype._styleRespondsToAbbreviateJournalTitles = function (
+    styleContent,
+    language
+) {
+    if (!this._abbreviationsManager.isLoaded()) {
+        // Fail open: don't hide a potentially-relevant option just because
+        // the MEDLINE table hasn't finished loading yet.
+        return true;
+    }
+
+    const abbreviationsManager = this._abbreviationsManager;
+    const localesManager = this._localesManager;
+    const skipUrlForPaperArticles = !this._includeUrlCheckbox.getState().checked;
+    const previewItems = Object.fromEntries(
+        PREVIEW_ITEMS.map(function (item) {
+            return [item.id, item];
+        })
+    );
+
+    /**
+     * @param {boolean} withAbbreviations
+     * @returns {string}
+     */
+    function render(withAbbreviations) {
+        /** @type {Object<string, any>} */
+        const sys = {
+            retrieveLocale: function (/** @type {string} */ id) {
+                return (
+                    localesManager.getLocale(id) ||
+                    localesManager.getLocale(language) ||
+                    localesManager.getLocale()
+                );
+            },
+            retrieveItem: function (/** @type {string} */ id) {
+                const raw = previewItems[id];
+                if (!raw) return null;
+                const itemData = new CitationItemData(id);
+                itemData.fillFromObject(raw);
+                return itemData.toJSON(skipUrlForPaperArticles);
+            },
+        };
+        if (withAbbreviations) {
+            sys.getAbbreviation = abbreviationsManager.createCiteprocHook();
+        }
+        // @ts-ignore citeproc does not expose an Engine constructor declaration.
+        const formatter = new CSL.Engine(sys, styleContent, language, true);
+        formatter.updateItems(PREVIEW_ITEMS.map((item) => item.id));
+        const bibliography = formatter.makeBibliography();
+        const entries = bibliography && bibliography[1];
+        return entries ? entries.join("") : "";
+    }
+
+    try {
+        const withoutAbbreviations = render(false);
+        const withAbbreviations = render(true);
+        return withoutAbbreviations !== withAbbreviations;
+    } catch (error) {
+        console.error(
+            "Failed to probe abbreviate-journal-titles toggle:",
+            error
+        );
         return true;
     }
 };
@@ -815,6 +950,23 @@ SettingsPage.prototype._onStyleChange = function (styleName, isClick) {
                 );
             } else {
                 self._includeUrlWrapper.classList.add(
+                    self._displayNoneClass
+                );
+            }
+
+            const canAbbreviateJournalTitles = Boolean(
+                styleInfo.content &&
+                    self._styleRespondsToAbbreviateJournalTitles(
+                        styleInfo.content,
+                        self._localesManager.getLastUsedLanguage()
+                    )
+            );
+            if (canAbbreviateJournalTitles) {
+                self._abbreviateJournalTitlesWrapper.classList.remove(
+                    self._displayNoneClass
+                );
+            } else {
+                self._abbreviateJournalTitlesWrapper.classList.add(
                     self._displayNoneClass
                 );
             }
