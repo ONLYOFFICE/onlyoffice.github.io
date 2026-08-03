@@ -46,6 +46,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 .selectbox-dropdown,
 .radio-visual, 
 .checkbox-visual, 
+#previewWrapper, 
 .message { background-color: `+e[`background-normal`]+`; }
 `),e[`text-inverse`]&&(t+=`.custom-button-primary { color: `+e[`text-inverse`]+`; }
 `),e[`border-regular-control`]&&(t+=`.custom-button-icon-only:active:not(.custom-button-disabled),
@@ -62,6 +63,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 .selectbox-header,
 .selectbox-dropdown,
 .selectbox-search-input:focus,
+#previewWrapper,
 .message { border-color: `+e[`border-regular-control`]+`; }
 `,t+=`.selectbox-search,
 .selectbox-option-divider { border-color: `+e[`border-regular-control`]+` !important; }
@@ -112,6 +114,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 .input-field-element::placeholder,
 .selectbox-search-input::placeholder { color: `+e[`text-tertiary`]+`; }
 `);var n=`11px`;[`theme-white`,`theme-night`].indexOf(e.name)!==-1||[`theme-white`,`theme-night`].indexOf(e.Name)!==-1?(n=`12px`,t+=`.message,
+#previewWrapper,
 .custom-button,
 .selectbox-header,
 .input-field-element { border-radius: 4px; }
