@@ -38,7 +38,7 @@ var bNewVersion = false;
 
     window.Asc.plugin.onThemeChanged = function (theme) {
 
-        var head  = document.getElementsByTagName('head')[0];
+        var head  = document.head;
         var link  = document.createElement('link');
         link.rel  = 'stylesheet';
         link.type = 'text/css';
@@ -191,6 +191,182 @@ var bNewVersion = false;
         }
     };
 
+    function hideUnwantedElements() {
+        const zoomIn = document.getElementsByClassName('tie-btn-zoomIn')[0];
+        const zoomOut = document.getElementsByClassName('tie-btn-zoomOut')[0];
+        const hand = document.getElementsByClassName('tie-btn-hand')[0];
+        const handNext = hand.nextSibling;
+        
+        zoomIn.style.display = 'none';
+        zoomOut.style.display = 'none';
+        hand.style.display = 'none';
+        handNext.style.display = 'none';
+        zoomIn.classList.remove('tui-image-editor-item');
+        zoomOut.classList.remove('tui-image-editor-item');
+        hand.classList.remove('tui-image-editor-item');
+        handNext.classList.remove('tui-image-editor-item');
+    }
+
+    function enableToolbarKeyboardNav(container) {
+        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item.enabled, .tui-image-editor-menu .tui-image-editor-item, .tui-image-editor-button, ol.history-list li';
+        const ITEMS_TO_REMOVE_TABINDEX = 'ol.history-list';
+
+        function initGroup(parent) {
+            var items = filterItems(parent.children);
+            if (!items.length) {
+                return;
+            }
+            var hasActive = items.some(function (el) {
+                return el.getAttribute('tabindex') === '0';
+            });
+            items.forEach(function (el, i) {
+                el.setAttribute('role', el.getAttribute('role') || 'button');
+                el.setAttribute('tabindex', !hasActive && i === 0 ? '0' : '-1');
+            });
+        }
+
+        function filterItems(children) {
+            return Array.prototype.filter.call(children, function (el) {
+                return el.nodeType === 1 && el.matches(ITEM_SELECTOR);
+            });
+        }
+
+        function initAll(root) {
+            var parents = [];
+            Array.prototype.forEach.call(root.querySelectorAll(ITEM_SELECTOR), function (el) {
+                if (el.parentElement && parents.indexOf(el.parentElement) === -1) {
+                    parents.push(el.parentElement);
+                }
+            });
+            parents.forEach(initGroup);
+        }
+
+        function removeTabindex(root) {
+            var parents = [];
+            Array.prototype.forEach.call(root.querySelectorAll(ITEMS_TO_REMOVE_TABINDEX), function (el) {
+                if (el.parentElement && parents.indexOf(el.parentElement) === -1) {
+                    parents.push(el.parentElement);
+                }
+            });
+            parents.forEach(function (parent) {
+                var items = filterItems(parent.children);
+                items.forEach(function (el) {
+                    el.setAttribute('tabindex', '-1');
+                });
+            });
+        }
+
+        function moveFocus(group, fromIndex, toIndex) {
+            group[fromIndex].setAttribute('tabindex', '-1');
+            var next = group[(toIndex + group.length) % group.length];
+            next.setAttribute('tabindex', '0');
+            next.focus();
+        }
+
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                Array.prototype.forEach.call(mutation.addedNodes, function (node) {
+                    if (node.nodeType !== 1) {
+                        return;
+                    }
+                    if (node.matches && node.matches(ITEM_SELECTOR)) {
+                        initGroup(node.parentElement);
+                    }
+                    if (node.querySelectorAll) {
+                        initAll(node);
+                    }
+                });
+            });
+        });
+        observer.observe(container, { childList: true, subtree: true });
+
+        initAll(container);
+        removeTabindex(container);
+
+        container.addEventListener('keydown', function (e) {
+            var target = e.target;
+            if (!target.matches || !target.matches(ITEM_SELECTOR)) {
+                return;
+            }
+
+            var group = filterItems(target.parentElement.children);
+            var currentIndex = group.indexOf(target);
+            if (currentIndex === -1) {
+                return;
+            }
+
+            switch (e.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, currentIndex + 1);
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, currentIndex - 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, 0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    moveFocus(group, currentIndex, group.length - 1);
+                    break;
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    target.click();
+                    break;
+            }
+        });
+    }
+
+    // Iframe is a single tab stop for the host page, so Tab past the last
+    // focusable element normally leaves the plugin instead of wrapping.
+    function trapFocusInsideIframe(root) {
+        var FOCUSABLE_SELECTOR = [
+            'a[href]',
+            'button:not([disabled])',
+            'input:not([disabled])',
+            'select:not([disabled])',
+            'textarea:not([disabled])',
+            '[tabindex]:not([tabindex="-1"])',
+            '[contenteditable="true"]'
+        ].join(',');
+
+        function isVisible(el) {
+            return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+        }
+
+        function getFocusable() {
+            return Array.prototype.filter.call(root.querySelectorAll(FOCUSABLE_SELECTOR), isVisible);
+        }
+
+        root.addEventListener('keydown', function (e) {
+            if (e.key !== 'Tab') {
+                return;
+            }
+
+            var focusable = getFocusable();
+            if (!focusable.length) {
+                return;
+            }
+
+            var first = focusable[0];
+            var last = focusable[focusable.length - 1];
+
+            if (e.shiftKey && root.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && root.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
+    }
+
     function CreateImageEditor() {
 
         if (initializationDone == true || translationDone == true) {
@@ -210,10 +386,14 @@ var bNewVersion = false;
                 cssMaxWidth: 700,
                 cssMaxHeight: 500,
             });
-            document.getElementsByClassName('tie-btn-zoomIn')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-zoomOut')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-hand')[0].style.display = 'none';
-            document.getElementsByClassName('tie-btn-hand')[0].nextSibling.style.display = 'none';
+            hideUnwantedElements();
+            enableToolbarKeyboardNav(document.getElementById('tui-image-editor-container'));
+            trapFocusInsideIframe(document);
+
+            var firstMenuItem = document.querySelector('.tui-image-editor-help-menu .tui-image-editor-item');
+            if (firstMenuItem) {
+                firstMenuItem.focus();
+            }
         }
     }
 
