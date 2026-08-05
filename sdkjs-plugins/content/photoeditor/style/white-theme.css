@@ -91,3 +91,9 @@ select:focus {
     outline: 1px solid #4d88ff !important;
     outline-offset: 2px !important;
 }
+svg {
+    color: #8a8a8a;
+}
+input[type="file"]:focus + svg {
+    color: #4d88ff;
+}

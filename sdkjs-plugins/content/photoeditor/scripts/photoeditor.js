@@ -141,11 +141,6 @@ var bNewVersion = false;
     };
 
     window.Asc.plugin.init = function (sHtml) {
-        window.Asc.plugin.executeMethod('GetVersion', [], function(ver) {
-            Version = ver;
-            console.log(Version);
-        });
-
         window.Asc.plugin.executeMethod("GetImageDataFromSelection", [], function(oResult) {
             if (oResult) {
                 oImage = document.createElement("img");
@@ -208,8 +203,12 @@ var bNewVersion = false;
     }
 
     function enableToolbarKeyboardNav(container) {
-        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item.enabled, .tui-image-editor-menu .tui-image-editor-item, .tui-image-editor-button, ol.history-list li';
-        const ITEMS_TO_REMOVE_TABINDEX = 'ol.history-list';
+        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item.enabled' + 
+                             ', .tui-image-editor-menu .tui-image-editor-item' + 
+                             ', .tui-image-editor-button';
+        const ITEMS_TO_REMOVE_TABINDEX = 'ol.history-list' + 
+                                         ', .tui-image-editor-menu-mask li:first-child .tui-image-editor-button' +
+                                         ', .tui-image-editor-menu-icon .tie-icon-add-button:nth-child(3) .tui-image-editor-button';
 
         function initGroup(parent) {
             var items = filterItems(parent.children);
@@ -251,7 +250,8 @@ var bNewVersion = false;
             parents.forEach(function (parent) {
                 var items = filterItems(parent.children);
                 items.forEach(function (el) {
-                    el.setAttribute('tabindex', '-1');
+                    el.removeAttribute('tabindex');
+                    el.removeAttribute('role');
                 });
             });
         }
@@ -261,6 +261,19 @@ var bNewVersion = false;
             var next = group[(toIndex + group.length) % group.length];
             next.setAttribute('tabindex', '0');
             next.focus();
+        }
+
+        function fallbackMoveCursorToHeightRangeValue() {
+            const heightRangeValue = document.querySelector('.tui-image-editor-range-value.tie-height-range-value');
+            if (heightRangeValue) {
+                heightRangeValue.focus();
+            }
+        }
+        function fallbackMoveCursorToAspectRatio() {
+            const aspectRatioButton = document.querySelector('.tui-image-editor-menu-resize .tie-lock-aspect-ratio');
+            if (aspectRatioButton) {
+                aspectRatioButton.focus();
+            }
         }
 
         var observer = new MutationObserver(function (mutations) {
@@ -286,12 +299,23 @@ var bNewVersion = false;
         container.addEventListener('keydown', function (e) {
             var target = e.target;
             if (!target.matches || !target.matches(ITEM_SELECTOR)) {
+                if (e.key === 'Tab' && target.classList && target.classList.contains('tui-image-editor-range-value')) {
+                    if (target.classList.contains('tie-width-range-value')) {
+                        fallbackMoveCursorToHeightRangeValue();
+                    } else {
+                        fallbackMoveCursorToAspectRatio();
+                    }
+
+                    return;
+                }
+                console.log('Not matching item selector');
                 return;
             }
 
             var group = filterItems(target.parentElement.children);
             var currentIndex = group.indexOf(target);
             if (currentIndex === -1) {
+                console.log('Current index not found');
                 return;
             }
 
