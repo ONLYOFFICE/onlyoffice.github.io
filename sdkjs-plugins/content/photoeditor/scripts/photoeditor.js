@@ -352,39 +352,54 @@ var bNewVersion = false;
     }
 
     function enableToolbarAria(container) {
-        var menuBar = container.querySelector('.tui-image-editor-menu');
-        if (!menuBar) {
-            return;
-        }
-        menuBar.setAttribute('role', 'toolbar');
-        menuBar.setAttribute('aria-label', window.Asc.plugin.tr('Photo editor tools'));
-
-        var buttons = Array.prototype.filter.call(menuBar.children, function (el) {
-            return el.classList.contains('tui-image-editor-item');
-        });
-
-        function syncPressed(el) {
-            el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
-        }
-
-        buttons.forEach(function (el) {
-            var label = el.getAttribute('tooltip-content');
-            if (label) {
-                el.setAttribute('aria-label', label);
+        function setupBar(bar, barLabel, mode) {
+            if (!bar) {
+                return;
             }
-            syncPressed(el);
-        });
+            bar.setAttribute('role', mode);
+            bar.setAttribute('aria-label', barLabel);
 
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    syncPressed(mutation.target);
-                }
+            var buttons = Array.prototype.filter.call(bar.children, function (el) {
+                return el.classList.contains('tui-image-editor-item');
             });
-        });
-        buttons.forEach(function (el) {
-            observer.observe(el, { attributes: true, attributeFilter: ['class'] });
-        });
+
+            var isRadioGroup = mode === 'radiogroup';
+
+            function syncState(el) {
+                if (isRadioGroup) {
+                    el.setAttribute('aria-checked', el.classList.contains('active') ? 'true' : 'false');
+                }
+            }
+
+            buttons.forEach(function (el) {
+                if (isRadioGroup) {
+                    el.setAttribute('role', 'radio');
+                }
+                var label = el.getAttribute('tooltip-content');
+                if (label) {
+                    el.setAttribute('aria-label', label);
+                }
+                syncState(el);
+            });
+
+            if (!isRadioGroup) {
+                return;
+            }
+
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        syncState(mutation.target);
+                    }
+                });
+            });
+            buttons.forEach(function (el) {
+                observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+            });
+        }
+
+        setupBar(container.querySelector('.tui-image-editor-menu'), window.Asc.plugin.tr('Photo editor tools'), 'radiogroup');
+        setupBar(container.querySelector('.tui-image-editor-help-menu'), window.Asc.plugin.tr('Photo editor actions'), 'toolbar');
     }
 
     function enableRangeInputAria(container) {
