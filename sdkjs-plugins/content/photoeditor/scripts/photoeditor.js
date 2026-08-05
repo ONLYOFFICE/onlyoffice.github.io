@@ -138,6 +138,11 @@ var bNewVersion = false;
 
         CreateImageEditor();
         translationDone = true;
+        let shortLang = 'en';
+        if (window.Asc.plugin.tr("Close") !== 'Close') {
+            shortLang = window.Asc.plugin.info.lang.split('-')[0];
+        }
+        document.documentElement.lang = shortLang;
     };
 
     window.Asc.plugin.init = function (sHtml) {
@@ -308,7 +313,6 @@ var bNewVersion = false;
 
                     return;
                 }
-                console.log('Not matching item selector');
                 return;
             }
 
@@ -344,6 +348,150 @@ var bNewVersion = false;
                     target.click();
                     break;
             }
+        });
+    }
+
+    function enableToolbarAria(container) {
+        var menuBar = container.querySelector('.tui-image-editor-menu');
+        if (!menuBar) {
+            return;
+        }
+        menuBar.setAttribute('role', 'toolbar');
+        menuBar.setAttribute('aria-label', window.Asc.plugin.tr('Photo editor tools'));
+
+        var buttons = Array.prototype.filter.call(menuBar.children, function (el) {
+            return el.classList.contains('tui-image-editor-item');
+        });
+
+        function syncPressed(el) {
+            el.setAttribute('aria-pressed', el.classList.contains('active') ? 'true' : 'false');
+        }
+
+        buttons.forEach(function (el) {
+            var label = el.getAttribute('tooltip-content');
+            if (label) {
+                el.setAttribute('aria-label', label);
+            }
+            syncPressed(el);
+        });
+
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    syncPressed(mutation.target);
+                }
+            });
+        });
+        buttons.forEach(function (el) {
+            observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+    }
+
+    function enableRangeInputAria(container) {
+        var inputs = container.querySelectorAll('input.tui-image-editor-range-value');
+        Array.prototype.forEach.call(inputs, function (input) {
+            var node = input.previousElementSibling;
+            while (node && !(node.tagName === 'LABEL' && node.classList.contains('range'))) {
+                node = node.previousElementSibling;
+            }
+            if (node) {
+                input.setAttribute('aria-label', node.textContent.trim());
+            }
+        });
+
+        var maskInput = container.querySelector('.tie-mask-image-file');
+        var maskButton = maskInput && maskInput.closest('.tui-image-editor-button');
+        var maskLabel = maskButton && maskButton.querySelector('label');
+        if (maskInput && maskLabel) {
+            maskInput.setAttribute('aria-label', maskLabel.textContent.trim());
+        }
+    }
+
+    function enableFilterRangeKeyboardAccess(container) {
+        var RANGES = {
+            'tie-removewhite-distance-range': { min: 0, max: 1 },
+            'tie-brightness-range': { min: -1, max: 1 },
+            'tie-noise-range': { min: 0, max: 1000 },
+            'tie-pixelate-range': { min: 2, max: 20 },
+            'tie-colorfilter-threshold-range': { min: 0, max: 1 }
+        };
+
+        function findLabel(slider) {
+            var prev = slider.previousElementSibling;
+            if (prev && prev.tagName === 'LABEL') {
+                return prev.textContent.trim();
+            }
+            var group = slider.closest('.tui-image-editor-checkbox-group');
+            var span = group && group.querySelector('.tui-image-editor-checkbox span');
+            return span ? span.textContent.trim() : null;
+        }
+
+        Object.keys(RANGES).forEach(function (sliderClass) {
+            var slider = container.querySelector('.' + sliderClass);
+            if (!slider) {
+                return;
+            }
+            var pointer = slider.querySelector('.tui-image-editor-virtual-range-pointer');
+            var bar = slider.querySelector('.tui-image-editor-virtual-range-bar');
+            if (!pointer || !bar) {
+                return;
+            }
+
+            var range = RANGES[sliderClass];
+            var label = findLabel(slider);
+
+            pointer.setAttribute('role', 'slider');
+            pointer.setAttribute('tabindex', '0');
+            if (label) {
+                pointer.setAttribute('aria-label', label);
+            }
+            pointer.setAttribute('aria-valuemin', String(range.min));
+            pointer.setAttribute('aria-valuemax', String(range.max));
+
+            function rangeWidth() {
+                return bar.clientWidth || 0;
+            }
+
+            function syncValueNow() {
+                var width = rangeWidth();
+                var left = parseFloat(pointer.style.left) || 0;
+                var ratio = width > 0 ? left / width : 0;
+                pointer.setAttribute('aria-valuenow', (range.min + ratio * (range.max - range.min)).toFixed(2));
+            }
+
+            new MutationObserver(syncValueNow).observe(pointer, { attributes: true, attributeFilter: ['style'] });
+            syncValueNow();
+
+            function dragBy(deltaPx) {
+                pointer.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, screenX: 0 }));
+                document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, screenX: deltaPx }));
+                document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, screenX: deltaPx }));
+            }
+
+            pointer.addEventListener('keydown', function (e) {
+                var width = rangeWidth();
+                var step = Math.max(1, Math.round(width / 20)) * (e.shiftKey ? 5 : 1);
+                switch (e.key) {
+                    case 'ArrowRight':
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        dragBy(step);
+                        break;
+                    case 'ArrowLeft':
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        dragBy(-step);
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        dragBy(-width);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        dragBy(width);
+                        break;
+                }
+            });
         });
     }
 
@@ -410,8 +558,12 @@ var bNewVersion = false;
                 cssMaxWidth: 700,
                 cssMaxHeight: 500,
             });
+            const container = document.getElementById('tui-image-editor-container');
             hideUnwantedElements();
-            enableToolbarKeyboardNav(document.getElementById('tui-image-editor-container'));
+            enableToolbarKeyboardNav(container);
+            enableToolbarAria(container);
+            enableRangeInputAria(container);
+            enableFilterRangeKeyboardAccess(container);
             trapFocusInsideIframe(document);
 
             var firstMenuItem = document.querySelector('.tui-image-editor-help-menu .tui-image-editor-item');
