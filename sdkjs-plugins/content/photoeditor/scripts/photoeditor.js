@@ -208,7 +208,7 @@ var bNewVersion = false;
     }
 
     function enableToolbarKeyboardNav(container) {
-        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item.enabled' + 
+        const ITEM_SELECTOR = '.tui-image-editor-help-menu .tui-image-editor-item[tooltip-content]' + 
                              ', .tui-image-editor-menu .tui-image-editor-item' + 
                              ', .tui-image-editor-button';
         const ITEMS_TO_REMOVE_TABINDEX = 'ol.history-list' + 
