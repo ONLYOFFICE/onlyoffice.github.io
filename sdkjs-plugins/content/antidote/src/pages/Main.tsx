@@ -57,7 +57,12 @@ export function Main(): JSX.Element {
   const {
     connectionState, scope, errorMessage, check, stop,
   } = useCorrection();
-  const { open: openLookup, error: lookupError, incorrectPort: lookupIncorrectPort } = useLookup();
+  const {
+    open: openLookup,
+    error: lookupError,
+    incorrectPort: lookupIncorrectPort,
+    pending: lookupPending,
+  } = useLookup();
 
   const [lookupText, setLookupText] = useState('');
 
@@ -113,6 +118,9 @@ export function Main(): JSX.Element {
       header={<Header title={t('Antidote')} />}
       footer={<Footer />}
     >
+      {(connectionState.value === 'connecting' || lookupPending) && (
+        <LoadingIndicator message={t('Connecting to Antidote')} />
+      )}
       <div className="antidote-section antidote-section--secondary" hidden={scopeOptions.length <= 1}>
         <div className="antidote-section__title">{t('Check')}</div>
         <div className="tab-group" role="radiogroup" aria-label={t('Check')}>
