@@ -1,2 +1,2 @@
-export { type AscDesktopEditor } from "./desktop-editor";
-export { type AscSimpleRequest, type AscSimpleRequestOptions } from "./simple-request";
+export type * from "./desktop-editor";
+export type * from "./simple-request";
