@@ -1,26 +1,4 @@
-export {
-    type Asc,
-    type AscPlugin,
-    type AscTheme,
-    type PluginScope,
-} from "./asc";
-export {
-    type PluginEventMap,
-    type PluginEventHandler,
-    type ContextMenuShowEvent,
-    type PluginEventName,
-    type PluginEventCallback,
-    type PluginEditorEventName,
-    type PluginEditorEventCallback,
-} from "./events";
-export {
-    type ButtonBase,
-    type ButtonContextMenu,
-    type ButtonToolbar,
-    type ButtonContentControl,
-    type ButtonWindowHeader,
-    type ButtonMenuItem,
-    type Buttons,
-    type WindowHeaderFrameOptions,
-} from "./menus";
-export { type PluginWindow } from "./windows";
+export type * from "./asc";
+export type * from "./events";
+export type * from "./menus";
+export type * from "./windows";

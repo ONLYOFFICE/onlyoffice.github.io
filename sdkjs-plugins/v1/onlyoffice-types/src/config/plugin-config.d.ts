@@ -48,10 +48,10 @@ interface PluginConfig {
     minVersion?: string;
     name: string;
     nameLocale?: Record<string, string>;
-    offered?: string;
+    offered: string;
     url?: string;
     variations: VariationConfig[];
-    version?: string;
+    version: string;
 }
 
 interface InstalledPluginInfo {
