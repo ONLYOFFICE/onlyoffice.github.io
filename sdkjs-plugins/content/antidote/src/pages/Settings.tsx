@@ -31,7 +31,7 @@
  */
 
 import { JSX } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import {
@@ -61,13 +61,13 @@ export function Settings(): JSX.Element {
     setManualPort(null);
   };
 
-  if (query.reason === 'connectionError') {
-    if (discoveredPort.value) {
+  useEffect(() => {
+    if (query.reason === 'connectionError' && discoveredPort.value) {
       setPlaceholder(String(discoveredPort.value));
       setManualPort(discoveredPort.value);
       setValue('');
     }
-  }
+  }, [query.reason]);
 
   return (
     <Layout
