@@ -1,4 +1,3 @@
-export type * from "./asc";
+export type * from "./plugin";
+export type * from "./buttons";
 export type * from "./events";
-export type * from "./menus";
-export type * from "./windows";
