@@ -168,7 +168,8 @@ import "../styles.css";
         settings = new SettingsPage(router, displayNoneClass);
         citationService = new CitationService(
             settings.getLocalesManager(),
-            settings.getStyleManager()
+            settings.getStyleManager(),
+            settings.getAbbreviationsManager()
         );
         let isInit = false;
 

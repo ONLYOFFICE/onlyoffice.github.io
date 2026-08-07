@@ -32,3 +32,10 @@
 * Improved handling of repeated citations (e.g., automatic `Ibid.` support).
 * Ability to edit citations via the context menu
 * Added bibliography formatting feature.
+
+## 1.1.0
+
+* Improved the styling of the bibliography.
+* Add MEDLINE journal title abbreviation option.
+* Add option to include URLs of paper articles.
+* Add bibliography preview to the settings page.

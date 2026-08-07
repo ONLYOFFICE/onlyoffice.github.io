@@ -28,6 +28,8 @@
     "Display citations as:": "显示引用方式",
     "Footnotes": "脚注",
     "Endnotes": "尾注",
+    "Include URLs of paper articles": "包含论文文章的URL",
+    "Use MEDLINE journal abbreviations": "使用MEDLINE期刊缩写",
     "Insert/Edit Citation": "插入/编辑引用",
     "Cancel selection": "取消选择",
     "Refresh": "刷新",

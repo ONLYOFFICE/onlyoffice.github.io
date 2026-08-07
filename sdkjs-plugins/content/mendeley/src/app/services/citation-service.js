@@ -38,6 +38,7 @@
 /**
  * @typedef {import('../csl/styles').CslStylesManager} CslStylesManager
  * @typedef {import('../csl/locales').LocalesManager} LocalesManager
+ * @typedef {import('../csl/abbreviations').AbbreviationsManager} AbbreviationsManager
  * @typedef {import('../csl/citation/citation-item').CitationItem} CitationItem
  */
 
@@ -48,12 +49,17 @@ import { AdditionalWindow } from "../pages/additional-window";
 
 class CitationService {
     #additionalWindow;
+    /** @type {boolean} */
+    #skipUrlForPaperArticles;
+    /** @type {AbbreviationsManager} */
+    #abbreviationsManager;
 
     /**
      * @param {LocalesManager} localesManager
      * @param {CslStylesManager} cslStylesManager
+     * @param {AbbreviationsManager} abbreviationsManager
      */
-    constructor(localesManager, cslStylesManager) {
+    constructor(localesManager, cslStylesManager, abbreviationsManager) {
         this._bibPlaceholderIfEmpty =
             "Please insert some citation into the document.";
         this._citPrefixNew = "MENDELEY_CITATION";
@@ -68,6 +74,9 @@ class CitationService {
             this._bibPrefixNew,
         );
         this.#additionalWindow = new AdditionalWindow();
+        this.#skipUrlForPaperArticles = false; // true only for bibliography
+        this.#abbreviationsManager = abbreviationsManager;
+        this.#abbreviationsManager.load();
     }
 
     /**
@@ -127,14 +136,21 @@ class CitationService {
     /** @returns {string} */
     #makeBibliography() {
         try {
-            const bibItems = new Array(this._storage.size);
+            const bibItems = new Array();
+            this.#skipUrlForPaperArticles = !this._cslStylesManager.getIncludeUrlForPaperArticles();
+            if (this.#skipUrlForPaperArticles) {
+                this.#updateFormatter();
+            }
             /** @type {false | any} */
             const bibObject = this._formatter.makeBibliography();
+            if (this.#skipUrlForPaperArticles) {
+                this.#skipUrlForPaperArticles = false;
+                this.#updateFormatter();
+            }
 
             for (let i = 0; i < bibObject[1].length; i++) {
                 /** @type {string} */
-                let bibText = this.#unEscapeHtml(bibObject[1][i]);
-                bibText = bibText
+                let bibText = this.#unEscapeHtml(bibObject[1][i])
                     .replaceAll('\n', '')
                     .replaceAll('\r', '')
                     .replace(/\s+/g, ' ')
@@ -142,12 +158,20 @@ class CitationService {
 
                 const paragraphStart = '<div class="csl-entry">';
                 const paragraphEnd = '</div>';
-                if (!bibObject[0]['second-field-align']) {
-                    bibText = bibText.replace(/<\/?div[^>]*>/g, '');
-                    bibText = "<p>" + bibText + "</p>";
-                } else if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
+                if (bibText.indexOf(paragraphStart) === 0 && bibText.endsWith(paragraphEnd)) {
                     bibText = paragraphStart + bibText.substring(paragraphStart.length, bibText.length - paragraphEnd.length).trim() + paragraphEnd;
                 }
+
+                if (!bibObject[0]['second-field-align']) {
+                    bibText = bibText.replace(/<div class=\"csl-left-margin\">([\s\S]*?)<\/div>/, '$1\t');
+                    bibText = bibText.replace(/<div class=\"csl-block\">([\s\S]*?)<\/div>/, '$1\n\r');
+                    bibText = bibText.replace(/<\/?div[^>]*>/g, ' ');
+                    bibText = "<p>" + bibText + "</p>";
+                }
+                bibText = bibText
+                    .split('\n')
+                    .map(line => line.replace(/[ ]{2,}/g, ' ').trim())
+                    .join('\n');
 
                 bibItems.push(bibText);
             }
@@ -471,24 +495,34 @@ class CitationService {
         this._storage.forEachItem(function (item, id) {
             arrIds.push(id);
         });
+        /** @type {Object<string, any>} */
+        const sys = {
+            /** @param {string} id */
+            retrieveLocale: function (id) {
+                if (self._localesManager.getLocale(id)) {
+                    return self._localesManager.getLocale(id);
+                }
+                return self._localesManager.getLocale();
+            },
+            /** @param {string} id */
+            retrieveItem: function (id) {
+                const item = self._storage.getItem(id);
+                let index = self._storage.getItemIndex(id);
+                if (!item) return null;
+                return item.toFlatJSON(index, self.#skipUrlForPaperArticles);
+            },
+        };
+
+        if (
+            this.#abbreviationsManager.isLoaded() &&
+            this._cslStylesManager.getAbbreviateJournalTitles()
+        ) {
+            sys.getAbbreviation = this.#abbreviationsManager.createCiteprocHook();
+        }
+
         // @ts-ignore
         this._formatter = new CSL.Engine(
-            {
-                /** @param {string} id */
-                retrieveLocale: function (id) {
-                    if (self._localesManager.getLocale(id)) {
-                        return self._localesManager.getLocale(id);
-                    }
-                    return self._localesManager.getLocale();
-                },
-                /** @param {string} id */
-                retrieveItem: function (id) {
-                    const item = self._storage.getItem(id);
-                    let index = self._storage.getItemIndex(id);
-                    if (!item) return null;
-                    return item.toFlatJSON(index);
-                },
-            },
+            sys,
             this._cslStylesManager.cached(
                 this._cslStylesManager.getLastUsedStyleIdOrDefault(),
             ),

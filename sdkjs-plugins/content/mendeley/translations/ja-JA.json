@@ -28,6 +28,8 @@
     "Display citations as:": "引用の表示形式:",
     "Footnotes": "脚注",
     "Endnotes": "文末注",
+    "Include URLs of paper articles": "論文記事のURLを含める",
+    "Use MEDLINE journal abbreviations": "MEDLINEジャーナル略称を使用する",
     "Insert/Edit Citation": "引用を挿入/編集",
     "Cancel selection": "選択をキャンセル",
     "Refresh": "更新",

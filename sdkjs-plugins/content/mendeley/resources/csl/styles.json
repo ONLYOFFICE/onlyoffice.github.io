@@ -688,7 +688,7 @@
         "chemistry"
       ]
     },
-    "updated": "2024-10-16 02:47:01",
+    "updated": "2026-06-01 08:30:52",
     "href": "https://www.zotero.org/styles/advanced-science"
   },
   {
@@ -1231,34 +1231,6 @@
     "href": "https://www.zotero.org/styles/ameghiniana"
   },
   {
-    "title": "Amercian Mathematical Society (label)",
-    "titleShort": "AMS",
-    "name": "american-mathematical-society-label",
-    "dependent": 0,
-    "categories": {
-      "format": "label",
-      "fields": [
-        "math"
-      ]
-    },
-    "updated": "2025-12-20 16:15:41",
-    "href": "https://www.zotero.org/styles/american-mathematical-society-label"
-  },
-  {
-    "title": "Amercian Mathematical Society (numeric)",
-    "titleShort": "AMS",
-    "name": "american-mathematical-society-numeric",
-    "dependent": 0,
-    "categories": {
-      "format": "numeric",
-      "fields": [
-        "math"
-      ]
-    },
-    "updated": "2025-12-18 16:39:17",
-    "href": "https://www.zotero.org/styles/american-mathematical-society-numeric"
-  },
-  {
     "title": "American Anthropological Association",
     "titleShort": "AAA",
     "name": "american-anthropological-association",
@@ -1646,6 +1618,34 @@
     },
     "updated": "2020-07-28 03:59:58",
     "href": "https://www.zotero.org/styles/american-marketing-association"
+  },
+  {
+    "title": "American Mathematical Society (label)",
+    "titleShort": "AMS",
+    "name": "american-mathematical-society-label",
+    "dependent": 0,
+    "categories": {
+      "format": "label",
+      "fields": [
+        "math"
+      ]
+    },
+    "updated": "2026-05-10 13:53:45",
+    "href": "https://www.zotero.org/styles/american-mathematical-society-label"
+  },
+  {
+    "title": "American Mathematical Society (numeric)",
+    "titleShort": "AMS",
+    "name": "american-mathematical-society-numeric",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "math"
+      ]
+    },
+    "updated": "2026-05-10 13:53:45",
+    "href": "https://www.zotero.org/styles/american-mathematical-society-numeric"
   },
   {
     "title": "American Meteorological Society",
@@ -2180,7 +2180,7 @@
         "social_science"
       ]
     },
-    "updated": "2025-09-08 13:02:27",
+    "updated": "2026-05-10 13:53:45",
     "href": "https://www.zotero.org/styles/ankara-universitesi-sosyal-bilimler-enstitusu-hukuk-fakultesi"
   },
   {
@@ -3188,6 +3188,20 @@
     },
     "updated": "2021-10-07 02:42:26",
     "href": "https://www.zotero.org/styles/archeosciences"
+  },
+  {
+    "title": "Archimède. Archéologie et histoire ancienne (French)",
+    "name": "archimede-archeologie-et-histoire-ancienne",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "history",
+        "anthropology"
+      ]
+    },
+    "updated": "2026-03-13 15:02:49",
+    "href": "https://www.zotero.org/styles/archimede-archeologie-et-histoire-ancienne"
   },
   {
     "title": "Archiv für die civilistische Praxis (Deutsch)",
@@ -4317,7 +4331,7 @@
         "biology"
       ]
     },
-    "updated": "2025-08-24 16:33:14",
+    "updated": "2026-06-25 08:45:25",
     "href": "https://www.zotero.org/styles/bio-protocol"
   },
   {
@@ -4663,7 +4677,7 @@
         "biology"
       ]
     },
-    "updated": "2015-12-04 07:31:16",
+    "updated": "2026-05-10 13:53:45",
     "href": "https://www.zotero.org/styles/bioresources"
   },
   {
@@ -6410,7 +6424,7 @@
   },
   {
     "title": "Chicago Manual of Style 17th edition (author-date)",
-    "titleShort": "CMOS 17e with Bluebook (author-date/AD [15.5])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (author-date/AD [15.5])",
     "name": "chicago-author-date-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6433,7 +6447,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-17th-edition"
   },
   {
@@ -6451,7 +6465,7 @@
   },
   {
     "title": "Chicago Manual of Style 17th edition (notes and bibliography, subsequent author-title)",
-    "titleShort": "CMOS 17e with Bluebook (notes and bibliography/NB [14.19], subsequent author-title [14.34])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (notes and bibliography/NB [14.19], subsequent author-title [14.34])",
     "name": "chicago-notes-bibliography-subsequent-author-title-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6474,12 +6488,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-title-17th-edition"
   },
   {
     "title": "Chicago Manual of Style 17th edition (notes and bibliography, subsequent ibid.)",
-    "titleShort": "CMOS 17e with Bluebook (notes and bibliography/NB [14.19], subsequent ibid. [14.34])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (notes and bibliography/NB [14.19], subsequent ibid. [14.34])",
     "name": "chicago-notes-bibliography-subsequent-ibid-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6502,12 +6516,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-ibid-17th-edition"
   },
   {
     "title": "Chicago Manual of Style 17th edition (notes and bibliography)",
-    "titleShort": "CMOS 17e with Bluebook (notes and bibliography/NB [14.19])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (notes and bibliography/NB [14.19])",
     "name": "chicago-notes-bibliography-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6530,12 +6544,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-17th-edition"
   },
   {
     "title": "Chicago Manual of Style 17th edition (shortened notes and bibliography, subsequent author-title)",
-    "titleShort": "CMOS 17e with Bluebook (shortened author-title notes [14.29], subsequent author-title [14.34])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (shortened author-title notes [14.29], subsequent author-title [14.34])",
     "name": "chicago-shortened-notes-bibliography-subsequent-author-title-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6558,12 +6572,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-author-title-17th-edition"
   },
   {
     "title": "Chicago Manual of Style 17th edition (shortened notes and bibliography, subsequent ibid.)",
-    "titleShort": "CMOS 17e with Bluebook (shortened author-title notes [14.29], subsequent ibid. [14.34])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (shortened author-title notes [14.29], subsequent ibid. [14.34])",
     "name": "chicago-shortened-notes-bibliography-subsequent-ibid-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6586,12 +6600,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-ibid-17th-edition"
   },
   {
     "title": "Chicago Manual of Style 17th edition (shortened notes and bibliography)",
-    "titleShort": "CMOS 17e with Bluebook (shortened author-title notes [14.29])",
+    "titleShort": "CMOS/CMS 17e with Bluebook (shortened author-title notes [14.29])",
     "name": "chicago-shortened-notes-bibliography-17th-edition",
     "dependent": 0,
     "categories": {
@@ -6614,7 +6628,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-17th-edition"
   },
   {
@@ -6642,7 +6656,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-access-dates"
   },
   {
@@ -6670,7 +6684,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-archive-place-first-no-url"
   },
   {
@@ -6698,7 +6712,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-archive-place-first"
   },
   {
@@ -6726,7 +6740,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-classic-no-url"
   },
   {
@@ -6754,7 +6768,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-classic"
   },
   {
@@ -6782,7 +6796,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date-no-url"
   },
   {
@@ -6810,7 +6824,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-author-date"
   },
   {
@@ -6838,7 +6852,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-full-no-url"
   },
   {
@@ -6866,7 +6880,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-full"
   },
   {
@@ -6894,7 +6908,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-shortened-author-no-url"
   },
   {
@@ -6922,7 +6936,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-shortened-author"
   },
   {
@@ -6950,7 +6964,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-shortened-author-title-no-url"
   },
   {
@@ -6978,7 +6992,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-in-text-shortened-author-title"
   },
   {
@@ -7006,7 +7020,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-annotated-abstract"
   },
   {
@@ -7034,7 +7048,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-annotated"
   },
   {
@@ -7062,7 +7076,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-access-dates"
   },
   {
@@ -7090,7 +7104,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-archive-place-first-no-url"
   },
   {
@@ -7118,7 +7132,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-archive-place-first"
   },
   {
@@ -7146,7 +7160,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-classic-archive-place-first-no-url"
   },
   {
@@ -7174,7 +7188,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-classic-archive-place-first"
   },
   {
@@ -7202,7 +7216,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-classic-no-url"
   },
   {
@@ -7230,7 +7244,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-classic"
   },
   {
@@ -7258,7 +7272,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-classic-no-url"
   },
   {
@@ -7286,7 +7300,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-classic"
   },
   {
@@ -7314,7 +7328,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-no-url"
   },
   {
@@ -7342,7 +7356,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author"
   },
   {
@@ -7370,7 +7384,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-ibid-classic-no-url"
   },
   {
@@ -7398,7 +7412,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-ibid-classic"
   },
   {
@@ -7426,7 +7440,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-ibid-no-url"
   },
   {
@@ -7454,7 +7468,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-ibid"
   },
   {
@@ -7482,7 +7496,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-title-no-url"
   },
   {
@@ -7510,7 +7524,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-title"
   },
   {
@@ -7538,7 +7552,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography-no-url"
   },
   {
@@ -7566,12 +7580,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-bibliography"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, archival references with place first, without URLs)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], archive place first [14.205], no URLs [13.6])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], archive place first [14.205], no URLs [13.6])",
     "name": "chicago-notes-archive-place-first-no-url",
     "dependent": 0,
     "categories": {
@@ -7594,12 +7608,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-archive-place-first-no-url"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, archival references with place first)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], archive place first [14.205])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], archive place first [14.205])",
     "name": "chicago-notes-archive-place-first",
     "dependent": 0,
     "categories": {
@@ -7622,12 +7636,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-archive-place-first"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, classic variants, archival references with place first, without URLs)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], classic variants [14.8, 14.30], archive place first [14.205], no URLs [13.6])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], classic variants [14.8, 14.30], archive place first [14.205], no URLs [13.6])",
     "name": "chicago-notes-classic-archive-place-first-no-url",
     "dependent": 0,
     "categories": {
@@ -7650,12 +7664,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-classic-archive-place-first-no-url"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, classic variants, archival references with place first)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], classic variants [14.8, 14.30], archive place first [14.205])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], classic variants [14.8, 14.30], archive place first [14.205])",
     "name": "chicago-notes-classic-archive-place-first",
     "dependent": 0,
     "categories": {
@@ -7678,12 +7692,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-classic-archive-place-first"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, classic variants, without URLs)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], classic variants [14.8, 14.30], no URLs [13.6])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], classic variants [14.8, 14.30], no URLs [13.6])",
     "name": "chicago-notes-classic-no-url",
     "dependent": 0,
     "categories": {
@@ -7706,12 +7720,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-classic-no-url"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, classic variants)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], classic variants [14.8, 14.30])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], classic variants [14.8, 14.30])",
     "name": "chicago-notes-classic",
     "dependent": 0,
     "categories": {
@@ -7734,12 +7748,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-classic"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, place of publication substituted for publisher, archival references with place first, without URLs)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], chapter page numbers [14.8], publisher place for name [14.31], archive place first [14.205], no URLs [13.6])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], chapter page numbers [14.8], publisher place for name [14.31], archive place first [14.205], no URLs [13.6])",
     "name": "chicago-notes-publisher-place-archive-place-first-no-url",
     "dependent": 0,
     "categories": {
@@ -7762,7 +7776,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place-archive-place-first-no-url"
   },
   {
@@ -7790,7 +7804,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place-archive-place-first"
   },
   {
@@ -7818,7 +7832,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place-label-page-archive-place-first-no-url"
   },
   {
@@ -7846,7 +7860,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place-label-page-archive-place-first"
   },
   {
@@ -7874,7 +7888,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place-no-url"
   },
   {
@@ -7902,12 +7916,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-publisher-place"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography, without URLs)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20], no URLs [13.6])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23], no URLs [13.6])",
     "name": "chicago-notes-no-url",
     "dependent": 0,
     "categories": {
@@ -7930,12 +7944,12 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes-no-url"
   },
   {
     "title": "Chicago Manual of Style 18th edition (notes without bibliography)",
-    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23, 14.20])",
+    "titleShort": "CMOS/CMS with Bluebook (notes only [13.23])",
     "name": "chicago-notes",
     "dependent": 0,
     "categories": {
@@ -7958,7 +7972,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-notes"
   },
   {
@@ -7986,7 +8000,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-access-dates"
   },
   {
@@ -8014,7 +8028,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-archive-place-first-no-url"
   },
   {
@@ -8042,7 +8056,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-archive-place-first"
   },
   {
@@ -8070,7 +8084,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-classic-archive-place-first-no-url"
   },
   {
@@ -8098,7 +8112,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-classic-archive-place-first"
   },
   {
@@ -8126,7 +8140,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-classic-no-url"
   },
   {
@@ -8154,7 +8168,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-classic"
   },
   {
@@ -8182,7 +8196,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-author-classic-no-url"
   },
   {
@@ -8210,7 +8224,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-author-classic"
   },
   {
@@ -8238,7 +8252,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-author-no-url"
   },
   {
@@ -8266,7 +8280,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-author"
   },
   {
@@ -8294,7 +8308,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-ibid-classic-no-url"
   },
   {
@@ -8322,7 +8336,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-ibid-classic"
   },
   {
@@ -8350,7 +8364,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-ibid-no-url"
   },
   {
@@ -8378,7 +8392,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-ibid"
   },
   {
@@ -8406,7 +8420,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-title-no-url"
   },
   {
@@ -8434,7 +8448,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-subsequent-title"
   },
   {
@@ -8462,7 +8476,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography-no-url"
   },
   {
@@ -8490,7 +8504,7 @@
         "theology"
       ]
     },
-    "updated": "2026-02-10 04:26:05",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/chicago-shortened-notes-bibliography"
   },
   {
@@ -8596,6 +8610,45 @@
     },
     "updated": "2024-09-18 20:42:19",
     "href": "https://www.zotero.org/styles/china-national-standard-gb-t-7714-2015-numeric"
+  },
+  {
+    "title": "China National Standard GB/T 7714-2025 (author-date, 中文)",
+    "name": "china-national-standard-gb-t-7714-2025-author-date",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "generic-base"
+      ]
+    },
+    "updated": "2026-05-10 01:44:44",
+    "href": "https://www.zotero.org/styles/china-national-standard-gb-t-7714-2025-author-date"
+  },
+  {
+    "title": "China National Standard GB/T 7714-2025 (note, 中文)",
+    "name": "china-national-standard-gb-t-7714-2025-note",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "generic-base"
+      ]
+    },
+    "updated": "2026-05-10 02:09:59",
+    "href": "https://www.zotero.org/styles/china-national-standard-gb-t-7714-2025-note"
+  },
+  {
+    "title": "China National Standard GB/T 7714-2025 (numeric, 中文)",
+    "name": "china-national-standard-gb-t-7714-2025-numeric",
+    "dependent": 0,
+    "categories": {
+      "format": "numeric",
+      "fields": [
+        "generic-base"
+      ]
+    },
+    "updated": "2026-05-10 01:39:45",
+    "href": "https://www.zotero.org/styles/china-national-standard-gb-t-7714-2025-numeric"
   },
   {
     "title": "Chinese Journal of Aeronautics",
@@ -10246,17 +10299,6 @@
     "href": "https://www.zotero.org/styles/degruyter-american-chemical-society"
   },
   {
-    "title": "De Montfort University (author-date/Harvard)",
-    "name": "de-montfort-university-harvard",
-    "dependent": 0,
-    "categories": {
-      "format": "author-date",
-      "fields": []
-    },
-    "updated": "2026-01-05 14:58:08",
-    "href": "https://www.zotero.org/styles/de-montfort-university-harvard"
-  },
-  {
     "title": "Deakin University (author-date/Harvard)",
     "name": "harvard-deakin-university",
     "dependent": 0,
@@ -11010,7 +11052,7 @@
         "biology"
       ]
     },
-    "updated": "2014-09-11 02:57:16",
+    "updated": "2026-03-19 22:24:25",
     "href": "https://www.zotero.org/styles/ecology-and-society"
   },
   {
@@ -11251,7 +11293,7 @@
         "science"
       ]
     },
-    "updated": "2026-01-04 15:26:59",
+    "updated": "2026-07-19 09:44:28",
     "href": "https://www.zotero.org/styles/elementa"
   },
   {
@@ -12036,6 +12078,20 @@
     "href": "https://www.zotero.org/styles/escuela-nacional-de-antropologia-e-historia-short-note"
   },
   {
+    "title": "Estonian Journal of Archaeology",
+    "titleShort": "EJA",
+    "name": "estonian-journal-of-archaeology",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "linguistics"
+      ]
+    },
+    "updated": "2026-03-11 13:41:08",
+    "href": "https://www.zotero.org/styles/estonian-journal-of-archaeology"
+  },
+  {
     "title": "Estonian Journal of Earth Sciences",
     "titleShort": "EJES",
     "name": "estonian-journal-of-earth-sciences",
@@ -12808,6 +12864,21 @@
     "href": "https://www.zotero.org/styles/eva-berlin-konferenz"
   },
   {
+    "title": "Evangélikus Hittudományi Egyetem (Magyar)",
+    "titleShort": "EHE",
+    "name": "evangelikus-hittudomanyi-egyetem",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "humanities",
+        "theology"
+      ]
+    },
+    "updated": "2026-05-05 11:07:22",
+    "href": "https://www.zotero.org/styles/evangelikus-hittudomanyi-egyetem"
+  },
+  {
     "title": "Evidence-Based Complementary and Alternative Medicine",
     "titleShort": "eCAM",
     "name": "evidence-based-complementary-and-alternative-medicine",
@@ -13113,7 +13184,7 @@
         "social_science"
       ]
     },
-    "updated": "2021-02-14 05:16:25",
+    "updated": "2026-05-15 06:33:52",
     "href": "https://www.zotero.org/styles/facolta-teologica-dell-italia-settentrionale-milano"
   },
   {
@@ -13485,7 +13556,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-03-03 04:02:07",
+    "updated": "2026-05-10 13:53:45",
     "href": "https://www.zotero.org/styles/food-and-agriculture-organization-of-the-united-nations"
   },
   {
@@ -13500,7 +13571,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-03-03 04:02:40",
+    "updated": "2026-05-10 13:53:45",
     "href": "https://www.zotero.org/styles/food-and-agriculture-organization-of-the-united-nations-numeric"
   },
   {
@@ -14540,7 +14611,7 @@
         "medicine"
       ]
     },
-    "updated": "2020-08-19 03:24:35",
+    "updated": "2026-06-09 14:29:25",
     "href": "https://www.zotero.org/styles/gigascience"
   },
   {
@@ -14841,7 +14912,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2025-05-18 00:55:38",
+    "updated": "2026-06-08 14:20:02",
     "href": "https://www.zotero.org/styles/haute-ecole-de-gestion-de-geneve-iso-690"
   },
   {
@@ -16172,7 +16243,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-09-06 00:40:28",
+    "updated": "2025-09-10 12:42:46",
     "href": "https://www.zotero.org/styles/infoclio-de"
   },
   {
@@ -16186,7 +16257,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-09-06 00:40:28",
+    "updated": "2025-09-10 12:42:46",
     "href": "https://www.zotero.org/styles/infoclio-de-kurzbelege"
   },
   {
@@ -16200,7 +16271,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-09-06 00:40:28",
+    "updated": "2025-09-10 12:42:46",
     "href": "https://www.zotero.org/styles/infoclio-fr-smallcaps"
   },
   {
@@ -16214,7 +16285,7 @@
         "social_science"
       ]
     },
-    "updated": "2024-09-06 00:40:28",
+    "updated": "2025-09-10 12:42:46",
     "href": "https://www.zotero.org/styles/infoclio-fr-nocaps"
   },
   {
@@ -16353,6 +16424,20 @@
     },
     "updated": "2025-05-10 14:43:09",
     "href": "https://www.zotero.org/styles/institut-francais-darcheologie-orientale-etudes-arabes"
+  },
+  {
+    "title": "Institut für Geschichte des ländlichen Raums (Deutsch)",
+    "titleShort": "IGLR",
+    "name": "institut-fur-geschichte-des-landlichen-raums",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "history"
+      ]
+    },
+    "updated": "2026-06-05 14:59:00",
+    "href": "https://www.zotero.org/styles/institut-fur-geschichte-des-landlichen-raums"
   },
   {
     "title": "Institut für Praxisforschung (author-date/Harvard, Bahr & Frackmann) (Deutsch)",
@@ -16531,7 +16616,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-02-02 13:34:16",
+    "updated": "2026-03-26 13:16:30",
     "href": "https://www.zotero.org/styles/instituto-brasileiro-de-informacao-em-ciencia-e-tecnologia-abnt-initials"
   },
   {
@@ -16543,7 +16628,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-02-02 13:04:40",
+    "updated": "2026-03-26 13:15:39",
     "href": "https://www.zotero.org/styles/instituto-brasileiro-de-informacao-em-ciencia-e-tecnologia-abnt"
   },
   {
@@ -17490,7 +17575,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2024-09-09 15:12:05",
+    "updated": "2026-07-10 09:20:07",
     "href": "https://www.zotero.org/styles/interpreting"
   },
   {
@@ -18578,6 +18663,22 @@
     },
     "updated": "2024-08-27 18:49:28",
     "href": "https://www.zotero.org/styles/journal-of-anatomy"
+  },
+  {
+    "title": "Journal of Animal and Feed Sciences",
+    "titleShort": "JAFS",
+    "name": "journal-of-animal-and-feed-sciences",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "biology",
+        "zoology",
+        "science"
+      ]
+    },
+    "updated": "2026-06-25 15:22:40",
+    "href": "https://www.zotero.org/styles/journal-of-animal-and-feed-sciences"
   },
   {
     "title": "Journal of Animal Physiology and Animal Nutrition",
@@ -20033,7 +20134,7 @@
         "social_science"
       ]
     },
-    "updated": "2026-02-23 08:22:00",
+    "updated": "2026-03-18 09:58:15",
     "href": "https://www.zotero.org/styles/journal-of-juridical-sciences"
   },
   {
@@ -20186,7 +20287,7 @@
         "engineering"
       ]
     },
-    "updated": "2014-09-06 22:02:33",
+    "updated": "2026-04-03 16:09:14",
     "href": "https://www.zotero.org/styles/journal-of-management-information-systems"
   },
   {
@@ -22894,6 +22995,20 @@
     "href": "https://www.zotero.org/styles/le-tapuscrit-note"
   },
   {
+    "title": "Lecciones y Ensayos (Español)",
+    "titleShort": "revistalye",
+    "name": "lecciones-y-ensayos",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "law"
+      ]
+    },
+    "updated": "2026-06-29 13:03:54",
+    "href": "https://www.zotero.org/styles/lecciones-y-ensayos"
+  },
+  {
     "title": "Leeds Beckett University (author-date/Harvard)",
     "name": "harvard-leeds-beckett-university",
     "dependent": 0,
@@ -23269,7 +23384,7 @@
   },
   {
     "title": "Magnetic Resonance in Medical Sciences",
-    "titleShort": "Magn Reson Med Sci",
+    "titleShort": "MRMS",
     "name": "magnetic-resonance-in-medical-sciences",
     "dependent": 0,
     "categories": {
@@ -23278,7 +23393,7 @@
         "medicine"
       ]
     },
-    "updated": "2021-07-22 04:01:35",
+    "updated": "2026-05-17 16:47:08",
     "href": "https://www.zotero.org/styles/magnetic-resonance-in-medical-sciences"
   },
   {
@@ -23486,7 +23601,7 @@
         "law"
       ]
     },
-    "updated": "2025-02-27 16:54:08",
+    "updated": "2026-03-04 14:08:09",
     "href": "https://www.zotero.org/styles/mcgill-fr"
   },
   {
@@ -26441,7 +26556,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-name"
   },
   {
@@ -26457,7 +26572,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-brackets-no-et-al"
   },
   {
@@ -26473,7 +26588,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-brackets-year-only-no-issue"
   },
   {
@@ -26489,7 +26604,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-brackets"
   },
   {
@@ -26505,7 +26620,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-superscript-brackets-year-only"
   },
   {
@@ -26521,7 +26636,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-superscript-year-only-no-issue"
   },
   {
@@ -26537,7 +26652,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence-superscript"
   },
   {
@@ -26553,7 +26668,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-citation-sequence"
   },
   {
@@ -26569,7 +26684,7 @@
         "science"
       ]
     },
-    "updated": "2026-02-18 15:24:08",
+    "updated": "2026-03-29 15:20:09",
     "href": "https://www.zotero.org/styles/nlm-name-year"
   },
   {
@@ -26642,7 +26757,20 @@
     "href": "https://www.zotero.org/styles/norsk-apa-manual-note"
   },
   {
-    "title": "Norsk henvisningsstandard for rettsvitenskapelige tekster (Norsk - Bokmål | Norsk - Nynorsk)",
+    "title": "Norsk henvisningsstandard for rettsvitenskapelige tekster – fullstendig førstenote (Norsk - Bokmål | Norsk - Nynorsk)",
+    "name": "norsk-henvisningsstandard-for-rettsvitenskapelige-tekster-full-firstnote",
+    "dependent": 0,
+    "categories": {
+      "format": "note",
+      "fields": [
+        "law"
+      ]
+    },
+    "updated": "2026-05-27 12:14:09",
+    "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster-full-firstnote"
+  },
+  {
+    "title": "Norsk henvisningsstandard for rettsvitenskapelige tekster – kortnoter (Norsk - Bokmål | Norsk - Nynorsk)",
     "name": "norsk-henvisningsstandard-for-rettsvitenskapelige-tekster",
     "dependent": 0,
     "categories": {
@@ -26651,7 +26779,7 @@
         "law"
       ]
     },
-    "updated": "2026-02-09 19:56:29",
+    "updated": "2026-05-27 12:14:09",
     "href": "https://www.zotero.org/styles/norsk-henvisningsstandard-for-rettsvitenskapelige-tekster"
   },
   {
@@ -28898,7 +29026,7 @@
         "theology"
       ]
     },
-    "updated": "2025-07-29 14:35:49",
+    "updated": "2026-06-02 07:21:14",
     "href": "https://www.zotero.org/styles/pontifical-biblical-institute"
   },
   {
@@ -29349,12 +29477,12 @@
     "name": "protein-science",
     "dependent": 0,
     "categories": {
-      "format": "numeric",
+      "format": "author-date",
       "fields": [
         "biology"
       ]
     },
-    "updated": "2026-01-04 15:26:59",
+    "updated": "2026-06-03 16:51:54",
     "href": "https://www.zotero.org/styles/protein-science"
   },
   {
@@ -32142,6 +32270,22 @@
     "href": "https://www.zotero.org/styles/solutions"
   },
   {
+    "title": "Sophiahemmet Högskola (Swedish)",
+    "titleShort": "SHH",
+    "name": "sophiahemmet-hogskola",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "medicine",
+        "social_science",
+        "law"
+      ]
+    },
+    "updated": "2026-06-01 12:09:00",
+    "href": "https://www.zotero.org/styles/sophiahemmet-hogskola"
+  },
+  {
     "title": "Sorbonne Student Law Review - Revue juridique des étudiants de la Sorbonne",
     "titleShort": "SSLR",
     "name": "sorbonne-student-law-review",
@@ -33609,7 +33753,7 @@
       "format": "author-date",
       "fields": []
     },
-    "updated": "2026-02-14 01:18:34",
+    "updated": "2026-04-14 07:08:20",
     "href": "https://www.zotero.org/styles/taylor-and-francis-chicago-author-date"
   },
   {
@@ -34731,7 +34875,7 @@
         "biology"
       ]
     },
-    "updated": "2025-02-23 05:15:30",
+    "updated": "2026-04-07 14:12:44",
     "href": "https://www.zotero.org/styles/the-isme-journal"
   },
   {
@@ -34980,7 +35124,7 @@
     "href": "https://www.zotero.org/styles/the-journal-of-juristic-papyrology"
   },
   {
-    "title": "The Journal of Laryngology & Otology",
+    "title": "The Journal of Laryngology and Otology",
     "titleShort": "JLO",
     "name": "the-journal-of-laryngology-and-otology",
     "dependent": 0,
@@ -34990,7 +35134,7 @@
         "medicine"
       ]
     },
-    "updated": "2026-01-25 22:16:24",
+    "updated": "2026-06-25 09:04:36",
     "href": "https://www.zotero.org/styles/the-journal-of-laryngology-and-otology"
   },
   {
@@ -37175,6 +37319,20 @@
     },
     "updated": "2021-02-10 05:28:52",
     "href": "https://www.zotero.org/styles/universitat-bremen-lehrstuhl-fur-innovatives-markenmanagement"
+  },
+  {
+    "title": "Universität Graz - Geographie",
+    "titleShort": "geo-graz",
+    "name": "universitat-graz-geographie",
+    "dependent": 0,
+    "categories": {
+      "format": "author-date",
+      "fields": [
+        "geography"
+      ]
+    },
+    "updated": "2026-03-16 15:46:45",
+    "href": "https://www.zotero.org/styles/universitat-graz-geographie"
   },
   {
     "title": "Universität Heidelberg - Historisches Seminar (Deutsch)",
@@ -39425,7 +39583,7 @@
         "medicine"
       ]
     },
-    "updated": "2014-09-06 22:02:33",
+    "updated": "2026-04-13 07:13:36",
     "href": "https://www.zotero.org/styles/xenotransplantation"
   },
   {

@@ -37,6 +37,8 @@
 /// <reference path="../csl/citation/types.js" />
 /// <reference path="../csl/styles/types.js" />
 
+import { CslHtmlParser } from "./csl-html-parser";
+
 class CitationDocService {
     #citPrefix;
     #bibPrefix;
@@ -698,7 +700,7 @@ class CitationDocService {
      * @returns {Promise<string>}
      */
     async #pasteContentControlHtml(html) {
-
+        html = CslHtmlParser.purifyHtml(html);
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const paragraphs = doc.querySelectorAll(".csl-entry");
