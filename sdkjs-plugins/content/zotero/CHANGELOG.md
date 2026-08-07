@@ -61,4 +61,3 @@
 * Add MEDLINE journal title abbreviation option.
 * Add option to include URLs of paper articles.
 * Add bibliography preview to the settings page.
-
