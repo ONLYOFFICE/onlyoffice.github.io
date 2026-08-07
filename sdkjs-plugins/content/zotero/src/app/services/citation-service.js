@@ -250,7 +250,7 @@ class CitationService {
                     bibText = bibText.replace(/<div class=\"csl-left-margin\">([\s\S]*?)<\/div>/, '$1\t');
                     bibText = bibText.replace(/<div class=\"csl-block\">([\s\S]*?)<\/div>/, '$1\n\r');
                     bibText = bibText.replace(/<\/?div[^>]*>/g, ' ');
-                    bibText = "<p>" + bibText + "</p>";
+                    bibText = "<p>" + bibText.trim() + "</p>";
                 }
                 bibText = bibText
                     .split('\n')
