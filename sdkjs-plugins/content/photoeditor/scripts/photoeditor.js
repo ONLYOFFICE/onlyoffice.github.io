@@ -274,10 +274,41 @@ var bNewVersion = false;
                 heightRangeValue.focus();
             }
         }
-        function fallbackMoveCursorToAspectRatio() {
-            const aspectRatioButton = document.querySelector('.tui-image-editor-menu-resize .tie-lock-aspect-ratio');
-            if (aspectRatioButton) {
-                aspectRatioButton.focus();
+        function getTabNeighbor(el, direction) {
+            const selectors = [
+                'a[href]', 'area[href]', 'input:not([disabled])',
+                'select:not([disabled])', 'textarea:not([disabled])',
+                'button:not([disabled])', '[tabindex]', '[contenteditable="true"]'
+            ].join(',');
+
+            let focusable = Array.from(document.querySelectorAll(selectors))
+                .filter(item => {
+                return item.tabIndex >= 0 && 
+                        item.offsetWidth > 0 && 
+                        item.offsetHeight > 0 && 
+                        window.getComputedStyle(item).visibility !== 'hidden';
+                });
+
+            focusable.sort((a, b) => {
+                const aTab = a.tabIndex > 0 ? a.tabIndex : Infinity;
+                const bTab = b.tabIndex > 0 ? b.tabIndex : Infinity;
+                if (aTab !== bTab) return aTab - bTab;
+                return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+            });
+
+            const index = focusable.indexOf(el);
+            if (index === -1) return null;
+
+            const nextIndex = (index + direction + focusable.length) % focusable.length;
+            return focusable[nextIndex];
+        }
+        function fallbackMoveCursorToElement(currentElement, neighborIndex) {
+            if (!neighborIndex) {
+                neighborIndex = 1;
+            }
+            const neighborEl = getTabNeighbor(currentElement, neighborIndex);
+            if (neighborEl) {
+                neighborEl.focus();
             }
         }
 
@@ -305,12 +336,11 @@ var bNewVersion = false;
             var target = e.target;
             if (!target.matches || !target.matches(ITEM_SELECTOR)) {
                 if (e.key === 'Tab' && target.classList && target.classList.contains('tui-image-editor-range-value')) {
-                    if (target.classList.contains('tie-width-range-value')) {
-                        fallbackMoveCursorToHeightRangeValue();
-                    } else {
-                        fallbackMoveCursorToAspectRatio();
+                    let neighborIndex = 1;
+                    if (e.shiftKey) {
+                        neighborIndex = -1;
                     }
-
+                    fallbackMoveCursorToElement(target, neighborIndex);
                     return;
                 }
                 return;
