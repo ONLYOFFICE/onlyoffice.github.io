@@ -133,7 +133,7 @@ function s(e, t) {
 		readonly: t.readonly || !1,
 		required: t.required || !1,
 		showCounter: t.showCounter || !1,
-		showClear: t.showClear === void 0 ? !0 : t.showClear,
+		showClear: t.showClear === void 0 || t.showClear,
 		autocomplete: t.autocomplete || "off"
 	}, t) this._options.hasOwnProperty(i) || (this._options[i] = t[i]);
 	this._id = e.id || "input_" + Math.random().toString(36).slice(2, 9), this.isFocused = !1, this.isValid = !0, this._validationMessage = "", this._subscribers = [], this._boundHandles = {
@@ -270,7 +270,7 @@ s.prototype = {
 		this.input.placeholder = e, this._options.placeholder = e;
 	},
 	clear: function(e) {
-		e = e === void 0 ? !0 : e, this.setValue(""), e && this.input.focus();
+		e = e === void 0 || e, this.setValue(""), e && this.input.focus();
 	},
 	focus: function() {
 		this.input.focus();
@@ -401,9 +401,7 @@ c.prototype = {
 			case "warning":
 				t = "Warning";
 				break;
-			case "info":
-				t = "Information";
-				break;
+			case "info": t = "Information";
 		}
 		var n = this._options.text;
 		if (!n) switch (n = "", this._options.type) {
@@ -413,9 +411,7 @@ c.prototype = {
 			case "warning":
 				n = "Please be cautious.";
 				break;
-			case "error":
-				n = "Something went wrong.";
-				break;
+			case "error": n = "Something went wrong.";
 		}
 		if (e.innerHTML = "<div class=\"message-content\"><span class=\"message-title\">" + t + "</span><span class=\"message-text\">" + n + "</span></div>", this._options.closeButton) {
 			var r = document.createElement("button");
@@ -492,10 +488,12 @@ l.prototype = {
 	_badgeElement: null,
 	_createDOM: function() {
 		var e = this._button.parentNode, t = document.createDocumentFragment();
-		if (t.appendChild(this._container), this._container.className += " custom-button-container", this._button.className += " custom-button", this._button.className += " custom-button-" + this._options.variant, this._button.className += " custom-button-" + this._options.size, this._options.disabled && (this._button.className += " custom-button-disabled"), this._options.loading && (this._container.className += " custom-button-loading"), this._options.type && (this._button.type = this._options.type), this._options.tooltip && (this._button.title = this._options.tooltip), this._options.disabled && (this._button.disabled = !0), this._options.text) if (this._button.textContent = "", this._buttonText = document.createElement("span"), this._buttonText.className = "custom-button-text", this._buttonText.textContent = this._options.text || "", this._options.icon) {
-			var n = document.createElement("span");
-			n.className = "custom-button-icon", this._options.iconPosition === "left" ? (n.className += " custom-button-icon-left", this._button.appendChild(n), this._button.appendChild(this._buttonText)) : (n.className += " custom-button-icon-right", this._button.appendChild(this._buttonText), this._button.appendChild(n)), n.innerHTML = this._options.icon;
-		} else this._button.appendChild(this._buttonText);
+		if (t.appendChild(this._container), this._container.className += " custom-button-container", this._button.className += " custom-button", this._button.className += " custom-button-" + this._options.variant, this._button.className += " custom-button-" + this._options.size, this._options.disabled && (this._button.className += " custom-button-disabled"), this._options.loading && (this._container.className += " custom-button-loading"), this._options.type && (this._button.type = this._options.type), this._options.tooltip && (this._button.title = this._options.tooltip), this._options.disabled && (this._button.disabled = !0), this._options.text) {
+			if (this._button.textContent = "", this._buttonText = document.createElement("span"), this._buttonText.className = "custom-button-text", this._buttonText.textContent = this._options.text || "", this._options.icon) {
+				var n = document.createElement("span");
+				n.className = "custom-button-icon", this._options.iconPosition === "left" ? (n.className += " custom-button-icon-left", this._button.appendChild(n), this._button.appendChild(this._buttonText)) : (n.className += " custom-button-icon-right", this._button.appendChild(this._buttonText), this._button.appendChild(n)), n.innerHTML = this._options.icon;
+			} else this._button.appendChild(this._buttonText);
+		}
 		this._options.loading && (this._spinner = document.createElement("span"), this._spinner.className = "custom-button-spinner", this._button.appendChild(this._spinner)), this._options.badge && (this._badgeElement = document.createElement("span"), this._badgeElement.className = "custom-button-badge", this._badgeElement.textContent = this._options.badge, this._button.appendChild(this._badgeElement)), e && e.insertBefore(t, this._button), this._container.appendChild(this._button);
 	},
 	_bindEvents: function() {
@@ -674,9 +672,7 @@ u.prototype = {
 						t.preventDefault(), !e._options.checked && !e._options.indeterminate && (e._options.checked ? e.setIndeterminate() : e.check());
 						break;
 					case "ArrowLeft":
-					case "ArrowUp":
-						t.preventDefault(), (e._options.checked || e._options.indeterminate) && (e._options.indeterminate ? e.uncheck() : e.setIndeterminate());
-						break;
+					case "ArrowUp": t.preventDefault(), (e._options.checked || e._options.indeterminate) && (e._options.indeterminate ? e.uncheck() : e.setIndeterminate());
 				}
 			}, r = function() {
 				e._container && e._container.classList.add("checkbox--focused");
@@ -978,16 +974,17 @@ function v(e) {
 	if (n && (i = i.filter(function(e) {
 		return e.text.toLowerCase().indexOf(n) !== -1;
 	})), i.length !== 0) {
-		if (e === "up") if (this._selectedValues.size === 0 && i.length > 0) r = i[i.length - 1], this._selectedValues.add(r.value);
-		else {
-			for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
-				o = s;
-				break;
+		if (e === "up") {
+			if (this._selectedValues.size === 0 && i.length > 0) r = i[i.length - 1], this._selectedValues.add(r.value);
+			else {
+				for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
+					o = s;
+					break;
+				}
+				var c = (o - 1 + i.length) % i.length;
+				this._selectedValues.clear(), r = i[c], this._selectedValues.add(r.value);
 			}
-			var c = (o - 1 + i.length) % i.length;
-			this._selectedValues.clear(), r = i[c], this._selectedValues.add(r.value);
-		}
-		else if (this._selectedValues.size === 0 && i.length > 0) r = i[0], this._selectedValues.add(r.value);
+		} else if (this._selectedValues.size === 0 && i.length > 0) r = i[0], this._selectedValues.add(r.value);
 		else {
 			for (var a = Array.from(this._selectedValues), o = -1, s = 0; s < i.length; s++) if (i[s].value === a[0]) {
 				o = s;
@@ -1018,9 +1015,7 @@ function y(e) {
 			e.preventDefault(), t(d, this, v).call(this, "up");
 			break;
 		case "Tab":
-		case 9:
-			t(d, this, g).call(this);
-			break;
+		case 9: t(d, this, g).call(this);
 	}
 }
 function b(e, t) {
