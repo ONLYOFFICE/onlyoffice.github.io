@@ -18,8 +18,8 @@
 /** focus **/
 .tui-image-editor-item:focus,
 .tui-image-editor-button:focus {
-    outline: 1px solid #4d88ff;
-    outline-offset: -1px;
+    box-shadow: inset 0px -2px 0px -1px #4d88ff;
+    outline: none;
 }
 input:not(:checked):focus + span::before {
     border: 2px solid #4d88ff !important;
