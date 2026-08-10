@@ -51,11 +51,16 @@ const jsConfig = [
       'no-plusplus': 'off',
       'no-continue': 'off',
       'no-restricted-syntax': ['error', 'WithStatement'],
-      'no-console': 'warn',
+      'no-console': 'off',
+      'no-restricted-properties': ['warn', {
+        object: 'console',
+        property: 'log',
+        message: 'Use console.warn/console.error/console.info instead of console.log.',
+      }],
       'no-alert': 'warn',
       'radix': ['error', 'as-needed'],
       'no-await-in-loop': 'warn',
-      '@stylistic/max-len': ['error', { code: 120, ignoreUrls: true, ignoreStrings: true }],
+      '@stylistic/max-len': 'off',
       '@stylistic/max-statements-per-line': ['error', { max: 1 }],
     },
   },
@@ -99,6 +104,14 @@ const typescriptConfig = [
     rules: {
       '@typescript-eslint/no-shadow': 'warn',
       '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
+      '@typescript-eslint/prefer-destructuring': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        vars: 'all',
+        args: 'none',
+        ignoreRestSiblings: true,
+        argsIgnorePattern: '^_',
+        caughtErrors: 'none',
+      }],
     },
   },
 ];
@@ -112,6 +125,8 @@ export default [
     rules: {
       'import-x/prefer-default-export': 'off',
       'import-x/no-cycle': 'warn',
+      'class-methods-use-this': 'off',
+      'prefer-const': 'off',
       'react-hooks/exhaustive-deps': 'warn',
       'consistent-return': 'warn',
       '@stylistic/no-tabs': 'error',

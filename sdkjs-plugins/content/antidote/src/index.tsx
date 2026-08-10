@@ -56,7 +56,7 @@ function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) 
 
   if (error) {
     return (
-      <Layout header={null} footer={null}>
+      <Layout footer={null}>
         <ErrorBox title={t('Error')} message={error} />
         <div style={{ marginTop: '16px' }}>
           <Button variant="primary" fullWidth onClick={() => window.location.reload()}>
@@ -70,7 +70,7 @@ function PluginReadyGuard({ children }: { children: preact.ComponentChildren }) 
   if (!ready) {
     const message = `${t('Loading')}…`;
     return (
-      <Layout header={null} footer={null}>
+      <Layout footer={null}>
         <LoadingIndicator message={message} />
       </Layout>
     );

@@ -70,7 +70,6 @@ export class TextEditor extends BaseEditor {
   }
 
   // Word is the only editor with a real paragraph object model — see BaseEditor.supportsZones.
-  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
   supportsZones(): boolean {
     return true;
   }

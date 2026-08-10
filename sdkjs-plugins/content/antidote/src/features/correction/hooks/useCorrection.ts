@@ -31,7 +31,7 @@
  */
 
 import { useCallback, useRef } from 'preact/hooks';
-import { Antidote, ConnectixAgent } from '@druide-informatique/antidote-api-js';
+import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
 import { getPortProvider, probePort, AntidoteError } from '@api/antidote';
 import { t } from '@utils/i18n';

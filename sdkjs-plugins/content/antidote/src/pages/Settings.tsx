@@ -35,7 +35,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import {
-  Layout, Header, Footer, Button, TextField,
+  Layout, Footer, Button, TextField,
 } from '@components';
 import { useTranslation } from '@hooks';
 import { manualPort, setManualPort } from '@features/correction';
@@ -71,7 +71,6 @@ export function Settings(): JSX.Element {
 
   return (
     <Layout
-      header={<Header title={t('Settings')} />}
       footer={<Footer />}
     >
       <div className="antidote-section">

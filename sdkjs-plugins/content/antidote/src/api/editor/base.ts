@@ -91,7 +91,6 @@ export abstract class BaseEditor {
     this.name = name;
   }
 
-  // eslint-disable-next-line class-methods-use-this -- shared instance helper, no per-editor state needed
   protected ensurePlugin(): void {
     if (!window.Asc?.plugin?.callCommand) throw new DocumentError('Plugin API unavailable', 'PLUGIN_UNAVAILABLE');
   }
@@ -99,7 +98,6 @@ export abstract class BaseEditor {
   // No caret-word API outside Word's object model. TextEditor overrides this with the real
   // `Api.GetDocument().GetCurrentWord()` call; every other editor keeps this empty-string default,
   // which callers (e.g. useLookup's Dictionaries/Guides caret fallback) treat as "nothing found."
-  // eslint-disable-next-line class-methods-use-this -- overridden by subclasses; base is a no-op
   getCurrentWord(): Promise<string> {
     console.error('getCurrentWord is not implemented in this editor');
     return Promise.resolve('');
@@ -117,7 +115,6 @@ export abstract class BaseEditor {
   // surrounding main text — see getDocumentContent) via a real paragraph object model. False by
   // default; only TextEditor (Word) has one. SelectionCorrectionAgent uses this to pick between
   // its zone-aware mode and its generic cross-editor flat-string fallback.
-  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is always false
   supportsZones(): boolean {
     return false;
   }
@@ -144,7 +141,6 @@ export abstract class BaseEditor {
   // absolute range without touching the live document selection. TextEditor overrides this with a
   // real object-model implementation; every other editor keeps this empty-text default (used only
   // when getSelectionStart/End are non-null, which they aren't outside TextEditor).
-  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   getRangeTextWithStyle(_start: number, _end: number): Promise<TextWithStyle> {
     console.error('getRangeTextWithStyle is not implemented in this editor');
     return Promise.resolve({ text: '' });
@@ -228,7 +224,6 @@ export abstract class BaseEditor {
   // real no-op path for editors without a paragraph object model, so it's silent by design (this
   // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
   // whole-document scope already keeps out of reach there).
-  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
     console.error('selectContentRange is not implemented in this editor');
     return Promise.resolve();
@@ -238,7 +233,6 @@ export abstract class BaseEditor {
   // selection's own text, matching the positions Antidote was given via
   // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
   // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
-  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength?: number): Promise<void> {
     console.error('selectWithinSelection is not implemented in this editor');
     return Promise.resolve();
@@ -254,9 +248,7 @@ export abstract class BaseEditor {
   // session (another collaborator, or the user typing directly) so cached positions can be
   // resynced instead of silently drifting. No-op outside Word's editor-event API; every other
   // editor just has no concurrent-edit detection yet.
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
   watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {}
 
-  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   stopWatchingContentChanges(): void {}
 }

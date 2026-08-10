@@ -48,7 +48,6 @@ export class LookupAgent extends WordProcessorAgent {
     super();
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   configuration(): WordProcessorConfiguration {
     return { documentTitle: 'ONLYOFFICE', activeMarkup: DocumentType.text };
   }
@@ -57,12 +56,10 @@ export class LookupAgent extends WordProcessorAgent {
     return [{ text: this.text, zoneId: '', zoneIsFocused: true }];
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   allowEdit(_params: ParamsAllowEdit): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   correctIntoWordProcessor(_params: ParamsReplace): boolean {
     return false;
   }

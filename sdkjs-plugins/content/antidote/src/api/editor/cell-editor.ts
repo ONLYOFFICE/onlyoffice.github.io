@@ -69,7 +69,6 @@ export class CellEditor extends BaseEditor {
   // Spreadsheets have a real per-cell object model (unlike a single linear document), so each
   // selected cell becomes its own independent zone — one cell selected means one zone, several
   // selected cells mean one zone each. See BaseEditor.supportsZones.
-  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
   supportsZones(): boolean {
     return true;
   }
@@ -79,12 +78,10 @@ export class CellEditor extends BaseEditor {
   // into. getDocumentContent below always reflects whatever's currently selected regardless of any
   // range passed to it, so these two only need to return distinct non-null values: just enough for
   // SelectionCorrectionAgent's "is there a tracked selection" null-checks to pass.
-  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
   getSelectionStart(): Promise<number | null> {
     return Promise.resolve(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this -- overrides BaseEditor's instance method
   getSelectionEnd(): Promise<number | null> {
     return Promise.resolve(1);
   }

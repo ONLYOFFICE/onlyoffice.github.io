@@ -33,15 +33,13 @@
 import { ComponentChildren, JSX } from 'preact';
 
 export interface LayoutProps {
-  header: ComponentChildren;
   footer: ComponentChildren;
   children: ComponentChildren;
 }
 
-export function Layout({ header, footer, children }: LayoutProps): JSX.Element {
+export function Layout({ footer, children }: LayoutProps): JSX.Element {
   return (
     <div className="antidote-layout">
-      {header}
       <main className="antidote-layout__content">{children}</main>
       {footer}
     </div>

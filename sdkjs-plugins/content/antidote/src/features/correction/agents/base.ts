@@ -96,7 +96,6 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   // `documentId` is the one stable per-document identifier the plugin host exposes — separate
   // from (and in addition to) the correctionMemory blob itself, in case Antidote's own cache also
   // keys off this.
-  // eslint-disable-next-line class-methods-use-this -- overrides WordProcessorAgent's instance method
   documentPath(): string {
     return window.Asc?.plugin?.info?.documentId ?? '';
   }

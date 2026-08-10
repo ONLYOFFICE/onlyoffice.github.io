@@ -30,5 +30,6 @@
  *
  */
 
-export { BaseEditor, DocumentZone, DocumentParagraph } from './base';
+export { BaseEditor } from './base';
+export type { DocumentZone, DocumentParagraph } from './base';
 export { Editor } from './editor';

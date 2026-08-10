@@ -35,7 +35,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
 
 import {
-  Layout, Header, Footer, Button, TextField, StatusBanner, IconButton, LoadingIndicator,
+  Layout, Footer, Button, TextField, StatusBanner, IconButton, LoadingIndicator,
 } from '@components';
 import { useHasSelection, useTranslation } from '@hooks';
 import { useCorrection, CorrectionScope } from '@features/correction';
@@ -113,7 +113,6 @@ export function Main(): JSX.Element {
 
   return (
     <Layout
-      header={<Header title={t('Antidote')} />}
       footer={<Footer />}
     >
       {(connectionState.value === 'connecting' || lookupPending) && (

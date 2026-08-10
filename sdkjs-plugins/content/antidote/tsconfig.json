@@ -6,7 +6,6 @@
 		"noEmit": true,
 		"allowJs": true,
 		"checkJs": true,
-		"baseUrl": ".",
 		"jsx": "react-jsx",
 		"jsxImportSource": "preact",
 		"skipLibCheck": false,
@@ -30,5 +29,5 @@
 		}
 	},
 	"include": ["node_modules/vite/client.d.ts", "**/*"],
-	"exclude": ["dist", "node_modules"]
+	"exclude": ["dist", "node_modules", "eslint.config.mjs"]
 }
