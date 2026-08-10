@@ -32,7 +32,7 @@
 
 import { JSX } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { useLocation } from 'preact-iso';
+import { useLocation } from '@/router';
 
 import {
   Layout, Footer, Button, TextField,

@@ -31,8 +31,8 @@
  */
 
 import { render } from 'preact';
-import { LocationProvider, Router, Route } from 'preact-iso';
 
+import { LocationProvider, useLocation } from '@/router';
 import {
   Layout, LoadingIndicator, ErrorBox, Button,
 } from '@components';
@@ -86,17 +86,19 @@ function ModalApp() {
   return null;
 }
 
+function AppRouter() {
+  const { path } = useLocation();
+  if (path === '/settings') return <Settings />;
+  return <Main />;
+}
+
 export function App() {
   if (modalName) return <ModalApp />;
 
   return (
     <PluginReadyGuard>
       <LocationProvider>
-        <Router>
-          <Route path="/" component={Main} />
-          <Route path="/settings" component={Settings} />
-          <Route default component={Main} />
-        </Router>
+        <AppRouter />
       </LocationProvider>
     </PluginReadyGuard>
   );
