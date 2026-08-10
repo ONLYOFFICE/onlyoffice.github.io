@@ -43,7 +43,6 @@ window.Asc.plugin.init = function() {
     
     // Use Document API
     window.Asc.plugin.callCommand(function() {
-        const Api = (window as any).Api;
         const doc = Api.GetDocument();
         const para = Api.CreateParagraph();
         para.AddText('Hello from plugin!');
@@ -56,7 +55,7 @@ window.Asc.plugin.button = function(id) {
 };
 
 // Get selected text
-window.Asc.plugin.getSelectedText(function(text) {
+window.Asc.plugin.executeMethod("GetSelectedText", [], function (text) {
     console.log('Selected:', text);
 });
 ```
@@ -74,33 +73,68 @@ window.Asc.plugin.getSelectedText(function(text) {
 Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`, `Pdf`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
 
 Any type from any editor is importable regardless of which editor the current plugin targets -
-same-named classes across editors don't collide, and you
-can reference another editor's types from shared/helper code:
+same-named classes across editors don't collide, so the same `onlyoffice-plugins-api` import
+works no matter which editor entry point your `tsconfig.json` declares. Each snippet below is a
+separate plugin/file targeting its own editor - only include the matching entry point
+(`/word`, `/cell`, `/slide`, or `/pdf`) in a given `tsconfig.json`; combining more than one in the
+same project makes the global `Api` declarations collide.
 
 ```typescript
-import type { Word, Cell, Slide, Pdf } from "onlyoffice-plugins-api";
+import type { Word } from "onlyoffice-plugins-api/word";
 
-function logParagraph(p: Word.ApiParagraph) { /* ... */ }
-function fillCell(r: Cell.ApiRange) { /* ... */ }
-function firstSlide(pres: Slide.ApiPresentation): Slide.ApiSlide { /* ... */ }
-function usePdfApi(api: Pdf.Api) { return api.GetDocument(); }
+window.Asc.plugin.callCommand(function() {
+    const wordApi: Word.Api = Api;
+    const paragraphs = wordApi.GetDocument().GetAllParagraphs();
+    console.log(paragraphs[0].GetText());
+});
+```
+
+```typescript
+import type { Cell } from "onlyoffice-plugins-api/cell";
+
+window.Asc.plugin.callCommand(function() {
+    const cellApi: Cell.Api = Api;
+    const cell = cellApi.GetActiveSheet().GetRangeByNumber(0, 0);
+    console.log(cell.GetValue());
+});
+```
+
+```typescript
+import type { Slide } from "onlyoffice-plugins-api/slide";
+
+window.Asc.plugin.callCommand(function() {
+    const slideApi: Slide.Api = Api;
+    const slide = slideApi.GetPresentation().GetCurrentSlide();
+    console.log(slide.GetSlideIndex());
+});
+```
+
+```typescript
+import type { Pdf } from "onlyoffice-plugins-api/pdf";
+
+window.Asc.plugin.callCommand(function() {
+    const doc: Pdf.ApiDocument = Api.GetDocument();
+    console.log(doc.GetPagesCount());
+});
 ```
 
 `Api<T>` resolves the entry-point class for a given editor kind (`"word" | "cell" | "slide" | "pdf"`),
 equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Pdf.Api`:
 
 ```typescript
+// Word plugin - include `onlyoffice-plugins-api/word` in tsconfig.json.
 import type { Api } from "onlyoffice-plugins-api";
 
-function useWordApi(api: Api<"word">) {
-    const doc = api.GetDocument();
-}
+window.Asc.plugin.callCommand(function() {
+    const wordApi: Api<"word"> = Api;
+    const doc = wordApi.GetDocument();
+});
 ```
 
-`window.Asc.plugin.executeMethod` is typed for Word, Cell, and Slide method
-names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs` in `src/`).
+`window.Asc.plugin.executeMethod` is typed for Word, Cell, Slide, and PDF method
+names and their argument tuples (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs`/`PdfMethodArgs` in `src/`).
 
-> `GetMacros` (all three editors) returns a raw JSON **string** - parse it yourself with
+> `GetMacros` (all four editors) returns a raw JSON **string** - parse it yourself with
 > `JSON.parse(result)` to get `{ current: number, macrosArray: {...}[] }`, matching the official
 > docs example.
 
@@ -203,21 +237,22 @@ The root package remains the compatibility entry point. The same runtime types a
 layer for better discoverability and smaller imports:
 
 ```typescript
-import type { AscPlugin } from "onlyoffice-plugins-api/plugin/asc-plugin";
+import type { AscPlugin } from "onlyoffice-plugins-api/plugin/plugin";
 import type { PluginEventMap } from "onlyoffice-plugins-api/plugin/events";
+import type { Buttons } from "onlyoffice-plugins-api/plugin/buttons";
 import type { PluginConfig } from "onlyoffice-plugins-api/config";
-import type { AscDesktopEditor } from "onlyoffice-plugins-api/services/desktop-editor";
+import type { AscDesktopEditor } from "onlyoffice-plugins-api/services";
 ```
 
 Available layer entry points:
 
 ```text
-onlyoffice-plugins-api/plugin
-onlyoffice-plugins-api/plugin/events
-onlyoffice-plugins-api/plugin/menus
-onlyoffice-plugins-api/plugin/windows
-onlyoffice-plugins-api/config
-onlyoffice-plugins-api/services
+onlyoffice-plugins-api/plugin           # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo, events, buttons (everything)
+onlyoffice-plugins-api/plugin/plugin    # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo only
+onlyoffice-plugins-api/plugin/events    # PluginEventMap and plugin-window-level event types only
+onlyoffice-plugins-api/plugin/buttons   # Buttons and its ButtonBase subtypes only
+onlyoffice-plugins-api/config           # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
+onlyoffice-plugins-api/services         # AscDesktopEditor, AscSimpleRequest
 ```
 
 These are type-only re-exports of the same declarations used by the root package, so existing root
@@ -240,19 +275,25 @@ onlyoffice-types/
 │   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
 │   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
 │   ├── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
+│   ├── editors/            # /word, /cell, /slide, /pdf entry points (declare each editor's global Api)
+│   │   ├── word.d.ts
+│   │   ├── cell.d.ts
+│   │   ├── slide.d.ts
+│   │   └── pdf.d.ts
 │   ├── theme/
 │   │   └── index.d.ts      # AscTheme, KnownThemeName
 │   ├── config/
-│   │   └── plugin-config.d.ts # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
+│   │   ├── plugin-config.d.ts # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
+│   │   └── index.d.ts         # re-exports plugin-config.d.ts - the /config entry point
 │   ├── plugin/
+│   │   ├── plugin.d.ts     # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo (the hub module)
 │   │   ├── events.d.ts     # PluginEventMap and plugin-window-level event types
 │   │   ├── buttons.d.ts    # Buttons, ButtonBase and its Toolbar/ContextMenu/... subtypes
-│   │   ├── plugin.d.ts     # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo (the hub module)
-│   │   └── index.d.ts, asc.d.ts, asc-plugin.d.ts, menus.d.ts, windows.d.ts # modular entry-point facades (see below)
+│   │   └── index.d.ts      # re-exports the three files above - the /plugin entry point
 │   └── services/
 │       ├── desktop-editor.d.ts  # AscDesktopEditor
 │       ├── simple-request.d.ts  # AscSimpleRequest
-│       └── index.d.ts           # modular entry-point facade
+│       └── index.d.ts           # re-exports both - the /services entry point
 ├── schemas/
 │   └── config.schema.json
 ├── scripts/
@@ -267,6 +308,7 @@ onlyoffice-types/
 Each interface/type is physically declared in exactly one module (e.g. `AscPlugin` lives in
 `src/plugin/plugin.d.ts`, `AscTheme` in `src/theme/index.d.ts`); `index.d.ts` only imports and
 re-exports them, so it stays a genuine barrel file rather than a second copy of the same content.
-The `src/plugin/asc.d.ts`/`asc-plugin.d.ts`/`menus.d.ts`/`windows.d.ts`/`services/index.d.ts` files
-are the pre-existing [modular entry points](#modular-entry-points) - thin facades kept for the
-`onlyoffice-plugins-api/plugin/*` import paths, re-exporting from the modules above.
+Each of `src/plugin/`, `src/config/`, `src/services/`, and `src/theme/` has its own `index.d.ts` that
+re-exports everything in that directory - that's what the [modular entry points](#modular-entry-points)
+(`onlyoffice-plugins-api/plugin`, `/config`, `/services`) resolve to; `onlyoffice-plugins-api/plugin/*`
+resolves directly to the individual file (e.g. `/plugin/events` → `src/plugin/events.d.ts`).
