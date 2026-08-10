@@ -2,6 +2,10 @@
 
 TypeScript type definitions for OnlyOffice plugins.
 
+For the official plugin API reference, guides, and examples (not TypeScript-specific), see
+[api.onlyoffice.com/docs/plugins/get-started](https://api.onlyoffice.com/docs/plugins/get-started/).
+This package only adds TypeScript types on top of that API.
+
 ## Installation
 
 ```bash
@@ -237,7 +241,7 @@ onlyoffice-types/
 │   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
 │   ├── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
 │   ├── theme/
-│   │   └── theme.d.ts      # AscTheme, KnownThemeName
+│   │   └── index.d.ts      # AscTheme, KnownThemeName
 │   ├── config/
 │   │   └── plugin-config.d.ts # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
 │   ├── plugin/
@@ -261,7 +265,7 @@ onlyoffice-types/
 ```
 
 Each interface/type is physically declared in exactly one module (e.g. `AscPlugin` lives in
-`src/plugin/plugin.d.ts`, `AscTheme` in `src/theme/theme.d.ts`); `index.d.ts` only imports and
+`src/plugin/plugin.d.ts`, `AscTheme` in `src/theme/index.d.ts`); `index.d.ts` only imports and
 re-exports them, so it stays a genuine barrel file rather than a second copy of the same content.
 The `src/plugin/asc.d.ts`/`asc-plugin.d.ts`/`menus.d.ts`/`windows.d.ts`/`services/index.d.ts` files
 are the pre-existing [modular entry points](#modular-entry-points) - thin facades kept for the

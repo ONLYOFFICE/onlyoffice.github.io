@@ -158,13 +158,13 @@ type CellMethodReturn<T extends CellMethodName> =
     T extends "ReplaceTextSmart" ? boolean :
     any;
 
-    export {
-        CellMethodArgs,
-        CellMethodName,
-        CellMethodReturn,
-    }
+export {
+    CellMethodArgs,
+    CellMethodName,
+    CellMethodReturn,
+}
 
-    export {
-        CellCommentData,
-        CellOLEProperties,
-    }
+export {
+    CellCommentData,
+    CellOLEProperties,
+}

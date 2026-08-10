@@ -14,7 +14,7 @@ import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "../cell-m
 import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "../slide-methods";
 import type { PdfMethodName, PdfMethodArgs, PdfMethodReturn } from "../pdf-methods";
 
-import type { AscTheme } from "../theme/theme";
+import type { AscTheme } from "../theme";
 import type { EditorType, VariationConfig } from "../config/plugin-config";
 import type {
     PluginEventMap,
