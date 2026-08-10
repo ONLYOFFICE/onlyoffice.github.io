@@ -1,4 +1,4 @@
-import type { Pdf } from "../pdf";
+import type { Pdf } from "../generated/pdf";
 
 declare global {
     interface Window {
