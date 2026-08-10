@@ -38,6 +38,7 @@
     "@preact/preset-vite": "^2.10.6",
     "@stylistic/eslint-plugin": "^3.1.0",
     "@types/node": "^26.1.2",
+    "@typescript-eslint/parser": "^8.66.0",
     "eslint": "^9.39.5",
     "eslint-config-airbnb-extended": "^3.2.0",
     "eslint-config-preact": "^2.0.0",
