@@ -1,7 +1,7 @@
-import type { WordApi } from "./src/editors/word";
-import type { CellApi } from "./src/editors/cell";
-import type { SlideApi } from "./src/editors/slide";
-import type { PdfApi } from "./src/editors/pdf";
+import type { Word } from "./src/generated/word";
+import type { Cell } from "./src/generated/cell";
+import type { Slide } from "./src/generated/slide";
+import type { Pdf } from "./src/generated/pdf";
 
 import type { EditorType } from "./src/config";
 import type { Asc } from "./src/plugin";
@@ -18,18 +18,17 @@ declare global {
 }
 
 export type Api<T extends EditorType> =
-    T extends "word" ? WordApi :
-    T extends "cell" ? CellApi :
-    T extends "slide" ? SlideApi :
-    T extends "pdf" ? PdfApi :
+    T extends "word" ? Word.Api :
+    T extends "cell" ? Cell.Api :
+    T extends "slide" ? Slide.Api :
+    T extends "pdf" ? Pdf.Api :
     never;
 
 export type * from "./src/generated/forms";
-
-export type * from "./src/editors/word";
-export type * from "./src/editors/cell";
-export type * from "./src/editors/slide";
-export type * from "./src/editors/pdf";
+export type * from "./src/generated/word";
+export type * from "./src/generated/cell";
+export type * from "./src/generated/slide";
+export type * from "./src/generated/pdf";
 
 export type * from "./src/word-methods";
 export type * from "./src/cell-methods";
