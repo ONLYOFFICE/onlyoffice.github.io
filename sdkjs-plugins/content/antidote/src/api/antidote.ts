@@ -47,7 +47,13 @@ export class AntidoteError extends Error {
 const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
 
-const isDesktop = window.location.protocol === 'file:';
+const isDesktop = (function(){
+		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
+			return false;
+		if (window.location && window.location.protocol == "file:")
+			return true;
+		return false;
+	})();
 export const DEFAULT_PROBE_TIMEOUT_MS = isDesktop ? 2000 : 500;
 export const PROBE_TIMEOUT_RANGE = { min: 100, max: 5000 };
 
