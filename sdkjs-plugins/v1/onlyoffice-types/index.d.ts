@@ -6,6 +6,7 @@ import type { Pdf } from "./src/generated/pdf";
 import type { EditorType } from "./src/config";
 import type { Asc } from "./src/plugin";
 import type { AscDesktopEditor, AscSimpleRequest } from "./src/services";
+
 declare global {
     interface Window {
         Asc: Asc;
