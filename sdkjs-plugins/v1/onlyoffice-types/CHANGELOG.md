@@ -40,7 +40,7 @@ Initial public release.
 - Physically split `AscPlugin`, `PluginEventMap`, `PluginWindow`, `Buttons`, `PluginConfig`,
   `VariationConfig`, `AscDesktopEditor`, `AscSimpleRequest`, and `AscTheme` (and their supporting
   types) out of `index.d.ts` into dedicated modules (`src/plugin/plugin.d.ts`, `src/plugin/events.d.ts`,
-  `src/plugin/buttons.d.ts`, `src/config/plugin-config.d.ts`, `src/theme/theme.d.ts`,
+  `src/plugin/buttons.d.ts`, `src/config/plugin-config.d.ts`, `src/theme/index.d.ts`,
   `src/services/desktop-editor.d.ts`, `src/services/simple-request.d.ts`). `index.d.ts` is now a
   genuine barrel file (127 lines, down from 1031) that only imports and re-exports; each type has
   exactly one physical home instead of being declared inline with the earlier modules re-exporting it.
