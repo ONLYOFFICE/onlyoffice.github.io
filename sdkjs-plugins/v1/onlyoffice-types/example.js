@@ -46,7 +46,7 @@ function documentPluginExample() {
 function spreadsheetPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            /** @type {import("./src/generated/cell").Cell.Api} */
+            /** @type {import("./src/editors/cell").Cell.Api} */
             var cellApi = Api;
             var activeSheet = cellApi.GetActiveSheet();
             cellApi.GetRange("A1").SetValue("Hello from plugin!");
@@ -58,7 +58,7 @@ function spreadsheetPluginExample() {
 function presentationPluginExample() {
     window.Asc.plugin.init = function() {
         window.Asc.plugin.callCommand(function() {
-            /** @type {import("./src/generated/slide").Slide.Api} */
+            /** @type {import("./src/editors/slide").Slide.Api} */
             var slideApi = Api;
             var oPresentation = slideApi.GetPresentation();
             var oSlide = slideApi.CreateSlide();
