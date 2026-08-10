@@ -31,6 +31,9 @@
   "Connectix WebSocket port": "Connectix WebSocket port",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".",
   "Save": "Save",
-  "Clear": "Clear"
+  "Clear": "Clear",
+  "Connection probe timeout (ms)": "Connection probe timeout (ms)",
+  "Leave empty to use the default": "Leave empty to use the default",
+  "ms": "ms"
 
 }

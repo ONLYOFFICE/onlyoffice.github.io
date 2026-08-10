@@ -31,5 +31,8 @@
   "Connectix WebSocket port": "Porti WebSocket i Connectix",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Lëreni bosh për zbulim automatik. Gjeni portin duke ekzekutuar \"AgentConnectixConsole --api\".",
   "Save": "Ruaj",
-  "Clear": "Pastro"
+  "Clear": "Pastro",
+  "Connection probe timeout (ms)": "Kohëmbarimi i provës së lidhjes (ms)",
+  "Leave empty to use the default": "Lëreni bosh për të përdorur të paracaktuar",
+  "ms": "ms"
 }

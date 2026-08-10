@@ -32,7 +32,7 @@
 
 import { signal } from '@preact/signals';
 import { AntidoteConnector } from '@druide-informatique/antidote-api-js';
-import { manualPort } from '@features/correction/store/correctionStore';
+import { manualPort, manualProbeTimeout } from '@features/correction/store/correctionStore';
 
 export class AntidoteError extends Error {
   constructor(message: string, public readonly code: 'NOT_DETECTED') {
@@ -46,7 +46,10 @@ export class AntidoteError extends Error {
 // Connectix's ephemeral range and provides a manual-port fallback.
 const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
-const PROBE_TIMEOUT_MS = 200;
+
+const isDesktop = window.location.protocol === 'file:';
+export const DEFAULT_PROBE_TIMEOUT_MS = isDesktop ? 2000 : 500;
+export const PROBE_TIMEOUT_RANGE = { min: 100, max: 5000 };
 
 // The port found by the last successful scan/probe, exposed so Settings can display it as the
 // effective port even when the user hasn't set a manual override — as if they had typed it in.
@@ -58,7 +61,7 @@ export const discoveredPort = signal<number | null>(null);
 export function probePort(port: number): Promise<boolean> {
   return new Promise((resolve) => {
     let settled = false;
-    const socket = new WebSocket(`ws://localhost:${port}`);
+    const socket = new WebSocket(`ws://127.0.0.1:${port}`);
 
     let timer: ReturnType<typeof setTimeout>;
     const finish = (ok: boolean) => {
@@ -69,7 +72,7 @@ export function probePort(port: number): Promise<boolean> {
       resolve(ok);
     };
 
-    timer = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
+    timer = setTimeout(() => finish(false), manualProbeTimeout.value ?? DEFAULT_PROBE_TIMEOUT_MS);
     socket.addEventListener('open', () => finish(true));
     socket.addEventListener('error', () => finish(false));
   });

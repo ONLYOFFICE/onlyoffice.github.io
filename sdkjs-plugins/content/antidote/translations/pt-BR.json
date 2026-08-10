@@ -31,6 +31,9 @@
   "Connectix WebSocket port": "Porta WebSocket do Connectix",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Deixe em branco para detecção automática. Encontre a porta executando \"AgentConnectixConsole --api\".",
   "Save": "Salvar",
-  "Clear": "Limpar"
+  "Clear": "Limpar",
+  "Connection probe timeout (ms)": "Tempo limite da sondagem de conexão (ms)",
+  "Leave empty to use the default": "Deixe em branco para usar o padrão",
+  "ms": "ms"
 
 }

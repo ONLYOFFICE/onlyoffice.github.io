@@ -31,5 +31,8 @@
   "Connectix WebSocket port": "Connectix WebSocket 端口",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "留空以自动检测。通过运行 \"AgentConnectixConsole --api\" 查找端口。",
   "Save": "保存",
-  "Clear": "清除"
+  "Clear": "清除",
+  "Connection probe timeout (ms)": "连接探测超时（毫秒）",
+  "Leave empty to use the default": "留空以使用默认值",
+  "ms": "毫秒"
 }

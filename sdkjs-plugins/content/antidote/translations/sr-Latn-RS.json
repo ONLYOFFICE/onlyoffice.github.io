@@ -31,5 +31,8 @@
   "Connectix WebSocket port": "Connectix WebSocket port",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "Ostavite prazno za automatsko detekciju. Pronađite port pokretanjem \"AgentConnectixConsole --api\".",
   "Save": "Sačuvaj",
-  "Clear": "Očisti"
+  "Clear": "Očisti",
+  "Connection probe timeout (ms)": "Vreme isteka za proveru konekcije (ms)",
+  "Leave empty to use the default": "Ostavite prazno za korišćenje podrazumevane vrednosti",
+  "ms": "ms"
 }

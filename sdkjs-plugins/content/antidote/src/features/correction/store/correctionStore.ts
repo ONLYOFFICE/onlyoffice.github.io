@@ -36,6 +36,7 @@ export type ConnectionState = 'idle' | 'connecting' | 'connected' | 'error';
 export type CorrectionScope = 'document' | 'selection';
 
 const MANUAL_PORT_STORAGE_KEY = 'antidote.manualPort';
+const MANUAL_PROBE_TIMEOUT_STORAGE_KEY = 'antidote.manualProbeTimeout';
 
 function readStoredPort(): number | null {
   if (typeof localStorage === 'undefined') return null;
@@ -43,14 +44,28 @@ function readStoredPort(): number | null {
   return stored ? Number(stored) : null;
 }
 
+function readStoredProbeTimeout(): number | null {
+  if (typeof localStorage === 'undefined') return null;
+  const stored = localStorage.getItem(MANUAL_PROBE_TIMEOUT_STORAGE_KEY);
+  return stored ? Number(stored) : null;
+}
+
 export const connectionState = signal<ConnectionState>('idle');
 export const scope = signal<CorrectionScope>('selection');
 export const errorMessage = signal<string | null>(null);
 export const manualPort = signal<number | null>(readStoredPort());
+export const manualProbeTimeout = signal<number | null>(readStoredProbeTimeout());
 
 export function setManualPort(port: number | null): void {
   manualPort.value = port;
   if (typeof localStorage === 'undefined') return;
   if (port === null) localStorage.removeItem(MANUAL_PORT_STORAGE_KEY);
   else localStorage.setItem(MANUAL_PORT_STORAGE_KEY, String(port));
+}
+
+export function setManualProbeTimeout(timeout: number | null): void {
+  manualProbeTimeout.value = timeout;
+  if (typeof localStorage === 'undefined') return;
+  if (timeout === null) localStorage.removeItem(MANUAL_PROBE_TIMEOUT_STORAGE_KEY);
+  else localStorage.setItem(MANUAL_PROBE_TIMEOUT_STORAGE_KEY, String(timeout));
 }

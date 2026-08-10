@@ -42,21 +42,26 @@ export interface TextFieldProps {
   disabled?: boolean;
   clearable?: boolean;
   clearLabel?: string;
+  type?: 'text' | 'number';
+  min?: number;
+  max?: number;
   onInput: (value: string) => void;
   onEnter?: () => void;
   onClear?: () => void;
 }
 
 export function TextField({
-  value, label, caption, placeholder, disabled, clearable, clearLabel, onInput, onEnter, onClear,
+  value, label, caption, placeholder, disabled, clearable, clearLabel, type = 'text', min, max, onInput, onEnter, onClear,
 }: TextFieldProps): JSX.Element {
   const input = (
     <input
-      type="text"
+      type={type}
       className="form-control text-field"
       value={value}
       placeholder={placeholder}
       disabled={disabled}
+      min={min}
+      max={max}
       onInput={(event) => onInput((event.target as HTMLInputElement).value)}
       onKeyDown={(event) => {
         if (event.key === 'Enter') onEnter?.();

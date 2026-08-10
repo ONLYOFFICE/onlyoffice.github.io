@@ -31,5 +31,8 @@
   "Connectix WebSocket port": "Connectix WebSocket ポート",
   "Leave empty to auto-detect. Find the port by running \"AgentConnectixConsole --api\".": "空のままにすると自動検出されます。\"AgentConnectixConsole --api\"を実行してポートを見つけます。",
   "Save": "保存",
-  "Clear": "クリア"
+  "Clear": "クリア",
+  "Connection probe timeout (ms)": "接続プローブのタイムアウト (ms)",
+  "Leave empty to use the default": "デフォルトを使用するには空のままにします",
+  "ms": "ms"
 }

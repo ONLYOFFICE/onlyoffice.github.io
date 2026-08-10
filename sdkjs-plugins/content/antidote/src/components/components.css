@@ -245,6 +245,14 @@
 .text-field-wrapper .text-field {
   padding-right: 24px;
 }
+.text-field-wrapper .text-field::-webkit-outer-spin-button,
+.text-field-wrapper .text-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.text-field-wrapper .text-field[type=number] {
+  -moz-appearance: textfield;
+}
 
 .text-field-wrapper .icon-button {
   position: absolute;

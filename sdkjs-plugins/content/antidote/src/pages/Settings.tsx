@@ -38,8 +38,10 @@ import {
   Layout, Footer, Button, TextField,
 } from '@components';
 import { useTranslation } from '@hooks';
-import { manualPort, setManualPort } from '@features/correction';
-import { discoveredPort } from '@api/antidote';
+import {
+  manualPort, manualProbeTimeout, setManualPort, setManualProbeTimeout,
+} from '@features/correction';
+import { discoveredPort, DEFAULT_PROBE_TIMEOUT_MS, PROBE_TIMEOUT_RANGE } from '@api/antidote';
 
 export function Settings(): JSX.Element {
   const { t } = useTranslation();
@@ -48,17 +50,31 @@ export function Settings(): JSX.Element {
   // as if the user had typed it in themselves rather than showing blank while a port is in use.
   const effectivePort = manualPort.value ?? discoveredPort.value;
   const [value, setValue] = useState(effectivePort ? String(effectivePort) : '');
-  const [placeholder, setPlaceholder] = useState(effectivePort ? String(effectivePort) : '59004');
+  const [placeholder, setPlaceholder] = useState(effectivePort ? String(effectivePort) : '49152');
+
+  const [timeoutValue, setTimeoutValue] = useState(manualProbeTimeout.value !== null ? String(manualProbeTimeout.value) : '');
 
   const save = () => {
     const port = Number(value.trim());
     setManualPort(Number.isFinite(port) && port > 0 ? port : null);
+
+    const timeout = Number(timeoutValue.trim());
+    const clampedTimeout = Number.isFinite(timeout)
+      ? Math.min(PROBE_TIMEOUT_RANGE.max, Math.max(PROBE_TIMEOUT_RANGE.min, timeout))
+      : null;
+    setManualProbeTimeout(clampedTimeout);
+
     route('/');
   };
 
   const clear = () => {
     setValue('');
     setManualPort(null);
+  };
+
+  const clearProbeTimeout = () => {
+    setTimeoutValue('');
+    setManualProbeTimeout(null);
   };
 
   useEffect(() => {
@@ -84,6 +100,20 @@ export function Settings(): JSX.Element {
           onInput={setValue}
           onEnter={save}
           onClear={clear}
+        />
+        <TextField
+          label={t('Connection probe timeout (ms)')}
+          caption={`${t('Leave empty to use the default')} (${DEFAULT_PROBE_TIMEOUT_MS} ${t('ms')}).`}
+          type="number"
+          min={PROBE_TIMEOUT_RANGE.min}
+          max={PROBE_TIMEOUT_RANGE.max}
+          value={timeoutValue}
+          placeholder={String(DEFAULT_PROBE_TIMEOUT_MS)}
+          clearable
+          clearLabel={t('Clear')}
+          onInput={setTimeoutValue}
+          onEnter={save}
+          onClear={clearProbeTimeout}
         />
         <div className="antidote-lookup-row">
           <Button variant="primary" onClick={save}>{t('Save')}</Button>
