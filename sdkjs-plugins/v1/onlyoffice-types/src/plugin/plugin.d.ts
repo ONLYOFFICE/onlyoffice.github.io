@@ -7,7 +7,7 @@ import type { Word } from "../generated/word";
 import type { Cell } from "../generated/cell";
 import type { Slide } from "../generated/slide";
 import type { Forms } from "../generated/forms";
-import type { Pdf } from "../pdf";
+import type { Pdf } from "../generated/pdf";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "../word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "../cell-methods";

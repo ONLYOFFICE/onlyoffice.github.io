@@ -2,7 +2,7 @@ import type { Cell } from "./src/generated/cell";
 import type { Slide } from "./src/generated/slide";
 import type { Word } from "./src/generated/word";
 import type { Forms } from "./src/generated/forms";
-import type { Pdf } from "./src/pdf";
+import type { Pdf } from "./src/generated/pdf";
 
 import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "./src/word-methods";
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "./src/cell-methods";
