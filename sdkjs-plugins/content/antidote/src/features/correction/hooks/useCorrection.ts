@@ -61,6 +61,10 @@ export function useCorrection() {
     connectionState.value = 'idle';
   }, []);
 
+  const setScope = useCallback((targetScope: CorrectionScope) => {
+    scope.value = targetScope;
+  }, []);
+
   const check = useCallback(async (targetScope: CorrectionScope = scope.value) => {
     errorMessage.value = null;
     connectionState.value = 'connecting';
@@ -117,6 +121,7 @@ export function useCorrection() {
   return {
     connectionState,
     scope,
+    setScope,
     errorMessage,
     check,
     stop,

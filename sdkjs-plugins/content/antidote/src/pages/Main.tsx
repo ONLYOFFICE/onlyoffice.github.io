@@ -55,7 +55,7 @@ export function Main(): JSX.Element {
   const { route } = useLocation();
   const hasSelection = useHasSelection();
   const {
-    connectionState, scope, errorMessage, check, stop,
+    connectionState, scope, setScope, errorMessage, check, stop,
   } = useCorrection();
   const {
     open: openLookup,
@@ -70,10 +70,8 @@ export function Main(): JSX.Element {
   const canCheckWholeDocument = editorType === 'word';
 
   useEffect(() => {
-    if (canCheckWholeDocument && !hasSelection) scope.value = 'document';
-    else scope.value = 'selection';
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- `scope` is a stable module-level signal, not state
-  }, [hasSelection, canCheckWholeDocument]);
+    setScope(canCheckWholeDocument && !hasSelection ? 'document' : 'selection');
+  }, [hasSelection, canCheckWholeDocument, setScope]);
 
   useEffect(() => {
     warmUpPort();
