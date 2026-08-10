@@ -33,6 +33,11 @@
 import { StyleInfo, TextStyle } from '@druide-informatique/antidote-api-js';
 import type { Word } from 'onlyoffice-plugins-api';
 
+import {
+  BaseEditor, TextWithStyle, CORRECTION_MEMORY_PROPERTY,
+  CONTENT_CHANGE_EVENTS, DocumentContent,
+} from './base';
+
 type ApiParagraph = Word.ApiParagraph;
 type ApiRun = Word.ApiRun;
 type ApiHyperlink = Word.ApiHyperlink;
@@ -44,11 +49,6 @@ type ParagraphContent = Word.ParagraphContent;
 // (it has imports/exports), a module-scoped declaration shadows the ambient global for type-
 // checking purposes only - no runtime effect, the real Api injected by the editor is unchanged.
 declare const Api: Word.Api;
-
-import {
-  BaseEditor, TextWithStyle, CORRECTION_MEMORY_PROPERTY,
-  CONTENT_CHANGE_EVENTS, DocumentContent,
-} from './base';
 
 // zoneId prefixes used by getDocumentContent — MAIN_ZONE_PREFIX is followed by that segment's
 // index (document order), TABLE_ZONE_PREFIX by the cell's own GetInternalId().
@@ -83,7 +83,7 @@ export class TextEditor extends BaseEditor {
   // DocumentCorrectionAgent (whole document) and SelectionCorrectionAgent (a range), the only
   // consumers of the zones this returns.
   getDocumentContent(range?: { start: number; end: number }): Promise<DocumentContent> {
-    return this.runQuery<DocumentContent>(function() {
+    return this.runQuery<DocumentContent>(() => {
       const {
         range: docRange, mainZonePrefix, tableZonePrefix, textStyle: TextStyle,
       } = Asc.scope as {
@@ -154,9 +154,9 @@ export class TextEditor extends BaseEditor {
         return { text, styleInfo };
       }
 
-      type Entry = {
+      interface Entry {
         id: string; text: string; styleInfo: StyleInfo[] | undefined; prefix?: string; suffix?: string;
-      };
+      }
       const paragraphs = docRange
         ? Api.GetDocument().GetRange(docRange.start, docRange.end).GetAllParagraphs()
         : Api.GetDocument().GetAllParagraphs();
@@ -175,7 +175,7 @@ export class TextEditor extends BaseEditor {
         // count — measuring the actual text of the in-between range does (same technique already
         // used in selectWithinSelection's firstParagraphAppendixLength for the same reason).
         const first = paragraphs[0];
-        let firstRange = first.GetRange(0, 0);
+        const firstRange = first.GetRange(0, 0);
         if (firstRange) {
           const firstStart = firstRange.GetStartPos();
           if (docRange.start > firstStart) {
@@ -240,10 +240,10 @@ export class TextEditor extends BaseEditor {
 
         const entry = {
           id: paragraph.GetInternalId(),
-          text: text,
+          text,
           prefix,
           suffix,
-          styleInfo: styleInfo,
+          styleInfo,
         };
 
         const cell = paragraph.GetParentTableCell();
@@ -278,9 +278,7 @@ export class TextEditor extends BaseEditor {
         superscript: TextStyle.superscript,
         subscript: TextStyle.subscript,
       },
-    }).then((result) => {
-        return result;
-      });
+    }).then((result) => result);
   }
 
   // Same reconstruction as getSelectedTextWithStyle, but for an explicit absolute [start, end)
@@ -381,7 +379,9 @@ export class TextEditor extends BaseEditor {
 
       return { text: joinedText, styleInfo: joinedStyleInfo };
     }, {
-      start, end, textStyle: {
+      start,
+      end,
+      textStyle: {
         bold: TextStyle.bold,
         italic: TextStyle.italic,
         strike: TextStyle.strike,
@@ -493,13 +493,15 @@ export class TextEditor extends BaseEditor {
         }
 
         return { text: joinedText, styleInfo: joinedStyleInfo };
-      }, { textStyle: {
-        bold: TextStyle.bold,
-        italic: TextStyle.italic,
-        strike: TextStyle.strike,
-        superscript: TextStyle.superscript,
-        subscript: TextStyle.subscript,
-      } });
+      }, {
+        textStyle: {
+          bold: TextStyle.bold,
+          italic: TextStyle.italic,
+          strike: TextStyle.strike,
+          superscript: TextStyle.superscript,
+          subscript: TextStyle.subscript,
+        },
+      });
 
       if (styled && styled.text) {
         return { text, styleInfo: styled.styleInfo };
@@ -534,11 +536,7 @@ export class TextEditor extends BaseEditor {
       if (!props) return '';
       const value = props.Get(property);
       return value && typeof value === 'string' ? value : '';
-    }, { CORRECTION_MEMORY_PROPERTY }).then((value) => {
-      return value;
-    }).catch(() => {
-      return '';
-    });
+    }, { CORRECTION_MEMORY_PROPERTY }).then((value) => value).catch(() => '');
   }
 
   // NOTE: tried reading back the paragraph's actual post-replace text here (to guard against
@@ -598,14 +596,14 @@ export class TextEditor extends BaseEditor {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
         if (!range) return;
-        let newText = range.GetText();
+        const newText = range.GetText();
         if (newText === selectedText) {
           start++;
         }
         selectedText = newText;
         start--;
       }
-      let posStartInDoc = range.GetEndPos();
+      const posStartInDoc = range.GetEndPos();
 
       range = lastParagraph.GetRange(0, 0);
       if (!range) return;
@@ -615,36 +613,37 @@ export class TextEditor extends BaseEditor {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
         if (!range) return;
-        let newText = range.GetText();
+        const newText = range.GetText();
         if (newText === selectedText) {
           end++;
         }
         selectedText = newText;
         end--;
       }
-      let posEndInDoc = range.GetEndPos();
+      const posEndInDoc = range.GetEndPos();
       doc.RemoveSelection();
       Api.GetDocument().GetRange(posStartInDoc, posEndInDoc).Select();
-
-    }, { _idFirstParagraph, _idLastParagraph, _start, _end });
+    }, {
+      _idFirstParagraph, _idLastParagraph, _start, _end,
+    });
   }
 
   selectSourceRange(_selectionStart: number, _selectionEnd: number): Promise<void> {
-   return this.runCommand(() => {
-      let { 
+    return this.runCommand(() => {
+      const {
         _selectionStart: selectionStart,
         _selectionEnd: selectionEnd,
       } = Asc.scope as { _selectionStart: number; _selectionEnd: number };
 
       const doc = Api.GetDocument();
       doc.GetRange(selectionStart, selectionEnd).Select();
-    }, { _selectionStart, _selectionEnd});
+    }, { _selectionStart, _selectionEnd });
   }
 
   // Antidote positions are relative to the initial selection, so each interval uses its saved document offset.
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength = 4): Promise<void> {
     return this.runCommand(() => {
-      let { 
+      let {
         _selectionStart: selectionStart,
         _selectionEnd: selectionEnd,
         _start: start,
@@ -661,11 +660,11 @@ export class TextEditor extends BaseEditor {
       let firstParagraph = paragraphs[0];
       const firstRange = firstParagraph.GetRange(0, 0);
       if (!firstRange) return;
-      let firstParagraphStart = firstRange.GetStartPos();
+      const firstParagraphStart = firstRange.GetStartPos();
       if (!firstParagraphStart) return;
       let fpLen = firstParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
 
-      let firstAppendixRange = doc.GetRange(firstParagraphStart, selectionStart);
+      const firstAppendixRange = doc.GetRange(firstParagraphStart, selectionStart);
       selectionStart = firstParagraphStart;
       const firstParagraphAppendixLength = firstAppendixRange.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
 
@@ -692,9 +691,8 @@ export class TextEditor extends BaseEditor {
         return paragraphs[0];
       }
 
-
-      let lastParagraph = findParagraphAt(end, paragraphs, sl);
-      let lpLen = lastParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
+      const lastParagraph = findParagraphAt(end, paragraphs, sl);
+      const lpLen = lastParagraph.GetText().replace(/[\t\r\n\v\f]+$/, '').length;
       const index = paragraphs.indexOf(lastParagraph);
       for (let i = 0; i < index; i++) {
         const paragraph = paragraphs[i];
@@ -717,7 +715,7 @@ export class TextEditor extends BaseEditor {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
         if (!range) return;
-        let newText = range.GetText();
+        const newText = range.GetText();
         if (newText === selectedText) {
           start++;
         }
@@ -725,7 +723,7 @@ export class TextEditor extends BaseEditor {
         start--;
         protection--;
       }
-      let posStartInDoc = range.GetEndPos();
+      const posStartInDoc = range.GetEndPos();
 
       protection = end * 10;
       range = lastParagraph.GetRange(0, 0);
@@ -736,7 +734,7 @@ export class TextEditor extends BaseEditor {
         doc.MoveCursorRight(1, true);
         range = doc.GetRangeBySelect();
         if (!range) return;
-        let newText = range.GetText();
+        const newText = range.GetText();
         if (newText === selectedText) {
           end++;
         }
@@ -747,17 +745,19 @@ export class TextEditor extends BaseEditor {
       if (protection <= 0) {
         console.error('Protection limit reached while finding end position');
       }
-      let posEndInDoc = range.GetEndPos();
+      const posEndInDoc = range.GetEndPos();
       doc.RemoveSelection();
       Api.GetDocument().GetRange(posStartInDoc, posEndInDoc).Select();
-    }, { _selectionStart, _selectionEnd, _start, _end, _separatorLength });
+    }, {
+      _selectionStart, _selectionEnd, _start, _end, _separatorLength,
+    });
   }
 
   stopWatchingContentChanges(): void {
     CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.detachEditorEvent(eventName));
   }
+
   watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {
     CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
   }
-
 }

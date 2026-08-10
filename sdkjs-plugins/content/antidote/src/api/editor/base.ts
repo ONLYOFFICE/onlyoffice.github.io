@@ -31,8 +31,8 @@
  */
 
 import { StyleInfo } from '@druide-informatique/antidote-api-js';
-import { DocumentError } from './errors';
 import type { PluginEditorEventName } from 'onlyoffice-plugins-api';
+import { DocumentError } from './errors';
 
 export type CorrectionStyle = 'bold' | 'italic' | 'superscript' | 'subscript' | 'strike';
 
@@ -107,7 +107,7 @@ export abstract class BaseEditor {
 
   // `range` scopes this to a sub-range of the document (SelectionCorrectionAgent's zone mode);
   // omitted, it covers the whole document (DocumentCorrectionAgent).
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+
   getDocumentContent(_range?: { start: number; end: number }): Promise<DocumentContent> {
     console.error('getDocumentContent is not implemented in this editor');
     return Promise.resolve({ zones: [] });
@@ -144,7 +144,7 @@ export abstract class BaseEditor {
   // absolute range without touching the live document selection. TextEditor overrides this with a
   // real object-model implementation; every other editor keeps this empty-text default (used only
   // when getSelectionStart/End are non-null, which they aren't outside TextEditor).
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   getRangeTextWithStyle(_start: number, _end: number): Promise<TextWithStyle> {
     console.error('getRangeTextWithStyle is not implemented in this editor');
     return Promise.resolve({ text: '' });
@@ -201,11 +201,11 @@ export abstract class BaseEditor {
   // invisible there. Subclasses passing a command to this must not reference `this` inside it.
   protected runQuery<TResult>(command: () => TResult | { error: string }, scope?: Record<string, unknown>): Promise<TResult> {
     this.ensurePlugin();
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       if (scope) {
         window.Asc.scope = scope;
       }
-      window.Asc.plugin.callCommand(command, false, true, function(result: unknown) {
+      window.Asc.plugin.callCommand(command, false, true, (result: unknown) => {
         if (result === undefined) {
           reject(new DocumentError('No response from plugin', 'NO_RESPONSE'));
         } else if (typeof result === 'object' && result !== null && 'error' in result && (result as { error?: string }).error) {
@@ -228,7 +228,7 @@ export abstract class BaseEditor {
   // real no-op path for editors without a paragraph object model, so it's silent by design (this
   // is expected to happen routinely on cell, unlike getDocumentContent/replaceContent which
   // whole-document scope already keeps out of reach there).
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   selectContentRange(_idFirstParagraph: string, _idLastParagraph: string, _start: number, _end: number): Promise<void> {
     console.error('selectContentRange is not implemented in this editor');
     return Promise.resolve();
@@ -238,7 +238,7 @@ export abstract class BaseEditor {
   // selection's own text, matching the positions Antidote was given via
   // getSelectedTextWithStyle/zonesToCorrect). Same selectInterval use case as
   // selectContentRange above, just for SelectionCorrectionAgent instead of DocumentCorrectionAgent.
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars -- overridden by TextEditor; base is a no-op
+  // eslint-disable-next-line class-methods-use-this -- overridden by TextEditor; base is a no-op
   selectWithinSelection(_selectionStart: number, _selectionEnd: number, _start: number, _end: number, _separatorLength?: number): Promise<void> {
     console.error('selectWithinSelection is not implemented in this editor');
     return Promise.resolve();

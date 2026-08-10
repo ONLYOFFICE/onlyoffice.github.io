@@ -50,6 +50,7 @@ export abstract class BaseCorrectionAgent extends WordProcessorAgent {
   protected title: string;
 
   protected editor: BaseEditor = Editor.create();
+
   protected readonly PARAGRAPH_SEPARATOR = '\r\n\r\n';
 
   // Populated by `preloadCorrectionMemory()` (call from `loadText`, which

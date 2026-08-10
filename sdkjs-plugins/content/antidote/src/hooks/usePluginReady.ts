@@ -41,13 +41,13 @@ export function usePluginReady(initialDelay = 10000): {
 
   useEffect(() => {
     if (ready) return undefined;
- 
+
     let timeoutId: ReturnType<typeof setTimeout>;
- 
+
     if (window.Asc?.plugin?.callCommand) {
       setReady(true);
     } else {
-      let defaultInit = Asc.plugin.init;
+      const defaultInit = Asc.plugin.init;
       Asc.plugin.init = function () {
         setReady(true);
         if (timeoutId) clearTimeout(timeoutId);
@@ -57,7 +57,7 @@ export function usePluginReady(initialDelay = 10000): {
         setError('Plugin API not available. Please reload the plugin.');
       }, initialDelay);
     }
- 
+
     return () => {
       clearTimeout(timeoutId);
       Asc.plugin.init = () => {};

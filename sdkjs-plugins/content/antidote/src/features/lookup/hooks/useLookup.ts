@@ -80,7 +80,7 @@ export function useLookup() {
       else connectix.launchGuides();
     } catch (err) {
       if (err instanceof AntidoteError) {
-        setError(t('Antidote wasn\'t detected. Make sure Antidote 12 and its Connectix agent are installed and running.'))
+        setError(t('Antidote wasn\'t detected. Make sure Antidote 12 and its Connectix agent are installed and running.'));
       } else {
         setError(t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.'));
         setIncorrectPort(true);
@@ -90,5 +90,7 @@ export function useLookup() {
     }
   }, []);
 
-  return { open, error, pending, incorrectPort };
+  return {
+    open, error, pending, incorrectPort,
+  };
 }
