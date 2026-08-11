@@ -141,7 +141,7 @@ export namespace Slide {
   /** Form type. The available form types.  ## Try it   ```js document-builder={"documentType": "slide"} let formType = textForm.GetFormType(); ``` */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
-  /** The coordinate value for the geometry paths.Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
+  /** The coordinate value for the geometry paths. Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
   export type GeometryCoordinate = string | number;
 
   /** This type specifies the formula type that will be used for a geometry guide. */
@@ -872,7 +872,7 @@ export namespace Slide {
     Unselect(): boolean;
   }
 
-  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into aseparate framed paragraph. */
+  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into a separate framed paragraph. */
   export interface ApiDropCap {
   }
 
@@ -1280,7 +1280,7 @@ export namespace Slide {
     GetClassType(): "rgbColor";
   }
 
-  /** Class representing a continuous region in a document. Each Range object is determined by the position of the start and end characters. */
+  /** Class representing a continuous region in a document.  Each Range object is determined by the position of the start and end characters. */
   export interface ApiRange {
   }
 
@@ -1675,7 +1675,7 @@ export namespace Slide {
   export interface ApiTableRowPr {
   }
 
-  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a tablewhich match the requirement specified on the <code>Type</code>. */
+  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a table which match the requirement specified on the <code>Type</code>. */
   export interface ApiTableStylePr {
     SetTablePr(oTablePr: ApiTablePr): boolean;
   }
@@ -1831,7 +1831,7 @@ export namespace Slide {
     onSlideShowBegin: [];
     /** The function called when a slide show presentation ends. */
     onSlideShowEnd: [];
-    /** The function called after a slide has been changed and displayed during a slide show presentation.Fires before the slide content is actually displayed. */
+    /** The function called after a slide has been changed and displayed during a slide show presentation. Fires before the slide content is actually displayed. */
     onSlideShowNextSlide: [];
     /** The function called when slide changes during a slide show presentation. Provides information about both the current and previous slide. */
     onSlideShowSlideChanged: [data: { slideIndex: number; previousSlideIndex: number }];

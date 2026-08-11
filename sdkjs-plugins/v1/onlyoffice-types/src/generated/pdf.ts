@@ -23,7 +23,7 @@ export namespace Pdf {
   /** The Base64 image string. */
   export type Base64Img = string;
 
-  /** The type of a fill which uses an image as a background.<b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.<b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface. */
+  /** The type of a fill which uses an image as a background. <b>"tile"</b> - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface. <b>"stretch"</b> - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface. */
   export type BlipFillType = "tile" | "stretch";
 
   /** The border properties object. */
@@ -34,7 +34,7 @@ export namespace Pdf {
     Color: ApiColor;
   }
 
-  /** A border type which will be added to the document element.<b>"none"</b> - no border will be added to the created element or the selected element side.<b>"single"</b> - a single border will be added to the created element or the selected element side. */
+  /** A border type which will be added to the document element. <b>"none"</b> - no border will be added to the created element or the selected element side. <b>"single"</b> - a single border will be added to the created element or the selected element side. */
   export type BorderType = "none" | "single";
 
   /** The available button widget border appearances types. */
@@ -55,10 +55,10 @@ export namespace Pdf {
   /** Possible values for the caption label. */
   export type CaptionLabel = "Table" | "Equation" | "Figure";
 
-  /** Possible values for the caption numbering format.<b>"ALPHABETIC"</b> - upper letter.<b>"alphabetic"</b> - lower letter.<b>"Roman"</b> - upper Roman.<b>"roman"</b> - lower Roman.<b>"Arabic"</b> - arabic. */
+  /** Possible values for the caption numbering format. <b>"ALPHABETIC"</b> - upper letter. <b>"alphabetic"</b> - lower letter. <b>"Roman"</b> - upper Roman. <b>"roman"</b> - lower Roman. <b>"Arabic"</b> - arabic. */
   export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
-  /** Possible values for the caption separator.<b>"hyphen"</b> - the "-" punctuation mark.<b>"period"</b> - the "." punctuation mark.<b>"colon"</b> - the ":" punctuation mark.<b>"longDash"</b> - the "—" punctuation mark.<b>"dash"</b> - the "-" punctuation mark. */
+  /** Possible values for the caption separator. <b>"hyphen"</b> - the "-" punctuation mark. <b>"period"</b> - the "." punctuation mark. <b>"colon"</b> - the ":" punctuation mark. <b>"longDash"</b> - the "—" punctuation mark. <b>"dash"</b> - the "-" punctuation mark. */
   export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
   /** This type specifies the available chart types which can be used to create a new chart. */
@@ -121,7 +121,7 @@ export namespace Pdf {
   /** Available dash type for line. */
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
-  /** Degree defines an angle in degrees.Can be any finite number (positive or negative). */
+  /** Degree defines an angle in degrees. Can be any finite number (positive or negative). */
   export type Degree = number;
 
   /** The available display types. */
@@ -174,7 +174,7 @@ export namespace Pdf {
   /** The specific form type. */
   export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio" | "complex" | "signature";
 
-  /** Form type.The available form types. */
+  /** Form type. The available form types. */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
   /** FreeText callout coordinates (Array of 3 points). */
@@ -187,13 +187,13 @@ export namespace Pdf {
   /** The available free text annot intent. */
   export type FreeTextIntent = "freeText" | "freeTextCallout";
 
-  /** The coordinate value for the geometry paths.Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
+  /** The coordinate value for the geometry paths. Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
   export type GeometryCoordinate = string | number;
 
   /** This type specifies the formula type that will be used for a geometry guide. */
   export type GeometryFormulaType = "*/" | "+-" | "+/" | "?:" | "abs" | "at2" | "cat2" | "cos" | "max" | "min" | "mod" | "pin" | "sat2" | "sin" | "sqrt" | "tan" | "val";
 
-  /** Header and footer types which can be applied to the document sections.<b>"default"</b> - a header or footer which can be applied to any default page.<b>"title"</b> - a header or footer which is applied to the title page.<b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default). */
+  /** Header and footer types which can be applied to the document sections. <b>"default"</b> - a header or footer which can be applied to any default page. <b>"title"</b> - a header or footer which is applied to the title page. <b>"even"</b> - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default). */
   export type HdrFtrType = "default" | "title" | "even";
 
   /** The available horizontal text alignment. */
@@ -220,10 +220,10 @@ export namespace Pdf {
   /** Standard numeric format. */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
-  /** NumberNegStyle defines the formatting style for negative numbers:- "black-minus" — "-1,234.56" (black minus sign)- "red-minus"   — "-1,234.56" (red minus sign)- "black-parens" — "(1,234.56)"" (black parentheses)- "red-parens"   — "(1,234.56)"" (red parentheses) */
+  /** NumberNegStyle defines the formatting style for negative numbers:  - "black-minus" — "-1,234.56" (black minus sign) - "red-minus"   — "-1,234.56" (red minus sign) - "black-parens" — "(1,234.56)"" (black parentheses) - "red-parens"   — "(1,234.56)"" (red parentheses) */
   export type NumberNegStyle = "black-minus" | "red-minus" | "black-parens" | "red-parens";
 
-  /** NumberSepStyle — defines number formatting style:- "us"        — 1,234.56   (English style)- "plain"     — 1234.56    (No separators)- "euro"      — 1.234,56   (European style)- "europlain" — 1234,56    (European without separators)- "ch"        — 1'234.56   (Swiss style) */
+  /** NumberSepStyle — defines number formatting style: - "us"        — 1,234.56   (English style) - "plain"     — 1234.56    (No separators) - "euro"      — 1.234,56   (European style) - "europlain" — 1234,56    (European without separators) - "ch"        — 1'234.56   (Swiss style) */
   export type NumberSepStyle = "us" | "plain" | "euro" | "europlain" | "ch";
 
   export interface PagePoint {
@@ -269,10 +269,10 @@ export namespace Pdf {
   /** The available preset color names. */
   export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
-  /** PsfFormat defines the type of formatting to apply:- "zip"       — ZIP code (e.g., 12345)- "zip+4"     — ZIP+4 (e.g., 12345-6789)- "phone"     — Phone number (e.g., (123) 456-7890)- "ssn"       — Social Security Number (e.g., 123-45-6789) */
+  /** PsfFormat defines the type of formatting to apply:  - "zip"       — ZIP code (e.g., 12345) - "zip+4"     — ZIP+4 (e.g., 12345-6789) - "phone"     — Phone number (e.g., (123) 456-7890) - "ssn"       — Social Security Number (e.g., 123-45-6789) */
   export type PsfFormat = "zip" | "zip+4" | "phone" | "ssn";
 
-  /** Quadrilateral represented as a flat tuple of vertices.Vertices order is fixed: · left-top → right-top → left-bottom → right-bottomInvariants: · x1 <= x2 (top edge goes left → right) · x3 <= x4 (bottom edge goes left → right) · y1 <= y3 (left edge goes top → bottom) · y2 <= y4 (right edge goes top → bottom) */
+  /** Quadrilateral represented as a flat tuple of vertices. Vertices order is fixed:  · left-top → right-top → left-bottom → right-bottom  Invariants:  · x1 <= x2 (top edge goes left → right)  · x3 <= x4 (bottom edge goes left → right)  · y1 <= y3 (left edge goes top → bottom)  · y2 <= y4 (right edge goes top → bottom) */
   export interface Quad {
     0: number;
     1: number;
@@ -287,7 +287,7 @@ export namespace Pdf {
   /** The reading order (left-to-right or right-to-left). */
   export type ReadingOrder = "ltr" | "rtl";
 
-  /** Axis-aligned rectangle represented as a tuple.Invariants: - rect[0] < rect[2] (x1 < x2) - rect[1] < rect[3] (y1 < y2) */
+  /** Axis-aligned rectangle represented as a tuple.  Invariants:  - rect[0] < rect[2] (x1 < x2)  - rect[1] < rect[3] (y1 < y2) */
   export interface Rect {
     0: number;
     1: number;
@@ -295,7 +295,7 @@ export namespace Pdf {
     3: number;
   }
 
-  /** Axis-aligned rectangle difference represented as a tuple.Describes coordinate-wise deltas between two rectangles (B - A).Invariants: - diff[0] = x1B - x1A - diff[1] = y1B - y1A - diff[2] = x2B - x2A - diff[3] = y2B - y2A */
+  /** Axis-aligned rectangle difference represented as a tuple. Describes coordinate-wise deltas between two rectangles (B - A).  Invariants:  - diff[0] = x1B - x1A  - diff[1] = y1B - y1A  - diff[2] = x2B - x2A  - diff[3] = y2B - y2A */
   export interface RectDiff {
     0: number;
     1: number;
@@ -347,7 +347,7 @@ export namespace Pdf {
   /** Represents a collection of search results. */
   export type SearchResults = SearchMatch[];
 
-  /** The section break type which defines how the contents of the current section are placed relative to the previous section.WordprocessingML supports five distinct types of section breaks:<b>Next page</b> ("nextPage") - starts a new section on the next page (the default value).<b>Odd</b> ("oddPage") - starts a new section on the next odd-numbered page.<b>Even</b> ("evenPage") - starts a new section on the next even-numbered page.<b>Continuous</b> ("continuous") - starts a new section in the next paragraph.This means that continuous section breaks might not specify certain page-level section properties,since they shall be inherited from the following section.However, these breaks can specify other section properties, such as line numbering and footnote/endnote settings.<b>Column</b> ("nextColumn") - starts a new section in the next column on the page. */
+  /** The section break type which defines how the contents of the current section are placed relative to the previous section. WordprocessingML supports five distinct types of section breaks: <b>Next page</b> ("nextPage") - starts a new section on the next page (the default value). <b>Odd</b> ("oddPage") - starts a new section on the next odd-numbered page. <b>Even</b> ("evenPage") - starts a new section on the next even-numbered page. <b>Continuous</b> ("continuous") - starts a new section in the next paragraph. This means that continuous section breaks might not specify certain page-level section properties, since they shall be inherited from the following section. However, these breaks can specify other section properties, such as line numbering and footnote/endnote settings. <b>Column</b> ("nextColumn") - starts a new section in the next column on the page. */
   export type SectionBreakType = "nextPage" | "oddPage" | "evenPage" | "continuous" | "nextColumn";
 
   /** Properties used to create a shadow. */
@@ -403,10 +403,10 @@ export namespace Pdf {
     bandVer: boolean;
   }
 
-  /** This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.<b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell.<b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell.<b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell.<b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell.<b>"firstRow"</b> - specifies that the table formatting is applied to the first row.<b>"lastRow"</b> - specifies that the table formatting is applied to the last row.<b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.<b>"lastColumn"</b> - specifies that the table formatting is applied to the last column.<b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows.<b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows.<b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns.<b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns.<b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table. */
+  /** This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used. <b>"topLeftCell"</b> - specifies that the table formatting is applied to the top left cell. <b>"topRightCell"</b> - specifies that the table formatting is applied to the top right cell. <b>"bottomLeftCell"</b> - specifies that the table formatting is applied to the bottom left cell. <b>"bottomRightCell"</b> - specifies that the table formatting is applied to the bottom right cell. <b>"firstRow"</b> - specifies that the table formatting is applied to the first row. <b>"lastRow"</b> - specifies that the table formatting is applied to the last row. <b>"firstColumn"</b> - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format. <b>"lastColumn"</b> - specifies that the table formatting is applied to the last column. <b>"bandedColumn"</b> - specifies that the table formatting is applied to odd numbered groupings of rows. <b>"bandedColumnEven"</b> - specifies that the table formatting is applied to even numbered groupings of rows. <b>"bandedRow"</b> - specifies that the table formatting is applied to odd numbered groupings of columns. <b>"bandedRowEven"</b> - specifies that the table formatting is applied to even numbered groupings of columns. <b>"wholeTable"</b> - specifies that the conditional formatting is applied to the whole table. */
   export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
-  /** The possible values for the units of the width property are defined by a specific table or table cell width property.<b>"auto"</b> - sets the table or table cell width to auto width.<b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point.<b>"nul"</b> - sets the table or table cell width to be of a zero value.<b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container. */
+  /** The possible values for the units of the width property are defined by a specific table or table cell width property. <b>"auto"</b> - sets the table or table cell width to auto width. <b>"twips"</b> - sets the table or table cell width to be measured in twentieths of a point. <b>"nul"</b> - sets the table or table cell width to be of a zero value. <b>"percent"</b> - sets the table or table cell width to be measured in percent to the parent container. */
   export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
   /** The available text autofit types inside a shape. */
@@ -430,13 +430,13 @@ export namespace Pdf {
   /** The available vertical text alignment. */
   export type TextVertAlign = "baseline" | "subscript" | "superscript";
 
-  /** Possible values for the position of chart tick labels (either horizontal or vertical).<b>"none"</b> - not display the selected tick labels.<b>"nextTo"</b> - sets the position of the selected tick labels next to the main label.<b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values.<b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values. */
+  /** Possible values for the position of chart tick labels (either horizontal or vertical). <b>"none"</b> - not display the selected tick labels. <b>"nextTo"</b> - sets the position of the selected tick labels next to the main label. <b>"low"</b> - sets the position of the selected tick labels in the part of the chart with lower values. <b>"high"</b> - sets the position of the selected tick labels in the part of the chart with higher values. */
   export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
   /** The type of tick mark appearance. */
   export type TickMark = "cross" | "in" | "none" | "out";
 
-  /** Time format options:- "HH:MM" — 24-hour format, hours and minutes (e.g., "14:30")- "h:MM tt" — 12-hour format with AM/PM, hours and minutes (e.g., "2:30 PM")- "HH:MM:ss" — 24-hour format, hours, minutes, and seconds (e.g., "14:30:15")- "h:MM:ss tt" — 12-hour format with AM/PM, hours, minutes, and seconds (e.g., "2:30:15 PM") */
+  /** Time format options: - "HH:MM" — 24-hour format, hours and minutes (e.g., "14:30") - "h:MM tt" — 12-hour format with AM/PM, hours and minutes (e.g., "2:30 PM") - "HH:MM:ss" — 24-hour format, hours, minutes, and seconds (e.g., "14:30:15") - "h:MM:ss tt" — 12-hour format with AM/PM, hours, minutes, and seconds (e.g., "2:30:15 PM") */
   export type TimeFormat = 'HH:MM' | 'h:MM tt' | 'HH:MM:ss' | 'h:MM:ss tt';
 
   /** Options for converting document content to an HTML string. */
@@ -454,7 +454,7 @@ export namespace Pdf {
     StylesLvls: TocStyleLvl[];
   }
 
-  /** Possible values for the table of contents leader:<b>"dot"</b> - "......."<b>"dash"</b> - "-------"<b>"underline"</b> - "_______" */
+  /** Possible values for the table of contents leader: <b>"dot"</b> - "......." <b>"dash"</b> - "-------" <b>"underline"</b> - "_______" */
   export type TocLeader = "dot" | "dash" | "underline" | "none";
 
   /** Table of contents properties. */
@@ -522,22 +522,22 @@ export namespace Pdf {
     storeItemID: string;
   }
 
-  /** Available values of the "bookmark" reference type:<b>"text"</b> - the entire bookmark text;<b>"pageNum"</b> - the bookmark page number;<b>"paraNum"</b> - the bookmark paragraph number;<b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);<b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1";<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "bookmark" reference type: <b>"text"</b> - the entire bookmark text; <b>"pageNum"</b> - the bookmark page number; <b>"paraNum"</b> - the bookmark paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum</b> - the full paragraph number, e.g. "4.1.1"; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
   export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
   /** A numeric value from 0 to 255. */
   export type byte = number;
 
-  /** Available values of the "equation"/"figure"/"table" reference type:<b>"entireCaption"</b>- the entire caption text;<b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1";<b>"captionText"</b> - the caption text only;<b>"pageNum"</b> - the page number containing the referenced object;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "equation"/"figure"/"table" reference type: <b>"entireCaption"</b>- the entire caption text; <b>"labelNumber"</b> - the label and object number only, e.g. "Table 1.1"; <b>"captionText"</b> - the caption text only; <b>"pageNum"</b> - the page number containing the referenced object; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
-  /** Available values of the "endnote" reference type:<b>"endnoteNum"</b> - the endnote number;<b>"pageNum"</b> - the endnote page number;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position;<b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected. */
+  /** Available values of the "endnote" reference type: <b>"endnoteNum"</b> - the endnote number; <b>"pageNum"</b> - the endnote page number; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position; <b>"formEndnoteNum"</b> - the form number formatted as an endnote. The numbering of the actual endnotes is not affected. */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
-  /** Available values of the "footnote" reference type:<b>"footnoteNum"</b> - the footnote number;<b>"pageNum"</b> - the page number of the footnote;<b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item;<b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected. */
+  /** Available values of the "footnote" reference type: <b>"footnoteNum"</b> - the footnote number; <b>"pageNum"</b> - the page number of the footnote; <b>"aboveBelow"</b> - the words "above" or "below" depending on the position of the item; <b>"formFootnoteNum"</b> - the form number formatted as a footnote. The numbering of the actual footnotes is not affected. */
   export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
-  /** Available values of the "heading" reference type:<b>"text"</b> - the entire heading text;<b>"pageNum"</b> - the heading page number;<b>"headingNum"</b> - the heading sequence number;<b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only;<b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "heading" reference type: <b>"text"</b> - the entire heading text; <b>"pageNum"</b> - the heading page number; <b>"headingNum"</b> - the heading sequence number; <b>"noCtxHeadingNum"</b> - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of "4.B" you receive "B" only; <b>"fullCtxHeadingNum"</b> - the full heading number even if the cursor pointer is in the same section; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
   export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
   /** Available highlight colors. */
@@ -552,7 +552,7 @@ export namespace Pdf {
   /** 1 millimetre equals 1/10th of a centimetre. */
   export type mm = number;
 
-  /** Available values of the "numbered" reference type:<b>"pageNum"</b> - the numbered item page number;<b>"paraNum"</b> - the numbered item paragraph number;<b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only);<b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1";<b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only;<b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
+  /** Available values of the "numbered" reference type: <b>"pageNum"</b> - the numbered item page number; <b>"paraNum"</b> - the numbered item paragraph number; <b>"noCtxParaNum"</b> - the abbreviated paragraph number (the specific item only, e.g. instead of "4.1.1" you refer to "1" only); <b>"fullCtxParaNum"</b> - the full paragraph number, e.g. "4.1.1"; <b>"text"</b> - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to "Terms and Conditions" only; <b>"aboveBelow"</b> - the words "above" or "below" depending on the item position. */
   export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
   /** Value from 0 to 100. */
@@ -1227,7 +1227,7 @@ export namespace Pdf {
     Unselect(): boolean;
   }
 
-  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into aseparate framed paragraph. */
+  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into a separate framed paragraph. */
   export interface ApiDropCap {
   }
 
@@ -1755,7 +1755,7 @@ export namespace Pdf {
     SetToggleToOff(allowToggleOff: boolean): boolean;
   }
 
-  /** Class representing a continuous region in a document. Each Range object is determined by the position of the start and end characters. */
+  /** Class representing a continuous region in a document.  Each Range object is determined by the position of the start and end characters. */
   export interface ApiRange {
   }
 
@@ -2150,7 +2150,7 @@ export namespace Pdf {
   export interface ApiTableRowPr {
   }
 
-  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a tablewhich match the requirement specified on the <code>Type</code>. */
+  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a table which match the requirement specified on the <code>Type</code>. */
   export interface ApiTableStylePr {
   }
 
