@@ -47,13 +47,11 @@ export class AntidoteError extends Error {
 const PORT_RANGE_START = 49152;
 const PORT_RANGE_SIZE = 13;
 
-const isDesktop = (function(){
-		if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf("ascdesktopeditor") < 0)
-			return false;
-		if (window.location && window.location.protocol == "file:")
-			return true;
-		return false;
-	})();
+const isDesktop = (function () {
+  if (window.navigator && window.navigator.userAgent.toLowerCase().indexOf('ascdesktopeditor') < 0) return false;
+  if (window.location && window.location.protocol === 'file:') return true;
+  return false;
+}());
 export const DEFAULT_PROBE_TIMEOUT_MS = isDesktop ? 2000 : 500;
 export const PROBE_TIMEOUT_RANGE = { min: 100, max: 5000 };
 
@@ -84,6 +82,25 @@ export function probePort(port: number): Promise<boolean> {
   });
 }
 
+const CONNECTOR_DETECTION_POLL_MS = 50;
+const CONNECTOR_DETECTION_TIMEOUT_MS = 500;
+
+// announcePresence() only posts a window message; the browser extension's content script answers
+// asynchronously by injecting the DOM marker isDetected() looks for. Checking isDetected() on the
+// very next line (no wait at all) would always see it as absent, even with the extension installed
+// and working — so poll briefly instead of asking only once.
+async function waitForConnectorDetection(): Promise<boolean> {
+  const deadline = Date.now() + CONNECTOR_DETECTION_TIMEOUT_MS;
+  while (Date.now() < deadline) {
+    if (AntidoteConnector.isDetected()) return true;
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise((resolve) => {
+      setTimeout(resolve, CONNECTOR_DETECTION_POLL_MS);
+    });
+  }
+  return AntidoteConnector.isDetected();
+}
+
 async function scanForPort(): Promise<number> {
   for (let offset = 0; offset < PORT_RANGE_SIZE; offset++) {
     const port = PORT_RANGE_START + offset;
@@ -108,7 +125,7 @@ export function getPortProvider(refresh = false): () => Promise<number> {
     if (cachedPort !== null && await probePort(cachedPort)) return cachedPort;
 
     AntidoteConnector.announcePresence();
-    if (AntidoteConnector.isDetected()) {
+    if (await waitForConnectorDetection()) {
       discoveredPort.value = await AntidoteConnector.getWebSocketPort();
       return discoveredPort.value;
     }

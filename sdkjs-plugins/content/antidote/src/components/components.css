@@ -323,7 +323,7 @@
 
 .tab-group {
   display: inline-flex;
-  background-color: var(---background-color, #fff);
+  background-color: var(--background-pane, #fff);
   padding: 3px;
   border-radius: 4px;
   gap: 2px;
