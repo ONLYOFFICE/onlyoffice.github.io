@@ -387,7 +387,7 @@ function generateEventArgsType(events) {
   for (const name of eventNames) {
     const event = events[name];
     if (event.description) {
-      output += `  /** ${event.description.replace(/\n/g, ' ')} */\n`;
+      output += `  /** ${event.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
     }
     const tuple = event.params.map((p) => `${p.name}: ${p.type}`).join(', ');
     output += `  ${name}: [${tuple}];\n`;
@@ -400,7 +400,7 @@ function generateInterface(className, classData, allClasses) {
   let output = '';
 
   if (classData.description) {
-    output += `/** ${classData.description.replace(/\n/g, ' ')} */\n`;
+    output += `/** ${classData.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
   }
 
   const ownMemberNames = new Set([
@@ -453,7 +453,7 @@ function generateInterface(className, classData, allClasses) {
 function generateTypedef(name, typedefData) {
   let output = '';
   if (typedefData.description) {
-    output += `/** ${typedefData.description.replace(/\n/g, ' ')} */\n`;
+    output += `/** ${typedefData.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
   }
   if (typedefData.properties.length > 0) {
     output += `export interface ${name} {\n`;

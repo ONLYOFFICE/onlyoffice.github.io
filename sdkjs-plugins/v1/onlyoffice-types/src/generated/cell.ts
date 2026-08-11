@@ -168,7 +168,7 @@ export namespace Cell {
   /** Specifies a type of freeze panes.  ## Try it   ```js document-builder={"documentType": "cell"} builder.CreateFile("xlsx"); Api.SetFreezePanesType('column'); let worksheet = Api.GetActiveSheet(); let freezePanes = worksheet.GetFreezePanes(); let range = freezePanes.GetLocation(); worksheet.GetRange("A1").SetValue("Location: "); worksheet.GetRange("B1").SetValue(range.GetAddress()); builder.SaveFile("xlsx", "FreezePanes.xlsx"); builder.CloseFile(); ``` */
   export type FreezePaneType = "row" | "column" | "cell" | null;
 
-  /** The coordinate value for the geometry paths.Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
+  /** The coordinate value for the geometry paths. Can be a guide name from "gdLst", a numeric value, or a string representation of a number. */
   export type GeometryCoordinate = string | number;
 
   /** This type specifies the formula type that will be used for a geometry guide. */
@@ -1227,7 +1227,7 @@ export namespace Cell {
     Unselect(): boolean;
   }
 
-  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into aseparate framed paragraph. */
+  /** Class representing a drop cap. A drop cap is a large initial letter that is split off from a paragraph into a separate framed paragraph. */
   export interface ApiDropCap {
   }
 
@@ -2185,7 +2185,7 @@ export namespace Cell {
   export interface ApiTableRowPr {
   }
 
-  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a tablewhich match the requirement specified on the <code>Type</code>. */
+  /** Class representing a set of formatting properties which shall be conditionally applied to the parts of a table which match the requirement specified on the <code>Type</code>. */
   export interface ApiTableStylePr {
   }
 
