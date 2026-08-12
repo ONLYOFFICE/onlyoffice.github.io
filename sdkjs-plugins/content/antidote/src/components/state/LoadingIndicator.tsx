@@ -41,16 +41,8 @@ export function LoadingIndicator({ message }: LoadingIndicatorProps): JSX.Elemen
     <div id="loader" className="loader-container loader-container-main">
       <div className="loader-bg" />
       <div className="loader-body">
-        <svg className="loader-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-          <circle
-            cx="10"
-            cy="10"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            r="7.25"
-            strokeDasharray="160%, 40%"
-          />
+        <svg class="loader-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" fill="none" stroke="currentColor" stroke-width="1.5" r="7.25" stroke-dasharray="160%, 40%"></circle>
         </svg>
         {message && <div className="loader-title">{message}</div>}
       </div>
