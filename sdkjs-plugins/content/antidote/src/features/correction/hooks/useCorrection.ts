@@ -33,7 +33,9 @@
 import { useCallback, useRef } from 'preact/hooks';
 import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
-import { getPortProvider, probePort, AntidoteError } from '@api/antidote';
+import {
+  getPortProvider, probePort, AntidoteError, isCrossOriginFromEditor,
+} from '@api/antidote';
 import { t } from '@utils/i18n';
 
 import { DocumentCorrectionAgent } from '../agents/documentAgent';
@@ -113,9 +115,13 @@ export function useCorrection() {
     } catch (error) {
       console.error(error);
       connectionState.value = 'error';
-      errorMessage.value = error instanceof AntidoteError
-        ? t("Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.")
-        : t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
+      if (error instanceof AntidoteError && isCrossOriginFromEditor()) {
+        errorMessage.value = t("Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.");
+      } else {
+        errorMessage.value = error instanceof AntidoteError
+          ? t("Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.")
+          : t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
+      }
     }
   }, []);
 

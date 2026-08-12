@@ -55,6 +55,15 @@ const isDesktop = (function () {
 export const DEFAULT_PROBE_TIMEOUT_MS = isDesktop ? 2000 : 500;
 export const PROBE_TIMEOUT_RANGE = { min: 100, max: 5000 };
 
+export function isCrossOriginFromEditor(): boolean {
+  if (isDesktop) return false;
+  try {
+    return window.parent.location.href === undefined;
+  } catch {
+    return true;
+  }
+}
+
 // The port found by the last successful scan/probe, exposed so Settings can display it as the
 // effective port even when the user hasn't set a manual override — as if they had typed it in.
 export const discoveredPort = signal<number | null>(null);
