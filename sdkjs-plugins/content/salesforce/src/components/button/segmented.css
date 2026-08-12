@@ -1,0 +1,67 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2026
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.segmented {
+	--segmented-bg-hover: var(--color-bg-hover);
+	--segmented-active-color: var(--color-text-light);
+	--segmented-active-bg: var(--color-accent);
+	--segmented-border-radius: 4px;
+}
+
+.segmented {
+	display: flex;
+
+	border: 1px solid var(--color-border);
+	border-radius: var(--segmented-border-radius);
+
+	overflow: hidden;
+}
+
+.segmented__btn {
+	padding: 6px 14px;
+
+	border: none;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	font-weight: 500;
+	
+	cursor: pointer;
+	background: var(--color-bg);
+	color: var(--color-text-secondary);
+	transition: all 0.15s ease;
+}
+
+.segmented__btn:not(:last-child) {
+	border-right: 1px solid var(--color-border);
+}
+
+.segmented__btn:hover:not(.segmented__btn--active) {
+	background: var(--segmented-bg-hover);
+	color: var(--color-text);
+}
+
+.segmented__btn--active {
+	color: var(--segmented-active-color);
+	background: var(--segmented-active-bg);
+}
+
+.segmented__btn--active:hover {
+	color: var(--segmented-active-color);
+	background: var(--segmented-active-bg);
+}

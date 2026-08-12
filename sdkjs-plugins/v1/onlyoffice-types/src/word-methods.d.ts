@@ -31,7 +31,6 @@ type ContentControlLock = 0 | 1 | 2 | 3;
 interface ContentControlProperties {
     Id?: number;
     Tag: string;
-    Lock?: number;
     Remove?: number;
     Alias?: string;
     Appearance?: number;
@@ -336,7 +335,7 @@ interface UpdateAddinFieldsOptions {
     Data: Record<string, any>;
 }
 
-export type WordMethodArgs = {
+type WordMethodArgs = {
     // Methods A
     AcceptReviewChanges: [boolean?];
     AddAddinField: [AddinFieldData];
@@ -366,7 +365,7 @@ export type WordMethodArgs = {
     
     // Methods E
     EditOleObject: [data: OLEProperties];
-    EndAction: [sType: string, description: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
+    EndAction: [sType: string, description?: string | {scrollToTarget?: boolean}, sCustomMessage?: string];
     
     // Methods F
     FocusEditor: [];
@@ -391,20 +390,20 @@ export type WordMethodArgs = {
     GetFormValue: [sInternalId: string];
     GetFormsByTag: [sTag: string];
     GetImageDataFromSelection: [];
-    GetInstalledPlugins: [null?];
+    GetInstalledPlugins: [null?] | null;
     GetMacros: [];
     GetSelectedContent: [];
     GetSelectedOleObjects: [];
     GetSelectedText: [oPr?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; ParaSeparator?: string; TabSymbol?: string }];
     GetSelectionType: [];
     GetVBAMacros: [];
-    GetVersion: [];
+    GetVersion: [] | null;
     
     // Methods I
     InputText: [sText: string, sText2?: string];
     InsertAndReplaceContentControls: [aDocuments: any[]];
     InsertOleObject: [oOleObj: OLEProperties, bIsAdd?: boolean];
-    InstallPlugin: [oConfig: any];
+    InstallPlugin: [oConfig: any, guid?: string];
     
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
@@ -435,6 +434,7 @@ export type WordMethodArgs = {
     RemoveContentControl: [sInternalId: string];
     RemoveContentControls: [aIds: any[]];
     RemoveFieldWrapper: [sFieldId: string];
+    ResizeWindow: [sWindowId: string, aSize: number[]];
     RemoveOleObject: [sInternalId: string];
     RemoveOleObjects: [aIds: any[]];
     RemovePlugin: [sGuid: string, bBackup?: boolean];
@@ -465,7 +465,10 @@ export type WordMethodArgs = {
     UnShowInputHelper: [sGuid: string, bIsKeyboardTake?: boolean];
     Undo: [];
     UpdateAddinFields: [aData: AddinFieldData[]];
-    UpdatePlugin: [oConfig: any];
+    UpdatePlugin: [oConfig: any, guid?: string];
+
+    // Common plugin methods
+    CloseWindow: [windowId: string | number];
 };
 
 type WordMethodName = keyof WordMethodArgs;

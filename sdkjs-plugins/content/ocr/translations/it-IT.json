@@ -1,11 +1,10 @@
 {
-	"Tesseract.js lets recognize text in pictures (png, jpg)": "Tesseract.js consente di riconoscere il testo nelle immagini (png, jpg)",
+	"Tesseract.js lets you recognize text in pictures (bmp, jpg, png, webp, gif)": "Tesseract.js consente di riconoscere il testo nelle immagini (bmp, jpg, png, webp, gif)",
 	"Choose language": "Scegli lingua",
 	"Load File": "Carica file",
 	"English": "Inglese",
 	"Chinese": "Cinese",
 	"Russian": "Russo",
-	"Meme": "Meme",
 	"Thai": "Tailandese",
 	"German": "Tedesco",
 	"Japanese": "Giapponese",
@@ -65,6 +64,6 @@
 	"Slovak": "Slovacco",
 	"Recognize": "Riconoscimento",
 	"Tesseract.js Add-on": "Componente aggiuntivo Tesseract.js",
-	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian, Meme and 60 other languages.": "Tesseract.js è una versione javascript pura del <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> che riconosce inglese, cinese, russo, meme e altre 60 lingue.",
+	"Tesseract.js is a pure javascript version of the <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> that recognize English, Chinese, Russian and 60 other languages.": "Tesseract.js è una versione javascript pura del <a href=\"http://tesseract.projectnaptha.com\" target=\"_blank\">Tesseract OCR Engine</a> che riconosce inglese, cinese, russo e altre 60 lingue.",
 	"Source code": "Codice sorgente"
 }

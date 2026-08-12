@@ -45,6 +45,17 @@ let spellchecker = null;
 let grammar = null;
 let customAssistantManager = new CustomAssistantManager();
 
+function migrateServerSettings(obj) {
+	if (!obj || typeof obj !== "object")
+		return null;
+
+	// v3 -> v4: only the version number changed; structure is the same
+	if (obj.version === 3)
+		obj.version = 4;
+
+	return obj;
+}
+
 window.getActionsInfo = function() {
 	let actions = [];
 	for (const action in AI.ActionType) {
@@ -706,6 +717,7 @@ window.Asc.plugin.init = async function() {
 	if (window.Asc.plugin.info.aiPluginSettings) {
 		try {
 			AI.serverSettings = JSON.parse(window.Asc.plugin.info.aiPluginSettings);
+			AI.serverSettings = migrateServerSettings(AI.serverSettings);
 		} catch (e) {
 			AI.serverSettings = null;
 		}

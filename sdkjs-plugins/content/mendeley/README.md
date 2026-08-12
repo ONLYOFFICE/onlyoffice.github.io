@@ -2,7 +2,7 @@
 
 Mendeley plugin allows users to create bibliographies in ONLYOFFICE editors using [Mendeley service](https://www.mendeley.com/).
 
-The plugin is pre-installed in [ONLYOFFICE Workspace](https://www.onlyoffice.com/workspace.aspx) (both Enterprise and Community Edition), [ONLYOFFICE cloud service](https://www.onlyoffice.com/cloud-office.aspx), and [ONLYOFFICE Personal](https://personal.onlyoffice.com/). It can also be installed to [Document Server](https://github.com/ONLYOFFICE/DocumentServer) manually.
+The plugin is pre-installed in [ONLYOFFICE Workspace](https://www.onlyoffice.com/workspace.aspx) (both Enterprise and Community Edition) and [ONLYOFFICE cloud service](https://www.onlyoffice.com/cloud-office.aspx). It can also be installed to [Document Server](https://github.com/ONLYOFFICE/DocumentServer) manually.
 
 ## How to use
 

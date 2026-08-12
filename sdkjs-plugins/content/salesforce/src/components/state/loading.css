@@ -1,0 +1,62 @@
+/**
+ *
+ * (c) Copyright Ascensio System SIA 2026
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.loading-state {
+	padding: 8px 0;
+}
+
+.loading-state__message {
+	margin: 0 0 12px 0;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+	line-height: var(--line-height-md);
+
+	color: var(--color-text);
+}
+
+.loading-state__indicator {
+	display: flex;
+	align-items: center;
+
+	gap: 8px;
+}
+
+.loading-state__spinner {
+	width: 14px;
+	height: 14px;
+
+	border: 2px solid var(--color-border-light);
+	border-top-color: var(--color-text);
+	border-radius: 50%;
+
+	animation: loading-spin 0.8s linear infinite;
+}
+
+.loading-state__text {
+	font-family: var(--font-family);
+	font-size: var(--font-size-sm);
+
+	color: var(--color-text);
+}
+
+@keyframes loading-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

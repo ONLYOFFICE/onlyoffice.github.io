@@ -16,7 +16,7 @@
     "zh": "日期选择器"
   },
   "guid": "asc.{409e5493-56ae-45e1-8423-c73c84a06c50}",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A plugin to insert formatted dates into cells.",
   "descriptionLocale": {
     "cs": "Plugin pro vkládání formátovaných dat do buněk.",

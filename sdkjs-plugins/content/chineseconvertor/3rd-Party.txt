@@ -1,0 +1,12 @@
+This plugin uses code from the following 3rd party projects.
+
+
+1. opencc-js - JavaScript library for converting between Traditional and Simplified Chinese. (https://github.com/nk2028/opencc-js)
+
+License:        MIT License
+License File:   opencc-js.license
+
+2. pinyin-pro - A professional and powerful Pinyin library with smart and complete phonetic transcription capabilities. (https://github.com/zh-lx/pinyin-pro)
+
+License:        MIT License
+License File:   pinyin-pro.license
