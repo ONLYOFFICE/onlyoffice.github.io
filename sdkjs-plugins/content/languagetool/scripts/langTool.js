@@ -164,7 +164,11 @@ function checkInternetExplorer(){
         window.Asc.plugin.onThemeChangedBase(theme);
         var rule = '.arrow { border-color : ' + window.Asc.plugin.theme["text-normal"] + ';}\n'
 		rule += '.asc-plugin-loader .asc-loader-image { background-image : url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCI+PGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIgcj0iMTAuMjUiIHN0cm9rZS1kYXNoYXJyYXk9IjE2MCUsIDQwJSIgLz48L3N2Zz4=) !important;}\n';
-        rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }";
+        rule += ".select2-container--default.select2-container--open .select2-selection__arrow b { border-color : " + window.Asc.plugin.theme["text-normal"] + " !important; }\n";
+        if (window.Asc.plugin.theme["text-tertiary"])
+            rule += "#textarea:empty:not(:focus):before { color : " + window.Asc.plugin.theme["text-tertiary"] + "; }\n";
+        if (window.Asc.plugin.theme["border-regular-control"])
+            rule += "#enter_container.form-control { border : 1px solid " + window.Asc.plugin.theme["border-regular-control"] + "; }";
 
         var styleTheme = document.createElement('style');
         styleTheme.type = 'text/css';

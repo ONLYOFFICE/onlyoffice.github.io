@@ -133,7 +133,10 @@
 		}
 		#textarea:empty:not(:focus):before{
 			content:attr(data-text);
-			color: gray;
+			color: var(--text-tertiary, gray);
+		}
+		#enter_container.form-control {
+			border: 1px solid var(--border-regular-control, #cfcfcf);
 		}
 		#flex-loader-container {
 		    display: flex;
