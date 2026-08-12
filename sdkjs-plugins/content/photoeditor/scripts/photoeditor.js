@@ -39,7 +39,9 @@ var bNewVersion = false;
     window.Asc.plugin.onThemeChanged = function (theme) {
 
         var head  = document.head;
+        var oldLink = document.getElementById('plugin-theme-style');
         var link  = document.createElement('link');
+        link.id   = 'plugin-theme-style';
         link.rel  = 'stylesheet';
         link.type = 'text/css';
         link.media = 'all';
@@ -51,6 +53,8 @@ var bNewVersion = false;
             themeStyle = whiteTheme;
             link.href = './style/white-theme.css';
         }
+        if (oldLink)
+            head.removeChild(oldLink);
         head.appendChild(link);
     };
 
