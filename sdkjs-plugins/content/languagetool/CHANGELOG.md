@@ -26,4 +26,4 @@
 
 ## 1.0.6
 
-* Use editor theme colors for the input field border and placeholder text.
+* Updated plugin UI.
