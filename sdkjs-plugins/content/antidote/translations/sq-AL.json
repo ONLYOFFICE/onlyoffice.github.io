@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Duke u lidhur me Antidote…",
   "Antidote corrector is open.": "Redaktuesi i Antidote është i hapur.",
   "Something went wrong.": "Diçka nuk shkoi si duhej.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "Antidote nuk u zbulua, mund të jetë për shkak se kjo shtesë nuk është e hostuar në të njëjtin domain si redaktuesi - disa browserë e kufizojnë këtë. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion, dhe shihni nëse të përdorni Antidote nga aplikacioni desktop.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote nuk u zbulua. Sigurohuni që Antidote 12 dhe agjenti i tij Connectix të jenë të instaluar dhe në funksion.",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Ndodhi një gabim i papritur gjatë komunikimit me Antidote. Rifreskoni shtesën ose ndryshoni portin në cilësimet.",
   "Settings": "Cilësimet",

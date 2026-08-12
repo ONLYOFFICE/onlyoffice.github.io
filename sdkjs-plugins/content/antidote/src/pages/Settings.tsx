@@ -58,8 +58,9 @@ export function Settings(): JSX.Element {
     const port = Number(value.trim());
     setManualPort(Number.isFinite(port) && port > 0 ? port : null);
 
-    const timeout = Number(timeoutValue.trim());
-    const clampedTimeout = Number.isFinite(timeout)
+    const rawTimeout = timeoutValue.trim();
+    const timeout = Number(rawTimeout);
+    const clampedTimeout = rawTimeout !== '' && Number.isFinite(timeout)
       ? Math.min(PROBE_TIMEOUT_RANGE.max, Math.max(PROBE_TIMEOUT_RANGE.min, timeout))
       : null;
     setManualProbeTimeout(clampedTimeout);

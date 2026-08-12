@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Conectando ao Antidoto…",
   "Antidote corrector is open.": "O corretor do Antidoto está aberto.",
   "Something went wrong.": "Algo deu errado.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "O Antidoto não foi detectado, possivelmente porque este plugin não está hospedado no mesmo domínio que o editor - alguns navegadores restringem isso. Certifique-se de que o Antidoto 12 e seu agente Connectix estão instalados e em execução, e considere usar o Antidoto a partir do aplicativo desktop.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "O Antidoto não foi detectado. Certifique-se de que o Antidoto 12 e seu agente Connectix estão instalados e em execução.",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Ocorreu um erro inesperado ao se comunicar com o Antidoto. Recarregue o plugin ou altere a porta nas configurações.",
   "Settings": "Configurações",

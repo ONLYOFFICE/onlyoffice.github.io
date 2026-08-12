@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Подключение к Антидоту…",
   "Antidote corrector is open.": "Редактор Антидота открыт.",
   "Something went wrong.": "Что-то пошло не так.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "Антидот не был обнаружен, возможно, потому что этот плагин не размещён на том же домене, что и редактор — некоторые браузеры ограничивают это. Убедитесь, что Антидот 12 и его агент Connectix установлены и запущены, и рассмотрите возможность использования Антидота из десктопного приложения.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Антидот не был обнаружен. Убедитесь, что Антидот 12 и его агент Connectix установлены и запущены.",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Произошла непредвиденная ошибка при работе с Антидотом. Перезагрузите плагин или отредактируйте порт в настройках.",
   "Settings": "Настройки",

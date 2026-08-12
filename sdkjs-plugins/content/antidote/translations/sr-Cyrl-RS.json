@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Повезивање са Антидотом…",
   "Antidote corrector is open.": "Антидот едитор је отворен.",
   "Something went wrong.": "Нешто није прошло како треба.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "Антидот није детектован, могуће је да овај додатак није хостован на истом домену као и едитор - неки браузери то ограничавају. Проверите да ли је Антидот 12 и његов Connectix агент инсталиран и активан, и размотрите коришћење Антидота из десктоп апликације.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Антидот није детектован. Проверите да ли је Антидот 12 и његов Connectix агент инсталиран и активан.",
   "unknown": "Дошло је до неочекиване грешке приликом комуникације са Антидотом. Поново учитајте додатак или промените порт у подешавањима.",
   "Settings": "Подешавања",

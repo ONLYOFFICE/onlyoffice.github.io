@@ -25,6 +25,7 @@
   "Connecting to Antidote": "正在连接到 Antidote…",
   "Antidote corrector is open.": "Antidote 校对器已打开。",
   "Something went wrong.": "出现问题。",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "未检测到 Antidote，这可能是因为此插件未托管在与编辑器相同的域上——某些浏览器会限制此操作。请确保已安装 Antidote 12 及其 Connectix 代理，并考虑使用桌面应用中的 Antidote。",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "未检测到 Antidote。请确保已安装 Antidote 12 及其 Connectix 代理。",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "与 Antidote 通信时发生意外错误。请重新加载插件或在设置中修改端口。",
   "Settings": "设置",

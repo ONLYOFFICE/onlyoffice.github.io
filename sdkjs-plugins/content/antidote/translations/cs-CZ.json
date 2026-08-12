@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Připojování k Antidote…",
   "Antidote corrector is open.": "Antidote je otevřen.",
   "Something went wrong.": "Něco se pokazilo.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "Antidote nebyl detekován. Toto může být způsobeno tím, že tento plugin není hostován na stejné doméně jako editor - některé prohlížeče to omezují. Ujistěte se, že Antidote 12 a jeho Connectix agent jsou nainstalovány a běží, a zvažte použití Antidote z desktopové aplikace.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote nebyl detekován. Ujistěte se, že Antidote 12 a jeho Connectix agent jsou nainstalovány a běží.",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Došlo k neočekávané chybě při komunikaci s Antidote. Načtěte plugin znovu nebo upravte port v nastavení.",
   "Settings": "Nastavení",

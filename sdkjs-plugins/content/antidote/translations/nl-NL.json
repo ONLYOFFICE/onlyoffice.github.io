@@ -25,6 +25,7 @@
   "Connecting to Antidote": "Verbinding maken met Antidote…",
   "Antidote corrector is open.": "Antidote corrector is geopend.",
   "Something went wrong.": "Er is iets misgegaan.",
+  "Antidote wasn't detected, possibly because this plugin isn't hosted on the same domain as the editor - some browsers restrict this. Make sure Antidote 12 and its Connectix agent are installed and running, and consider using Antidote from the desktop app instead.": "Antidote werd niet gedetecteerd, mogelijk omdat deze plugin niet op dezelfde domein als de editor wordt gehost - sommige browsers beperken dit. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn, en overweeg om Antidote vanuit de desktop-app te gebruiken.",
   "Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.": "Antidote werd niet gedetecteerd. Zorg ervoor dat Antidote 12 en zijn Connectix-agent geïnstalleerd en actief zijn.",
   "An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.": "Er is een onverwachte fout opgetreden tijdens het communiceren met Antidote. Herlaad de plugin of wijzig de poort in de instellingen.",
   "Settings": "Instellingen",
