@@ -33,9 +33,7 @@
 import { useCallback, useRef } from 'preact/hooks';
 import { ConnectixAgent } from '@druide-informatique/antidote-api-js';
 
-import {
-  getPortProvider, probePort, AntidoteError, isLocalNetworkAccessBlocked,
-} from '@api/antidote';
+import { getPortProvider, probePort, AntidoteError } from '@api/antidote';
 import { t } from '@utils/i18n';
 
 import { DocumentCorrectionAgent } from '../agents/documentAgent';
@@ -113,14 +111,11 @@ export function useCorrection() {
       connectixRef.current = connectix;
       connectionState.value = 'connected';
     } catch (error) {
+      console.error(error);
       connectionState.value = 'error';
-      if (error instanceof AntidoteError && await isLocalNetworkAccessBlocked()) {
-        errorMessage.value = t("Your browser is blocking this page's access to the local network, so it can't reach Antidote/Connectix. Ask your administrator to allow local network access for this page, or use Antidote from the desktop app instead.");
-      } else {
-        errorMessage.value = error instanceof AntidoteError
-          ? t("Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.")
-          : t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
-      }
+      errorMessage.value = error instanceof AntidoteError
+        ? t("Antidote wasn't detected. Make sure Antidote 12 and its Connectix agent are installed and running.")
+        : t('An unexpected error occurred while talking to Antidote. Reload the plugin or edit the port in settings.');
     }
   }, []);
 

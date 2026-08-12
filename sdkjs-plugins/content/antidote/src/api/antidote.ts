@@ -55,24 +55,6 @@ const isDesktop = (function () {
 export const DEFAULT_PROBE_TIMEOUT_MS = isDesktop ? 2000 : 500;
 export const PROBE_TIMEOUT_RANGE = { min: 100, max: 5000 };
 
-const LOCAL_NETWORK_PERMISSION_NAMES = ['loopback-network', 'local-network-access', 'local-network'];
-
-export async function isLocalNetworkAccessBlocked(): Promise<boolean> {
-  if (!navigator.permissions?.query) return false;
-  for (const name of LOCAL_NETWORK_PERMISSION_NAMES) {
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      const status = await navigator.permissions.query({ name } as PermissionDescriptor);
-      if (status.state === 'denied') return true;
-    } catch {
-      // Unknown permission name on this browser/Chrome version - try the next one. A throw here is
-      // NOT itself treated as "blocked": Firefox/Safari (no Local Network Access at all) would throw
-      // for every one of these names, and that must never be reported as Chrome blocking anything.
-    }
-  }
-  return false;
-}
-
 // The port found by the last successful scan/probe, exposed so Settings can display it as the
 // effective port even when the user hasn't set a manual override — as if they had typed it in.
 export const discoveredPort = signal<number | null>(null);
