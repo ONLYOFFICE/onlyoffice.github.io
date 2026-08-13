@@ -17,7 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const {
   resolveSdkjsPaths, runJsdoc, parseType, collectCustomTypeRefs, renderJsDoc,
+  splitDescription, htmlToMarkdown, cleanProse,
 } = require('./generate-types.js');
+const { mergeApiIndex } = require('./api-index.js');
 
 // jsdoc signals "may be omitted" three different ways depending on how the comment was written:
 // `[name]` bracket syntax -> `optional: true`; `[name=default]` -> also `defaultvalue`; and a
@@ -415,6 +417,39 @@ function generateMethodFile(editor, methods, typedefs) {
   return body;
 }
 
+// Same shape of prose the object-model index carries (description vs examples kept apart), keyed by
+// the executeMethod name a caller passes as a string - that string is what an agent or a search tool
+// actually looks up, so it leads the entry rather than being buried in a signature.
+function buildExecuteMethodIndex(methods) {
+  const index = {};
+  for (const [name, method] of Object.entries(methods)) {
+    const { summary, examples } = splitDescription(method.description);
+    const paramsTuple = method.params
+      .map((p) => `${p.name}${p.optional ? '?' : ''}: ${p.type}`)
+      .join(', ');
+    index[name] = {
+      signature: `executeMethod("${name}", [${paramsTuple}], callback?): ${method.returnType}`,
+      ...(summary ? { description: htmlToMarkdown(cleanProse(summary)) } : {}),
+      ...(examples.length > 0 ? { examples } : {}),
+      ...(method.since ? { since: method.since } : {}),
+      ...(method.deprecated ? { deprecated: typeof method.deprecated === 'string' ? method.deprecated : true } : {}),
+      params: method.params.map((p) => ({
+        name: p.name,
+        type: p.type,
+        ...(p.optional ? { optional: true } : {}),
+        ...(p.description ? { description: htmlToMarkdown(cleanProse(p.description)) } : {}),
+      })),
+      returns: {
+        type: method.returnType,
+        ...(method.returnDescription
+          ? { description: htmlToMarkdown(cleanProse(method.returnDescription)) }
+          : {}),
+      },
+    };
+  }
+  return index;
+}
+
 function main() {
   const sdkjsPaths = resolveSdkjsPaths();
   const paths = { ...sdkjsPaths, sdkjsExt: resolveSdkjsExt(sdkjsPaths) };
@@ -429,6 +464,7 @@ function main() {
     const content = generateMethodFile(editor, methods, typedefs);
     const outPath = path.join(OUTPUT_DIR, `${editor}-methods.ts`);
     fs.writeFileSync(outPath, content);
+    mergeApiIndex(editor, { executeMethods: buildExecuteMethodIndex(methods) });
     console.log(`Generated ${path.relative(PACKAGE_ROOT, outPath)} with ${Object.keys(methods).length} methods, ${Object.keys(typedefs).length} typedefs`);
   }
 }

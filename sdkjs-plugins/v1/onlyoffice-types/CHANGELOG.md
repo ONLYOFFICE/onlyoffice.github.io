@@ -2,108 +2,82 @@
 
 ## 0.9.0
 
-- The `Asc.plugin.executeMethod` surface (`<Editor>MethodArgs`/`MethodName`/`MethodReturn`) is now
-  generated - `scripts/generate-plugin-methods.js`, parsing `Api.prototype["pluginMethod_<Name>"]`
-  JSDoc from the same sdkjs/sdkjs-forms/sdkjs-ext checkout `generate-types.js` already reads -
-  replacing the previous hand-maintained `src/{word,cell,slide,pdf,forms}-methods.d.ts`. This closed
-  a real, larger-than-expected gap: an entire missing `FormsMethodArgs` family (the Forms editor had
-  no `executeMethod` types at all, including cross-editor common methods like `PasteHtml`/`ShowButton`/
-  `GetVersion`), plus per-editor gaps such as `SetButtonDisabled`, `RemoveAddinField`, `IsFillingForm`/
-  `IsFillingPdfForm`/`IsEditingPdfForm`, `IsFormSigned`, `GetOFormRole`, `MoveCursorToAnnotationRange`,
-  `SetParagraphHtml` (Word), and `InsertPresentationFromUrl`/`AnnotateParagraph`/
-  `SelectAnnotationRange`/`RemoveAnnotationRange` (Slide). Verified against every real call in
-  `test/*-methods-original-examples.js` and `test/pdf-methods-smoke.js` with zero regressions; the
-  handful of cases where sdkjs's JSDoc gives no usable signal, or contradicts real documented
-  examples, are recorded (with the specific example each is derived from) in override tables at the
-  top of the generator rather than silently guessed at.
-- `npm run generate-ambient` (and the `postgenerate` step that runs automatically after `npm run
-  generate`) now flattens the generated `*-methods.ts` files, and correctly resolves `comment` (a real
-  typedef in word/forms that a Pdf method also references but pdf/api_plugins.js never declares) and
-  `FormsMethodArgs` (previously missing from the bundle entirely - a latent gap, since nothing
-  referencing it was ever included) into the global scope, deduplicating identical shared typedefs
-  (`Color`, `EventType`, `SelectionType`, ...) each editor's file redeclares locally and merging the
-  rare case where the same typedef name genuinely documents a different shape per editor
-  (`CommentData.UserId`, word-only) into one optional-superset shape instead of failing to compile.
-- Added `onEnableMouseEvent`/`onChangeRestrictions` to `PluginEventMap`, and typed `onClick`'s payload
-  as `isSelectionUse: boolean` instead of `unknown` - per `common/base-plugin-events.js`'s JSDoc.
-- `scripts/check-plugin-methods.js` is now `scripts/check-plugin-events.js` (`npm run
-  check-plugin-events`) and only checks plugin-window events - the `executeMethod`-name half of what
-  it checked is superseded by the generator above plus `check-generated` (which already fails CI if
-  regenerating produces anything different from what's checked in).
+### Breaking
 
-- **Every generated member is now documented.** The generator collected method, parameter and return
-  descriptions all along and then emitted a bare signature: 2012 methods across the five editor
-  namespaces had no JSDoc at all, and the only comments present - on classes and typedefs - were the
-  whole description flattened into a single line, runnable example and all, which no editor could
-  render usefully. Members now carry a multi-line block with the description, `@param`/`@returns`,
-  `@since` where sdkjs records it, `@example` from the docs' "## Try it" snippet, and `@see` linking
-  to the member's page on api.onlyoffice.com. The link is derived from the `@see
-  office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` path already in the JSDoc rather than
-  assembled from a hand-written table, so it can't point at a page that doesn't exist. Inline HTML in
-  the prose (`<b>"tile"</b>`) is translated to markdown, and a `*/` occurring in a description or
-  example is escaped instead of ending the comment early.
-- Parameter prose is merged from the `office-js-api-declarations` snapshot by parameter *name*: the
-  snapshot occasionally documents a different arity than the current sdkjs signature has, and a
-  positional merge would then attach one parameter's description to another.
-- JSDoc's `{*}` wildcard type (as in `@property {*} FormValue`) now maps to `unknown` instead of being
-  emitted verbatim as `*`, which was not valid TypeScript.
-- The ambient bundle is now one base file plus four ~10-line per-editor `Api` addons
-  (`onlyoffice-plugins-types.<editor>-api.ambient.d.ts`) instead of five near-identical
-  self-contained copies. With per-method JSDoc each copy is a few megabytes, so the five-copy layout
-  meant ~21 MB rewritten in git on every regeneration for content that differs by ten lines. Load the
-  base bundle first, then exactly one addon. The unwrapped `declare global` block is also dedented now
-  rather than keeping the wrapper's indentation.
+- Package renamed `onlyoffice-plugins-api` → `@onlyoffice/plugins-types` (the old name was never
+  published; update `types` in `tsconfig.json` and import paths).
+- Relicensed AGPL-3.0-or-later → Apache-2.0, matching `@onlyoffice/doceditor-types`. The editors
+  themselves (`sdkjs`) stay AGPL-3.0-or-later.
+- Ambient bundles are now one base `onlyoffice-plugins-types.ambient.d.ts` plus ~10-line per-editor
+  `...<editor>-api.ambient.d.ts` addons instead of five self-contained copies. Load the base first,
+  then exactly one addon.
+- Hand-written `src/*-methods.d.ts` replaced by generated `src/generated/*-methods.ts`.
+
+### Added
+
+- JSDoc on every generated member: description, `@param`/`@returns`, `@since`, `@example` (from the
+  docs' "Try it" snippets) and `@see` → api.onlyoffice.com. The 2012 methods previously had no
+  documentation at all; class/typedef comments were single-line and unreadable in hovers.
+- `dist/api-index.json` - the whole API surface (classes, typedefs, events, `executeMethod`s) as
+  JSON with signatures, docs, examples and `docsUrl`, for search/RAG/coding agents. Shipped in the
+  package (`@onlyoffice/plugins-types/api-index.json`) and tracked in git.
+- `AGENTS.md` - the plugin-authoring contract and development invariants, for coding agents.
+- The `executeMethod` surface is now generated from sdkjs JSDoc
+  (`scripts/generate-plugin-methods.js`), adding the entire missing `FormsMethodArgs` family and
+  per-editor gaps (`SetButtonDisabled`, `IsFillingForm`/`IsFillingPdfForm`, `SetParagraphHtml`,
+  `InsertPresentationFromUrl`, ...). JSDoc/signature contradictions are resolved via documented
+  override tables in the generator.
+- `onEnableMouseEvent`/`onChangeRestrictions` in `PluginEventMap`; `onClick` payload typed as
+  `isSelectionUse: boolean`.
+
+### Fixed
+
+- JSDoc's `{*}` wildcard now maps to `unknown` instead of invalid `*` in the output.
+- The ambient bundle resolves shared/cross-file typedefs (`comment`, `FormsMethodArgs`, per-editor
+  `CommentData`) into the global scope instead of missing or duplicating them.
+
+### Changed
+
+- `check-plugin-methods.js` → `check-plugin-events.js`: the `executeMethod`-name half is superseded
+  by the generator plus `check-generated`.
 
 ## 0.8.0
 
 Initial public release.
 
-- The root package no longer declares a cross-editor global `Api` intersection. Editor-specific entry points (`/word`, `/cell`, `/slide`, `/pdf`) now declare the matching `Api` type for `callCommand`. **If your code referenced the bare global `Api`, add a local `declare const Api: Word.Api;` (or Cell/Slide/Pdf) to each file that uses it, or `import "onlyoffice-plugins-api/<editor>"` once for its ambient global.**
-- `PluginScope.prototype` is optional, not required - plugins routinely replace `Asc.scope` wholesale with a plain data payload before `callCommand` (`window.Asc.scope = { foo: 1 }`), and that payload has no reason to carry `prototype.clear` (it's only ever set once at runtime bootstrap as an author convenience, never read back by the runtime itself).
-- Added public plugin menu APIs: context menu, toolbar, window header, and content-control button registration plus click handlers.
-- Added a typed plugin event map for common events, with an `unknown[]` fallback for undocumented event names.
-- Added a separate `Pdf` namespace and PDF Plugin API method definitions, including `GetPageImage`, `GoToPage`, and `ReplacePageContent`; `Forms` remains the Form API namespace.
-- Fixed generated type reference detection so string enum values and object property names no longer produce fake type stubs. Generated files now contain no `any` occurrences; unresolved references are reported in `src/generated/api-report.json`.
-- PDF is now included in the generator and shared Word API sources are loaded for PDF cross-references.
-- Added pinned local legacy documentation snapshots, `generation-manifest.json`, and `check-generated`; generation no longer depends on network availability.
-- Added a static Level 2 runtime contract checker for public `Asc.plugin`, `Asc.Buttons`, button constructors, and `Asc.scope.prototype.clear` against `plugins.dev.js` (the unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds, unlike the minified `plugins.js`'s single-letter aliases).
-- Added `Asc.plugin.guid`, `windowID`, and custom menu click handler properties to the runtime declarations.
-- Added modular type-only entry points for `plugin`, `config`, and `services` while preserving the root API.
-- Types generated from ONLYOFFICE's own `sdkjs` JSDoc (`Api`, document/spreadsheet/presentation/
-  form object models), enriched with `office-js-api-declarations`' richer descriptions and
-  runnable examples where a class/method name matches.
-- Word, Cell, Slide, and Forms are each namespaced (`Word.*`, `Cell.*`, `Slide.*`, `Forms.*`), so
-  every type is reachable and disambiguated regardless of which editor a plugin targets.
-- `window.Asc.plugin.executeMethod` typed per method name and argument tuple
-  for Word, Cell, and Slide (`WordMethodArgs`/`CellMethodArgs`/`SlideMethodArgs`).
-- `window.Asc.plugin.attachEditorEvent`/`detachEditorEvent` typed per editor event name and payload
-  (`Word.EditorEventArgs`/`Cell.EditorEventArgs`/`Slide.EditorEventArgs`/`Forms.EditorEventArgs`),
-  parsed from each editor's own `plugin-events.js`.
-- Class inheritance (`@extends`, e.g. `ApiOleObject`/`ApiShape`/`ApiImage` extending `ApiDrawing`)
-  is now modeled as real TS `interface ... extends ...` - previously every drawing/color/text-run
-  subclass across all four editors was silently missing its entire base class's members (~100
-  interfaces affected).
-- Real-example regression tests for every method in `WordMethodArgs`/`CellMethodArgs`/
-  `SlideMethodArgs`, copied from ONLYOFFICE's own docs and type-checked (`test/*-methods-original-
-  examples.js`) - caught and fixed several signature mismatches against the live docs along the way
-  (e.g. `Slide.ShowError`'s params, `GetSelectedText`'s options shape, `GetImageDataFromSelection`'s
-  return shape for Cell and Slide).
-- Added `attachEditorEvent`/`detachEditorEvent` overloads for `Pdf.EditorEventName` (`onSelectionEnd`,
-  `onSelectionCancel`) - previously only Word/Cell/Slide/Forms were covered, so PDF fell through to
-  the untyped fallback.
-- Physically split `AscPlugin`, `PluginEventMap`, `PluginWindow`, `Buttons`, `PluginConfig`,
-  `VariationConfig`, `AscDesktopEditor`, `AscSimpleRequest`, and `AscTheme` (and their supporting
-  types) out of `index.d.ts` into dedicated modules (`src/plugin/plugin.d.ts`, `src/plugin/events.d.ts`,
-  `src/plugin/buttons.d.ts`, `src/config/plugin-config.d.ts`, `src/theme/index.d.ts`,
-  `src/services/desktop-editor.d.ts`, `src/services/simple-request.d.ts`). `index.d.ts` is now a
-  genuine barrel file (127 lines, down from 1031) that only imports and re-exports; each type has
-  exactly one physical home instead of being declared inline with the earlier modules re-exporting it.
-- Added `schemas/config.schema.json`, a JSON Schema for `config.json` generated from
-  `PluginConfig`/`VariationConfig`/`ButtonConfig`/`IconConfig` (`npm run generate-schema`). Validating
-  it against every real `config.json` in this monorepo (`npm run validate-schema`) surfaced and fixed
-  real gaps in those types: `VariationConfig.buttons`/`isVisual` are optional (routinely omitted in
-  practice), `icons2` entries can carry `style`/`theme`/`default`, `VariationConfig` can carry
-  `methods`/`screens`/`isNeedNumbering`, `icons` can hold the same rich per-scale shape as `icons2`,
-  and `PluginConfig` can carry `help`/`onlyofficeScheme`/`manifestVersion`. 51/53 real config.json
-  files now validate cleanly; the remaining 2 have genuine mistakes in those specific plugins,
-  tracked in `validate-config-schema.js`'s `KNOWN_ISSUES`.
+### Breaking
+
+- The root package no longer declares a cross-editor global `Api`. Each editor entry point (`/word`,
+  `/cell`, `/slide`, `/pdf`) declares its own. If you referenced the bare global `Api`, add
+  `declare const Api: Word.Api;` (or Cell/Slide/Pdf) per file, or `import ".../<editor>"` once.
+- `PluginScope.prototype` is optional - plugins routinely replace `Asc.scope` with a plain payload.
+
+### Added
+
+- One namespace per editor (`Word`, `Cell`, `Slide`, `Forms`), so same-named classes never collide.
+- `Pdf` namespace and PDF plugin API methods (`GetPageImage`, `GoToPage`, `ReplacePageContent`).
+- Plugin menu APIs: context menu, toolbar, window header, content-control buttons, click handlers.
+- Typed plugin event map with an `unknown[]` fallback for undocumented event names.
+- `executeMethod` typed per method name/argument tuple (Word/Cell/Slide);
+  `attachEditorEvent`/`detachEditorEvent` typed per editor event (including Pdf `onSelectionEnd`/
+  `onSelectionCancel`).
+- `Asc.plugin.guid`, `windowID` and custom menu click handler declarations.
+- Modular entry points `/plugin`, `/config`, `/services`; `index.d.ts` is now a pure barrel file
+  (1031 → 127 lines).
+- `schemas/config.schema.json` generated from the `PluginConfig` types (`npm run generate-schema`),
+  validated against every real `config.json` in this monorepo (`npm run validate-schema`).
+- Pinned offline documentation snapshots, `generation-manifest.json` and `check-generated` -
+  generation no longer needs the network.
+- `npm run check-runtime`: static contract check of `Asc.plugin`/`Asc.Buttons`/button constructors
+  against `plugins.dev.js`.
+- Regression tests type-checking the official docs' own examples
+  (`test/*-methods-original-examples.js`).
+
+### Fixed
+
+- Class inheritance modeled as real `interface ... extends ...` - ~100 subclasses (drawings, forms,
+  ...) previously missed their entire base class's members.
+- String enum values and object property names no longer produce fake type stubs; generated files
+  contain no `any` (tracked in `src/generated/api-report.json`).
+- Signature mismatches against the live docs (`Slide.ShowError` params, `GetSelectedText` options,
+  `GetImageDataFromSelection` return shape for Cell/Slide).
