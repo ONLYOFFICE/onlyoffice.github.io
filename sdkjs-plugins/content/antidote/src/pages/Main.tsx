@@ -115,7 +115,7 @@ export function Main(): JSX.Element {
     <Layout
       footer={<Footer />}
     >
-      {!isCrossOriginFromEditor() && !browserWarningDismissed.value && (
+      {isCrossOriginFromEditor() && !browserWarningDismissed.value && (
         <BrowserNotice
           message={t("Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.")}
           closeLabel={t('Close')}

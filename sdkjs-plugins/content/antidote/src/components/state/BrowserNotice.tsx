@@ -31,7 +31,6 @@
  */
 
 import { JSX } from 'preact';
-import { IconButton } from '@components/button';
 
 export interface BrowserNoticeProps {
   message: string;
@@ -41,11 +40,13 @@ export interface BrowserNoticeProps {
 
 export function BrowserNotice({ message, closeLabel, onClose }: BrowserNoticeProps): JSX.Element {
   return (
-    <div className="browser-notice">
-      <span className="browser-notice__message">{message}</span>
-      <IconButton ariaLabel={closeLabel} variant="icon-only" onClick={onClose}>
-        <span aria-hidden="true">×</span>
-      </IconButton>
+    <div className="browser-notice-container">
+      <div className="browser-notice">
+        <span className="browser-notice__text">{message}</span>
+        <button type="button" className="browser-notice__close" aria-label={closeLabel} onClick={onClose}>
+          ×
+        </button>
+      </div>
     </div>
   );
 }
