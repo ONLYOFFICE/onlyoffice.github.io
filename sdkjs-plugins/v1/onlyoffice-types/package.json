@@ -103,6 +103,7 @@
     "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
     "check-runtime": "node scripts/check-runtime-contract.js",
+    "check-plugin-methods": "node scripts/check-plugin-methods.js",
     "validate-schema": "node scripts/validate-config-schema.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsc --noEmit -p tsconfig.typecheck.json"

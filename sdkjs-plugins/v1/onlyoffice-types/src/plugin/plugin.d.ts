@@ -13,6 +13,7 @@ import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "../word-m
 import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "../cell-methods";
 import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "../slide-methods";
 import type { PdfMethodName, PdfMethodArgs, PdfMethodReturn } from "../pdf-methods";
+import type { FormsMethodName, FormsMethodArgs, FormsMethodReturn } from "../forms-methods";
 
 import type { AscTheme } from "../theme";
 import type { EditorType, VariationConfig } from "../config/plugin-config";
@@ -105,6 +106,8 @@ interface AscPlugin {
     event_onTargetPositionChanged?: PluginEventHandler<"onTargetPositionChanged">;
     event_onClick?: PluginEventHandler<"onClick">;
     event_onKeyDown?: PluginEventHandler<"onKeyDown">;
+    event_onEnableMouseEvent?: PluginEventHandler<"onEnableMouseEvent">;
+    event_onChangeRestrictions?: PluginEventHandler<"onChangeRestrictions">;
     onDestroy?: () => void;
     onEvent: (eventName: string, payload?: unknown) => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
@@ -112,7 +115,8 @@ interface AscPlugin {
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
         (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) &
-        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void);
+        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void) &
+        (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T], callback?: (result: FormsMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;

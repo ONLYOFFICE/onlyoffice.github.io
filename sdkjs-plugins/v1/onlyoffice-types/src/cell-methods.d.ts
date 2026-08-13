@@ -128,6 +128,8 @@ type CellMethodArgs = {
     ResizeWindow: [sWindowId: string, aSize: number[]];
 
     // Methods S
+    /** Disables (true) or enables (false) the button at the given 0-based index in config.json's buttons array. */
+    SetButtonDisabled: [index: number, isDisabled: boolean];
     SetCustomFunctions: [sCode: string];
     SetMacros: [sData: string];
     SetPluginsOptions: [oData: any];

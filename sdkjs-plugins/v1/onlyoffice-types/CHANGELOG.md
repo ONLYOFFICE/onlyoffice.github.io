@@ -2,6 +2,23 @@
 
 ## 0.9.0
 
+- Added `SetButtonDisabled` (Word/Cell/Slide), `RemoveAddinField`, `IsFillingForm`,
+  `IsFillingPdfForm`, `IsEditingPdfForm`, `IsFormSigned`, `GetOFormRole`, `MoveCursorToAnnotationRange`,
+  `SetParagraphHtml` (Word), and `InsertPresentationFromUrl`/`AnnotateParagraph`/
+  `SelectAnnotationRange`/`RemoveAnnotationRange` (Slide) to `executeMethod` - all documented via
+  `@alias` in sdkjs's own JSDoc (`common/apiBase_plugins.js`, `<editor>/api_plugins.js`,
+  `sdkjs-ext/<editor>/api_plugins.js`) but missing from the hand-maintained method-arg types.
+- Added `src/forms-methods.d.ts` (`FormsMethodArgs`/`FormsMethodName`/`FormsMethodReturn`) - the Form
+  editor's `executeMethod` surface had no types at all before this, including the common
+  cross-editor methods (`PasteHtml`, `ShowButton`, `GetVersion`, ...) that apply to every editor via
+  `common/apiBase_plugins.js`.
+- Added `onEnableMouseEvent`/`onChangeRestrictions` to `PluginEventMap`, and typed `onClick`'s payload
+  as `isSelectionUse: boolean` instead of `unknown` - per `common/base-plugin-events.js`'s JSDoc.
+- Added `scripts/check-plugin-methods.js` (`npm run check-plugin-methods`) - a drift check (not a
+  generator) that diffs sdkjs's own documented `executeMethod` names/plugin events against
+  `src/*-methods.d.ts`/`PluginEventMap`, so a method or event ONLYOFFICE documents later doesn't
+  silently stay untyped. Deliberately excludes anything sdkjs itself marks `@undocumented`.
+
 - **Every generated member is now documented.** The generator collected method, parameter and return
   descriptions all along and then emitted a bare signature: 2012 methods across the five editor
   namespaces had no JSDoc at all, and the only comments present - on classes and typedefs - were the
@@ -24,21 +41,6 @@
   meant ~21 MB rewritten in git on every regeneration for content that differs by ten lines. Load the
   base bundle first, then exactly one addon. The unwrapped `declare global` block is also dedented now
   rather than keeping the wrapper's indentation.
-- **Relicensed from AGPL-3.0-or-later to Apache-2.0.** AGPL on a package that consists solely of
-  `.d.ts` declarations is a blocker for its intended audience: the file ends up inside the build of
-  every plugin that installs it. Apache-2.0 matches ONLYOFFICE's other published types package,
-  [`@onlyoffice/doceditor-types`](https://www.npmjs.com/package/@onlyoffice/doceditor-types), and
-  adds an explicit patent grant. The editors themselves (`sdkjs`, from whose JSDoc these types are
-  generated) are unaffected and stay AGPL-3.0-or-later.
-- **Renamed the package from `onlyoffice-plugins-api` to `@onlyoffice/plugins-types`**, in one line
-  with `@onlyoffice/doceditor-types`. The old name was never published to npm, so no installs break;
-  update `tsconfig.json`'s `types` array and any `import type` paths (`onlyoffice-plugins-api/word`
-  → `@onlyoffice/plugins-types/word`, and likewise for `/cell`, `/slide`, `/pdf`, `/plugin`,
-  `/config`, `/services`).
-- The ambient bundles follow the new name: `dist/ambient/onlyoffice-plugins-types[.<editor>].ambient.d.ts`
-  (previously `onlyoffice-plugins-api[.<editor>].ambient.d.ts`). Update any `addExtraLib()`/fetch
-  URL that pointed at the old filenames.
-- Added `author` and `publishConfig.access` to `package.json` for publishing.
 
 ## 0.8.0
 

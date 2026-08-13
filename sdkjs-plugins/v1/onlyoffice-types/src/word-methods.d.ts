@@ -81,6 +81,12 @@ interface TextAnnotationRange {
     id: string;
 }
 
+interface TextAnnotation {
+    paragraphId: string;
+    rangeId: string;
+    name?: string;
+}
+
 interface OLEProperties {
     data?: string;
     imgSrc?: string;
@@ -392,6 +398,8 @@ type WordMethodArgs = {
     GetImageDataFromSelection: [];
     GetInstalledPlugins: [null?] | null;
     GetMacros: [];
+    /** The current role name for the OForm document, or an empty string if no role is set. */
+    GetOFormRole: [];
     GetSelectedContent: [];
     GetSelectedOleObjects: [];
     GetSelectedText: [oPr?: { Numbering?: boolean; Math?: boolean; TableCellSeparator?: string; ParaSeparator?: string; TabSymbol?: string }];
@@ -404,11 +412,17 @@ type WordMethodArgs = {
     InsertAndReplaceContentControls: [aDocuments: any[]];
     InsertOleObject: [oOleObj: OLEProperties, bIsAdd?: boolean];
     InstallPlugin: [oConfig?: any];
-    
+    IsEditingPdfForm: [];
+    IsFillingForm: [];
+    IsFillingPdfForm: [];
+    IsFormSigned: [];
+
     // Methods M
     MouseMoveWindow: [sGuid: string, X: number, Y: number];
     MouseUpWindow: [sGuid: string, X: number, Y: number];
     MoveCursorOutsideField: [fieldId: string, isBegin?: boolean];
+    /** Moves the cursor to the beginning or end of the specified annotation range without selecting it. */
+    MoveCursorToAnnotationRange: [annotation: TextAnnotation, isBegin?: boolean];
     MoveCursorToContentControl: [sInternalId: string, bMoveToContentControl?: boolean];
     MoveCursorToEnd: [bMoveToEnd?: boolean];
     MoveCursorToField: [fieldId: string, isBegin?: boolean];
@@ -429,6 +443,8 @@ type WordMethodArgs = {
     // Methods R
     Redo: [];
     RejectReviewChanges: [bIsAll?: boolean];
+    /** Removes the specified add-in field. */
+    RemoveAddinField: [fieldId: string];
     RemoveAnnotationRange: [oData: { paragraphId: string; rangeId: string; name: string }];
     RemoveComments: [aIds: string[]];
     RemoveContentControl: [sInternalId: string];
@@ -450,10 +466,18 @@ type WordMethodArgs = {
     SelectAnnotationRange: [oData: { paragraphId: string; rangeId: string; name: string }];
     SelectContentControl: [sInternalId: string];
     SelectOleObject: [sInternalId: string];
+    /** Disables (true) or enables (false) the button at the given 0-based index in config.json's buttons array. */
+    SetButtonDisabled: [index: number, isDisabled: boolean];
     SetDisplayModeInReview: [sMode: string];
     SetEditingRestrictions: [sType: string];
     SetFormValue: [sInternalId: string, value: string | boolean];
     SetMacros: [sData: string];
+    /**
+     * Replaces all content of the specified paragraph with the content parsed from the given HTML
+     * string. If the HTML contains multiple block-level elements, their inline content is merged
+     * into the target paragraph.
+     */
+    SetParagraphHtml: [html: string, paraId?: number];
     SetPluginsOptions: [oData: any];
     SetProperties: [oProps: any];
     ShowButton: [sBtn: string, bVisible: boolean, sAlign?: string];
@@ -475,8 +499,8 @@ type WordMethodName = keyof WordMethodArgs;
 
 type WordMethodReturn<T extends WordMethodName> = 
     T extends "AddComment" ? string | null :
-    T extends "CanRedo" | "CanUndo" | "SearchNext" | "ReplaceTextSmart" ? boolean :
-    T extends "GetSelectedText" | "GetCurrentWord" | "GetCurrentSentence" | "GetDocumentLang" | "GetFields" | "GetFileHTML" | "GetFileToDownload" | "ConvertDocument" | "GetSelectedContent" | "GetVBAMacros" | "GetVersion" ? string :
+    T extends "CanRedo" | "CanUndo" | "SearchNext" | "ReplaceTextSmart" | "IsEditingPdfForm" | "IsFillingForm" | "IsFillingPdfForm" | "IsFormSigned" ? boolean :
+    T extends "GetSelectedText" | "GetCurrentWord" | "GetCurrentSentence" | "GetDocumentLang" | "GetFields" | "GetFileHTML" | "GetFileToDownload" | "ConvertDocument" | "GetSelectedContent" | "GetVBAMacros" | "GetVersion" | "GetOFormRole" ? string :
     T extends "GetFormValue" ? null | string | boolean :
     T extends "GetCurrentContentControl" ? string :
     T extends "InstallPlugin" | "UpdatePlugin" | "RemovePlugin" ? object :

@@ -19,6 +19,18 @@ interface SlideCommentReply {
     Solved?: boolean;
 }
 
+interface TextAnnotationRange {
+    start: number;
+    length: number;
+    id: string;
+}
+
+interface TextAnnotation {
+    paragraphId: string;
+    rangeId: string;
+    name?: string;
+}
+
 interface SlideOLEProperties {
     data?: string;
     imgSrc?: string;
@@ -75,6 +87,14 @@ type SlideMethodArgs = {
     // Methods A
     AddComment: [oCommentData: SlideCommentData];
     AddOleObject: [data: SlideOLEProperties];
+    /** Annotates a paragraph, e.g. highlighting text ranges for grammar/spellcheck-style overlays. */
+    AnnotateParagraph: [data: {
+        type: string;
+        name?: string;
+        paragraphId: string;
+        recalcId: string;
+        ranges?: TextAnnotationRange[];
+    }];
     ApplyTheme: [themeIndexOrName: number | string];
 
     // Methods C
@@ -135,6 +155,13 @@ type SlideMethodArgs = {
 
     // Methods I
     InputText: [sText: string, sText2?: string];
+    /** Inserts slides from an external presentation (pptx) referenced by URL into the current presentation. Returns the number of slides inserted, asynchronously. */
+    InsertPresentationFromUrl: [url: string, options?: {
+        index?: number;
+        slideStart?: number;
+        slideEnd?: number;
+        keepSourceFormatting?: boolean;
+    }, token?: string];
     InstallPlugin: [oConfig?: SlideInstallPluginConfig];
 
     // Methods M
@@ -152,6 +179,8 @@ type SlideMethodArgs = {
     PutImageDataToSelection: [oImageData: { src: string; width: number; height: number; fromUrl?: boolean }];
 
     // Methods R
+    /** Removes a specific annotation range from the presentation. */
+    RemoveAnnotationRange: [annotation: TextAnnotation & { all?: boolean }];
     RemoveComments: [aIds: string[]];
     RemoveOleObject: [sInternalId: string];
     RemovePlugin: [sGuid: string, sBackup: string];
@@ -160,6 +189,10 @@ type SlideMethodArgs = {
     ResumeSlideShow: [];
 
     // Methods S
+    /** Selects text in a presentation using a given annotation. */
+    SelectAnnotationRange: [annotation: TextAnnotation];
+    /** Disables (true) or enables (false) the button at the given 0-based index in config.json's buttons array. */
+    SetButtonDisabled: [index: number, isDisabled: boolean];
     SetMacros: [sData: string];
     SetPluginsOptions: [oData: any];
     SetProperties: [oProps: any];

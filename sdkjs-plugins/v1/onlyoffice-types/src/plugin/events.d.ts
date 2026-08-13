@@ -19,10 +19,14 @@ type PluginEventMap = {
     onClickBack: [];
     onDocumentContentReady: [];
     onTargetPositionChanged: [];
-    /** Payload shape is not documented consistently across editor versions. */
-    onClick: [event: unknown];
+    /** `isSelectionUse` - defines if the selection is used or not. */
+    onClick: [isSelectionUse: boolean];
     /** Payload shape is not documented consistently across editor versions. */
     onKeyDown: [event: unknown];
+    /** `isEnabled` - whether the mouse or touchpad is enabled (true) or not (false). */
+    onEnableMouseEvent: [isEnabled: boolean];
+    /** `value` - the restrictions value. */
+    onChangeRestrictions: [value: number];
 };
 
 type PluginEventName = keyof PluginEventMap | (string & {});

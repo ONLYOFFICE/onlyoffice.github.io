@@ -227,9 +227,10 @@ Everything in that block comes from the sources above, not from hand-written pro
 ## Type-checking
 
 ```bash
-npm run check-runtime # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
-npm run typecheck      # checks index.d.ts + src/generated/*.ts + src/*.d.ts
-npm test               # also type-checks example.js and test/*.js against the library
+npm run check-runtime        # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
+npm run check-plugin-methods # checks executeMethod names/events against sdkjs's own JSDoc (needs SDKJS_PATH)
+npm run typecheck            # checks index.d.ts + src/generated/*.ts + src/*.d.ts
+npm test                     # also type-checks example.js and test/*.js against the library
 ```
 
 `check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
@@ -238,6 +239,17 @@ npm test               # also type-checks example.js and test/*.js against the l
 unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds,
 unlike the minified `plugins.js`'s single-letter aliases). It does not launch an editor or verify
 host-provided `executeMethod` behavior; those require a real browser/Desktop Editor smoke test.
+
+`check-plugin-methods` is a drift check, not a generator: ONLYOFFICE documents which
+`executeMethod` names exist via `Api.prototype["pluginMethod_<Name>"]` JSDoc doclets in
+`sdkjs/common/apiBase_plugins.js` (shared across editors, filtered by `@typeofeditors`) plus each
+editor's own `<editor>/api_plugins.js` / `sdkjs-forms/apiPlugins.js` / `sdkjs-ext/<editor>/api_plugins.js`,
+and plugin-window events via `sdkjs/common/base-plugin-events.js`. The script diffs that source
+against `src/*-methods.d.ts` and `src/plugin/events.d.ts` and fails if anything documented (and not
+tagged `@undocumented`) is missing - it deliberately does not generate `.d.ts` bodies itself, since
+the parameter/return shapes here are hand-curated against ONLYOFFICE's own documented examples.
+Requires `SDKJS_PATH` (same as `generate`); `SDKJS_FORMS_PATH`/`SDKJS_EXT_PATH` default to siblings
+of `sdkjs` like the generator does.
 
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't

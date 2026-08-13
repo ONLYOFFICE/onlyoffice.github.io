@@ -35,6 +35,7 @@ export type * from "./src/word-methods";
 export type * from "./src/cell-methods";
 export type * from "./src/slide-methods";
 export type * from "./src/pdf-methods";
+export type * from "./src/forms-methods";
 
 export type * from "./src/services";
 export type * from "./src/config";
