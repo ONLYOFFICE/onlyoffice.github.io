@@ -709,7 +709,9 @@ function generateTypedef(name, typedefData) {
 const TS_BUILTINS = new Set([
   'Array', 'Record', 'Object', 'Function', 'Promise', 'Date', 'Map', 'Set',
   'Error', 'RegExp', 'Symbol', 'ReadonlyArray', 'Partial', 'Required', 'Readonly',
-  'Pick', 'Omit', 'Exclude', 'Extract', 'NonNullable', 'ReturnType', 'JSON'
+  'Pick', 'Omit', 'Exclude', 'Extract', 'NonNullable', 'ReturnType', 'JSON',
+  'ArrayBuffer', 'Uint8Array', 'Int8Array', 'Uint16Array', 'Int16Array',
+  'Uint32Array', 'Int32Array', 'Float32Array', 'Float64Array', 'Blob', 'File',
 ]);
 
 function collectCustomTypeRefs(str) {
@@ -922,4 +924,26 @@ async function main() {
   console.log('Done!');
 }
 
-main().catch(console.error);
+module.exports = {
+  resolveSdkjsPaths,
+  runJsdoc,
+  parseType,
+  parseTypeName,
+  splitTopLevel,
+  htmlToMarkdown,
+  wrapText,
+  cleanProse,
+  taggedLines,
+  renderJsDoc,
+  splitDescription,
+  collectCustomTypeRefs,
+  TS_BUILTINS,
+  DOC_WIDTH,
+};
+
+// Only run the sdkjs->src/generated pipeline when invoked directly (`node scripts/generate-types.js`)
+// - other scripts (e.g. generate-plugin-methods.js) require this file purely for its parsing
+// utilities and must not trigger a second, unrelated generation run as a side effect.
+if (require.main === module) {
+  main().catch(console.error);
+}

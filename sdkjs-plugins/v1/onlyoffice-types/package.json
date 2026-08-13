@@ -98,12 +98,13 @@
   },
   "scripts": {
     "generate": "node scripts/generate-types.js",
-    "postgenerate": "node scripts/generate-ambient-bundle.js",
+    "postgenerate": "node scripts/generate-plugin-methods.js && node scripts/generate-ambient-bundle.js",
+    "generate-plugin-methods": "node scripts/generate-plugin-methods.js",
     "generate-schema": "node scripts/generate-config-schema.js",
     "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
     "check-runtime": "node scripts/check-runtime-contract.js",
-    "check-plugin-methods": "node scripts/check-plugin-methods.js",
+    "check-plugin-events": "node scripts/check-plugin-events.js",
     "validate-schema": "node scripts/validate-config-schema.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsc --noEmit -p tsconfig.typecheck.json"

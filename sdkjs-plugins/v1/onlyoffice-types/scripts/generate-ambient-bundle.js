@@ -31,10 +31,11 @@ const BASE_FILES = [
   'src/generated/slide.ts',
   'src/generated/forms.ts',
   'src/generated/pdf.ts',
-  'src/word-methods.d.ts',
-  'src/cell-methods.d.ts',
-  'src/slide-methods.d.ts',
-  'src/pdf-methods.d.ts',
+  'src/generated/word-methods.ts',
+  'src/generated/cell-methods.ts',
+  'src/generated/slide-methods.ts',
+  'src/generated/pdf-methods.ts',
+  'src/generated/forms-methods.ts',
   'src/theme/index.d.ts',
   'src/config/plugin-config.d.ts',
   'src/plugin/events.d.ts',
@@ -73,6 +74,168 @@ function stripModuleSyntax(source) {
     // scope - so this must catch every declaration keyword, not just the ones seen so far.
     .replace(/^export\s+(?=(?:interface|type|enum|class|abstract\s+class|function|const|let|var)\b)/gm, '')
     .trim();
+}
+
+// The generated `src/generated/*-methods.ts` files each declare their own local copy of every
+// shared typedef they reference (Color, EventType, SelectionType, unresolved-ref stubs like
+// `localeTranslate`, ...) rather than importing a common module - deliberate, since as real ES
+// modules those names are file-scoped and importing/exporting them between the 5 files would
+// reintroduce the TS2308 ambiguous-export collisions `generate-plugin-methods.js` was built to
+// avoid. Flattening all 5 files into one global-scope bundle turns those same file-scoped
+// identically-named identifiers into duplicate GLOBAL ones, which TypeScript rejects - so the
+// bundle keeps only the first copy of each, and only after verifying every later copy is textually
+// identical (a name collision between two genuinely different shapes must fail loudly, not be
+// silently papered over).
+function popTrailingJsDocComment(output) {
+  let end = output.length;
+  while (end > 0 && output[end - 1].trim() === '') end -= 1;
+  if (end === 0 || !/^\s*\*\/\s*$/.test(output[end - 1])) return null;
+  let start = end - 1;
+  while (start >= 0 && !/^\s*\/\*\*/.test(output[start])) start -= 1;
+  if (start < 0) return null;
+  const comment = output.slice(start, end);
+  output.length = start;
+  return comment;
+}
+
+// Splits the lines strictly between an interface's `{` and closing `}` into per-member chunks
+// (each chunk is a member's own leading `/** ... */` comment, if any, plus its `name[?]: type;`
+// line) by tracking brace depth so a member whose type is itself an inline `{ ... }` object still
+// ends up as one chunk instead of being cut mid-type.
+function splitInterfaceMembers(bodyLines) {
+  const members = [];
+  let depth = 0;
+  let current = [];
+  for (const line of bodyLines) {
+    current.push(line);
+    for (const ch of line) {
+      if (ch === '{') depth += 1;
+      else if (ch === '}') depth -= 1;
+    }
+    if (depth === 0 && /;\s*$/.test(line)) {
+      members.push(current);
+      current = [];
+    }
+  }
+  if (current.some((l) => l.trim() !== '')) members.push(current);
+  return members;
+}
+
+function memberNameAndSignature(memberLines) {
+  for (const line of memberLines) {
+    const m = line.match(/^\s*(?:\[?['"]?([A-Za-z_$][A-Za-z0-9_$-]*)['"]?\]?)(\??)\s*:\s*(.*)$/);
+    if (m) return { name: m[1], optional: m[2] === '?', typeAndRest: m[3] };
+  }
+  return null;
+}
+
+// Two same-named `interface` bodies from different editors' generated files can legitimately
+// differ - sdkjs's own JSDoc for a nominally "shared" typedef (CommentData, ...) isn't always
+// identical across editors (e.g. word's CommentData documents `UserId`, other editors' don't).
+// Flattened into one ambient global, the more permissive shape (member present in every body,
+// with the same type, wins as-is; a member missing from or optional in ANY body is kept but forced
+// optional in the merge) is the only one that stays assignable from every editor's real result
+// object. Returns null (caller falls back to a hard error) if either body isn't a plain interface
+// or a member's underlying type genuinely disagrees across bodies - that's a real conflict, not a
+// benign optionality difference, and must not be silently guessed at.
+function mergeInterfaceBodies(nameForErrors, blockA, blockB) {
+  const linesA = blockA.split('\n');
+  const linesB = blockB.split('\n');
+  const openA = linesA[0].match(/\{\s*$/);
+  const openB = linesB[0].match(/\{\s*$/);
+  if (!openA || !openB || linesA[linesA.length - 1].trim() !== '}' || linesB[linesB.length - 1].trim() !== '}') {
+    return null;
+  }
+  const membersA = splitInterfaceMembers(linesA.slice(1, -1));
+  const membersB = splitInterfaceMembers(linesB.slice(1, -1));
+  const sigB = new Map(membersB.map((m) => [memberNameAndSignature(m)?.name, m]));
+  const seenNamesB = new Set();
+
+  const mergedMembers = membersA.map((memberLines) => {
+    const sigA = memberNameAndSignature(memberLines);
+    if (!sigA) return memberLines;
+    const other = sigB.get(sigA.name);
+    if (!other) return forceOptional(memberLines, sigA);
+    seenNamesB.add(sigA.name);
+    const sigOther = memberNameAndSignature(other);
+    if (sigOther.typeAndRest !== sigA.typeAndRest) return null; // real type conflict
+    return sigA.optional || sigOther.optional ? forceOptional(memberLines, sigA) : memberLines;
+  });
+  if (mergedMembers.includes(null)) return null;
+
+  const extraFromB = membersB.filter((m) => {
+    const sig = memberNameAndSignature(m);
+    return sig && !seenNamesB.has(sig.name);
+  }).map((m) => forceOptional(m, memberNameAndSignature(m)));
+
+  const body = [...mergedMembers, ...extraFromB].flat();
+  return [linesA[0], ...body, '}'].join('\n');
+}
+
+function forceOptional(memberLines, sig) {
+  if (sig.optional) return memberLines;
+  const idx = memberLines.findIndex((l) => memberNameAndSignature([l])?.name === sig.name);
+  if (idx === -1) return memberLines;
+  const out = memberLines.slice();
+  out[idx] = out[idx].replace(/^(\s*(?:\[?['"]?[A-Za-z_$][A-Za-z0-9_$-]*['"]?\]?))(\s*:)/, '$1?$2');
+  return out;
+}
+
+function dedupeTopLevelDeclarations(source) {
+  const lines = source.split('\n');
+  const declRe = /^(?:export\s+)?(?:interface|type)\s+([A-Za-z_$][A-Za-z0-9_$]*)\b/;
+  const seen = new Map();
+  const output = [];
+  let i = 0;
+  while (i < lines.length) {
+    const match = lines[i].match(declRe);
+    if (!match) {
+      output.push(lines[i]);
+      i += 1;
+      continue;
+    }
+    const name = match[1];
+    let depth = 0;
+    let sawBrace = false;
+    let j = i;
+    for (; j < lines.length; j += 1) {
+      for (const ch of lines[j]) {
+        if (ch === '{') { depth += 1; sawBrace = true; }
+        else if (ch === '}') depth -= 1;
+      }
+      const closed = sawBrace ? depth === 0 : /;\s*$/.test(lines[j]);
+      if (closed) { j += 1; break; }
+    }
+    const block = lines.slice(i, j).join('\n');
+    const comment = popTrailingJsDocComment(output);
+    if (seen.has(name)) {
+      const existing = seen.get(name);
+      if (existing !== block) {
+        // `type NAME = unknown;` is generate-plugin-methods.js's stub for a type ref it couldn't
+        // resolve FROM THAT EDITOR'S OWN source files - not evidence the name has no real shape,
+        // just that whichever file declares it wasn't in that editor's source list (`comment` is a
+        // real word/forms typedef a Pdf method also references, but pdf/api_plugins.js never
+        // declares it). Prefer the real declared shape another editor's parse already found.
+        const stubRe = new RegExp(`^type ${name} = unknown;$`);
+        if (stubRe.test(existing) && !stubRe.test(block)) { seen.set(name, block); output[output.indexOf(existing)] = block; i = j; continue; }
+        if (stubRe.test(block) && !stubRe.test(existing)) { i = j; continue; }
+        const merged = mergeInterfaceBodies(name, existing, block);
+        if (merged === null) {
+          throw new Error(`Ambient bundle: '${name}' is declared twice with different bodies - cannot flatten into one global scope. First:\n${existing}\n\nSecond:\n${block}`);
+        }
+        seen.set(name, merged);
+        const idx = output.indexOf(existing);
+        if (idx !== -1) output[idx] = merged;
+      }
+      // Otherwise an identical duplicate (and its doc-comment, just popped) - drop both.
+    } else {
+      seen.set(name, block);
+      if (comment) output.push(...comment);
+      output.push(block);
+    }
+    i = j;
+  }
+  return output.join('\n');
 }
 
 function unwrapDeclareGlobal(source) {
@@ -120,7 +283,9 @@ function buildBaseBundle() {
     return `// ---- ${relPath} ----\n${content}\n`;
   });
 
-  return [header, ...sections, `// ---- window.Asc / window.AscDesktopEditor / window.AscSimpleRequest ----\n${globalBlock}\n`].join('\n');
+  const body = dedupeTopLevelDeclarations(sections.join('\n'));
+
+  return [header, body, `// ---- window.Asc / window.AscDesktopEditor / window.AscSimpleRequest ----\n${globalBlock}\n`].join('\n');
 }
 
 function buildEditorAddon(editorFile) {

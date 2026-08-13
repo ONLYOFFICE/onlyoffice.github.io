@@ -2,22 +2,34 @@
 
 ## 0.9.0
 
-- Added `SetButtonDisabled` (Word/Cell/Slide), `RemoveAddinField`, `IsFillingForm`,
-  `IsFillingPdfForm`, `IsEditingPdfForm`, `IsFormSigned`, `GetOFormRole`, `MoveCursorToAnnotationRange`,
+- The `Asc.plugin.executeMethod` surface (`<Editor>MethodArgs`/`MethodName`/`MethodReturn`) is now
+  generated - `scripts/generate-plugin-methods.js`, parsing `Api.prototype["pluginMethod_<Name>"]`
+  JSDoc from the same sdkjs/sdkjs-forms/sdkjs-ext checkout `generate-types.js` already reads -
+  replacing the previous hand-maintained `src/{word,cell,slide,pdf,forms}-methods.d.ts`. This closed
+  a real, larger-than-expected gap: an entire missing `FormsMethodArgs` family (the Forms editor had
+  no `executeMethod` types at all, including cross-editor common methods like `PasteHtml`/`ShowButton`/
+  `GetVersion`), plus per-editor gaps such as `SetButtonDisabled`, `RemoveAddinField`, `IsFillingForm`/
+  `IsFillingPdfForm`/`IsEditingPdfForm`, `IsFormSigned`, `GetOFormRole`, `MoveCursorToAnnotationRange`,
   `SetParagraphHtml` (Word), and `InsertPresentationFromUrl`/`AnnotateParagraph`/
-  `SelectAnnotationRange`/`RemoveAnnotationRange` (Slide) to `executeMethod` - all documented via
-  `@alias` in sdkjs's own JSDoc (`common/apiBase_plugins.js`, `<editor>/api_plugins.js`,
-  `sdkjs-ext/<editor>/api_plugins.js`) but missing from the hand-maintained method-arg types.
-- Added `src/forms-methods.d.ts` (`FormsMethodArgs`/`FormsMethodName`/`FormsMethodReturn`) - the Form
-  editor's `executeMethod` surface had no types at all before this, including the common
-  cross-editor methods (`PasteHtml`, `ShowButton`, `GetVersion`, ...) that apply to every editor via
-  `common/apiBase_plugins.js`.
+  `SelectAnnotationRange`/`RemoveAnnotationRange` (Slide). Verified against every real call in
+  `test/*-methods-original-examples.js` and `test/pdf-methods-smoke.js` with zero regressions; the
+  handful of cases where sdkjs's JSDoc gives no usable signal, or contradicts real documented
+  examples, are recorded (with the specific example each is derived from) in override tables at the
+  top of the generator rather than silently guessed at.
+- `npm run generate-ambient` (and the `postgenerate` step that runs automatically after `npm run
+  generate`) now flattens the generated `*-methods.ts` files, and correctly resolves `comment` (a real
+  typedef in word/forms that a Pdf method also references but pdf/api_plugins.js never declares) and
+  `FormsMethodArgs` (previously missing from the bundle entirely - a latent gap, since nothing
+  referencing it was ever included) into the global scope, deduplicating identical shared typedefs
+  (`Color`, `EventType`, `SelectionType`, ...) each editor's file redeclares locally and merging the
+  rare case where the same typedef name genuinely documents a different shape per editor
+  (`CommentData.UserId`, word-only) into one optional-superset shape instead of failing to compile.
 - Added `onEnableMouseEvent`/`onChangeRestrictions` to `PluginEventMap`, and typed `onClick`'s payload
   as `isSelectionUse: boolean` instead of `unknown` - per `common/base-plugin-events.js`'s JSDoc.
-- Added `scripts/check-plugin-methods.js` (`npm run check-plugin-methods`) - a drift check (not a
-  generator) that diffs sdkjs's own documented `executeMethod` names/plugin events against
-  `src/*-methods.d.ts`/`PluginEventMap`, so a method or event ONLYOFFICE documents later doesn't
-  silently stay untyped. Deliberately excludes anything sdkjs itself marks `@undocumented`.
+- `scripts/check-plugin-methods.js` is now `scripts/check-plugin-events.js` (`npm run
+  check-plugin-events`) and only checks plugin-window events - the `executeMethod`-name half of what
+  it checked is superseded by the generator above plus `check-generated` (which already fails CI if
+  regenerating produces anything different from what's checked in).
 
 - **Every generated member is now documented.** The generator collected method, parameter and return
   descriptions all along and then emitted a bare signature: 2012 methods across the five editor

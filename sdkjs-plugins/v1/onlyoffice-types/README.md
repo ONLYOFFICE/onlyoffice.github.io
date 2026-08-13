@@ -178,6 +178,25 @@ npm run generate
 the env var too. The generator records source commits and file hashes in
 `src/generated/generation-manifest.json`.
 
+`npm run generate` only regenerates the Api object model (`src/generated/{word,cell,slide,pdf,forms}.ts`).
+The `Asc.plugin.executeMethod` surface (`src/generated/*-methods.ts` - `<Editor>MethodArgs`/
+`MethodName`/`MethodReturn`) is a separate generator, `scripts/generate-plugin-methods.js`, parsing
+`Api.prototype["pluginMethod_<Name>"]` doclets from the same sdkjs/sdkjs-forms checkout plus
+`sdkjs-ext` (`SDKJS_EXT_PATH`, defaults to `SDKJS_PATH/../sdkjs-ext`, for the handful of methods only
+sdkjs-ext documents for word/slide):
+
+```bash
+SDKJS_PATH=/path/to/sdkjs npm run generate-plugin-methods
+```
+
+It runs automatically as part of `postgenerate` (see [Ambient bundle](#ambient-bundle-non-npm-consumers)
+below), so a plain `npm run generate` regenerates both halves together. Where sdkjs's own JSDoc gives
+no usable signal at all, or contradicts real, documented `executeMethod` call examples, a small set of
+override tables at the top of the script (`OPTIONAL_PROPERTY_OVERRIDES`, `TYPE_OVERRIDES`,
+`TYPEDEF_TYPE_OVERRIDES`, `METHOD_OVERRIDES`) correct the generated shape - each entry is commented
+with the specific example it was derived from, so before adding a new one, check whether the
+mismatch is already covered.
+
 The legacy documentation snapshots are stored in `scripts/legacy-api/` and pinned to the commit
 recorded in `src/generated/generation-manifest.json`. Generation is fully offline and fails if a
 snapshot is missing or invalid. To update the snapshots, download the four JSON files from the new
@@ -227,10 +246,11 @@ Everything in that block comes from the sources above, not from hand-written pro
 ## Type-checking
 
 ```bash
-npm run check-runtime        # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
-npm run check-plugin-methods # checks executeMethod names/events against sdkjs's own JSDoc (needs SDKJS_PATH)
-npm run typecheck            # checks index.d.ts + src/generated/*.ts + src/*.d.ts
-npm test                     # also type-checks example.js and test/*.js against the library
+npm run check-runtime       # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
+npm run check-plugin-events # checks attachEvent/event_on* names against sdkjs's own JSDoc (needs SDKJS_PATH)
+npm run check-generated     # regenerates src/generated and fails if the checked-in output differs (needs SDKJS_PATH, a git checkout)
+npm run typecheck           # checks index.d.ts + src/generated/*.ts + src/*.d.ts
+npm test                    # also type-checks example.js and test/*.js against the library
 ```
 
 `check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
@@ -240,16 +260,14 @@ unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable 
 unlike the minified `plugins.js`'s single-letter aliases). It does not launch an editor or verify
 host-provided `executeMethod` behavior; those require a real browser/Desktop Editor smoke test.
 
-`check-plugin-methods` is a drift check, not a generator: ONLYOFFICE documents which
-`executeMethod` names exist via `Api.prototype["pluginMethod_<Name>"]` JSDoc doclets in
-`sdkjs/common/apiBase_plugins.js` (shared across editors, filtered by `@typeofeditors`) plus each
-editor's own `<editor>/api_plugins.js` / `sdkjs-forms/apiPlugins.js` / `sdkjs-ext/<editor>/api_plugins.js`,
-and plugin-window events via `sdkjs/common/base-plugin-events.js`. The script diffs that source
-against `src/*-methods.d.ts` and `src/plugin/events.d.ts` and fails if anything documented (and not
-tagged `@undocumented`) is missing - it deliberately does not generate `.d.ts` bodies itself, since
-the parameter/return shapes here are hand-curated against ONLYOFFICE's own documented examples.
-Requires `SDKJS_PATH` (same as `generate`); `SDKJS_FORMS_PATH`/`SDKJS_EXT_PATH` default to siblings
-of `sdkjs` like the generator does.
+`check-plugin-events` is a drift check, not a generator: plugin-window events (`attachEvent`,
+`event_on*`) are hand-curated in `src/plugin/events.d.ts` rather than generated, since their payload
+shapes need richer modeling than a mechanical `@param`-to-tuple conversion gives. The script diffs
+`@alias` names documented in `sdkjs/common/base-plugin-events.js` against that file and fails if
+anything documented (and not tagged `@undocumented`) is missing. Requires `SDKJS_PATH` (same as
+`generate`). The equivalent check for `executeMethod` names doesn't need a separate drift check:
+`generate-plugin-methods.js` generates the full body directly, and `check-generated` already fails
+CI if regenerating produces anything different from what's checked in.
 
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
@@ -359,11 +377,12 @@ onlyoffice-types/
 │   │   ├── slide.ts       # namespace Slide { ... }
 │   │   ├── forms.ts       # namespace Forms { ... }
 │   │   ├── pdf.ts         # namespace Pdf { ... }
+│   │   ├── word-methods.ts  # executeMethod names/args/returns for Word
+│   │   ├── cell-methods.ts  # executeMethod names/args/returns for Cell
+│   │   ├── slide-methods.ts # executeMethod names/args/returns for Slide
+│   │   ├── pdf-methods.ts   # executeMethod names/args/returns for PDF
+│   │   ├── forms-methods.ts # executeMethod names/args/returns for Forms
 │   │   └── api-report.json # unresolved type and any report
-│   ├── word-methods.d.ts  # executeMethod names/args/returns for Word
-│   ├── cell-methods.d.ts  # executeMethod names/args/returns for Cell
-│   ├── slide-methods.d.ts # executeMethod names/args/returns for Slide
-│   ├── pdf-methods.d.ts   # executeMethod names/args/returns for PDF
 │   ├── editors/            # /word, /cell, /slide, /pdf entry points (declare each editor's global Api)
 │   │   ├── word.d.ts
 │   │   ├── cell.d.ts
@@ -386,7 +405,13 @@ onlyoffice-types/
 ├── schemas/
 │   └── config.schema.json
 ├── scripts/
-│   └── generate-types.js
+│   ├── generate-types.js          # Api object model generator (src/generated/{word,cell,slide,pdf,forms}.ts)
+│   ├── generate-plugin-methods.js # executeMethod surface generator (src/generated/*-methods.ts)
+│   ├── generate-ambient-bundle.js
+│   ├── generate-config-schema.js
+│   ├── check-runtime-contract.js
+│   ├── check-plugin-events.js
+│   └── validate-config-schema.js
 ├── tsconfig.json           # builds/typechecks the library itself
 ├── tsconfig.typecheck.json # also typechecks example.js + test/*.js
 ├── example.js             # Usage examples
