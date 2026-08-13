@@ -55,7 +55,7 @@ declare namespace Word {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -722,7 +722,7 @@ declare namespace Word {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -1455,6 +1455,11 @@ declare namespace Word {
      *   HTML tag, you can avoid using the opening angle bracket
      *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
      *   with the special characters.
+     * @default convertType = "markdown"
+     * @default htmlHeadings = false
+     * @default base64img = false
+     * @default demoteHeadings = false
+     * @default renderHTMLTags = false
      *
      * @example
      * ```js
@@ -1540,6 +1545,7 @@ declare namespace Word {
      * @param styleIndex - The chart color style index (can be 1 - 48, as described in OOXML specification).
      * @param numFormats - Numeric formats which will be applied to the series (can be custom formats).
      *   The default numeric format is "General".
+     * @default chartType = "bar"
      *
      * @example
      * ```js
@@ -1558,8 +1564,8 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateChart/
      */
-    CreateChart(series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
-    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox content control.
@@ -1575,6 +1581,7 @@ declare namespace Word {
      *
      * @param list - An array of objects representing the items in the combo box.
      * @param selected - The selected item index.
+     * @default selected = -1
      * @returns An inline-level content control that represents a combo box.
      * @since 9.0.0
      */
@@ -1601,6 +1608,7 @@ declare namespace Word {
      *
      * @param list - An array of objects representing the items in the drop-down list.
      * @param selected - The selected item index.
+     * @default selected = -1
      * @returns An inline-level content control that represents a drop-down list.
      * @since 9.0.0
      */
@@ -1694,7 +1702,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateImage/
      */
-    CreateImage(imageSrc: string, width: number, height: number): ApiImage;
+    CreateImage(imageSrc: string, width: EMU, height: EMU): ApiImage;
 
     /**
      * Creates a new inline container.
@@ -1745,6 +1753,7 @@ declare namespace Word {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -1773,6 +1782,7 @@ declare namespace Word {
      * parameter.
      *
      * @param sType - The type of the numbering which will be created.
+     * @default sType = "bullet"
      * @since 9.4.0
      *
      * @example
@@ -1812,7 +1822,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateOleObject/
      */
-    CreateOleObject(imageSrc: string, width: number, height: number, data: string, appId: string): ApiOleObject;
+    CreateOleObject(imageSrc: string, width: EMU, height: EMU, data: string, appId: string): ApiOleObject;
 
     /** Creates the empty paragraph properties. */
     CreateParaPr(): ApiParaPr;
@@ -1862,7 +1872,7 @@ declare namespace Word {
      * @returns An inline-level content control that represents a picture container.
      * @since 9.0.0
      */
-    CreatePictureContentControl(width?: number, height?: number): ApiInlineLvlSdt;
+    CreatePictureContentControl(width?: EMU, height?: EMU): ApiInlineLvlSdt;
 
     /**
      * Creates a color selecting it from one of the available color presets.
@@ -1890,6 +1900,7 @@ declare namespace Word {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -2011,6 +2022,9 @@ declare namespace Word {
      * @param height - The shape height in English measure units.
      * @param fill - The color or pattern used to fill the shape.
      * @param stroke - The stroke used to create the element shadow.
+     * @default shapeType = "rect"
+     * @default width = 914400
+     * @default height = 914400
      *
      * @example
      * ```js
@@ -2026,7 +2040,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateShape/
      */
-    CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
+    CreateShape(shapeType?: ShapeType, width?: EMU, height?: EMU, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a solid fill to apply to the object using a selected solid color as the object background.
@@ -2054,6 +2068,7 @@ declare namespace Word {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      *
      * @example
@@ -2068,7 +2083,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateStroke/
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates a new table with a specified number of rows and columns.
@@ -2138,6 +2153,14 @@ declare namespace Word {
      * @param rotAngle - Rotation angle.
      * @param width - The Text Art width measured in English measure units.
      * @param height - The Text Art heigth measured in English measure units.
+     * @default textPr = Api.CreateTextPr()
+     * @default text = "Your text here"
+     * @default transform = "textNoShape"
+     * @default fill = Api.CreateNoFill()
+     * @default stroke = Api.CreateStroke(0, Api.CreateNoFill())
+     * @default rotAngle = 0
+     * @default width = 1828800
+     * @default height = 1828800
      *
      * @example
      * ```js
@@ -2157,7 +2180,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateWordArt/
      */
-    CreateWordArt(textPr?: ApiTextPr, text?: string, transform?: TextTransform, fill?: ApiFill, stroke?: ApiStroke, rotAngle?: number, width?: number, height?: number): ApiDrawing;
+    CreateWordArt(textPr?: ApiTextPr, text?: string, transform?: TextTransform, fill?: ApiFill, stroke?: ApiStroke, rotAngle?: number, width?: EMU, height?: EMU): ApiDrawing;
 
     /**
      * Converts English Metric Units (EMUs) to millimeters.
@@ -2165,7 +2188,7 @@ declare namespace Word {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -2374,6 +2397,8 @@ declare namespace Word {
      *
      * @param startIndex - The start index of the document for mail merge process.
      * @param endIndex - The end index of the document for mail merge process.
+     * @default startIndex = 0
+     * @default endIndex = Api.GetMailMergeReceptionsCount() - 1
      *
      * @example
      * ```js
@@ -2412,7 +2437,7 @@ declare namespace Word {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -2578,6 +2603,8 @@ declare namespace Word {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      *
      * @example
      * ```js
@@ -2613,6 +2640,7 @@ declare namespace Word {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -2674,6 +2702,11 @@ declare namespace Word {
      * @param headingLvl - The heading level (used if you want to specify the chapter number).
      *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param captionSep - The caption separator (used if you want to specify the chapter number).
+     * @default label = "Table"
+     * @default excludeLabel = false
+     * @default numFormat = "Arabic"
+     * @default isBefore = false
+     * @default captionSep = "hyphen"
      *
      * @example
      * ```js
@@ -3232,6 +3265,7 @@ declare namespace Word {
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current content
      *   control.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -3599,6 +3633,13 @@ declare namespace Word {
      *   used. The default separator is "\r\n".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   symbol can be used. The default symbol is "\t".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
      * @since 8.3.0
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetText/
@@ -3825,7 +3866,7 @@ declare namespace Word {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -4028,7 +4069,7 @@ declare namespace Word {
     GetType(): ChartType;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -4097,6 +4138,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -4159,6 +4201,7 @@ declare namespace Word {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      *
      * @example
      * ```js
@@ -4262,7 +4305,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -4298,6 +4341,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -4306,7 +4351,7 @@ declare namespace Word {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -4458,7 +4503,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetHorAxisTitle/
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Flips the current drawing horizontally.
@@ -4475,9 +4520,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets the fill to the chart legend.
@@ -4531,7 +4577,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetLegendFontSize/
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -4670,6 +4716,7 @@ declare namespace Word {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -4701,6 +4748,7 @@ declare namespace Word {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -4869,6 +4917,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -4879,6 +4928,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -4979,6 +5029,7 @@ declare namespace Word {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -5007,6 +5058,7 @@ declare namespace Word {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -5077,6 +5129,7 @@ declare namespace Word {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -5122,7 +5175,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Specifies the chart title.
@@ -5153,7 +5206,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetTitle/
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -5214,6 +5267,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -5275,7 +5330,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetVerAxisTitle/
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the absolute measurement for the vertical positioning of the floating object.
@@ -5284,16 +5339,17 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -5984,6 +6040,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -6276,7 +6333,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -6740,6 +6797,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -7013,7 +7071,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -7054,6 +7112,7 @@ declare namespace Word {
      * @param sAuthorName - The name of the comment reply author (optional).
      * @param sUserId - The user ID of the comment reply author (optional).
      * @param nPos - The comment reply position.
+     * @default nPos = -1
      * @returns this
      *
      * @example
@@ -7196,6 +7255,7 @@ declare namespace Word {
      * Returns the specified comment reply.
      *
      * @param nIndex - The comment reply index.
+     * @default nIndex = 0
      *
      * @example
      * ```js
@@ -7325,6 +7385,9 @@ declare namespace Word {
      * @param nPos - The position of the first comment reply to remove.
      * @param nCount - A number of comment replies to remove.
      * @param bRemoveAll - Specifies whether to remove all comment replies or not.
+     * @default nPos = 0
+     * @default nCount = 1
+     * @default bRemoveAll = false
      * @returns this
      *
      * @example
@@ -7988,6 +8051,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -8205,7 +8269,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -8245,6 +8309,7 @@ declare namespace Word {
      * @param sText - The display text for the list item.
      * @param sValue - The list item value.
      * @param nIndex - A position where a new value will be added.
+     * @default nIndex = -1
      *
      * @example
      * ```js
@@ -9534,6 +9599,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -9829,7 +9895,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -9960,7 +10026,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddDrawingToPage/
      */
-    AddDrawingToPage(oDrawing: ApiDrawing, nPage: number, x: number, y: number): boolean;
+    AddDrawingToPage(oDrawing: ApiDrawing, nPage: number, x: EMU, y: EMU): boolean;
 
     /**
      * Adds a new drop-down list content control to the document.
@@ -10039,6 +10105,7 @@ declare namespace Word {
      *
      * @param sText - An equation written as a linear text string.
      * @param sFormat - The format of the specified linear representation.
+     * @default sFormat = "unicode"
      * @since 8.2.0
      *
      * @example
@@ -10066,7 +10133,7 @@ declare namespace Word {
      * @returns An instance of the ApiInlineLvlSdt object representing the picture content control.
      * @since 9.0.0
      */
-    AddPictureContentControl(width?: number, height?: number): ApiInlineLvlSdt;
+    AddPictureContentControl(width?: EMU, height?: EMU): ApiInlineLvlSdt;
 
     /**
      * Adds a table of content to the current document.
@@ -10075,6 +10142,7 @@ declare namespace Word {
      * @param oTocPr - Table of contents properties.
      * @param oRange - The range that the table of contents replaces. If omitted, the table of contents is inserted at
      *   the current position.
+     * @default oTocPr = {}
      * @since 9.5.0
      *
      * @example
@@ -10105,6 +10173,7 @@ declare namespace Word {
      *   properties if they are undefined.</note>
      * @param oRange - The range that the table of figures replaces. If omitted, the table of figures is inserted at
      *   the current position.
+     * @default oTofPr = {}
      * @since 9.5.0
      *
      * @example
@@ -10189,6 +10258,7 @@ declare namespace Word {
      * Creates an abstract multilevel numbering with a specified type.
      *
      * @param sType - The type of the numbering which will be created.
+     * @default sType = "bullet"
      *
      * @example
      * ```js
@@ -10254,6 +10324,7 @@ declare namespace Word {
      *
      * @param styleName - The name of the style which will be created.
      * @param type - The document element which the style will be applied to.
+     * @default type = "paragraph"
      *
      * @example
      * ```js
@@ -11769,6 +11840,13 @@ declare namespace Word {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      *
      * @example
@@ -11865,6 +11943,7 @@ declare namespace Word {
      *   paragraph).
      * @param pr - Specifies that text and paragraph document properties are preserved for the inserted elements.
      *   The object should look like this: {"KeepTextOnly": true}.
+     * @default isInline = false
      * @returns Success?
      *
      * @example
@@ -11892,6 +11971,8 @@ declare namespace Word {
      *
      * @param sText - Watermark text.
      * @param bIsDiagonal - Specifies if the watermark is placed diagonally (true) or horizontally (false).
+     * @default sText = "WATERMARK"
+     * @default bIsDiagonal = false
      *
      * @example
      * ```js
@@ -11959,6 +12040,8 @@ declare namespace Word {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.2.0
      */
     MoveCursorDown(count?: number, addToSelect?: boolean): boolean;
@@ -11969,6 +12052,9 @@ declare namespace Word {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.2.0
      */
     MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -11979,6 +12065,9 @@ declare namespace Word {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.2.0
      */
     MoveCursorRight(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -12031,6 +12120,7 @@ declare namespace Word {
      * If there is any selection in the document, it will be removed.
      *
      * @param nPos - The desired cursor position.
+     * @default nPos = 0
      * @since 9.0.0
      */
     MoveCursorToPos(nPos?: number): boolean;
@@ -12047,6 +12137,8 @@ declare namespace Word {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.2.0
      */
     MoveCursorUp(count?: number, addToSelect?: boolean): boolean;
@@ -12236,7 +12328,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentImage/
      */
-    ReplaceCurrentImage(sImageUrl: string, Width: number, Height: number): boolean;
+    ReplaceCurrentImage(sImageUrl: string, Width: EMU, Height: EMU): boolean;
 
     /**
      * Replaces the current sentence or part of the current sentence with the specified text.
@@ -12293,6 +12385,7 @@ declare namespace Word {
      * @param oOldDrawing - A drawing which will be replaced.
      * @param oNewDrawing - A drawing to replace the old drawing.
      * @param bSaveOldDrawingPr - Specifies if the old drawing settings will be saved.
+     * @default bSaveOldDrawingPr = false
      *
      * @example
      * ```js
@@ -12352,6 +12445,7 @@ declare namespace Word {
      * @param oProperties_searchString - Search string.
      * @param oProperties_replaceString - Replacement string.
      * @param oProperties_matchCase - Case sensitive or not.
+     * @default oProperties_matchCase = true
      *
      * @example
      * ```js
@@ -12598,6 +12692,10 @@ declare namespace Word {
      *   HTML tag, you can avoid using the opening angle bracket
      *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
      *   with the special characters.
+     * @default bHtmlHeadings = false
+     * @default bBase64img = false
+     * @default bDemoteHeadings = false
+     * @default bRenderHTMLTags = false
      *
      * @example
      * ```js
@@ -12679,6 +12777,10 @@ declare namespace Word {
      *   HTML tag, you can avoid using the opening angle bracket
      *   in the following way: \<tag>text\</tag>. By default, the opening angle brackets will be replaced
      *   with the special characters.
+     * @default bHtmlHeadings = false
+     * @default bBase64img = false
+     * @default bDemoteHeadings = false
+     * @default bRenderHTMLTags = false
      *
      * @example
      * ```js
@@ -12717,6 +12819,7 @@ declare namespace Word {
      * Updates all fields in the document.
      *
      * @param bBySelection - Specifies whether all fields will be updated within the selection.
+     * @default bBySelection = false
      * @since 8.2.0
      *
      * @example
@@ -12749,6 +12852,7 @@ declare namespace Word {
      * Updates all tables of contents in the current document.
      *
      * @param bOnlyPageNumbers - Specifies that only page numbers will be updated.
+     * @default bOnlyPageNumbers = false
      *
      * @example
      * ```js
@@ -12780,6 +12884,7 @@ declare namespace Word {
      * Updates all tables of figures in the current document.
      *
      * @param bOnlyPageNumbers - Specifies that only page numbers will be updated.
+     * @default bOnlyPageNumbers = false
      *
      * @example
      * ```js
@@ -13258,6 +13363,13 @@ declare namespace Word {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      *
      * @example
@@ -13621,7 +13733,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -13864,7 +13976,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -13966,6 +14078,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      *
      * @example
@@ -14037,7 +14150,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDistances/
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -14110,6 +14223,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      *
      * @example
      * ```js
@@ -14167,6 +14282,7 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object measured in
      *   English measure units.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      *
      * @example
@@ -14195,7 +14311,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetHorPosition/
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets whether the aspect ratio of the drawing is locked.
@@ -14275,6 +14391,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -14285,6 +14402,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -14336,7 +14454,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetSize/
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -14352,6 +14470,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      *
      * @example
      * ```js
@@ -14385,6 +14505,7 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object measured in
      *   English measure units.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      *
      * @example
@@ -14410,7 +14531,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVerPosition/
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -14530,7 +14651,7 @@ declare namespace Word {
      *
      * @since 9.5.0
      */
-    GetDistanceFromText(): number;
+    GetDistanceFromText(): twips;
 
     /**
      * Returns the number of lines that the drop cap occupies.
@@ -14561,7 +14682,7 @@ declare namespace Word {
      * @param distance - The distance between the drop cap and the paragraph text. Must be a non-negative number.
      * @since 9.5.0
      */
-    SetDistanceFromText(distance: number): ApiDropCap;
+    SetDistanceFromText(distance: twips): ApiDropCap;
 
     /**
      * Sets the font family of the drop cap letter.
@@ -14958,6 +15079,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -15175,7 +15297,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -15471,7 +15593,7 @@ declare namespace Word {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -15567,7 +15689,7 @@ declare namespace Word {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -15609,6 +15731,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -15644,7 +15767,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -15680,6 +15803,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -15698,9 +15823,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets whether the aspect ratio of the drawing is locked.
@@ -15744,6 +15870,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -15754,6 +15881,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -15782,7 +15910,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -15798,6 +15926,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -15808,9 +15938,10 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -16265,7 +16396,7 @@ declare namespace Word {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -16409,7 +16540,7 @@ declare namespace Word {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -16451,6 +16582,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -16486,7 +16618,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -16522,6 +16654,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -16540,9 +16674,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets whether the aspect ratio of the drawing is locked.
@@ -16586,6 +16721,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -16596,6 +16732,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -16624,7 +16761,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -16640,6 +16777,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -16650,9 +16789,10 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -17319,6 +17459,7 @@ declare namespace Word {
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current content
      *   control.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -17610,7 +17751,7 @@ declare namespace Word {
      *   picture.
      * @since 9.0.0
      */
-    SetPictureSize(width: number, height: number): boolean;
+    SetPictureSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the placeholder text to the current inline content control.
@@ -17737,6 +17878,7 @@ declare namespace Word {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -18144,6 +18286,7 @@ declare namespace Word {
      * @param sType - The predefined numbering template.
      * @param sSymbol - The symbol used for the list numbering. This parameter has the meaning only if the predefined
      *   numbering template is "bullet".
+     * @default sSymbol = ""
      *
      * @example
      * ```js
@@ -18300,7 +18443,7 @@ declare namespace Word {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -18396,7 +18539,7 @@ declare namespace Word {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -18438,6 +18581,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -18509,7 +18653,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -18545,6 +18689,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -18563,9 +18709,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets whether the aspect ratio of the drawing is locked.
@@ -18609,6 +18756,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -18619,6 +18767,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -18647,7 +18796,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -18663,6 +18812,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -18673,9 +18824,10 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -18795,7 +18947,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -18821,7 +18973,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -18849,7 +19001,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
@@ -18981,7 +19133,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -19008,7 +19160,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -19054,7 +19206,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the paragraph style method.
@@ -19140,7 +19292,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBetweenBorder/
      */
-    SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed below a set of paragraphs which have the same paragraph
@@ -19170,7 +19322,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBottomBorder/
      */
-    SetBottomBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetBottomBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies that any space before or after this paragraph set using the
@@ -19237,7 +19389,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -19269,7 +19421,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -19302,7 +19454,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -19455,7 +19607,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetLeftBorder/
      */
-    SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies that the current paragraph references a numbering definition instance in the current
@@ -19466,6 +19618,7 @@ declare namespace Word {
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
      *   instance of the ApiParaPr class
      *   is the part of ApiStyle properties, this parameter will be ignored.
+     * @default nLvl = 0
      *
      * @example
      * ```js
@@ -19561,7 +19714,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetRightBorder/
      */
-    SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the shading applied to the contents of the paragraph.
@@ -19594,6 +19747,7 @@ declare namespace Word {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -19613,7 +19767,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -19624,6 +19778,7 @@ declare namespace Word {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -19643,7 +19798,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -19697,7 +19852,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * The paragraph style base method.
@@ -19755,7 +19910,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Specifies the border which will be displayed above a set of paragraphs which have the same set of
@@ -19784,7 +19939,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTopBorder/
      */
-    SetTopBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTopBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies whether a single line of the current paragraph will be displayed on a separate page from
@@ -19856,6 +20011,9 @@ declare namespace Word {
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (don't used with the "text" and "aboveBelow" sRefType).
      * @param sSepWith - A number separator (used only with the "fullCtxParaNum" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
+     * @default sSepWith = ""
      *
      * @example
      * ```js
@@ -19890,6 +20048,11 @@ declare namespace Word {
      * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
      *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
+     * @default sLabel = "Table"
+     * @default bExludeLabel = false
+     * @default sNumberingFormat = "Arabic"
+     * @default bBefore = false
+     * @default sCaptionSep = "hyphen"
      *
      * @example
      * ```js
@@ -19916,6 +20079,8 @@ declare namespace Word {
      * @param bLink - Specifies if the reference will be inserted as a hyperlink.
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (used only with the "pageNum" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
      *
      * @example
      * ```js
@@ -20039,6 +20204,8 @@ declare namespace Word {
      * @param bLink - Specifies if the reference will be inserted as a hyperlink.
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (don't used with the "aboveBelow" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
      *
      * @example
      * ```js
@@ -20067,6 +20234,8 @@ declare namespace Word {
      * @param bLink - Specifies if the reference will be inserted as a hyperlink.
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (don't used with the "aboveBelow" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
      *
      * @example
      * ```js
@@ -20095,6 +20264,8 @@ declare namespace Word {
      * @param bLink - Specifies if the reference will be inserted as a hyperlink.
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (don't used with the "text" and "aboveBelow" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
      *
      * @example
      * ```js
@@ -20184,6 +20355,9 @@ declare namespace Word {
      * @param bAboveBelow - Specifies if the above/below words indicating the position of the reference should be included
      *   (don't used with the "text" and "aboveBelow" sRefType).
      * @param sSepWith - A number separator (used only with the "fullCtxParaNum" sRefType).
+     * @default bLink = true
+     * @default bAboveBelow = false
+     * @default sSepWith = ""
      *
      * @example
      * ```js
@@ -20685,7 +20859,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -20711,7 +20885,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -20739,7 +20913,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -21168,7 +21342,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -21195,7 +21369,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -21241,7 +21415,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the paragraph style method.
@@ -21283,6 +21457,10 @@ declare namespace Word {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      *
      * @example
      * ```js
@@ -21589,7 +21767,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBetweenBorder/
      */
-    SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetBetweenBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the bold property to the text character.
@@ -21637,7 +21815,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetBottomBorder/
      */
-    SetBottomBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetBottomBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies that any lowercase characters in this paragraph are formatted for display only as their
@@ -21828,7 +22006,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -21860,7 +22038,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -21893,7 +22071,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -22064,7 +22242,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetLeftBorder/
      */
-    SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetLeftBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies that the current paragraph references a numbering definition instance in the current
@@ -22075,6 +22253,7 @@ declare namespace Word {
      *   formatting of a paragraph, then this parameter MUST BE specified. Otherwise, if the current
      *   instance of the ApiParaPr class
      *   is the part of ApiStyle properties, this parameter will be ignored.
+     * @default nLvl = 0
      *
      * @example
      * ```js
@@ -22222,7 +22401,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetRightBorder/
      */
-    SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetRightBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the specified section to the current paragraph.
@@ -22315,7 +22494,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -22326,6 +22505,7 @@ declare namespace Word {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -22345,7 +22525,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -22356,6 +22536,7 @@ declare namespace Word {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -22375,7 +22556,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -22429,7 +22610,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -22506,7 +22687,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -22563,7 +22744,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTopBorder/
      */
-    SetTopBorder(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTopBorder(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed along with a line appearing directly
@@ -23354,6 +23535,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -23462,6 +23644,7 @@ declare namespace Word {
      * Locks the aspect ratio of the current picture form.
      *
      * @param isLock - Specifies if the aspect ratio of the current picture form will be locked (true) or not (false).
+     * @default isLock = true
      *
      * @example
      * ```js
@@ -23559,6 +23742,7 @@ declare namespace Word {
      * Respects the form border width when scaling the image.
      *
      * @param isRespect - Specifies if the form border width will be respected (true) or not (false).
+     * @default isRespect = true
      *
      * @example
      * ```js
@@ -23692,7 +23876,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -23913,6 +24097,7 @@ declare namespace Word {
      *
      * @param text - The text that will be added.
      * @param position - The position where the text will be added ("before" or "after" the range specified).
+     * @default position = "after"
      * @returns returns true if the text was successfully added.
      *
      * @example
@@ -24067,6 +24252,8 @@ declare namespace Word {
      *
      * @param Start - Start position index in the current range.
      * @param End - End position index in the current range (if <= 0, then the range is taken to the end).
+     * @default Start = 0
+     * @default End = -1
      *
      * @example
      * ```js
@@ -24128,6 +24315,13 @@ declare namespace Word {
      *   used. The default separator is "\r\n".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   symbol can be used. The default symbol is "\t".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
      * @returns Returns an empty string if range is empty.
      *
      * @example
@@ -24207,6 +24401,7 @@ declare namespace Word {
      * If there is any selection in the document, it will be removed.
      *
      * @param nPos - The desired cursor position.
+     * @default nPos = 0
      * @since 9.0.0
      */
     MoveCursorToPos(nPos?: number): boolean;
@@ -24491,7 +24686,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiRange | null;
+    SetSpacing(nSpacing: twips): ApiRange | null;
 
     /**
      * Sets the start position of the current range object.
@@ -24746,7 +24941,7 @@ declare namespace Word {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -24908,7 +25103,7 @@ declare namespace Word {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -25826,7 +26021,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -25902,6 +26097,8 @@ declare namespace Word {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string. Any symbol can be used. The
      *   default symbol is "\t".
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      *
      * @example
      * ```js
@@ -26027,6 +26224,7 @@ declare namespace Word {
      * If there is any selection in the document, it will be removed.
      *
      * @param nPos - Desired cursor position.
+     * @default nPos = 0
      * @since 8.2.0
      *
      * @example
@@ -26421,7 +26619,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the current run are displayed with a single horizontal line through
@@ -26704,10 +26902,10 @@ declare namespace Word {
      * Returns an array of distance values between the columns measured in twentieths of a point (1/1440 of
      * an inch).
      */
-    GetColumnsSpaces(): number[];
+    GetColumnsSpaces(): twips[];
 
     /** Returns an array of column width values measured in twentieths of a point (1/1440 of an inch). */
-    GetColumnsWidths(): number[];
+    GetColumnsWidths(): twips[];
 
     /**
      * Returns the content for the specified footer type.
@@ -26715,6 +26913,7 @@ declare namespace Word {
      * @param sType - Footer type to get the content from.
      * @param isCreate - Specifies whether to create a new footer or not with the specified footer type in case
      *   no footer with such a type could be found in the current section.
+     * @default isCreate = false
      *
      * @example
      * ```js
@@ -26733,7 +26932,7 @@ declare namespace Word {
     GetFooter(sType: HdrFtrType, isCreate?: boolean): ApiDocumentContent;
 
     /** Returns the distance from the bottom edge of the page to the bottom edge of the footer. */
-    GetFooterDistance(): number;
+    GetFooterDistance(): twips;
 
     /**
      * Returns the content for the specified header type.
@@ -26741,6 +26940,7 @@ declare namespace Word {
      * @param sType - Header type to get the content from.
      * @param isCreate - Specifies whether to create a new header or not with the specified header type in case
      *   no header with such a type could be found in the current section.
+     * @default isCreate = false
      *
      * @example
      * ```js
@@ -26759,7 +26959,7 @@ declare namespace Word {
     GetHeader(sType: HdrFtrType, isCreate?: boolean): ApiDocumentContent;
 
     /** Returns the distance from the top edge of the page to the top edge of the header. */
-    GetHeaderDistance(): number;
+    GetHeaderDistance(): twips;
 
     /**
      * Returns the next section if exists.
@@ -26800,19 +27000,19 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageHeight/
      */
-    GetPageHeight(): number;
+    GetPageHeight(): twips;
 
     /** Returns the bottom page margin for all pages in the current section. */
-    GetPageMarginBottom(): number;
+    GetPageMarginBottom(): twips;
 
     /** Returns the left page margin for all pages in the current section. */
-    GetPageMarginLeft(): number;
+    GetPageMarginLeft(): twips;
 
     /** Returns the right page margin for all pages in the current section. */
-    GetPageMarginRight(): number;
+    GetPageMarginRight(): twips;
 
     /** Returns the top page margin for all pages in the current section. */
-    GetPageMarginTop(): number;
+    GetPageMarginTop(): twips;
 
     /**
      * Gets page width for current section.
@@ -26828,7 +27028,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageWidth/
      */
-    GetPageWidth(): number;
+    GetPageWidth(): twips;
 
     /**
      * Returns the previous section if exists.
@@ -26986,7 +27186,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetEqualColumns/
      */
-    SetEqualColumns(nCount: number, nSpace: number): boolean;
+    SetEqualColumns(nCount: number, nSpace: twips): boolean;
 
     /**
      * Specifies the distance from the bottom edge of the page to the bottom edge of the footer.
@@ -27010,7 +27210,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetFooterDistance/
      */
-    SetFooterDistance(nDistance: number): boolean;
+    SetFooterDistance(nDistance: twips): boolean;
 
     /**
      * Specifies the distance from the top edge of the page to the top edge of the header.
@@ -27034,7 +27234,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetHeaderDistance/
      */
-    SetHeaderDistance(nDistance: number): boolean;
+    SetHeaderDistance(nDistance: twips): boolean;
 
     /**
      * Specifies the page margins for all the pages in this section. Alias for
@@ -27046,7 +27246,7 @@ declare namespace Word {
      * @param bottom - The bottom margin height measured in twentieths of a point (1/1440 of an inch).
      * @since 9.4.0
      */
-    SetMargins(left: number, top: number, right: number, bottom: number): boolean;
+    SetMargins(left: twips, top: twips, right: twips, bottom: twips): boolean;
 
     /**
      * Specifies that all the columns in the current section have the different widths. Number of columns
@@ -27078,7 +27278,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetNotEqualColumns/
      */
-    SetNotEqualColumns(aWidths: number[], aSpaces: number[]): boolean;
+    SetNotEqualColumns(aWidths: twips[], aSpaces: twips[]): boolean;
 
     /**
      * Specifies the page margins for all the pages in this section.
@@ -27103,7 +27303,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetPageMargins/
      */
-    SetPageMargins(left: number, top: number, right: number, bottom: number): boolean;
+    SetPageMargins(left: twips, top: twips, right: twips, bottom: twips): boolean;
 
     /**
      * Specifies the properties (size and orientation) for all the pages in the current section.
@@ -27112,6 +27312,7 @@ declare namespace Word {
      * @param nHeight - The page height measured in twentieths of a point (1/1440 of an inch).
      * @param isPortrait - Specifies the orientation of all the pages in this section (if set to true, then the portrait
      *   orientation is chosen).
+     * @default isPortrait = false
      *
      * @example
      * ```js
@@ -27128,7 +27329,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetPageSize/
      */
-    SetPageSize(nWidth: number, nHeight: number, isPortrait?: boolean): boolean;
+    SetPageSize(nWidth: twips, nHeight: twips, isPortrait?: boolean): boolean;
 
     /**
      * Sets the start page number for the specified section.
@@ -27375,7 +27576,7 @@ declare namespace Word {
     GetGeometry(): ApiGeometry;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /** Gets the outline properties from the current shape. */
     GetLine(): ApiStroke | null;
@@ -27522,7 +27723,7 @@ declare namespace Word {
     GetVerticalTextAlign(): VerticalTextAlign;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -27564,6 +27765,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -27599,7 +27801,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -27651,6 +27853,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -27669,9 +27873,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets the outline properties to the current shape.
@@ -27743,13 +27948,14 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/SetPaddings/
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the relative height of the object (image, shape, chart) bounding box.
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -27760,6 +27966,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -27788,7 +27995,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -27804,6 +28011,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -27814,9 +28023,10 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -28027,6 +28237,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
@@ -28125,7 +28336,7 @@ declare namespace Word {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -28211,7 +28422,7 @@ declare namespace Word {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -28307,7 +28518,7 @@ declare namespace Word {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Wraps the graphic object with a rich text content control.
@@ -28349,6 +28560,7 @@ declare namespace Word {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = true
      * @since 9.3.0
      */
     Select(isReplace?: boolean): boolean;
@@ -28384,7 +28596,7 @@ declare namespace Word {
      * @param nBottom - The distance from the bottom side of the current object and the subsequent text run measured in
      *   English measure units.
      */
-    SetDistances(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetDistances(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the properties from another drawing to the current drawing.
@@ -28420,6 +28632,8 @@ declare namespace Word {
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object horizontal
      *   alignment.
      * @param sAlign - The alignment type which will be used for the object horizontal alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "left"
      */
     SetHorAlign(sRelativeFrom?: RelFromH, sAlign?: "left" | "right" | "center"): boolean;
 
@@ -28438,9 +28652,10 @@ declare namespace Word {
      * @param nDistance - The distance from the right side of the document element to the floating object. Use EMU for
      *   absolute distance or a number for percent (1 = 1%) when bPercent=true.
      * @param bPercent - The option defining whether the horizontal alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetHorPosition(sRelativeFrom: RelFromH, nDistance: number | number, bPercent?: boolean): boolean;
+    SetHorPosition(sRelativeFrom: RelFromH, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Sets whether the aspect ratio of the drawing is locked.
@@ -28484,6 +28699,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object height.
      * @param percent - The height of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeHeight(percent: percentage): boolean;
@@ -28494,6 +28710,7 @@ declare namespace Word {
      *
      * @param relativeFrom - The document element which will be taken as a countdown point for the object width.
      * @param percent - The width of the object as a percentage of the specified element.
+     * @default relativeFrom = "page"
      * @since 9.3.0
      */
     SetRelativeWidth(percent: percentage): boolean;
@@ -28522,7 +28739,7 @@ declare namespace Word {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -28538,6 +28755,8 @@ declare namespace Word {
      *
      * @param sRelativeFrom - The document element which will be taken as a countdown point for the object vertical alignment.
      * @param sAlign - The alingment type which will be used for the object vertical alignment.
+     * @default sRelativeFrom = "page"
+     * @default sAlign = "top"
      */
     SetVerAlign(sRelativeFrom?: RelFromV, sAlign?: "top" | "bottom" | "center"): boolean;
 
@@ -28548,9 +28767,10 @@ declare namespace Word {
      * @param nDistance - The distance from the bottom part of the document element to the floating object. Use EMU for
      *   absolute units or a number (1 = 1%) when bPercent=true for percent relative positioning.
      * @param bPercent - The option defining whether the vertical alignment offset is specified in percent.
+     * @default bPercent = false
      * @since 9.3.0
      */
-    SetVerPosition(sRelativeFrom: RelFromV, nDistance: number | number, bPercent?: boolean): boolean;
+    SetVerPosition(sRelativeFrom: RelFromV, nDistance: EMU | number, bPercent?: boolean): boolean;
 
     /**
      * Flips the current drawing vertically.
@@ -28644,7 +28864,7 @@ declare namespace Word {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -28652,6 +28872,8 @@ declare namespace Word {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -28662,6 +28884,8 @@ declare namespace Word {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -28716,6 +28940,7 @@ declare namespace Word {
      * requirement specified in the sType parameter.
      *
      * @param sType - The table part which the formatting properties must be applied to.
+     * @default sType = "wholeTable"
      *
      * @example
      * ```js
@@ -29044,6 +29269,11 @@ declare namespace Word {
      * @param nHeadingLvl - The heading level (used if you want to specify the chapter number).
      *   <note>If you want to specify "Heading 1", then nHeadingLvl === 0 and etc.</note>
      * @param sCaptionSep - The caption separator (used if you want to specify the chapter number).
+     * @default sLabel = "Table"
+     * @default bExludeLabel = false
+     * @default sNumberingFormat = "Arabic"
+     * @default bBefore = false
+     * @default sCaptionSep = "hyphen"
      *
      * @example
      * ```js
@@ -29072,6 +29302,7 @@ declare namespace Word {
      *   the end of the table.
      * @param isBefore - Adds a new column before (false) or after (true) the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -29099,6 +29330,7 @@ declare namespace Word {
      * @param nCount - Count of columns to be added.
      * @param isBefore - Adds the new columns before (false) or after (true) the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -29180,6 +29412,7 @@ declare namespace Word {
      *   be added at the end of the table.
      * @param isBefore - Adds a new row before (false) or after (true) the specified cell. If no cell is specified, then
      *   this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -29208,6 +29441,7 @@ declare namespace Word {
      * @param isBefore - Adds the new rows before (false) or after (true) the specified cell. If no cell is specified,
      *   then
      *   this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -29352,7 +29586,7 @@ declare namespace Word {
      * @param columnIndex - The zero-based column index.
      * @since 9.5.0
      */
-    GetColumnWidth(columnIndex: number): number | null;
+    GetColumnWidth(columnIndex: number): EMU | null;
 
     /**
      * Returns an internal ID of the current table.
@@ -29874,7 +30108,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetCellSpacing/
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Sets the width of the specified column (by index) of the current table.
@@ -29884,7 +30118,7 @@ declare namespace Word {
      * @returns Returns the actual column width set (in EMU), or null if the column index is invalid.
      * @since 9.5.0
      */
-    SetColumnWidth(columnIndex: number, width: number): number | null;
+    SetColumnWidth(columnIndex: number, width: EMU): EMU | null;
 
     /**
      * Sets the horizontal alignment to the table.
@@ -29917,7 +30151,7 @@ declare namespace Word {
      * @returns Returns the requested height (in EMU), or null if the table has no rows.
      * @since 9.5.0
      */
-    SetHeight(nValue: number): number | null;
+    SetHeight(nValue: EMU): EMU | null;
 
     /**
      * Specifies the alignment of the current table with respect to the text margins in the current
@@ -29979,6 +30213,7 @@ declare namespace Word {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the SetShd method use.
+     * @default isAuto = false
      *
      * @example
      * ```js
@@ -30098,7 +30333,7 @@ declare namespace Word {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -30128,7 +30363,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderBottom/
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -30161,7 +30396,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideH/
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -30194,7 +30429,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideV/
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -30224,7 +30459,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderLeft/
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -30254,7 +30489,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderRight/
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -30284,7 +30519,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderTop/
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -30312,7 +30547,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginBottom/
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -30340,7 +30575,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginLeft/
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -30368,7 +30603,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginRight/
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -30396,7 +30631,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginTop/
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -30447,7 +30682,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableInd/
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -30664,6 +30899,8 @@ declare namespace Word {
      * @param oCell - The cell which will be split.
      * @param nRow - Count of rows into which the cell will be split.
      * @param nCol - Count of columns into which the cell will be split.
+     * @default nRow = 1
+     * @default nCol = 1
      * @returns returns null if can't split.
      *
      * @example
@@ -30717,6 +30954,7 @@ declare namespace Word {
      *
      * @param nCount - Count of columns to be added.
      * @param isBefore - Specifies if the new columns will be added before or after the current cell.
+     * @default isBefore = false
      * @returns returns null if parent table doesn't exist.
      *
      * @example
@@ -30767,6 +31005,7 @@ declare namespace Word {
      *
      * @param nCount - Count of rows to be added.
      * @param isBefore - Specifies if the new rows will be added before or after the current cell.
+     * @default isBefore = false
      * @returns returns null if parent table doesn't exist.
      *
      * @example
@@ -31019,6 +31258,13 @@ declare namespace Word {
      * @param pr_ParaSeparator - Defines how the paragraph separator will be specified in the resulting string.
      * @param pr_TabSymbol - Defines how the tab will be specified in the resulting string.
      * @param pr_NewLineSeparator - Defines how the line separator will be specified in the resulting string.
+     * @default pr_Numbering = true
+     * @default pr_Math = true
+     * @default pr_TableCellSeparator = '\t'
+     * @default pr_TableRowSeparator = '\r\n'
+     * @default pr_ParaSeparator = '\r\n'
+     * @default pr_TabSymbol = '\t'
+     * @default pr_NewLineSeparator = '\r'
      * @since 9.4.0
      */
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
@@ -31145,7 +31391,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderBottom/
      */
-    SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed to the left of the current table cell.
@@ -31175,7 +31421,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderLeft/
      */
-    SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed to the right of the current table cell.
@@ -31205,7 +31451,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderRight/
      */
-    SetCellBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table cell.
@@ -31235,7 +31481,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderTop/
      */
-    SetCellBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -31265,7 +31511,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginBottom/
      */
-    SetCellMarginBottom(nValue: number): boolean;
+    SetCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and
@@ -31294,7 +31540,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginLeft/
      */
-    SetCellMarginLeft(nValue: number): boolean;
+    SetCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -31323,7 +31569,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginRight/
      */
-    SetCellMarginRight(nValue: number): boolean;
+    SetCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the upper extent of the cell contents
@@ -31352,7 +31598,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginTop/
      */
-    SetCellMarginTop(nValue: number): boolean;
+    SetCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the cell properties to the current cell.
@@ -31459,6 +31705,7 @@ declare namespace Word {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the table cell contents shading.
+     * @default isAuto = false
      *
      * @example
      * ```js
@@ -31600,6 +31847,8 @@ declare namespace Word {
      *
      * @param nRow - Count of rows into which the cell will be split.
      * @param nCol - Count of columns into which the cell will be split.
+     * @default nRow = 1
+     * @default nCol = 1
      * @returns returns null if parent table doesn't exist.
      *
      * @example
@@ -31697,7 +31946,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderBottom/
      */
-    SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed to the left of the current table cell.
@@ -31727,7 +31976,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderLeft/
      */
-    SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed to the right of the current table cell.
@@ -31757,7 +32006,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderRight/
      */
-    SetCellBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table cell.
@@ -31787,7 +32036,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellBorderTop/
      */
-    SetCellBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetCellBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -31817,7 +32066,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginBottom/
      */
-    SetCellMarginBottom(nValue: number): boolean;
+    SetCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and
@@ -31846,7 +32095,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginLeft/
      */
-    SetCellMarginLeft(nValue: number): boolean;
+    SetCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -31875,7 +32124,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginRight/
      */
-    SetCellMarginRight(nValue: number): boolean;
+    SetCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the upper extent of the cell contents
@@ -31904,7 +32153,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/Methods/SetCellMarginTop/
      */
-    SetCellMarginTop(nValue: number): boolean;
+    SetCellMarginTop(nValue: twips): boolean;
 
     /**
      * Specifies how the current table cell is laid out when the parent table is displayed in a document.
@@ -31958,6 +32207,7 @@ declare namespace Word {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the table cell contents shading.
+     * @default isAuto = false
      *
      * @example
      * ```js
@@ -32176,7 +32426,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetCellSpacing/
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Specifies the alignment of the current table with respect to the text margins in the current
@@ -32212,6 +32462,7 @@ declare namespace Word {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the SetShd method use.
+     * @default isAuto = false
      *
      * @example
      * ```js
@@ -32309,7 +32560,7 @@ declare namespace Word {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -32339,7 +32590,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderBottom/
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -32372,7 +32623,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideH/
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -32405,7 +32656,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideV/
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -32435,7 +32686,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderLeft/
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -32465,7 +32716,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderRight/
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -32495,7 +32746,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderTop/
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -32523,7 +32774,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginBottom/
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -32551,7 +32802,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginLeft/
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -32579,7 +32830,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginRight/
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -32607,7 +32858,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableCellMarginTop/
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -32658,7 +32909,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableInd/
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -32767,6 +33018,7 @@ declare namespace Word {
      *
      * @param nCount - Count of rows to be added.
      * @param isBefore - Specifies if the rows will be added before or after the current row.
+     * @default isBefore = false
      * @returns returns null if parent table doesn't exist.
      *
      * @example
@@ -32886,7 +33138,7 @@ declare namespace Word {
      *
      * @since 9.5.0
      */
-    GetHeight(): number | null;
+    GetHeight(): EMU | null;
 
     /**
      * Returns the current row index.
@@ -33101,7 +33353,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRowPr/Methods/SetHeight/
      */
-    SetHeight(sHRule: "auto" | "atLeast", nValue?: number): boolean;
+    SetHeight(sHRule: "auto" | "atLeast", nValue?: twips): boolean;
 
     /**
      * Sets the properties to the current table row.
@@ -33241,7 +33493,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRowPr/Methods/SetHeight/
      */
-    SetHeight(sHRule: "auto" | "atLeast", nValue?: number): boolean;
+    SetHeight(sHRule: "auto" | "atLeast", nValue?: twips): boolean;
 
     /**
      * Specifies that the current table row will be repeated at the top of each new page
@@ -33943,6 +34195,7 @@ declare namespace Word {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -34035,6 +34288,7 @@ declare namespace Word {
      * @param nCellWidth - The cell width measured in millimeters.
      *   If this parameter is not specified or equal to 0 or less, then the width will be set
      *   automatically. Must be >= 1 and <= 558.8.
+     * @default nCellWidth = 0
      *
      * @example
      * ```js
@@ -34048,7 +34302,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCellWidth/
      */
-    SetCellWidth(nCellWidth?: number): boolean;
+    SetCellWidth(nCellWidth?: mm): boolean;
 
     /**
      * Sets a limit to the text field characters.
@@ -34311,7 +34565,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -34808,7 +35062,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -35255,7 +35509,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -35570,7 +35824,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiWatermarkSettings/Methods/GetImageHeight/
      */
-    GetImageHeight(): number | null;
+    GetImageHeight(): EMU | null;
 
     /**
      * Returns the image URL of the watermark in the document.
@@ -35618,7 +35872,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiWatermarkSettings/Methods/GetImageWidth/
      */
-    GetImageWidth(): number | null;
+    GetImageWidth(): EMU | null;
 
     /**
      * Returns the opacity of the watermark in the document.
@@ -35777,7 +36031,7 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiWatermarkSettings/Methods/SetImageSize/
      */
-    SetImageSize(nWidth: number, nHeight: number): boolean;
+    SetImageSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the image URL of the watermark in the document.
@@ -36050,7 +36304,7 @@ declare namespace Cell {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -36976,7 +37230,7 @@ declare namespace Cell {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -38063,6 +38317,7 @@ declare namespace Cell {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -38176,6 +38431,7 @@ declare namespace Cell {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -38296,6 +38552,7 @@ declare namespace Cell {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      *
      * @example
@@ -38311,7 +38568,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateStroke/
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates the empty text properties.
@@ -38344,7 +38601,7 @@ declare namespace Cell {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -38583,6 +38840,7 @@ declare namespace Cell {
      *
      * @param nSheet - The sheet index.
      * @param bWithFormat - Specifies that the data will be received with the format.
+     * @default bWithFormat = false
      *
      * @example
      * ```js
@@ -38850,7 +39108,7 @@ declare namespace Cell {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -39061,6 +39319,8 @@ declare namespace Cell {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      *
      * @example
      * ```js
@@ -39169,6 +39429,7 @@ declare namespace Cell {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -40161,6 +40422,7 @@ declare namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      *
      * @example
      * ```js
@@ -40231,7 +40493,7 @@ declare namespace Cell {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -40402,7 +40664,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetHorAxisTitle/
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart legend.
@@ -40467,7 +40729,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetLegendFontSize/
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -40607,6 +40869,7 @@ declare namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -40645,6 +40908,7 @@ declare namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -40946,6 +41210,7 @@ declare namespace Cell {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -40979,6 +41244,7 @@ declare namespace Cell {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -41050,6 +41316,7 @@ declare namespace Cell {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -41124,7 +41391,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetTitle/
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -41257,14 +41524,14 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetVerAxisTitle/
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -41910,6 +42177,7 @@ declare namespace Cell {
      * @param sAuthorName - The name of the comment reply author (optional).
      * @param sUserId - The user ID of the comment reply author (optional).
      * @param nPos - The comment reply position.
+     * @default nPos = this.GetRepliesCount()
      * @since 7.5.0
      *
      * @example
@@ -42047,6 +42315,7 @@ declare namespace Cell {
      * Returns the specified comment reply.
      *
      * @param nIndex - The comment reply index.
+     * @default nIndex = 0
      * @since 7.5.0
      *
      * @example
@@ -42164,6 +42433,9 @@ declare namespace Cell {
      * @param nPos - The position of the first comment reply to remove.
      * @param nCount - A number of comment replies to remove.
      * @param bRemoveAll - Specifies whether to remove all comment replies or not.
+     * @default nPos = 0
+     * @default nCount = 1
+     * @default bRemoveAll = false
      * @since 7.5.0
      *
      * @example
@@ -43750,6 +44022,13 @@ declare namespace Cell {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -43929,6 +44208,13 @@ declare namespace Cell {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -44095,7 +44381,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -44200,13 +44486,14 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Selects the current graphic object.
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      * @since 9.3.0
      */
     Select(isReplace?: boolean): void;
@@ -44325,7 +44612,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetPosition/
      */
-    SetPosition(nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): void;
+    SetPosition(nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): void;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -44362,7 +44649,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetSize/
      */
-    SetSize(nWidth: number, nHeight: number): void;
+    SetSize(nWidth: EMU, nHeight: EMU): void;
 
     /**
      * Sets the title of the current drawing.
@@ -45160,6 +45447,7 @@ declare namespace Cell {
      * Adds a new color scale conditional formatting rule to the collection.
      *
      * @param ColorScaleType - The type of color scale (2 for two-color scale, 3 for three-color scale).
+     * @default ColorScaleType = 3
      * @returns The created color scale rule, or null if the operation fails.
      * @since 9.1.0
      */
@@ -45255,6 +45543,7 @@ declare namespace Cell {
      * Freezes the first column or columns of the current worksheet.
      *
      * @param count - Optional number of columns to freeze, or zero to unfreeze all columns.
+     * @default count = 0
      * @since 8.0.0
      *
      * @example
@@ -45272,6 +45561,7 @@ declare namespace Cell {
      * Freezes the top row or rows of the current worksheet.
      *
      * @param count - Optional number of rows to freeze, or zero to unfreeze all rows.
+     * @default count = 0
      * @since 8.0.0
      *
      * @example
@@ -46125,6 +46415,7 @@ declare namespace Cell {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -46967,7 +47258,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -46994,7 +47285,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -47023,7 +47314,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
@@ -47091,7 +47382,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -47123,7 +47414,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -47177,7 +47468,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -47235,7 +47526,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -47259,7 +47550,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -47284,7 +47575,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -47337,6 +47628,7 @@ declare namespace Cell {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -47358,7 +47650,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -47369,6 +47661,7 @@ declare namespace Cell {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -47390,7 +47683,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -47420,7 +47713,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -47457,7 +47750,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -47718,7 +48011,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -47745,7 +48038,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -47774,7 +48067,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -47931,7 +48224,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -47963,7 +48256,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -48017,7 +48310,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -48036,6 +48329,10 @@ declare namespace Cell {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -48239,7 +48536,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -48263,7 +48560,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -48288,7 +48585,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -48358,7 +48655,7 @@ declare namespace Cell {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -48369,6 +48666,7 @@ declare namespace Cell {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -48390,7 +48688,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -48401,6 +48699,7 @@ declare namespace Cell {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -48422,7 +48721,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -48452,7 +48751,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -48498,7 +48797,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -58336,7 +58635,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRowHeight/
      */
-    GetRowHeight(): number;
+    GetRowHeight(): pt;
 
     /**
      * Returns a Range object that represents the rows in the specified range. If the specified row is
@@ -58536,6 +58835,10 @@ declare namespace Cell {
      * @param bSkipBlanks - [bSkipBlanks=false] - Specifies whether to avoid replacing values in the paste area when blank
      *   cells occur in the copy area.
      * @param bTranspose - [bTranspose=false] - Specifies whether the pasted data will be transposed from rows to columns.
+     * @default sPasteType = "xlPasteAll"
+     * @default sPasteSpecialOperation = "xlPasteSpecialOperationNone"
+     * @default bSkipBlanks = false
+     * @default bTranspose = false
      * @since 8.1.0
      *
      * @example
@@ -58969,7 +59272,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetRowHeight/
      */
-    SetRowHeight(nHeight: number): boolean;
+    SetRowHeight(nHeight: pt): boolean;
 
     /**
      * Sorts the cells in the given range by the parameters specified in the request.
@@ -59183,7 +59486,7 @@ declare namespace Cell {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -59290,7 +59593,7 @@ declare namespace Cell {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -59845,7 +60148,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -60260,7 +60563,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the current run are displayed with a single horizontal line through
@@ -60571,7 +60874,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/SetPaddings/
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.
@@ -60674,7 +60977,7 @@ declare namespace Cell {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -60682,6 +60985,8 @@ declare namespace Cell {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -60692,6 +60997,8 @@ declare namespace Cell {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -61072,7 +61379,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -61439,7 +61746,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -62485,7 +62792,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddChart/
      */
-    AddChart(sDataRange: string, bInRows: boolean, sType: ChartType, nStyleIndex: number, nExtX: number, nExtY: number, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiChart | null;
+    AddChart(sDataRange: string, bInRows: boolean, sType: ChartType, nStyleIndex: number, nExtX: EMU, nExtY: EMU, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiChart | null;
 
     /**
      * Adds a new name to the current worksheet.
@@ -62531,7 +62838,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddImage/
      */
-    AddImage(sImageSrc: string, nWidth: number, nHeight: number, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiImage | null;
+    AddImage(sImageSrc: string, nWidth: EMU, nHeight: EMU, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiImage | null;
 
     /**
      * Adds an OLE object to the current sheet with the parameters specified.
@@ -62557,7 +62864,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddOleObject/
      */
-    AddOleObject(sImageSrc: string, nWidth: number, nHeight: number, sData: string, sAppId: string, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiOleObject | null;
+    AddOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiOleObject | null;
 
     /**
      * Creates a protected range of the specified type from the selected data range of the current sheet.
@@ -62596,6 +62903,7 @@ declare namespace Cell {
      * @param nFromRow - The number of the row where the beginning of the shape will be placed.
      * @param nRowOffset - The offset from the nFromRow row to the upper part of the shape measured in English measure
      *   units.
+     * @default sType = "rect"
      *
      * @example
      * ```js
@@ -62609,7 +62917,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddShape/
      */
-    AddShape(sType?: ShapeType, nWidth?: number, nHeight?: number, oFill?: ApiFill, oStroke?: ApiStroke, nFromCol?: number, nColOffset?: number, nFromRow?: number, nRowOffset?: number): ApiShape | null;
+    AddShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke, nFromCol?: number, nColOffset?: EMU, nFromRow?: number, nRowOffset?: EMU): ApiShape | null;
 
     /**
      * Adds a Text Art object to the current sheet with the parameters specified.
@@ -62628,6 +62936,18 @@ declare namespace Cell {
      *   measure units.
      * @param nRowOffset - The offset from the nFromRow row to the upper part of the Text Art object measured in English
      *   measure units.
+     * @default oTextPr = Api.CreateTextPr()
+     * @default sText = "Your text here"
+     * @default sTransform = "textNoShape"
+     * @default oFill = Api.CreateNoFill()
+     * @default oStroke = Api.CreateStroke(0, Api.CreateNoFill())
+     * @default nRotAngle = 0
+     * @default nWidth = 1828800
+     * @default nHeight = 1828800
+     * @default nFromCol = 0
+     * @default nFromRow = 0
+     * @default nColOffset = 0
+     * @default nRowOffset = 0
      *
      * @example
      * ```js
@@ -62645,7 +62965,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddWordArt/
      */
-    AddWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: number, nHeight?: number, nFromCol?: number, nFromRow?: number, nColOffset?: number, nRowOffset?: number): ApiDrawing | null;
+    AddWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nFromCol?: number, nFromRow?: number, nColOffset?: EMU, nRowOffset?: EMU): ApiDrawing | null;
 
     /**
      * Deletes the current worksheet.
@@ -63428,7 +63748,7 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/ReplaceCurrentImage/
      */
-    ReplaceCurrentImage(sImageUrl: string, nWidth: number, nHeight: number): boolean;
+    ReplaceCurrentImage(sImageUrl: string, nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Makes the current sheet active.
@@ -63474,6 +63794,7 @@ declare namespace Cell {
      * @param nColumn - The number of the column to set the width to.
      * @param nWidth - The width of the column divided by 7 pixels.
      * @param bWithotPaddings - Specifies whether nWidth will be set without standard paddings.
+     * @default bWithotPaddings = false
      * @returns returns true if the column width was set successfully.
      *
      * @example
@@ -72952,7 +73273,7 @@ declare namespace Slide {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -73564,7 +73885,7 @@ declare namespace Slide {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -74210,6 +74531,7 @@ declare namespace Slide {
      * @param nStyleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
      * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats).
      *   The default numeric format is "General".
+     * @default sType = "bar"
      *
      * @example
      * ```js
@@ -74232,8 +74554,8 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/
      */
-    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
-    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: EMU, nHeight: EMU, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: EMU, nHeight: EMU, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a new custom geometry.
@@ -74325,12 +74647,13 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateImage/
      */
-    CreateImage(sImageSrc: string, nWidth: number, nHeight: number): ApiImage;
+    CreateImage(sImageSrc: string, nWidth: EMU, nHeight: EMU): ApiImage;
 
     /**
      * Creates a new slide layout and adds it to the slide master if it is specified.
      *
      * @param oMaster - Parent slide master.
+     * @default oMaster = null
      *
      * @example
      * ```js
@@ -74385,6 +74708,7 @@ declare namespace Slide {
      * Creates a new slide master.
      *
      * @param oTheme - The presentation theme object.
+     * @default oTheme = ApiPresentation.GetMaster(0).GetTheme()
      * @returns returns null if presentation theme doesn't exist.
      *
      * @example
@@ -74421,6 +74745,7 @@ declare namespace Slide {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -74479,7 +74804,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateOleObject/
      */
-    CreateOleObject(sImageSrc: string, nWidth: number, nHeight: number, sData: string, sAppId: string): ApiOleObject;
+    CreateOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string): ApiOleObject;
 
     /**
      * Creates a new paragraph.
@@ -74583,6 +74908,7 @@ declare namespace Slide {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -74705,6 +75031,9 @@ declare namespace Slide {
      * @param nHeight - The shape height in English measure units.
      * @param oFill - The color or pattern used to fill the shape.
      * @param oStroke - The stroke used to create the element shadow.
+     * @default sType = "rect"
+     * @default nWidth = 914400
+     * @default nHeight = 914400
      *
      * @example
      * ```js
@@ -74731,7 +75060,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateShape/
      */
-    CreateShape(sType?: ShapeType, nWidth?: number, nHeight?: number, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape;
+    CreateShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a new slide.
@@ -74788,6 +75117,7 @@ declare namespace Slide {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      *
      * @example
@@ -74807,7 +75137,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateStroke/
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates a table.
@@ -75039,6 +75369,16 @@ declare namespace Slide {
      * @param nHeight - The Text Art heigth measured in English measure units.
      * @param nIndLeft - The Text Art left side indentation value measured in English measure units.
      * @param nIndTop - The Text Art top side indentation value measured in English measure units.
+     * @default oTextPr = Api.CreateTextPr()
+     * @default sText = "Your text here"
+     * @default sTransform = "textNoShape"
+     * @default oFill = Api.CreateNoFill()
+     * @default oStroke = Api.CreateStroke(0, Api.CreateNoFill())
+     * @default nRotAngle = 0
+     * @default nWidth = 1828800
+     * @default nHeight = 1828800
+     * @default nIndLeft = ApiPresentation.GetWidth() / 2
+     * @default nIndTop = ApiPresentation.GetHeight() / 2
      *
      * @example
      * ```js
@@ -75060,7 +75400,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateWordArt/
      */
-    CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: number, nHeight?: number, nIndLeft?: number, nIndTop?: number): ApiDrawing;
+    CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nIndLeft?: EMU, nIndTop?: EMU): ApiDrawing;
 
     /**
      * Converts English Metric Units (EMUs) to millimeters.
@@ -75068,7 +75408,7 @@ declare namespace Slide {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -75205,7 +75545,7 @@ declare namespace Slide {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -75324,6 +75664,8 @@ declare namespace Slide {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      *
      * @example
      * ```js
@@ -75388,6 +75730,7 @@ declare namespace Slide {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -75550,6 +75893,7 @@ declare namespace Slide {
      * @param drawing - The drawing object to animate.
      * @param effectType - The type of animation effect (e.g., "entranceFade", "entranceFlyIn", "emphasisPulse").
      * @param trigger - The trigger type: "onclick", "withprevious", or "afterprevious".
+     * @default trigger = "onclick"
      * @returns The created animation effect, or null if creation failed.
      * @since 9.3.0
      */
@@ -75789,10 +76133,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the series with a specific index.
@@ -75946,6 +76290,7 @@ declare namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      *
      * @example
      * ```js
@@ -76040,7 +76385,7 @@ declare namespace Slide {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -76207,7 +76552,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTitle/
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets a hyperlink to the current drawing object (shape or image).
@@ -76276,7 +76621,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFontSize/
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -76410,6 +76755,7 @@ declare namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -76444,6 +76790,7 @@ declare namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -76617,7 +76964,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -76625,7 +76972,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -76635,7 +76982,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets a name to the specified chart series.
@@ -76733,6 +77080,7 @@ declare namespace Slide {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -76762,6 +77110,7 @@ declare namespace Slide {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -76830,6 +77179,7 @@ declare namespace Slide {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -76904,7 +77254,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitle/
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -77029,14 +77379,14 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisTitle/
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -77371,6 +77721,7 @@ declare namespace Slide {
      * @param sAuthorName - The name of the comment reply author (optional).
      * @param sUserId - The user ID of the comment reply author (optional).
      * @param nPos - The comment reply position.
+     * @default nPos = -1
      * @returns this
      *
      * @example
@@ -77632,6 +77983,9 @@ declare namespace Slide {
      * @param nPos - The position of the first comment reply to remove.
      * @param nCount - A number of comment replies to remove.
      * @param bRemoveAll - Specifies whether to remove all comment replies or not.
+     * @default nPos = 0
+     * @default nCount = 1
+     * @default bRemoveAll = false
      * @returns this
      *
      * @example
@@ -78726,6 +79080,13 @@ declare namespace Slide {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -78921,6 +79282,13 @@ declare namespace Slide {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -79182,7 +79550,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns the hyperlink from the current drawing object (shape or image).
@@ -79387,10 +79755,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the rotation angle of the current drawing object.
@@ -79443,7 +79811,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Checks whether the drawing has an associated text body.
@@ -79464,6 +79832,7 @@ declare namespace Slide {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      * @since 9.3.0
      *
      * @example
@@ -79607,7 +79976,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -79615,7 +79984,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -79646,7 +80015,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosition/
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -79692,7 +80061,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetSize/
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -80010,10 +80379,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -80060,7 +80429,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -80068,7 +80437,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -80078,7 +80447,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Ungroups the current group of drawings.
@@ -80259,10 +80628,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -80309,7 +80678,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -80317,7 +80686,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -80327,7 +80696,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing a container for the paragraph elements. */
@@ -80459,6 +80828,7 @@ declare namespace Slide {
      * layout collection.
      *
      * @param nPos - Position where the new slide layout will be added.
+     * @default nPos = ApiMaster.GetLayoutsCount()
      * @returns returns new ApiLayout object that represents the copy of slide layout. Returns null if slide
      *   layout doesn't exist or is not in the slide master.
      *
@@ -80832,6 +81202,7 @@ declare namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - The number of elements to delete.
+     * @default nCount = 1
      * @returns returns false if layout doesn't exist or position is invalid or layout hasn't objects.
      *
      * @example
@@ -80869,6 +81240,8 @@ declare namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -80929,6 +81302,8 @@ declare namespace Slide {
      *
      * @param bWriteMaster - Specifies if the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteMaster = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -80965,6 +81340,7 @@ declare namespace Slide {
      *
      * @param nPos - Position where a layout will be added.
      * @param oLayout - A layout to be added.
+     * @default nPos = ApiMaster.GetLayoutsCount()
      * @returns returns false if oLayout isn't a layout.
      *
      * @example
@@ -81116,6 +81492,7 @@ declare namespace Slide {
      * masters collection.
      *
      * @param nPos - Position where the new slide master will be added.
+     * @default nPos = ApiPresentation.GetMastersCount()
      * @returns returns new ApiMaster object that represents the copy of slide master. Returns null if slide
      *   master doesn't exist or is not in the presentation.
      *
@@ -81488,6 +81865,7 @@ declare namespace Slide {
      *
      * @param nPos - Position from which a layout will be deleted.
      * @param nCount - Number of layouts to delete.
+     * @default nCount = 1
      * @returns return false if position is invalid.
      *
      * @example
@@ -81522,6 +81900,7 @@ declare namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - Number of objects to delete.
+     * @default nCount = 1
      * @returns returns false if master doesn't exist or position is invalid or master hasn't objects.
      *
      * @example
@@ -81558,6 +81937,8 @@ declare namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -81643,6 +82024,7 @@ declare namespace Slide {
      * Converts the ApiMaster object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -81678,6 +82060,7 @@ declare namespace Slide {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -81870,10 +82253,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -81962,7 +82345,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -81970,7 +82353,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -81980,7 +82363,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing the paragraph properties. */
@@ -82053,7 +82436,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -82089,7 +82472,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -82127,7 +82510,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
@@ -82207,7 +82590,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -82245,7 +82628,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -82313,7 +82696,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -82383,7 +82766,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -82414,7 +82797,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -82446,7 +82829,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -82505,6 +82888,7 @@ declare namespace Slide {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -82532,7 +82916,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -82543,6 +82927,7 @@ declare namespace Slide {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -82571,7 +82956,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -82608,7 +82993,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -82651,7 +83036,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -82972,7 +83357,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -83008,7 +83393,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -83046,7 +83431,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -83233,7 +83618,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -83271,7 +83656,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -83339,7 +83724,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -83358,6 +83743,10 @@ declare namespace Slide {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -83615,7 +84004,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -83646,7 +84035,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -83678,7 +84067,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -83754,7 +84143,7 @@ declare namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -83765,6 +84154,7 @@ declare namespace Slide {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -83792,7 +84182,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -83803,6 +84193,7 @@ declare namespace Slide {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -83831,7 +84222,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -83868,7 +84259,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -83920,7 +84311,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -84314,6 +84705,7 @@ declare namespace Slide {
      *
      * @param pos - The position where the slide master will be added.
      * @param apiMaster - The slide master to be added.
+     * @default pos = ApiPresentation.GetMastersCount()
      * @returns return false if position is invalid or apiMaster doesn't exist.
      *
      * @example
@@ -84710,7 +85102,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns whether the presentation loops continuously until the user stops it.
@@ -84851,7 +85243,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Add paragraph to the document on the cursor position.
@@ -84865,6 +85257,8 @@ declare namespace Slide {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.5.0
      */
     MoveCursorDown(count?: number, addToSelect?: boolean): boolean;
@@ -84875,6 +85269,9 @@ declare namespace Slide {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.5.0
      */
     MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -84885,6 +85282,9 @@ declare namespace Slide {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.5.0
      */
     MoveCursorRight(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -84894,6 +85294,8 @@ declare namespace Slide {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.5.0
      */
     MoveCursorUp(count?: number, addToSelect?: boolean): boolean;
@@ -84904,6 +85306,8 @@ declare namespace Slide {
      *
      * @param nStart - The starting position for the deletion range.
      * @param nCount - The number of slides to delete.
+     * @default nStart = 0
+     * @default nCount = ApiPresentation.GetSlidesCount()
      *
      * @example
      * ```js
@@ -84952,7 +85356,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ReplaceCurrentImage/
      */
-    ReplaceCurrentImage(sImageUrl: string, Width: number, Height: number): void;
+    ReplaceCurrentImage(sImageUrl: string, Width: EMU, Height: EMU): void;
 
     /**
      * Searches for the specified text in the presentation and returns all found occurrences as text
@@ -84961,6 +85365,8 @@ declare namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -84973,6 +85379,8 @@ declare namespace Slide {
      * @param properties_replaceString - Replacement string.
      * @param properties_matchCase - Case sensitive or not.
      * @param properties_wholeWords - Whether to search for whole words only.
+     * @default properties_matchCase = false
+     * @default properties_wholeWords = false
      * @since 9.5.0
      */
     SearchAndReplace(properties: object, properties_searchString: string, properties_replaceString: string, properties_matchCase?: boolean, properties_wholeWords?: boolean): boolean;
@@ -85036,7 +85444,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetSizes/
      */
-    SetSizes(nWidth: number, nHeight: number): void;
+    SetSizes(nWidth: EMU, nHeight: EMU): void;
 
     /**
      * Converts the slides from the current ApiPresentation object into the JSON objects.
@@ -85048,6 +85456,12 @@ declare namespace Slide {
      *   if bWriteLayout === false).
      * @param bWriteAllMasLayouts - Specifies if all child layouts from the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default nStart = 0
+     * @default nEnd = ApiPresentation.GetSlidesCount() - 1
+     * @default bWriteLayout = false
+     * @default bWriteMaster = false
+     * @default bWriteAllMasLayouts = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -85078,6 +85492,7 @@ declare namespace Slide {
      * Converts the ApiPresentation object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -85252,7 +85667,7 @@ declare namespace Slide {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -85367,7 +85782,7 @@ declare namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -86030,7 +86445,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -86532,7 +86947,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the current run are displayed with a single horizontal line through
@@ -86936,10 +87351,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the text autofit type of the current shape.
@@ -87016,7 +87431,7 @@ declare namespace Slide {
      * @param nBottom - Bottom padding.
      * @since 9.3.0
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the specified placeholder to the current drawing object.
@@ -87032,7 +87447,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -87040,7 +87455,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -87050,7 +87465,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets the text autofit type to the current shape.
@@ -87286,6 +87701,7 @@ declare namespace Slide {
      * Creates a duplicate of the specified slide object, adds the new slide to the slides collection.
      *
      * @param nPos - Position where the new slide will be added.
+     * @default nPos = ApiPresentation.GetSlidesCount()
      * @returns returns new ApiSlide object that represents the duplicate slide. Returns null if slide doesn't
      *   exist or is not in the presentation.
      *
@@ -87572,7 +87988,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns a layout of the current slide.
@@ -87729,7 +88145,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Groups an array of drawings in the current slide.
@@ -87813,6 +88229,7 @@ declare namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - The number of elements to delete.
+     * @default nCount = 1
      * @returns returns false if slide doesn't exist or position is invalid or slide hasn't objects.
      *
      * @example
@@ -87844,6 +88261,8 @@ declare namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -87911,6 +88330,10 @@ declare namespace Slide {
      *   if bWriteLayout === false).
      * @param bWriteAllMasLayouts - Specifies if all child layouts from the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteLayout = false
+     * @default bWriteMaster = false
+     * @default bWriteAllMasLayouts = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -88111,10 +88534,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -88161,7 +88584,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -88169,7 +88592,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -88179,7 +88602,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing a stroke. */
@@ -88235,7 +88658,7 @@ declare namespace Slide {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -88243,6 +88666,8 @@ declare namespace Slide {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -88253,6 +88678,8 @@ declare namespace Slide {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -88270,6 +88697,7 @@ declare namespace Slide {
      * @param oCell - If not specified, a new column will be added to the end of the table.
      * @param isBefore - Add a new column before or after the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -88300,6 +88728,7 @@ declare namespace Slide {
      *   added at the end of the table.
      * @param nCount - Count of columns to be added.
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddColumns(nCount: number): ApiTable | null;
@@ -88323,6 +88752,7 @@ declare namespace Slide {
      * @param oCell - If not specified, a new row will be added to the end of the table.
      * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -88351,6 +88781,7 @@ declare namespace Slide {
      *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddRows(nCount: number): ApiTable | null;
@@ -88401,7 +88832,7 @@ declare namespace Slide {
      * @param columnIndex - The zero-based column index.
      * @since 9.4.0
      */
-    GetColumnWidth(columnIndex: number): number | null;
+    GetColumnWidth(columnIndex: number): EMU | null;
 
     /**
      * Returns the hyperlink from the current drawing object (shape or image).
@@ -88449,10 +88880,10 @@ declare namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns a row by its index.
@@ -88661,7 +89092,7 @@ declare namespace Slide {
      * @param nValue - Spacing value measured in twentieths of a point (1/1440 of an inch). `"Null"` means that no
      *   spacing will be applied.
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Sets the width of the specified column in the current table.
@@ -88671,7 +89102,7 @@ declare namespace Slide {
      * @returns Returns the actual column width set (in EMU), or null if the column index is invalid.
      * @since 9.4.0
      */
-    SetColumnWidth(columnIndex: number, width: number): number | null;
+    SetColumnWidth(columnIndex: number, width: EMU): EMU | null;
 
     /**
      * Sets the total height of the current table, distributing it evenly among the table rows.
@@ -88682,7 +89113,7 @@ declare namespace Slide {
      * @returns Returns the requested height (in EMU), or null if the table has no rows.
      * @since 9.5.0
      */
-    SetHeight(nValue: number): number | null;
+    SetHeight(nValue: EMU): EMU | null;
 
     /**
      * Sets a hyperlink to the current drawing object (shape or image).
@@ -88715,7 +89146,7 @@ declare namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -88723,7 +89154,7 @@ declare namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -88733,7 +89164,7 @@ declare namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Specifies the shading which shall be applied to the extents of the current table.
@@ -88763,7 +89194,7 @@ declare namespace Slide {
      * @param width - The table width measured in English measure units.
      * @param height - The table height measured in English measure units.
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the style for the current table.
@@ -88798,7 +89229,7 @@ declare namespace Slide {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -88810,7 +89241,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -88825,7 +89256,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -88840,7 +89271,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -88852,7 +89283,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -88864,7 +89295,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -88876,7 +89307,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -88886,7 +89317,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
      *   a point (1/1440 of an inch).
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -88896,7 +89327,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -88906,7 +89337,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -88916,7 +89347,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space above the top extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -88933,7 +89364,7 @@ declare namespace Slide {
      *
      * @param nValue - The indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -89004,6 +89435,7 @@ declare namespace Slide {
      * Converts the ApiTable object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -89154,6 +89586,13 @@ declare namespace Slide {
      * @param pr_ParaSeparator - Defines how the paragraph separator will be specified in the resulting string.
      * @param pr_TabSymbol - Defines how the tab will be specified in the resulting string.
      * @param pr_NewLineSeparator - Defines how the line separator will be specified in the resulting string.
+     * @default pr_Numbering = true
+     * @default pr_Math = true
+     * @default pr_TableCellSeparator = '\t'
+     * @default pr_TableRowSeparator = '\r\n'
+     * @default pr_ParaSeparator = '\r\n'
+     * @default pr_TabSymbol = '\t'
+     * @default pr_NewLineSeparator = '\r'
      * @since 9.4.0
      */
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
@@ -89203,7 +89642,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderBottom/
      */
-    SetCellBorderBottom(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderBottom(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the left of the current table cell.
@@ -89228,7 +89667,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderLeft/
      */
-    SetCellBorderLeft(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderLeft(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the right of the current table cell.
@@ -89253,7 +89692,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderRight/
      */
-    SetCellBorderRight(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderRight(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the top of the current table cell.
@@ -89278,7 +89717,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderTop/
      */
-    SetCellBorderTop(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderTop(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the bottom extent of the cell contents and
@@ -89306,7 +89745,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginBottom/
      */
-    SetCellMarginBottom(nValue: number): void;
+    SetCellMarginBottom(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the left extent of the current cell
@@ -89334,7 +89773,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginLeft/
      */
-    SetCellMarginLeft(nValue: number): void;
+    SetCellMarginLeft(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the right extent of the current cell
@@ -89362,7 +89801,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginRight/
      */
-    SetCellMarginRight(nValue: number): void;
+    SetCellMarginRight(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the top extent of the current cell contents
@@ -89390,7 +89829,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginTop/
      */
-    SetCellMarginTop(nValue: number): void;
+    SetCellMarginTop(nValue: twips): void;
 
     /**
      * Sets the background color to all cells in the column containing the current cell.
@@ -89517,7 +89956,7 @@ declare namespace Slide {
      * @param nValue - Spacing value measured in twentieths of a point (1/1440 of an inch). `"Null"` means that no
      *   spacing will be applied.
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Specifies the alignment of the current table with respect to the text margins in the current
@@ -89535,6 +89974,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the SetShd method use.
+     * @default isAuto = false
      */
     SetShd(sType: ShdType, r: number, g: number, b: number, isAuto?: boolean): boolean;
 
@@ -89563,7 +90003,7 @@ declare namespace Slide {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -89575,7 +90015,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -89590,7 +90030,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -89605,7 +90045,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -89617,7 +90057,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -89629,7 +90069,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -89641,7 +90081,7 @@ declare namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -89651,7 +90091,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
      *   a point (1/1440 of an inch).
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -89661,7 +90101,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -89671,7 +90111,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -89681,7 +90121,7 @@ declare namespace Slide {
      * @param nValue - The value for the amount of space above the top extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -89697,7 +90137,7 @@ declare namespace Slide {
      *
      * @param nValue - The indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -89807,7 +90247,7 @@ declare namespace Slide {
      *
      * @since 9.4.0
      */
-    GetHeight(): number | null;
+    GetHeight(): EMU | null;
 
     /**
      * Returns the next row if exists.
@@ -89849,7 +90289,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/SetHeight/
      */
-    SetHeight(nValue?: number): number | null;
+    SetHeight(nValue?: EMU): EMU | null;
   }
 
   /** Class representing the table row properties. */
@@ -90282,7 +90722,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -90733,7 +91173,7 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -90878,6 +91318,7 @@ declare namespace Slide {
      *
      * @param text - The text that will be added.
      * @param position - The position where the text will be added ("before" or "after" the range specified).
+     * @default position = "after"
      * @returns returns true if the text was successfully added.
      * @since 9.5.0
      */
@@ -90907,6 +91348,9 @@ declare namespace Slide {
      * @param nAfter - 1-based position within this range to start searching from.
      * @param bMatchCase - Case-sensitive search.
      * @param bWholeWords - Match whole words only.
+     * @default nAfter = 1
+     * @default bMatchCase = false
+     * @default bWholeWords = false
      * @since 9.5.0
      */
     Find(sFindWhat: string, nAfter?: number, bMatchCase?: boolean, bWholeWords?: boolean): ApiTextRange | null;
@@ -90945,6 +91389,8 @@ declare namespace Slide {
      *
      * @param nStart - Start offset (0-based) relative to the beginning of this range.
      * @param nEnd - End offset relative to the beginning of this range. -1 means the end of this range.
+     * @default nStart = 0
+     * @default nEnd = -1
      * @since 9.5.0
      */
     GetRange(nStart?: number, nEnd?: number): ApiTextRange | null;
@@ -90971,6 +91417,12 @@ declare namespace Slide {
      *   used. The default separator is "\r\n".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   symbol can be used. The default symbol is "\t".
+     * @default options_Math = true
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
      * @since 9.5.0
      */
     GetText(options?: object, options_Math?: boolean, options_NewLineSeparator?: string, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string): string;
@@ -90994,6 +91446,7 @@ declare namespace Slide {
      * Moves a cursor to the specified position within the current range.
      *
      * @param nPos - The desired cursor position.
+     * @default nPos = 0
      * @since 9.5.0
      */
     MoveCursorToPos(nPos?: number): boolean;
@@ -91005,6 +91458,8 @@ declare namespace Slide {
      * @param sReplaceWith - Replacement text.
      * @param bMatchCase - Case-sensitive search.
      * @param bWholeWords - Match whole words only.
+     * @default bMatchCase = false
+     * @default bWholeWords = false
      * @returns this
      * @since 9.5.0
      */
@@ -91116,7 +91571,7 @@ declare namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @since 9.5.0
      */
-    SetSpacing(nSpacing: number): ApiTextRange | null;
+    SetSpacing(nSpacing: twips): ApiTextRange | null;
 
     /**
      * Sets the start position of the current range.
@@ -92251,7 +92706,7 @@ declare namespace Forms {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -93040,7 +93495,7 @@ declare namespace Forms {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -93657,6 +94112,11 @@ declare namespace Forms {
      * @param renderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
      *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
      *   By default, the opening angle brackets will be replaced with the special characters.
+     * @default convertType = "markdown"
+     * @default htmlHeadings = false
+     * @default base64img = false
+     * @default demoteHeadings = false
+     * @default renderHTMLTags = false
      */
     ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;
 
@@ -93777,6 +94237,8 @@ declare namespace Forms {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      */
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
   }
@@ -94214,6 +94676,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -94506,7 +94969,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -94903,6 +95366,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -95176,7 +95640,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -95554,6 +96018,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -95771,7 +96236,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -96233,6 +96698,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -96528,7 +96994,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -97003,6 +97469,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -97220,7 +97687,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -97834,6 +98301,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -97942,6 +98410,7 @@ declare namespace Forms {
      * Locks the aspect ratio of the current picture form.
      *
      * @param isLock - Specifies if the aspect ratio of the current picture form will be locked (true) or not (false).
+     * @default isLock = true
      *
      * @example
      * ```js
@@ -98039,6 +98508,7 @@ declare namespace Forms {
      * Respects the form border width when scaling the image.
      *
      * @param isRespect - Specifies if the form border width will be respected (true) or not (false).
+     * @default isRespect = true
      *
      * @example
      * ```js
@@ -98172,7 +98642,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -98383,6 +98853,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
@@ -98481,7 +98952,7 @@ declare namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -98938,6 +99409,7 @@ declare namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -99030,6 +99502,7 @@ declare namespace Forms {
      * @param nCellWidth - The cell width measured in millimeters.
      *   If this parameter is not specified or equal to 0 or less, then the width will be set
      *   automatically. Must be >= 1 and <= 558.8.
+     * @default nCellWidth = 0
      *
      * @example
      * ```js
@@ -99043,7 +99516,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCellWidth/
      */
-    SetCellWidth(nCellWidth?: number): boolean;
+    SetCellWidth(nCellWidth?: mm): boolean;
 
     /**
      * Sets a limit to the text field characters.
@@ -99306,7 +99779,7 @@ declare namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -99407,7 +99880,7 @@ declare namespace Pdf {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -99775,10 +100248,10 @@ declare namespace Pdf {
   /** Axis-aligned point. */
   export interface Point {
     /** The horizontal coordinate in points. */
-    x: number;
+    x: pt;
 
     /** The vertical coordinate in points. */
-    y: number;
+    y: pt;
   }
 
   /** 60000th of a degree (5400000 = 90 degrees). */
@@ -99813,28 +100286,28 @@ declare namespace Pdf {
    */
   export interface Quad {
     /** x1 (left top) */
-    0: number;
+    0: pt;
 
     /** y1 (left top) */
-    1: number;
+    1: pt;
 
     /** x2 (right top) */
-    2: number;
+    2: pt;
 
     /** y2 (right top) */
-    3: number;
+    3: pt;
 
     /** x3 (left bottom) */
-    4: number;
+    4: pt;
 
     /** y3 (left bottom) */
-    5: number;
+    5: pt;
 
     /** x4 (right bottom) */
-    6: number;
+    6: pt;
 
     /** y4 (right bottom) */
-    7: number;
+    7: pt;
   }
 
   /** The reading order (left-to-right or right-to-left). */
@@ -99849,16 +100322,16 @@ declare namespace Pdf {
    */
   export interface Rect {
     /** x1 (left) */
-    0: number;
+    0: pt;
 
     /** y1 (top) */
-    1: number;
+    1: pt;
 
     /** x2 (right) */
-    2: number;
+    2: pt;
 
     /** y2 (bottom) */
-    3: number;
+    3: pt;
   }
 
   /**
@@ -99873,16 +100346,16 @@ declare namespace Pdf {
    */
   export interface RectDiff {
     /** dx1 (left delta) */
-    0: number;
+    0: pt;
 
     /** dy1 (top delta) */
-    1: number;
+    1: pt;
 
     /** dx2 (right delta) */
-    2: number;
+    2: pt;
 
     /** dy2 (bottom delta) */
-    3: number;
+    3: pt;
   }
 
   /**
@@ -100024,7 +100497,7 @@ declare namespace Pdf {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -100486,9 +100959,10 @@ declare namespace Pdf {
      * @param styleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
      * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
      *   format is "General".
+     * @default chartType = "bar"
      */
-    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
-    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox field.
@@ -100571,7 +101045,7 @@ declare namespace Pdf {
      * @param width - The image width in English measure units.
      * @param height - The image height in English measure units.
      */
-    CreateImage(imageSrc: string, width: number, height: number): ApiImage;
+    CreateImage(imageSrc: string, width: EMU, height: EMU): ApiImage;
 
     /**
      * Creates a image field.
@@ -100623,6 +101097,7 @@ declare namespace Pdf {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -100683,6 +101158,7 @@ declare namespace Pdf {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -100766,8 +101242,11 @@ declare namespace Pdf {
      *   (theme accent) is used.
      * @param stroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
      *   (theme accent) is used.
+     * @default shapeType = "rect"
+     * @default width = 914400
+     * @default height = 914400
      */
-    CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
+    CreateShape(shapeType?: ShapeType, width?: EMU, height?: EMU, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a signature field.
@@ -100814,9 +101293,10 @@ declare namespace Pdf {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates a table.
@@ -100866,7 +101346,7 @@ declare namespace Pdf {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -100917,7 +101397,7 @@ declare namespace Pdf {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -101033,6 +101513,7 @@ declare namespace Pdf {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -101192,7 +101673,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annotation contents. */
     GetContents(): string;
@@ -101272,7 +101753,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -101433,6 +101914,7 @@ declare namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -101578,7 +102060,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annotation contents. */
     GetContents(): string;
@@ -101661,7 +102143,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -101790,7 +102272,7 @@ declare namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -101857,7 +102339,7 @@ declare namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a container for the document content. */
@@ -101985,6 +102467,7 @@ declare namespace Pdf {
      * Gets label from button widget field.
      *
      * @param appearance - The appearance state.
+     * @default appearance = "normal"
      */
     GetLabel(appearance?: ButtonAppearance): string;
 
@@ -102010,7 +102493,7 @@ declare namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -102086,6 +102569,8 @@ declare namespace Pdf {
      *
      * @param imageUrl - The image URL.
      * @param appearance - The appearance state.
+     * @default imageUrl = ""
+     * @default appearance = "normal"
      */
     SetImage(imageUrl?: string, appearance?: ButtonAppearance): boolean;
 
@@ -102094,6 +102579,7 @@ declare namespace Pdf {
      *
      * @param label - The button label.
      * @param appearance - The appearance state.
+     * @default appearance = "normal"
      */
     SetLabel(label: string, appearance?: ButtonAppearance): boolean;
 
@@ -102145,7 +102631,7 @@ declare namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a caret annotation. */
@@ -102186,10 +102672,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the series with a specific index.
@@ -102241,6 +102727,7 @@ declare namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      */
     SetDataPointFill(oFill: ApiFill, nSeries: number, nDataPoint: number, bAllSeries?: boolean): boolean;
 
@@ -102269,7 +102756,7 @@ declare namespace Pdf {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -102307,7 +102794,7 @@ declare namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the horizontal axis title is written in bold font or not.
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart legend.
@@ -102321,7 +102808,7 @@ declare namespace Pdf {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -102358,6 +102845,7 @@ declare namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      */
     SetMarkerFill(oFill: ApiFill, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
 
@@ -102368,6 +102856,7 @@ declare namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      */
     SetMarkerOutLine(oStroke: ApiStroke, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
 
@@ -102405,7 +102894,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -102413,7 +102902,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -102423,7 +102912,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets a name to the specified chart series.
@@ -102455,6 +102944,7 @@ declare namespace Pdf {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      */
     SetSeriesFill(oFill: ApiFill, nSeries: number, bAll?: boolean): boolean;
 
@@ -102464,6 +102954,7 @@ declare namespace Pdf {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      */
     SetSeriesOutLine(oStroke: ApiStroke, nSeries: number, bAll?: boolean): boolean;
 
@@ -102484,6 +102975,7 @@ declare namespace Pdf {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -102509,7 +103001,7 @@ declare namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the chart title is written in bold font or not.
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -102540,14 +103032,14 @@ declare namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the vertical axis title is written in bold font or not.
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -102736,7 +103228,7 @@ declare namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -102837,7 +103329,7 @@ declare namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a circle annotation. */
@@ -102868,7 +103360,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiCircleAnnotation class. */
     GetClassType(): "circleAnnot";
@@ -102954,7 +103446,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -103119,6 +103611,7 @@ declare namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -103256,6 +103749,8 @@ declare namespace Pdf {
      * @param greaterThanValue - The minimum allowed value.
      * @param lessThan - If true, enables maximum value validation using `lessThanValue`.
      * @param lessThanValue - The maximum allowed value.
+     * @default greaterThan = false
+     * @default lessThan = false
      */
     SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean;
 
@@ -103339,8 +103834,9 @@ declare namespace Pdf {
      * @param index - The index where the page will be added.
      * @param width - The page width.
      * @param height - The page height.
+     * @default index = this.GetPagesCount()
      */
-    AddPage(index?: number, width?: number, height?: number): ApiPage;
+    AddPage(index?: number, width?: pt, height?: pt): ApiPage;
 
     /**
      * Appends the specified text to the end of the document content.
@@ -103450,6 +103946,13 @@ declare namespace Pdf {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -103584,6 +104087,13 @@ declare namespace Pdf {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -103670,7 +104180,7 @@ declare namespace Pdf {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -103705,10 +104215,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /** Returns the rotation angle of the current drawing object. */
     GetRotation(): number;
@@ -103729,13 +104239,14 @@ declare namespace Pdf {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Selects the current graphic object.
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      */
     Select(isReplace?: boolean): boolean;
 
@@ -103820,7 +104331,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -103828,7 +104339,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -103838,7 +104349,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -103862,7 +104373,7 @@ declare namespace Pdf {
      * @param width - The object width measured in English measure units.
      * @param height - The object height measured in English measure units.
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -103934,7 +104445,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annot callout. */
     GetCallout(): FreeTextCallout;
@@ -104029,7 +104540,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annot callout.
@@ -104284,10 +104795,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -104295,7 +104806,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -104303,7 +104814,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -104313,7 +104824,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a hide-show action. */
@@ -104399,10 +104910,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -104410,7 +104921,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -104418,7 +104929,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -104428,7 +104939,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a ink annotation. */
@@ -104459,7 +104970,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiInkAnnotation class. */
     GetClassType(): "inkAnnot";
@@ -104545,7 +105056,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -104679,7 +105190,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiLineAnnotation class. */
     GetClassType(): "lineAnnot";
@@ -104774,7 +105285,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -104908,6 +105419,7 @@ declare namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -104979,6 +105491,7 @@ declare namespace Pdf {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -105009,10 +105522,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -105020,7 +105533,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -105028,7 +105541,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -105038,7 +105551,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a document page. */
@@ -105114,14 +105627,14 @@ declare namespace Pdf {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -105129,7 +105642,7 @@ declare namespace Pdf {
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /** Returns the paragraph contents justification. */
     GetJc(): "left" | "right" | "both" | "center" | undefined;
@@ -105147,7 +105660,7 @@ declare namespace Pdf {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -105155,7 +105668,7 @@ declare namespace Pdf {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /** Returns the paragraph line spacing rule. */
     GetSpacingLineRule(): "auto" | "atLeast" | "exact" | undefined;
@@ -105165,7 +105678,7 @@ declare namespace Pdf {
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -105188,14 +105701,14 @@ declare namespace Pdf {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -105203,7 +105716,7 @@ declare namespace Pdf {
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -105235,8 +105748,9 @@ declare namespace Pdf {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -105247,8 +105761,9 @@ declare namespace Pdf {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -105260,7 +105775,7 @@ declare namespace Pdf {
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -105272,7 +105787,7 @@ declare namespace Pdf {
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -105341,14 +105856,14 @@ declare namespace Pdf {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -105356,7 +105871,7 @@ declare namespace Pdf {
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -105401,7 +105916,7 @@ declare namespace Pdf {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -105409,7 +105924,7 @@ declare namespace Pdf {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /** Returns the paragraph line spacing rule. */
     GetSpacingLineRule(): "auto" | "atLeast" | "exact" | undefined;
@@ -105419,7 +105934,7 @@ declare namespace Pdf {
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -105438,6 +105953,10 @@ declare namespace Pdf {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -105558,14 +106077,14 @@ declare namespace Pdf {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -105573,7 +106092,7 @@ declare namespace Pdf {
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -105622,7 +106141,7 @@ declare namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -105633,8 +106152,9 @@ declare namespace Pdf {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -105645,8 +106165,9 @@ declare namespace Pdf {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -105658,7 +106179,7 @@ declare namespace Pdf {
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -105679,7 +106200,7 @@ declare namespace Pdf {
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -105989,7 +106510,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiPolyLineAnnotation class. */
     GetClassType(): "polyLineAnnot";
@@ -106081,7 +106602,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -106213,7 +106734,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiPolygonAnnotation class. */
     GetClassType(): "polygonAnnot";
@@ -106299,7 +106820,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -106524,7 +107045,7 @@ declare namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -106639,7 +107160,7 @@ declare namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -106986,7 +107507,7 @@ declare namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -107107,7 +107628,7 @@ declare namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -107206,10 +107727,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the text autofit type of the current shape.
@@ -107254,7 +107775,7 @@ declare namespace Pdf {
      * @param nBottom - Bottom padding.
      * @since 9.5.0
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -107262,7 +107783,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -107270,7 +107791,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -107280,7 +107801,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets the text autofit type to the current shape.
@@ -107334,10 +107855,10 @@ declare namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -107345,7 +107866,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -107353,7 +107874,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -107363,7 +107884,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a square annotation. */
@@ -107394,7 +107915,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiSquareAnnotation class. */
     GetClassType(): "squareAnnot";
@@ -107480,7 +108001,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -107598,7 +108119,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiStampAnnotation class. */
     GetClassType(): "stampAnnot";
@@ -107690,7 +108211,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -107833,7 +108354,7 @@ declare namespace Pdf {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -107841,6 +108362,8 @@ declare namespace Pdf {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -107851,6 +108374,8 @@ declare namespace Pdf {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -107868,6 +108393,7 @@ declare namespace Pdf {
      * @param referenceCell - The cell used as an insertion reference.
      * @param before - Add a new column before or after the specified cell. If no cell is specified, then this
      *   parameter will be ignored.
+     * @default before = false
      */
     AddColumn(referenceCell?: ApiTableCell, before?: boolean): boolean;
 
@@ -107878,6 +108404,7 @@ declare namespace Pdf {
      *   added at the end of the table.
      * @param nCount - Count of columns to be added.
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddColumns(nCount: number): ApiTable;
@@ -107899,6 +108426,7 @@ declare namespace Pdf {
      * @param referenceCell - The cell used as an insertion reference.
      * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified, then this parameter
      *   will be ignored.
+     * @default isBefore = false
      */
     AddRow(referenceCell?: ApiTableCell, isBefore?: boolean): ApiTableRow;
 
@@ -107909,6 +108437,7 @@ declare namespace Pdf {
      *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddRows(nCount: number): ApiTable;
@@ -107932,16 +108461,16 @@ declare namespace Pdf {
      * @param columnIndex - The zero-based column index.
      * @since 9.5.0
      */
-    GetColumnWidth(columnIndex: number): number | null;
+    GetColumnWidth(columnIndex: number): EMU | null;
 
     /** Returns the type of the ApiDrawing class. */
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns a row by its index.
@@ -108052,7 +108581,7 @@ declare namespace Pdf {
      * @returns Returns the actual column width set (in EMU), or null if the column index is invalid.
      * @since 9.5.0
      */
-    SetColumnWidth(columnIndex: number, width: number): number | null;
+    SetColumnWidth(columnIndex: number, width: EMU): EMU | null;
 
     /**
      * Sets the total height of the current table, distributing it evenly among the table rows.
@@ -108063,7 +108592,7 @@ declare namespace Pdf {
      * @returns Returns the requested height (in EMU), or null if the table has no rows.
      * @since 9.5.0
      */
-    SetHeight(nValue: number): number | null;
+    SetHeight(nValue: EMU): EMU | null;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -108071,7 +108600,7 @@ declare namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -108079,7 +108608,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -108089,7 +108618,7 @@ declare namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Specifies the shading which shall be applied to the extents of the current table.
@@ -108108,7 +108637,7 @@ declare namespace Pdf {
      * @param height - The table height measured in English measure units.
      * @since 9.5.0
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the style for the current table.
@@ -108229,6 +108758,13 @@ declare namespace Pdf {
      * @param pr_ParaSeparator - Defines how the paragraph separator will be specified in the resulting string.
      * @param pr_TabSymbol - Defines how the tab will be specified in the resulting string.
      * @param pr_NewLineSeparator - Defines how the line separator will be specified in the resulting string.
+     * @default pr_Numbering = true
+     * @default pr_Math = true
+     * @default pr_TableCellSeparator = '\t'
+     * @default pr_TableRowSeparator = '\r\n'
+     * @default pr_ParaSeparator = '\r\n'
+     * @default pr_TabSymbol = '\t'
+     * @default pr_NewLineSeparator = '\r'
      * @since 9.4.0
      */
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
@@ -108254,7 +108790,7 @@ declare namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderBottom(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderBottom(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the left of the current table cell.
@@ -108262,7 +108798,7 @@ declare namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderLeft(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderLeft(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the right of the current table cell.
@@ -108270,7 +108806,7 @@ declare namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderRight(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderRight(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the top of the current table cell.
@@ -108278,7 +108814,7 @@ declare namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderTop(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderTop(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the bottom extent of the cell contents and
@@ -108288,7 +108824,7 @@ declare namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell bottom margin with specified value for the current cell.
      */
-    SetCellMarginBottom(margin: number): boolean;
+    SetCellMarginBottom(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the left extent of the current cell
@@ -108298,7 +108834,7 @@ declare namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell left margin with specified value for the current cell.
      */
-    SetCellMarginLeft(margin: number): boolean;
+    SetCellMarginLeft(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the right extent of the current cell
@@ -108308,7 +108844,7 @@ declare namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell right margin with specified value for the current cell.
      */
-    SetCellMarginRight(margin: number): boolean;
+    SetCellMarginRight(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the top extent of the current cell contents
@@ -108318,7 +108854,7 @@ declare namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell top margin with specified value for the current cell.
      */
-    SetCellMarginTop(margin: number): boolean;
+    SetCellMarginTop(margin: twips): boolean;
 
     /**
      * Sets the background color to all cells in the column containing the current cell.
@@ -108395,7 +108931,7 @@ declare namespace Pdf {
     GetClassType(): "tableRow";
 
     /** Gets the height from the current table row. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns the next row if exists.
@@ -108426,7 +108962,7 @@ declare namespace Pdf {
      *
      * @param height - The row height in English measure units.
      */
-    SetHeight(height: number): boolean;
+    SetHeight(height: EMU): boolean;
   }
 
   /** Class representing the table row properties. */
@@ -108469,7 +109005,7 @@ declare namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiTextAnnotation class. */
     GetClassType(): "textAnnot";
@@ -108555,7 +109091,7 @@ declare namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -108838,6 +109374,8 @@ declare namespace Pdf {
      * @param greaterThanValue - The minimum allowed value.
      * @param lessThan - If true, enables maximum value validation using `lessThanValue`.
      * @param lessThanValue - The maximum allowed value.
+     * @default greaterThan = false
+     * @default lessThan = false
      */
     SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean;
 
@@ -108935,7 +109473,7 @@ declare namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -109050,7 +109588,7 @@ declare namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -109143,7 +109681,7 @@ declare namespace Pdf {
     /** The function called was when selection was canceled. */
     onSelectionCancel: [];
     /** The function called to when selection was ended. */
-    onSelectionEnd: [page: number, x: number, y: number];
+    onSelectionEnd: [page: number, x: pt, y: pt];
   };
 
   export type EditorEventName = keyof EditorEventArgs;

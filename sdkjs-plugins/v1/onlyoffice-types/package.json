@@ -79,9 +79,10 @@
     "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io.git",
     "directory": "sdkjs-plugins/v1/onlyoffice-types"
   },
-  "homepage": "https://github.com/ONLYOFFICE/onlyoffice.github.io/tree/master/sdkjs-plugins/v1/onlyoffice-types#readme",
+  "homepage": "https://api.onlyoffice.com/docs/plugins/get-started/",
   "bugs": {
-    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types"
+    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types",
+    "email": "support@onlyoffice.com"
   },
   "license": "Apache-2.0",
   "author": {
@@ -89,6 +90,13 @@
     "email": "integration@onlyoffice.com",
     "url": "https://www.onlyoffice.com"
   },
+  "maintainers": [
+    {
+      "name": "Ascensio System SIA",
+      "email": "integration@onlyoffice.com",
+      "url": "https://www.onlyoffice.com"
+    }
+  ],
   "keywords": [
     "onlyoffice",
     "plugin",
@@ -101,16 +109,23 @@
   },
   "scripts": {
     "generate": "node scripts/generate-types.js",
-    "postgenerate": "node scripts/generate-plugin-methods.js && node scripts/generate-ambient-bundle.js",
+    "postgenerate": "node scripts/generate-plugin-methods.js && node scripts/generate-runtime-index.js && node scripts/generate-ambient-bundle.js",
     "generate-plugin-methods": "node scripts/generate-plugin-methods.js",
+    "generate-runtime-index": "node scripts/generate-runtime-index.js",
     "generate-schema": "node scripts/generate-config-schema.js",
     "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
+    "check-runtime-index": "npm run generate-runtime-index && git diff --exit-code -- dist/api-index.json",
     "check-runtime": "node scripts/check-runtime-contract.js",
     "check-plugin-events": "node scripts/check-plugin-events.js",
     "validate-schema": "node scripts/validate-config-schema.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "tsc --noEmit -p tsconfig.typecheck.json"
+    "test": "npm run test:shared && npm run test:word && npm run test:cell && npm run test:slide && npm run test:pdf",
+    "test:shared": "tsc --noEmit -p tsconfig.typecheck.json",
+    "test:word": "tsc --noEmit -p tsconfig.test.word.json",
+    "test:cell": "tsc --noEmit -p tsconfig.test.cell.json",
+    "test:slide": "tsc --noEmit -p tsconfig.test.slide.json",
+    "test:pdf": "tsc --noEmit -p tsconfig.test.pdf.json"
   },
   "peerDependencies": {
     "typescript": ">=5.0.0"

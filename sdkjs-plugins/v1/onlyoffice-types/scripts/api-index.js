@@ -37,16 +37,29 @@ function readIndex() {
   }
 }
 
-function mergeApiIndex(editor, sections) {
-  const index = readIndex();
+function writeIndex(index) {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
   index.package = pkg.name;
   index.version = pkg.version;
-  index.editors = index.editors || {};
-  index.editors[editor] = { ...index.editors[editor], ...sections };
 
   fs.mkdirSync(path.dirname(INDEX_PATH), { recursive: true });
   fs.writeFileSync(INDEX_PATH, `${JSON.stringify(sortKeysDeep(index), null, 2)}\n`);
 }
 
-module.exports = { mergeApiIndex };
+function mergeApiIndex(editor, sections) {
+  const index = readIndex();
+  index.editors = index.editors || {};
+  index.editors[editor] = { ...index.editors[editor], ...sections };
+  writeIndex(index);
+}
+
+// The plugin runtime surface (Asc.plugin, config.json, the services bridge) is not per-editor, so it
+// sits beside `editors` rather than inside it. Replaced wholesale like every other section, so a
+// removed declaration disappears instead of going stale.
+function mergeRuntimeIndex(sections) {
+  const index = readIndex();
+  index.runtime = sections;
+  writeIndex(index);
+}
+
+module.exports = { mergeApiIndex, mergeRuntimeIndex };

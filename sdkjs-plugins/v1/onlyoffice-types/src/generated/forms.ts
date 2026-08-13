@@ -48,7 +48,7 @@ export namespace Forms {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -837,7 +837,7 @@ export namespace Forms {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -1454,6 +1454,11 @@ export namespace Forms {
      * @param renderHTMLTags - Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional
      *   HTML tag, you can avoid using the opening angle bracket in the following way: \<tag>text\</tag>.
      *   By default, the opening angle brackets will be replaced with the special characters.
+     * @default convertType = "markdown"
+     * @default htmlHeadings = false
+     * @default base64img = false
+     * @default demoteHeadings = false
+     * @default renderHTMLTags = false
      */
     ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;
 
@@ -1574,6 +1579,8 @@ export namespace Forms {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      */
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
   }
@@ -2011,6 +2018,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -2303,7 +2311,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -2700,6 +2708,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -2973,7 +2982,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -3351,6 +3360,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -3568,7 +3578,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -4030,6 +4040,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -4325,7 +4336,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -4800,6 +4811,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -5017,7 +5029,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -5631,6 +5643,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -5739,6 +5752,7 @@ export namespace Forms {
      * Locks the aspect ratio of the current picture form.
      *
      * @param isLock - Specifies if the aspect ratio of the current picture form will be locked (true) or not (false).
+     * @default isLock = true
      *
      * @example
      * ```js
@@ -5836,6 +5850,7 @@ export namespace Forms {
      * Respects the form border width when scaling the image.
      *
      * @param isRespect - Specifies if the form border width will be respected (true) or not (false).
+     * @default isRespect = true
      *
      * @example
      * ```js
@@ -5969,7 +5984,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -6180,6 +6195,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
@@ -6278,7 +6294,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
@@ -6735,6 +6751,7 @@ export namespace Forms {
      * Places a cursor before/after the current form.
      *
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
+     * @default isAfter = true
      * @since 8.1.0
      *
      * @example
@@ -6827,6 +6844,7 @@ export namespace Forms {
      * @param nCellWidth - The cell width measured in millimeters.
      *   If this parameter is not specified or equal to 0 or less, then the width will be set
      *   automatically. Must be >= 1 and <= 558.8.
+     * @default nCellWidth = 0
      *
      * @example
      * ```js
@@ -6840,7 +6858,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCellWidth/
      */
-    SetCellWidth(nCellWidth?: number): boolean;
+    SetCellWidth(nCellWidth?: mm): boolean;
 
     /**
      * Sets a limit to the text field characters.
@@ -7103,7 +7121,7 @@ export namespace Forms {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
      */
-    ToFixed(width: number, height: number, keepPosition: boolean): boolean;
+    ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.

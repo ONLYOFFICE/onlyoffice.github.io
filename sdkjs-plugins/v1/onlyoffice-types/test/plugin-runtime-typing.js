@@ -10,10 +10,10 @@
  * filters its return value through `Asc.checkReturnCommand`, replacing anything carrying methods
  * with `undefined`. That silent data loss must be a compile error.
  *
- * The object-model values below come from explicitly annotated locals rather than the global `Api`,
- * because `test/global-api.d.ts` declares that global as `any` for the executeMethod smoke tests -
- * reading `Api.GetDocument()` here would collapse every expression to `any` and make both the
- * positive assertions and the `@ts-expect-error` lines pass while testing nothing.
+ * The object-model values below come from explicitly annotated locals rather than the global `Api`.
+ * This file is editor-agnostic - it tests the plugin runtime, not one editor's object model - so it
+ * lives in the shared program, which deliberately has no editor entry point and therefore no global
+ * `Api`. Per-editor `Api` typing is asserted in `<editor>-api-global.js` instead.
  */
 
 /** @type {import("../src/generated/word").Word.ApiDocument} */

@@ -55,6 +55,11 @@ three channels, and confusing them is the most common source of broken plugin co
   — every class/method/typedef/event/executeMethod with signature, markdown description, parameter
   list, return type, runnable `examples`, `since` version and a verified `docsUrl`. Search this
   before inventing a method name; if a member isn't in the index, it isn't public API.
+  Two top-level sections, and which one to search depends on the question:
+  `editors.<editor>` for what you do *inside* a `callCommand` body (`Api.*` classes, typedefs,
+  editor events, `executeMethod` names); `runtime` for how you write the plugin around it -
+  `runtime.plugin` (`AscPlugin.callCommand`, the async variants, `Asc`, buttons, plugin events),
+  `runtime.config` (`config.json`), `runtime.services`.
 - Every generated member's JSDoc carries the same information (hover in the editor), including an
   `@example` snippet and an `@see` link to api.onlyoffice.com.
 - `dist/ambient/` holds a flattened no-import `.d.ts` bundle for Monaco-style tooling

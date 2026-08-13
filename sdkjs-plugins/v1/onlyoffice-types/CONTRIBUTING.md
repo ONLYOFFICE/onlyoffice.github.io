@@ -110,8 +110,19 @@ npm run check-runtime       # checks Asc.plugin/Asc.Buttons against plugins.dev.
 npm run check-plugin-events # checks attachEvent/event_on* names against sdkjs's own JSDoc (needs SDKJS_PATH)
 npm run check-generated     # regenerates src/generated and fails if the checked-in output differs (needs SDKJS_PATH, a git checkout)
 npm run typecheck           # checks index.d.ts + src/generated/*.ts + src/*.d.ts
-npm test                    # also type-checks example.js and test/*.js against the library
+npm test                    # five programs: shared + one per editor (see below)
+npm run test:word           # a single editor's program, for a faster edit/check loop
 ```
+
+`npm test` compiles **five** TypeScript programs, not one. The four editor entry points each declare
+the same global `Api` with a different type, so putting two of them in one program is an immediate
+`TS2403` collision - which is why a shared `declare var Api: any` stub used to sit in `test/`,
+silently reducing every `Api.*` call in the copied documentation examples to `any`. Now
+`tsconfig.test.<editor>.json` gives each editor's examples the real `Word.Api`/`Cell.Api`/... global,
+and `tsconfig.typecheck.json` keeps the editor-agnostic files (`example.js`, which is a deliberately
+multi-editor sampler with its own `any`, and the plugin-runtime tests). Each editor program also
+compiles `test/<editor>-api-global.js`, whose `@ts-expect-error` on another editor's entry method
+only holds while that program's `Api` is genuinely typed - so the stub cannot creep back unnoticed.
 
 `check-runtime` is a static Level 2 check with two halves, against two sources:
 
@@ -221,12 +232,33 @@ entry carries its signature, markdown description, parameter list, return type, 
 }
 ```
 
-Three ways to get it: read it from an installed copy of the package
+Alongside `editors` there is a `runtime` section covering the other half of the API - how you write
+a plugin at all, rather than what you do inside a `callCommand` body. It is grouped as
+`runtime.plugin` (`AscPlugin`, `Asc`, events, buttons), `runtime.config` (the `config.json` types)
+and `runtime.services`, and carries each member's real declared signature plus its JSDoc:
+
+```json
+"callCommand": {
+  "signature": "callCommand: <T>(command: () => T & CommandSerializable<T>, isClose?: boolean, ...) => void",
+  "description": "Runs `command` inside the editor's process, where the global `Api` is the entry point. ..."
+}
+```
+
+Three ways to get the file: read it from an installed copy of the package
 (`require.resolve("@onlyoffice/plugins-types/api-index.json")` - it's in the published `files`),
 fetch the git-tracked file from raw.githubusercontent.com, or regenerate it locally with
-`npm run generate`. Written by `generate-types.js` (object model + events) and
-`generate-plugin-methods.js` (executeMethod surface); each replaces its own section wholesale, so
-removed members disappear instead of going stale. `AGENTS.md` in this directory condenses the
+`npm run generate`. Written by `generate-types.js` (object model + events),
+`generate-plugin-methods.js` (executeMethod surface) and `generate-runtime-index.js` (the `runtime`
+section); each replaces its own section wholesale, so removed members disappear instead of going
+stale.
+
+`generate-runtime-index.js` is the one generator that reads *this package's* declarations rather
+than sdkjs - via the TypeScript compiler API, so the published signature is the one we actually
+authored (`callCommand`'s serializability constraint, `executeMethod`'s overload chain) rather than
+a re-transcription of sdkjs's looser `@param {Function}` JSDoc. Because its inputs are hand-written
+files that change without a regeneration, it needs no `SDKJS_PATH` and has its own drift guard:
+`npm run check-runtime-index` regenerates and fails if the checked-in `dist/api-index.json` differs.
+Run it after editing anything under `src/plugin/`, `src/config/` or `src/services/`. `AGENTS.md` in this directory condenses the
 plugin-authoring contract (`callCommand` serialization, `Asc.scope`, the three channels) plus these
 lookup pointers for coding agents.
 
@@ -287,7 +319,11 @@ onlyoffice-types/
 │   ├── check-plugin-events.js
 │   └── validate-config-schema.js
 ├── tsconfig.json           # builds/typechecks the library itself
-├── tsconfig.typecheck.json # also typechecks example.js + test/*.js
+├── tsconfig.typecheck.json # editor-agnostic test program (example.js + runtime tests)
+├── tsconfig.test.word.json # one program per editor - each declares the global Api differently
+├── tsconfig.test.cell.json
+├── tsconfig.test.slide.json
+├── tsconfig.test.pdf.json
 ├── example.js             # Usage examples
 ├── test/                  # Call-shape smoke tests copied from the official docs
 ├── AGENTS.md              # authoring contract + lookup pointers for coding agents
