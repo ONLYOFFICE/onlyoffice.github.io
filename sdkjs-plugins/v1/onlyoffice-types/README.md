@@ -263,8 +263,10 @@ host-provided `executeMethod` behavior; those require a real browser/Desktop Edi
 `check-plugin-events` is a drift check, not a generator: plugin-window events (`attachEvent`,
 `event_on*`) are hand-curated in `src/plugin/events.d.ts` rather than generated, since their payload
 shapes need richer modeling than a mechanical `@param`-to-tuple conversion gives. The script diffs
-`@alias` names documented in `sdkjs/common/base-plugin-events.js` against that file and fails if
-anything documented (and not tagged `@undocumented`) is missing. Requires `SDKJS_PATH` (same as
+`@alias` names documented in `sdkjs/common/base-plugin-events.js` (shared across editors, filtered by
+`@typeofeditors`) plus each editor's own `<editor>/plugin-events.js` / `sdkjs-forms/plugin-events.js`
+against that file and fails if anything documented (and not tagged `@undocumented`) is missing.
+Requires `SDKJS_PATH` (same as
 `generate`). The equivalent check for `executeMethod` names doesn't need a separate drift check:
 `generate-plugin-methods.js` generates the full body directly, and `check-generated` already fails
 CI if regenerating produces anything different from what's checked in.

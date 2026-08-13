@@ -1633,4 +1633,4 @@ type WordMethodReturnMap = {
 
 type WordMethodReturn<T extends WordMethodName> = WordMethodReturnMap[T];
 
-export type { WordMethodArgs, WordMethodName, WordMethodReturn, ContentControlProperties, AddinFieldData };
+export type { WordMethodArgs, WordMethodName, WordMethodReturn, ContentControlProperties, AddinFieldData, ContentControl, comment, TextAnnotation, TextAnnotationRange };
