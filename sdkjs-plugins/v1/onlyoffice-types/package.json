@@ -33,6 +33,7 @@
       "types": "./src/services/index.d.ts"
     },
     "./config/schema.json": "./schemas/config.schema.json",
+    "./api-index.json": "./dist/api-index.json",
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -67,9 +68,11 @@
     "index.d.ts",
     "src",
     "schemas",
+    "dist/api-index.json",
     "README.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "AGENTS.md"
   ],
   "repository": {
     "type": "git",

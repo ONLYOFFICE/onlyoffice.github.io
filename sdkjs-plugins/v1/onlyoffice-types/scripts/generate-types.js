@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { spawnSync } = require('child_process');
+const { mergeApiIndex } = require('./api-index.js');
 
 const PACKAGE_ROOT = path.join(__dirname, '..');
 const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
@@ -706,6 +707,102 @@ function generateTypedef(name, typedefData) {
   return output;
 }
 
+function methodSignature(name, method) {
+  const params = method.params
+    .map((p) => `${p.name}${p.optional ? '?' : ''}: ${p.type}`)
+    .join(', ');
+  return `${name}(${params}): ${method.returnType}`;
+}
+
+// The JSDoc prose and the runnable "## Try it" snippets are more useful to a search/RAG consumer as
+// separate fields than flattened into one markdown string, so the index keeps them apart -
+// description is markdown (inline HTML already translated), examples are raw code.
+function proseFields(description) {
+  const { summary, examples } = splitDescription(description);
+  return {
+    ...(summary ? { description: htmlToMarkdown(cleanProse(summary)) } : {}),
+    ...(examples.length > 0 ? { examples } : {}),
+  };
+}
+
+function deprecatedField(deprecated) {
+  return deprecated ? { deprecated: typeof deprecated === 'string' ? deprecated : true } : {};
+}
+
+function buildApiIndexSection(classes, typedefs, events) {
+  const classesIndex = {};
+  for (const [className, classData] of Object.entries(classes)) {
+    const methods = {};
+    for (const [methodName, method] of Object.entries(classData.methods)) {
+      methods[methodName] = {
+        signature: methodSignature(methodName, method),
+        ...proseFields(method.description),
+        ...(method.docsUrl ? { docsUrl: method.docsUrl } : {}),
+        ...(method.since ? { since: method.since } : {}),
+        ...deprecatedField(method.deprecated),
+        params: method.params.map((p) => ({
+          name: p.name,
+          type: p.type,
+          ...(p.optional ? { optional: true } : {}),
+          ...(p.description ? { description: htmlToMarkdown(cleanProse(p.description)) } : {}),
+        })),
+        returns: {
+          type: method.returnType,
+          ...(method.returnDescription
+            ? { description: htmlToMarkdown(cleanProse(method.returnDescription)) }
+            : {}),
+        },
+      };
+    }
+    const properties = {};
+    for (const [propName, prop] of Object.entries(classData.properties)) {
+      properties[propName] = {
+        type: prop.type,
+        ...(prop.optional ? { optional: true } : {}),
+        ...(prop.description ? { description: htmlToMarkdown(cleanProse(prop.description)) } : {}),
+      };
+    }
+    classesIndex[className] = {
+      ...proseFields(classData.description),
+      ...(classData.docsUrl ? { docsUrl: classData.docsUrl } : {}),
+      ...(classData.since ? { since: classData.since } : {}),
+      ...deprecatedField(classData.deprecated),
+      ...(classData.extends && classData.extends.length > 0 ? { extends: classData.extends } : {}),
+      ...(Object.keys(methods).length > 0 ? { methods } : {}),
+      ...(Object.keys(properties).length > 0 ? { properties } : {}),
+    };
+  }
+
+  const typedefsIndex = {};
+  for (const [name, typedefData] of Object.entries(typedefs)) {
+    const properties = {};
+    for (const prop of typedefData.properties) {
+      properties[prop.name] = {
+        type: prop.type,
+        ...(prop.optional ? { optional: true } : {}),
+        ...(prop.description ? { description: htmlToMarkdown(cleanProse(prop.description)) } : {}),
+      };
+    }
+    typedefsIndex[name] = {
+      ...proseFields(typedefData.description),
+      ...(typedefData.since ? { since: typedefData.since } : {}),
+      ...deprecatedField(typedefData.deprecated),
+      ...(typedefData.type ? { type: typedefData.type } : {}),
+      ...(Object.keys(properties).length > 0 ? { properties } : {}),
+    };
+  }
+
+  const eventsIndex = {};
+  for (const [name, event] of Object.entries(events)) {
+    eventsIndex[name] = {
+      ...proseFields(event.description),
+      params: event.params.map((p) => ({ name: p.name, type: p.type })),
+    };
+  }
+
+  return { classes: classesIndex, typedefs: typedefsIndex, events: eventsIndex };
+}
+
 const TS_BUILTINS = new Set([
   'Array', 'Record', 'Object', 'Function', 'Promise', 'Date', 'Map', 'Set',
   'Error', 'RegExp', 'Symbol', 'ReadonlyArray', 'Partial', 'Required', 'Readonly',
@@ -824,6 +921,7 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
       unresolvedTypes: stubs,
       anyOccurrences,
     },
+    indexSection: buildApiIndexSection(classes, typedefs, events),
   };
 }
 
@@ -914,6 +1012,7 @@ async function main() {
     const filename = `${typeName}.ts`;
     fs.writeFileSync(path.join(OUTPUT_DIR, filename), generated.content);
     report[typeName] = generated.stats;
+    mergeApiIndex(typeName, generated.indexSection);
     console.log(`Generated ${filename} with ${generated.stats.classes} classes`);
   }
 

@@ -338,6 +338,33 @@ A file with no top-level `import`/`export` is a TypeScript "script": every `inte
 to look like if it weren't wrapped in a module - unlike the modular npm package, it doesn't need
 installing, only loading as text.
 
+## Machine-readable index (AI agents, search, RAG)
+
+`dist/api-index.json` is the same API surface as the `.d.ts` files - every class, method, typedef,
+editor event and `executeMethod` - but as plain JSON for tools that don't parse TypeScript. Each
+entry carries its signature, markdown description, parameter list, return type, runnable `examples`,
+`since` version and the verified `docsUrl` (derived from the sources, never guessed):
+
+```json
+"AddComment": {
+  "signature": "AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment",
+  "description": "Adds a comment to the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddComment/",
+  "examples": ["let doc = Api.GetDocument(); ..."],
+  "params": [{ "name": "sText", "type": "string", "description": "The comment text (required.)" }, ...],
+  "returns": { "type": "ApiComment", "description": "Returns null if the comment was not added." }
+}
+```
+
+Three ways to get it: read it from an installed copy of the package
+(`require.resolve("@onlyoffice/plugins-types/api-index.json")` - it's in the published `files`),
+fetch the git-tracked file from raw.githubusercontent.com, or regenerate it locally with
+`npm run generate`. Written by `generate-types.js` (object model + events) and
+`generate-plugin-methods.js` (executeMethod surface); each replaces its own section wholesale, so
+removed members disappear instead of going stale. `AGENTS.md` in this directory condenses the
+plugin-authoring contract (`callCommand` serialization, `Asc.scope`, the three channels) plus these
+lookup pointers for coding agents.
+
 ## Modular entry points
 
 The root package remains the compatibility entry point. The same runtime types are also available by
@@ -404,9 +431,13 @@ onlyoffice-types/
 │       └── index.d.ts           # re-exports both - the /services entry point
 ├── schemas/
 │   └── config.schema.json
+├── dist/                  # tracked in git: directly linkable build artifacts
+│   ├── api-index.json      # machine-readable API index (signatures, docs, examples) for agents/RAG
+│   └── ambient/            # flattened no-import .d.ts bundle + per-editor Api addons (Monaco etc.)
 ├── scripts/
 │   ├── generate-types.js          # Api object model generator (src/generated/{word,cell,slide,pdf,forms}.ts)
 │   ├── generate-plugin-methods.js # executeMethod surface generator (src/generated/*-methods.ts)
+│   ├── api-index.js               # shared section-merging writer for dist/api-index.json
 │   ├── generate-ambient-bundle.js
 │   ├── generate-config-schema.js
 │   ├── check-runtime-contract.js
@@ -416,6 +447,7 @@ onlyoffice-types/
 ├── tsconfig.typecheck.json # also typechecks example.js + test/*.js
 ├── example.js             # Usage examples
 ├── test/                  # Call-shape smoke tests copied from the official docs
+├── AGENTS.md              # authoring contract + lookup pointers for coding agents
 └── package.json
 ```
 
