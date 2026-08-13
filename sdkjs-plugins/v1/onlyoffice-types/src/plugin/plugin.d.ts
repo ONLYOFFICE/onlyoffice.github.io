@@ -9,10 +9,11 @@ import type { Slide } from "../generated/slide";
 import type { Forms } from "../generated/forms";
 import type { Pdf } from "../generated/pdf";
 
-import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "../word-methods";
-import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "../cell-methods";
-import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "../slide-methods";
-import type { PdfMethodName, PdfMethodArgs, PdfMethodReturn } from "../pdf-methods";
+import type { WordMethodName, WordMethodArgs, WordMethodReturn } from "../generated/word-methods";
+import type { CellMethodName, CellMethodArgs, CellMethodReturn } from "../generated/cell-methods";
+import type { SlideMethodName, SlideMethodArgs, SlideMethodReturn } from "../generated/slide-methods";
+import type { PdfMethodName, PdfMethodArgs, PdfMethodReturn } from "../generated/pdf-methods";
+import type { FormsMethodName, FormsMethodArgs, FormsMethodReturn } from "../generated/forms-methods";
 
 import type { AscTheme } from "../theme";
 import type { EditorType, VariationConfig } from "../config/plugin-config";
@@ -105,14 +106,24 @@ interface AscPlugin {
     event_onTargetPositionChanged?: PluginEventHandler<"onTargetPositionChanged">;
     event_onClick?: PluginEventHandler<"onClick">;
     event_onKeyDown?: PluginEventHandler<"onKeyDown">;
+    event_onEnableMouseEvent?: PluginEventHandler<"onEnableMouseEvent">;
+    event_onChangeRestrictions?: PluginEventHandler<"onChangeRestrictions">;
     onDestroy?: () => void;
     onEvent: (eventName: string, payload?: unknown) => void;
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
+        /**
+         * Like CloseWindow/ShowButton, undocumented on api.onlyoffice.com but real and callable -
+         * `common/apiBase_plugins.js`'s own `pluginMethod_ResizeWindow` takes exactly these 4
+         * params (frameId, size, minSize, maxSize), not the single `aSize: number[]` this used to
+         * be typed as here.
+         */
+        ((methodName: 'ResizeWindow', args?: [frameId: string, size: number, minSize: number, maxSize: number]) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
         (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) &
-        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void);
+        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void) &
+        (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T], callback?: (result: FormsMethodReturn<T>) => void) => void);
     executeCommand: ExecuteCommandCallback;
     info: PluginInfo;
     init: () => void;

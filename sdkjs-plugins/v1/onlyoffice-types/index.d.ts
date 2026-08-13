@@ -31,10 +31,11 @@ export type * from "./src/generated/cell";
 export type * from "./src/generated/slide";
 export type * from "./src/generated/pdf";
 
-export type * from "./src/word-methods";
-export type * from "./src/cell-methods";
-export type * from "./src/slide-methods";
-export type * from "./src/pdf-methods";
+export type * from "./src/generated/word-methods";
+export type * from "./src/generated/cell-methods";
+export type * from "./src/generated/slide-methods";
+export type * from "./src/generated/pdf-methods";
+export type * from "./src/generated/forms-methods";
 
 export type * from "./src/services";
 export type * from "./src/config";

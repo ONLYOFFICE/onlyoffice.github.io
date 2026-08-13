@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "onlyoffice-plugins-api",
-  "version": "0.8.3",
-  "description": "TypeScript definitions for OnlyOffice plugins",
+  "name": "@onlyoffice/plugins-types",
+  "version": "0.9.0",
+  "description": "TypeScript type definitions for the ONLYOFFICE Plugin API",
   "types": "index.d.ts",
   "exports": {
     ".": {
@@ -80,18 +80,31 @@
   "bugs": {
     "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types"
   },
-  "license": "AGPL-3.0-or-later",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Ascensio System SIA",
+    "email": "integration@onlyoffice.com",
+    "url": "https://www.onlyoffice.com"
+  },
   "keywords": [
     "onlyoffice",
     "plugin",
+    "plugins-api",
     "typescript",
     "types"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "generate": "node scripts/generate-types.js",
+    "postgenerate": "node scripts/generate-plugin-methods.js && node scripts/generate-ambient-bundle.js",
+    "generate-plugin-methods": "node scripts/generate-plugin-methods.js",
     "generate-schema": "node scripts/generate-config-schema.js",
+    "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
     "check-runtime": "node scripts/check-runtime-contract.js",
+    "check-plugin-events": "node scripts/check-plugin-events.js",
     "validate-schema": "node scripts/validate-config-schema.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "tsc --noEmit -p tsconfig.typecheck.json"

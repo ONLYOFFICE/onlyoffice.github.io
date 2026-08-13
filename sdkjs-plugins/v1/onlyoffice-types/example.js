@@ -6,7 +6,7 @@
 /// <reference path="./index.d.ts" />
 
 // This file demonstrates multiple editor variants in one smoke-test file. In a real plugin,
-// select exactly one editor entry point (`onlyoffice-plugins-api/word`, `/cell`, or `/slide`).
+// select exactly one editor entry point (`@onlyoffice/plugins-types/word`, `/cell`, or `/slide`).
 /** @type {any} */
 var Api;
 
@@ -24,7 +24,7 @@ function basicPluginExample() {
 // Example 2: Using callCommand with document API (Word)
 function documentPluginExample() {
     window.Asc.plugin.init = function() {
-        // In a Word plugin, include `onlyoffice-plugins-api/word` in tsconfig.json.
+        // In a Word plugin, include `@onlyoffice/plugins-types/word` in tsconfig.json.
         window.Asc.plugin.callCommand(function() {
             var oDocument = Api.GetDocument();
             var oParagraph = Api.CreateParagraph();
