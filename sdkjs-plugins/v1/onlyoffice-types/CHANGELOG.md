@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.1
+
+### Added
+
+- Real overloads for `Api.*` methods where an optional parameter is followed by a required one
+  (`SetRelativeHeight`, `AddRows`/`AddColumns`, `AddMaster`, `AddLayout`, `CreateChart`, ...) -
+  previously flattened into one signature that wrongly let the required parameter be omitted too.
+- `src/overrides/{word,cell,pdf}.ts` - hand-maintained declarations (the DefinitelyTyped pattern) for
+  8 classes/typedefs sdkjs documents fully but a plain checkout can't resolve (`ApiTableOfContents`,
+  `ApiTableOfFigures`, `TextAnnotation`, `TextAnnotationRange`, `ApiListObject`, `ApiHyperlinks`,
+  `PTCondition`, `BulletType`), replacing a blind `unknown` stub. Included in `tsconfig.typecheck.json`
+  so they're type-checked on their own, not just once spliced into a generated file.
+- `CONTRIBUTING.md` - generator/build internals split out of `README.md` (479 → ~120 lines).
+
+### Fixed
+
+- `extends Omit<Base, /* ~60 names */>` sheets, where sdkjs's JSDoc happened to redocument most of a
+  base class's members unchanged: now only genuinely conflicting members (usually just
+  `GetClassType`) are Omitted.
+- `any` can no longer reappear through an untested fallback path (undocumented property, empty
+  typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+
 ## 0.9.0
 
 ### Breaking

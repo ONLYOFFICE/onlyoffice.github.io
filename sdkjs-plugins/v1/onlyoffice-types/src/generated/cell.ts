@@ -509,6 +509,12 @@ export namespace Cell {
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
   /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
+  /**
    * The mathematical operation which will be applied to the copied data.
    *
    * @example
@@ -1655,10 +1661,118 @@ export namespace Cell {
    */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ApiHyperlinks = unknown;
-  export type ApiListObject = unknown;
+  // Manual overrides (see src/overrides/cell.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  /**
+   * `ApiWorksheet.GetHyperlinks`/`ApiRange.GetHyperlinks` are documented with `@returns {ApiHyperlinks}`,
+   * but there is no `ApiHyperlinks` class anywhere in sdkjs (checked out or the deploy bundle) - a
+   * naming mistake in sdkjs's own JSDoc. Both implementations actually
+   * `.map(elem => new ApiHyperlink(elem, ws))`, i.e. a plain array of the real (singular) `ApiHyperlink`
+   * class already generated in this file.
+   */
+  export type ApiHyperlinks = ApiHyperlink[];
+  export interface ApiListObject {
+    /** Returns whether the active cell is within the range of the table. */
+    GetActive(): boolean;
+    /** Returns the alternative text for the table. */
+    GetAlternativeText(): string;
+    /** Sets the alternative text for the table. */
+    SetAlternativeText(sAltText: string): void;
+    /** Returns the comment (summary alternative text) for the table. */
+    GetComment(): string;
+    /** Sets the comment (summary alternative text) for the table. */
+    SetComment(sComment: string): void;
+    /** Returns the name of the table. */
+    GetName(): string;
+    /** Sets the name of the table. Equivalent to SetDisplayName. Returns false if the name is invalid or already used by another table. */
+    SetName(name: string): boolean;
+    /** Returns the worksheet that is the parent of the table. */
+    GetParent(): ApiWorksheet;
+    /** Returns the display name of the table. */
+    GetDisplayName(): string;
+    /** Sets the display name of the table. Returns false if the name is invalid or already used by another table. */
+    SetDisplayName(sDisplayName: string): boolean;
+    /** Returns the range of the table, or null if the table has no range. */
+    GetRange(): ApiRange | null;
+    /** Returns the range of the header row, or null if the table has no header row. */
+    GetHeaderRowRange(): ApiRange | null;
+    /** Returns whether the AutoFilter dropdown buttons are displayed on the header row. Defaults to true for a new table. */
+    GetShowAutoFilter(): boolean;
+    /** Sets whether the AutoFilter is present on the table. Setting to false removes it entirely; true creates it if not present. */
+    SetShowAutoFilter(show: boolean): void;
+    /** Returns whether the AutoFilter dropdown arrows are displayed on the header row. Defaults to true for a new table. */
+    GetShowAutoFilterDropDown(): boolean;
+    /** Sets whether the AutoFilter dropdown arrows are displayed; does not remove the AutoFilter itself. */
+    SetShowAutoFilterDropDown(bShow: boolean): void;
+    /** Returns whether the header row is displayed for the table. */
+    GetShowHeaders(): boolean;
+    /** Sets whether the header row is displayed for the table. */
+    SetShowHeaders(show: boolean): void;
+    /** Returns the AutoFilter object for the table, or null if the table has no autofilter. */
+    GetAutoFilter(): ApiAutoFilter | null;
+    /** Returns the range of the data rows, excluding the header and totals rows; null if the table has no data rows. */
+    GetDataBodyRange(): ApiRange | null;
+    /** Returns whether banded column formatting is applied to the table. */
+    GetShowTableStyleColumnStripes(): boolean;
+    /** Sets whether banded column formatting is applied to the table. */
+    SetShowTableStyleColumnStripes(show: boolean): void;
+    /** Returns whether the first-column style is applied to the table. */
+    GetShowTableStyleFirstColumn(): boolean;
+    /** Sets whether the first-column style is applied to the table. */
+    SetShowTableStyleFirstColumn(show: boolean): void;
+    /** Returns whether the last-column style is applied to the table. */
+    GetShowTableStyleLastColumn(): boolean;
+    /** Sets whether the last-column style is applied to the table. */
+    SetShowTableStyleLastColumn(show: boolean): void;
+    /** Returns whether banded row formatting is applied to the table. */
+    GetShowTableStyleRowStripes(): boolean;
+    /** Sets whether banded row formatting is applied to the table. */
+    SetShowTableStyleRowStripes(show: boolean): void;
+    /** Returns whether the totals row is displayed for the table. */
+    GetShowTotals(): boolean;
+    /** Sets whether the totals row is displayed for the table. */
+    SetShowTotals(show: boolean): void;
+    /** Deletes the table and clears the cell formatting. */
+    Delete(): void;
+    /** Removes the list functionality from the table and converts it to a regular data range; cell data/formatting/formulas remain. */
+    Unlist(): void;
+    /** Resizes the table to a new range (as an ApiRange or an address string, e.g. `"A1:D10"`). Cells are not inserted or moved. */
+    Resize(Range: ApiRange | string): void;
+    /** Returns the source type of the table. Always `"xlSrcRange"` for range-based tables. */
+    GetSourceType(): string;
+    /** Returns the name of the table style applied to the table. */
+    GetTableStyle(): string;
+    /** Sets the table style by name. */
+    SetTableStyle(styleName: string): void;
+    /** Returns the range of the totals row, or null if the table has no totals row. */
+    GetTotalsRowRange(): ApiRange | null;
+    /** Returns the summary description (alternative text summary) for the table. */
+    GetSummary(): string;
+    /** Sets the summary description (alternative text summary) for the table. */
+    SetSummary(summary: string): void;
+    /** Returns all columns in the table. */
+    GetListColumns(): ApiListColumn[];
+    /** Adds a new column at the specified 1-based position (appended at the end if omitted). Returns null if the position is invalid. */
+    AddListColumn(nPosition?: number): ApiListColumn | null;
+    /** Returns all data rows in the table, excluding the header and totals rows. */
+    GetListRows(): ApiListRow[];
+    /** Adds a new data row at the specified 1-based position within the data body (appended at the end if omitted). `bAlwaysInsert` (default true) specifies whether cells outside the table are shifted. Returns null if the position is invalid. */
+    AddListRow(nPosition?: number, bAlwaysInsert?: boolean): ApiListRow | null;
+    /** Returns the Sort object for this table. */
+    GetSort(): ApiSort;
+  }
+  /**
+   * `ApiFormatCondition`/`ApiAboveAverage` etc.'s `GetPTCondition()` (and the `PTCondition` property
+   * alias) return `this.rule.pivot` directly - an internal pivot-table rule object with no public
+   * `Api*` wrapper class anywhere in sdkjs, checked-out or bundled. There is nothing to model here;
+   * `unknown` is the honest type, not a resolution gap to eventually fill in.
+   */
   export type PTCondition = unknown;
+
+  // Cross-file type stubs
+  export type ApiListColumn = unknown;
+  export type ApiListRow = unknown;
+  export type ApiSort = unknown;
 
   /**
    * Base class.
@@ -2899,6 +3013,15 @@ export namespace Cell {
     RecalculateAllFormulas(fLogger?: (...args: unknown[]) => unknown): boolean;
 
     /**
+     * Redraws the editor screen, making the changes already made by a macro visible without waiting for it
+     * to finish. Observable from asynchronous code only. Repaints without recalculating: call
+     * {@link Api#Calculate} first if formula results must be up to date.
+     *
+     * @since 9.5.0
+     */
+    Redraw(): boolean;
+
+    /**
      * Refreshes all pivot tables.
      *
      * @since 8.2.0
@@ -3128,7 +3251,7 @@ export namespace Cell {
   }
 
   /** Class representing an above average conditional formatting rule. */
-  export interface ApiAboveAverage extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiAboveAverage extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -3251,6 +3374,14 @@ export namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -3379,6 +3510,15 @@ export namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -3745,7 +3885,7 @@ export namespace Cell {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "SetTitle" | "GetTitle"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Adds a new series to the current chart.
      *
@@ -5461,7 +5601,7 @@ export namespace Cell {
   }
 
   /** Class representing a color scale conditional formatting rule. */
-  export interface ApiColorScale extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiColorScale extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -5579,6 +5719,14 @@ export namespace Cell {
     GetScopeType(): XlPivotConditionScope;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -5689,6 +5837,15 @@ export namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -7040,7 +7197,7 @@ export namespace Cell {
   }
 
   /** Class representing a data bar conditional formatting rule. */
-  export interface ApiDatabar extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiDatabar extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -7279,6 +7436,14 @@ export namespace Cell {
     GetShowValue(): boolean;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -7511,6 +7676,15 @@ export namespace Cell {
     SetShowValue(showValue: boolean): void;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -7532,7 +7706,7 @@ export namespace Cell {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetAllParagraphs" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "AddText"> {
+  export interface ApiDocument extends ApiDocumentContent {
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the document
      * content.
@@ -7877,15 +8051,6 @@ export namespace Cell {
 
   /** Class representing a graphical object. */
   export interface ApiDrawing {
-    /**
-     * Sets the fill formatting properties to the current graphic object.
-     *
-     * @param fill - The fill type used to fill the graphic object.
-     * @returns returns false if param is invalid.
-     * @since 9.5.0
-     */
-    Fill(fill: ApiFill): boolean;
-
     /**
      * Returns a type of the ApiDrawing class.
      *
@@ -8851,6 +9016,14 @@ export namespace Cell {
     GetScopeType(): XlPivotConditionScope;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -8961,6 +9134,15 @@ export namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -9304,7 +9486,7 @@ export namespace Cell {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiGroup class.
      *
@@ -9580,7 +9762,7 @@ export namespace Cell {
   }
 
   /** Class representing an icon set conditional formatting rule. */
-  export interface ApiIconSetCondition extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiIconSetCondition extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -9739,6 +9921,14 @@ export namespace Cell {
     GetShowIconOnly(): boolean | null;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -9888,6 +10078,15 @@ export namespace Cell {
     SetShowIconOnly(showIconOnly: boolean): boolean;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -9905,7 +10104,7 @@ export namespace Cell {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiImage class.
      *
@@ -10093,7 +10292,7 @@ export namespace Cell {
   }
 
   /** Class representing an OLE object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns the application ID from the current OLE object.
      *
@@ -11289,7 +11488,7 @@ export namespace Cell {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -12609,7 +12808,7 @@ export namespace Cell {
   }
 
   /** Class representing a pivot table data field. */
-  export interface ApiPivotDataField extends Omit<ApiPivotField, "ClearAllFilters" | "ClearLabelFilters" | "ClearManualFilters" | "ClearValueFilters" | "GetPivotItems" | "Move" | "Remove" | "GetPosition" | "SetPosition" | "GetOrientation" | "SetOrientation" | "GetValue" | "SetValue" | "GetCaption" | "SetCaption" | "GetName" | "SetName" | "GetSourceName" | "GetIndex" | "GetTable" | "GetParent" | "GetLayoutCompactRow" | "SetLayoutCompactRow" | "GetLayoutForm" | "SetLayoutForm" | "GetLayoutPageBreak" | "SetLayoutPageBreak" | "GetShowingInAxis" | "GetRepeatLabels" | "SetRepeatLabels" | "GetLayoutBlankLine" | "SetLayoutBlankLine" | "GetShowAllItems" | "SetShowAllItems" | "GetLayoutSubtotals" | "SetLayoutSubtotals" | "GetLayoutSubtotalLocation" | "SetLayoutSubtotalLocation" | "GetSubtotalName" | "SetSubtotalName" | "GetSubtotals" | "SetSubtotals" | "GetDragToColumn" | "SetDragToColumn" | "GetDragToRow" | "SetDragToRow" | "GetDragToData" | "SetDragToData" | "GetDragToPage" | "SetDragToPage" | "GetCurrentPage" | "GetPivotFilters" | "AutoSort"> {
+  export interface ApiPivotDataField extends ApiPivotField {
     /**
      * Establishes automatic field-sorting rules for the pivot table reports.
      *
@@ -22937,7 +23136,7 @@ export namespace Cell {
     UnMerge(): boolean;
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -23164,7 +23363,7 @@ export namespace Cell {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a line break to the current run position and starts the next element from a new line.
      *
@@ -24290,7 +24489,7 @@ export namespace Cell {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "GetLine"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiShape class.
      *
@@ -24441,7 +24640,7 @@ export namespace Cell {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiSmartArt class. */
     GetClassType(): "smartArt";
 
@@ -24530,7 +24729,7 @@ export namespace Cell {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetParentSheet">, ApiTablePr {
+  export interface ApiTable extends ApiDrawing, ApiTablePr {
     /**
      * Returns the parent sheet of the current drawing.
      *
@@ -25427,7 +25626,7 @@ export namespace Cell {
   }
 
   /** Class representing a top 10 conditional formatting rule. */
-  export interface ApiTop10 extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiTop10 extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -25550,6 +25749,14 @@ export namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -25689,6 +25896,15 @@ export namespace Cell {
     SetScopeType(ScopeType: XlPivotConditionScope): void;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -25740,7 +25956,7 @@ export namespace Cell {
   }
 
   /** Class representing a unique values conditional formatting rule. */
-  export interface ApiUniqueValues extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiUniqueValues extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -25856,6 +26072,14 @@ export namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -25977,6 +26201,15 @@ export namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -26209,6 +26442,15 @@ export namespace Cell {
      * @since 9.1.0
      */
     GetTheme(): ApiTheme;
+
+    /**
+     * Redraws the editor screen, making the changes already made by a macro visible without waiting for it
+     * to finish. Observable from asynchronous code only. Repaints without recalculating: call
+     * {@link ApiWorkbook#Calculate} first if formula results must be up to date.
+     *
+     * @since 9.5.0
+     */
+    Redraw(): boolean;
 
     /**
      * Saves changes to the specified document.
@@ -35482,7 +35724,8 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUMIFS/
      */
-    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3?: ApiRange | ApiName, arg4?: ApiRange | ApiName | number | string, arg5?: ApiRange | ApiName): number;
+    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg4: ApiRange | ApiName | number | string): number;
+    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3: ApiRange | ApiName, arg4: ApiRange | ApiName | number | string, arg5?: ApiRange | ApiName): number;
 
     /**
      * Returns the sum of the squares of the arguments.
