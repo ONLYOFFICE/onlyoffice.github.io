@@ -29,6 +29,16 @@
   override tables in the generator.
 - `onEnableMouseEvent`/`onChangeRestrictions` in `PluginEventMap`; `onClick` payload typed as
   `isSelectionUse: boolean`.
+- 23 more `PluginEventMap` entries, sourced from each editor's own `<editor>/plugin-events.js` /
+  `sdkjs-forms/plugin-events.js` (previously only `common/base-plugin-events.js` was checked):
+  Word's `onAddComment`, `onChangeCommentData`, `onChangeCurrentPage`, `onRemoveComment`,
+  `onSubmitForm`, `onFocusContentControl`, `onBlurContentControl`, `onChangeContentControl`,
+  `onHideContentControlTrack`, `onShowContentControlTrack`, `onInsertOleObjects`,
+  `onBlurAnnotation`, `onFocusAnnotation`, `onClickAnnotation`, `onParagraphText`; Cell's
+  `onChangeCurrentSheet`; Slide's `onChangeCurrentSlide`, `onSlideShowBegin`, `onSlideShowEnd`,
+  `onSlideShowNextSlide`, `onSlideShowSlideChanged`; Pdf's `onSelectionEnd`, `onSelectionCancel`.
+  The Word-only payloads reuse `ContentControl`/`comment`/`TextAnnotation`/`TextAnnotationRange`
+  from `src/generated/word-methods.ts` rather than duplicating those shapes by hand.
 
 ### Fixed
 
@@ -39,7 +49,9 @@
 ### Changed
 
 - `check-plugin-methods.js` → `check-plugin-events.js`: the `executeMethod`-name half is superseded
-  by the generator plus `check-generated`.
+  by the generator plus `check-generated`; the surviving events check now also reads every editor's
+  own `plugin-events.js` (previously only the common file), which is what surfaced the 23 events
+  added above.
 
 ## 0.8.0
 

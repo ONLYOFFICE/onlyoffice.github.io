@@ -37,8 +37,11 @@ const NAME_PREFIX = { word: 'Word', cell: 'Cell', slide: 'Slide', pdf: 'Pdf', fo
 
 // Supporting typedefs that real code outside this package already imports from the root
 // (`onlyoffice-plugins-api`/`@onlyoffice/plugins-types`) - everything else stays file-local.
+// `ContentControl`/`comment`/`TextAnnotation`/`TextAnnotationRange` are also imported by
+// `src/plugin/events.d.ts`, whose `PluginEventMap` reuses these canonical shapes for Word's
+// content-control/comment/annotation event payloads instead of duplicating them by hand.
 const EXTRA_EXPORTS = {
-  word: ['ContentControlProperties', 'AddinFieldData'],
+  word: ['ContentControlProperties', 'AddinFieldData', 'ContentControl', 'comment', 'TextAnnotation', 'TextAnnotationRange'],
 };
 
 // Typedef properties sdkjs's own JSDoc marks required with no optional/nullable/defaultvalue signal
