@@ -227,16 +227,16 @@ interface PluginOptions {
  */
 interface Rect {
   /** x1 (left) */
-  "0": number;
+  "0": pt;
 
   /** y1 (top) */
-  "1": number;
+  "1": pt;
 
   /** x2 (right) */
-  "2": number;
+  "2": pt;
 
   /** y2 (bottom) */
-  "3": number;
+  "3": pt;
 }
 
 /** Options to replace the HTML page content. */

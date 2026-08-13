@@ -107,6 +107,24 @@ layer for smaller imports: `@onlyoffice/plugins-types/plugin` (`AscPlugin`, even
 `/plugin/events`, `/plugin/buttons`, `/config`, `/services` - type-only re-exports of the same
 declarations the root package uses, so existing root imports remain compatible.
 
+## Versioning
+
+This package's version tracks the ONLYOFFICE editor version its types were generated from, the same
+way [`@onlyoffice/doceditor-types`](https://www.npmjs.com/package/@onlyoffice/doceditor-types) tracks
+Docs Server:
+
+| Package version | Editors (sdkjs) version |
+| --------------- | ----------------------- |
+| 9.5.0           | 9.5.0                   |
+
+Pick the package version matching the editors you target. Because the version identifies a product
+release rather than the shape of the type surface, it is **not** semver over these declarations: a
+new editor release can rename or retype an API in any version segment, so a type-level breaking
+change can arrive in what looks like a patch. Pin exactly (`"@onlyoffice/plugins-types": "9.5.0"`)
+if that matters to you, and read the [changelog](CHANGELOG.md) before moving between editor
+versions. The exact source commit each release was generated from is recorded in
+`src/generated/generation-manifest.json`.
+
 ## Contributing / how the types are generated
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the generator pipeline, type-checking scripts, the

@@ -1,9 +1,17 @@
 # Changelog
 
-## 0.9.1
+Versions mirror the ONLYOFFICE editor release this package's types were generated from - see
+[Versioning](README.md#versioning). The `0.x` entries below are development history from before the
+first publish; no `0.x` version was ever released to npm.
+
+## 9.5.0
+
+First published release. Generated from sdkjs `v9.5.0.150`.
 
 ### Breaking
 
+- Versioning switched from independent `0.x` semver to mirroring the editor version, so this release
+  follows `0.9.1` as `9.5.0`. Nothing was published under the old scheme.
 - `peerDependencies` now requires `typescript >=5.0.0`. It always did in practice - `index.d.ts`
   re-exports the editor namespaces with `export type *`, which 4.x rejects outright (`TS1383`) - the
   declared floor was simply wrong.
@@ -122,7 +130,7 @@
 
 ## 0.8.0
 
-Initial public release.
+The initial development version - never published to npm.
 
 ### Breaking
 
