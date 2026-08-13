@@ -4,11 +4,11 @@
 // unwrapped into plain top-level declarations instead.
 //
 // Produces:
-//   dist/ambient/onlyoffice-plugins-api.ambient.d.ts        - Asc/AscPlugin/events/buttons/config/
+//   dist/ambient/onlyoffice-plugins-types.ambient.d.ts        - Asc/AscPlugin/events/buttons/config/
 //                                                              theme/services + all 5 editor namespaces,
 //                                                              WITHOUT a global `Api` (matches the root
 //                                                              package - no cross-editor Api global).
-//   dist/ambient/onlyoffice-plugins-api.<editor>.ambient.d.ts - the base bundle above PLUS that one
+//   dist/ambient/onlyoffice-plugins-types.<editor>.ambient.d.ts - the base bundle above PLUS that one
 //                                                              editor's global `Api`, for consumers
 //                                                              (like a Monaco playground) that already
 //                                                              know which editor they're targeting.
@@ -94,7 +94,7 @@ function readStripped(relPath) {
 
 function buildBaseBundle() {
   const header = `// AUTO-GENERATED - do not edit by hand. Run \`npm run generate-ambient\` to regenerate.
-// A flattened, non-module ambient bundle of onlyoffice-plugins-api for tools (e.g. a Monaco
+// A flattened, non-module ambient bundle of @onlyoffice/plugins-types for tools (e.g. a Monaco
 // editor's addExtraLib()) that want one global-scope .d.ts blob instead of an installable,
 // module-based npm package. Source of truth is still the modular package under src/ - this is a
 // build artifact, not something to hand-edit.
@@ -122,15 +122,15 @@ function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   const base = buildBaseBundle();
-  fs.writeFileSync(path.join(OUT_DIR, 'onlyoffice-plugins-api.ambient.d.ts'), base);
-  console.log('Generated dist/ambient/onlyoffice-plugins-api.ambient.d.ts');
+  fs.writeFileSync(path.join(OUT_DIR, 'onlyoffice-plugins-types.ambient.d.ts'), base);
+  console.log('Generated dist/ambient/onlyoffice-plugins-types.ambient.d.ts');
 
   for (const [editorName, editorFile] of Object.entries(EDITOR_FILES)) {
     const addon = buildEditorAddon(editorFile);
     const combined = `${base}\n// ---- ${editorFile} (global Api for the "${editorName}" editor) ----\n${addon}\n`;
-    const outPath = path.join(OUT_DIR, `onlyoffice-plugins-api.${editorName}.ambient.d.ts`);
+    const outPath = path.join(OUT_DIR, `onlyoffice-plugins-types.${editorName}.ambient.d.ts`);
     fs.writeFileSync(outPath, combined);
-    console.log(`Generated dist/ambient/onlyoffice-plugins-api.${editorName}.ambient.d.ts`);
+    console.log(`Generated dist/ambient/onlyoffice-plugins-types.${editorName}.ambient.d.ts`);
   }
 }
 

@@ -1,5 +1,5 @@
 // AUTO-GENERATED - do not edit by hand. Run `npm run generate-ambient` to regenerate.
-// A flattened, non-module ambient bundle of onlyoffice-plugins-api for tools (e.g. a Monaco
+// A flattened, non-module ambient bundle of @onlyoffice/plugins-types for tools (e.g. a Monaco
 // editor's addExtraLib()) that want one global-scope .d.ts blob instead of an installable,
 // module-based npm package. Source of truth is still the modular package under src/ - this is a
 // build artifact, not something to hand-edit.

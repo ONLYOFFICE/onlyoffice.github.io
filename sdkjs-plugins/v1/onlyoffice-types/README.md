@@ -9,7 +9,7 @@ This package only adds TypeScript types on top of that API.
 ## Installation
 
 ```bash
-npm install onlyoffice-plugins-api
+npm install @onlyoffice/plugins-types
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ Add the root package and the entry point for the editor your plugin supports to 
 ```json
 {
   "compilerOptions": {
-    "types": ["onlyoffice-plugins-api", "onlyoffice-plugins-api/word"]
+    "types": ["@onlyoffice/plugins-types", "@onlyoffice/plugins-types/word"]
   }
 }
 ```
@@ -31,7 +31,7 @@ Use `/word`, `/cell`, `/slide`, or `/pdf`. The editor entry point declares the m
 Alternatively, reference the entry point directly in a TypeScript file:
 
 ```typescript
-/// <reference types="onlyoffice-plugins-api/word" />
+/// <reference types="@onlyoffice/plugins-types/word" />
 ```
 
 ### Example Plugin
@@ -73,14 +73,14 @@ window.Asc.plugin.executeMethod("GetSelectedText", [], function (text) {
 Every editor's API is generated into its own TypeScript `namespace` (`Word`, `Cell`, `Slide`, `Forms`, `Pdf`). The root package does not declare a global `Api`; select the editor-specific entry point (`/word`, `/cell`, `/slide`, or `/pdf`) for that global inside `callCommand`.
 
 Any type from any editor is importable regardless of which editor the current plugin targets -
-same-named classes across editors don't collide, so the same `onlyoffice-plugins-api` import
+same-named classes across editors don't collide, so the same `@onlyoffice/plugins-types` import
 works no matter which editor entry point your `tsconfig.json` declares. Each snippet below is a
 separate plugin/file targeting its own editor - only include the matching entry point
 (`/word`, `/cell`, `/slide`, or `/pdf`) in a given `tsconfig.json`; combining more than one in the
 same project makes the global `Api` declarations collide.
 
 ```typescript
-import type { Word } from "onlyoffice-plugins-api/word";
+import type { Word } from "@onlyoffice/plugins-types/word";
 
 window.Asc.plugin.callCommand(function() {
     const wordApi: Word.Api = Api;
@@ -90,7 +90,7 @@ window.Asc.plugin.callCommand(function() {
 ```
 
 ```typescript
-import type { Cell } from "onlyoffice-plugins-api/cell";
+import type { Cell } from "@onlyoffice/plugins-types/cell";
 
 window.Asc.plugin.callCommand(function() {
     const cellApi: Cell.Api = Api;
@@ -100,7 +100,7 @@ window.Asc.plugin.callCommand(function() {
 ```
 
 ```typescript
-import type { Slide } from "onlyoffice-plugins-api/slide";
+import type { Slide } from "@onlyoffice/plugins-types/slide";
 
 window.Asc.plugin.callCommand(function() {
     const slideApi: Slide.Api = Api;
@@ -110,7 +110,7 @@ window.Asc.plugin.callCommand(function() {
 ```
 
 ```typescript
-import type { Pdf } from "onlyoffice-plugins-api/pdf";
+import type { Pdf } from "@onlyoffice/plugins-types/pdf";
 
 window.Asc.plugin.callCommand(function() {
     const doc: Pdf.ApiDocument = Api.GetDocument();
@@ -122,8 +122,8 @@ window.Asc.plugin.callCommand(function() {
 equivalent to `Word.Api`/`Cell.Api`/`Slide.Api`/`Pdf.Api`:
 
 ```typescript
-// Word plugin - include `onlyoffice-plugins-api/word` in tsconfig.json.
-import type { Api } from "onlyoffice-plugins-api";
+// Word plugin - include `@onlyoffice/plugins-types/word` in tsconfig.json.
+import type { Api } from "@onlyoffice/plugins-types";
 
 window.Asc.plugin.callCommand(function() {
     const wordApi: Api<"word"> = Api;
@@ -244,13 +244,13 @@ generated files themselves are directly linkable/reviewable, but excluded from t
 don't need this flattened, ~700KB-per-file duplicate:
 
 ```text
-dist/ambient/onlyoffice-plugins-api.ambient.d.ts        # Asc/AscPlugin/events/buttons/config/
+dist/ambient/onlyoffice-plugins-types.ambient.d.ts        # Asc/AscPlugin/events/buttons/config/
                                                           # theme/services + all 5 editor namespaces,
                                                           # no global Api (matches the root package)
-dist/ambient/onlyoffice-plugins-api.word.ambient.d.ts    # the bundle above + a global `Api: Word.Api`
-dist/ambient/onlyoffice-plugins-api.cell.ambient.d.ts    # ...same, for Cell
-dist/ambient/onlyoffice-plugins-api.slide.ambient.d.ts   # ...same, for Slide
-dist/ambient/onlyoffice-plugins-api.pdf.ambient.d.ts     # ...same, for Pdf
+dist/ambient/onlyoffice-plugins-types.word.ambient.d.ts    # the bundle above + a global `Api: Word.Api`
+dist/ambient/onlyoffice-plugins-types.cell.ambient.d.ts    # ...same, for Cell
+dist/ambient/onlyoffice-plugins-types.slide.ambient.d.ts   # ...same, for Slide
+dist/ambient/onlyoffice-plugins-types.pdf.ambient.d.ts     # ...same, for Pdf
 ```
 
 A file with no top-level `import`/`export` is a TypeScript "script": every `interface`/`type`/
@@ -264,22 +264,22 @@ The root package remains the compatibility entry point. The same runtime types a
 layer for better discoverability and smaller imports:
 
 ```typescript
-import type { AscPlugin } from "onlyoffice-plugins-api/plugin/plugin";
-import type { PluginEventMap } from "onlyoffice-plugins-api/plugin/events";
-import type { Buttons } from "onlyoffice-plugins-api/plugin/buttons";
-import type { PluginConfig } from "onlyoffice-plugins-api/config";
-import type { AscDesktopEditor } from "onlyoffice-plugins-api/services";
+import type { AscPlugin } from "@onlyoffice/plugins-types/plugin/plugin";
+import type { PluginEventMap } from "@onlyoffice/plugins-types/plugin/events";
+import type { Buttons } from "@onlyoffice/plugins-types/plugin/buttons";
+import type { PluginConfig } from "@onlyoffice/plugins-types/config";
+import type { AscDesktopEditor } from "@onlyoffice/plugins-types/services";
 ```
 
 Available layer entry points:
 
 ```text
-onlyoffice-plugins-api/plugin           # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo, events, buttons (everything)
-onlyoffice-plugins-api/plugin/plugin    # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo only
-onlyoffice-plugins-api/plugin/events    # PluginEventMap and plugin-window-level event types only
-onlyoffice-plugins-api/plugin/buttons   # Buttons and its ButtonBase subtypes only
-onlyoffice-plugins-api/config           # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
-onlyoffice-plugins-api/services         # AscDesktopEditor, AscSimpleRequest
+@onlyoffice/plugins-types/plugin           # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo, events, buttons (everything)
+@onlyoffice/plugins-types/plugin/plugin    # Asc, AscPlugin, PluginWindow, PluginScope, PluginInfo only
+@onlyoffice/plugins-types/plugin/events    # PluginEventMap and plugin-window-level event types only
+@onlyoffice/plugins-types/plugin/buttons   # Buttons and its ButtonBase subtypes only
+@onlyoffice/plugins-types/config           # PluginConfig, VariationConfig, ButtonConfig, IconConfig, ...
+@onlyoffice/plugins-types/services         # AscDesktopEditor, AscSimpleRequest
 ```
 
 These are type-only re-exports of the same declarations used by the root package, so existing root
@@ -337,5 +337,13 @@ Each interface/type is physically declared in exactly one module (e.g. `AscPlugi
 re-exports them, so it stays a genuine barrel file rather than a second copy of the same content.
 Each of `src/plugin/`, `src/config/`, `src/services/`, and `src/theme/` has its own `index.d.ts` that
 re-exports everything in that directory - that's what the [modular entry points](#modular-entry-points)
-(`onlyoffice-plugins-api/plugin`, `/config`, `/services`) resolve to; `onlyoffice-plugins-api/plugin/*`
+(`@onlyoffice/plugins-types/plugin`, `/config`, `/services`) resolve to; `@onlyoffice/plugins-types/plugin/*`
 resolves directly to the individual file (e.g. `/plugin/events` → `src/plugin/events.d.ts`).
+
+## License
+
+[Apache-2.0](LICENSE), Copyright 2026 Ascensio System SIA - the same license as
+[`@onlyoffice/doceditor-types`](https://www.npmjs.com/package/@onlyoffice/doceditor-types), so these
+declarations can be consumed by plugins under any license. Note that this covers the type
+declarations only; the ONLYOFFICE editors themselves (`sdkjs`, from whose JSDoc these types are
+generated) remain under AGPL-3.0-or-later.

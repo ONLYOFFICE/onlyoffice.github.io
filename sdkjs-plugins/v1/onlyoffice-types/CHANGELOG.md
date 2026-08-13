@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.0
+
+- **Relicensed from AGPL-3.0-or-later to Apache-2.0.** AGPL on a package that consists solely of
+  `.d.ts` declarations is a blocker for its intended audience: the file ends up inside the build of
+  every plugin that installs it. Apache-2.0 matches ONLYOFFICE's other published types package,
+  [`@onlyoffice/doceditor-types`](https://www.npmjs.com/package/@onlyoffice/doceditor-types), and
+  adds an explicit patent grant. The editors themselves (`sdkjs`, from whose JSDoc these types are
+  generated) are unaffected and stay AGPL-3.0-or-later.
+- **Renamed the package from `onlyoffice-plugins-api` to `@onlyoffice/plugins-types`**, in one line
+  with `@onlyoffice/doceditor-types`. The old name was never published to npm, so no installs break;
+  update `tsconfig.json`'s `types` array and any `import type` paths (`onlyoffice-plugins-api/word`
+  → `@onlyoffice/plugins-types/word`, and likewise for `/cell`, `/slide`, `/pdf`, `/plugin`,
+  `/config`, `/services`).
+- The ambient bundles follow the new name: `dist/ambient/onlyoffice-plugins-types[.<editor>].ambient.d.ts`
+  (previously `onlyoffice-plugins-api[.<editor>].ambient.d.ts`). Update any `addExtraLib()`/fetch
+  URL that pointed at the old filenames.
+- Added `author` and `publishConfig.access` to `package.json` for publishing.
+
 ## 0.8.0
 
 Initial public release.

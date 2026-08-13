@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "onlyoffice-plugins-api",
-  "version": "0.8.3",
-  "description": "TypeScript definitions for OnlyOffice plugins",
+  "name": "@onlyoffice/plugins-types",
+  "version": "0.9.0",
+  "description": "TypeScript type definitions for the ONLYOFFICE Plugin API",
   "types": "index.d.ts",
   "exports": {
     ".": {
@@ -80,13 +80,22 @@
   "bugs": {
     "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types"
   },
-  "license": "AGPL-3.0-or-later",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Ascensio System SIA",
+    "email": "integration@onlyoffice.com",
+    "url": "https://www.onlyoffice.com"
+  },
   "keywords": [
     "onlyoffice",
     "plugin",
+    "plugins-api",
     "typescript",
     "types"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "generate": "node scripts/generate-types.js",
     "postgenerate": "node scripts/generate-ambient-bundle.js",
