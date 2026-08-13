@@ -1558,7 +1558,8 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateChart/
      */
-    CreateChart(chartType?: ChartType, series?: number[][], seriesNames?: number[] | string[], catNames?: number[] | string[], width?: number, height?: number, styleIndex?: number, numFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox content control.
@@ -4870,7 +4871,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -4879,7 +4881,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -14274,7 +14277,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -14283,7 +14287,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -15741,7 +15746,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -15750,7 +15756,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -16581,7 +16588,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -16590,7 +16598,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -18602,7 +18611,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -18611,7 +18621,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -27741,7 +27752,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -27750,7 +27762,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -28473,7 +28486,8 @@ declare namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -28482,7 +28496,8 @@ declare namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -29100,7 +29115,8 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddColumns/
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddColumns(nCount: number): ApiTable;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Adds a comment to all contents of the current table.
@@ -29208,7 +29224,8 @@ declare namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddRows/
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddRows(nCount: number): ApiTable;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Clears the content from the table.
@@ -71680,7 +71697,8 @@ declare namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUMIFS/
      */
-    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3?: ApiRange | ApiName, arg4?: ApiRange | ApiName | number | string, arg5?: ApiRange | ApiName): number;
+    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg4: ApiRange | ApiName | number | string): number;
+    SUMIFS(arg1: ApiRange | ApiName, arg2: ApiRange | ApiName | number | string, arg3: ApiRange | ApiName, arg4: ApiRange | ApiName | number | string, arg5?: ApiRange | ApiName): number;
 
     /**
      * Returns the sum of the squares of the arguments.
@@ -74214,7 +74232,8 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/
      */
-    CreateChart(sType?: ChartType, aSeries?: number[][], aSeriesNames?: number[] | string[], aCatNames?: number[] | string[], nWidth?: number, nHeight?: number, nStyleIndex?: number, aNumFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a new custom geometry.
@@ -80974,7 +80993,8 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/AddLayout/
      */
-    AddLayout(nPos?: number, oLayout?: ApiLayout): boolean;
+    AddLayout(oLayout: ApiLayout): boolean;
+    AddLayout(nPos: number, oLayout: ApiLayout): boolean;
 
     /**
      * Adds an object (image, shape or chart) to the current slide master.
@@ -84321,7 +84341,8 @@ declare namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddMaster/
      */
-    AddMaster(pos?: number, apiMaster?: ApiMaster): boolean;
+    AddMaster(apiMaster: ApiMaster): boolean;
+    AddMaster(pos: number, apiMaster: ApiMaster): boolean;
 
     /**
      * Adds a math equation to the current presentation.
@@ -88281,7 +88302,8 @@ declare namespace Slide {
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable | null;
+    AddColumns(nCount: number): ApiTable | null;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the cell.
@@ -88331,7 +88353,8 @@ declare namespace Slide {
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable | null;
+    AddRows(nCount: number): ApiTable | null;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
@@ -100464,7 +100487,8 @@ declare namespace Pdf {
      * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
      *   format is "General".
      */
-    CreateChart(chartType?: ChartType, series?: number[][], seriesNames?: number[] | string[], categoryNames?: number[] | string[], width?: number, height?: number, styleIndex?: number, numFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox field.
@@ -107856,7 +107880,8 @@ declare namespace Pdf {
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddColumns(nCount: number): ApiTable;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Adds a paragraph using its position in the cell.
@@ -107886,7 +107911,8 @@ declare namespace Pdf {
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddRows(nCount: number): ApiTable;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Returns a cell by its position.
@@ -113390,6 +113416,58 @@ interface WindowHeaderFrameOptions {
 
 
 
+/**
+ * Rejects anything a `callCommand` result can't survive.
+ *
+ * The command body is serialized with `Function.prototype.toString()` and re-run inside the
+ * editor's own process, so its return value has to cross a process boundary. The editor filters it
+ * through `Asc.checkReturnCommand`, which walks the value up to 10 levels deep and replaces
+ * anything carrying methods - an `ApiParagraph`, an `ApiDocument`, any other `Api.*` object - with
+ * `undefined`. Mapping function-valued properties to `never` turns that silent data loss into a
+ * compile error, while plain data (object literals, interfaces, arrays, unions, nested
+ * combinations) passes through untouched.
+ */
+type CommandSerializable<T> =
+    T extends Function ? never :
+    T extends object ? { [K in keyof T]: CommandSerializable<T[K]> } :
+    T;
+
+/** An item of the input helper list. */
+interface InputHelperItem {
+    /**
+     * The item index. Optional when setting items - the runtime assigns the array position as the
+     * id for any item that omits it - and always present on items read back via `getItems`.
+     */
+    id?: string;
+    /** The item text. */
+    text: string;
+}
+
+/**
+ * A window that appears and disappears as the user types, positioned against the cursor. Obtained
+ * from `Asc.plugin.getInputHelper()` after `Asc.plugin.createInputHelper()`.
+ */
+interface InputHelper {
+    /** Creates the input helper window. */
+    createWindow(): void;
+    /** Returns all items currently in the input helper. */
+    getItems(): InputHelperItem[];
+    /** Sets the items shown in the input helper. */
+    setItems(items: InputHelperItem[]): void;
+    /** Shows the input helper at the given size, optionally capturing the keyboard. */
+    show(width: number, height: number, isCaptureKeyboard?: boolean): void;
+    /** Hides the input helper. */
+    unShow(): void;
+    /**
+     * Returns the scrollable size of the input helper window.
+     *
+     * Keyed `w`/`h`, not `width`/`height`: sdkjs's own JSDoc declares this `@returns {number}` and
+     * describes it as "width and height", but the implementation returns `{ w, h }` - the shape
+     * here follows the implementation.
+     */
+    getScrollSizes(): { w: number; h: number };
+}
+
 interface PluginScope {
     [key: string]: any;
     /**
@@ -113443,7 +113521,66 @@ interface AscPlugin {
     attachToolbarMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
     attachWindowHeaderMenuClickEvent: (id: string, callback: CustomMenuClickCallback) => void;
     button: (id: number, text: string) => void;
-    callCommand: (command: () => void, isClose?: boolean, isCalc?: boolean, callback?: (value?: any) => void) => void;
+    /**
+     * Runs `command` inside the editor's process, where the global `Api` is the entry point.
+     *
+     * The function is serialized with `Function.prototype.toString()`, so it is **not a closure**:
+     * nothing from the surrounding scope is visible inside it. Pass data in through
+     * `Asc.scope` (JSON-serialized into the command's context and readable there as `Asc.scope` or
+     * the bare `scope`) rather than by capturing variables.
+     *
+     * `command`'s return value is delivered to `callback`. It must be plain data - see
+     * {@link CommandSerializable}; returning an `Api.*` object yields `undefined` at runtime and is
+     * rejected here at compile time.
+     *
+     * @param isClose - Close the plugin window once the command has run.
+     * @param isCalc - Recalculate the document afterwards (default `true`; pass `false` only when
+     * the edits certainly cannot affect recalculation).
+     */
+    callCommand: <T>(
+        command: () => T & CommandSerializable<T>,
+        isClose?: boolean,
+        isCalc?: boolean,
+        callback?: (value: T) => void,
+    ) => void;
+    /**
+     * Promise-returning {@link AscPlugin.callCommand}, available when the host supports async
+     * functions. Always runs with `isClose: false` and `isCalc: true`; use `callCommand` directly
+     * when you need either of those to differ.
+     */
+    callCommandAsync: <T>(command: () => T & CommandSerializable<T>) => Promise<T>;
+    /** Promise-returning {@link AscPlugin.executeMethod}, typed per editor the same way. */
+    callMethodAsync: (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T]) => Promise<WordMethodReturn<T>>) &
+        (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T]) => Promise<CellMethodReturn<T>>) &
+        (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T]) => Promise<SlideMethodReturn<T>>) &
+        (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T]) => Promise<PdfMethodReturn<T>>) &
+        (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T]) => Promise<FormsMethodReturn<T>>);
+    /**
+     * Fetches a remotely located script and executes it as a command, the same way
+     * {@link AscPlugin.callCommand} executes an inline function. The callback receives the fetched
+     * source text, not the command's return value.
+     */
+    callModule: (url: string, callback?: (response: string) => void, isClose?: boolean) => void;
+    /** Fetches a remotely located text resource without executing it. */
+    loadModule: (url: string, callback?: (response: string) => void) => void;
+    /** Creates the {@link InputHelper} - a window that tracks the cursor as the user types. */
+    createInputHelper: () => void;
+    /** Returns the {@link InputHelper} created by {@link AscPlugin.createInputHelper}. */
+    getInputHelper: () => InputHelper;
+    /** Called when the user picks an item from the input helper. */
+    inputHelper_onSelectItem?: (item: InputHelperItem) => void;
+    /**
+     * Fallback for a {@link AscPlugin.callCommand} result when that call was made without its own
+     * `callback` argument.
+     */
+    onCommandCallback?: (returnValue: unknown) => void;
+    /**
+     * Fallback for an {@link AscPlugin.executeMethod} result when that call was made without its
+     * own `callback` argument.
+     */
+    onMethodReturn?: (returnValue: unknown) => void;
+    /** Called when the editor integrator sends the plugin a message. */
+    onExternalPluginMessage?: (data: { type: string; [key: string]: unknown }) => void;
     detachEditorEvent: (<T extends Word.EditorEventName>(eventName: T) => void) &
         (<T extends Cell.EditorEventName>(eventName: T) => void) &
         (<T extends Slide.EditorEventName>(eventName: T) => void) &

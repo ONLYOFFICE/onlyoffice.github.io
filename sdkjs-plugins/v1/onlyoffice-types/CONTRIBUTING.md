@@ -106,19 +106,35 @@ Everything in that block comes from the sources above, not from hand-written pro
 ## Type-checking
 
 ```bash
-npm run check-runtime       # checks Asc.plugin/Asc.Buttons declarations against plugins.dev.js
+npm run check-runtime       # checks Asc.plugin/Asc.Buttons against plugins.dev.js + sdkjs (needs SDKJS_PATH)
 npm run check-plugin-events # checks attachEvent/event_on* names against sdkjs's own JSDoc (needs SDKJS_PATH)
 npm run check-generated     # regenerates src/generated and fails if the checked-in output differs (needs SDKJS_PATH, a git checkout)
 npm run typecheck           # checks index.d.ts + src/generated/*.ts + src/*.d.ts
 npm test                    # also type-checks example.js and test/*.js against the library
 ```
 
-`check-runtime` is a static Level 2 check: it verifies public `Asc.plugin` members (`guid`,
-`windowID`, event handlers, and registration methods), `Asc.Buttons`, button constructors, and
-`Asc.scope.prototype.clear` against the checked-in `sdkjs-plugins/v1/plugins.dev.js` (the
-unminified runtime - its qualified names like `window.Asc.plugin.X` stay stable across rebuilds,
-unlike the minified `plugins.js`'s single-letter aliases). It does not launch an editor or verify
-host-provided `executeMethod` behavior; those require a real browser/Desktop Editor smoke test.
+`check-runtime` is a static Level 2 check with two halves, against two sources:
+
+- *Bootstrap assignments* - `Asc.plugin`'s `guid`/`windowID`/event handlers/registration methods,
+  `Asc.Buttons`, the button constructors and `Asc.scope.prototype.clear`, verified in both
+  directions against the checked-in `sdkjs-plugins/v1/plugins.dev.js` (the unminified runtime - its
+  qualified names like `window.Asc.plugin.X` stay stable across rebuilds, unlike the minified
+  `plugins.js`'s single-letter aliases).
+- *API completeness* - every member sdkjs's own JSDoc documents with `@memberof Plugin` /
+  `@memberof InputHelper` in `common/plugins/plugin_base_api.js` must be declared by us. This half
+  needs `SDKJS_PATH` (same as `generate`). It exists because the bulk of the API - `callCommand`,
+  `executeMethod`, `callModule`, `createInputHelper`, ... - is installed by `startPluginApi()` and
+  never appears in `plugins.dev.js` at all; checking only that file previously let ~10 documented
+  members go undeclared while this script still reported success. A documented `onFoo` satisfies the
+  check when declared as either `onFoo` or `event_onFoo`, since editor-dispatched events reach the
+  plugin as `Asc.plugin["event_" + name]`.
+
+Note that `@undocumented` is deliberately *not* filtered in this second half: in
+`plugin_base_api.js` that tag happens to sit on every method (`callCommand`, `executeMethod`, ...)
+rather than marking non-public members the way it does in the method/event sources.
+
+Neither half launches an editor or verifies host-provided `executeMethod` behavior; those require a
+real browser/Desktop Editor smoke test.
 
 `check-plugin-events` is a drift check, not a generator: plugin-window events (`attachEvent`,
 `event_on*`) are hand-curated in `src/plugin/events.d.ts` rather than generated, since their payload
@@ -133,6 +149,12 @@ need a separate drift check: `generate-plugin-methods.js` generates the full bod
 Run these after editing any `.d.ts` file or regenerating types - `skipLibCheck` is intentionally
 off in `tsconfig.json` so mistakes in the declaration files themselves (e.g. a type that isn't
 actually exported) surface immediately instead of being silently ignored.
+
+`peerDependencies` declares `typescript: >=5.0.0`, and that floor is real, not cautious: `index.d.ts`
+re-exports every editor namespace with `export type * from "..."`, which TypeScript only parses from
+5.0 on (4.9 rejects it with `TS1383: Only named exports may use 'export type'`). Lowering the floor
+without first rewriting those 14 re-exports as named `export type { ... }` lists ships a package that
+fails to parse on the very first file.
 
 `npm run validate-schema` checks `schemas/config.schema.json` against every real `config.json`
 already in this monorepo (`sdkjs-plugins/content/*/config.json`) - not part of `npm test` since it

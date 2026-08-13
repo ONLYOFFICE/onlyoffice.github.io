@@ -14,10 +14,17 @@ three channels, and confusing them is the most common source of broken plugin co
    editor serializes `fn`'s source with `Function.prototype.toString()` and re-runs it inside the
    editor process. Consequences:
    - the callback is a fresh scope: no closures, no variables from the plugin page, no imports —
-     everything it references must be declared inside it;
+     everything it references must be declared inside it. **The types cannot catch this** (TypeScript
+     has no notion of closure capture); it is the one rule you must hold yourself;
    - pass data in via `window.Asc.scope` (a plain JSON-able object) before the call, read it inside
-     as `Asc.scope.<key>`;
-   - `fn` runs in the editor's context, where the global `Api` (not `Asc.plugin`) is the entry point.
+     as `Asc.scope.<key>` or the bare `scope` the runtime injects;
+   - `fn` runs in the editor's context, where the global `Api` (not `Asc.plugin`) is the entry point;
+   - whatever `fn` returns is delivered to the callback, but only if it survives the process
+     boundary — the editor drops anything carrying methods to `undefined`. **The types do catch
+     this**: returning an `Api.*` object is a compile error, so `return doc` fails and
+     `return doc.GetAllParagraphs().map(p => p.GetText())` is what you want.
+   - prefer `await callCommandAsync(fn)` over the callback form; `callMethodAsync(name, args)` is
+     the same for `executeMethod`.
 2. **`executeMethod("Name", [args], callback)`** — editor-provided utility methods (get selected
    text, insert content, show input helpers, ...). Typed per editor: a known method name gives its
    argument tuple and callback result type; an unknown name falls back to a loosely typed overload.
@@ -61,8 +68,8 @@ three channels, and confusing them is the most common source of broken plugin co
 ```bash
 npm test                 # tsc over the package + example.js + test/*.js (skipLibCheck off)
 npm run typecheck        # package only
-npm run check-runtime    # Asc.plugin/Asc.Buttons declarations vs sdkjs-plugins/v1/plugins.dev.js
-npm run check-plugin-events  # plugin-window event map vs plugins.dev.js dispatch sites
+npm run check-runtime    # Asc.plugin/Asc.Buttons vs plugins.dev.js + full API surface vs sdkjs (SDKJS_PATH)
+npm run check-plugin-events  # plugin-window event map vs sdkjs event sources (SDKJS_PATH)
 npm run validate-schema  # schemas/config.schema.json vs every real config.json in this monorepo
 npm run generate         # regenerate src/generated from sdkjs + merge dist/api-index.json
                          # (postgenerate also regenerates executeMethod types and dist/ambient)

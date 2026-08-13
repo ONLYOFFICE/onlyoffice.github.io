@@ -113,7 +113,7 @@
     "test": "tsc --noEmit -p tsconfig.typecheck.json"
   },
   "peerDependencies": {
-    "typescript": ">=4.0.0"
+    "typescript": ">=5.0.0"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
