@@ -1,3 +1,13 @@
+// Two complementary checks, against two different sources:
+//
+// 1. *Bootstrap assignments* - a fixed set of members that the vendored `plugins.dev.js` harness
+//    assigns directly (guid, attachEvent, the custom-menu click handlers, ...). Verified in both
+//    directions: present in the runtime file AND declared by us.
+// 2. *API completeness* - every member sdkjs's own JSDoc documents on the plugin object must be
+//    declared by us. This half is NOT in plugins.dev.js: the bulk of the API (callCommand,
+//    executeMethod, callModule, createInputHelper, ...) is installed by `startPluginApi()`, whose
+//    real source is sdkjs `common/plugins/plugin_base_api.js`. Checking only plugins.dev.js is what
+//    previously let ~10 documented members go undeclared while this script still reported success.
 const fs = require('fs');
 const path = require('path');
 
@@ -12,6 +22,15 @@ const DECLARATIONS = path.join(PACKAGE_ROOT, 'index.d.ts');
 // index.d.ts is just a barrel that re-exports them. Concatenate every .d.ts module so the
 // interface lookup below doesn't care which physical file declares a given interface.
 const DECLARATION_GLOB_DIRS = ['src/plugin', 'src/config', 'src/theme', 'src/services'];
+
+// sdkjs documents the plugin-side API with `@memberof Plugin` / `@memberof InputHelper` plus an
+// `@alias` giving the real member name - the same convention the method/event generators already
+// read. `plugin_base.js` carries no @alias blocks today, but it is the other half of the same
+// runtime and is read too so a future move between the files can't silently drop a member.
+const API_SOURCE_FILES = ['plugin_base_api.js', 'plugin_base.js'];
+
+// The interface each `@memberof` maps onto in our declarations.
+const MEMBEROF_TO_INTERFACE = { Plugin: 'AscPlugin', InputHelper: 'InputHelper' };
 
 const RUNTIME_PLUGIN_MEMBERS = [
   'guid',
@@ -48,6 +67,72 @@ const RUNTIME_CONSTRUCTORS = [
 function readOption(name, fallback) {
   const index = process.argv.indexOf(`--${name}`);
   return index === -1 ? fallback : process.argv[index + 1];
+}
+
+function resolveApiSources() {
+  const sdkjs = readOption('sdkjs', process.env.SDKJS_PATH);
+  if (!sdkjs) {
+    throw new Error('Set SDKJS_PATH or pass --sdkjs <path-to-sdkjs> (needed to verify the plugin API surface is completely declared).');
+  }
+  const dir = path.join(path.resolve(sdkjs), 'common', 'plugins');
+  if (!fs.existsSync(dir)) throw new Error(`sdkjs plugin sources not found: ${dir}`);
+  return API_SOURCE_FILES.map((file) => path.join(dir, file)).filter((file) => fs.existsSync(file));
+}
+
+// Splits on `/**` rather than running a JSDoc parser: these blocks only ever carry single-line tags,
+// so a full parse would be a dependency for no extra signal - the same approach check-plugin-events
+// takes against the event sources.
+function documentedApiMembers(files) {
+  const byInterface = {};
+  for (const file of files) {
+    for (const block of fs.readFileSync(file, 'utf8').split('/**').slice(1)) {
+      const head = block.split('*/')[0];
+      const alias = head.match(/@alias\s+(\w+)/);
+      const memberof = head.match(/@memberof\s+(\w+)/);
+      // NOTE: unlike the method/event sources - where `@undocumented` marks members deliberately
+      // kept out of the public API - in this file it happens to tag every *method* (callCommand,
+      // executeMethod, attachEvent, resizeWindow, ...) while leaving the event-handler properties
+      // (init, button, onMethodReturn, ...) untagged. Those methods are unambiguously public: they
+      // are on api.onlyoffice.com and half of them are already declared here. So this check must
+      // NOT filter on `@undocumented`, or it would skip the very members most worth verifying.
+      if (!alias || !memberof) continue;
+      const target = MEMBEROF_TO_INTERFACE[memberof[1]];
+      if (!target) continue; // a @memberof we don't model as an interface (e.g. PluginWindow docs)
+      (byInterface[target] = byInterface[target] || new Set()).add(alias[1]);
+    }
+  }
+  return byInterface;
+}
+
+// Editor-dispatched events reach the plugin as `Asc.plugin["event_" + name]` (see the onEvent
+// branch in plugins.dev.js), so a documented `onFoo` may legitimately be declared as either
+// `onFoo` or `event_onFoo` - both satisfy the contract.
+function isDeclared(declared, member) {
+  return declared.has(member) || declared.has(`event_${member}`);
+}
+
+function checkApiCompleteness(declarations, files) {
+  const documented = documentedApiMembers(files);
+  const failures = [];
+  let total = 0;
+
+  for (const [interfaceName, members] of Object.entries(documented)) {
+    total += members.size;
+    let declared;
+    try {
+      declared = declaredMembers(declarations, interfaceName);
+    } catch {
+      failures.push(`${interfaceName}: interface is not declared at all (documents ${members.size} member(s): ${[...members].sort().join(', ')})`);
+      continue;
+    }
+    const missing = [...members].filter((member) => !isDeclared(declared, member)).sort();
+    if (missing.length > 0) failures.push(`${interfaceName}: missing declarations: ${missing.join(', ')}`);
+  }
+
+  if (failures.length > 0) {
+    throw new Error(`documented plugin API members are not declared -\n  ${failures.join('\n  ')}`);
+  }
+  console.log(`Plugin API surface: ${total} documented members all declared`);
 }
 
 function escapeRegExp(value) {
@@ -105,7 +190,10 @@ function checkGroup({name, expected, declared, runtime, runtimeObject}) {
     throw new Error(`${name}: missing runtime assignments in plugins.dev.js: ${missingRuntime.join(', ')}`);
   }
 
-  console.log(`${name}: ${expected.length} runtime members verified`);
+  // Deliberately says "bootstrap members", not "runtime members": this group is a fixed list of
+  // what plugins.dev.js itself assigns, which is only part of the API - completeness of the whole
+  // surface is checkApiCompleteness's job, against sdkjs.
+  console.log(`${name}: ${expected.length} bootstrap members verified`);
 }
 
 function main() {
@@ -113,8 +201,11 @@ function main() {
   if (!fs.existsSync(runtimePath)) throw new Error(`Runtime file does not exist: ${runtimePath}`);
   if (!fs.existsSync(DECLARATIONS)) throw new Error(`Declarations file does not exist: ${DECLARATIONS}`);
 
+  const apiSources = resolveApiSources();
   const runtime = fs.readFileSync(runtimePath, 'utf8');
   const declarations = readAllDeclarations();
+
+  checkApiCompleteness(declarations, apiSources);
 
   checkGroup({
     name: 'Asc.plugin',

@@ -2,6 +2,12 @@
 
 ## 0.9.1
 
+### Breaking
+
+- `peerDependencies` now requires `typescript >=5.0.0`. It always did in practice - `index.d.ts`
+  re-exports the editor namespaces with `export type *`, which 4.x rejects outright (`TS1383`) - the
+  declared floor was simply wrong.
+
 ### Added
 
 - Real overloads for `Api.*` methods where an optional parameter is followed by a required one
@@ -13,6 +19,19 @@
   `PTCondition`, `BulletType`), replacing a blind `unknown` stub. Included in `tsconfig.typecheck.json`
   so they're type-checked on their own, not just once spliced into a generated file.
 - `CONTRIBUTING.md` - generator/build internals split out of `README.md` (479 → ~120 lines).
+- `callCommand` is now generic over its return value, constrained to what can actually cross the
+  process boundary. The editor filters the result through `Asc.checkReturnCommand`, silently
+  replacing anything carrying methods with `undefined`; returning an `Api.*` object (directly, in an
+  array, or nested in a plain object) is now a compile error instead. The callback parameter is
+  typed rather than `any` - the last `any` in the package's public surface.
+- `callCommandAsync` / `callMethodAsync` - the promise-returning variants, present in the runtime
+  but previously undeclared. `callMethodAsync` is typed per editor like `executeMethod`.
+- The plugin API members sdkjs documents but we never declared: `callModule`, `loadModule`,
+  `createInputHelper`, `getInputHelper`, `inputHelper_onSelectItem`, `onCommandCallback`,
+  `onMethodReturn`, `onExternalPluginMessage`, plus the whole `InputHelper` class and
+  `InputHelperItem`.
+- `test/plugin-runtime-typing.js` - locks the above in with `@ts-expect-error` assertions, so
+  loosening `callCommand` back to `any` fails the build.
 
 ### Fixed
 
@@ -21,6 +40,11 @@
   `GetClassType`) are Omitted.
 - `any` can no longer reappear through an untested fallback path (undocumented property, empty
   typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+- `check-runtime` verified a hardcoded list of 13 names against `plugins.dev.js`, which holds only
+  the bootstrap half of the runtime - the rest of the API is installed by `startPluginApi()` and
+  never appears there, so 14 documented members were missing while the check still reported success.
+  It now derives the expected surface from sdkjs's own `@memberof Plugin`/`@memberof InputHelper`
+  JSDoc (needs `SDKJS_PATH`) and reports bootstrap coverage as such.
 
 ## 0.9.0
 
