@@ -53,7 +53,16 @@ export class LookupAgent extends WordProcessorAgent {
   }
 
   zonesToCorrect(_params: ParamsGetZonesToCorrect): TextZoneConnectix[] {
-    return [{ text: this.text, zoneId: '', zoneIsFocused: true }];
+    // Without an explicit selection, Antidote defaults to looking up whatever is at the very start
+    // of the zone - i.e. only the first word, no matter how much text we hand it. Marking the whole
+    // string as selected lets Dictionaries/Guides look up the full word or phrase the user typed.
+    return [{
+      text: this.text,
+      zoneId: '',
+      zoneIsFocused: true,
+      positionSelectionStart: 0,
+      positionSelectionEnd: this.text.length,
+    }];
   }
 
   allowEdit(_params: ParamsAllowEdit): boolean {
