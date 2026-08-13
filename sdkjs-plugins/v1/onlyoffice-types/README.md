@@ -231,6 +231,33 @@ sibling directory, which only exists inside this checkout. A small `KNOWN_ISSUES
 script tracks the couple of plugins whose `config.json` has a genuine mistake (a misplaced field, a
 typo) rather than a schema gap; anything else that fails is a real regression.
 
+## Ambient bundle (non-npm consumers)
+
+`npm run generate-ambient` flattens the modular sources into a single, import/export-free
+`.d.ts` blob - the format tools that don't install npm packages expect, such as a Monaco editor's
+`addExtraLib()` (the same mechanism used by the ONLYOFFICE plugin playground for its `Api.*`
+autocomplete). It also runs automatically as a `postgenerate` step whenever `npm run generate`
+regenerates the types from `sdkjs`, so the ambient bundle can't silently go stale relative to the
+modular package. It writes to `dist/ambient/` - tracked in git (unlike the rest of `dist/`) so the
+generated files themselves are directly linkable/reviewable, but excluded from the npm package
+(`package.json`'s `files`) since npm consumers get the modular, non-duplicated package instead and
+don't need this flattened, ~700KB-per-file duplicate:
+
+```text
+dist/ambient/onlyoffice-plugins-api.ambient.d.ts        # Asc/AscPlugin/events/buttons/config/
+                                                          # theme/services + all 5 editor namespaces,
+                                                          # no global Api (matches the root package)
+dist/ambient/onlyoffice-plugins-api.word.ambient.d.ts    # the bundle above + a global `Api: Word.Api`
+dist/ambient/onlyoffice-plugins-api.cell.ambient.d.ts    # ...same, for Cell
+dist/ambient/onlyoffice-plugins-api.slide.ambient.d.ts   # ...same, for Slide
+dist/ambient/onlyoffice-plugins-api.pdf.ambient.d.ts     # ...same, for Pdf
+```
+
+A file with no top-level `import`/`export` is a TypeScript "script": every `interface`/`type`/
+`namespace` in it is automatically global, so this is what a `declare global {}` block would need
+to look like if it weren't wrapped in a module - unlike the modular npm package, it doesn't need
+installing, only loading as text.
+
 ## Modular entry points
 
 The root package remains the compatibility entry point. The same runtime types are also available by
