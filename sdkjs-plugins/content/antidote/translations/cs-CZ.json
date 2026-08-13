@@ -35,5 +35,6 @@
   "Clear": "Vymazat",
   "Connection probe timeout (ms)": "Časový limit pro zjištění připojení (ms)",
   "Leave empty to use the default": "Ponechte prázdné pro použití výchozího nastavení",
-  "ms": "ms"
+  "ms": "ms",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Některé prohlížeče omezují přístup tohoto pluginu k Antidote/Connectix. Pokud se korektor nepřipojí, zkuste desktopovou aplikaci."
 }

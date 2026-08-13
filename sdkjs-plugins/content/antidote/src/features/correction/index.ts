@@ -33,5 +33,6 @@
 export { useCorrection } from './hooks/useCorrection';
 export {
   connectionState, scope, errorMessage, manualPort, setManualPort, manualProbeTimeout, setManualProbeTimeout,
+  browserWarningDismissed, dismissBrowserWarning,
 } from './store/correctionStore';
 export type { ConnectionState, CorrectionScope } from './store/correctionStore';

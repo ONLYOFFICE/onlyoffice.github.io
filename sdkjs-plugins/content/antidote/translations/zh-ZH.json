@@ -35,5 +35,6 @@
   "Clear": "清除",
   "Connection probe timeout (ms)": "连接探测超时（毫秒）",
   "Leave empty to use the default": "留空以使用默认值",
-  "ms": "毫秒"
+  "ms": "毫秒",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "某些浏览器会限制此插件访问 Antidote/Connectix。如果校对器无法连接，请尝试使用桌面应用。"
 }

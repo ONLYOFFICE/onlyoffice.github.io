@@ -35,5 +35,6 @@
   "Clear": "Wissen",
   "Connection probe timeout (ms)": "Time-out voor verbindingsproef (ms)",
   "Leave empty to use the default": "Leeg laten voor standaardwaarde",
-  "ms": "ms"
+  "ms": "ms",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Sommige browsers beperken de toegang van deze plugin tot Antidote/Connectix. Als de corrector geen verbinding maakt, probeer dan de desktop-app."
 }

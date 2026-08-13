@@ -35,5 +35,6 @@
   "Clear": "クリア",
   "Connection probe timeout (ms)": "接続プローブのタイムアウト (ms)",
   "Leave empty to use the default": "デフォルトを使用するには空のままにします",
-  "ms": "ms"
+  "ms": "ms",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "一部のブラウザは、このプラグインのAntidote/Connectixへのアクセスを制限します。校正ツールが接続しない場合は、デスクトップアプリをお試しください。"
 }

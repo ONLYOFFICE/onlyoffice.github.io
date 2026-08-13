@@ -37,6 +37,7 @@ export type CorrectionScope = 'document' | 'selection';
 
 const MANUAL_PORT_STORAGE_KEY = 'antidote.manualPort';
 const MANUAL_PROBE_TIMEOUT_STORAGE_KEY = 'antidote.manualProbeTimeout';
+const BROWSER_WARNING_DISMISSED_KEY = 'antidote.browserWarningDismissed';
 
 function readStoredPort(): number | null {
   if (typeof localStorage === 'undefined') return null;
@@ -50,11 +51,17 @@ function readStoredProbeTimeout(): number | null {
   return stored ? Number(stored) : null;
 }
 
+function readBrowserWarningDismissed(): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  return localStorage.getItem(BROWSER_WARNING_DISMISSED_KEY) === 'true';
+}
+
 export const connectionState = signal<ConnectionState>('idle');
 export const scope = signal<CorrectionScope>('selection');
 export const errorMessage = signal<string | null>(null);
 export const manualPort = signal<number | null>(readStoredPort());
 export const manualProbeTimeout = signal<number | null>(readStoredProbeTimeout());
+export const browserWarningDismissed = signal<boolean>(readBrowserWarningDismissed());
 
 export function setManualPort(port: number | null): void {
   manualPort.value = port;
@@ -68,4 +75,10 @@ export function setManualProbeTimeout(timeout: number | null): void {
   if (typeof localStorage === 'undefined') return;
   if (timeout === null) localStorage.removeItem(MANUAL_PROBE_TIMEOUT_STORAGE_KEY);
   else localStorage.setItem(MANUAL_PROBE_TIMEOUT_STORAGE_KEY, String(timeout));
+}
+
+export function dismissBrowserWarning(): void {
+  browserWarningDismissed.value = true;
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem(BROWSER_WARNING_DISMISSED_KEY, 'true');
 }

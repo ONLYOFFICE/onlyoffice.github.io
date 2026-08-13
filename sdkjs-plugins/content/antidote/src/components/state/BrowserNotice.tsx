@@ -30,8 +30,22 @@
  *
  */
 
-export { LoadingIndicator } from './LoadingIndicator';
-export { ErrorBox } from './ErrorBox';
-export { StatusBanner } from './StatusBanner';
-export type { StatusBannerTone } from './StatusBanner';
-export { BrowserNotice } from './BrowserNotice';
+import { JSX } from 'preact';
+import { IconButton } from '@components/button';
+
+export interface BrowserNoticeProps {
+  message: string;
+  closeLabel: string;
+  onClose: () => void;
+}
+
+export function BrowserNotice({ message, closeLabel, onClose }: BrowserNoticeProps): JSX.Element {
+  return (
+    <div className="browser-notice">
+      <span className="browser-notice__message">{message}</span>
+      <IconButton ariaLabel={closeLabel} variant="icon-only" onClick={onClose}>
+        <span aria-hidden="true">×</span>
+      </IconButton>
+    </div>
+  );
+}

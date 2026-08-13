@@ -35,13 +35,15 @@ import { useEffect, useState } from 'preact/hooks';
 import { useLocation } from '@/router';
 
 import {
-  Layout, Footer, Button, TextField, StatusBanner, IconButton, LoadingIndicator,
+  Layout, Footer, Button, TextField, StatusBanner, IconButton, LoadingIndicator, BrowserNotice,
 } from '@components';
 import { useHasSelection, useTranslation } from '@hooks';
-import { useCorrection, CorrectionScope } from '@features/correction';
+import {
+  useCorrection, CorrectionScope, browserWarningDismissed, dismissBrowserWarning,
+} from '@features/correction';
 import { useLookup, LookupTool } from '@features/lookup';
 import { showWarning } from '@api/pluginWindow';
-import { warmUpPort } from '@api/antidote';
+import { warmUpPort, isCrossOriginFromEditor } from '@api/antidote';
 
 function statusTone(state: ReturnType<typeof useCorrection>['connectionState']['value']) {
   if (state === 'connected') return 'success' as const;
@@ -113,6 +115,13 @@ export function Main(): JSX.Element {
     <Layout
       footer={<Footer />}
     >
+      {!isCrossOriginFromEditor() && !browserWarningDismissed.value && (
+        <BrowserNotice
+          message={t("Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.")}
+          closeLabel={t('Close')}
+          onClose={dismissBrowserWarning}
+        />
+      )}
       {(connectionState.value === 'connecting' || lookupPending) && (
         <LoadingIndicator message={t('Connecting to Antidote')} />
       )}

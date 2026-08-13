@@ -35,5 +35,6 @@
   "Clear": "Pastro",
   "Connection probe timeout (ms)": "Kohëmbarimi i provës së lidhjes (ms)",
   "Leave empty to use the default": "Lëreni bosh për të përdorur të paracaktuar",
-  "ms": "ms"
+  "ms": "ms",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Disa shfletues kufizojnë qasjen e kësaj shtese në Antidote/Connectix. Nëse korrigjuesi nuk lidhet, provoni aplikacionin desktop."
 }

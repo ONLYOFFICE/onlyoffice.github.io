@@ -35,5 +35,6 @@
   "Clear": "Очисти",
   "Connection probe timeout (ms)": "Време истека за проверу конекције (мс)",
   "Leave empty to use the default": "Оставите празно за коришћење подразумеване вредности",
-  "ms": "мс"
+  "ms": "мс",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Неки прегледачи ограничавају приступ овог додатка Антидоту/Connectix-у. Ако се коригатор не повеже, покушајте десктоп апликацију."
 }

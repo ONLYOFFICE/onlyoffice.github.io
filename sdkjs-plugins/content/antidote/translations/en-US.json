@@ -35,6 +35,7 @@
   "Clear": "Clear",
   "Connection probe timeout (ms)": "Connection probe timeout (ms)",
   "Leave empty to use the default": "Leave empty to use the default",
-  "ms": "ms"
+  "ms": "ms",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app."
 
 }

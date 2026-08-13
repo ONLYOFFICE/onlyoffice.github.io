@@ -35,5 +35,6 @@
   "Clear": "Очистить",
   "Connection probe timeout (ms)": "Таймаут проверки подключения (мс)",
   "Leave empty to use the default": "Оставьте пустым для использования значения по умолчанию",
-  "ms": "мс"
+  "ms": "мс",
+  "Some browsers limit this plugin's access to Antidote/Connectix. If the corrector doesn't connect, try the desktop app.": "Некоторые браузеры ограничивают доступ этого плагина к Antidote/Connectix. Если корректор не подключается, попробуйте desktop-приложение."
 }
