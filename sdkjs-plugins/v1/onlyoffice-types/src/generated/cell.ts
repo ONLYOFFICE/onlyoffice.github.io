@@ -77,7 +77,7 @@ export namespace Cell {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -1003,7 +1003,7 @@ export namespace Cell {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -2090,6 +2090,7 @@ export namespace Cell {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -2203,6 +2204,7 @@ export namespace Cell {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -2323,6 +2325,7 @@ export namespace Cell {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      *
      * @example
@@ -2338,7 +2341,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateStroke/
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates the empty text properties.
@@ -2371,7 +2374,7 @@ export namespace Cell {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -2610,6 +2613,7 @@ export namespace Cell {
      *
      * @param nSheet - The sheet index.
      * @param bWithFormat - Specifies that the data will be received with the format.
+     * @default bWithFormat = false
      *
      * @example
      * ```js
@@ -2877,7 +2881,7 @@ export namespace Cell {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -3088,6 +3092,8 @@ export namespace Cell {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      *
      * @example
      * ```js
@@ -3196,6 +3202,7 @@ export namespace Cell {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -4188,6 +4195,7 @@ export namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      *
      * @example
      * ```js
@@ -4258,7 +4266,7 @@ export namespace Cell {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -4429,7 +4437,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetHorAxisTitle/
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart legend.
@@ -4494,7 +4502,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetLegendFontSize/
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -4634,6 +4642,7 @@ export namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -4672,6 +4681,7 @@ export namespace Cell {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -4973,6 +4983,7 @@ export namespace Cell {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -5006,6 +5017,7 @@ export namespace Cell {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -5077,6 +5089,7 @@ export namespace Cell {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -5151,7 +5164,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetTitle/
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -5284,14 +5297,14 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetVerAxisTitle/
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -5937,6 +5950,7 @@ export namespace Cell {
      * @param sAuthorName - The name of the comment reply author (optional).
      * @param sUserId - The user ID of the comment reply author (optional).
      * @param nPos - The comment reply position.
+     * @default nPos = this.GetRepliesCount()
      * @since 7.5.0
      *
      * @example
@@ -6074,6 +6088,7 @@ export namespace Cell {
      * Returns the specified comment reply.
      *
      * @param nIndex - The comment reply index.
+     * @default nIndex = 0
      * @since 7.5.0
      *
      * @example
@@ -6191,6 +6206,9 @@ export namespace Cell {
      * @param nPos - The position of the first comment reply to remove.
      * @param nCount - A number of comment replies to remove.
      * @param bRemoveAll - Specifies whether to remove all comment replies or not.
+     * @default nPos = 0
+     * @default nCount = 1
+     * @default bRemoveAll = false
      * @since 7.5.0
      *
      * @example
@@ -7777,6 +7795,13 @@ export namespace Cell {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -7956,6 +7981,13 @@ export namespace Cell {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -8122,7 +8154,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -8227,13 +8259,14 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Selects the current graphic object.
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      * @since 9.3.0
      */
     Select(isReplace?: boolean): void;
@@ -8352,7 +8385,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetPosition/
      */
-    SetPosition(nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): void;
+    SetPosition(nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): void;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -8389,7 +8422,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetSize/
      */
-    SetSize(nWidth: number, nHeight: number): void;
+    SetSize(nWidth: EMU, nHeight: EMU): void;
 
     /**
      * Sets the title of the current drawing.
@@ -9187,6 +9220,7 @@ export namespace Cell {
      * Adds a new color scale conditional formatting rule to the collection.
      *
      * @param ColorScaleType - The type of color scale (2 for two-color scale, 3 for three-color scale).
+     * @default ColorScaleType = 3
      * @returns The created color scale rule, or null if the operation fails.
      * @since 9.1.0
      */
@@ -9282,6 +9316,7 @@ export namespace Cell {
      * Freezes the first column or columns of the current worksheet.
      *
      * @param count - Optional number of columns to freeze, or zero to unfreeze all columns.
+     * @default count = 0
      * @since 8.0.0
      *
      * @example
@@ -9299,6 +9334,7 @@ export namespace Cell {
      * Freezes the top row or rows of the current worksheet.
      *
      * @param count - Optional number of rows to freeze, or zero to unfreeze all rows.
+     * @default count = 0
      * @since 8.0.0
      *
      * @example
@@ -10152,6 +10188,7 @@ export namespace Cell {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -10994,7 +11031,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -11021,7 +11058,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -11050,7 +11087,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
@@ -11118,7 +11155,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -11150,7 +11187,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -11204,7 +11241,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -11262,7 +11299,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -11286,7 +11323,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -11311,7 +11348,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -11364,6 +11401,7 @@ export namespace Cell {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -11385,7 +11423,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -11396,6 +11434,7 @@ export namespace Cell {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -11417,7 +11456,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -11447,7 +11486,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -11484,7 +11523,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -11745,7 +11784,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -11772,7 +11811,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -11801,7 +11840,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -11958,7 +11997,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -11990,7 +12029,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -12044,7 +12083,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -12063,6 +12102,10 @@ export namespace Cell {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -12266,7 +12309,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -12290,7 +12333,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -12315,7 +12358,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -12385,7 +12428,7 @@ export namespace Cell {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -12396,6 +12439,7 @@ export namespace Cell {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -12417,7 +12461,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -12428,6 +12472,7 @@ export namespace Cell {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -12449,7 +12494,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -12479,7 +12524,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -12525,7 +12570,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -22363,7 +22408,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRowHeight/
      */
-    GetRowHeight(): number;
+    GetRowHeight(): pt;
 
     /**
      * Returns a Range object that represents the rows in the specified range. If the specified row is
@@ -22563,6 +22608,10 @@ export namespace Cell {
      * @param bSkipBlanks - [bSkipBlanks=false] - Specifies whether to avoid replacing values in the paste area when blank
      *   cells occur in the copy area.
      * @param bTranspose - [bTranspose=false] - Specifies whether the pasted data will be transposed from rows to columns.
+     * @default sPasteType = "xlPasteAll"
+     * @default sPasteSpecialOperation = "xlPasteSpecialOperationNone"
+     * @default bSkipBlanks = false
+     * @default bTranspose = false
      * @since 8.1.0
      *
      * @example
@@ -22996,7 +23045,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetRowHeight/
      */
-    SetRowHeight(nHeight: number): boolean;
+    SetRowHeight(nHeight: pt): boolean;
 
     /**
      * Sorts the cells in the given range by the parameters specified in the request.
@@ -23210,7 +23259,7 @@ export namespace Cell {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -23317,7 +23366,7 @@ export namespace Cell {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -23872,7 +23921,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -24287,7 +24336,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the current run are displayed with a single horizontal line through
@@ -24598,7 +24647,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/SetPaddings/
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.
@@ -24701,7 +24750,7 @@ export namespace Cell {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -24709,6 +24758,8 @@ export namespace Cell {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -24719,6 +24770,8 @@ export namespace Cell {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -25099,7 +25152,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -25466,7 +25519,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -26512,7 +26565,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddChart/
      */
-    AddChart(sDataRange: string, bInRows: boolean, sType: ChartType, nStyleIndex: number, nExtX: number, nExtY: number, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiChart | null;
+    AddChart(sDataRange: string, bInRows: boolean, sType: ChartType, nStyleIndex: number, nExtX: EMU, nExtY: EMU, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiChart | null;
 
     /**
      * Adds a new name to the current worksheet.
@@ -26558,7 +26611,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddImage/
      */
-    AddImage(sImageSrc: string, nWidth: number, nHeight: number, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiImage | null;
+    AddImage(sImageSrc: string, nWidth: EMU, nHeight: EMU, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiImage | null;
 
     /**
      * Adds an OLE object to the current sheet with the parameters specified.
@@ -26584,7 +26637,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddOleObject/
      */
-    AddOleObject(sImageSrc: string, nWidth: number, nHeight: number, sData: string, sAppId: string, nFromCol: number, nColOffset: number, nFromRow: number, nRowOffset: number): ApiOleObject | null;
+    AddOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string, nFromCol: number, nColOffset: EMU, nFromRow: number, nRowOffset: EMU): ApiOleObject | null;
 
     /**
      * Creates a protected range of the specified type from the selected data range of the current sheet.
@@ -26623,6 +26676,7 @@ export namespace Cell {
      * @param nFromRow - The number of the row where the beginning of the shape will be placed.
      * @param nRowOffset - The offset from the nFromRow row to the upper part of the shape measured in English measure
      *   units.
+     * @default sType = "rect"
      *
      * @example
      * ```js
@@ -26636,7 +26690,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddShape/
      */
-    AddShape(sType?: ShapeType, nWidth?: number, nHeight?: number, oFill?: ApiFill, oStroke?: ApiStroke, nFromCol?: number, nColOffset?: number, nFromRow?: number, nRowOffset?: number): ApiShape | null;
+    AddShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke, nFromCol?: number, nColOffset?: EMU, nFromRow?: number, nRowOffset?: EMU): ApiShape | null;
 
     /**
      * Adds a Text Art object to the current sheet with the parameters specified.
@@ -26655,6 +26709,18 @@ export namespace Cell {
      *   measure units.
      * @param nRowOffset - The offset from the nFromRow row to the upper part of the Text Art object measured in English
      *   measure units.
+     * @default oTextPr = Api.CreateTextPr()
+     * @default sText = "Your text here"
+     * @default sTransform = "textNoShape"
+     * @default oFill = Api.CreateNoFill()
+     * @default oStroke = Api.CreateStroke(0, Api.CreateNoFill())
+     * @default nRotAngle = 0
+     * @default nWidth = 1828800
+     * @default nHeight = 1828800
+     * @default nFromCol = 0
+     * @default nFromRow = 0
+     * @default nColOffset = 0
+     * @default nRowOffset = 0
      *
      * @example
      * ```js
@@ -26672,7 +26738,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddWordArt/
      */
-    AddWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: number, nHeight?: number, nFromCol?: number, nFromRow?: number, nColOffset?: number, nRowOffset?: number): ApiDrawing | null;
+    AddWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nFromCol?: number, nFromRow?: number, nColOffset?: EMU, nRowOffset?: EMU): ApiDrawing | null;
 
     /**
      * Deletes the current worksheet.
@@ -27455,7 +27521,7 @@ export namespace Cell {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/ReplaceCurrentImage/
      */
-    ReplaceCurrentImage(sImageUrl: string, nWidth: number, nHeight: number): boolean;
+    ReplaceCurrentImage(sImageUrl: string, nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Makes the current sheet active.
@@ -27501,6 +27567,7 @@ export namespace Cell {
      * @param nColumn - The number of the column to set the width to.
      * @param nWidth - The width of the column divided by 7 pixels.
      * @param bWithotPaddings - Specifies whether nWidth will be set without standard paddings.
+     * @default bWithotPaddings = false
      * @returns returns true if the column width was set successfully.
      *
      * @example

@@ -247,12 +247,14 @@ function parseTypeName(n) {
   // into otherwise `any`-free output.
   if (n === 'any') return 'unknown';
   if (n === 'function' || n === 'Function') return '(...args: unknown[]) => unknown';
+  // `twips`/`EMU`/`pt`/`mm`/`rad`/`percentage` are NOT collapsed to `number` here on purpose: sdkjs
+  // declares each as a real `@typedef {number}` with prose explaining the unit ("Twentieths of a
+  // point (equivalent to 1/1440th of an inch)"), and the generator emits those typedefs - collapsing
+  // every use site to bare `number` shipped a documented alias that nothing referenced (`EMU` had 0
+  // uses, `twips` 1) and dropped the unit from every hover. They all resolve to `number`, so keeping
+  // the alias is purely additive. `byte` has no such typedef in the sources, so it still maps
+  // directly.
   if (n === 'byte') return 'number';
-  if (n === 'twips') return 'number';
-  if (n === 'EMU') return 'number';
-  if (n === 'pt') return 'number';
-  if (n === 'mm') return 'number';
-  if (n === 'rad') return 'number';
   if (n === 'JSON') return 'object';
   if (n === 'base64img') return 'string';
   if (n === 'range') return 'unknown';
@@ -617,6 +619,15 @@ function renderJsDoc(doc, indent) {
   for (const param of doc.params || []) {
     if (param.description) {
       tags.push(...taggedLines(`@param ${param.name} -`, htmlToMarkdown(cleanProse(param.description))));
+    }
+  }
+  // sdkjs records a parameter's default in `[name=value]` form, which jsdoc hands back as
+  // `defaultvalue` - previously parsed and then dropped. Emitted per parameter (rather than as a
+  // single bare `@default`) because a method can document several, and an editor renders the tag
+  // verbatim, so naming the parameter is what makes it readable.
+  for (const param of doc.params || []) {
+    if (param.defaultValue !== undefined && param.defaultValue !== '') {
+      tags.push(`@default ${param.name} = ${String(param.defaultValue).trim()}`);
     }
   }
   if (doc.returnDescription) {

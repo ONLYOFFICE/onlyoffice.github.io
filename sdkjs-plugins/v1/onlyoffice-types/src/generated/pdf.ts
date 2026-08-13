@@ -41,7 +41,7 @@ export namespace Pdf {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -409,10 +409,10 @@ export namespace Pdf {
   /** Axis-aligned point. */
   export interface Point {
     /** The horizontal coordinate in points. */
-    x: number;
+    x: pt;
 
     /** The vertical coordinate in points. */
-    y: number;
+    y: pt;
   }
 
   /** 60000th of a degree (5400000 = 90 degrees). */
@@ -447,28 +447,28 @@ export namespace Pdf {
    */
   export interface Quad {
     /** x1 (left top) */
-    0: number;
+    0: pt;
 
     /** y1 (left top) */
-    1: number;
+    1: pt;
 
     /** x2 (right top) */
-    2: number;
+    2: pt;
 
     /** y2 (right top) */
-    3: number;
+    3: pt;
 
     /** x3 (left bottom) */
-    4: number;
+    4: pt;
 
     /** y3 (left bottom) */
-    5: number;
+    5: pt;
 
     /** x4 (right bottom) */
-    6: number;
+    6: pt;
 
     /** y4 (right bottom) */
-    7: number;
+    7: pt;
   }
 
   /** The reading order (left-to-right or right-to-left). */
@@ -483,16 +483,16 @@ export namespace Pdf {
    */
   export interface Rect {
     /** x1 (left) */
-    0: number;
+    0: pt;
 
     /** y1 (top) */
-    1: number;
+    1: pt;
 
     /** x2 (right) */
-    2: number;
+    2: pt;
 
     /** y2 (bottom) */
-    3: number;
+    3: pt;
   }
 
   /**
@@ -507,16 +507,16 @@ export namespace Pdf {
    */
   export interface RectDiff {
     /** dx1 (left delta) */
-    0: number;
+    0: pt;
 
     /** dy1 (top delta) */
-    1: number;
+    1: pt;
 
     /** dx2 (right delta) */
-    2: number;
+    2: pt;
 
     /** dy2 (bottom delta) */
-    3: number;
+    3: pt;
   }
 
   /**
@@ -658,7 +658,7 @@ export namespace Pdf {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -1120,9 +1120,10 @@ export namespace Pdf {
      * @param styleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
      * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
      *   format is "General".
+     * @default chartType = "bar"
      */
-    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
-    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: EMU, height: EMU, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox field.
@@ -1205,7 +1206,7 @@ export namespace Pdf {
      * @param width - The image width in English measure units.
      * @param height - The image height in English measure units.
      */
-    CreateImage(imageSrc: string, width: number, height: number): ApiImage;
+    CreateImage(imageSrc: string, width: EMU, height: EMU): ApiImage;
 
     /**
      * Creates a image field.
@@ -1257,6 +1258,7 @@ export namespace Pdf {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -1317,6 +1319,7 @@ export namespace Pdf {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -1400,8 +1403,11 @@ export namespace Pdf {
      *   (theme accent) is used.
      * @param stroke - The stroke used to draw the shape outline. If not specified, the default shape style outline
      *   (theme accent) is used.
+     * @default shapeType = "rect"
+     * @default width = 914400
+     * @default height = 914400
      */
-    CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
+    CreateShape(shapeType?: ShapeType, width?: EMU, height?: EMU, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a signature field.
@@ -1448,9 +1454,10 @@ export namespace Pdf {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates a table.
@@ -1500,7 +1507,7 @@ export namespace Pdf {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -1551,7 +1558,7 @@ export namespace Pdf {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -1667,6 +1674,7 @@ export namespace Pdf {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -1826,7 +1834,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annotation contents. */
     GetContents(): string;
@@ -1906,7 +1914,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -2067,6 +2075,7 @@ export namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -2212,7 +2221,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annotation contents. */
     GetContents(): string;
@@ -2295,7 +2304,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -2424,7 +2433,7 @@ export namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -2491,7 +2500,7 @@ export namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a container for the document content. */
@@ -2619,6 +2628,7 @@ export namespace Pdf {
      * Gets label from button widget field.
      *
      * @param appearance - The appearance state.
+     * @default appearance = "normal"
      */
     GetLabel(appearance?: ButtonAppearance): string;
 
@@ -2644,7 +2654,7 @@ export namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -2720,6 +2730,8 @@ export namespace Pdf {
      *
      * @param imageUrl - The image URL.
      * @param appearance - The appearance state.
+     * @default imageUrl = ""
+     * @default appearance = "normal"
      */
     SetImage(imageUrl?: string, appearance?: ButtonAppearance): boolean;
 
@@ -2728,6 +2740,7 @@ export namespace Pdf {
      *
      * @param label - The button label.
      * @param appearance - The appearance state.
+     * @default appearance = "normal"
      */
     SetLabel(label: string, appearance?: ButtonAppearance): boolean;
 
@@ -2779,7 +2792,7 @@ export namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a caret annotation. */
@@ -2820,10 +2833,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the series with a specific index.
@@ -2875,6 +2888,7 @@ export namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      */
     SetDataPointFill(oFill: ApiFill, nSeries: number, nDataPoint: number, bAllSeries?: boolean): boolean;
 
@@ -2903,7 +2917,7 @@ export namespace Pdf {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -2941,7 +2955,7 @@ export namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the horizontal axis title is written in bold font or not.
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart legend.
@@ -2955,7 +2969,7 @@ export namespace Pdf {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -2992,6 +3006,7 @@ export namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      */
     SetMarkerFill(oFill: ApiFill, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
 
@@ -3002,6 +3017,7 @@ export namespace Pdf {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      */
     SetMarkerOutLine(oStroke: ApiStroke, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
 
@@ -3039,7 +3055,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -3047,7 +3063,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -3057,7 +3073,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets a name to the specified chart series.
@@ -3089,6 +3105,7 @@ export namespace Pdf {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      */
     SetSeriesFill(oFill: ApiFill, nSeries: number, bAll?: boolean): boolean;
 
@@ -3098,6 +3115,7 @@ export namespace Pdf {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      */
     SetSeriesOutLine(oStroke: ApiStroke, nSeries: number, bAll?: boolean): boolean;
 
@@ -3118,6 +3136,7 @@ export namespace Pdf {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -3143,7 +3162,7 @@ export namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the chart title is written in bold font or not.
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -3174,14 +3193,14 @@ export namespace Pdf {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the vertical axis title is written in bold font or not.
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -3370,7 +3389,7 @@ export namespace Pdf {
      * Gets widget text size.
      * <note> Text size === 0 means autofit </note>
      */
-    GetTextSize(): number;
+    GetTextSize(): pt;
 
     /** Checks if text is autofit. */
     IsAutoFit(): boolean;
@@ -3471,7 +3490,7 @@ export namespace Pdf {
      *
      * @param size - The font size in points.
      */
-    SetTextSize(size: number): boolean;
+    SetTextSize(size: pt): boolean;
   }
 
   /** Class representing a circle annotation. */
@@ -3502,7 +3521,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiCircleAnnotation class. */
     GetClassType(): "circleAnnot";
@@ -3588,7 +3607,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -3753,6 +3772,7 @@ export namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -3890,6 +3910,8 @@ export namespace Pdf {
      * @param greaterThanValue - The minimum allowed value.
      * @param lessThan - If true, enables maximum value validation using `lessThanValue`.
      * @param lessThanValue - The maximum allowed value.
+     * @default greaterThan = false
+     * @default lessThan = false
      */
     SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean;
 
@@ -3973,8 +3995,9 @@ export namespace Pdf {
      * @param index - The index where the page will be added.
      * @param width - The page width.
      * @param height - The page height.
+     * @default index = this.GetPagesCount()
      */
-    AddPage(index?: number, width?: number, height?: number): ApiPage;
+    AddPage(index?: number, width?: pt, height?: pt): ApiPage;
 
     /**
      * Appends the specified text to the end of the document content.
@@ -4084,6 +4107,13 @@ export namespace Pdf {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -4218,6 +4248,13 @@ export namespace Pdf {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -4304,7 +4341,7 @@ export namespace Pdf {
     GetFlipV(): boolean | null;
 
     /** Returns the height of the current drawing. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Gets the outline properties from the current graphic object.
@@ -4339,10 +4376,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /** Returns the rotation angle of the current drawing object. */
     GetRotation(): number;
@@ -4363,13 +4400,14 @@ export namespace Pdf {
     GetTitle(): string | null;
 
     /** Returns the width of the current drawing. */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Selects the current graphic object.
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      */
     Select(isReplace?: boolean): boolean;
 
@@ -4454,7 +4492,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -4462,7 +4500,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -4472,7 +4510,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -4496,7 +4534,7 @@ export namespace Pdf {
      * @param width - The object width measured in English measure units.
      * @param height - The object height measured in English measure units.
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -4568,7 +4606,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Gets annot callout. */
     GetCallout(): FreeTextCallout;
@@ -4663,7 +4701,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annot callout.
@@ -4918,10 +4956,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -4929,7 +4967,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -4937,7 +4975,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -4947,7 +4985,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a hide-show action. */
@@ -5033,10 +5071,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -5044,7 +5082,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -5052,7 +5090,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -5062,7 +5100,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a ink annotation. */
@@ -5093,7 +5131,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiInkAnnotation class. */
     GetClassType(): "inkAnnot";
@@ -5179,7 +5217,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -5313,7 +5351,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiLineAnnotation class. */
     GetClassType(): "lineAnnot";
@@ -5408,7 +5446,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -5542,6 +5580,7 @@ export namespace Pdf {
      *
      * @param option - list option to add
      * @param index - index to add option.
+     * @default index = this.GetOptions().lenght
      */
     AddOption(option: ListOption, index?: number): boolean;
 
@@ -5613,6 +5652,7 @@ export namespace Pdf {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -5643,10 +5683,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -5654,7 +5694,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -5662,7 +5702,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -5672,7 +5712,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a document page. */
@@ -5748,14 +5788,14 @@ export namespace Pdf {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -5763,7 +5803,7 @@ export namespace Pdf {
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /** Returns the paragraph contents justification. */
     GetJc(): "left" | "right" | "both" | "center" | undefined;
@@ -5781,7 +5821,7 @@ export namespace Pdf {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -5789,7 +5829,7 @@ export namespace Pdf {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /** Returns the paragraph line spacing rule. */
     GetSpacingLineRule(): "auto" | "atLeast" | "exact" | undefined;
@@ -5799,7 +5839,7 @@ export namespace Pdf {
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -5822,14 +5862,14 @@ export namespace Pdf {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -5837,7 +5877,7 @@ export namespace Pdf {
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -5869,8 +5909,9 @@ export namespace Pdf {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -5881,8 +5922,9 @@ export namespace Pdf {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -5894,7 +5936,7 @@ export namespace Pdf {
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -5906,7 +5948,7 @@ export namespace Pdf {
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -5975,14 +6017,14 @@ export namespace Pdf {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -5990,7 +6032,7 @@ export namespace Pdf {
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -6035,7 +6077,7 @@ export namespace Pdf {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -6043,7 +6085,7 @@ export namespace Pdf {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /** Returns the paragraph line spacing rule. */
     GetSpacingLineRule(): "auto" | "atLeast" | "exact" | undefined;
@@ -6053,7 +6095,7 @@ export namespace Pdf {
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -6072,6 +6114,10 @@ export namespace Pdf {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -6192,14 +6238,14 @@ export namespace Pdf {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -6207,7 +6253,7 @@ export namespace Pdf {
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -6256,7 +6302,7 @@ export namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -6267,8 +6313,9 @@ export namespace Pdf {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -6279,8 +6326,9 @@ export namespace Pdf {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -6292,7 +6340,7 @@ export namespace Pdf {
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -6313,7 +6361,7 @@ export namespace Pdf {
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -6623,7 +6671,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiPolyLineAnnotation class. */
     GetClassType(): "polyLineAnnot";
@@ -6715,7 +6763,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -6847,7 +6895,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiPolygonAnnotation class. */
     GetClassType(): "polygonAnnot";
@@ -6933,7 +6981,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -7158,7 +7206,7 @@ export namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -7273,7 +7321,7 @@ export namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -7620,7 +7668,7 @@ export namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -7741,7 +7789,7 @@ export namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -7840,10 +7888,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the text autofit type of the current shape.
@@ -7888,7 +7936,7 @@ export namespace Pdf {
      * @param nBottom - Bottom padding.
      * @since 9.5.0
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -7896,7 +7944,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -7904,7 +7952,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -7914,7 +7962,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Sets the text autofit type to the current shape.
@@ -7968,10 +8016,10 @@ export namespace Pdf {
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -7979,7 +8027,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -7987,7 +8035,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -7997,7 +8045,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
   }
 
   /** Class representing a square annotation. */
@@ -8028,7 +8076,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiSquareAnnotation class. */
     GetClassType(): "squareAnnot";
@@ -8114,7 +8162,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -8232,7 +8280,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiStampAnnotation class. */
     GetClassType(): "stampAnnot";
@@ -8324,7 +8372,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -8467,7 +8515,7 @@ export namespace Pdf {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -8475,6 +8523,8 @@ export namespace Pdf {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -8485,6 +8535,8 @@ export namespace Pdf {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -8502,6 +8554,7 @@ export namespace Pdf {
      * @param referenceCell - The cell used as an insertion reference.
      * @param before - Add a new column before or after the specified cell. If no cell is specified, then this
      *   parameter will be ignored.
+     * @default before = false
      */
     AddColumn(referenceCell?: ApiTableCell, before?: boolean): boolean;
 
@@ -8512,6 +8565,7 @@ export namespace Pdf {
      *   added at the end of the table.
      * @param nCount - Count of columns to be added.
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddColumns(nCount: number): ApiTable;
@@ -8533,6 +8587,7 @@ export namespace Pdf {
      * @param referenceCell - The cell used as an insertion reference.
      * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified, then this parameter
      *   will be ignored.
+     * @default isBefore = false
      */
     AddRow(referenceCell?: ApiTableCell, isBefore?: boolean): ApiTableRow;
 
@@ -8543,6 +8598,7 @@ export namespace Pdf {
      *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddRows(nCount: number): ApiTable;
@@ -8566,16 +8622,16 @@ export namespace Pdf {
      * @param columnIndex - The zero-based column index.
      * @since 9.5.0
      */
-    GetColumnWidth(columnIndex: number): number | null;
+    GetColumnWidth(columnIndex: number): EMU | null;
 
     /** Returns the type of the ApiDrawing class. */
     GetParentPage(): ApiPage;
 
     /** Gets the x position of the drawing on the page. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the page. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns a row by its index.
@@ -8686,7 +8742,7 @@ export namespace Pdf {
      * @returns Returns the actual column width set (in EMU), or null if the column index is invalid.
      * @since 9.5.0
      */
-    SetColumnWidth(columnIndex: number, width: number): number | null;
+    SetColumnWidth(columnIndex: number, width: EMU): EMU | null;
 
     /**
      * Sets the total height of the current table, distributing it evenly among the table rows.
@@ -8697,7 +8753,7 @@ export namespace Pdf {
      * @returns Returns the requested height (in EMU), or null if the table has no rows.
      * @since 9.5.0
      */
-    SetHeight(nValue: number): number | null;
+    SetHeight(nValue: EMU): EMU | null;
 
     /**
      * Sets the x position of the drawing on the page.
@@ -8705,7 +8761,7 @@ export namespace Pdf {
      * @param posX - The distance from the left side of the page to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the page.
@@ -8713,7 +8769,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the page.
@@ -8723,7 +8779,7 @@ export namespace Pdf {
      * @param posY - The distance from the top side of the page to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(posX: number, posY: number): boolean;
+    SetPosition(posX: EMU, posY: EMU): boolean;
 
     /**
      * Specifies the shading which shall be applied to the extents of the current table.
@@ -8742,7 +8798,7 @@ export namespace Pdf {
      * @param height - The table height measured in English measure units.
      * @since 9.5.0
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the style for the current table.
@@ -8863,6 +8919,13 @@ export namespace Pdf {
      * @param pr_ParaSeparator - Defines how the paragraph separator will be specified in the resulting string.
      * @param pr_TabSymbol - Defines how the tab will be specified in the resulting string.
      * @param pr_NewLineSeparator - Defines how the line separator will be specified in the resulting string.
+     * @default pr_Numbering = true
+     * @default pr_Math = true
+     * @default pr_TableCellSeparator = '\t'
+     * @default pr_TableRowSeparator = '\r\n'
+     * @default pr_ParaSeparator = '\r\n'
+     * @default pr_TabSymbol = '\t'
+     * @default pr_NewLineSeparator = '\r'
      * @since 9.4.0
      */
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
@@ -8888,7 +8951,7 @@ export namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderBottom(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderBottom(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the left of the current table cell.
@@ -8896,7 +8959,7 @@ export namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderLeft(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderLeft(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the right of the current table cell.
@@ -8904,7 +8967,7 @@ export namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderRight(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderRight(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the top of the current table cell.
@@ -8912,7 +8975,7 @@ export namespace Pdf {
      * @param borderWidth - The width of the current border.
      * @param fill - The color or pattern used to fill the current border.
      */
-    SetCellBorderTop(borderWidth: number, fill: ApiFill): boolean;
+    SetCellBorderTop(borderWidth: mm, fill: ApiFill): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the bottom extent of the cell contents and
@@ -8922,7 +8985,7 @@ export namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell bottom margin with specified value for the current cell.
      */
-    SetCellMarginBottom(margin: number): boolean;
+    SetCellMarginBottom(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the left extent of the current cell
@@ -8932,7 +8995,7 @@ export namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell left margin with specified value for the current cell.
      */
-    SetCellMarginLeft(margin: number): boolean;
+    SetCellMarginLeft(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the right extent of the current cell
@@ -8942,7 +9005,7 @@ export namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell right margin with specified value for the current cell.
      */
-    SetCellMarginRight(margin: number): boolean;
+    SetCellMarginRight(margin: twips): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the top extent of the current cell contents
@@ -8952,7 +9015,7 @@ export namespace Pdf {
      * @param margin - The cell margin. If this value is `null`, the default margin is used. otherwise override the
      *   table cell top margin with specified value for the current cell.
      */
-    SetCellMarginTop(margin: number): boolean;
+    SetCellMarginTop(margin: twips): boolean;
 
     /**
      * Sets the background color to all cells in the column containing the current cell.
@@ -9029,7 +9092,7 @@ export namespace Pdf {
     GetClassType(): "tableRow";
 
     /** Gets the height from the current table row. */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns the next row if exists.
@@ -9060,7 +9123,7 @@ export namespace Pdf {
      *
      * @param height - The row height in English measure units.
      */
-    SetHeight(height: number): boolean;
+    SetHeight(height: EMU): boolean;
   }
 
   /** Class representing the table row properties. */
@@ -9103,7 +9166,7 @@ export namespace Pdf {
     GetBorderStyle(): AnnotBorderStyle;
 
     /** Gets annotation border width. */
-    GetBorderWidth(): number;
+    GetBorderWidth(): pt;
 
     /** Returns a type of the ApiTextAnnotation class. */
     GetClassType(): "textAnnot";
@@ -9189,7 +9252,7 @@ export namespace Pdf {
      *
      * @param width - The border width in points.
      */
-    SetBorderWidth(width: number): boolean;
+    SetBorderWidth(width: pt): boolean;
 
     /**
      * Sets annotation contents.
@@ -9472,6 +9535,8 @@ export namespace Pdf {
      * @param greaterThanValue - The minimum allowed value.
      * @param lessThan - If true, enables maximum value validation using `lessThanValue`.
      * @param lessThanValue - The maximum allowed value.
+     * @default greaterThan = false
+     * @default lessThan = false
      */
     SetValidateRange(greaterThan?: boolean, greaterThanValue?: number, lessThan?: boolean, lessThanValue?: number): boolean;
 
@@ -9569,7 +9634,7 @@ export namespace Pdf {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -9684,7 +9749,7 @@ export namespace Pdf {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -9777,7 +9842,7 @@ export namespace Pdf {
     /** The function called was when selection was canceled. */
     onSelectionCancel: [];
     /** The function called to when selection was ended. */
-    onSelectionEnd: [page: number, x: number, y: number];
+    onSelectionEnd: [page: number, x: pt, y: pt];
   };
 
   export type EditorEventName = keyof EditorEventArgs;

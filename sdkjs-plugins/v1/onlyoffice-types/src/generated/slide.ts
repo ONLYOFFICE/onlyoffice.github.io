@@ -54,7 +54,7 @@ export namespace Slide {
     Size: pt_8;
 
     /** The spacing offset from the text to the border measured in points. */
-    Space: number;
+    Space: pt;
 
     /** The border color. */
     Color: ApiColor;
@@ -666,7 +666,7 @@ export namespace Slide {
   /** A paragraph tab stop. */
   export interface TabStop {
     /** The tab stop position measured in twentieths of a point (1/1440 of an inch). */
-    Pos: number;
+    Pos: twips;
 
     /** The tab stop alignment style. */
     Val: TabJc;
@@ -1312,6 +1312,7 @@ export namespace Slide {
      * @param nStyleIndex - The chart color style index (can be **1 - 48**, as described in OOXML specification).
      * @param aNumFormats - Numeric formats which will be applied to the series (can be custom formats).
      *   The default numeric format is "General".
+     * @default sType = "bar"
      *
      * @example
      * ```js
@@ -1334,8 +1335,8 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/
      */
-    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
-    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: EMU, nHeight: EMU, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: EMU, nHeight: EMU, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a new custom geometry.
@@ -1427,12 +1428,13 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateImage/
      */
-    CreateImage(sImageSrc: string, nWidth: number, nHeight: number): ApiImage;
+    CreateImage(sImageSrc: string, nWidth: EMU, nHeight: EMU): ApiImage;
 
     /**
      * Creates a new slide layout and adds it to the slide master if it is specified.
      *
      * @param oMaster - Parent slide master.
+     * @default oMaster = null
      *
      * @example
      * ```js
@@ -1487,6 +1489,7 @@ export namespace Slide {
      * Creates a new slide master.
      *
      * @param oTheme - The presentation theme object.
+     * @default oTheme = ApiPresentation.GetMaster(0).GetTheme()
      * @returns returns null if presentation theme doesn't exist.
      *
      * @example
@@ -1523,6 +1526,7 @@ export namespace Slide {
      *
      * @param text - An equation written as a linear text string.
      * @param format - The format of the specified linear representation.
+     * @default format = "unicode"
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
@@ -1581,7 +1585,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateOleObject/
      */
-    CreateOleObject(sImageSrc: string, nWidth: number, nHeight: number, sData: string, sAppId: string): ApiOleObject;
+    CreateOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string): ApiOleObject;
 
     /**
      * Creates a new paragraph.
@@ -1685,6 +1689,7 @@ export namespace Slide {
      * Creates a geometry using one of the available preset shapes.
      *
      * @param preset - The preset name.
+     * @default preset = "rect"
      * @since 9.1.0
      */
     CreatePresetGeometry(preset?: ShapeType): ApiGeometry;
@@ -1807,6 +1812,9 @@ export namespace Slide {
      * @param nHeight - The shape height in English measure units.
      * @param oFill - The color or pattern used to fill the shape.
      * @param oStroke - The stroke used to create the element shadow.
+     * @default sType = "rect"
+     * @default nWidth = 914400
+     * @default nHeight = 914400
      *
      * @example
      * ```js
@@ -1833,7 +1841,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateShape/
      */
-    CreateShape(sType?: ShapeType, nWidth?: number, nHeight?: number, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape;
+    CreateShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a new slide.
@@ -1890,6 +1898,7 @@ export namespace Slide {
      * @param width - The width of the shadow measured in English measure units.
      * @param fill - The fill type used to create the shadow.
      * @param sDash - The type of line dash.
+     * @default sDash = "solid"
      * @since 9.3.0
      *
      * @example
@@ -1909,7 +1918,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateStroke/
      */
-    CreateStroke(width: number, fill: ApiFill, sDash?: DashType): ApiStroke;
+    CreateStroke(width: EMU, fill: ApiFill, sDash?: DashType): ApiStroke;
 
     /**
      * Creates a table.
@@ -2141,6 +2150,16 @@ export namespace Slide {
      * @param nHeight - The Text Art heigth measured in English measure units.
      * @param nIndLeft - The Text Art left side indentation value measured in English measure units.
      * @param nIndTop - The Text Art top side indentation value measured in English measure units.
+     * @default oTextPr = Api.CreateTextPr()
+     * @default sText = "Your text here"
+     * @default sTransform = "textNoShape"
+     * @default oFill = Api.CreateNoFill()
+     * @default oStroke = Api.CreateStroke(0, Api.CreateNoFill())
+     * @default nRotAngle = 0
+     * @default nWidth = 1828800
+     * @default nHeight = 1828800
+     * @default nIndLeft = ApiPresentation.GetWidth() / 2
+     * @default nIndTop = ApiPresentation.GetHeight() / 2
      *
      * @example
      * ```js
@@ -2162,7 +2181,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateWordArt/
      */
-    CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: number, nHeight?: number, nIndLeft?: number, nIndTop?: number): ApiDrawing;
+    CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nIndLeft?: EMU, nIndTop?: EMU): ApiDrawing;
 
     /**
      * Converts English Metric Units (EMUs) to millimeters.
@@ -2170,7 +2189,7 @@ export namespace Slide {
      * @param emu - The value in English Metric Units (EMUs).
      * @returns The value in millimeters.
      */
-    EmusToMillimeters(emu: number): number;
+    EmusToMillimeters(emu: EMU): mm;
 
     /**
      * Converts EMUs (English Metric Units) to points.
@@ -2307,7 +2326,7 @@ export namespace Slide {
      * @param mm - The value in millimeters.
      * @returns The value in English Metric Units (EMUs), as an integer.
      */
-    MillimetersToEmus(mm: number): number;
+    MillimetersToEmus(mm: mm): EMU;
 
     /**
      * Converts millimeters to pixels.
@@ -2426,6 +2445,8 @@ export namespace Slide {
      * @param textStrings - An array of replacement strings.
      * @param tab - A character which is used to specify the tab in the source text.
      * @param newLine - A character which is used to specify the line break character in the source text.
+     * @default tab = "\t"
+     * @default newLine = "\r\n"
      *
      * @example
      * ```js
@@ -2490,6 +2511,7 @@ export namespace Slide {
      * Creates a theme color.
      *
      * @param name - The theme color name. If the provided name is not supported, the 'tx1' color will be used.
+     * @default name = "tx1"
      * @returns Instance of ApiColor with 'theme' type.
      */
     ThemeColor(name?: SchemeColorId): ApiColor;
@@ -2652,6 +2674,7 @@ export namespace Slide {
      * @param drawing - The drawing object to animate.
      * @param effectType - The type of animation effect (e.g., "entranceFade", "entranceFlyIn", "emphasisPulse").
      * @param trigger - The trigger type: "onclick", "withprevious", or "afterprevious".
+     * @default trigger = "onclick"
      * @returns The created animation effect, or null if creation failed.
      * @since 9.3.0
      */
@@ -2891,10 +2914,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the series with a specific index.
@@ -3048,6 +3071,7 @@ export namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
+     * @default bAllSeries = false
      *
      * @example
      * ```js
@@ -3142,7 +3166,7 @@ export namespace Slide {
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetHorAxisLabelsFontSize(nFontSize: number): boolean;
+    SetHorAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the horizontal axis.
@@ -3309,7 +3333,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTitle/
      */
-    SetHorAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetHorAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets a hyperlink to the current drawing object (shape or image).
@@ -3378,7 +3402,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFontSize/
      */
-    SetLegendFontSize(nFontSize: number): boolean;
+    SetLegendFontSize(nFontSize: pt): boolean;
 
     /**
      * Sets the outline to the chart legend.
@@ -3512,6 +3536,7 @@ export namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -3546,6 +3571,7 @@ export namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nMarker - The index of the marker in the specified chart series.
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
+     * @default bAllMarkers = false
      *
      * @example
      * ```js
@@ -3719,7 +3745,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -3727,7 +3753,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -3737,7 +3763,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets a name to the specified chart series.
@@ -3835,6 +3861,7 @@ export namespace Slide {
      * @param oFill - The fill type used to fill the series.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the fill will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -3864,6 +3891,7 @@ export namespace Slide {
      * @param oStroke - The stroke used to create the series outline.
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
+     * @default bAll = false
      *
      * @example
      * ```js
@@ -3932,6 +3960,7 @@ export namespace Slide {
      *
      * @param bShow - Whether to show or hide the data table below the chart.
      * @param bShowKeys - Whether to show the legend keys in the data table.
+     * @default bShowKeys = false
      * @since 9.5.0
      */
     SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean;
@@ -4006,7 +4035,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitle/
      */
-    SetTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Sets the fill to the chart title.
@@ -4131,14 +4160,14 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisTitle/
      */
-    SetVerAxisTitle(sTitle: string, nFontSize: number, bIsBold: boolean): boolean;
+    SetVerAxisTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
 
     /**
      * Specifies font size for labels of the vertical axis.
      *
      * @param nFontSize - The text size value measured in points.
      */
-    SetVertAxisLabelsFontSize(nFontSize: number): boolean;
+    SetVertAxisLabelsFontSize(nFontSize: pt): boolean;
 
     /**
      * Specifies major tick mark for the vertical axis.
@@ -4473,6 +4502,7 @@ export namespace Slide {
      * @param sAuthorName - The name of the comment reply author (optional).
      * @param sUserId - The user ID of the comment reply author (optional).
      * @param nPos - The comment reply position.
+     * @default nPos = -1
      * @returns this
      *
      * @example
@@ -4734,6 +4764,9 @@ export namespace Slide {
      * @param nPos - The position of the first comment reply to remove.
      * @param nCount - A number of comment replies to remove.
      * @param bRemoveAll - Specifies whether to remove all comment replies or not.
+     * @default nPos = 0
+     * @default nCount = 1
+     * @default bRemoveAll = false
      * @returns this
      *
      * @example
@@ -5828,6 +5861,13 @@ export namespace Slide {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -6023,6 +6063,13 @@ export namespace Slide {
      *   default symbol is "\t".
      * @param options_NewLineSeparator - Defines how the line separator will be specified in the resulting string. Any symbol can be
      *   used. The default separator is "\r".
+     * @default options_Numbering = true
+     * @default options_Math = true
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
+     * @default options_NewLineSeparator = '\r'
      * @since 8.3.0
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string, options_NewLineSeparator?: string): string;
@@ -6284,7 +6331,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns the hyperlink from the current drawing object (shape or image).
@@ -6489,10 +6536,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the rotation angle of the current drawing object.
@@ -6545,7 +6592,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Checks whether the drawing has an associated text body.
@@ -6566,6 +6613,7 @@ export namespace Slide {
      *
      * @param isReplace - Specifies whether the selection should replace the current selection (true) or be added to it
      *   (false).
+     * @default isReplace = false
      * @since 9.3.0
      *
      * @example
@@ -6709,7 +6757,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -6717,7 +6765,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -6748,7 +6796,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosition/
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -6794,7 +6842,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetSize/
      */
-    SetSize(nWidth: number, nHeight: number): boolean;
+    SetSize(nWidth: EMU, nHeight: EMU): boolean;
 
     /**
      * Sets the title of the current drawing.
@@ -7112,10 +7160,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -7162,7 +7210,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -7170,7 +7218,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -7180,7 +7228,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Ungroups the current group of drawings.
@@ -7361,10 +7409,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -7411,7 +7459,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -7419,7 +7467,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -7429,7 +7477,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing a container for the paragraph elements. */
@@ -7561,6 +7609,7 @@ export namespace Slide {
      * layout collection.
      *
      * @param nPos - Position where the new slide layout will be added.
+     * @default nPos = ApiMaster.GetLayoutsCount()
      * @returns returns new ApiLayout object that represents the copy of slide layout. Returns null if slide
      *   layout doesn't exist or is not in the slide master.
      *
@@ -7934,6 +7983,7 @@ export namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - The number of elements to delete.
+     * @default nCount = 1
      * @returns returns false if layout doesn't exist or position is invalid or layout hasn't objects.
      *
      * @example
@@ -7971,6 +8021,8 @@ export namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -8031,6 +8083,8 @@ export namespace Slide {
      *
      * @param bWriteMaster - Specifies if the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteMaster = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -8067,6 +8121,7 @@ export namespace Slide {
      *
      * @param nPos - Position where a layout will be added.
      * @param oLayout - A layout to be added.
+     * @default nPos = ApiMaster.GetLayoutsCount()
      * @returns returns false if oLayout isn't a layout.
      *
      * @example
@@ -8218,6 +8273,7 @@ export namespace Slide {
      * masters collection.
      *
      * @param nPos - Position where the new slide master will be added.
+     * @default nPos = ApiPresentation.GetMastersCount()
      * @returns returns new ApiMaster object that represents the copy of slide master. Returns null if slide
      *   master doesn't exist or is not in the presentation.
      *
@@ -8590,6 +8646,7 @@ export namespace Slide {
      *
      * @param nPos - Position from which a layout will be deleted.
      * @param nCount - Number of layouts to delete.
+     * @default nCount = 1
      * @returns return false if position is invalid.
      *
      * @example
@@ -8624,6 +8681,7 @@ export namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - Number of objects to delete.
+     * @default nCount = 1
      * @returns returns false if master doesn't exist or position is invalid or master hasn't objects.
      *
      * @example
@@ -8660,6 +8718,8 @@ export namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -8745,6 +8805,7 @@ export namespace Slide {
      * Converts the ApiMaster object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -8780,6 +8841,7 @@ export namespace Slide {
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
+     * @default format = "unicode"
      */
     GetText(format?: "unicode" | "latex"): string;
   }
@@ -8972,10 +9034,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -9064,7 +9126,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -9072,7 +9134,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -9082,7 +9144,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing the paragraph properties. */
@@ -9155,7 +9217,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -9191,7 +9253,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -9229,7 +9291,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
@@ -9309,7 +9371,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -9347,7 +9409,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -9415,7 +9477,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -9485,7 +9547,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -9516,7 +9578,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -9548,7 +9610,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the paragraph contents justification.
@@ -9607,6 +9669,7 @@ export namespace Slide {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -9634,7 +9697,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -9645,6 +9708,7 @@ export namespace Slide {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -9673,7 +9737,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -9710,7 +9774,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies a sequence of custom tab stops which will be used for any tab characters in the current
@@ -9753,7 +9817,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
   }
 
   /** Class representing a paragraph. */
@@ -10074,7 +10138,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
-    GetIndFirstLine(): number | undefined;
+    GetIndFirstLine(): twips | undefined;
 
     /**
      * Returns the paragraph left side indentation.
@@ -10110,7 +10174,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
-    GetIndLeft(): number | undefined;
+    GetIndLeft(): twips | undefined;
 
     /**
      * Returns the paragraph right side indentation.
@@ -10148,7 +10212,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
-    GetIndRight(): number | undefined;
+    GetIndRight(): twips | undefined;
 
     /**
      * Returns an internal ID of the current paragraph.
@@ -10335,7 +10399,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
-    GetSpacingAfter(): number;
+    GetSpacingAfter(): twips;
 
     /**
      * Returns the spacing before value of the current paragraph.
@@ -10373,7 +10437,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
-    GetSpacingBefore(): number;
+    GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
@@ -10441,7 +10505,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
-    GetSpacingLineValue(): number | line240 | undefined;
+    GetSpacingLineValue(): twips | line240 | undefined;
 
     /**
      * Returns the custom tab stops of the current paragraph.
@@ -10460,6 +10524,10 @@ export namespace Slide {
      *   used. The default separator is "\r".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   string can be used. The default symbol is "\t".
+     * @default options_Numbering = false
+     * @default options_Math = false
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TabSymbol = '\t'
      */
     GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string;
 
@@ -10717,7 +10785,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
-    SetIndFirstLine(nValue: number): boolean;
+    SetIndFirstLine(nValue: twips): boolean;
 
     /**
      * Sets the paragraph left side indentation.
@@ -10748,7 +10816,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
-    SetIndLeft(nValue: number): boolean;
+    SetIndLeft(nValue: twips): boolean;
 
     /**
      * Sets the paragraph right side indentation.
@@ -10780,7 +10848,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
-    SetIndRight(nValue: number): boolean;
+    SetIndRight(nValue: twips): boolean;
 
     /**
      * Sets the italic property to the text character.
@@ -10856,7 +10924,7 @@ export namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this
      */
-    SetSpacing(nSpacing: number): ApiParagraph;
+    SetSpacing(nSpacing: twips): ApiParagraph;
 
     /**
      * Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true,
@@ -10867,6 +10935,7 @@ export namespace Slide {
      * @param nAfter - The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
+     * @default isAfterAuto = false
      *
      * @example
      * ```js
@@ -10894,7 +10963,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
-    SetSpacingAfter(nAfter: number, isAfterAuto?: boolean): boolean;
+    SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
 
     /**
      * Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true,
@@ -10905,6 +10974,7 @@ export namespace Slide {
      * @param nBefore - The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
+     * @default isBeforeAuto = false
      *
      * @example
      * ```js
@@ -10933,7 +11003,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
-    SetSpacingBefore(nBefore: number, isBeforeAuto?: boolean): boolean;
+    SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
 
     /**
      * Sets the paragraph line spacing. If the value of the sLineRule parameter is either
@@ -10970,7 +11040,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
-    SetSpacingLine(nLine: number | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
+    SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
 
     /**
      * Specifies that the contents of this paragraph are displayed with a single horizontal line through
@@ -11022,7 +11092,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
-    SetTabs(aPos: number[], aVal: TabJc[]): boolean;
+    SetTabs(aPos: twips[], aVal: TabJc[]): boolean;
 
     /**
      * Replaces the paragraph content with the specified text.
@@ -11416,6 +11486,7 @@ export namespace Slide {
      *
      * @param pos - The position where the slide master will be added.
      * @param apiMaster - The slide master to be added.
+     * @default pos = ApiPresentation.GetMastersCount()
      * @returns return false if position is invalid or apiMaster doesn't exist.
      *
      * @example
@@ -11812,7 +11883,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns whether the presentation loops continuously until the user stops it.
@@ -11953,7 +12024,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Add paragraph to the document on the cursor position.
@@ -11967,6 +12038,8 @@ export namespace Slide {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.5.0
      */
     MoveCursorDown(count?: number, addToSelect?: boolean): boolean;
@@ -11977,6 +12050,9 @@ export namespace Slide {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.5.0
      */
     MoveCursorLeft(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -11987,6 +12063,9 @@ export namespace Slide {
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
      * @param byWords - Specifies whether to move by words instead of by character.
+     * @default count = 1
+     * @default addToSelect = false
+     * @default byWords = false
      * @since 9.5.0
      */
     MoveCursorRight(count?: number, addToSelect?: boolean, byWords?: boolean): boolean;
@@ -11996,6 +12075,8 @@ export namespace Slide {
      *
      * @param count - Number of movements.
      * @param addToSelect - Specifies whether to select text during the move.
+     * @default count = 1
+     * @default addToSelect = false
      * @since 9.5.0
      */
     MoveCursorUp(count?: number, addToSelect?: boolean): boolean;
@@ -12006,6 +12087,8 @@ export namespace Slide {
      *
      * @param nStart - The starting position for the deletion range.
      * @param nCount - The number of slides to delete.
+     * @default nStart = 0
+     * @default nCount = ApiPresentation.GetSlidesCount()
      *
      * @example
      * ```js
@@ -12054,7 +12137,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ReplaceCurrentImage/
      */
-    ReplaceCurrentImage(sImageUrl: string, Width: number, Height: number): void;
+    ReplaceCurrentImage(sImageUrl: string, Width: EMU, Height: EMU): void;
 
     /**
      * Searches for the specified text in the presentation and returns all found occurrences as text
@@ -12063,6 +12146,8 @@ export namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -12075,6 +12160,8 @@ export namespace Slide {
      * @param properties_replaceString - Replacement string.
      * @param properties_matchCase - Case sensitive or not.
      * @param properties_wholeWords - Whether to search for whole words only.
+     * @default properties_matchCase = false
+     * @default properties_wholeWords = false
      * @since 9.5.0
      */
     SearchAndReplace(properties: object, properties_searchString: string, properties_replaceString: string, properties_matchCase?: boolean, properties_wholeWords?: boolean): boolean;
@@ -12138,7 +12225,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetSizes/
      */
-    SetSizes(nWidth: number, nHeight: number): void;
+    SetSizes(nWidth: EMU, nHeight: EMU): void;
 
     /**
      * Converts the slides from the current ApiPresentation object into the JSON objects.
@@ -12150,6 +12237,12 @@ export namespace Slide {
      *   if bWriteLayout === false).
      * @param bWriteAllMasLayouts - Specifies if all child layouts from the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default nStart = 0
+     * @default nEnd = ApiPresentation.GetSlidesCount() - 1
+     * @default bWriteLayout = false
+     * @default bWriteMaster = false
+     * @default bWriteAllMasLayouts = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -12180,6 +12273,7 @@ export namespace Slide {
      * Converts the ApiPresentation object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -12354,7 +12448,7 @@ export namespace Slide {
      *
      * @since 8.1.0
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -12469,7 +12563,7 @@ export namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -13132,7 +13226,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -13634,7 +13728,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the current run are displayed with a single horizontal line through
@@ -14038,10 +14132,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns the text autofit type of the current shape.
@@ -14118,7 +14212,7 @@ export namespace Slide {
      * @param nBottom - Bottom padding.
      * @since 9.3.0
      */
-    SetPaddings(nLeft: number, nTop: number, nRight: number, nBottom: number): boolean;
+    SetPaddings(nLeft: EMU, nTop: EMU, nRight: EMU, nBottom: EMU): boolean;
 
     /**
      * Sets the specified placeholder to the current drawing object.
@@ -14134,7 +14228,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -14142,7 +14236,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -14152,7 +14246,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Sets the text autofit type to the current shape.
@@ -14388,6 +14482,7 @@ export namespace Slide {
      * Creates a duplicate of the specified slide object, adds the new slide to the slides collection.
      *
      * @param nPos - Position where the new slide will be added.
+     * @default nPos = ApiPresentation.GetSlidesCount()
      * @returns returns new ApiSlide object that represents the duplicate slide. Returns null if slide doesn't
      *   exist or is not in the presentation.
      *
@@ -14674,7 +14769,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetHeight/
      */
-    GetHeight(): number;
+    GetHeight(): EMU;
 
     /**
      * Returns a layout of the current slide.
@@ -14831,7 +14926,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetWidth/
      */
-    GetWidth(): number;
+    GetWidth(): EMU;
 
     /**
      * Groups an array of drawings in the current slide.
@@ -14915,6 +15010,7 @@ export namespace Slide {
      *
      * @param nPos - Position from which the object will be deleted.
      * @param nCount - The number of elements to delete.
+     * @default nCount = 1
      * @returns returns false if slide doesn't exist or position is invalid or slide hasn't objects.
      *
      * @example
@@ -14946,6 +15042,8 @@ export namespace Slide {
      * @param text - The text to search for.
      * @param isMatchCase - Case sensitive or not.
      * @param isWholeWords - Whether to search for whole words only.
+     * @default isMatchCase = false
+     * @default isWholeWords = false
      * @since 9.5.0
      */
     Search(text: string, isMatchCase?: boolean, isWholeWords?: boolean): ApiTextRange[];
@@ -15013,6 +15111,10 @@ export namespace Slide {
      *   if bWriteLayout === false).
      * @param bWriteAllMasLayouts - Specifies if all child layouts from the slide master will be written to the JSON object or not.
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteLayout = false
+     * @default bWriteMaster = false
+     * @default bWriteAllMasLayouts = false
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -15213,10 +15315,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no
@@ -15263,7 +15365,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -15271,7 +15373,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -15281,7 +15383,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
   }
 
   /** Class representing a stroke. */
@@ -15337,7 +15439,7 @@ export namespace Slide {
     GetFill(): ApiFill | null;
 
     /** Gets the width of the stroke in English Metric Units. */
-    GetWidth(): number | null;
+    GetWidth(): EMU | null;
 
     /**
      * Sets the beginning arrow of the stroke.
@@ -15345,6 +15447,8 @@ export namespace Slide {
      * @param type - The type of the beginning arrow.
      * @param width - The width of the beginning arrow.
      * @param length - The length of the beginning arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetBeginArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -15355,6 +15459,8 @@ export namespace Slide {
      * @param type - The type of the ending arrow.
      * @param width - The width of the ending arrow.
      * @param length - The length of the ending arrow.
+     * @default width = "medium"
+     * @default length = "medium"
      * @since 9.5.0
      */
     SetEndArrow(type: LineEndType, width?: LineEndSize, length?: LineEndSize): boolean;
@@ -15372,6 +15478,7 @@ export namespace Slide {
      * @param oCell - If not specified, a new column will be added to the end of the table.
      * @param isBefore - Add a new column before or after the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -15402,6 +15509,7 @@ export namespace Slide {
      *   added at the end of the table.
      * @param nCount - Count of columns to be added.
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddColumns(nCount: number): ApiTable | null;
@@ -15425,6 +15533,7 @@ export namespace Slide {
      * @param oCell - If not specified, a new row will be added to the end of the table.
      * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified,
      *   then this parameter will be ignored.
+     * @default isBefore = false
      *
      * @example
      * ```js
@@ -15453,6 +15562,7 @@ export namespace Slide {
      *   the end of the table.
      * @param nCount - Count of rows to be added.
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
+     * @default isBefore = false
      * @since 9.5.0
      */
     AddRows(nCount: number): ApiTable | null;
@@ -15503,7 +15613,7 @@ export namespace Slide {
      * @param columnIndex - The zero-based column index.
      * @since 9.4.0
      */
-    GetColumnWidth(columnIndex: number): number | null;
+    GetColumnWidth(columnIndex: number): EMU | null;
 
     /**
      * Returns the hyperlink from the current drawing object (shape or image).
@@ -15551,10 +15661,10 @@ export namespace Slide {
     GetPlaceholder(): ApiPlaceholder | null;
 
     /** Gets the x position of the drawing on the slide. */
-    GetPosX(): number;
+    GetPosX(): EMU;
 
     /** Gets the y position of the drawing on the slide. */
-    GetPosY(): number;
+    GetPosY(): EMU;
 
     /**
      * Returns a row by its index.
@@ -15763,7 +15873,7 @@ export namespace Slide {
      * @param nValue - Spacing value measured in twentieths of a point (1/1440 of an inch). `"Null"` means that no
      *   spacing will be applied.
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Sets the width of the specified column in the current table.
@@ -15773,7 +15883,7 @@ export namespace Slide {
      * @returns Returns the actual column width set (in EMU), or null if the column index is invalid.
      * @since 9.4.0
      */
-    SetColumnWidth(columnIndex: number, width: number): number | null;
+    SetColumnWidth(columnIndex: number, width: EMU): EMU | null;
 
     /**
      * Sets the total height of the current table, distributing it evenly among the table rows.
@@ -15784,7 +15894,7 @@ export namespace Slide {
      * @returns Returns the requested height (in EMU), or null if the table has no rows.
      * @since 9.5.0
      */
-    SetHeight(nValue: number): number | null;
+    SetHeight(nValue: EMU): EMU | null;
 
     /**
      * Sets a hyperlink to the current drawing object (shape or image).
@@ -15817,7 +15927,7 @@ export namespace Slide {
      * @param posX - The distance from the left side of the slide to the left side of the drawing measured in English
      *   measure units.
      */
-    SetPosX(posX: number): boolean;
+    SetPosX(posX: EMU): boolean;
 
     /**
      * Sets the y position of the drawing on the slide.
@@ -15825,7 +15935,7 @@ export namespace Slide {
      * @param posY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosY(posY: number): boolean;
+    SetPosY(posY: EMU): boolean;
 
     /**
      * Sets the position of the drawing on the slide.
@@ -15835,7 +15945,7 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      */
-    SetPosition(nPosX: number, nPosY: number): void;
+    SetPosition(nPosX: EMU, nPosY: EMU): void;
 
     /**
      * Specifies the shading which shall be applied to the extents of the current table.
@@ -15865,7 +15975,7 @@ export namespace Slide {
      * @param width - The table width measured in English measure units.
      * @param height - The table height measured in English measure units.
      */
-    SetSize(width: number, height: number): boolean;
+    SetSize(width: EMU, height: EMU): boolean;
 
     /**
      * Sets the style for the current table.
@@ -15900,7 +16010,7 @@ export namespace Slide {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -15912,7 +16022,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -15927,7 +16037,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -15942,7 +16052,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -15954,7 +16064,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -15966,7 +16076,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -15978,7 +16088,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -15988,7 +16098,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
      *   a point (1/1440 of an inch).
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -15998,7 +16108,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -16008,7 +16118,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -16018,7 +16128,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space above the top extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -16035,7 +16145,7 @@ export namespace Slide {
      *
      * @param nValue - The indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -16106,6 +16216,7 @@ export namespace Slide {
      * Converts the ApiTable object into the JSON object.
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
+     * @default bWriteTableStyles = false
      *
      * @example
      * ```js
@@ -16256,6 +16367,13 @@ export namespace Slide {
      * @param pr_ParaSeparator - Defines how the paragraph separator will be specified in the resulting string.
      * @param pr_TabSymbol - Defines how the tab will be specified in the resulting string.
      * @param pr_NewLineSeparator - Defines how the line separator will be specified in the resulting string.
+     * @default pr_Numbering = true
+     * @default pr_Math = true
+     * @default pr_TableCellSeparator = '\t'
+     * @default pr_TableRowSeparator = '\r\n'
+     * @default pr_ParaSeparator = '\r\n'
+     * @default pr_TabSymbol = '\t'
+     * @default pr_NewLineSeparator = '\r'
      * @since 9.4.0
      */
     GetText(pr?: object, pr_Numbering?: boolean, pr_Math?: boolean, pr_TableCellSeparator?: string, pr_TableRowSeparator?: string, pr_ParaSeparator?: string, pr_TabSymbol?: string, pr_NewLineSeparator?: string): string;
@@ -16305,7 +16423,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderBottom/
      */
-    SetCellBorderBottom(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderBottom(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the left of the current table cell.
@@ -16330,7 +16448,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderLeft/
      */
-    SetCellBorderLeft(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderLeft(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the right of the current table cell.
@@ -16355,7 +16473,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderRight/
      */
-    SetCellBorderRight(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderRight(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Sets the border which shall be displayed at the top of the current table cell.
@@ -16380,7 +16498,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderTop/
      */
-    SetCellBorderTop(sType: BorderType, fSize: number, oApiFill: ApiFill): boolean;
+    SetCellBorderTop(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
 
     /**
      * Specifies an amount of space which shall be left between the bottom extent of the cell contents and
@@ -16408,7 +16526,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginBottom/
      */
-    SetCellMarginBottom(nValue: number): void;
+    SetCellMarginBottom(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the left extent of the current cell
@@ -16436,7 +16554,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginLeft/
      */
-    SetCellMarginLeft(nValue: number): void;
+    SetCellMarginLeft(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the right extent of the current cell
@@ -16464,7 +16582,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginRight/
      */
-    SetCellMarginRight(nValue: number): void;
+    SetCellMarginRight(nValue: twips): void;
 
     /**
      * Specifies an amount of space which shall be left between the top extent of the current cell contents
@@ -16492,7 +16610,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginTop/
      */
-    SetCellMarginTop(nValue: number): void;
+    SetCellMarginTop(nValue: twips): void;
 
     /**
      * Sets the background color to all cells in the column containing the current cell.
@@ -16619,7 +16737,7 @@ export namespace Slide {
      * @param nValue - Spacing value measured in twentieths of a point (1/1440 of an inch). `"Null"` means that no
      *   spacing will be applied.
      */
-    SetCellSpacing(nValue: number): boolean;
+    SetCellSpacing(nValue: twips): boolean;
 
     /**
      * Specifies the alignment of the current table with respect to the text margins in the current
@@ -16637,6 +16755,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      * @param isAuto - The true value disables the SetShd method use.
+     * @default isAuto = false
      */
     SetShd(sType: ShdType, r: number, g: number, b: number, isAuto?: boolean): boolean;
 
@@ -16665,7 +16784,7 @@ export namespace Slide {
      * @param b - Blue color component value.
      * @since 9.0.0
      */
-    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderAll(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the bottom of the current table.
@@ -16677,7 +16796,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderBottom(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all horizontal table cell borders which are not on
@@ -16692,7 +16811,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideH(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies the border which will be displayed on all vertical table cell borders which are not on the
@@ -16707,7 +16826,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderInsideV(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the left of the current table.
@@ -16719,7 +16838,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderLeft(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed on the right of the current table.
@@ -16731,7 +16850,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderRight(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Sets the border which will be displayed at the top of the current table.
@@ -16743,7 +16862,7 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      */
-    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: number, r: number, g: number, b: number): boolean;
+    SetTableBorderTop(sType: BorderType, nSize: pt_8, nSpace: pt, r: number, g: number, b: number): boolean;
 
     /**
      * Specifies an amount of space which will be left between the bottom extent of the cell contents and
@@ -16753,7 +16872,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space below the bottom extent of the cell measured in twentieths of
      *   a point (1/1440 of an inch).
      */
-    SetTableCellMarginBottom(nValue: number): boolean;
+    SetTableCellMarginBottom(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the left extent of the cell contents and the
@@ -16763,7 +16882,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space to the left extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginLeft(nValue: number): boolean;
+    SetTableCellMarginLeft(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the right extent of the cell contents and
@@ -16773,7 +16892,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space to the right extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginRight(nValue: number): boolean;
+    SetTableCellMarginRight(nValue: twips): boolean;
 
     /**
      * Specifies an amount of space which will be left between the top extent of the cell contents and the
@@ -16783,7 +16902,7 @@ export namespace Slide {
      * @param nValue - The value for the amount of space above the top extent of the cell measured in twentieths of a
      *   point (1/1440 of an inch).
      */
-    SetTableCellMarginTop(nValue: number): boolean;
+    SetTableCellMarginTop(nValue: twips): boolean;
 
     /**
      * Sets the table description.
@@ -16799,7 +16918,7 @@ export namespace Slide {
      *
      * @param nValue - The indentation value measured in twentieths of a point (1/1440 of an inch).
      */
-    SetTableInd(nValue: number): boolean;
+    SetTableInd(nValue: twips): boolean;
 
     /**
      * Specifies the algorithm which will be used to lay out the contents of the current table within the
@@ -16909,7 +17028,7 @@ export namespace Slide {
      *
      * @since 9.4.0
      */
-    GetHeight(): number | null;
+    GetHeight(): EMU | null;
 
     /**
      * Returns the next row if exists.
@@ -16951,7 +17070,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/SetHeight/
      */
-    SetHeight(nValue?: number): number | null;
+    SetHeight(nValue?: EMU): EMU | null;
   }
 
   /** Class representing the table row properties. */
@@ -17384,7 +17503,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
-    GetSpacing(): number;
+    GetSpacing(): twips;
 
     /**
      * Gets the strikeout property from the current text properties.
@@ -17835,7 +17954,7 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/
      */
-    SetSpacing(nSpacing: number): ApiTextPr;
+    SetSpacing(nSpacing: twips): ApiTextPr;
 
     /**
      * Specifies that the contents of the run are displayed with a single horizontal line through the
@@ -17980,6 +18099,7 @@ export namespace Slide {
      *
      * @param text - The text that will be added.
      * @param position - The position where the text will be added ("before" or "after" the range specified).
+     * @default position = "after"
      * @returns returns true if the text was successfully added.
      * @since 9.5.0
      */
@@ -18009,6 +18129,9 @@ export namespace Slide {
      * @param nAfter - 1-based position within this range to start searching from.
      * @param bMatchCase - Case-sensitive search.
      * @param bWholeWords - Match whole words only.
+     * @default nAfter = 1
+     * @default bMatchCase = false
+     * @default bWholeWords = false
      * @since 9.5.0
      */
     Find(sFindWhat: string, nAfter?: number, bMatchCase?: boolean, bWholeWords?: boolean): ApiTextRange | null;
@@ -18047,6 +18170,8 @@ export namespace Slide {
      *
      * @param nStart - Start offset (0-based) relative to the beginning of this range.
      * @param nEnd - End offset relative to the beginning of this range. -1 means the end of this range.
+     * @default nStart = 0
+     * @default nEnd = -1
      * @since 9.5.0
      */
     GetRange(nStart?: number, nEnd?: number): ApiTextRange | null;
@@ -18073,6 +18198,12 @@ export namespace Slide {
      *   used. The default separator is "\r\n".
      * @param options_TabSymbol - Defines how the tab will be specified in the resulting string (does not apply to numbering). Any
      *   symbol can be used. The default symbol is "\t".
+     * @default options_Math = true
+     * @default options_NewLineSeparator = '\r'
+     * @default options_TableCellSeparator = '\t'
+     * @default options_TableRowSeparator = '\r\n'
+     * @default options_ParaSeparator = '\r\n'
+     * @default options_TabSymbol = '\t'
      * @since 9.5.0
      */
     GetText(options?: object, options_Math?: boolean, options_NewLineSeparator?: string, options_TableCellSeparator?: string, options_TableRowSeparator?: string, options_ParaSeparator?: string, options_TabSymbol?: string): string;
@@ -18096,6 +18227,7 @@ export namespace Slide {
      * Moves a cursor to the specified position within the current range.
      *
      * @param nPos - The desired cursor position.
+     * @default nPos = 0
      * @since 9.5.0
      */
     MoveCursorToPos(nPos?: number): boolean;
@@ -18107,6 +18239,8 @@ export namespace Slide {
      * @param sReplaceWith - Replacement text.
      * @param bMatchCase - Case-sensitive search.
      * @param bWholeWords - Match whole words only.
+     * @default bMatchCase = false
+     * @default bWholeWords = false
      * @returns this
      * @since 9.5.0
      */
@@ -18218,7 +18352,7 @@ export namespace Slide {
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @since 9.5.0
      */
-    SetSpacing(nSpacing: number): ApiTextRange | null;
+    SetSpacing(nSpacing: twips): ApiTextRange | null;
 
     /**
      * Sets the start position of the current range.
