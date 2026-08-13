@@ -188,6 +188,42 @@ sdkjs is the structural source of truth (classes, methods, params - it can't dri
 runtime), while the local `office-js-api-declarations` snapshots provide richer descriptions and
 runnable examples wherever a class/method name matches.
 
+### Documentation carried by the types
+
+Every generated class, typedef, property and method carries a real multi-line JSDoc block, so a hover
+in the editor shows what the reference site shows:
+
+````typescript
+/**
+ * Adds a comment to the current document selection, or to the current word if no text is selected.
+ *
+ * @param sText - The comment text (required).
+ * @param sAuthor - The author's name (optional).
+ * @returns Returns null if the comment was not added.
+ *
+ * @example
+ * ```js
+ * let doc = Api.GetDocument();
+ * doc.AddComment("This is a comment to the document.", "Jane");
+ * ```
+ *
+ * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddComment/
+ */
+AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment;
+````
+
+Everything in that block comes from the sources above, not from hand-written prose:
+
+- the description, with the docs' inline HTML (`<b>"tile"</b>`) translated to markdown;
+- `@param`/`@returns` from the documented arguments and return value - param prose is merged by
+  parameter *name*, since the snapshot occasionally documents a different arity than current sdkjs;
+- `@since`, where sdkjs records the editor version a member first appeared in;
+- `@example`, from the docs' "## Try it" snippet (its `document-builder={...}` fence directive, which
+  means nothing outside the docs site, is dropped);
+- `@see`, derived from the `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` path
+  already present in the JSDoc - the same three segments address the public reference page, so the
+  link is data-driven rather than guessed and can't point at a page that doesn't exist.
+
 ## Type-checking
 
 ```bash
@@ -240,18 +276,32 @@ autocomplete). It also runs automatically as a `postgenerate` step whenever `npm
 regenerates the types from `sdkjs`, so the ambient bundle can't silently go stale relative to the
 modular package. It writes to `dist/ambient/` - tracked in git (unlike the rest of `dist/`) so the
 generated files themselves are directly linkable/reviewable, but excluded from the npm package
-(`package.json`'s `files`) since npm consumers get the modular, non-duplicated package instead and
-don't need this flattened, ~700KB-per-file duplicate:
+(`package.json`'s `files`) since npm consumers get the modular package instead:
 
 ```text
-dist/ambient/onlyoffice-plugins-types.ambient.d.ts        # Asc/AscPlugin/events/buttons/config/
-                                                          # theme/services + all 5 editor namespaces,
-                                                          # no global Api (matches the root package)
-dist/ambient/onlyoffice-plugins-types.word.ambient.d.ts    # the bundle above + a global `Api: Word.Api`
-dist/ambient/onlyoffice-plugins-types.cell.ambient.d.ts    # ...same, for Cell
-dist/ambient/onlyoffice-plugins-types.slide.ambient.d.ts   # ...same, for Slide
-dist/ambient/onlyoffice-plugins-types.pdf.ambient.d.ts     # ...same, for Pdf
+dist/ambient/onlyoffice-plugins-types.ambient.d.ts           # Asc/AscPlugin/events/buttons/config/
+                                                             # theme/services + all 5 editor
+                                                             # namespaces, no global Api (matches
+                                                             # the root package)
+dist/ambient/onlyoffice-plugins-types.word-api.ambient.d.ts   # +10 lines: a global `Api: Word.Api`
+dist/ambient/onlyoffice-plugins-types.cell-api.ambient.d.ts   # ...same, for Cell
+dist/ambient/onlyoffice-plugins-types.slide-api.ambient.d.ts  # ...same, for Slide
+dist/ambient/onlyoffice-plugins-types.pdf-api.ambient.d.ts    # ...same, for Pdf
 ```
+
+Load the base bundle plus exactly one editor addon (in that order - the addon refers to the
+namespace the base bundle declares, and the four addons declare the same `Api` global with a
+different type):
+
+```js
+monaco.languages.typescript.javascriptDefaults.addExtraLib(baseBundleText, "onlyoffice.d.ts");
+monaco.languages.typescript.javascriptDefaults.addExtraLib(wordApiAddonText, "onlyoffice.word.d.ts");
+```
+
+The per-editor part is a small addon rather than four more self-contained copies of the base bundle:
+with per-method JSDoc the base bundle is a few megabytes, and five near-identical copies of it would
+be that much duplicated text rewritten in full in git on every regeneration, plus a needlessly large
+download for a Monaco consumer.
 
 A file with no top-level `import`/`export` is a TypeScript "script": every `interface`/`type`/
 `namespace` in it is automatically global, so this is what a `declare global {}` block would need

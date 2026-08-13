@@ -4,14 +4,20 @@
 // unwrapped into plain top-level declarations instead.
 //
 // Produces:
-//   dist/ambient/onlyoffice-plugins-types.ambient.d.ts        - Asc/AscPlugin/events/buttons/config/
-//                                                              theme/services + all 5 editor namespaces,
-//                                                              WITHOUT a global `Api` (matches the root
-//                                                              package - no cross-editor Api global).
-//   dist/ambient/onlyoffice-plugins-types.<editor>.ambient.d.ts - the base bundle above PLUS that one
-//                                                              editor's global `Api`, for consumers
-//                                                              (like a Monaco playground) that already
-//                                                              know which editor they're targeting.
+//   dist/ambient/onlyoffice-plugins-types.ambient.d.ts             - Asc/AscPlugin/events/buttons/
+//                                                                    config/theme/services + all 5
+//                                                                    editor namespaces, WITHOUT a
+//                                                                    global `Api` (matches the root
+//                                                                    package - no cross-editor Api).
+//   dist/ambient/onlyoffice-plugins-types.<editor>-api.ambient.d.ts - a few lines declaring that one
+//                                                                    editor's global `Api`, to load
+//                                                                    on top of the base bundle.
+//
+// The per-editor part is a separate small addon rather than four more self-contained copies of the
+// base bundle: with per-method JSDoc the base bundle is several megabytes, and five near-identical
+// copies of it would be that much duplicated text in git (rewritten in full on every regeneration)
+// and in whatever a Monaco consumer downloads. `addExtraLib()` takes any number of files, so loading
+// the base bundle plus one addon is no harder than loading a single blob.
 
 const fs = require('fs');
 const path = require('path');
@@ -80,7 +86,13 @@ function unwrapDeclareGlobal(source) {
     if (source[end] === '}') depth -= 1;
     if (depth === 0) break;
   }
-  const inner = source.slice(start, end).trim();
+  // Everything inside the block carries the wrapper's indentation; unwrapped to the top level it
+  // would read as if it were still nested, so the whole block is shifted left by its own common
+  // indentation instead of just having its first line trimmed.
+  const raw = source.slice(start, end).replace(/^\n+/, '').replace(/\s+$/, '');
+  const indentWidths = raw.split('\n').filter((line) => line.trim()).map((line) => line.match(/^[ \t]*/)[0].length);
+  const commonIndent = Math.min(...indentWidths);
+  const inner = raw.split('\n').map((line) => line.slice(commonIndent)).join('\n');
   // `declare global { var X: Y; }` doesn't need `declare` on `var` (it's implied by the wrapper),
   // but once unwrapped to bare top level, `var`/`function`/`const`/`let`/`class` all need an
   // explicit `declare` - unlike `interface`/`type`/`namespace`, which are ambient either way.
@@ -121,16 +133,18 @@ function buildEditorAddon(editorFile) {
 function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const base = buildBaseBundle();
-  fs.writeFileSync(path.join(OUT_DIR, 'onlyoffice-plugins-types.ambient.d.ts'), base);
+  fs.writeFileSync(path.join(OUT_DIR, 'onlyoffice-plugins-types.ambient.d.ts'), buildBaseBundle());
   console.log('Generated dist/ambient/onlyoffice-plugins-types.ambient.d.ts');
 
   for (const [editorName, editorFile] of Object.entries(EDITOR_FILES)) {
-    const addon = buildEditorAddon(editorFile);
-    const combined = `${base}\n// ---- ${editorFile} (global Api for the "${editorName}" editor) ----\n${addon}\n`;
-    const outPath = path.join(OUT_DIR, `onlyoffice-plugins-types.${editorName}.ambient.d.ts`);
-    fs.writeFileSync(outPath, combined);
-    console.log(`Generated dist/ambient/onlyoffice-plugins-types.${editorName}.ambient.d.ts`);
+    const header = `// AUTO-GENERATED - do not edit by hand. Run \`npm run generate-ambient\` to regenerate.
+// Declares the global \`Api\` of the "${editorName}" editor (${editorFile}). Load this AFTER
+// onlyoffice-plugins-types.ambient.d.ts, which declares the namespace it refers to; load exactly one
+// editor addon, since the four declare the same \`Api\` global with a different type.
+`;
+    const outPath = path.join(OUT_DIR, `onlyoffice-plugins-types.${editorName}-api.ambient.d.ts`);
+    fs.writeFileSync(outPath, `${header}\n${buildEditorAddon(editorFile)}\n`);
+    console.log(`Generated dist/ambient/onlyoffice-plugins-types.${editorName}-api.ambient.d.ts`);
   }
 }
 

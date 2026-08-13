@@ -2,6 +2,28 @@
 
 ## 0.9.0
 
+- **Every generated member is now documented.** The generator collected method, parameter and return
+  descriptions all along and then emitted a bare signature: 2012 methods across the five editor
+  namespaces had no JSDoc at all, and the only comments present - on classes and typedefs - were the
+  whole description flattened into a single line, runnable example and all, which no editor could
+  render usefully. Members now carry a multi-line block with the description, `@param`/`@returns`,
+  `@since` where sdkjs records it, `@example` from the docs' "## Try it" snippet, and `@see` linking
+  to the member's page on api.onlyoffice.com. The link is derived from the `@see
+  office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` path already in the JSDoc rather than
+  assembled from a hand-written table, so it can't point at a page that doesn't exist. Inline HTML in
+  the prose (`<b>"tile"</b>`) is translated to markdown, and a `*/` occurring in a description or
+  example is escaped instead of ending the comment early.
+- Parameter prose is merged from the `office-js-api-declarations` snapshot by parameter *name*: the
+  snapshot occasionally documents a different arity than the current sdkjs signature has, and a
+  positional merge would then attach one parameter's description to another.
+- JSDoc's `{*}` wildcard type (as in `@property {*} FormValue`) now maps to `unknown` instead of being
+  emitted verbatim as `*`, which was not valid TypeScript.
+- The ambient bundle is now one base file plus four ~10-line per-editor `Api` addons
+  (`onlyoffice-plugins-types.<editor>-api.ambient.d.ts`) instead of five near-identical
+  self-contained copies. With per-method JSDoc each copy is a few megabytes, so the five-copy layout
+  meant ~21 MB rewritten in git on every regeneration for content that differs by ten lines. Load the
+  base bundle first, then exactly one addon. The unwrapped `declare global` block is also dedented now
+  rather than keeping the wrapper's indentation.
 - **Relicensed from AGPL-3.0-or-later to Apache-2.0.** AGPL on a package that consists solely of
   `.d.ts` declarations is a blocker for its intended audience: the file ends up inside the build of
   every plugin that installs it. Apache-2.0 matches ONLYOFFICE's other published types package,

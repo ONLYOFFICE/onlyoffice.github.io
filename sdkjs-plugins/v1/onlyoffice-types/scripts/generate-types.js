@@ -113,13 +113,22 @@ function buildLegacyLookup(data) {
   const classes = {};
   const typedefs = {};
 
+  const describedParams = (item) => Object.fromEntries(
+    (item.params || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
+  );
+
   for (const item of data) {
     if (item.kind === 'class' && item.name && item.description) {
       classes[item.name] = classes[item.name] || { description: '', methods: {} };
       classes[item.name].description = item.description;
     }
     if (item.kind === 'typedef' && item.name && item.description) {
-      typedefs[item.name] = item.description;
+      typedefs[item.name] = {
+        description: item.description,
+        properties: Object.fromEntries(
+          (item.properties || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
+        ),
+      };
     }
   }
   for (const item of data) {
@@ -129,7 +138,12 @@ function buildLegacyLookup(data) {
       // office-js-api-declarations has the same duplicate-entry quirk sdkjs does (see the comment
       // in extractClasses) - keep whichever description was recorded first for a given method.
       if (!classes[className].methods[item.name]) {
-        classes[className].methods[item.name] = item.description;
+        classes[className].methods[item.name] = {
+          description: item.description,
+          params: describedParams(item),
+          returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
+          docsUrl: methodDocsUrl(item.see),
+        };
       }
     }
   }
@@ -165,12 +179,28 @@ function applyLegacyDescriptions(classes, typedefs, legacy) {
     const legacyClass = legacy.classes[className];
     if (legacyClass && legacyClass.description) classData.description = legacyClass.description;
     for (const [methodName, method] of Object.entries(classData.methods)) {
-      const legacyDescription = legacyClass && legacyClass.methods[methodName];
-      if (legacyDescription) method.description = legacyDescription;
+      const legacyMethod = legacyClass && legacyClass.methods[methodName];
+      if (!legacyMethod) continue;
+      method.description = legacyMethod.description;
+      if (legacyMethod.returnDescription) method.returnDescription = legacyMethod.returnDescription;
+      if (!method.docsUrl) method.docsUrl = legacyMethod.docsUrl;
+      // Param descriptions are matched by name, not position: the snapshot occasionally documents a
+      // different arity than the current sdkjs signature does, and a positional merge would then
+      // attach one parameter's prose to another.
+      for (const param of method.params) {
+        const legacyParamDescription = legacyMethod.params[param.name];
+        if (legacyParamDescription) param.description = legacyParamDescription;
+      }
     }
   }
   for (const [name, typedefData] of Object.entries(typedefs)) {
-    if (legacy.typedefs[name]) typedefData.description = legacy.typedefs[name];
+    const legacyTypedef = legacy.typedefs[name];
+    if (!legacyTypedef) continue;
+    typedefData.description = legacyTypedef.description;
+    for (const prop of typedefData.properties) {
+      const legacyPropDescription = legacyTypedef.properties[prop.name];
+      if (legacyPropDescription) prop.description = legacyPropDescription;
+    }
   }
 }
 
@@ -202,6 +232,9 @@ function parseTypeName(n) {
   if (n.startsWith('Array.')) return `${parseTypeName(n.slice(6))}[]`;
   if (n.includes('|')) return splitTopLevel(n, '|').map(parseTypeName).join(' | ');
   if (n === 'undefined') return 'undefined';
+  // JSDoc's "any type" wildcard (`@property {*} FormValue`) - `unknown` keeps the package's no-`any`
+  // guarantee while still accepting every value the runtime can put there.
+  if (n === '*') return 'unknown';
   if (n === 'Number') return 'number';
   if (n === 'String') return 'string';
   if (n === 'Boolean') return 'boolean';
@@ -239,6 +272,46 @@ function parseType(typeObj) {
   return typeObj.names.map(parseTypeName).join(' | ');
 }
 
+// Every documented sdkjs member carries a `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js`
+// tag pointing at its runnable example in ONLYOFFICE's docs repository. Those same three segments
+// address the public reference page for that member, so a stable api.onlyoffice.com link can be
+// derived from data already in the doclet - no per-class URL table to maintain and nothing to guess
+// (a hand-built URL for an undocumented member would be a 404 in every hover tooltip).
+const DOCS_BASE = 'https://api.onlyoffice.com/docs/office-api/usage-api';
+const DOCS_SECTIONS = {
+  Word: 'document-api',
+  Cell: 'spreadsheet-api',
+  Slide: 'presentation-api',
+  Forms: 'form-api',
+  Form: 'form-api',
+  Pdf: 'pdf-api',
+};
+
+function parseSeeEntry(see) {
+  for (const entry of (Array.isArray(see) ? see : [see])) {
+    const match = /Examples\/([A-Za-z]+)\/([A-Za-z0-9_]+)\/Methods\/([A-Za-z0-9_]+)\.js/
+      .exec(String(entry || ''));
+    // "Enumerations" is a real segment here, but typedefs have no per-editor reference page.
+    if (match && DOCS_SECTIONS[match[1]]) {
+      return { section: DOCS_SECTIONS[match[1]], className: match[2], methodName: match[3] };
+    }
+  }
+  return null;
+}
+
+function methodDocsUrl(see) {
+  const parsed = parseSeeEntry(see);
+  // A `constructor.js` example documents the class itself, not a callable member - the reference
+  // site has no /Methods/constructor/ page for it.
+  if (!parsed || parsed.methodName === 'constructor') return '';
+  return `${DOCS_BASE}/${parsed.section}/${parsed.className}/Methods/${parsed.methodName}/`;
+}
+
+function classDocsUrl(see) {
+  const parsed = parseSeeEntry(see);
+  return parsed ? `${DOCS_BASE}/${parsed.section}/${parsed.className}/` : '';
+}
+
 function extractClasses(data) {
   const classes = {};
 
@@ -247,6 +320,9 @@ function extractClasses(data) {
       const className = item.name;
       classes[className] = {
         description: item.description || '',
+        since: item.since || '',
+        deprecated: item.deprecated || '',
+        docsUrl: classDocsUrl(item.see),
         // sdkjs classes commonly do `ApiOleObject.prototype = Object.create(ApiDrawing.prototype)`
         // and JSDoc-tag the relationship with `@extends {ApiDrawing}` (-> `augments` here) -
         // without modeling that as a real TS `extends`, every method tagged `@memberof ApiDrawing`
@@ -298,6 +374,7 @@ function extractClasses(data) {
             type: parseType(names?.length ? { ...p.type, names } : p.type),
             optional: hasOptional,
             defaultValue: p.defaultvalue,
+            description: p.description || '',
           };
         }) : [];
 
@@ -308,7 +385,12 @@ function extractClasses(data) {
         classes[className].methods[item.name] = {
           params,
           returnType,
-          description: item.description || ''
+          description: item.description || '',
+          returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
+          since: item.since || '',
+          deprecated: item.deprecated || '',
+          docsUrl: methodDocsUrl(item.see),
+          see: item.see || [],
         };
       }
     }
@@ -325,6 +407,19 @@ function extractClasses(data) {
     }
   }
 
+  // A class doclet itself rarely carries a `@see` example path, but every one of its members does,
+  // and each such path names the class - so its reference page can be derived from any member.
+  for (const classData of Object.values(classes)) {
+    if (classData.docsUrl) continue;
+    for (const method of Object.values(classData.methods)) {
+      const url = classDocsUrl(method.see);
+      if (url) {
+        classData.docsUrl = url;
+        break;
+      }
+    }
+  }
+
   return classes;
 }
 
@@ -335,6 +430,8 @@ function extractTypedefs(data) {
       const hasProps = item.properties && item.properties.length > 0;
       typedefs[item.name] = {
         description: item.description || '',
+        since: item.since || '',
+        deprecated: item.deprecated || '',
         type: hasProps ? null : parseType(item.type),
         properties: hasProps ? item.properties.map(p => ({
           name: p.name,
@@ -379,29 +476,154 @@ function extractEvents(data, manualEvents) {
   return events;
 }
 
+const DOC_WIDTH = 100;
+
+// Both prose sources are HTML-flavored (`<b>"tile"</b> - if the image is smaller...`), while editors
+// render a JSDoc block as markdown. Only known inline tags are translated - nothing else is stripped,
+// so type-ish text such as `Array.<ApiRun>` inside a description survives untouched.
+function htmlToMarkdown(text) {
+  return text
+    // sdkjs writes site-relative inline links (`{@link /docs/plugins/... AddComment}`), which resolve
+    // to nothing in an editor tooltip.
+    .replace(/\{@link\s+(\/docs\/)/g, '{@link https://api.onlyoffice.com$1')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/?(?:b|strong)>/gi, '**')
+    .replace(/<\/?(?:i|em)>/gi, '_')
+    .replace(/<\/?code>/gi, '`')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
+// The "## Try it" section carrying a fenced runnable snippet is the most valuable part of the
+// office-js-api-declarations prose, and it's unreadable when flattened into a one-line `/** ... */`
+// comment - it becomes a real `@example` tag instead. The fence's info string carries a
+// document-builder directive (```js document-builder={"documentType": "word"}) that means nothing
+// outside the docs site, so only the language survives.
+function splitDescription(raw) {
+  const examples = [];
+  const text = String(raw || '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/```[^\n]*\n([\s\S]*?)```/g, (_, code) => {
+      examples.push(code.trim());
+      return '';
+    })
+    .replace(/^[ \t]*#+[ \t]*Try it[ \t]*$/gim, '')
+    .replace(/\n{3,}/g, '\n\n');
+  return { summary: text.trim(), examples };
+}
+
+// An inline `{@link url Label}` tag must stay on one line - split across two, editors render the
+// literal text instead of a link - so it is wrapped as a single (possibly over-long) word.
+function toWords(paragraph) {
+  const words = [];
+  for (const word of paragraph.trim().split(/\s+/)) {
+    const pending = words.length > 0 ? words[words.length - 1] : '';
+    if (pending.includes('{@link') && !pending.includes('}')) words[words.length - 1] = `${pending} ${word}`;
+    else words.push(word);
+  }
+  return words;
+}
+
+function wrapText(text, width) {
+  const lines = [];
+  for (const paragraph of text.split('\n')) {
+    if (!paragraph.trim()) {
+      if (lines.length > 0 && lines[lines.length - 1] !== '') lines.push('');
+      continue;
+    }
+    let line = '';
+    for (const word of toWords(paragraph)) {
+      if (line && `${line} ${word}`.length > width) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = line ? `${line} ${word}` : word;
+      }
+    }
+    if (line) lines.push(line);
+  }
+  while (lines.length > 0 && lines[lines.length - 1] === '') lines.pop();
+  return lines;
+}
+
+// sdkjs writes `@returns {?ApiComment} - Returns null if the comment was not added.`, and jsdoc keeps
+// that separator hyphen in the description for `@returns` (unlike `@param`, where it strips it) -
+// re-emitted as-is it would read as a stray bullet right after the tag.
+function cleanProse(text) {
+  return String(text || '').replace(/^\s*-\s+/, '').trimEnd();
+}
+
+// Continuation lines of a wrapped tag are indented so the tag's own text stays visually attached to
+// it rather than reading as the start of a new tag.
+function taggedLines(tag, text) {
+  const wrapped = text ? wrapText(text, DOC_WIDTH - 4) : [];
+  if (wrapped.length === 0) return [tag];
+  return wrapped.map((line, index) => (index === 0 ? `${tag} ${line}` : `  ${line}`));
+}
+
+function renderJsDoc(doc, indent) {
+  const { summary, examples } = splitDescription(doc.description);
+  const blocks = [];
+
+  if (summary) blocks.push(wrapText(htmlToMarkdown(cleanProse(summary)), DOC_WIDTH));
+
+  const tags = [];
+  for (const param of doc.params || []) {
+    if (param.description) {
+      tags.push(...taggedLines(`@param ${param.name} -`, htmlToMarkdown(cleanProse(param.description))));
+    }
+  }
+  if (doc.returnDescription) {
+    tags.push(...taggedLines('@returns', htmlToMarkdown(cleanProse(doc.returnDescription))));
+  }
+  if (doc.since) tags.push(`@since ${String(doc.since).trim()}`);
+  if (doc.deprecated) {
+    tags.push(...taggedLines('@deprecated', typeof doc.deprecated === 'string' ? htmlToMarkdown(cleanProse(doc.deprecated)) : ''));
+  }
+  if (tags.length > 0) blocks.push(tags);
+
+  for (const example of examples) {
+    blocks.push(['@example', '```js', ...example.split('\n').map((line) => line.trimEnd()), '```']);
+  }
+  if (doc.docsUrl) blocks.push([`@see ${doc.docsUrl}`]);
+
+  if (blocks.length === 0) return '';
+
+  // A `*/` anywhere in the prose or in an example would end the comment early and turn the rest of
+  // the file into syntax errors.
+  const escape = (line) => line.replace(/\*\//g, '*\\/');
+  const lines = blocks.flatMap((block, index) => (index === 0 ? block : ['', ...block]));
+  if (lines.length === 1) return `${indent}/** ${escape(lines[0])} */\n`;
+  const body = lines.map((line) => (line ? `${indent} * ${escape(line)}` : `${indent} *`)).join('\n');
+  return `${indent}/**\n${body}\n${indent} */\n`;
+}
+
 function generateEventArgsType(events) {
   const eventNames = Object.keys(events).sort();
   if (eventNames.length === 0) return '';
 
   let output = 'export type EditorEventArgs = {\n';
-  for (const name of eventNames) {
+  eventNames.forEach((name, index) => {
     const event = events[name];
-    if (event.description) {
-      output += `  /** ${event.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
-    }
+    const doc = renderJsDoc({ description: event.description }, '  ');
+    if (doc.includes('\n *') && index > 0) output += '\n';
     const tuple = event.params.map((p) => `${p.name}: ${p.type}`).join(', ');
-    output += `  ${name}: [${tuple}];\n`;
-  }
+    output += `${doc}  ${name}: [${tuple}];\n`;
+  });
   output += '};\n\nexport type EditorEventName = keyof EditorEventArgs;\n';
   return output;
 }
 
 function generateInterface(className, classData, allClasses) {
-  let output = '';
-
-  if (classData.description) {
-    output += `/** ${classData.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
-  }
+  let output = renderJsDoc({
+    description: classData.description,
+    since: classData.since,
+    deprecated: classData.deprecated,
+    docsUrl: classData.docsUrl,
+  }, '');
 
   const ownMemberNames = new Set([
     ...Object.keys(classData.methods),
@@ -425,42 +647,58 @@ function generateInterface(className, classData, allClasses) {
   const extendsClause = extendsList.length > 0 ? ` extends ${extendsList.join(', ')}` : '';
   output += `export interface ${className}${extendsClause} {\n`;
 
+  // A documented member is preceded by a blank line so its comment block doesn't visually merge with
+  // the member above it; undocumented ones stay packed together as before.
+  const members = [];
+
   const propertyNames = Object.keys(classData.properties).sort();
   for (const propName of propertyNames) {
     const prop = classData.properties[propName];
     const optional = prop.optional ? '?' : '';
-    output += `  ${propName}${optional}: ${prop.type};\n`;
-  }
-
-  if (propertyNames.length > 0 && Object.keys(classData.methods).length > 0) {
-    output += '\n';
+    members.push({
+      doc: renderJsDoc({ description: prop.description }, '  '),
+      code: `  ${propName}${optional}: ${prop.type};\n`,
+    });
   }
 
   const methodNames = Object.keys(classData.methods).sort();
+  if (propertyNames.length > 0 && methodNames.length > 0) members.push({ doc: '', code: '\n' });
+
   for (const methodName of methodNames) {
     const method = classData.methods[methodName];
     const params = method.params
       .map(p => p.optional ? `${p.name}?: ${p.type}` : `${p.name}: ${p.type}`)
       .join(', ');
 
-    output += `  ${methodName}(${params}): ${method.returnType};\n`;
+    members.push({
+      doc: renderJsDoc(method, '  '),
+      code: `  ${methodName}(${params}): ${method.returnType};\n`,
+    });
   }
+
+  members.forEach((member, index) => {
+    if (member.doc && index > 0) output += '\n';
+    output += member.doc + member.code;
+  });
 
   output += '}\n';
   return output;
 }
 
 function generateTypedef(name, typedefData) {
-  let output = '';
-  if (typedefData.description) {
-    output += `/** ${typedefData.description.replace(/\r\n|\r|\n/g, ' ')} */\n`;
-  }
+  let output = renderJsDoc({
+    description: typedefData.description,
+    since: typedefData.since,
+    deprecated: typedefData.deprecated,
+  }, '');
   if (typedefData.properties.length > 0) {
     output += `export interface ${name} {\n`;
-    for (const prop of typedefData.properties) {
+    typedefData.properties.forEach((prop, index) => {
+      const doc = renderJsDoc({ description: prop.description }, '  ');
+      if (doc && index > 0) output += '\n';
       const opt = prop.optional ? '?' : '';
-      output += `  ${prop.name}${opt}: ${prop.type};\n`;
-    }
+      output += `${doc}  ${prop.name}${opt}: ${prop.type};\n`;
+    });
     output += '}\n';
   } else {
     output += `export type ${name} = ${typedefData.type || 'any'};\n`;
