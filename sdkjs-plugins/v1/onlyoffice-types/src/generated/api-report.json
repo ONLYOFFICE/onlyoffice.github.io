@@ -1,43 +1,36 @@
 {
   "word": {
     "classes": 66,
-    "typedefs": 102,
-    "unresolvedTypes": [
-      "ApiTableOfContents",
-      "ApiTableOfFigures",
-      "TextAnnotation",
-      "TextAnnotationRange"
-    ],
+    "typedefs": 103,
+    "unresolvedTypes": [],
     "anyOccurrences": 0
   },
   "cell": {
     "classes": 114,
-    "typedefs": 163,
+    "typedefs": 164,
     "unresolvedTypes": [
-      "ApiHyperlinks",
-      "ApiListObject",
-      "PTCondition"
+      "ApiListColumn",
+      "ApiListRow",
+      "ApiSort"
     ],
     "anyOccurrences": 0
   },
   "slide": {
     "classes": 83,
-    "typedefs": 107,
+    "typedefs": 108,
     "unresolvedTypes": [],
     "anyOccurrences": 0
   },
   "forms": {
     "classes": 67,
-    "typedefs": 112,
+    "typedefs": 113,
     "unresolvedTypes": [],
     "anyOccurrences": 0
   },
   "pdf": {
-    "classes": 100,
-    "typedefs": 140,
-    "unresolvedTypes": [
-      "BulletType"
-    ],
+    "classes": 109,
+    "typedefs": 143,
+    "unresolvedTypes": [],
     "anyOccurrences": 0
   }
 }

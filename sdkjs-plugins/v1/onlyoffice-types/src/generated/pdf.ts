@@ -295,6 +295,19 @@ export namespace Pdf {
   export type GeometryFormulaType = "*/" | "+-" | "+/" | "?:" | "abs" | "at2" | "cat2" | "cos" | "max" | "min" | "mod" | "pin" | "sat2" | "sin" | "sqrt" | "tan" | "val";
 
   /**
+   * The available GoTo action types:
+   * - "xyz" — Zoom to a specific position and magnification
+   * - "fit" — Fit the entire page in the window
+   * - "fitH" — Fit the page horizontally
+   * - "fitV" — Fit the page vertically
+   * - "fitR" — Fit the specified rectangle
+   * - "fitB" — Fit the page bounding box
+   * - "fitBH" — Fit the bounding box horizontally
+   * - "fitBV" — Fit the bounding box vertically
+   */
+  export type GoToType = "xyz" | "fit" | "fitH" | "fitV" | "fitR" | "fitB" | "fitBH" | "fitBV";
+
+  /**
    * Header and footer types which can be applied to the document sections.
    * **"default"** - a header or footer which can be applied to any default page.
    * **"title"** - a header or footer which is applied to the title page.
@@ -326,6 +339,9 @@ export namespace Pdf {
     /** The value exported when the option is selected. */
     1: string;
   }
+
+  /** The available named action names: */
+  export type NamedActionType = "NextPage" | "PrevPage" | "FirstPage" | "LastPage";
 
   /** Standard numeric format. */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
@@ -368,6 +384,12 @@ export namespace Pdf {
 
   /** The types of elements that can be added to the paragraph structure. */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
+
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
 
   /** An array of points representing a continuous path. */
   export type Path = Point[];
@@ -548,7 +570,7 @@ export namespace Pdf {
   /** Search options used when performing text search operations. */
   export interface SearchProps {
     /** The text to search for. */
-    text: string;
+    text: string | RegExp;
 
     /** Whether the search is case-sensitive. */
     matchCase: boolean;
@@ -1001,8 +1023,16 @@ export namespace Pdf {
   /** Twentieths of a point (equivalent to 1/1440th of an inch). */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type BulletType = unknown;
+  // Manual overrides (see src/overrides/pdf.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  /**
+   * A paragraph numbering bullet type, referenced by a `word/apiBuilder.js` method also tagged for
+   * Pdf - genuinely declared in `slide/apiBuilder.js`, not one of Pdf's own sources
+   * (`word/apiBuilder.js`, `pdf/apiBuilder.js`, `pdf/plugin-events.js`). Adding all of
+   * `slide/apiBuilder.js` as a Pdf source to resolve this one typedef would pull Slide's entire class
+   * set into the Pdf namespace, so it's a one-line override instead.
+   */
+  export type BulletType = "None" | "ArabicPeriod" | "ArabicParenR" | "RomanUcPeriod" | "RomanLcPeriod" | "AlphaLcParenR" | "AlphaLcPeriod" | "AlphaUcParenR" | "AlphaUcPeriod";
 
   export interface Api {
     /**
@@ -1057,6 +1087,13 @@ export namespace Pdf {
     CreateBullet(sSymbol: string): ApiBullet;
 
     /**
+     * Creates a button field.
+     *
+     * @param rect - widget rect
+     */
+    CreateButtonField(rect: Rect): ApiButtonField;
+
+    /**
      * Creates caret annotation.
      *
      * @param rect - region to apply caret.
@@ -1084,7 +1121,8 @@ export namespace Pdf {
      * @param numFormats - Numeric formats which will be applied to the series (can be custom formats). The default numeric
      *   format is "General".
      */
-    CreateChart(chartType?: ChartType, series?: number[][], seriesNames?: number[] | string[], categoryNames?: number[] | string[], width?: number, height?: number, styleIndex?: number, numFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], categoryNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox field.
@@ -1129,6 +1167,13 @@ export namespace Pdf {
     CreateFreeTextAnnot(rect: Rect): ApiFreeTextAnnotation;
 
     /**
+     * Creates a GoTo action.
+     *
+     * @param zoom - 1 = 100% (used only for goToType = "xyz")
+     */
+    CreateGoToAction(page: number, goToType: GoToType, zoom: number, rect: Rect): ApiGoToAction;
+
+    /**
      * Creates a gradient stop used for different types of gradients.
      *
      * @param color - The color used for the gradient stop.
@@ -1136,6 +1181,14 @@ export namespace Pdf {
      * @since 9.1.0
      */
     CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop;
+
+    /**
+     * Creates a hide-show forms action.
+     *
+     * @param isHidde - to hide - true, to show - false
+     * @param names - field names
+     */
+    CreateHideShowFormsAction(isHidde: boolean, names: string[]): ApiHideShowFormsAction;
 
     /**
      * Creates highlight annotation.
@@ -1168,6 +1221,9 @@ export namespace Pdf {
      * @param inkPaths - The ink path list.
      */
     CreateInkAnnot(rect: Rect, inkPaths: PathList): ApiInkAnnotation;
+
+    /** Creates a js action. */
+    CreateJsAction(script: string): ApiJsAction;
 
     /**
      * Creates line annotation.
@@ -1204,6 +1260,9 @@ export namespace Pdf {
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
+
+    /** Creates a named action. */
+    CreateNamedAction(name: NamedActionType): ApiNamedAction;
 
     /** Creates no fill and removes the fill from the element. */
     CreateNoFill(): ApiFill;
@@ -1293,6 +1352,14 @@ export namespace Pdf {
      */
     CreateRedactAnnot(rect: Rect | Quad[]): ApiRedactAnnotation;
 
+    /**
+     * Creates a reset forms action.
+     *
+     * @param isAllExcept - will all fields be reset except the fields whose names are specified
+     * @param names - field names
+     */
+    CreateResetFormsAction(isAllExcept: boolean, names: string[]): ApiHideShowFormsAction;
+
     /** Creates the empty rich paragraph properties. */
     CreateRichParaPr(): ApiParaPr;
 
@@ -1335,6 +1402,13 @@ export namespace Pdf {
      *   (theme accent) is used.
      */
     CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
+
+    /**
+     * Creates a signature field.
+     *
+     * @param rect - widget rect
+     */
+    CreateSignatureField(rect: Rect): ApiSignatureField;
 
     /**
      * Creates a solid fill to apply to the object using a selected solid color as the object background.
@@ -1417,6 +1491,9 @@ export namespace Pdf {
      */
     CreateUnderlineAnnot(rect: Rect | Quad[]): ApiUnderlineAnnotation;
 
+    /** Creates an URI action. */
+    CreateUriAction(uri: string): ApiUriAction;
+
     /**
      * Converts English Metric Units (EMUs) to millimeters.
      *
@@ -1431,6 +1508,14 @@ export namespace Pdf {
      * @param emu - The number of EMUs to convert to points.
      */
     EmusToPoints(emu: number): number;
+
+    /**
+     * Returns the object by it's internal ID.
+     *
+     * @param id - the object internal ID.
+     * @since 9.4.0
+     */
+    GetByInternalId(id: string): FloatObject | ApiDocumentContent | ApiParagraph | ApiTableRow | ApiTableCell;
 
     /** Creates a text field with the specified text field properties. */
     GetDocument(): ApiDocument;
@@ -1592,6 +1677,125 @@ export namespace Pdf {
      * @param twips - The number of twips to convert to points.
      */
     TwipsToPoints(twips: number): number;
+  }
+
+  /** Class representing a base an action collection. */
+  export interface ApiActionCollection {
+    /** Gets Calculate action. */
+    GetCalculate(): ApiJsAction;
+
+    /** Gets class type of this object. */
+    GetClassType(): "actionCollection";
+
+    /** Gets Format action. */
+    GetFormat(): ApiJsAction;
+
+    /** Gets Keystroke action. */
+    GetKeystroke(): ApiJsAction;
+
+    /** Gets MouseDown action. */
+    GetMouseDown(): ApiBaseAction;
+
+    /** Gets MouseEnter action. */
+    GetMouseEnter(): ApiBaseAction;
+
+    /** Gets MouseExit action. */
+    GetMouseExit(): ApiBaseAction;
+
+    /** Gets MouseUp action. */
+    GetMouseUp(): ApiBaseAction;
+
+    /** Gets OnBlur action. */
+    GetOnBlur(): ApiBaseAction;
+
+    /** Gets OnFocus action. */
+    GetOnFocus(): ApiBaseAction;
+
+    /** Gets Validate action. */
+    GetValidate(): ApiJsAction;
+
+    /**
+     * Sets the Calculate action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetCalculate(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the Format action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetFormat(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the Keystroke action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetKeystroke(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the MouseDown action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseDown(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseEnter action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseEnter(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseExit action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseExit(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseUp action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseUp(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the OnBlur action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetOnBlur(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the OnFocus action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetOnFocus(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the Validate action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetValidate(action: ApiJsAction): boolean;
+  }
+
+  /** Class representing a base pdf action. */
+  export interface ApiBaseAction {
+    /** Returns next action. */
+    GetNext(): ApiBaseAction;
+
+    /**
+     * Sets next action.
+     *
+     * @returns returns next action
+     */
+    SetNext(action: ApiBaseAction): ApiBaseAction;
   }
 
   /** Class representing a base annotation. */
@@ -1857,7 +2061,7 @@ export namespace Pdf {
   }
 
   /** Class representing a base list field. */
-  export interface ApiBaseListField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiBaseListField extends ApiBaseField {
     /**
      * Adds new option to list options.
      *
@@ -1981,7 +2185,7 @@ export namespace Pdf {
   }
 
   /** Class representing a base markup annotation. */
-  export interface ApiBaseMarkupAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiBaseMarkupAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -2186,6 +2390,9 @@ export namespace Pdf {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
+    /** Gets actions collection. */
+    GetActions(): ApiActionCollection;
+
     /** Gets widget background color. */
     GetBackgroundColor(): ApiColor;
 
@@ -2200,6 +2407,9 @@ export namespace Pdf {
 
     /** Returns a type of the ApiBaseWidget class. */
     GetClassType(): "baseWidget";
+
+    /** Gets parent field. */
+    GetParent(): ApiField;
 
     /** Gets widget position. */
     GetPosition(): Point;
@@ -2302,7 +2512,7 @@ export namespace Pdf {
   }
 
   /** Class representing a button field. */
-  export interface ApiButtonField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiButtonField extends ApiBaseField {
     /**
      * Adds new widget - visual representation for field
      *
@@ -2368,15 +2578,16 @@ export namespace Pdf {
     SetRequired(required: boolean): boolean;
 
     /**
-     * Sets field value
+     * Sets image for all button field widgets
      *
-     * @param value - The new value for the field.
+     * @param imageUrl - The URL of the image to set for the button.
+     * @since 9.4.0
      */
-    SetValue(value: string): boolean;
+    SetValue(imageUrl: string): boolean;
   }
 
   /** Class representing a button widget. */
-  export interface ApiButtonWidget extends Omit<ApiBaseWidget, "GetClassType" | "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetBackgroundColor" | "GetBackgroundColor" | "SetTextColor" | "GetTextColor" | "SetTextSize" | "GetTextSize" | "SetAutoFit" | "IsAutoFit" | "Delete"> {
+  export interface ApiButtonWidget extends Omit<ApiBaseWidget, "GetClassType"> {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
@@ -2572,7 +2783,7 @@ export namespace Pdf {
   }
 
   /** Class representing a caret annotation. */
-  export interface ApiCaretAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiCaretAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiCaretAnnotation class. */
     GetClassType(): "caretAnnot";
 
@@ -2588,7 +2799,7 @@ export namespace Pdf {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY" | "SetTitle" | "GetTitle"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Sets a style to the current chart by style ID.
      *
@@ -3028,7 +3239,7 @@ export namespace Pdf {
   }
 
   /** Class representing a checkbox field. */
-  export interface ApiCheckboxField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiCheckboxField extends ApiBaseField {
     /**
      * Adds options to checkbox group.
      *
@@ -3121,7 +3332,7 @@ export namespace Pdf {
   }
 
   /** Class representing a checkbox field widget. */
-  export interface ApiCheckboxWidget extends Omit<ApiBaseWidget, "GetClassType" | "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetBackgroundColor" | "GetBackgroundColor" | "SetTextColor" | "GetTextColor" | "SetTextSize" | "GetTextSize" | "SetAutoFit" | "IsAutoFit" | "Delete"> {
+  export interface ApiCheckboxWidget extends Omit<ApiBaseWidget, "GetClassType"> {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
@@ -3264,7 +3475,7 @@ export namespace Pdf {
   }
 
   /** Class representing a circle annotation. */
-  export interface ApiCircleAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiCircleAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -3536,7 +3747,7 @@ export namespace Pdf {
   }
 
   /** Class representing a combobox field. */
-  export interface ApiComboboxField extends Omit<ApiBaseListField, "AddOption" | "RemoveOption" | "MoveOption" | "GetOption" | "GetOptions" | "SetCommitOnSelChange" | "IsCommitOnSelChange" | "SetValueIndexes" | "GetValueIndexes"> {
+  export interface ApiComboboxField extends ApiBaseListField {
     /**
      * Adds new option to list options.
      *
@@ -3644,6 +3855,7 @@ export namespace Pdf {
 
     /**
      * Sets text field placeholder.
+     * <note>Makes combobox editable</note>
      *
      * @param sPlaceholder - field placeholder
      */
@@ -3781,6 +3993,13 @@ export namespace Pdf {
     /** Returns an array of all paragraphs from the current document content. */
     GetAllParagraphs(): ApiParagraph[];
 
+    /**
+     * Gets document calculate fields order
+     *
+     * @returns order of fields names
+     */
+    GetCalculateOrder(): string[];
+
     /** Returns a type of the ApiDocument class. */
     GetClassType(): "document";
 
@@ -3906,6 +4125,13 @@ export namespace Pdf {
      * @param props - The search options.
      */
     SearchAndRedact(props: SearchProps): ApiRedactAnnotation[];
+
+    /**
+     * Sets document calculate fields order
+     *
+     * @param names - order of fields names
+     */
+    SetCalculateOrder(names: string[]): boolean;
 
     /** Sets document selection */
     SetSelection(selection: DocSelection): boolean;
@@ -4315,7 +4541,7 @@ export namespace Pdf {
   }
 
   /** Class representing a freeText annotation. */
-  export interface ApiFreeTextAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiFreeTextAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -4650,6 +4876,33 @@ export namespace Pdf {
     SetTextRect(sLeft: string, sTop: string, sRight: string, sBottom: string): boolean;
   }
 
+  /** Class representing a GoTo action. */
+  export interface ApiGoToAction {
+    /** Returns a type of the ApiGoToAction class. */
+    GetClassType(): "goToAction";
+
+    /** Gets desctination page index */
+    GetPage(): number;
+
+    /** Gets goto destination rect */
+    GetRect(): Rect;
+
+    /** Gets goto type */
+    GetType(): GoToType;
+
+    /** Gets goto destination rect */
+    GetZoom(): Rect;
+
+    /** Sets desctination page index */
+    SetPage(page: number): boolean;
+
+    /** Sets goto destination rect */
+    SetRect(rect: Rect): boolean;
+
+    /** Sets goto type */
+    SetType(type: GoToType): boolean;
+  }
+
   /** Class representing gradient stop. */
   export interface ApiGradientStop {
     /** Returns a type of the ApiGradientStop class. */
@@ -4657,7 +4910,7 @@ export namespace Pdf {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiGroup class. */
     GetClassType(): "group";
 
@@ -4697,8 +4950,30 @@ export namespace Pdf {
     SetPosition(posX: number, posY: number): boolean;
   }
 
+  /** Class representing a hide-show action. */
+  export interface ApiHideShowFormsAction {
+    /** Returns a type of the ApiHideShowFormsAction class. */
+    GetClassType(): "hideShowAction";
+
+    /** Gets names of fields to hide */
+    GetNames(): string[];
+
+    /**
+     * Checks if action hide fields
+     *
+     * @returns if false then show fields
+     */
+    IsHide(): boolean;
+
+    /** Sets action hide fields */
+    SetHide(isHide: boolean): boolean;
+
+    /** Sets names of fields to hide */
+    SetNames(names: string[]): boolean;
+  }
+
   /** Class representing a highlight annotation. */
-  export interface ApiHighlightAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiHighlightAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiHighlightAnnotation class. */
     GetClassType(): "highlightAnnot";
 
@@ -4750,7 +5025,7 @@ export namespace Pdf {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns the type of the ApiImage class. */
     GetClassType(): "image";
 
@@ -4791,7 +5066,7 @@ export namespace Pdf {
   }
 
   /** Class representing a ink annotation. */
-  export interface ApiInkAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiInkAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -4998,8 +5273,20 @@ export namespace Pdf {
   export interface ApiInlineLvlSdt {
   }
 
+  /** Class representing a js action. */
+  export interface ApiJsAction {
+    /** Returns a type of the ApiJsAction class. */
+    GetClassType(): "jsAction";
+
+    /** Gets action script */
+    GetScript(): string;
+
+    /** Sets action script. */
+    SetScript(script: string): boolean;
+  }
+
   /** Class representing a line annotation. */
-  export interface ApiLineAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiLineAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -5233,7 +5520,7 @@ export namespace Pdf {
   }
 
   /** Class representing a link annotation. */
-  export interface ApiLinkAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiLinkAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiLinkAnnotation class. */
     GetClassType(): "linkAnnot";
 
@@ -5249,7 +5536,7 @@ export namespace Pdf {
   }
 
   /** Class representing a listbox field. */
-  export interface ApiListboxField extends Omit<ApiBaseListField, "AddOption" | "RemoveOption" | "MoveOption" | "GetOption" | "GetOptions" | "SetCommitOnSelChange" | "IsCommitOnSelChange" | "SetValueIndexes" | "GetValueIndexes"> {
+  export interface ApiListboxField extends ApiBaseListField {
     /**
      * Adds new option to list options.
      *
@@ -5330,6 +5617,18 @@ export namespace Pdf {
     GetText(format?: "unicode" | "latex"): string;
   }
 
+  /** Class representing a named action. */
+  export interface ApiNamedAction {
+    /** Returns a type of the ApiNamedAction class. */
+    GetClassType(): "namedAction";
+
+    /** Gets a name of action. */
+    GetName(): NamedActionType;
+
+    /** Sets a name of action. */
+    SetName(name: NamedActionType): boolean;
+  }
+
   /** Class representing the numbering properties. */
   export interface ApiNumbering {
   }
@@ -5339,7 +5638,7 @@ export namespace Pdf {
   }
 
   /** Class representing an Ole object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiOleObject extends ApiDrawing {
     /** Returns the type of the ApiDrawing class. */
     GetParentPage(): ApiPage;
 
@@ -5611,7 +5910,7 @@ export namespace Pdf {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -6297,7 +6596,7 @@ export namespace Pdf {
   }
 
   /** Class representing a polyline annotation. */
-  export interface ApiPolyLineAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiPolyLineAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -6521,7 +6820,7 @@ export namespace Pdf {
   }
 
   /** Class representing a polygon annotation. */
-  export interface ApiPolygonAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiPolygonAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -6737,7 +7036,7 @@ export namespace Pdf {
   }
 
   /** Class representing a radiobutton field. */
-  export interface ApiRadiobuttonField extends Omit<ApiCheckboxField, "GetClassType" | "SetToggleToOff" | "IsToggleToOff" | "AddOption"> {
+  export interface ApiRadiobuttonField extends Omit<ApiCheckboxField, "GetClassType"> {
     /**
      * Adds options to checkbox group.
      *
@@ -6778,7 +7077,7 @@ export namespace Pdf {
   export interface ApiRange {
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -7020,7 +7319,7 @@ export namespace Pdf {
   }
 
   /** Class representing a redact annotation. */
-  export interface ApiRedactAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiRedactAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiRedactAnnotation class. */
     GetClassType(): "redactAnnot";
 
@@ -7033,6 +7332,24 @@ export namespace Pdf {
      * @param quads - An array of quadrilaterals defining the highlighted regions.
      */
     SetQuads(quads: Quad[]): boolean;
+  }
+
+  /** Class representing a reset form action. */
+  export interface ApiResetFormsAction {
+    /** Returns a type of the ApiResetFormsAction class. */
+    GetClassType(): "resetFormsAction";
+
+    /** Gets names of fields to reset */
+    GetNames(): string[];
+
+    /** Will all fields be reset except the fields whose names are specified */
+    IsAllExcept(): boolean;
+
+    /** Sets all fields be reset except the fields whose names are specified */
+    SetAllExcept(isAllExcept: boolean): boolean;
+
+    /** Sets names of fields to reset */
+    SetNames(names: string[]): boolean;
   }
 
   /** Class representing a rich content. */
@@ -7189,7 +7506,7 @@ export namespace Pdf {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /** Adds a line break to the current run position and starts the next element from a new line. */
     AddLineBreak(): boolean;
 
@@ -7500,7 +7817,7 @@ export namespace Pdf {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY" | "SetFill" | "GetFill" | "SetLine" | "GetLine"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns the type of the ApiShape class. */
     GetClassType(): "shape";
 
@@ -7616,12 +7933,34 @@ export namespace Pdf {
     SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean;
   }
 
+  /**
+   * Class representing a signature field.
+   *
+   * @since 9.5.0
+   */
+  export interface ApiSignatureField extends Omit<ApiButtonField, "GetClassType"> {
+    /**
+     * Returns a type of the ApiSignatureField class.
+     *
+     * @since 9.5.0
+     */
+    GetClassType(): "signatureField";
+
+    /**
+     * Sets image for all button field widgets
+     *
+     * @param imageUrl - The URL of the image to set for the button.
+     * @since 9.4.0
+     */
+    SetValue(imageUrl: string): boolean;
+  }
+
   /** Class representing a document picture form. */
   export interface ApiSignatureForm extends ApiFormBase {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiSmartArt class. */
     GetClassType(): "smartArt";
 
@@ -7662,7 +8001,7 @@ export namespace Pdf {
   }
 
   /** Class representing a square annotation. */
-  export interface ApiSquareAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiSquareAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -7866,7 +8205,7 @@ export namespace Pdf {
   }
 
   /** Class representing a stamp annotation. */
-  export interface ApiStampAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiStampAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -8083,7 +8422,7 @@ export namespace Pdf {
   }
 
   /** Class representing a strikeout annotation. */
-  export interface ApiStrikeoutAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiStrikeoutAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiStrikeoutAnnotation class. */
     GetClassType(): "strikeoutAnnot";
 
@@ -8156,7 +8495,7 @@ export namespace Pdf {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetSize" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiTable extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Adds a new column to the end of the current table.
      *
@@ -8175,7 +8514,8 @@ export namespace Pdf {
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddColumns(nCount: number): ApiTable;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Adds a paragraph using its position in the cell.
@@ -8205,7 +8545,8 @@ export namespace Pdf {
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddRows(nCount: number): ApiTable;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Returns a cell by its position.
@@ -8735,7 +9076,7 @@ export namespace Pdf {
   }
 
   /** Class representing a text annotation. */
-  export interface ApiTextAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiTextAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -8939,7 +9280,7 @@ export namespace Pdf {
   }
 
   /** Class representing a text field. */
-  export interface ApiTextField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiTextField extends ApiBaseField {
     /**
      * Adds new widget - visual representation for field
      *
@@ -9389,7 +9730,7 @@ export namespace Pdf {
   }
 
   /** Class representing a underline annotation. */
-  export interface ApiUnderlineAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiUnderlineAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiUnderlineAnnotation class. */
     GetClassType(): "underlineAnnot";
 
@@ -9414,6 +9755,18 @@ export namespace Pdf {
   export interface ApiUnsupported {
     /** Returns a type of the ApiUnsupported class. */
     GetClassType(): "unsupported";
+  }
+
+  /** Class representing a uri action. */
+  export interface ApiUriAction {
+    /** Returns a type of the ApiUriAction class. */
+    GetClassType(): "uriAction";
+
+    /** Gets uri string */
+    GetUri(): string;
+
+    /** Sets uri to action */
+    SetUri(uri: string): boolean;
   }
 
   /** Class representing the settings which are used to create a watermark. */

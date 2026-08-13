@@ -1362,6 +1362,15 @@
               },
               "signature": "RecalculateAllFormulas(fLogger?: (...args: unknown[]) => unknown): boolean"
             },
+            "Redraw": {
+              "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link Api#Calculate} first if formula results must be up to date.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "Redraw(): boolean",
+              "since": "9.5.0"
+            },
             "RefreshAllPivots": {
               "description": "Refreshes all pivot tables.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/RefreshAllPivots/",
@@ -1740,6 +1749,15 @@
               "signature": "GetScopeType(): XlPivotConditionScope",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -1967,6 +1985,21 @@
               },
               "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -3643,6 +3676,15 @@
               "signature": "GetScopeType(): XlPivotConditionScope",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -3840,6 +3882,21 @@
               },
               "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -5786,6 +5843,15 @@
               "signature": "GetShowValue(): boolean",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -6208,6 +6274,21 @@
               },
               "signature": "SetShowValue(showValue: boolean): void",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -6709,22 +6790,6 @@
         "ApiDrawing": {
           "description": "Class representing a graphical object.",
           "methods": {
-            "Fill": {
-              "description": "Sets the fill formatting properties to the current graphic object.",
-              "params": [
-                {
-                  "description": "The fill type used to fill the graphic object.",
-                  "name": "fill",
-                  "type": "ApiFill"
-                }
-              ],
-              "returns": {
-                "description": "returns false if param is invalid.",
-                "type": "boolean"
-              },
-              "signature": "Fill(fill: ApiFill): boolean",
-              "since": "9.5.0"
-            },
             "GetClassType": {
               "description": "Returns a type of the ApiDrawing class.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetClassType/",
@@ -7673,6 +7738,15 @@
               "signature": "GetScopeType(): XlPivotConditionScope",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -7870,6 +7944,21 @@
               },
               "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -8970,6 +9059,15 @@
               "signature": "GetShowIconOnly(): boolean | null",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -9231,6 +9329,21 @@
               },
               "signature": "SetShowIconOnly(showIconOnly: boolean): boolean",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -18484,6 +18597,15 @@
               "signature": "GetScopeType(): XlPivotConditionScope",
               "since": "9.1.0"
             },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
+            },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
               "params": [],
@@ -18722,6 +18844,21 @@
               "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
               "since": "9.1.0"
             },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
+            },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
               "params": [
@@ -18930,6 +19067,15 @@
               },
               "signature": "GetScopeType(): XlPivotConditionScope",
               "since": "9.1.0"
+            },
+            "GetStopIfTrue": {
+              "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "GetStopIfTrue(): boolean",
+              "since": "9.5.0"
             },
             "GetText": {
               "description": "Returns the text value used in text-based conditional formatting rules.",
@@ -19143,6 +19289,21 @@
               },
               "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
               "since": "9.1.0"
+            },
+            "SetStopIfTrue": {
+              "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+              "params": [
+                {
+                  "description": "True to stop evaluating additional rules.",
+                  "name": "StopIfTrue",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "void"
+              },
+              "signature": "SetStopIfTrue(StopIfTrue: boolean): void",
+              "since": "9.5.0"
             },
             "SetText": {
               "description": "Sets the text value used in text-based conditional formatting rules.",
@@ -19599,6 +19760,15 @@
               },
               "signature": "GetTheme(): ApiTheme",
               "since": "9.1.0"
+            },
+            "Redraw": {
+              "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link ApiWorkbook#Calculate} first if formula results must be up to date.",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "Redraw(): boolean",
+              "since": "9.5.0"
             },
             "Save": {
               "description": "Saves changes to the specified document.",
@@ -32549,6 +32719,10 @@
           ],
           "type": "ApiUnsupported | ApiRun | ApiHyperlink"
         },
+        "ParagraphLikeContainer": {
+          "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+          "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
+        },
         "PasteSpecialOperation": {
           "description": "The mathematical operation which will be applied to the copied data.",
           "examples": [
@@ -33894,6 +34068,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -33902,6 +34086,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRadioGroup": {
               "description": "Returns the radio group key if the current checkbox is a radio button.",
@@ -34516,6 +34710,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -34524,6 +34728,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -35102,6 +35316,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -35110,6 +35334,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -35660,6 +35894,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -35668,6 +35912,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -36427,6 +36681,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -36435,6 +36699,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -37138,6 +37412,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPicturePosition": {
               "description": "Returns the picture position inside the current form.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetPicturePosition/",
@@ -37159,6 +37443,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -37798,6 +38092,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -37806,6 +38110,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -38295,6 +38609,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -38303,6 +38627,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -40068,6 +40402,10 @@
           ],
           "type": "ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath"
         },
+        "ParagraphLikeContainer": {
+          "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+          "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
+        },
         "PathCommandType": {
           "description": "The path command types.",
           "type": "\"moveTo\" | \"lineTo\" | \"bezier3\" | \"bezier4\" | \"arcTo\" | \"close\""
@@ -40871,6 +41209,20 @@
               },
               "signature": "CreateBullet(sSymbol: string): ApiBullet"
             },
+            "CreateButtonField": {
+              "description": "Creates a button field.",
+              "params": [
+                {
+                  "description": "widget rect",
+                  "name": "rect",
+                  "type": "Rect"
+                }
+              ],
+              "returns": {
+                "type": "ApiButtonField"
+              },
+              "signature": "CreateButtonField(rect: Rect): ApiButtonField"
+            },
             "CreateCaretAnnot": {
               "description": "Creates caret annotation.",
               "params": [
@@ -41021,6 +41373,32 @@
               },
               "signature": "CreateFreeTextAnnot(rect: Rect): ApiFreeTextAnnotation"
             },
+            "CreateGoToAction": {
+              "description": "Creates a GoTo action.",
+              "params": [
+                {
+                  "name": "page",
+                  "type": "number"
+                },
+                {
+                  "name": "goToType",
+                  "type": "GoToType"
+                },
+                {
+                  "description": "1 = 100% (used only for goToType = \"xyz\")",
+                  "name": "zoom",
+                  "type": "number"
+                },
+                {
+                  "name": "rect",
+                  "type": "Rect"
+                }
+              ],
+              "returns": {
+                "type": "ApiGoToAction"
+              },
+              "signature": "CreateGoToAction(page: number, goToType: GoToType, zoom: number, rect: Rect): ApiGoToAction"
+            },
             "CreateGradientStop": {
               "description": "Creates a gradient stop used for different types of gradients.",
               "params": [
@@ -41040,6 +41418,25 @@
               },
               "signature": "CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop",
               "since": "9.1.0"
+            },
+            "CreateHideShowFormsAction": {
+              "description": "Creates a hide-show forms action.",
+              "params": [
+                {
+                  "description": "to hide - true, to show - false",
+                  "name": "isHidde",
+                  "type": "boolean"
+                },
+                {
+                  "description": "field names",
+                  "name": "names",
+                  "type": "string[]"
+                }
+              ],
+              "returns": {
+                "type": "ApiHideShowFormsAction"
+              },
+              "signature": "CreateHideShowFormsAction(isHidde: boolean, names: string[]): ApiHideShowFormsAction"
             },
             "CreateHighlightAnnot": {
               "description": "Creates highlight annotation.",
@@ -41111,6 +41508,19 @@
                 "type": "ApiInkAnnotation"
               },
               "signature": "CreateInkAnnot(rect: Rect, inkPaths: PathList): ApiInkAnnotation"
+            },
+            "CreateJsAction": {
+              "description": "Creates a js action.",
+              "params": [
+                {
+                  "name": "script",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "ApiJsAction"
+              },
+              "signature": "CreateJsAction(script: string): ApiJsAction"
             },
             "CreateLineAnnot": {
               "description": "Creates line annotation.",
@@ -41189,6 +41599,19 @@
               },
               "signature": "CreateMath(text: string, format?: \"unicode\" | \"latex\" | \"mathml\"): ApiMath",
               "since": "9.5.0"
+            },
+            "CreateNamedAction": {
+              "description": "Creates a named action.",
+              "params": [
+                {
+                  "name": "name",
+                  "type": "NamedActionType"
+                }
+              ],
+              "returns": {
+                "type": "ApiNamedAction"
+              },
+              "signature": "CreateNamedAction(name: NamedActionType): ApiNamedAction"
             },
             "CreateNoFill": {
               "description": "Creates no fill and removes the fill from the element.",
@@ -41385,6 +41808,25 @@
               },
               "signature": "CreateRedactAnnot(rect: Rect | Quad[]): ApiRedactAnnotation"
             },
+            "CreateResetFormsAction": {
+              "description": "Creates a reset forms action.",
+              "params": [
+                {
+                  "description": "will all fields be reset except the fields whose names are specified",
+                  "name": "isAllExcept",
+                  "type": "boolean"
+                },
+                {
+                  "description": "field names",
+                  "name": "names",
+                  "type": "string[]"
+                }
+              ],
+              "returns": {
+                "type": "ApiHideShowFormsAction"
+              },
+              "signature": "CreateResetFormsAction(isAllExcept: boolean, names: string[]): ApiHideShowFormsAction"
+            },
             "CreateRichParaPr": {
               "description": "Creates the empty rich paragraph properties.",
               "params": [],
@@ -41492,6 +41934,20 @@
                 "type": "ApiShape"
               },
               "signature": "CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape"
+            },
+            "CreateSignatureField": {
+              "description": "Creates a signature field.",
+              "params": [
+                {
+                  "description": "widget rect",
+                  "name": "rect",
+                  "type": "Rect"
+                }
+              ],
+              "returns": {
+                "type": "ApiSignatureField"
+              },
+              "signature": "CreateSignatureField(rect: Rect): ApiSignatureField"
             },
             "CreateSolidFill": {
               "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
@@ -41671,6 +42127,19 @@
               },
               "signature": "CreateUnderlineAnnot(rect: Rect | Quad[]): ApiUnderlineAnnotation"
             },
+            "CreateUriAction": {
+              "description": "Creates an URI action.",
+              "params": [
+                {
+                  "name": "uri",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "ApiUriAction"
+              },
+              "signature": "CreateUriAction(uri: string): ApiUriAction"
+            },
             "EmusToMillimeters": {
               "description": "Converts English Metric Units (EMUs) to millimeters.",
               "params": [
@@ -41699,6 +42168,21 @@
                 "type": "number"
               },
               "signature": "EmusToPoints(emu: number): number"
+            },
+            "GetByInternalId": {
+              "description": "Returns the object by it's internal ID.",
+              "params": [
+                {
+                  "description": "the object internal ID.",
+                  "name": "id",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "FloatObject | ApiDocumentContent | ApiParagraph | ApiTableRow | ApiTableCell"
+              },
+              "signature": "GetByInternalId(id: string): FloatObject | ApiDocumentContent | ApiParagraph | ApiTableRow | ApiTableCell",
+              "since": "9.4.0"
             },
             "GetDocument": {
               "description": "Creates a text field with the specified text field properties.",
@@ -42037,6 +42521,266 @@
                 "type": "number"
               },
               "signature": "TwipsToPoints(twips: number): number"
+            }
+          }
+        },
+        "ApiActionCollection": {
+          "description": "Class representing a base an action collection.",
+          "methods": {
+            "GetCalculate": {
+              "description": "Gets Calculate action.",
+              "params": [],
+              "returns": {
+                "type": "ApiJsAction"
+              },
+              "signature": "GetCalculate(): ApiJsAction"
+            },
+            "GetClassType": {
+              "description": "Gets class type of this object.",
+              "params": [],
+              "returns": {
+                "type": "\"actionCollection\""
+              },
+              "signature": "GetClassType(): \"actionCollection\""
+            },
+            "GetFormat": {
+              "description": "Gets Format action.",
+              "params": [],
+              "returns": {
+                "type": "ApiJsAction"
+              },
+              "signature": "GetFormat(): ApiJsAction"
+            },
+            "GetKeystroke": {
+              "description": "Gets Keystroke action.",
+              "params": [],
+              "returns": {
+                "type": "ApiJsAction"
+              },
+              "signature": "GetKeystroke(): ApiJsAction"
+            },
+            "GetMouseDown": {
+              "description": "Gets MouseDown action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetMouseDown(): ApiBaseAction"
+            },
+            "GetMouseEnter": {
+              "description": "Gets MouseEnter action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetMouseEnter(): ApiBaseAction"
+            },
+            "GetMouseExit": {
+              "description": "Gets MouseExit action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetMouseExit(): ApiBaseAction"
+            },
+            "GetMouseUp": {
+              "description": "Gets MouseUp action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetMouseUp(): ApiBaseAction"
+            },
+            "GetOnBlur": {
+              "description": "Gets OnBlur action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetOnBlur(): ApiBaseAction"
+            },
+            "GetOnFocus": {
+              "description": "Gets OnFocus action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetOnFocus(): ApiBaseAction"
+            },
+            "GetValidate": {
+              "description": "Gets Validate action.",
+              "params": [],
+              "returns": {
+                "type": "ApiJsAction"
+              },
+              "signature": "GetValidate(): ApiJsAction"
+            },
+            "SetCalculate": {
+              "description": "Sets the Calculate action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiJsAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetCalculate(action: ApiJsAction): boolean"
+            },
+            "SetFormat": {
+              "description": "Sets the Format action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiJsAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetFormat(action: ApiJsAction): boolean"
+            },
+            "SetKeystroke": {
+              "description": "Sets the Keystroke action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiJsAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetKeystroke(action: ApiJsAction): boolean"
+            },
+            "SetMouseDown": {
+              "description": "Sets the MouseDown action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetMouseDown(action: ApiBaseAction): boolean"
+            },
+            "SetMouseEnter": {
+              "description": "Sets the MouseEnter action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetMouseEnter(action: ApiBaseAction): boolean"
+            },
+            "SetMouseExit": {
+              "description": "Sets the MouseExit action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetMouseExit(action: ApiBaseAction): boolean"
+            },
+            "SetMouseUp": {
+              "description": "Sets the MouseUp action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetMouseUp(action: ApiBaseAction): boolean"
+            },
+            "SetOnBlur": {
+              "description": "Sets the OnBlur action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetOnBlur(action: ApiBaseAction): boolean"
+            },
+            "SetOnFocus": {
+              "description": "Sets the OnFocus action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetOnFocus(action: ApiBaseAction): boolean"
+            },
+            "SetValidate": {
+              "description": "Sets the Validate action.",
+              "params": [
+                {
+                  "description": "The action to set, or `null` to remove it.",
+                  "name": "action",
+                  "type": "ApiJsAction"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetValidate(action: ApiJsAction): boolean"
+            }
+          }
+        },
+        "ApiBaseAction": {
+          "description": "Class representing a base pdf action.",
+          "methods": {
+            "GetNext": {
+              "description": "Returns next action.",
+              "params": [],
+              "returns": {
+                "type": "ApiBaseAction"
+              },
+              "signature": "GetNext(): ApiBaseAction"
+            },
+            "SetNext": {
+              "description": "Sets next action.",
+              "params": [
+                {
+                  "name": "action",
+                  "type": "ApiBaseAction"
+                }
+              ],
+              "returns": {
+                "description": "returns next action",
+                "type": "ApiBaseAction"
+              },
+              "signature": "SetNext(action: ApiBaseAction): ApiBaseAction"
             }
           }
         },
@@ -43318,6 +44062,14 @@
               },
               "signature": "Delete(): boolean"
             },
+            "GetActions": {
+              "description": "Gets actions collection.",
+              "params": [],
+              "returns": {
+                "type": "ApiActionCollection"
+              },
+              "signature": "GetActions(): ApiActionCollection"
+            },
             "GetBackgroundColor": {
               "description": "Gets widget background color.",
               "params": [],
@@ -43357,6 +44109,14 @@
                 "type": "\"baseWidget\""
               },
               "signature": "GetClassType(): \"baseWidget\""
+            },
+            "GetParent": {
+              "description": "Gets parent field.",
+              "params": [],
+              "returns": {
+                "type": "ApiField"
+              },
+              "signature": "GetParent(): ApiField"
             },
             "GetPosition": {
               "description": "Gets widget position.",
@@ -43700,18 +44460,19 @@
               "signature": "SetRequired(required: boolean): boolean"
             },
             "SetValue": {
-              "description": "Sets field value",
+              "description": "Sets image for all button field widgets",
               "params": [
                 {
-                  "description": "The new value for the field.",
-                  "name": "value",
+                  "description": "The URL of the image to set for the button.",
+                  "name": "imageUrl",
                   "type": "string"
                 }
               ],
               "returns": {
                 "type": "boolean"
               },
-              "signature": "SetValue(value: string): boolean"
+              "signature": "SetValue(imageUrl: string): boolean",
+              "since": "9.4.0"
             }
           }
         },
@@ -46481,7 +47242,7 @@
               "signature": "SetPercentageFormat(decimalPlaces: number, separatorStyle: NumberSepStyle): boolean"
             },
             "SetPlaceholder": {
-              "description": "Sets text field placeholder.",
+              "description": "Sets text field placeholder.\n<note>Makes combobox editable</note>",
               "params": [
                 {
                   "description": "field placeholder",
@@ -46713,6 +47474,15 @@
                 "type": "ApiParagraph[]"
               },
               "signature": "GetAllParagraphs(): ApiParagraph[]"
+            },
+            "GetCalculateOrder": {
+              "description": "Gets document calculate fields order",
+              "params": [],
+              "returns": {
+                "description": "order of fields names",
+                "type": "string[]"
+              },
+              "signature": "GetCalculateOrder(): string[]"
             },
             "GetClassType": {
               "description": "Returns a type of the ApiDocument class.",
@@ -46968,6 +47738,20 @@
                 "type": "ApiRedactAnnotation[]"
               },
               "signature": "SearchAndRedact(props: SearchProps): ApiRedactAnnotation[]"
+            },
+            "SetCalculateOrder": {
+              "description": "Sets document calculate fields order",
+              "params": [
+                {
+                  "description": "order of fields names",
+                  "name": "names",
+                  "type": "string[]"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetCalculateOrder(names: string[]): boolean"
             },
             "SetSelection": {
               "description": "Sets document selection",
@@ -48400,6 +49184,90 @@
             }
           }
         },
+        "ApiGoToAction": {
+          "description": "Class representing a GoTo action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiGoToAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"goToAction\""
+              },
+              "signature": "GetClassType(): \"goToAction\""
+            },
+            "GetPage": {
+              "description": "Gets desctination page index",
+              "params": [],
+              "returns": {
+                "type": "number"
+              },
+              "signature": "GetPage(): number"
+            },
+            "GetRect": {
+              "description": "Gets goto destination rect",
+              "params": [],
+              "returns": {
+                "type": "Rect"
+              },
+              "signature": "GetRect(): Rect"
+            },
+            "GetType": {
+              "description": "Gets goto type",
+              "params": [],
+              "returns": {
+                "type": "GoToType"
+              },
+              "signature": "GetType(): GoToType"
+            },
+            "GetZoom": {
+              "description": "Gets goto destination rect",
+              "params": [],
+              "returns": {
+                "type": "Rect"
+              },
+              "signature": "GetZoom(): Rect"
+            },
+            "SetPage": {
+              "description": "Sets desctination page index",
+              "params": [
+                {
+                  "name": "page",
+                  "type": "number"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetPage(page: number): boolean"
+            },
+            "SetRect": {
+              "description": "Sets goto destination rect",
+              "params": [
+                {
+                  "name": "rect",
+                  "type": "Rect"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetRect(rect: Rect): boolean"
+            },
+            "SetType": {
+              "description": "Sets goto type",
+              "params": [
+                {
+                  "name": "type",
+                  "type": "GoToType"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetType(type: GoToType): boolean"
+            }
+          }
+        },
         "ApiGradientStop": {
           "description": "Class representing gradient stop.",
           "methods": {
@@ -48497,6 +49365,62 @@
                 "type": "boolean"
               },
               "signature": "SetPosition(posX: number, posY: number): boolean"
+            }
+          }
+        },
+        "ApiHideShowFormsAction": {
+          "description": "Class representing a hide-show action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiHideShowFormsAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"hideShowAction\""
+              },
+              "signature": "GetClassType(): \"hideShowAction\""
+            },
+            "GetNames": {
+              "description": "Gets names of fields to hide",
+              "params": [],
+              "returns": {
+                "type": "string[]"
+              },
+              "signature": "GetNames(): string[]"
+            },
+            "IsHide": {
+              "description": "Checks if action hide fields",
+              "params": [],
+              "returns": {
+                "description": "if false then show fields",
+                "type": "boolean"
+              },
+              "signature": "IsHide(): boolean"
+            },
+            "SetHide": {
+              "description": "Sets action hide fields",
+              "params": [
+                {
+                  "name": "isHide",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetHide(isHide: boolean): boolean"
+            },
+            "SetNames": {
+              "description": "Sets names of fields to hide",
+              "params": [
+                {
+                  "name": "names",
+                  "type": "string[]"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetNames(names: string[]): boolean"
             }
           }
         },
@@ -49148,6 +50072,40 @@
         },
         "ApiInlineLvlSdt": {
           "description": "Class representing a container for the paragraph elements."
+        },
+        "ApiJsAction": {
+          "description": "Class representing a js action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiJsAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"jsAction\""
+              },
+              "signature": "GetClassType(): \"jsAction\""
+            },
+            "GetScript": {
+              "description": "Gets action script",
+              "params": [],
+              "returns": {
+                "type": "string"
+              },
+              "signature": "GetScript(): string"
+            },
+            "SetScript": {
+              "description": "Sets action script.",
+              "params": [
+                {
+                  "name": "script",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetScript(script: string): boolean"
+            }
+          }
         },
         "ApiLineAnnotation": {
           "description": "Class representing a line annotation.",
@@ -49877,6 +50835,40 @@
                 "type": "string"
               },
               "signature": "GetText(format?: \"unicode\" | \"latex\"): string"
+            }
+          }
+        },
+        "ApiNamedAction": {
+          "description": "Class representing a named action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiNamedAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"namedAction\""
+              },
+              "signature": "GetClassType(): \"namedAction\""
+            },
+            "GetName": {
+              "description": "Gets a name of action.",
+              "params": [],
+              "returns": {
+                "type": "NamedActionType"
+              },
+              "signature": "GetName(): NamedActionType"
+            },
+            "SetName": {
+              "description": "Sets a name of action.",
+              "params": [
+                {
+                  "name": "name",
+                  "type": "NamedActionType"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetName(name: NamedActionType): boolean"
             }
           }
         },
@@ -52989,6 +53981,61 @@
             }
           }
         },
+        "ApiResetFormsAction": {
+          "description": "Class representing a reset form action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiResetFormsAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"resetFormsAction\""
+              },
+              "signature": "GetClassType(): \"resetFormsAction\""
+            },
+            "GetNames": {
+              "description": "Gets names of fields to reset",
+              "params": [],
+              "returns": {
+                "type": "string[]"
+              },
+              "signature": "GetNames(): string[]"
+            },
+            "IsAllExcept": {
+              "description": "Will all fields be reset except the fields whose names are specified",
+              "params": [],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "IsAllExcept(): boolean"
+            },
+            "SetAllExcept": {
+              "description": "Sets all fields be reset except the fields whose names are specified",
+              "params": [
+                {
+                  "name": "isAllExcept",
+                  "type": "boolean"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetAllExcept(isAllExcept: boolean): boolean"
+            },
+            "SetNames": {
+              "description": "Sets names of fields to reset",
+              "params": [
+                {
+                  "name": "names",
+                  "type": "string[]"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetNames(names: string[]): boolean"
+            }
+          }
+        },
         "ApiRichContent": {
           "description": "Class representing a rich content.",
           "methods": {
@@ -54063,6 +55110,39 @@
               "signature": "SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean"
             }
           }
+        },
+        "ApiSignatureField": {
+          "description": "Class representing a signature field.",
+          "extends": [
+            "ApiButtonField"
+          ],
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiSignatureField class.",
+              "params": [],
+              "returns": {
+                "type": "\"signatureField\""
+              },
+              "signature": "GetClassType(): \"signatureField\"",
+              "since": "9.5.0"
+            },
+            "SetValue": {
+              "description": "Sets image for all button field widgets",
+              "params": [
+                {
+                  "description": "The URL of the image to set for the button.",
+                  "name": "imageUrl",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetValue(imageUrl: string): boolean",
+              "since": "9.4.0"
+            }
+          },
+          "since": "9.5.0"
         },
         "ApiSignatureForm": {
           "description": "Class representing a document picture form.",
@@ -57653,6 +58733,40 @@
             }
           }
         },
+        "ApiUriAction": {
+          "description": "Class representing a uri action.",
+          "methods": {
+            "GetClassType": {
+              "description": "Returns a type of the ApiUriAction class.",
+              "params": [],
+              "returns": {
+                "type": "\"uriAction\""
+              },
+              "signature": "GetClassType(): \"uriAction\""
+            },
+            "GetUri": {
+              "description": "Gets uri string",
+              "params": [],
+              "returns": {
+                "type": "string"
+              },
+              "signature": "GetUri(): string"
+            },
+            "SetUri": {
+              "description": "Sets uri to action",
+              "params": [
+                {
+                  "name": "uri",
+                  "type": "string"
+                }
+              ],
+              "returns": {
+                "type": "boolean"
+              },
+              "signature": "SetUri(uri: string): boolean"
+            }
+          }
+        },
         "ApiWatermarkSettings": {
           "description": "Class representing the settings which are used to create a watermark."
         }
@@ -58550,6 +59664,10 @@
           "description": "This type specifies the formula type that will be used for a geometry guide.",
           "type": "\"*/\" | \"+-\" | \"+/\" | \"?:\" | \"abs\" | \"at2\" | \"cat2\" | \"cos\" | \"max\" | \"min\" | \"mod\" | \"pin\" | \"sat2\" | \"sin\" | \"sqrt\" | \"tan\" | \"val\""
         },
+        "GoToType": {
+          "description": "The available GoTo action types:\n- \"xyz\"   — Zoom to a specific position and magnification\n- \"fit\"   — Fit the entire page in the window\n- \"fitH\"  — Fit the page horizontally\n- \"fitV\"  — Fit the page vertically\n- \"fitR\"  — Fit the specified rectangle\n- \"fitB\"  — Fit the page bounding box\n- \"fitBH\" — Fit the bounding box horizontally\n- \"fitBV\" — Fit the bounding box vertically",
+          "type": "\"xyz\" | \"fit\" | \"fitH\" | \"fitV\" | \"fitR\" | \"fitB\" | \"fitBH\" | \"fitBV\""
+        },
         "HdrFtrType": {
           "description": "Header and footer types which can be applied to the document sections.\n**\"default\"** - a header or footer which can be applied to any default page.\n**\"title\"** - a header or footer which is applied to the title page.\n**\"even\"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).",
           "type": "\"default\" | \"title\" | \"even\""
@@ -58586,6 +59704,10 @@
               "type": "string"
             }
           }
+        },
+        "NamedActionType": {
+          "description": "The available named action names:",
+          "type": "\"NextPage\" | \"PrevPage\" | \"FirstPage\" | \"LastPage\""
         },
         "NumFormat": {
           "description": "Standard numeric format.",
@@ -58626,6 +59748,10 @@
         "ParagraphContent": {
           "description": "The types of elements that can be added to the paragraph structure.",
           "type": "ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath"
+        },
+        "ParagraphLikeContainer": {
+          "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+          "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
         },
         "Path": {
           "description": "An array of points representing a continuous path.",
@@ -58828,7 +59954,7 @@
             },
             "text": {
               "description": "The text to search for.",
-              "type": "string"
+              "type": "string | RegExp"
             },
             "wholeWords": {
               "description": "Whether to match whole words only.",
@@ -75269,18 +76395,11 @@
             },
             "Select": {
               "description": "Selects the text range in the editor.",
-              "params": [
-                {
-                  "description": "Specifies whether the previous selection is removed, the range becomes the current\reditor position and the selection state is updated (true) or the selection is set without changing the editor state (false).",
-                  "name": "update",
-                  "optional": true,
-                  "type": "boolean"
-                }
-              ],
+              "params": [],
               "returns": {
                 "type": "boolean"
               },
-              "signature": "Select(update?: boolean): boolean",
+              "signature": "Select(): boolean",
               "since": "9.5.0"
             },
             "SetBold": {
@@ -77344,6 +78463,10 @@
             "paragraph.AddElement(run, 0);"
           ],
           "type": "ApiUnsupported | ApiRun | ApiHyperlink"
+        },
+        "ParagraphLikeContainer": {
+          "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+          "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
         },
         "PathCommandType": {
           "description": "The path command types.",
@@ -79957,6 +81080,16 @@
                 "type": "SdtLock"
               },
               "signature": "GetLock(): SdtLock"
+            },
+            "GetParent": {
+              "description": "Returns the document content that contains the current content control.",
+              "params": [],
+              "returns": {
+                "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the content control has no parent.",
+                "type": "ApiDocument | ApiDocumentContent | null"
+              },
+              "signature": "GetParent(): ApiDocument | ApiDocumentContent | null",
+              "since": "9.5.0"
             },
             "GetParentContentControl": {
               "description": "Returns a content control that contains the current content control.",
@@ -82616,6 +83749,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -82624,6 +83767,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRadioGroup": {
               "description": "Returns the radio group key if the current checkbox is a radio button.",
@@ -83331,6 +84484,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -83339,6 +84502,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -84360,6 +85533,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -84368,6 +85551,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -86159,6 +87352,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -86167,6 +87370,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -87651,6 +88864,22 @@
                 "type": "DocumentElement"
               },
               "signature": "GetElement(nPos: number): DocumentElement"
+            },
+            "GetElementIndex": {
+              "description": "Returns the position (index) of the specified element within the current document content.",
+              "params": [
+                {
+                  "description": "The document element (paragraph, table or block content control) whose index will be returned.",
+                  "name": "element",
+                  "type": "DocumentElement"
+                }
+              ],
+              "returns": {
+                "description": "returns -1 if the element is not a direct child of the current document content.",
+                "type": "number"
+              },
+              "signature": "GetElementIndex(element: DocumentElement): number",
+              "since": "9.5.0"
             },
             "GetElementsCount": {
               "description": "Returns a number of elements in the current document.",
@@ -89187,6 +90416,22 @@
               },
               "signature": "GetElement(nPos: number): DocumentElement"
             },
+            "GetElementIndex": {
+              "description": "Returns the position (index) of the specified element within the current document content.",
+              "params": [
+                {
+                  "description": "The document element (paragraph, table or block content control) whose index will be returned.",
+                  "name": "element",
+                  "type": "DocumentElement"
+                }
+              ],
+              "returns": {
+                "description": "returns -1 if the element is not a direct child of the current document content.",
+                "type": "number"
+              },
+              "signature": "GetElementIndex(element: DocumentElement): number",
+              "since": "9.5.0"
+            },
             "GetElementsCount": {
               "description": "Returns a number of elements in the current document.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElementsCount/",
@@ -90621,6 +91866,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -90629,6 +91884,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -92123,6 +93388,26 @@
               },
               "signature": "GetLinkedText(): string"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current hyperlink.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the hyperlink has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current hyperlink within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the hyperlink has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
+            },
             "GetRange": {
               "description": "Returns a Range object that represents the document part contained in the specified hyperlink.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetRange/",
@@ -93328,6 +94613,22 @@
               },
               "signature": "GetElement(nPos: number): ParagraphContent"
             },
+            "GetElementIndex": {
+              "description": "Returns the position (index) of the specified element within the current inline content control.",
+              "params": [
+                {
+                  "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",
+                  "name": "element",
+                  "type": "ParagraphContent"
+                }
+              ],
+              "returns": {
+                "description": "returns -1 if the element is not a direct child of the current inline content control.",
+                "type": "number"
+              },
+              "signature": "GetElementIndex(element: ParagraphContent): number",
+              "since": "9.5.0"
+            },
             "GetElementsCount": {
               "description": "Returns a number of elements in the current inline text content control. The text content \ncontrol is created with one text run present in it by default, so even without any \nelement added this method will return the value of '1'.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElementsCount/",
@@ -93381,6 +94682,16 @@
                 "type": "SdtLock"
               },
               "signature": "GetLock(): SdtLock"
+            },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current inline content control.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the content control has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
             },
             "GetParentContentControl": {
               "description": "Returns a content control that contains the current content control.",
@@ -93445,6 +94756,16 @@
                 "type": "string"
               },
               "signature": "GetPlaceholderText(): string"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current inline content control within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the content control has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRange": {
               "description": "Returns a Range object that represents the part of the document contained in the specified content control.",
@@ -93990,6 +95311,26 @@
                 "type": "\"math\""
               },
               "signature": "GetClassType(): \"math\""
+            },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current math element.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the math element has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current math element within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the math element has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetText": {
               "description": "Returns the inner text of the current math element.",
@@ -96629,6 +97970,22 @@
               },
               "signature": "GetElement(nPos: number): ParagraphContent"
             },
+            "GetElementIndex": {
+              "description": "Returns the position (index) of the specified element within the current paragraph.",
+              "params": [
+                {
+                  "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",
+                  "name": "element",
+                  "type": "ParagraphContent"
+                }
+              ],
+              "returns": {
+                "description": "returns -1 if the element is not a direct child of the current paragraph.",
+                "type": "number"
+              },
+              "signature": "GetElementIndex(element: ParagraphContent): number",
+              "since": "9.5.0"
+            },
             "GetElementsCount": {
               "description": "Returns a number of elements in the current paragraph.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetElementsCount/",
@@ -96842,6 +98199,16 @@
                 "type": "ApiTextPr"
               },
               "signature": "GetParagraphMarkTextPr(): ApiTextPr"
+            },
+            "GetParent": {
+              "description": "Returns the document content that contains the current paragraph.",
+              "params": [],
+              "returns": {
+                "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the paragraph has no parent.",
+                "type": "ApiDocument | ApiDocumentContent | null"
+              },
+              "signature": "GetParent(): ApiDocument | ApiDocumentContent | null",
+              "since": "9.5.0"
             },
             "GetParentContentControl": {
               "description": "Returns a content control that contains the current paragraph.",
@@ -98789,6 +100156,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPicturePosition": {
               "description": "Returns the picture position inside the current form.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetPicturePosition/",
@@ -98810,6 +100187,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -101006,6 +102393,16 @@
               "signature": "GetOutLine(): ApiStroke",
               "since": "8.1.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current run.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the run has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetParentContentControl": {
               "description": "Returns a content control that contains the current run.",
               "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentContentControl/",
@@ -101052,6 +102449,16 @@
                 "type": "ApiTableCell | null"
               },
               "signature": "GetParentTableCell(): ApiTableCell | null"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current run within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the run has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetPosition": {
               "description": "Gets the text position from the current text properties measured in half-points (1/144 of an inch).",
@@ -103304,6 +104711,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -103312,6 +104729,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -105135,6 +106562,16 @@
               },
               "signature": "GetInternalId(): string",
               "since": "9.2.0"
+            },
+            "GetParent": {
+              "description": "Returns the document content that contains the current table.",
+              "params": [],
+              "returns": {
+                "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the table has no parent.",
+                "type": "ApiDocument | ApiDocumentContent | null"
+              },
+              "signature": "GetParent(): ApiDocument | ApiDocumentContent | null",
+              "since": "9.5.0"
             },
             "GetParentContentControl": {
               "description": "Returns a content control that contains the current table.",
@@ -108891,6 +110328,16 @@
               "signature": "GetLock(): boolean",
               "since": "9.3.0"
             },
+            "GetParent": {
+              "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+              "params": [],
+              "returns": {
+                "description": "returns null if the form has no parent.",
+                "type": "ParagraphLikeContainer"
+              },
+              "signature": "GetParent(): ParagraphLikeContainer",
+              "since": "9.5.0"
+            },
             "GetPlaceholderText": {
               "description": "Returns the placeholder text from the current form.",
               "params": [],
@@ -108899,6 +110346,16 @@
               },
               "signature": "GetPlaceholderText(): string",
               "since": "9.1.0"
+            },
+            "GetPosInParent": {
+              "description": "Returns the position (index) of the current form within its parent element.",
+              "params": [],
+              "returns": {
+                "description": "returns -1 if the form has no parent.",
+                "type": "number"
+              },
+              "signature": "GetPosInParent(): number",
+              "since": "9.5.0"
             },
             "GetRole": {
               "description": "Returns the role of the current form.",
@@ -112687,6 +114144,10 @@
           ],
           "type": "ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath"
         },
+        "ParagraphLikeContainer": {
+          "description": "A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt, etc.).",
+          "type": "ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase"
+        },
         "PathCommandType": {
           "description": "The path command types.",
           "type": "\"moveTo\" | \"lineTo\" | \"bezier3\" | \"bezier4\" | \"arcTo\" | \"close\""
@@ -113336,5 +114797,5 @@
     }
   },
   "package": "@onlyoffice/plugins-types",
-  "version": "0.9.0"
+  "version": "0.9.1"
 }

@@ -1,13 +1,13 @@
 {
   "generator": {
-    "packageVersion": "0.9.0",
+    "packageVersion": "0.9.1",
     "node": "v24.2.0",
     "jsdoc": "4.0.5",
     "typescript": "5.9.3"
   },
   "repositories": {
     "sdkjs": {
-      "commit": "26a4b3d7adc5ff6d6c009752507b41348e31f8bc",
+      "commit": "586ec09e2dc845c1287ac78baa5e3baaf0f9e061",
       "dirty": false
     },
     "sdkjsForms": {
@@ -23,7 +23,7 @@
     {
       "repository": "sdkjs",
       "path": "word\\apiBuilder.js",
-      "sha256": "cbc29da6d41c2cfe1664f08b683c1c929f18dab598d286851296ac47e2a6f0a4"
+      "sha256": "52f417eff557444b0bcfc4be24af2161278007bb213cfe7cd34d6a42029e2818"
     },
     {
       "repository": "sdkjs",
@@ -33,12 +33,12 @@
     {
       "repository": "sdkjs",
       "path": "slide\\apiBuilder.js",
-      "sha256": "5b7d1049a30e0bbd4e382c62ccb25000a75f05a86829de7e43ddb1c0f466a507"
+      "sha256": "1bc9c73d2733359e8d1630ba1bf6a9da63d57c62282cbbe7a6499cddeafb7b4d"
     },
     {
       "repository": "sdkjs",
       "path": "cell\\apiBuilder.js",
-      "sha256": "a160db088d606f4fb7c1fc237a27d3b933ae22b0f524161d22e22641808c1334"
+      "sha256": "8b98cd739dc262d5bfbe8b71fa9a494572af0a55aaa3b0a5bf144c1304d566ba"
     },
     {
       "repository": "sdkjs",
@@ -63,7 +63,7 @@
     {
       "repository": "sdkjs",
       "path": "pdf\\apiBuilder.js",
-      "sha256": "b1dfb3abd74e1859d19964dcbf959cb68778bcea5c1a3aa17738d8e6389e4959"
+      "sha256": "128ba417bb0c6d6b4b7de29eef94eeaf09737792f01eeb9082ae2f112491c23d"
     },
     {
       "repository": "sdkjs",

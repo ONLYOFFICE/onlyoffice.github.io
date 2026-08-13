@@ -449,6 +449,12 @@ declare namespace Word {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -1267,11 +1273,100 @@ declare namespace Word {
    */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ApiTableOfContents = unknown;
-  export type ApiTableOfFigures = unknown;
-  export type TextAnnotation = unknown;
-  export type TextAnnotationRange = unknown;
+  // Manual overrides (see src/overrides/word.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  export interface ApiTableOfContents {
+    /** Returns a type of the ApiTableOfContents class. */
+    GetClassType(): "tableOfContents";
+    /** Updates the table of contents. */
+    Update(bOnlyPageNumbers?: boolean): boolean;
+    /** Removes the table of contents from the document. */
+    Delete(): boolean;
+    /** Returns the document that contains the table of contents. */
+    GetParent(): ApiDocument | null;
+    /** Returns a range that covers the entire table of contents. */
+    GetRange(): ApiRange | null;
+    /** Returns whether page numbers are shown in the table of contents. */
+    GetIncludePageNumbers(): boolean;
+    /** Specifies whether page numbers are shown in the table of contents. */
+    SetIncludePageNumbers(isInclude: boolean): boolean;
+    /** Returns whether page numbers are right-aligned in the table of contents. */
+    GetRightAlignPageNumbers(): boolean;
+    /** Specifies whether page numbers are right-aligned in the table of contents. */
+    SetRightAlignPageNumbers(isRightAlign: boolean): boolean;
+    /** Returns whether entries are formatted as hyperlinks. */
+    GetUseHyperlinks(): boolean;
+    /** Specifies whether entries are formatted as hyperlinks. */
+    SetUseHyperlinks(isUseHyperlinks: boolean): boolean;
+    /** Returns the highest (outermost) heading level included in the table of contents. */
+    GetUpperHeadingLevel(): number;
+    /** Sets the highest (outermost) heading level included in the table of contents. */
+    SetUpperHeadingLevel(nLevel: number): boolean;
+    /** Returns the lowest (innermost) heading level included in the table of contents. */
+    GetLowerHeadingLevel(): number;
+    /** Sets the lowest (innermost) heading level included in the table of contents. */
+    SetLowerHeadingLevel(nLevel: number): boolean;
+    /** Applies the specified properties to the table of contents and rebuilds it. */
+    SetPr(oTocPr: TocPr): boolean;
+  }
+  export interface ApiTableOfFigures {
+    /** Returns a type of the ApiTableOfFigures class. */
+    GetClassType(): "tableOfFigures";
+    /** Updates the table of figures. */
+    Update(bOnlyPageNumbers?: boolean): boolean;
+    /** Removes the table of figures from the document. */
+    Delete(): boolean;
+    /** Returns the document that contains the table of figures. */
+    GetParent(): ApiDocument | null;
+    /** Returns a range that covers the entire table of figures. */
+    GetRange(): ApiRange | null;
+    /** Returns whether page numbers are shown in the table of figures. */
+    GetIncludePageNumbers(): boolean;
+    /** Specifies whether page numbers are shown in the table of figures. */
+    SetIncludePageNumbers(isInclude: boolean): boolean;
+    /** Returns whether page numbers are right-aligned in the table of figures. */
+    GetRightAlignPageNumbers(): boolean;
+    /** Specifies whether page numbers are right-aligned in the table of figures. */
+    SetRightAlignPageNumbers(isRightAlign: boolean): boolean;
+    /** Returns whether entries are formatted as hyperlinks. */
+    GetUseHyperlinks(): boolean;
+    /** Specifies whether entries are formatted as hyperlinks. */
+    SetUseHyperlinks(isUseHyperlinks: boolean): boolean;
+    /** Returns the caption label that the table of figures is built from (for example, "Figure"). */
+    GetCaption(): string | null;
+    /** Sets the caption label that the table of figures is built from (for example, "Figure"). */
+    SetCaption(sCaption: string): boolean;
+    /** Returns whether the caption label and number are included in the table of figures entries. */
+    GetIncludeLabel(): boolean;
+    /** Specifies whether the caption label and number are included in the table of figures entries. */
+    SetIncludeLabel(isInclude: boolean): boolean;
+    /** Applies the specified properties to the table of figures and rebuilds it. */
+    SetPr(oTofPr: TofPr): boolean;
+  }
+  /**
+   * A grammar/spellcheck-style annotation range attached to a paragraph - the payload of
+   * `onBlurAnnotation`/`onFocusAnnotation`/`onClickAnnotation`. Kept in sync by hand with the
+   * identical shape `scripts/generate-plugin-methods.js` derives independently for the same concept
+   * from a different sdkjs source (word/api_plugins.js) - see src/generated/word-methods.ts.
+   */
+  export interface TextAnnotation {
+    /** ID of the paragraph containing the annotation. */
+    paragraphId: string;
+    /** ID of the annotation range. */
+    rangeId: string;
+    /** Annotation type (e.g., `"grammar"`). */
+    name?: string;
+  }
+  export interface TextAnnotationRange {
+    /** Unique identifier for the range. */
+    id: string;
+    /** Starting index of the text range. */
+    start: number;
+    /** Length of the text range. */
+    length: number;
+    /** Annotation type (e.g., `"grammar"`). */
+    name?: string;
+  }
 
   /** Base class */
   export interface Api {
@@ -2953,6 +3048,15 @@ declare namespace Word {
     GetLock(): SdtLock;
 
     /**
+     * Returns the document content that contains the current content control.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
+
+    /**
      * Returns a content control that contains the current content control.
      *
      * @returns returns null if parent content control doesn't exist.
@@ -3544,7 +3648,7 @@ declare namespace Word {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -5465,7 +5569,7 @@ declare namespace Word {
   }
 
   /** Class representing a document checkbox / radio button. */
-  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -5623,11 +5727,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the radio group key if the current checkbox is a radio button.
@@ -6256,7 +6377,7 @@ declare namespace Word {
   }
 
   /** Class representing a document combo box / dropdown list. */
-  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -6417,11 +6538,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -7510,7 +7648,7 @@ declare namespace Word {
   }
 
   /** Class representing a complex field. */
-  export interface ApiComplexForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
@@ -7661,11 +7799,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -8986,7 +9141,7 @@ declare namespace Word {
   }
 
   /** Class representing a document date field. */
-  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -9174,11 +9329,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -9687,7 +9859,7 @@ declare namespace Word {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetRange" | "ToJSON" | "GetContent" | "GetAllDrawingObjects" | "GetAllShapes" | "GetAllImages" | "GetAllCharts" | "GetAllOleObjects" | "GetAllParagraphs" | "GetAllTables" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "GetCurrentContentControl" | "IsFootnote" | "IsEndnote" | "SelectNoteReference" | "MoveCursorToNoteReference" | "AddParagraph" | "AddText"> {
+  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "ToJSON"> {
     /**
      * Accepts all changes made in review mode.
      *
@@ -11069,6 +11241,15 @@ declare namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElement/
      */
     GetElement(nPos: number): DocumentElement;
+
+    /**
+     * Returns the position (index) of the specified element within the current document content.
+     *
+     * @param element - The document element (paragraph, table or block content control) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current document content.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: DocumentElement): number;
 
     /**
      * Returns a number of elements in the current document.
@@ -12992,6 +13173,15 @@ declare namespace Word {
     GetElement(nPos: number): DocumentElement;
 
     /**
+     * Returns the position (index) of the specified element within the current document content.
+     *
+     * @param element - The document element (paragraph, table or block content control) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current document content.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: DocumentElement): number;
+
+    /**
      * Returns a number of elements in the current document.
      *
      * @example
@@ -14584,11 +14774,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -15151,7 +15358,7 @@ declare namespace Word {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -15795,6 +16002,23 @@ declare namespace Word {
     GetLinkedText(): string;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current hyperlink.
+     *
+     * @returns returns null if the hyperlink has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
+     * Returns the position (index) of the current hyperlink within its parent element.
+     *
+     * @returns returns -1 if the hyperlink has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
+
+    /**
      * Returns a Range object that represents the document part contained in the specified hyperlink.
      *
      * @param Start - Start position index in the current element.
@@ -15942,7 +16166,7 @@ declare namespace Word {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -16727,6 +16951,15 @@ declare namespace Word {
     GetElement(nPos: number): ParagraphContent;
 
     /**
+     * Returns the position (index) of the specified element within the current inline content control.
+     *
+     * @param element - The inline element (run, inline content control, form, etc.) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current inline content control.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: ParagraphContent): number;
+
+    /**
      * Returns a number of elements in the current inline text content control. The text content
      * control is created with one text run present in it by default, so even without any
      * element added this method will return the value of '1'.
@@ -16817,6 +17050,15 @@ declare namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLock/
      */
     GetLock(): SdtLock;
+
+    /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current inline content control.
+     *
+     * @returns returns null if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
 
     /**
      * Returns a content control that contains the current content control.
@@ -16938,6 +17180,14 @@ declare namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current inline content control within its parent element.
+     *
+     * @returns returns -1 if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns a Range object that represents the part of the document contained in the specified content
@@ -17458,6 +17708,23 @@ declare namespace Word {
     GetClassType(): "math";
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current math element.
+     *
+     * @returns returns null if the math element has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
+     * Returns the position (index) of the current math element within its parent element.
+     *
+     * @returns returns -1 if the math element has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
+
+    /**
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
@@ -17894,7 +18161,7 @@ declare namespace Word {
   }
 
   /** Class representing an Ole object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -19567,7 +19834,7 @@ declare namespace Word {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetContextualSpacing" | "GetContextualSpacing" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetKeepLines" | "GetKeepLines" | "SetKeepNext" | "GetKeepNext" | "SetPageBreakBefore" | "GetPageBreakBefore" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetShd" | "GetShd" | "SetBottomBorder" | "GetBottomBorder" | "SetLeftBorder" | "GetLeftBorder" | "SetRightBorder" | "GetRightBorder" | "SetTopBorder" | "GetTopBorder" | "SetBetweenBorder" | "GetBetweenBorder" | "SetWidowControl" | "GetWidowControl" | "SetTabs" | "GetTabs" | "SetNumPr" | "GetNumPr" | "SetOutlineLvl" | "GetOutlineLvl" | "ToJSON"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "ToJSON"> {
     /**
      * Adds a bookmark cross-reference to the current paragraph.
      * <note>Please note that this paragraph must be in the document.</note>
@@ -20325,6 +20592,15 @@ declare namespace Word {
     GetElement(nPos: number): ParagraphContent;
 
     /**
+     * Returns the position (index) of the specified element within the current paragraph.
+     *
+     * @param element - The inline element (run, inline content control, form, etc.) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current paragraph.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: ParagraphContent): number;
+
+    /**
      * Returns a number of elements in the current paragraph.
      *
      * @example
@@ -20652,6 +20928,15 @@ declare namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParagraphMarkTextPr/
      */
     GetParagraphMarkTextPr(): ApiTextPr;
+
+    /**
+     * Returns the document content that contains the current paragraph.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the paragraph has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
 
     /**
      * Returns a content control that contains the current paragraph.
@@ -22633,7 +22918,7 @@ declare namespace Word {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -22788,6 +23073,15 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the picture position inside the current form.
      *
      * @returns Array of two numbers [shiftX, shiftY]
@@ -22822,6 +23116,14 @@ declare namespace Word {
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -23412,7 +23714,7 @@ declare namespace Word {
   }
 
   /** Class representing a Preset Color. */
-  export interface ApiPresetColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiPresetColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiPresetColor class.
      *
@@ -23465,7 +23767,7 @@ declare namespace Word {
   }
 
   /** Class representing an RGB Color. */
-  export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiRGBColor class.
      *
@@ -24331,7 +24633,7 @@ declare namespace Word {
     ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object;
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetColor" | "GetColor" | "SetVertAlign" | "GetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetPosition" | "GetPosition" | "SetLanguage" | "GetLanguage" | "SetShd" | "GetShd" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine" | "ToJSON"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -24659,7 +24961,7 @@ declare namespace Word {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetColor" | "GetColor" | "SetVertAlign" | "GetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetPosition" | "GetPosition" | "SetLanguage" | "GetLanguage" | "SetShd" | "GetShd" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine" | "ToJSON"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a column break to the current run position and starts the next element from a new column.
      *
@@ -25258,6 +25560,15 @@ declare namespace Word {
     GetOutLine(): ApiStroke;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current run.
+     *
+     * @returns returns null if the run has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns a content control that contains the current run.
      *
      * @returns returns null if parent content control doesn't exist.
@@ -25342,6 +25653,14 @@ declare namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentTableCell/
      */
     GetParentTableCell(): ApiTableCell | null;
+
+    /**
+     * Returns the position (index) of the current run within its parent element.
+     *
+     * @returns returns -1 if the run has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Gets the text position from the current text properties measured in half-points (1/144 of an inch).
@@ -26300,7 +26619,7 @@ declare namespace Word {
   }
 
   /** Class representing a Scheme Color. */
-  export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiSchemeColor class.
      *
@@ -26925,7 +27244,7 @@ declare namespace Word {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -27555,7 +27874,7 @@ declare namespace Word {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /** Clears the current form. */
     Clear(): boolean;
 
@@ -27613,11 +27932,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -27786,7 +28122,7 @@ declare namespace Word {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -28677,7 +29013,7 @@ declare namespace Word {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiTablePr, "GetClassType" | "SetStyleColBandSize" | "SetStyleRowBandSize" | "SetJc" | "SetShd" | "SetTableBorderTop" | "SetTableBorderBottom" | "SetTableBorderLeft" | "SetTableBorderRight" | "SetTableBorderInsideH" | "SetTableBorderInsideV" | "SetTableBorderAll" | "SetTableCellMarginBottom" | "SetTableCellMarginLeft" | "SetTableCellMarginRight" | "SetTableCellMarginTop" | "SetCellSpacing" | "SetTableInd" | "SetWidth" | "SetTableLayout" | "SetTableTitle" | "GetTableTitle" | "SetTableDescription" | "GetTableDescription" | "ToJSON"> {
+  export interface ApiTable extends Omit<ApiTablePr, "GetClassType" | "ToJSON"> {
     /**
      * Adds a caption paragraph after (or before) the current table.
      * <note>Please note that the current table must be in the document (not in the footer/header).
@@ -29007,6 +29343,15 @@ declare namespace Word {
      * @since 9.2.0
      */
     GetInternalId(): string;
+
+    /**
+     * Returns the document content that contains the current table.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the table has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
 
     /**
      * Returns a content control that contains the current table.
@@ -30349,7 +30694,7 @@ declare namespace Word {
   }
 
   /** Class representing a table cell. */
-  export interface ApiTableCell extends Omit<ApiTableCellPr, "GetClassType" | "SetShd" | "SetCellMarginBottom" | "SetCellMarginLeft" | "SetCellMarginRight" | "SetCellMarginTop" | "SetCellBorderBottom" | "SetCellBorderLeft" | "SetCellBorderRight" | "SetCellBorderTop" | "SetWidth" | "SetVerticalAlign" | "SetTextDirection" | "SetNoWrap" | "ToJSON"> {
+  export interface ApiTableCell extends Omit<ApiTableCellPr, "GetClassType"> {
     /**
      * Adds the new columns to the current table.
      *
@@ -32399,7 +32744,7 @@ declare namespace Word {
   }
 
   /** Class representing a table row. */
-  export interface ApiTableRow extends Omit<ApiTableRowPr, "GetClassType" | "SetHeight" | "SetTableHeader" | "ToJSON"> {
+  export interface ApiTableRow extends Omit<ApiTableRowPr, "GetClassType"> {
     /**
      * Adds the new rows to the current table.
      *
@@ -33178,7 +33523,7 @@ declare namespace Word {
   }
 
   /** Class representing a document text field. */
-  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -33343,11 +33688,28 @@ declare namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -36103,6 +36465,12 @@ declare namespace Cell {
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
   /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
+  /**
    * The mathematical operation which will be applied to the copied data.
    *
    * @example
@@ -37249,10 +37617,118 @@ declare namespace Cell {
    */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ApiHyperlinks = unknown;
-  export type ApiListObject = unknown;
+  // Manual overrides (see src/overrides/cell.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  /**
+   * `ApiWorksheet.GetHyperlinks`/`ApiRange.GetHyperlinks` are documented with `@returns {ApiHyperlinks}`,
+   * but there is no `ApiHyperlinks` class anywhere in sdkjs (checked out or the deploy bundle) - a
+   * naming mistake in sdkjs's own JSDoc. Both implementations actually
+   * `.map(elem => new ApiHyperlink(elem, ws))`, i.e. a plain array of the real (singular) `ApiHyperlink`
+   * class already generated in this file.
+   */
+  export type ApiHyperlinks = ApiHyperlink[];
+  export interface ApiListObject {
+    /** Returns whether the active cell is within the range of the table. */
+    GetActive(): boolean;
+    /** Returns the alternative text for the table. */
+    GetAlternativeText(): string;
+    /** Sets the alternative text for the table. */
+    SetAlternativeText(sAltText: string): void;
+    /** Returns the comment (summary alternative text) for the table. */
+    GetComment(): string;
+    /** Sets the comment (summary alternative text) for the table. */
+    SetComment(sComment: string): void;
+    /** Returns the name of the table. */
+    GetName(): string;
+    /** Sets the name of the table. Equivalent to SetDisplayName. Returns false if the name is invalid or already used by another table. */
+    SetName(name: string): boolean;
+    /** Returns the worksheet that is the parent of the table. */
+    GetParent(): ApiWorksheet;
+    /** Returns the display name of the table. */
+    GetDisplayName(): string;
+    /** Sets the display name of the table. Returns false if the name is invalid or already used by another table. */
+    SetDisplayName(sDisplayName: string): boolean;
+    /** Returns the range of the table, or null if the table has no range. */
+    GetRange(): ApiRange | null;
+    /** Returns the range of the header row, or null if the table has no header row. */
+    GetHeaderRowRange(): ApiRange | null;
+    /** Returns whether the AutoFilter dropdown buttons are displayed on the header row. Defaults to true for a new table. */
+    GetShowAutoFilter(): boolean;
+    /** Sets whether the AutoFilter is present on the table. Setting to false removes it entirely; true creates it if not present. */
+    SetShowAutoFilter(show: boolean): void;
+    /** Returns whether the AutoFilter dropdown arrows are displayed on the header row. Defaults to true for a new table. */
+    GetShowAutoFilterDropDown(): boolean;
+    /** Sets whether the AutoFilter dropdown arrows are displayed; does not remove the AutoFilter itself. */
+    SetShowAutoFilterDropDown(bShow: boolean): void;
+    /** Returns whether the header row is displayed for the table. */
+    GetShowHeaders(): boolean;
+    /** Sets whether the header row is displayed for the table. */
+    SetShowHeaders(show: boolean): void;
+    /** Returns the AutoFilter object for the table, or null if the table has no autofilter. */
+    GetAutoFilter(): ApiAutoFilter | null;
+    /** Returns the range of the data rows, excluding the header and totals rows; null if the table has no data rows. */
+    GetDataBodyRange(): ApiRange | null;
+    /** Returns whether banded column formatting is applied to the table. */
+    GetShowTableStyleColumnStripes(): boolean;
+    /** Sets whether banded column formatting is applied to the table. */
+    SetShowTableStyleColumnStripes(show: boolean): void;
+    /** Returns whether the first-column style is applied to the table. */
+    GetShowTableStyleFirstColumn(): boolean;
+    /** Sets whether the first-column style is applied to the table. */
+    SetShowTableStyleFirstColumn(show: boolean): void;
+    /** Returns whether the last-column style is applied to the table. */
+    GetShowTableStyleLastColumn(): boolean;
+    /** Sets whether the last-column style is applied to the table. */
+    SetShowTableStyleLastColumn(show: boolean): void;
+    /** Returns whether banded row formatting is applied to the table. */
+    GetShowTableStyleRowStripes(): boolean;
+    /** Sets whether banded row formatting is applied to the table. */
+    SetShowTableStyleRowStripes(show: boolean): void;
+    /** Returns whether the totals row is displayed for the table. */
+    GetShowTotals(): boolean;
+    /** Sets whether the totals row is displayed for the table. */
+    SetShowTotals(show: boolean): void;
+    /** Deletes the table and clears the cell formatting. */
+    Delete(): void;
+    /** Removes the list functionality from the table and converts it to a regular data range; cell data/formatting/formulas remain. */
+    Unlist(): void;
+    /** Resizes the table to a new range (as an ApiRange or an address string, e.g. `"A1:D10"`). Cells are not inserted or moved. */
+    Resize(Range: ApiRange | string): void;
+    /** Returns the source type of the table. Always `"xlSrcRange"` for range-based tables. */
+    GetSourceType(): string;
+    /** Returns the name of the table style applied to the table. */
+    GetTableStyle(): string;
+    /** Sets the table style by name. */
+    SetTableStyle(styleName: string): void;
+    /** Returns the range of the totals row, or null if the table has no totals row. */
+    GetTotalsRowRange(): ApiRange | null;
+    /** Returns the summary description (alternative text summary) for the table. */
+    GetSummary(): string;
+    /** Sets the summary description (alternative text summary) for the table. */
+    SetSummary(summary: string): void;
+    /** Returns all columns in the table. */
+    GetListColumns(): ApiListColumn[];
+    /** Adds a new column at the specified 1-based position (appended at the end if omitted). Returns null if the position is invalid. */
+    AddListColumn(nPosition?: number): ApiListColumn | null;
+    /** Returns all data rows in the table, excluding the header and totals rows. */
+    GetListRows(): ApiListRow[];
+    /** Adds a new data row at the specified 1-based position within the data body (appended at the end if omitted). `bAlwaysInsert` (default true) specifies whether cells outside the table are shifted. Returns null if the position is invalid. */
+    AddListRow(nPosition?: number, bAlwaysInsert?: boolean): ApiListRow | null;
+    /** Returns the Sort object for this table. */
+    GetSort(): ApiSort;
+  }
+  /**
+   * `ApiFormatCondition`/`ApiAboveAverage` etc.'s `GetPTCondition()` (and the `PTCondition` property
+   * alias) return `this.rule.pivot` directly - an internal pivot-table rule object with no public
+   * `Api*` wrapper class anywhere in sdkjs, checked-out or bundled. There is nothing to model here;
+   * `unknown` is the honest type, not a resolution gap to eventually fill in.
+   */
   export type PTCondition = unknown;
+
+  // Cross-file type stubs
+  export type ApiListColumn = unknown;
+  export type ApiListRow = unknown;
+  export type ApiSort = unknown;
 
   /**
    * Base class.
@@ -38493,6 +38969,15 @@ declare namespace Cell {
     RecalculateAllFormulas(fLogger?: (...args: unknown[]) => unknown): boolean;
 
     /**
+     * Redraws the editor screen, making the changes already made by a macro visible without waiting for it
+     * to finish. Observable from asynchronous code only. Repaints without recalculating: call
+     * {@link Api#Calculate} first if formula results must be up to date.
+     *
+     * @since 9.5.0
+     */
+    Redraw(): boolean;
+
+    /**
      * Refreshes all pivot tables.
      *
      * @since 8.2.0
@@ -38722,7 +39207,7 @@ declare namespace Cell {
   }
 
   /** Class representing an above average conditional formatting rule. */
-  export interface ApiAboveAverage extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiAboveAverage extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -38845,6 +39330,14 @@ declare namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -38973,6 +39466,15 @@ declare namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -39339,7 +39841,7 @@ declare namespace Cell {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "SetTitle" | "GetTitle"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Adds a new series to the current chart.
      *
@@ -41055,7 +41557,7 @@ declare namespace Cell {
   }
 
   /** Class representing a color scale conditional formatting rule. */
-  export interface ApiColorScale extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiColorScale extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -41173,6 +41675,14 @@ declare namespace Cell {
     GetScopeType(): XlPivotConditionScope;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -41283,6 +41793,15 @@ declare namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -42634,7 +43153,7 @@ declare namespace Cell {
   }
 
   /** Class representing a data bar conditional formatting rule. */
-  export interface ApiDatabar extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiDatabar extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -42873,6 +43392,14 @@ declare namespace Cell {
     GetShowValue(): boolean;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -43105,6 +43632,15 @@ declare namespace Cell {
     SetShowValue(showValue: boolean): void;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -43126,7 +43662,7 @@ declare namespace Cell {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetAllParagraphs" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "AddText"> {
+  export interface ApiDocument extends ApiDocumentContent {
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the document
      * content.
@@ -43471,15 +44007,6 @@ declare namespace Cell {
 
   /** Class representing a graphical object. */
   export interface ApiDrawing {
-    /**
-     * Sets the fill formatting properties to the current graphic object.
-     *
-     * @param fill - The fill type used to fill the graphic object.
-     * @returns returns false if param is invalid.
-     * @since 9.5.0
-     */
-    Fill(fill: ApiFill): boolean;
-
     /**
      * Returns a type of the ApiDrawing class.
      *
@@ -44445,6 +44972,14 @@ declare namespace Cell {
     GetScopeType(): XlPivotConditionScope;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -44555,6 +45090,15 @@ declare namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -44898,7 +45442,7 @@ declare namespace Cell {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiGroup class.
      *
@@ -45174,7 +45718,7 @@ declare namespace Cell {
   }
 
   /** Class representing an icon set conditional formatting rule. */
-  export interface ApiIconSetCondition extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiIconSetCondition extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -45333,6 +45877,14 @@ declare namespace Cell {
     GetShowIconOnly(): boolean | null;
 
     /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
+
+    /**
      * Returns the text value used in text-based conditional formatting rules.
      *
      * @returns The text value used in text-based conditional formatting rules.
@@ -45482,6 +46034,15 @@ declare namespace Cell {
     SetShowIconOnly(showIconOnly: boolean): boolean;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -45499,7 +46060,7 @@ declare namespace Cell {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiImage class.
      *
@@ -45687,7 +46248,7 @@ declare namespace Cell {
   }
 
   /** Class representing an OLE object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns the application ID from the current OLE object.
      *
@@ -46883,7 +47444,7 @@ declare namespace Cell {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -48203,7 +48764,7 @@ declare namespace Cell {
   }
 
   /** Class representing a pivot table data field. */
-  export interface ApiPivotDataField extends Omit<ApiPivotField, "ClearAllFilters" | "ClearLabelFilters" | "ClearManualFilters" | "ClearValueFilters" | "GetPivotItems" | "Move" | "Remove" | "GetPosition" | "SetPosition" | "GetOrientation" | "SetOrientation" | "GetValue" | "SetValue" | "GetCaption" | "SetCaption" | "GetName" | "SetName" | "GetSourceName" | "GetIndex" | "GetTable" | "GetParent" | "GetLayoutCompactRow" | "SetLayoutCompactRow" | "GetLayoutForm" | "SetLayoutForm" | "GetLayoutPageBreak" | "SetLayoutPageBreak" | "GetShowingInAxis" | "GetRepeatLabels" | "SetRepeatLabels" | "GetLayoutBlankLine" | "SetLayoutBlankLine" | "GetShowAllItems" | "SetShowAllItems" | "GetLayoutSubtotals" | "SetLayoutSubtotals" | "GetLayoutSubtotalLocation" | "SetLayoutSubtotalLocation" | "GetSubtotalName" | "SetSubtotalName" | "GetSubtotals" | "SetSubtotals" | "GetDragToColumn" | "SetDragToColumn" | "GetDragToRow" | "SetDragToRow" | "GetDragToData" | "SetDragToData" | "GetDragToPage" | "SetDragToPage" | "GetCurrentPage" | "GetPivotFilters" | "AutoSort"> {
+  export interface ApiPivotDataField extends ApiPivotField {
     /**
      * Establishes automatic field-sorting rules for the pivot table reports.
      *
@@ -58531,7 +59092,7 @@ declare namespace Cell {
     UnMerge(): boolean;
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -58758,7 +59319,7 @@ declare namespace Cell {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a line break to the current run position and starts the next element from a new line.
      *
@@ -59884,7 +60445,7 @@ declare namespace Cell {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet" | "GetLine"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Returns a type of the ApiShape class.
      *
@@ -60035,7 +60596,7 @@ declare namespace Cell {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetParentSheet"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiSmartArt class. */
     GetClassType(): "smartArt";
 
@@ -60124,7 +60685,7 @@ declare namespace Cell {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetParentSheet">, ApiTablePr {
+  export interface ApiTable extends ApiDrawing, ApiTablePr {
     /**
      * Returns the parent sheet of the current drawing.
      *
@@ -61021,7 +61582,7 @@ declare namespace Cell {
   }
 
   /** Class representing a top 10 conditional formatting rule. */
-  export interface ApiTop10 extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiTop10 extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -61144,6 +61705,14 @@ declare namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -61283,6 +61852,15 @@ declare namespace Cell {
     SetScopeType(ScopeType: XlPivotConditionScope): void;
 
     /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
+
+    /**
      * Sets the text value used in text-based conditional formatting rules.
      *
      * @param Text - The text value to compare against.
@@ -61334,7 +61912,7 @@ declare namespace Cell {
   }
 
   /** Class representing a unique values conditional formatting rule. */
-  export interface ApiUniqueValues extends Omit<ApiFormatCondition, "Delete" | "Modify" | "ModifyAppliesToRange" | "SetFirstPriority" | "SetLastPriority" | "GetAppliesTo" | "GetFont" | "GetType" | "GetFormula1" | "GetFormula2" | "SetNumberFormat" | "GetNumberFormat" | "GetOperator" | "GetParent" | "GetPTCondition" | "GetPriority" | "SetPriority" | "GetScopeType" | "SetScopeType" | "GetText" | "SetText" | "GetTextOperator" | "SetTextOperator" | "GetDateOperator" | "SetDateOperator" | "SetBorders" | "SetFillColor" | "GetFillColor"> {
+  export interface ApiUniqueValues extends ApiFormatCondition {
     /**
      * Deletes the current format condition.
      *
@@ -61450,6 +62028,14 @@ declare namespace Cell {
      * @since 9.1.0
      */
     GetScopeType(): XlPivotConditionScope;
+
+    /**
+     * Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates
+     * to true.
+     *
+     * @since 9.5.0
+     */
+    GetStopIfTrue(): boolean;
 
     /**
      * Returns the text value used in text-based conditional formatting rules.
@@ -61571,6 +62157,15 @@ declare namespace Cell {
      * @since 9.1.0
      */
     SetScopeType(ScopeType: XlPivotConditionScope): void;
+
+    /**
+     * Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to
+     * true.
+     *
+     * @param StopIfTrue - True to stop evaluating additional rules.
+     * @since 9.5.0
+     */
+    SetStopIfTrue(StopIfTrue: boolean): void;
 
     /**
      * Sets the text value used in text-based conditional formatting rules.
@@ -61803,6 +62398,15 @@ declare namespace Cell {
      * @since 9.1.0
      */
     GetTheme(): ApiTheme;
+
+    /**
+     * Redraws the editor screen, making the changes already made by a macro visible without waiting for it
+     * to finish. Observable from asynchronous code only. Repaints without recalculating: call
+     * {@link ApiWorkbook#Calculate} first if formula results must be up to date.
+     *
+     * @since 9.5.0
+     */
+    Redraw(): boolean;
 
     /**
      * Saves changes to the specified document.
@@ -72663,6 +73267,12 @@ declare namespace Slide {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -75003,7 +75613,7 @@ declare namespace Slide {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "SetTitle" | "GetTitle" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Sets a style to the current chart by style ID.
      *
@@ -78026,7 +78636,7 @@ declare namespace Slide {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetAllParagraphs" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "AddText"> {
+  export interface ApiDocument extends ApiDocumentContent {
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the document
      * content.
@@ -79292,7 +79902,7 @@ declare namespace Slide {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -79552,7 +80162,7 @@ declare namespace Slide {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -81103,7 +81713,7 @@ declare namespace Slide {
   }
 
   /** Class representing an OLE object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -82025,7 +82635,7 @@ declare namespace Slide {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -84540,7 +85150,7 @@ declare namespace Slide {
   export interface ApiRange {
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -84782,7 +85392,7 @@ declare namespace Slide {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a line break to the current run position and starts the next element from a new line.
      *
@@ -86163,7 +86773,7 @@ declare namespace Slide {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetFill" | "GetLine" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -87427,7 +88037,7 @@ declare namespace Slide {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -87632,7 +88242,7 @@ declare namespace Slide {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "SetSize" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "ToJSON" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange">, Omit<ApiTablePr, "GetClassType" | "SetStyleColBandSize" | "SetStyleRowBandSize" | "SetJc" | "SetShd" | "SetTableBorderTop" | "SetTableBorderBottom" | "SetTableBorderLeft" | "SetTableBorderRight" | "SetTableBorderInsideH" | "SetTableBorderInsideV" | "SetTableBorderAll" | "SetTableCellMarginBottom" | "SetTableCellMarginLeft" | "SetTableCellMarginRight" | "SetTableCellMarginTop" | "SetCellSpacing" | "SetTableInd" | "SetWidth" | "SetTableLayout" | "SetTableTitle" | "GetTableTitle" | "SetTableDescription" | "GetTableDescription" | "ToJSON"> {
+  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "ToJSON">, Omit<ApiTablePr, "GetClassType" | "SetShd" | "ToJSON"> {
     /**
      * Adds a new column to the end of the current table.
      *
@@ -90380,12 +90990,9 @@ declare namespace Slide {
     /**
      * Selects the text range in the editor.
      *
-     * @param update - Specifies whether the previous selection is removed, the range becomes the current editor
-     *   position and the selection state is updated (true) or the selection is set without changing the
-     *   editor state (false).
      * @since 9.5.0
      */
-    Select(update?: boolean): boolean;
+    Select(): boolean;
 
     /**
      * Sets bold formatting for the contents of the current text range.
@@ -92084,6 +92691,12 @@ declare namespace Forms {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -93166,7 +93779,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document checkbox / radio button. */
-  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -93324,11 +93937,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the radio group key if the current checkbox is a radio button.
@@ -93890,7 +94520,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document combo box / dropdown list. */
-  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -94051,11 +94681,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -94547,7 +95194,7 @@ declare namespace Forms {
   }
 
   /** Class representing a complex field. */
-  export interface ApiComplexForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
@@ -94698,11 +95345,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -95156,7 +95820,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document date field. */
-  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -95344,11 +96008,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -96120,11 +96801,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -96688,7 +97386,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -96843,6 +97541,15 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the picture position inside the current form.
      *
      * @returns Array of two numbers [shiftX, shiftY]
@@ -96877,6 +97584,14 @@ declare namespace Forms {
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -97505,7 +98220,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /** Clears the current form. */
     Clear(): boolean;
 
@@ -97563,11 +98278,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -97780,7 +98512,7 @@ declare namespace Forms {
   }
 
   /** Class representing a document text field. */
-  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -97945,11 +98677,28 @@ declare namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -98889,6 +99638,19 @@ declare namespace Pdf {
   export type GeometryFormulaType = "*/" | "+-" | "+/" | "?:" | "abs" | "at2" | "cat2" | "cos" | "max" | "min" | "mod" | "pin" | "sat2" | "sin" | "sqrt" | "tan" | "val";
 
   /**
+   * The available GoTo action types:
+   * - "xyz" — Zoom to a specific position and magnification
+   * - "fit" — Fit the entire page in the window
+   * - "fitH" — Fit the page horizontally
+   * - "fitV" — Fit the page vertically
+   * - "fitR" — Fit the specified rectangle
+   * - "fitB" — Fit the page bounding box
+   * - "fitBH" — Fit the bounding box horizontally
+   * - "fitBV" — Fit the bounding box vertically
+   */
+  export type GoToType = "xyz" | "fit" | "fitH" | "fitV" | "fitR" | "fitB" | "fitBH" | "fitBV";
+
+  /**
    * Header and footer types which can be applied to the document sections.
    * **"default"** - a header or footer which can be applied to any default page.
    * **"title"** - a header or footer which is applied to the title page.
@@ -98920,6 +99682,9 @@ declare namespace Pdf {
     /** The value exported when the option is selected. */
     1: string;
   }
+
+  /** The available named action names: */
+  export type NamedActionType = "NextPage" | "PrevPage" | "FirstPage" | "LastPage";
 
   /** Standard numeric format. */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
@@ -98962,6 +99727,12 @@ declare namespace Pdf {
 
   /** The types of elements that can be added to the paragraph structure. */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
+
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
 
   /** An array of points representing a continuous path. */
   export type Path = Point[];
@@ -99142,7 +99913,7 @@ declare namespace Pdf {
   /** Search options used when performing text search operations. */
   export interface SearchProps {
     /** The text to search for. */
-    text: string;
+    text: string | RegExp;
 
     /** Whether the search is case-sensitive. */
     matchCase: boolean;
@@ -99595,8 +100366,16 @@ declare namespace Pdf {
   /** Twentieths of a point (equivalent to 1/1440th of an inch). */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type BulletType = unknown;
+  // Manual overrides (see src/overrides/pdf.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  /**
+   * A paragraph numbering bullet type, referenced by a `word/apiBuilder.js` method also tagged for
+   * Pdf - genuinely declared in `slide/apiBuilder.js`, not one of Pdf's own sources
+   * (`word/apiBuilder.js`, `pdf/apiBuilder.js`, `pdf/plugin-events.js`). Adding all of
+   * `slide/apiBuilder.js` as a Pdf source to resolve this one typedef would pull Slide's entire class
+   * set into the Pdf namespace, so it's a one-line override instead.
+   */
+  export type BulletType = "None" | "ArabicPeriod" | "ArabicParenR" | "RomanUcPeriod" | "RomanLcPeriod" | "AlphaLcParenR" | "AlphaLcPeriod" | "AlphaUcParenR" | "AlphaUcPeriod";
 
   export interface Api {
     /**
@@ -99649,6 +100428,13 @@ declare namespace Pdf {
      * @param sSymbol - The character or symbol which will be used to create the bullet for the paragraph.
      */
     CreateBullet(sSymbol: string): ApiBullet;
+
+    /**
+     * Creates a button field.
+     *
+     * @param rect - widget rect
+     */
+    CreateButtonField(rect: Rect): ApiButtonField;
 
     /**
      * Creates caret annotation.
@@ -99723,6 +100509,13 @@ declare namespace Pdf {
     CreateFreeTextAnnot(rect: Rect): ApiFreeTextAnnotation;
 
     /**
+     * Creates a GoTo action.
+     *
+     * @param zoom - 1 = 100% (used only for goToType = "xyz")
+     */
+    CreateGoToAction(page: number, goToType: GoToType, zoom: number, rect: Rect): ApiGoToAction;
+
+    /**
      * Creates a gradient stop used for different types of gradients.
      *
      * @param color - The color used for the gradient stop.
@@ -99730,6 +100523,14 @@ declare namespace Pdf {
      * @since 9.1.0
      */
     CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop;
+
+    /**
+     * Creates a hide-show forms action.
+     *
+     * @param isHidde - to hide - true, to show - false
+     * @param names - field names
+     */
+    CreateHideShowFormsAction(isHidde: boolean, names: string[]): ApiHideShowFormsAction;
 
     /**
      * Creates highlight annotation.
@@ -99762,6 +100563,9 @@ declare namespace Pdf {
      * @param inkPaths - The ink path list.
      */
     CreateInkAnnot(rect: Rect, inkPaths: PathList): ApiInkAnnotation;
+
+    /** Creates a js action. */
+    CreateJsAction(script: string): ApiJsAction;
 
     /**
      * Creates line annotation.
@@ -99798,6 +100602,9 @@ declare namespace Pdf {
      * @since 9.5.0
      */
     CreateMath(text: string, format?: "unicode" | "latex" | "mathml"): ApiMath;
+
+    /** Creates a named action. */
+    CreateNamedAction(name: NamedActionType): ApiNamedAction;
 
     /** Creates no fill and removes the fill from the element. */
     CreateNoFill(): ApiFill;
@@ -99887,6 +100694,14 @@ declare namespace Pdf {
      */
     CreateRedactAnnot(rect: Rect | Quad[]): ApiRedactAnnotation;
 
+    /**
+     * Creates a reset forms action.
+     *
+     * @param isAllExcept - will all fields be reset except the fields whose names are specified
+     * @param names - field names
+     */
+    CreateResetFormsAction(isAllExcept: boolean, names: string[]): ApiHideShowFormsAction;
+
     /** Creates the empty rich paragraph properties. */
     CreateRichParaPr(): ApiParaPr;
 
@@ -99929,6 +100744,13 @@ declare namespace Pdf {
      *   (theme accent) is used.
      */
     CreateShape(shapeType?: ShapeType, width?: number, height?: number, fill?: ApiFill, stroke?: ApiStroke): ApiShape;
+
+    /**
+     * Creates a signature field.
+     *
+     * @param rect - widget rect
+     */
+    CreateSignatureField(rect: Rect): ApiSignatureField;
 
     /**
      * Creates a solid fill to apply to the object using a selected solid color as the object background.
@@ -100011,6 +100833,9 @@ declare namespace Pdf {
      */
     CreateUnderlineAnnot(rect: Rect | Quad[]): ApiUnderlineAnnotation;
 
+    /** Creates an URI action. */
+    CreateUriAction(uri: string): ApiUriAction;
+
     /**
      * Converts English Metric Units (EMUs) to millimeters.
      *
@@ -100025,6 +100850,14 @@ declare namespace Pdf {
      * @param emu - The number of EMUs to convert to points.
      */
     EmusToPoints(emu: number): number;
+
+    /**
+     * Returns the object by it's internal ID.
+     *
+     * @param id - the object internal ID.
+     * @since 9.4.0
+     */
+    GetByInternalId(id: string): FloatObject | ApiDocumentContent | ApiParagraph | ApiTableRow | ApiTableCell;
 
     /** Creates a text field with the specified text field properties. */
     GetDocument(): ApiDocument;
@@ -100186,6 +101019,125 @@ declare namespace Pdf {
      * @param twips - The number of twips to convert to points.
      */
     TwipsToPoints(twips: number): number;
+  }
+
+  /** Class representing a base an action collection. */
+  export interface ApiActionCollection {
+    /** Gets Calculate action. */
+    GetCalculate(): ApiJsAction;
+
+    /** Gets class type of this object. */
+    GetClassType(): "actionCollection";
+
+    /** Gets Format action. */
+    GetFormat(): ApiJsAction;
+
+    /** Gets Keystroke action. */
+    GetKeystroke(): ApiJsAction;
+
+    /** Gets MouseDown action. */
+    GetMouseDown(): ApiBaseAction;
+
+    /** Gets MouseEnter action. */
+    GetMouseEnter(): ApiBaseAction;
+
+    /** Gets MouseExit action. */
+    GetMouseExit(): ApiBaseAction;
+
+    /** Gets MouseUp action. */
+    GetMouseUp(): ApiBaseAction;
+
+    /** Gets OnBlur action. */
+    GetOnBlur(): ApiBaseAction;
+
+    /** Gets OnFocus action. */
+    GetOnFocus(): ApiBaseAction;
+
+    /** Gets Validate action. */
+    GetValidate(): ApiJsAction;
+
+    /**
+     * Sets the Calculate action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetCalculate(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the Format action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetFormat(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the Keystroke action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetKeystroke(action: ApiJsAction): boolean;
+
+    /**
+     * Sets the MouseDown action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseDown(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseEnter action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseEnter(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseExit action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseExit(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the MouseUp action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetMouseUp(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the OnBlur action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetOnBlur(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the OnFocus action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetOnFocus(action: ApiBaseAction): boolean;
+
+    /**
+     * Sets the Validate action.
+     *
+     * @param action - The action to set, or `null` to remove it.
+     */
+    SetValidate(action: ApiJsAction): boolean;
+  }
+
+  /** Class representing a base pdf action. */
+  export interface ApiBaseAction {
+    /** Returns next action. */
+    GetNext(): ApiBaseAction;
+
+    /**
+     * Sets next action.
+     *
+     * @returns returns next action
+     */
+    SetNext(action: ApiBaseAction): ApiBaseAction;
   }
 
   /** Class representing a base annotation. */
@@ -100451,7 +101403,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a base list field. */
-  export interface ApiBaseListField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiBaseListField extends ApiBaseField {
     /**
      * Adds new option to list options.
      *
@@ -100575,7 +101527,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a base markup annotation. */
-  export interface ApiBaseMarkupAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiBaseMarkupAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -100780,6 +101732,9 @@ declare namespace Pdf {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
+    /** Gets actions collection. */
+    GetActions(): ApiActionCollection;
+
     /** Gets widget background color. */
     GetBackgroundColor(): ApiColor;
 
@@ -100794,6 +101749,9 @@ declare namespace Pdf {
 
     /** Returns a type of the ApiBaseWidget class. */
     GetClassType(): "baseWidget";
+
+    /** Gets parent field. */
+    GetParent(): ApiField;
 
     /** Gets widget position. */
     GetPosition(): Point;
@@ -100896,7 +101854,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a button field. */
-  export interface ApiButtonField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiButtonField extends ApiBaseField {
     /**
      * Adds new widget - visual representation for field
      *
@@ -100962,15 +101920,16 @@ declare namespace Pdf {
     SetRequired(required: boolean): boolean;
 
     /**
-     * Sets field value
+     * Sets image for all button field widgets
      *
-     * @param value - The new value for the field.
+     * @param imageUrl - The URL of the image to set for the button.
+     * @since 9.4.0
      */
-    SetValue(value: string): boolean;
+    SetValue(imageUrl: string): boolean;
   }
 
   /** Class representing a button widget. */
-  export interface ApiButtonWidget extends Omit<ApiBaseWidget, "GetClassType" | "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetBackgroundColor" | "GetBackgroundColor" | "SetTextColor" | "GetTextColor" | "SetTextSize" | "GetTextSize" | "SetAutoFit" | "IsAutoFit" | "Delete"> {
+  export interface ApiButtonWidget extends Omit<ApiBaseWidget, "GetClassType"> {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
@@ -101166,7 +102125,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a caret annotation. */
-  export interface ApiCaretAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiCaretAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiCaretAnnotation class. */
     GetClassType(): "caretAnnot";
 
@@ -101182,7 +102141,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY" | "SetTitle" | "GetTitle"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Sets a style to the current chart by style ID.
      *
@@ -101622,7 +102581,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a checkbox field. */
-  export interface ApiCheckboxField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiCheckboxField extends ApiBaseField {
     /**
      * Adds options to checkbox group.
      *
@@ -101715,7 +102674,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a checkbox field widget. */
-  export interface ApiCheckboxWidget extends Omit<ApiBaseWidget, "GetClassType" | "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetBackgroundColor" | "GetBackgroundColor" | "SetTextColor" | "GetTextColor" | "SetTextSize" | "GetTextSize" | "SetAutoFit" | "IsAutoFit" | "Delete"> {
+  export interface ApiCheckboxWidget extends Omit<ApiBaseWidget, "GetClassType"> {
     /** Removes widget from parent field. */
     Delete(): boolean;
 
@@ -101858,7 +102817,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a circle annotation. */
-  export interface ApiCircleAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiCircleAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -102130,7 +103089,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a combobox field. */
-  export interface ApiComboboxField extends Omit<ApiBaseListField, "AddOption" | "RemoveOption" | "MoveOption" | "GetOption" | "GetOptions" | "SetCommitOnSelChange" | "IsCommitOnSelChange" | "SetValueIndexes" | "GetValueIndexes"> {
+  export interface ApiComboboxField extends ApiBaseListField {
     /**
      * Adds new option to list options.
      *
@@ -102238,6 +103197,7 @@ declare namespace Pdf {
 
     /**
      * Sets text field placeholder.
+     * <note>Makes combobox editable</note>
      *
      * @param sPlaceholder - field placeholder
      */
@@ -102375,6 +103335,13 @@ declare namespace Pdf {
     /** Returns an array of all paragraphs from the current document content. */
     GetAllParagraphs(): ApiParagraph[];
 
+    /**
+     * Gets document calculate fields order
+     *
+     * @returns order of fields names
+     */
+    GetCalculateOrder(): string[];
+
     /** Returns a type of the ApiDocument class. */
     GetClassType(): "document";
 
@@ -102500,6 +103467,13 @@ declare namespace Pdf {
      * @param props - The search options.
      */
     SearchAndRedact(props: SearchProps): ApiRedactAnnotation[];
+
+    /**
+     * Sets document calculate fields order
+     *
+     * @param names - order of fields names
+     */
+    SetCalculateOrder(names: string[]): boolean;
 
     /** Sets document selection */
     SetSelection(selection: DocSelection): boolean;
@@ -102909,7 +103883,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a freeText annotation. */
-  export interface ApiFreeTextAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiFreeTextAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -103244,6 +104218,33 @@ declare namespace Pdf {
     SetTextRect(sLeft: string, sTop: string, sRight: string, sBottom: string): boolean;
   }
 
+  /** Class representing a GoTo action. */
+  export interface ApiGoToAction {
+    /** Returns a type of the ApiGoToAction class. */
+    GetClassType(): "goToAction";
+
+    /** Gets desctination page index */
+    GetPage(): number;
+
+    /** Gets goto destination rect */
+    GetRect(): Rect;
+
+    /** Gets goto type */
+    GetType(): GoToType;
+
+    /** Gets goto destination rect */
+    GetZoom(): Rect;
+
+    /** Sets desctination page index */
+    SetPage(page: number): boolean;
+
+    /** Sets goto destination rect */
+    SetRect(rect: Rect): boolean;
+
+    /** Sets goto type */
+    SetType(type: GoToType): boolean;
+  }
+
   /** Class representing gradient stop. */
   export interface ApiGradientStop {
     /** Returns a type of the ApiGradientStop class. */
@@ -103251,7 +104252,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiGroup class. */
     GetClassType(): "group";
 
@@ -103291,8 +104292,30 @@ declare namespace Pdf {
     SetPosition(posX: number, posY: number): boolean;
   }
 
+  /** Class representing a hide-show action. */
+  export interface ApiHideShowFormsAction {
+    /** Returns a type of the ApiHideShowFormsAction class. */
+    GetClassType(): "hideShowAction";
+
+    /** Gets names of fields to hide */
+    GetNames(): string[];
+
+    /**
+     * Checks if action hide fields
+     *
+     * @returns if false then show fields
+     */
+    IsHide(): boolean;
+
+    /** Sets action hide fields */
+    SetHide(isHide: boolean): boolean;
+
+    /** Sets names of fields to hide */
+    SetNames(names: string[]): boolean;
+  }
+
   /** Class representing a highlight annotation. */
-  export interface ApiHighlightAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiHighlightAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiHighlightAnnotation class. */
     GetClassType(): "highlightAnnot";
 
@@ -103344,7 +104367,7 @@ declare namespace Pdf {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns the type of the ApiImage class. */
     GetClassType(): "image";
 
@@ -103385,7 +104408,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a ink annotation. */
-  export interface ApiInkAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiInkAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -103592,8 +104615,20 @@ declare namespace Pdf {
   export interface ApiInlineLvlSdt {
   }
 
+  /** Class representing a js action. */
+  export interface ApiJsAction {
+    /** Returns a type of the ApiJsAction class. */
+    GetClassType(): "jsAction";
+
+    /** Gets action script */
+    GetScript(): string;
+
+    /** Sets action script. */
+    SetScript(script: string): boolean;
+  }
+
   /** Class representing a line annotation. */
-  export interface ApiLineAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiLineAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -103827,7 +104862,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a link annotation. */
-  export interface ApiLinkAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiLinkAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiLinkAnnotation class. */
     GetClassType(): "linkAnnot";
 
@@ -103843,7 +104878,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a listbox field. */
-  export interface ApiListboxField extends Omit<ApiBaseListField, "AddOption" | "RemoveOption" | "MoveOption" | "GetOption" | "GetOptions" | "SetCommitOnSelChange" | "IsCommitOnSelChange" | "SetValueIndexes" | "GetValueIndexes"> {
+  export interface ApiListboxField extends ApiBaseListField {
     /**
      * Adds new option to list options.
      *
@@ -103924,6 +104959,18 @@ declare namespace Pdf {
     GetText(format?: "unicode" | "latex"): string;
   }
 
+  /** Class representing a named action. */
+  export interface ApiNamedAction {
+    /** Returns a type of the ApiNamedAction class. */
+    GetClassType(): "namedAction";
+
+    /** Gets a name of action. */
+    GetName(): NamedActionType;
+
+    /** Sets a name of action. */
+    SetName(name: NamedActionType): boolean;
+  }
+
   /** Class representing the numbering properties. */
   export interface ApiNumbering {
   }
@@ -103933,7 +104980,7 @@ declare namespace Pdf {
   }
 
   /** Class representing an Ole object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiOleObject extends ApiDrawing {
     /** Returns the type of the ApiDrawing class. */
     GetParentPage(): ApiPage;
 
@@ -104205,7 +105252,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -104891,7 +105938,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a polyline annotation. */
-  export interface ApiPolyLineAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiPolyLineAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -105115,7 +106162,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a polygon annotation. */
-  export interface ApiPolygonAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiPolygonAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -105331,7 +106378,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a radiobutton field. */
-  export interface ApiRadiobuttonField extends Omit<ApiCheckboxField, "GetClassType" | "SetToggleToOff" | "IsToggleToOff" | "AddOption"> {
+  export interface ApiRadiobuttonField extends Omit<ApiCheckboxField, "GetClassType"> {
     /**
      * Adds options to checkbox group.
      *
@@ -105372,7 +106419,7 @@ declare namespace Pdf {
   export interface ApiRange {
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -105614,7 +106661,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a redact annotation. */
-  export interface ApiRedactAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiRedactAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiRedactAnnotation class. */
     GetClassType(): "redactAnnot";
 
@@ -105627,6 +106674,24 @@ declare namespace Pdf {
      * @param quads - An array of quadrilaterals defining the highlighted regions.
      */
     SetQuads(quads: Quad[]): boolean;
+  }
+
+  /** Class representing a reset form action. */
+  export interface ApiResetFormsAction {
+    /** Returns a type of the ApiResetFormsAction class. */
+    GetClassType(): "resetFormsAction";
+
+    /** Gets names of fields to reset */
+    GetNames(): string[];
+
+    /** Will all fields be reset except the fields whose names are specified */
+    IsAllExcept(): boolean;
+
+    /** Sets all fields be reset except the fields whose names are specified */
+    SetAllExcept(isAllExcept: boolean): boolean;
+
+    /** Sets names of fields to reset */
+    SetNames(names: string[]): boolean;
   }
 
   /** Class representing a rich content. */
@@ -105783,7 +106848,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /** Adds a line break to the current run position and starts the next element from a new line. */
     AddLineBreak(): boolean;
 
@@ -106094,7 +107159,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY" | "SetFill" | "GetFill" | "SetLine" | "GetLine"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns the type of the ApiShape class. */
     GetClassType(): "shape";
 
@@ -106210,12 +107275,34 @@ declare namespace Pdf {
     SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean;
   }
 
+  /**
+   * Class representing a signature field.
+   *
+   * @since 9.5.0
+   */
+  export interface ApiSignatureField extends Omit<ApiButtonField, "GetClassType"> {
+    /**
+     * Returns a type of the ApiSignatureField class.
+     *
+     * @since 9.5.0
+     */
+    GetClassType(): "signatureField";
+
+    /**
+     * Sets image for all button field widgets
+     *
+     * @param imageUrl - The URL of the image to set for the button.
+     * @since 9.4.0
+     */
+    SetValue(imageUrl: string): boolean;
+  }
+
   /** Class representing a document picture form. */
   export interface ApiSignatureForm extends ApiFormBase {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /** Returns a type of the ApiSmartArt class. */
     GetClassType(): "smartArt";
 
@@ -106256,7 +107343,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a square annotation. */
-  export interface ApiSquareAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiSquareAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -106460,7 +107547,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a stamp annotation. */
-  export interface ApiStampAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiStampAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -106677,7 +107764,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a strikeout annotation. */
-  export interface ApiStrikeoutAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiStrikeoutAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiStrikeoutAnnotation class. */
     GetClassType(): "strikeoutAnnot";
 
@@ -106750,7 +107837,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "GetParentPage" | "SetSize" | "SetPosition" | "SetPosX" | "GetPosX" | "SetPosY" | "GetPosY"> {
+  export interface ApiTable extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Adds a new column to the end of the current table.
      *
@@ -107329,7 +108416,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a text annotation. */
-  export interface ApiTextAnnotation extends Omit<ApiBaseAnnotation, "SetRect" | "GetRect" | "SetPosition" | "GetPosition" | "SetBorderColor" | "GetBorderColor" | "SetFillColor" | "GetFillColor" | "SetBorderWidth" | "GetBorderWidth" | "SetBorderStyle" | "GetBorderStyle" | "SetAuthorName" | "GetAuthorName" | "SetContents" | "GetContents" | "SetCreationDate" | "GetCreationDate" | "SetModDate" | "GetModDate" | "SetUniqueName" | "GetUniqueName" | "SetOpacity" | "GetOpacity" | "SetSubject" | "GetSubject" | "SetDisplay" | "GetDisplay" | "SetDashPattern" | "GetDashPattern" | "SetBorderEffectStyle" | "GetBorderEffectStyle" | "SetBorderEffectIntensity" | "GetBorderEffectIntensity" | "AddReply" | "GetReplies" | "Delete"> {
+  export interface ApiTextAnnotation extends ApiBaseAnnotation {
     /**
      * Adds reply on this annot.
      *
@@ -107533,7 +108620,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a text field. */
-  export interface ApiTextField extends Omit<ApiBaseField, "SetFullName" | "GetFullName" | "SetPartialName" | "GetPartialName" | "SetRequired" | "IsRequired" | "SetReadOnly" | "IsReadOnly" | "SetValue" | "GetValue" | "AddWidget" | "GetAllWidgets" | "Delete"> {
+  export interface ApiTextField extends ApiBaseField {
     /**
      * Adds new widget - visual representation for field
      *
@@ -107983,7 +109070,7 @@ declare namespace Pdf {
   }
 
   /** Class representing a underline annotation. */
-  export interface ApiUnderlineAnnotation extends Omit<ApiBaseMarkupAnnotation, "SetQuads" | "GetQuads"> {
+  export interface ApiUnderlineAnnotation extends ApiBaseMarkupAnnotation {
     /** Returns a type of the ApiUnderlineAnnotation class. */
     GetClassType(): "underlineAnnot";
 
@@ -108008,6 +109095,18 @@ declare namespace Pdf {
   export interface ApiUnsupported {
     /** Returns a type of the ApiUnsupported class. */
     GetClassType(): "unsupported";
+  }
+
+  /** Class representing a uri action. */
+  export interface ApiUriAction {
+    /** Returns a type of the ApiUriAction class. */
+    GetClassType(): "uriAction";
+
+    /** Gets uri string */
+    GetUri(): string;
+
+    /** Sets uri to action */
+    SetUri(uri: string): boolean;
   }
 
   /** Class representing the settings which are used to create a watermark. */

@@ -387,6 +387,12 @@ export namespace Slide {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -1328,7 +1334,8 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/
      */
-    CreateChart(sType?: ChartType, aSeries?: number[][], aSeriesNames?: number[] | string[], aCatNames?: number[] | string[], nWidth?: number, nHeight?: number, nStyleIndex?: number, aNumFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(sType: ChartType, aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: number, nHeight: number, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a new custom geometry.
@@ -2727,7 +2734,7 @@ export namespace Slide {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "SetTitle" | "GetTitle" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Sets a style to the current chart by style ID.
      *
@@ -5750,7 +5757,7 @@ export namespace Slide {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetAllParagraphs" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "AddText"> {
+  export interface ApiDocument extends ApiDocumentContent {
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the document
      * content.
@@ -7016,7 +7023,7 @@ export namespace Slide {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -7276,7 +7283,7 @@ export namespace Slide {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -8088,7 +8095,8 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/AddLayout/
      */
-    AddLayout(nPos?: number, oLayout?: ApiLayout): boolean;
+    AddLayout(oLayout: ApiLayout): boolean;
+    AddLayout(nPos: number, oLayout: ApiLayout): boolean;
 
     /**
      * Adds an object (image, shape or chart) to the current slide master.
@@ -8827,7 +8835,7 @@ export namespace Slide {
   }
 
   /** Class representing an OLE object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -9749,7 +9757,7 @@ export namespace Slide {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetTabs" | "GetTabs" | "SetBullet" | "SetOutlineLvl" | "GetOutlineLvl"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType"> {
     /**
      * Adds an element to the current paragraph.
      *
@@ -11435,7 +11443,8 @@ export namespace Slide {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddMaster/
      */
-    AddMaster(pos?: number, apiMaster?: ApiMaster): boolean;
+    AddMaster(apiMaster: ApiMaster): boolean;
+    AddMaster(pos: number, apiMaster: ApiMaster): boolean;
 
     /**
      * Adds a math equation to the current presentation.
@@ -12264,7 +12273,7 @@ export namespace Slide {
   export interface ApiRange {
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -12506,7 +12515,7 @@ export namespace Slide {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetFill" | "GetFill" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a line break to the current run position and starts the next element from a new line.
      *
@@ -13887,7 +13896,7 @@ export namespace Slide {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetFill" | "GetLine" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -15151,7 +15160,7 @@ export namespace Slide {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
      *
@@ -15356,7 +15365,7 @@ export namespace Slide {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "SetSize" | "SetPosition" | "GetParent" | "GetParentSlide" | "GetParentLayout" | "GetParentMaster" | "SetPlaceholder" | "GetPlaceholder" | "ToJSON" | "GetPosX" | "GetPosY" | "SetPosX" | "SetPosY" | "ReplacePlaceholder" | "GetInternalId" | "SetHyperlink" | "GetHyperlink" | "GetTextRange" | "IsTextRange" | "CreateTextRange">, Omit<ApiTablePr, "GetClassType" | "SetStyleColBandSize" | "SetStyleRowBandSize" | "SetJc" | "SetShd" | "SetTableBorderTop" | "SetTableBorderBottom" | "SetTableBorderLeft" | "SetTableBorderRight" | "SetTableBorderInsideH" | "SetTableBorderInsideV" | "SetTableBorderAll" | "SetTableCellMarginBottom" | "SetTableCellMarginLeft" | "SetTableCellMarginRight" | "SetTableCellMarginTop" | "SetCellSpacing" | "SetTableInd" | "SetWidth" | "SetTableLayout" | "SetTableTitle" | "GetTableTitle" | "SetTableDescription" | "GetTableDescription" | "ToJSON"> {
+  export interface ApiTable extends Omit<ApiDrawing, "GetClassType" | "ToJSON">, Omit<ApiTablePr, "GetClassType" | "SetShd" | "ToJSON"> {
     /**
      * Adds a new column to the end of the current table.
      *
@@ -15395,7 +15404,8 @@ export namespace Slide {
      * @param isBefore - Adds the new columns before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable | null;
+    AddColumns(nCount: number): ApiTable | null;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
      * Adds a paragraph or a table or a blockLvl content control using its position in the cell.
@@ -15445,7 +15455,8 @@ export namespace Slide {
      * @param isBefore - Adds the new rows before (true) or after (false) the specified cell.
      * @since 9.5.0
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable | null;
+    AddRows(nCount: number): ApiTable | null;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable | null;
 
     /**
      * Creates a text body for the drawing if it does not already exist and returns its full text range.
@@ -18104,12 +18115,9 @@ export namespace Slide {
     /**
      * Selects the text range in the editor.
      *
-     * @param update - Specifies whether the previous selection is removed, the range becomes the current editor
-     *   position and the selection state is updated (true) or the selection is set without changing the
-     *   editor state (false).
      * @since 9.5.0
      */
-    Select(update?: boolean): boolean;
+    Select(): boolean;
 
     /**
      * Sets bold formatting for the contents of the current text range.

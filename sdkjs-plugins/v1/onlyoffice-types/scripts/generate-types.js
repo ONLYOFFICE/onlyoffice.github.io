@@ -242,7 +242,10 @@ function parseTypeName(n) {
   if (n === 'bool') return 'boolean';
   if (n === 'Array' || n === 'array') return 'unknown[]';
   if (n === 'Object') return 'object';
-  if (n === 'any') return 'any';
+  // Same reasoning as `*` just above - `@param {any}` is JSDoc's other spelling of "unconstrained",
+  // and passing it through as literal `any` would be the one place left that could reintroduce it
+  // into otherwise `any`-free output.
+  if (n === 'any') return 'unknown';
   if (n === 'function' || n === 'Function') return '(...args: unknown[]) => unknown';
   if (n === 'byte') return 'number';
   if (n === 'twips') return 'number';
@@ -313,6 +316,38 @@ function classDocsUrl(see) {
   return parsed ? `${DOCS_BASE}/${parsed.section}/${parsed.className}/` : '';
 }
 
+// A single flattened signature ("every param from the first optional one onward is optional") is
+// correct whenever a method's own per-param optionality is monotonic (once optional, stays
+// optional) - the common case, and the only shape a plain `extends`-free TS signature can express
+// anyway. Real sdkjs methods occasionally break that: `ApiDrawing#SetRelativeHeight(relativeFrom?,
+// percent)` takes an optional leading param followed by a required one, so real calls come in two
+// shapes - `SetRelativeHeight(50)` and `SetRelativeHeight(relativeFromH, 50)` - that the flattened
+// `(relativeFrom?, percent?)` signature can't distinguish (it wrongly also accepts zero args).
+// Exactly one such "optional run closed by a later required param" is a well-defined, common
+// pattern (a skippable leading/middle argument) with an unambiguous two-overload fix: one signature
+// with just the required params, one with everything (the previously-optional run pinned back to
+// required, since this specific call shape needs it). Two or more such gaps (e.g. two independent
+// optional flag+value pairs) don't have an unambiguous decomposition into two overloads without
+// knowing which combinations the implementation actually accepts - those keep the single flattened
+// signature rather than risk generating an incomplete or wrong overload set.
+function buildOverloadParams(params, ownOptional) {
+  let gapRegions = 0;
+  let inOptionalRun = false;
+  for (const isOpt of ownOptional) {
+    if (isOpt) inOptionalRun = true;
+    else if (inOptionalRun) { gapRegions += 1; inOptionalRun = false; }
+  }
+  if (gapRegions !== 1) return null;
+
+  const lastRequiredIndex = ownOptional.reduce((last, isOpt, i) => (isOpt ? last : i), -1);
+  // Params retain the flattened/cascaded `optional` value from `params` (true for a required param
+  // that merely comes after an earlier optional one) - both overloads below need to override it
+  // explicitly rather than trust that value, which is exactly the ambiguity being resolved here.
+  const requiredOnly = params.filter((_, i) => !ownOptional[i]).map((p) => ({ ...p, optional: false }));
+  const anchored = params.map((p, i) => ({ ...p, optional: i > lastRequiredIndex && ownOptional[i] }));
+  return [requiredOnly, anchored];
+}
+
 function extractClasses(data) {
   const classes = {};
 
@@ -354,6 +389,7 @@ function extractClasses(data) {
 
         const seenNames = new Set();
         let hasOptional = false;
+        const ownOptional = [];
         const params = item.params ? item.params.map(p => {
           let name = p.name.replace(/[^a-zA-Z0-9_$]/g, '_');
           if (seenNames.has(name)) {
@@ -368,7 +404,9 @@ function extractClasses(data) {
           // "@param {?number} nIndex - ... If not specified, the slide will be added to the end"),
           // even though strict JSDoc semantics would call that "nullable", not "optional".
           const isNullable = p.type?.names?.some(n => typeof n === 'string' && n.startsWith('?'));
-          if (p.optional || p.defaultvalue !== undefined || acceptsUndefined || isNullable) hasOptional = true;
+          const isOwnOptional = Boolean(p.optional || p.defaultvalue !== undefined || acceptsUndefined || isNullable);
+          ownOptional.push(isOwnOptional);
+          if (isOwnOptional) hasOptional = true;
           const names = acceptsUndefined ? p.type.names.filter(type => type !== 'undefined') : p.type?.names;
           return {
             name,
@@ -385,6 +423,7 @@ function extractClasses(data) {
 
         classes[className].methods[item.name] = {
           params,
+          overloadParams: buildOverloadParams(params, ownOptional),
           returnType,
           description: item.description || '',
           returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
@@ -400,7 +439,10 @@ function extractClasses(data) {
       const className = item.memberof.replace('#', '');
       if (classes[className]) {
         classes[className].properties[item.name] = {
-          type: item.type ? parseType(item.type) : 'any',
+          // `unknown`, not `any`: a property with no `@type` tag at all is exactly as unknown as a
+          // documented `{*}`/`{any}` one (see parseTypeName) - defaulting to `any` here would be a
+          // silent, untested way for real `any` to reappear in otherwise `any`-free output.
+          type: item.type ? parseType(item.type) : 'unknown',
           description: item.description || '',
           optional: item.optional || false
         };
@@ -618,6 +660,47 @@ function generateEventArgsType(events) {
   return output;
 }
 
+// A type-only signature (param types/optionality + return type, no param names) so two
+// documentations of "the same" method that merely spell a parameter differently
+// (`nIndex` vs `index`) don't get flagged as a conflict - only an actual type difference does.
+function methodTypeSignature(method) {
+  const params = method.params.map((p) => `${p.optional ? '?' : ''}${p.type}`).join(', ');
+  return `(${params}) => ${method.returnType}`;
+}
+
+function propertyTypeSignature(prop) {
+  return `${prop.optional ? '?' : ''}${prop.type}`;
+}
+
+// sdkjs's own JSDoc frequently re-documents an inherited member under the subclass's own
+// `@memberof` (e.g. ApiChart's doc page lists `GetContent`/`SetSize`/... alongside its own
+// `GetClassType`, even though only `GetClassType` actually behaves differently from
+// ApiDrawing's) - so a name appearing in both `classData` and `base` is not by itself evidence
+// of a real override. Compare the two declared signatures and only treat it as conflicting (and
+// worth `Omit`-ting from the `extends` clause) when they actually differ.
+function findConflictingMembers(classData, base) {
+  const conflicts = [];
+  const ownMemberNames = new Set([...Object.keys(classData.methods), ...Object.keys(classData.properties)]);
+  for (const name of ownMemberNames) {
+    const baseMethod = base.methods[name];
+    const ownMethod = classData.methods[name];
+    if (baseMethod && ownMethod) {
+      if (methodTypeSignature(baseMethod) !== methodTypeSignature(ownMethod)) conflicts.push(name);
+      continue;
+    }
+    const baseProp = base.properties[name];
+    const ownProp = classData.properties[name];
+    if (baseProp && ownProp) {
+      if (propertyTypeSignature(baseProp) !== propertyTypeSignature(ownProp)) conflicts.push(name);
+      continue;
+    }
+    // Same name, but a method on one side and a plain property on the other - always a real
+    // conflict (a callable can't also be assignable as a data property of the same name).
+    if ((baseMethod && ownProp) || (baseProp && ownMethod)) conflicts.push(name);
+  }
+  return conflicts;
+}
+
 function generateInterface(className, classData, allClasses) {
   let output = renderJsDoc({
     description: classData.description,
@@ -626,23 +709,17 @@ function generateInterface(className, classData, allClasses) {
     docsUrl: classData.docsUrl,
   }, '');
 
-  const ownMemberNames = new Set([
-    ...Object.keys(classData.methods),
-    ...Object.keys(classData.properties),
-  ]);
   const extendsList = (classData.extends || []).map((baseClassName) => {
     const base = allClasses[baseClassName];
     if (!base) return baseClassName;
-    const overriddenNames = [
-      ...Object.keys(base.methods),
-      ...Object.keys(base.properties),
-    ].filter((name) => ownMemberNames.has(name));
     // A subclass re-declaring a base member with an incompatible type (almost always
     // GetClassType(): "someMoreSpecificLiteral" vs the base's own GetClassType(): "baseLiteral")
-    // makes a plain `extends BaseClass` fail with "incorrectly extends" - Omit the member(s) the
-    // subclass already redeclares itself, since its own declaration (below) already covers them.
-    return overriddenNames.length > 0
-      ? `Omit<${baseClassName}, ${overriddenNames.map((n) => `"${n}"`).join(' | ')}>`
+    // makes a plain `extends BaseClass` fail with "incorrectly extends" - Omit only the member(s)
+    // that are genuinely incompatible, since its own declaration (below) already covers them; a
+    // same-signature redeclaration needs no Omit at all and can extend the base class directly.
+    const conflicts = findConflictingMembers(classData, base);
+    return conflicts.length > 0
+      ? `Omit<${baseClassName}, ${conflicts.map((n) => `"${n}"`).join(' | ')}>`
       : baseClassName;
   });
   const extendsClause = extendsList.length > 0 ? ` extends ${extendsList.join(', ')}` : '';
@@ -665,15 +742,22 @@ function generateInterface(className, classData, allClasses) {
   const methodNames = Object.keys(classData.methods).sort();
   if (propertyNames.length > 0 && methodNames.length > 0) members.push({ doc: '', code: '\n' });
 
+  const renderParams = (params) => params
+    .map(p => p.optional ? `${p.name}?: ${p.type}` : `${p.name}: ${p.type}`)
+    .join(', ');
+
   for (const methodName of methodNames) {
     const method = classData.methods[methodName];
-    const params = method.params
-      .map(p => p.optional ? `${p.name}?: ${p.type}` : `${p.name}: ${p.type}`)
-      .join(', ');
+    // A real, unambiguous overload pair (see buildOverloadParams) - two call signatures, one doc
+    // comment attached to the first the way TS overloads normally read.
+    const signatures = method.overloadParams || [method.params];
+    const code = signatures
+      .map((params) => `  ${methodName}(${renderParams(params)}): ${method.returnType};\n`)
+      .join('');
 
     members.push({
       doc: renderJsDoc(method, '  '),
-      code: `  ${methodName}(${params}): ${method.returnType};\n`,
+      code,
     });
   }
 
@@ -702,7 +786,7 @@ function generateTypedef(name, typedefData) {
     });
     output += '}\n';
   } else {
-    output += `export type ${name} = ${typedefData.type || 'any'};\n`;
+    output += `export type ${name} = ${typedefData.type || 'unknown'};\n`;
   }
   return output;
 }
@@ -847,6 +931,60 @@ function collectReferencedApiTypes(classes, typedefs, events) {
   return refs;
 }
 
+const OVERRIDES_DIR = path.join(PACKAGE_ROOT, 'src', 'overrides');
+
+// Splits a src/overrides/<editor>.ts file into per-name blocks (its `export interface X {...}` /
+// `export type X = ...;` plus any immediately preceding `/** ... */` doc comment), the same way
+// generate-ambient-bundle.js's dedupeTopLevelDeclarations walks generated output - reused here for
+// the same reason: a name-keyed block is easy to splice in or compare against a real definition.
+function parseOverrideBlocks(text) {
+  const lines = text.split('\n');
+  const declRe = /^export\s+(?:interface|type)\s+([A-Za-z_$][A-Za-z0-9_$]*)\b/;
+  const blocks = {};
+  let i = 0;
+  while (i < lines.length) {
+    const match = lines[i].match(declRe);
+    if (!match) { i += 1; continue; }
+
+    let start = i;
+    let j = i - 1;
+    while (j >= 0 && lines[j].trim() === '') j -= 1;
+    if (j >= 0 && /^\s*\*\/\s*$/.test(lines[j])) {
+      let k = j;
+      while (k >= 0 && !/^\s*\/\*\*/.test(lines[k])) k -= 1;
+      if (k >= 0) start = k;
+    }
+
+    let depth = 0;
+    let sawBrace = false;
+    let end = i;
+    for (; end < lines.length; end += 1) {
+      for (const ch of lines[end]) {
+        if (ch === '{') { depth += 1; sawBrace = true; }
+        else if (ch === '}') depth -= 1;
+      }
+      const closed = sawBrace ? depth === 0 : /;\s*$/.test(lines[end]);
+      if (closed) { end += 1; break; }
+    }
+
+    blocks[match[1]] = lines.slice(start, end).join('\n');
+    i = end;
+  }
+  return blocks;
+}
+
+// A handful of classes/typedefs sdkjs documents fully but that this package can't reach from a
+// plain sdkjs checkout (the individual source file only exists in ONLYOFFICE's prebuilt deploy
+// bundle, or the reference is a plain naming mistake in sdkjs's own JSDoc) - see
+// src/overrides/word.ts for the full rationale. Loaded once per editor and spliced into the
+// generated output in place of a blind `export type X = unknown;` stub, the same pattern
+// DefinitelyTyped uses for undocumented corners of a real-world API.
+function loadOverrides(typeName) {
+  const overridePath = path.join(OVERRIDES_DIR, `${typeName}.ts`);
+  if (!fs.existsSync(overridePath)) return {};
+  return parseOverrideBlocks(fs.readFileSync(overridePath, 'utf8'));
+}
+
 function generateDtsFile(data, typeName, namespaceName, legacy) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let body = '';
@@ -867,7 +1005,37 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
 
   const definedNames = new Set([...classNames, ...typedefNames]);
   const referenced = collectReferencedApiTypes(classes, typedefs, events);
-  const stubs = [...referenced].filter(t => !definedNames.has(t)).sort();
+
+  const overrides = loadOverrides(typeName);
+  const shadowedOverrides = Object.keys(overrides).filter((name) => definedNames.has(name));
+  if (shadowedOverrides.length > 0) {
+    console.warn(`[${namespaceName}] override(s) in src/overrides/${typeName}.ts are now resolved from real sdkjs sources too - remove from the override file: ${shadowedOverrides.join(', ')}`);
+  }
+  const activeOverrides = Object.fromEntries(Object.entries(overrides).filter(([name]) => !definedNames.has(name)));
+  // An override's own body can reference further names (e.g. ApiTableOfContents.SetPr's `TocPr`
+  // param) that need the same "is this resolved anywhere?" treatment as anything the real sdkjs
+  // doclets reference - otherwise those would slip through unstubbed instead of falling back to
+  // `unknown` like every other unresolved reference does. Unlike collectReferencedApiTypes's other
+  // callers (always passed an isolated type string), this runs on full method-declaration lines, so
+  // two things collectCustomTypeRefs doesn't otherwise need to guard against must be stripped first:
+  // `/** prose */` doc comments (capitalized English words read as type references) and method names
+  // immediately followed by `(` (a declaration, not a reference).
+  for (const block of Object.values(activeOverrides)) {
+    const withoutComments = block.replace(/\/\*\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const typesOnly = withoutComments.replace(/\b[A-Za-z_$][A-Za-z0-9_$]*(?=\s*\()/g, '');
+    collectCustomTypeRefs(typesOnly).forEach((t) => referenced.add(t));
+  }
+
+  const activeOverrideNames = Object.keys(activeOverrides).sort();
+  if (activeOverrideNames.length > 0) {
+    body += `// Manual overrides (see src/overrides/${typeName}.ts) for types sdkjs's own JSDoc doesn't\n// resolve from this package's usual sources\n`;
+    for (const name of activeOverrideNames) {
+      body += `${activeOverrides[name]}\n`;
+    }
+    body += '\n';
+  }
+
+  const stubs = [...referenced].filter((t) => !definedNames.has(t) && !activeOverrides[t]).sort();
   if (stubs.length > 0) {
     body += `// Cross-file type stubs\n`;
     for (const stub of stubs) {

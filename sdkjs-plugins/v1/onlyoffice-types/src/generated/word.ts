@@ -442,6 +442,12 @@ export namespace Word {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -1260,11 +1266,100 @@ export namespace Word {
    */
   export type twips = number;
 
-  // Cross-file type stubs
-  export type ApiTableOfContents = unknown;
-  export type ApiTableOfFigures = unknown;
-  export type TextAnnotation = unknown;
-  export type TextAnnotationRange = unknown;
+  // Manual overrides (see src/overrides/word.ts) for types sdkjs's own JSDoc doesn't
+  // resolve from this package's usual sources
+  export interface ApiTableOfContents {
+    /** Returns a type of the ApiTableOfContents class. */
+    GetClassType(): "tableOfContents";
+    /** Updates the table of contents. */
+    Update(bOnlyPageNumbers?: boolean): boolean;
+    /** Removes the table of contents from the document. */
+    Delete(): boolean;
+    /** Returns the document that contains the table of contents. */
+    GetParent(): ApiDocument | null;
+    /** Returns a range that covers the entire table of contents. */
+    GetRange(): ApiRange | null;
+    /** Returns whether page numbers are shown in the table of contents. */
+    GetIncludePageNumbers(): boolean;
+    /** Specifies whether page numbers are shown in the table of contents. */
+    SetIncludePageNumbers(isInclude: boolean): boolean;
+    /** Returns whether page numbers are right-aligned in the table of contents. */
+    GetRightAlignPageNumbers(): boolean;
+    /** Specifies whether page numbers are right-aligned in the table of contents. */
+    SetRightAlignPageNumbers(isRightAlign: boolean): boolean;
+    /** Returns whether entries are formatted as hyperlinks. */
+    GetUseHyperlinks(): boolean;
+    /** Specifies whether entries are formatted as hyperlinks. */
+    SetUseHyperlinks(isUseHyperlinks: boolean): boolean;
+    /** Returns the highest (outermost) heading level included in the table of contents. */
+    GetUpperHeadingLevel(): number;
+    /** Sets the highest (outermost) heading level included in the table of contents. */
+    SetUpperHeadingLevel(nLevel: number): boolean;
+    /** Returns the lowest (innermost) heading level included in the table of contents. */
+    GetLowerHeadingLevel(): number;
+    /** Sets the lowest (innermost) heading level included in the table of contents. */
+    SetLowerHeadingLevel(nLevel: number): boolean;
+    /** Applies the specified properties to the table of contents and rebuilds it. */
+    SetPr(oTocPr: TocPr): boolean;
+  }
+  export interface ApiTableOfFigures {
+    /** Returns a type of the ApiTableOfFigures class. */
+    GetClassType(): "tableOfFigures";
+    /** Updates the table of figures. */
+    Update(bOnlyPageNumbers?: boolean): boolean;
+    /** Removes the table of figures from the document. */
+    Delete(): boolean;
+    /** Returns the document that contains the table of figures. */
+    GetParent(): ApiDocument | null;
+    /** Returns a range that covers the entire table of figures. */
+    GetRange(): ApiRange | null;
+    /** Returns whether page numbers are shown in the table of figures. */
+    GetIncludePageNumbers(): boolean;
+    /** Specifies whether page numbers are shown in the table of figures. */
+    SetIncludePageNumbers(isInclude: boolean): boolean;
+    /** Returns whether page numbers are right-aligned in the table of figures. */
+    GetRightAlignPageNumbers(): boolean;
+    /** Specifies whether page numbers are right-aligned in the table of figures. */
+    SetRightAlignPageNumbers(isRightAlign: boolean): boolean;
+    /** Returns whether entries are formatted as hyperlinks. */
+    GetUseHyperlinks(): boolean;
+    /** Specifies whether entries are formatted as hyperlinks. */
+    SetUseHyperlinks(isUseHyperlinks: boolean): boolean;
+    /** Returns the caption label that the table of figures is built from (for example, "Figure"). */
+    GetCaption(): string | null;
+    /** Sets the caption label that the table of figures is built from (for example, "Figure"). */
+    SetCaption(sCaption: string): boolean;
+    /** Returns whether the caption label and number are included in the table of figures entries. */
+    GetIncludeLabel(): boolean;
+    /** Specifies whether the caption label and number are included in the table of figures entries. */
+    SetIncludeLabel(isInclude: boolean): boolean;
+    /** Applies the specified properties to the table of figures and rebuilds it. */
+    SetPr(oTofPr: TofPr): boolean;
+  }
+  /**
+   * A grammar/spellcheck-style annotation range attached to a paragraph - the payload of
+   * `onBlurAnnotation`/`onFocusAnnotation`/`onClickAnnotation`. Kept in sync by hand with the
+   * identical shape `scripts/generate-plugin-methods.js` derives independently for the same concept
+   * from a different sdkjs source (word/api_plugins.js) - see src/generated/word-methods.ts.
+   */
+  export interface TextAnnotation {
+    /** ID of the paragraph containing the annotation. */
+    paragraphId: string;
+    /** ID of the annotation range. */
+    rangeId: string;
+    /** Annotation type (e.g., `"grammar"`). */
+    name?: string;
+  }
+  export interface TextAnnotationRange {
+    /** Unique identifier for the range. */
+    id: string;
+    /** Starting index of the text range. */
+    start: number;
+    /** Length of the text range. */
+    length: number;
+    /** Annotation type (e.g., `"grammar"`). */
+    name?: string;
+  }
 
   /** Base class */
   export interface Api {
@@ -1456,7 +1551,8 @@ export namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateChart/
      */
-    CreateChart(chartType?: ChartType, series?: number[][], seriesNames?: number[] | string[], catNames?: number[] | string[], width?: number, height?: number, styleIndex?: number, numFormats?: NumFormat[] | string[]): ApiChart;
+    CreateChart(series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
+    CreateChart(chartType: ChartType, series: number[][], seriesNames: number[] | string[], catNames: number[] | string[], width: number, height: number, styleIndex: number, numFormats: NumFormat[] | string[]): ApiChart;
 
     /**
      * Creates a checkbox content control.
@@ -2946,6 +3042,15 @@ export namespace Word {
     GetLock(): SdtLock;
 
     /**
+     * Returns the document content that contains the current content control.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
+
+    /**
      * Returns a content control that contains the current content control.
      *
      * @returns returns null if parent content control doesn't exist.
@@ -3537,7 +3642,7 @@ export namespace Word {
   }
 
   /** Class representing a chart. */
-  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiChart extends Omit<ApiDrawing, "GetClassType" | "SetTitle"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -4759,7 +4864,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -4768,7 +4874,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -5458,7 +5565,7 @@ export namespace Word {
   }
 
   /** Class representing a document checkbox / radio button. */
-  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -5616,11 +5723,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the radio group key if the current checkbox is a radio button.
@@ -6249,7 +6373,7 @@ export namespace Word {
   }
 
   /** Class representing a document combo box / dropdown list. */
-  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -6410,11 +6534,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -7503,7 +7644,7 @@ export namespace Word {
   }
 
   /** Class representing a complex field. */
-  export interface ApiComplexForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
@@ -7654,11 +7795,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -8979,7 +9137,7 @@ export namespace Word {
   }
 
   /** Class representing a document date field. */
-  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -9167,11 +9325,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -9680,7 +9855,7 @@ export namespace Word {
   }
 
   /** Class representing a document. */
-  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "GetInternalId" | "GetElementsCount" | "GetElement" | "AddElement" | "Push" | "RemoveAllElements" | "RemoveElement" | "GetRange" | "ToJSON" | "GetContent" | "GetAllDrawingObjects" | "GetAllShapes" | "GetAllImages" | "GetAllCharts" | "GetAllOleObjects" | "GetAllParagraphs" | "GetAllTables" | "GetText" | "SetText" | "GetCurrentParagraph" | "GetCurrentRun" | "GetCurrentContentControl" | "IsFootnote" | "IsEndnote" | "SelectNoteReference" | "MoveCursorToNoteReference" | "AddParagraph" | "AddText"> {
+  export interface ApiDocument extends Omit<ApiDocumentContent, "GetClassType" | "ToJSON"> {
     /**
      * Accepts all changes made in review mode.
      *
@@ -11062,6 +11237,15 @@ export namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElement/
      */
     GetElement(nPos: number): DocumentElement;
+
+    /**
+     * Returns the position (index) of the specified element within the current document content.
+     *
+     * @param element - The document element (paragraph, table or block content control) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current document content.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: DocumentElement): number;
 
     /**
      * Returns a number of elements in the current document.
@@ -12985,6 +13169,15 @@ export namespace Word {
     GetElement(nPos: number): DocumentElement;
 
     /**
+     * Returns the position (index) of the specified element within the current document content.
+     *
+     * @param element - The document element (paragraph, table or block content control) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current document content.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: DocumentElement): number;
+
+    /**
      * Returns a number of elements in the current document.
      *
      * @example
@@ -14077,7 +14270,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -14086,7 +14280,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -14577,11 +14772,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -15144,7 +15356,7 @@ export namespace Word {
   }
 
   /** Class representing a group of drawings. */
-  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiGroup extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -15527,7 +15739,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -15536,7 +15749,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -15788,6 +16002,23 @@ export namespace Word {
     GetLinkedText(): string;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current hyperlink.
+     *
+     * @returns returns null if the hyperlink has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
+     * Returns the position (index) of the current hyperlink within its parent element.
+     *
+     * @returns returns -1 if the hyperlink has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
+
+    /**
      * Returns a Range object that represents the document part contained in the specified hyperlink.
      *
      * @param Start - Start position index in the current element.
@@ -15935,7 +16166,7 @@ export namespace Word {
   }
 
   /** Class representing an image. */
-  export interface ApiImage extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiImage extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -16350,7 +16581,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -16359,7 +16591,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -16720,6 +16953,15 @@ export namespace Word {
     GetElement(nPos: number): ParagraphContent;
 
     /**
+     * Returns the position (index) of the specified element within the current inline content control.
+     *
+     * @param element - The inline element (run, inline content control, form, etc.) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current inline content control.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: ParagraphContent): number;
+
+    /**
      * Returns a number of elements in the current inline text content control. The text content
      * control is created with one text run present in it by default, so even without any
      * element added this method will return the value of '1'.
@@ -16810,6 +17052,15 @@ export namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLock/
      */
     GetLock(): SdtLock;
+
+    /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current inline content control.
+     *
+     * @returns returns null if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
 
     /**
      * Returns a content control that contains the current content control.
@@ -16931,6 +17182,14 @@ export namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current inline content control within its parent element.
+     *
+     * @returns returns -1 if the content control has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns a Range object that represents the part of the document contained in the specified content
@@ -17451,6 +17710,23 @@ export namespace Word {
     GetClassType(): "math";
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current math element.
+     *
+     * @returns returns null if the math element has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
+     * Returns the position (index) of the current math element within its parent element.
+     *
+     * @returns returns -1 if the math element has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
+
+    /**
      * Returns the inner text of the current math element.
      *
      * @param format - The format the text should be returned in.
@@ -17887,7 +18163,7 @@ export namespace Word {
   }
 
   /** Class representing an Ole object. */
-  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiOleObject extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -18328,7 +18604,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -18337,7 +18614,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -19560,7 +19838,7 @@ export namespace Word {
   }
 
   /** Class representing a paragraph. */
-  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetContextualSpacing" | "GetContextualSpacing" | "SetIndLeft" | "GetIndLeft" | "SetIndRight" | "GetIndRight" | "SetIndFirstLine" | "GetIndFirstLine" | "SetJc" | "GetJc" | "SetKeepLines" | "GetKeepLines" | "SetKeepNext" | "GetKeepNext" | "SetPageBreakBefore" | "GetPageBreakBefore" | "SetSpacingLine" | "GetSpacingLineValue" | "GetSpacingLineRule" | "SetSpacingBefore" | "GetSpacingBefore" | "SetSpacingAfter" | "GetSpacingAfter" | "SetShd" | "GetShd" | "SetBottomBorder" | "GetBottomBorder" | "SetLeftBorder" | "GetLeftBorder" | "SetRightBorder" | "GetRightBorder" | "SetTopBorder" | "GetTopBorder" | "SetBetweenBorder" | "GetBetweenBorder" | "SetWidowControl" | "GetWidowControl" | "SetTabs" | "GetTabs" | "SetNumPr" | "GetNumPr" | "SetOutlineLvl" | "GetOutlineLvl" | "ToJSON"> {
+  export interface ApiParagraph extends Omit<ApiParaPr, "GetClassType" | "ToJSON"> {
     /**
      * Adds a bookmark cross-reference to the current paragraph.
      * <note>Please note that this paragraph must be in the document.</note>
@@ -20318,6 +20596,15 @@ export namespace Word {
     GetElement(nPos: number): ParagraphContent;
 
     /**
+     * Returns the position (index) of the specified element within the current paragraph.
+     *
+     * @param element - The inline element (run, inline content control, form, etc.) whose index will be returned.
+     * @returns returns -1 if the element is not a direct child of the current paragraph.
+     * @since 9.5.0
+     */
+    GetElementIndex(element: ParagraphContent): number;
+
+    /**
      * Returns a number of elements in the current paragraph.
      *
      * @example
@@ -20645,6 +20932,15 @@ export namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParagraphMarkTextPr/
      */
     GetParagraphMarkTextPr(): ApiTextPr;
+
+    /**
+     * Returns the document content that contains the current paragraph.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the paragraph has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
 
     /**
      * Returns a content control that contains the current paragraph.
@@ -22626,7 +22922,7 @@ export namespace Word {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -22781,6 +23077,15 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the picture position inside the current form.
      *
      * @returns Array of two numbers [shiftX, shiftY]
@@ -22815,6 +23120,14 @@ export namespace Word {
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -23405,7 +23718,7 @@ export namespace Word {
   }
 
   /** Class representing a Preset Color. */
-  export interface ApiPresetColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiPresetColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiPresetColor class.
      *
@@ -23458,7 +23771,7 @@ export namespace Word {
   }
 
   /** Class representing an RGB Color. */
-  export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiRGBColor class.
      *
@@ -24324,7 +24637,7 @@ export namespace Word {
     ToJSON(bWriteNumberings: boolean, bWriteStyles: boolean): object;
   }
 
-  export interface ApiRangeTextPr extends Omit<ApiTextPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetColor" | "GetColor" | "SetVertAlign" | "GetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetPosition" | "GetPosition" | "SetLanguage" | "GetLanguage" | "SetShd" | "GetShd" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine" | "ToJSON"> {
+  export interface ApiRangeTextPr extends ApiTextPr {
     /**
      * Gets the bold property from the current text properties.
      *
@@ -24652,7 +24965,7 @@ export namespace Word {
   }
 
   /** Class representing a small text block called 'run'. */
-  export interface ApiRun extends Omit<ApiTextPr, "GetClassType" | "SetStyle" | "GetStyle" | "SetBold" | "GetBold" | "SetItalic" | "GetItalic" | "SetStrikeout" | "GetStrikeout" | "SetUnderline" | "GetUnderline" | "SetFontFamily" | "GetFontFamily" | "SetFontSize" | "GetFontSize" | "SetColor" | "GetColor" | "SetVertAlign" | "GetVertAlign" | "SetHighlight" | "GetHighlight" | "SetSpacing" | "GetSpacing" | "SetDoubleStrikeout" | "GetDoubleStrikeout" | "SetCaps" | "GetCaps" | "SetSmallCaps" | "GetSmallCaps" | "SetPosition" | "GetPosition" | "SetLanguage" | "GetLanguage" | "SetShd" | "GetShd" | "SetTextFill" | "GetTextFill" | "SetOutLine" | "GetOutLine" | "ToJSON"> {
+  export interface ApiRun extends Omit<ApiTextPr, "GetClassType"> {
     /**
      * Adds a column break to the current run position and starts the next element from a new column.
      *
@@ -25251,6 +25564,15 @@ export namespace Word {
     GetOutLine(): ApiStroke;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current run.
+     *
+     * @returns returns null if the run has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns a content control that contains the current run.
      *
      * @returns returns null if parent content control doesn't exist.
@@ -25335,6 +25657,14 @@ export namespace Word {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentTableCell/
      */
     GetParentTableCell(): ApiTableCell | null;
+
+    /**
+     * Returns the position (index) of the current run within its parent element.
+     *
+     * @returns returns -1 if the run has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Gets the text position from the current text properties measured in half-points (1/144 of an inch).
@@ -26293,7 +26623,7 @@ export namespace Word {
   }
 
   /** Class representing a Scheme Color. */
-  export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType" | "ToJSON" | "GetRGB"> {
+  export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiSchemeColor class.
      *
@@ -26918,7 +27248,7 @@ export namespace Word {
   }
 
   /** Class representing a shape. */
-  export interface ApiShape extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiShape extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -27415,7 +27745,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -27424,7 +27755,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -27548,7 +27880,7 @@ export namespace Word {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /** Clears the current form. */
     Clear(): boolean;
 
@@ -27606,11 +27938,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -27779,7 +28128,7 @@ export namespace Word {
   }
 
   /** Class representing a smart art. */
-  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType" | "GetContent" | "SetSize" | "SetRelativeHeight" | "SetRelativeWidth" | "SetWrappingStyle" | "SetHorAlign" | "SetVerAlign" | "SetHorPosition" | "SetVerPosition" | "SetDistances" | "GetParentParagraph" | "GetParentContentControl" | "GetParentTable" | "GetParentTableCell" | "Delete" | "Copy" | "InsertInContentControl" | "InsertParagraph" | "Select" | "Unselect" | "AddBreak" | "GetFlipH" | "GetFlipV" | "SetFlipH" | "SetFlipV" | "SetHorFlip" | "SetVertFlip" | "ScaleHeight" | "ScaleWidth" | "Fill" | "GetFill" | "SetOutLine" | "GetLine" | "SetShadow" | "GetShadow" | "GetNextDrawing" | "GetPrevDrawing" | "SetTitle" | "GetTitle" | "SetDescription" | "GetDescription" | "ToJSON" | "GetWidth" | "GetHeight" | "GetName" | "SetName" | "GetLockValue" | "SetLockValue" | "SetDrawingPrFromDrawing" | "SetRotation" | "GetRotation" | "SetLockAspect" | "GetLockAspect" | "SetAllowOverlap" | "GetAllowOverlap"> {
+  export interface ApiSmartArt extends Omit<ApiDrawing, "GetClassType"> {
     /**
      * Inserts a break at the specified location in the main document.
      *
@@ -28130,7 +28479,8 @@ export namespace Word {
      * @param percent - The height of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeHeight(relativeFrom?: SizeRelFromV, percent?: percentage): boolean;
+    SetRelativeHeight(percent: percentage): boolean;
+    SetRelativeHeight(relativeFrom: SizeRelFromV, percent: percentage): boolean;
 
     /**
      * Sets the relative width of the object (image, shape, chart) bounding box.
@@ -28139,7 +28489,8 @@ export namespace Word {
      * @param percent - The width of the object as a percentage of the specified element.
      * @since 9.3.0
      */
-    SetRelativeWidth(relativeFrom?: SizeRelFromH, percent?: percentage): boolean;
+    SetRelativeWidth(percent: percentage): boolean;
+    SetRelativeWidth(relativeFrom: SizeRelFromH, percent: percentage): boolean;
 
     /**
      * Sets the rotation angle to the current drawing object.
@@ -28670,7 +29021,7 @@ export namespace Word {
   }
 
   /** Class representing a table. */
-  export interface ApiTable extends Omit<ApiTablePr, "GetClassType" | "SetStyleColBandSize" | "SetStyleRowBandSize" | "SetJc" | "SetShd" | "SetTableBorderTop" | "SetTableBorderBottom" | "SetTableBorderLeft" | "SetTableBorderRight" | "SetTableBorderInsideH" | "SetTableBorderInsideV" | "SetTableBorderAll" | "SetTableCellMarginBottom" | "SetTableCellMarginLeft" | "SetTableCellMarginRight" | "SetTableCellMarginTop" | "SetCellSpacing" | "SetTableInd" | "SetWidth" | "SetTableLayout" | "SetTableTitle" | "GetTableTitle" | "SetTableDescription" | "GetTableDescription" | "ToJSON"> {
+  export interface ApiTable extends Omit<ApiTablePr, "GetClassType" | "ToJSON"> {
     /**
      * Adds a caption paragraph after (or before) the current table.
      * <note>Please note that the current table must be in the document (not in the footer/header).
@@ -28757,7 +29108,8 @@ export namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddColumns/
      */
-    AddColumns(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddColumns(nCount: number): ApiTable;
+    AddColumns(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Adds a comment to all contents of the current table.
@@ -28865,7 +29217,8 @@ export namespace Word {
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddRows/
      */
-    AddRows(oCell?: ApiTableCell, nCount?: number, isBefore?: boolean): ApiTable;
+    AddRows(nCount: number): ApiTable;
+    AddRows(oCell: ApiTableCell, nCount: number, isBefore?: boolean): ApiTable;
 
     /**
      * Clears the content from the table.
@@ -29000,6 +29353,15 @@ export namespace Word {
      * @since 9.2.0
      */
     GetInternalId(): string;
+
+    /**
+     * Returns the document content that contains the current table.
+     *
+     * @returns returns the main document, a document part (table cell, header/footer, footnote, etc.), or null
+     *   if the table has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ApiDocument | ApiDocumentContent | null;
 
     /**
      * Returns a content control that contains the current table.
@@ -30342,7 +30704,7 @@ export namespace Word {
   }
 
   /** Class representing a table cell. */
-  export interface ApiTableCell extends Omit<ApiTableCellPr, "GetClassType" | "SetShd" | "SetCellMarginBottom" | "SetCellMarginLeft" | "SetCellMarginRight" | "SetCellMarginTop" | "SetCellBorderBottom" | "SetCellBorderLeft" | "SetCellBorderRight" | "SetCellBorderTop" | "SetWidth" | "SetVerticalAlign" | "SetTextDirection" | "SetNoWrap" | "ToJSON"> {
+  export interface ApiTableCell extends Omit<ApiTableCellPr, "GetClassType"> {
     /**
      * Adds the new columns to the current table.
      *
@@ -32392,7 +32754,7 @@ export namespace Word {
   }
 
   /** Class representing a table row. */
-  export interface ApiTableRow extends Omit<ApiTableRowPr, "GetClassType" | "SetHeight" | "SetTableHeader" | "ToJSON"> {
+  export interface ApiTableRow extends Omit<ApiTableRowPr, "GetClassType"> {
     /**
      * Adds the new rows to the current table.
      *
@@ -33171,7 +33533,7 @@ export namespace Word {
   }
 
   /** Class representing a document text field. */
-  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -33336,11 +33698,28 @@ export namespace Word {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.

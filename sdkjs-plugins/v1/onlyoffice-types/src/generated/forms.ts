@@ -511,6 +511,12 @@ export namespace Forms {
    */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
+  /**
+   * A paragraph-like container that can directly hold inline-level content (Hyperlink, InlineLvlSdt,
+   * etc.).
+   */
+  export type ParagraphLikeContainer = ApiParagraph | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase;
+
   /** The path command types. */
   export type PathCommandType = "moveTo" | "lineTo" | "bezier3" | "bezier4" | "arcTo" | "close";
 
@@ -1593,7 +1599,7 @@ export namespace Forms {
   }
 
   /** Class representing a document checkbox / radio button. */
-  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -1751,11 +1757,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the radio group key if the current checkbox is a radio button.
@@ -2317,7 +2340,7 @@ export namespace Forms {
   }
 
   /** Class representing a document combo box / dropdown list. */
-  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -2478,11 +2501,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -2974,7 +3014,7 @@ export namespace Forms {
   }
 
   /** Class representing a complex field. */
-  export interface ApiComplexForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
@@ -3125,11 +3165,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -3583,7 +3640,7 @@ export namespace Forms {
   }
 
   /** Class representing a document date field. */
-  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -3771,11 +3828,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -4547,11 +4621,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -5115,7 +5206,7 @@ export namespace Forms {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -5270,6 +5361,15 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the picture position inside the current form.
      *
      * @returns Array of two numbers [shiftX, shiftY]
@@ -5304,6 +5404,14 @@ export namespace Forms {
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -5932,7 +6040,7 @@ export namespace Forms {
   }
 
   /** Class representing a document picture form. */
-  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /** Clears the current form. */
     Clear(): boolean;
 
@@ -5990,11 +6098,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
@@ -6207,7 +6332,7 @@ export namespace Forms {
   }
 
   /** Class representing a document text field. */
-  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetInternalId" | "GetFormType" | "GetFormKey" | "SetFormKey" | "GetTipText" | "SetTipText" | "IsRequired" | "SetRequired" | "IsFixed" | "ToFixed" | "ToInline" | "SetBorderColor" | "GetBorderColor" | "SetBackgroundColor" | "GetBackgroundColor" | "GetText" | "IsFilled" | "Clear" | "GetWrapperShape" | "SetPlaceholderText" | "GetPlaceholderText" | "SetTextPr" | "GetTextPr" | "MoveCursorOutside" | "Copy" | "GetTag" | "SetTag" | "GetRole" | "SetRole" | "Delete" | "SetLock" | "GetLock" | "GetValue" | "SetValue"> {
+  export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
@@ -6372,11 +6497,28 @@ export namespace Forms {
     GetLock(): boolean;
 
     /**
+     * Returns the parent element (a paragraph or an inline content control) that directly contains the
+     * current form.
+     *
+     * @returns returns null if the form has no parent.
+     * @since 9.5.0
+     */
+    GetParent(): ParagraphLikeContainer;
+
+    /**
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
      */
     GetPlaceholderText(): string;
+
+    /**
+     * Returns the position (index) of the current form within its parent element.
+     *
+     * @returns returns -1 if the form has no parent.
+     * @since 9.5.0
+     */
+    GetPosInParent(): number;
 
     /**
      * Returns the role of the current form.
