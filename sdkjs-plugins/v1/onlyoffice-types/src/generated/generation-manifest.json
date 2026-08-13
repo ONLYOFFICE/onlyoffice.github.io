@@ -1,6 +1,6 @@
 {
   "generator": {
-    "packageVersion": "0.9.1",
+    "packageVersion": "9.5.0",
     "node": "v24.2.0",
     "jsdoc": "4.0.5",
     "typescript": "5.9.3"
@@ -8,10 +8,12 @@
   "repositories": {
     "sdkjs": {
       "commit": "586ec09e2dc845c1287ac78baa5e3baaf0f9e061",
+      "describe": "v9.5.0.150-2-g586ec09e2d",
       "dirty": false
     },
     "sdkjsForms": {
       "commit": "55c335430f18ff16ebf7ece2db79558cb61ab260",
+      "describe": "v9.5.0.100",
       "dirty": false
     },
     "officeApiDescriptions": {

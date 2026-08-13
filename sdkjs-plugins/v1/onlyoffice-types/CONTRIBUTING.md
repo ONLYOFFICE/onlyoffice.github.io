@@ -5,6 +5,32 @@ working on `@onlyoffice/plugins-types` itself (as opposed to consuming it in a p
 [README.md](README.md) for that). See also [AGENTS.md](AGENTS.md) for a condensed version aimed at
 coding agents.
 
+## Releasing
+
+The package version mirrors the editor version the types were generated from (the consumer-facing
+side of this is the [Versioning](README.md#versioning) table). To cut a release:
+
+1. Check out the sdkjs tag you are releasing against and confirm it: `git -C <sdkjs> describe --tags`
+   prints e.g. `v9.5.0.150`. The **first three segments** are the package version - `9.5.0`. The
+   fourth is a build number and is not part of it. A trailing `-<n>-g<sha>` (e.g.
+   `v9.5.0.150-2-g586ec09e`) means the checkout is *n* commits past that tag: fine while developing,
+   but move to the exact tag before publishing, or the manifest will record a version the released
+   types were not actually generated from.
+2. Regenerate (`npm run generate`) and run the checks below. `src/generated/generation-manifest.json`
+   records the commit *and* that `describe` string, so the mapping from a published version back to
+   its source is auditable later - do not hand-edit it.
+3. Set `version` in `package.json` to those three segments, add a `## <version>` changelog section
+   naming the sdkjs tag, and add the row to the README table.
+
+Two consequences of product versioning worth being deliberate about:
+
+- **The version is not semver over the type surface.** If an editor patch release renames an API,
+  that rename ships in a package patch. Say so in the changelog rather than trying to encode it in
+  the version.
+- **Republishing the same editor version needs a fourth segment.** If a packaging fix has to go out
+  against an unchanged sdkjs tag, use `9.5.0.1`-style suffixes rather than bumping to `9.5.1`, which
+  would falsely claim a different editor release.
+
 ## Generating Types
 
 The generator parses the JSDoc comments straight out of a local `sdkjs` (and `sdkjs-forms`) checkout

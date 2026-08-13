@@ -1110,11 +1110,16 @@ function runGit(repo, args) {
 }
 
 function getGitMetadata(repo) {
-  if (!fs.existsSync(path.join(repo, '.git'))) return {commit: null, dirty: null};
+  if (!fs.existsSync(path.join(repo, '.git'))) return {commit: null, describe: null, dirty: null};
   const commit = runGit(repo, ['rev-parse', 'HEAD']);
+  // `describe` is what ties this package's version to a product release: sdkjs tags releases as
+  // `v9.5.0.150`, and this package's version mirrors the editor version those tags carry (see the
+  // versioning table in README.md). Recording it makes the mapping auditable after the fact rather
+  // than something a release engineer has to remember.
+  const describe = runGit(repo, ['describe', '--tags', '--always']);
   const unstaged = spawnSync('git', ['-C', repo, 'diff', '--quiet'], {stdio: 'ignore'}).status;
   const staged = spawnSync('git', ['-C', repo, 'diff', '--cached', '--quiet'], {stdio: 'ignore'}).status;
-  return {commit, dirty: unstaged !== 0 || staged !== 0};
+  return {commit, describe, dirty: unstaged !== 0 || staged !== 0};
 }
 
 function sha256File(filePath) {
