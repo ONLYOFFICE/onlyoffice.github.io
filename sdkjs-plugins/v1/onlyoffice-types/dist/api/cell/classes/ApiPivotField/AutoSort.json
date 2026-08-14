@@ -1,5 +1,6 @@
 {
   "description": "Establishes automatic field-sorting rules for the pivot table reports.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotField/Methods/AutoSort/",
   "params": [
     {
       "description": "The sort order.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document date field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/",
   "extends": [
     "ApiFormBase"
   ],
@@ -30,6 +31,7 @@
     },
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Delete/",
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -46,6 +48,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -55,6 +58,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -64,7 +68,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiDateForm class.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetClassType/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet classType = textForm.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
@@ -77,6 +81,7 @@
     },
     "GetDate": {
       "description": "Returns the date of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetDate/",
       "params": [],
       "returns": {
         "description": "The date object, or undefined if the form is a placeholder.",
@@ -124,6 +129,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -146,6 +152,7 @@
     },
     "GetLock": {
       "description": "Returns the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetLock/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -155,6 +162,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the form has no parent.",
@@ -165,6 +173,7 @@
     },
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPlaceholderText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -174,6 +183,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current form within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the form has no parent.",
@@ -184,6 +194,7 @@
     },
     "GetRole": {
       "description": "Returns the role of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetRole/",
       "params": [],
       "returns": {
         "type": "string"
@@ -193,6 +204,7 @@
     },
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTag/",
       "params": [],
       "returns": {
         "type": "string"
@@ -252,6 +264,7 @@
     },
     "GetValue": {
       "description": "Returns the date of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "Date | undefined"
@@ -274,6 +287,7 @@
     },
     "IsFilled": {
       "description": "Checks if the current form is filled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFilled/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -367,6 +381,7 @@
     },
     "SetDate": {
       "description": "Sets the date to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetDate/",
       "params": [
         {
           "description": "The date object or the date in the string format.",
@@ -438,6 +453,7 @@
     },
     "SetLock": {
       "description": "Sets the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetLock/",
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -490,6 +506,7 @@
     },
     "SetRole": {
       "description": "Sets the role to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRole/",
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -505,6 +522,7 @@
     },
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTag/",
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -575,6 +593,7 @@
     },
     "SetValue": {
       "description": "Sets the date of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetValue/",
       "params": [
         {
           "description": "The date object or the date in the string format.",

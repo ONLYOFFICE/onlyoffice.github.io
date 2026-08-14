@@ -1,5 +1,6 @@
 {
   "description": "Class representing the selection in the presentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSelection/",
   "methods": {
     "GetShapes": {
       "description": "Returns the selected shapes.",

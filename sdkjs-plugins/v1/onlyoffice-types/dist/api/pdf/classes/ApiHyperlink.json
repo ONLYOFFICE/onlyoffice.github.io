@@ -1,8 +1,10 @@
 {
   "description": "Class representing a Paragraph hyperlink.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiHyperlink class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"hyperlink\""
@@ -11,6 +13,7 @@
     },
     "GetElement": {
       "description": "Returns the hyperlink element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetElement/",
       "params": [
         {
           "description": "The position where the element which content we want to get must be located.",
@@ -25,6 +28,7 @@
     },
     "GetElementsCount": {
       "description": "Returns a number of elements in the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetElementsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -33,6 +37,7 @@
     },
     "GetLinkedText": {
       "description": "Returns the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetLinkedText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -41,6 +46,7 @@
     },
     "GetScreenTipText": {
       "description": "Returns the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetScreenTipText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -49,6 +55,7 @@
     },
     "SetLink": {
       "description": "Sets the hyperlink address.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/SetLink/",
       "params": [
         {
           "description": "The hyperlink address.",
@@ -63,6 +70,7 @@
     },
     "SetScreenTipText": {
       "description": "Sets the screen tip text of the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/SetScreenTipText/",
       "params": [
         {
           "description": "The screen tip text of the hyperlink.",

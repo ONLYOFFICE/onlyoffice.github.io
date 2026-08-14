@@ -1,8 +1,10 @@
 {
   "description": "Class representing the header and footer of a specific page type (even or first) of a worksheet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/",
   "methods": {
     "GetCenterFooter": {
       "description": "Returns the center footer section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetCenterFooter/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"
@@ -12,6 +14,7 @@
     },
     "GetCenterHeader": {
       "description": "Returns the center header section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetCenterHeader/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"
@@ -21,6 +24,7 @@
     },
     "GetLeftFooter": {
       "description": "Returns the left footer section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetLeftFooter/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"
@@ -30,6 +34,7 @@
     },
     "GetLeftHeader": {
       "description": "Returns the left header section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetLeftHeader/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"
@@ -39,6 +44,7 @@
     },
     "GetRightFooter": {
       "description": "Returns the right footer section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetRightFooter/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"
@@ -48,6 +54,7 @@
     },
     "GetRightHeader": {
       "description": "Returns the right header section of this page type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPage/Methods/GetRightHeader/",
       "params": [],
       "returns": {
         "type": "ApiHeaderFooter"

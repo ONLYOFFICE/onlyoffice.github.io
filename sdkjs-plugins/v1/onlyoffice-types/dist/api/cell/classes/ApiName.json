@@ -1,5 +1,6 @@
 {
   "description": "Class representing a name.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/",
   "methods": {
     "Delete": {
       "description": "Deletes the DefName object.",

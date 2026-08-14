@@ -1,5 +1,6 @@
 {
   "description": "Copies the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Copy/",
   "params": [],
   "returns": {
     "type": "ApiDrawing | null"

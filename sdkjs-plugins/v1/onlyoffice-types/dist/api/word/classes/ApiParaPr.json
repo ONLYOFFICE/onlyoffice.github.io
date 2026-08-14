@@ -1,8 +1,10 @@
 {
   "description": "Class representing the paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/",
   "methods": {
     "GetBetweenBorder": {
       "description": "Returns the between border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBetweenBorder/",
       "params": [],
       "returns": {
         "description": "Returns the border properties object, or _undefined_ if the between border is not set.",
@@ -13,6 +15,7 @@
     },
     "GetBottomBorder": {
       "description": "Returns the bottom border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBottomBorder/",
       "params": [],
       "returns": {
         "description": "Returns the border properties object, or _undefined_ if the bottom border is not set.",
@@ -35,6 +38,7 @@
     },
     "GetContextualSpacing": {
       "description": "Returns the contextual spacing value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetContextualSpacing/",
       "params": [],
       "returns": {
         "description": "Returns _true_ if the contextual spacing is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",
@@ -96,6 +100,7 @@
     },
     "GetKeepLines": {
       "description": "Returns the keep lines value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepLines/",
       "params": [],
       "returns": {
         "description": "Returns _true_ if all lines of the paragraph are kept on a single page,\r_false_ if they are not, or _undefined_ if the value is not set.",
@@ -106,6 +111,7 @@
     },
     "GetKeepNext": {
       "description": "Returns the keep next value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepNext/",
       "params": [],
       "returns": {
         "description": "Returns _true_ if the paragraph is kept on the same page as the following paragraph,\r_false_ if it is not, or _undefined_ if the value is not set.",
@@ -116,6 +122,7 @@
     },
     "GetLeftBorder": {
       "description": "Returns the left border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetLeftBorder/",
       "params": [],
       "returns": {
         "description": "Returns the border properties object, or _undefined_ if the left border is not set.",
@@ -126,6 +133,7 @@
     },
     "GetNumPr": {
       "description": "Returns the numbering level for the current paragraph referencing the numbering definition instance in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetNumPr/",
       "params": [],
       "returns": {
         "type": "ApiNumberingLevel | undefined"
@@ -144,6 +152,7 @@
     },
     "GetPageBreakBefore": {
       "description": "Returns the page break before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetPageBreakBefore/",
       "params": [],
       "returns": {
         "description": "Returns _true_ if the paragraph is rendered at the beginning of a new page,\r_false_ if it is not, or _undefined_ if the value is not set.",
@@ -154,6 +163,7 @@
     },
     "GetRightBorder": {
       "description": "Returns the right border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetRightBorder/",
       "params": [],
       "returns": {
         "description": "Returns the border properties object, or _undefined_ if the right border is not set.",
@@ -240,6 +250,7 @@
     },
     "GetTabs": {
       "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetTabs/",
       "params": [],
       "returns": {
         "type": "TabStop[]"
@@ -249,6 +260,7 @@
     },
     "GetTopBorder": {
       "description": "Returns the top border of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetTopBorder/",
       "params": [],
       "returns": {
         "description": "Returns the border properties object, or _undefined_ if the top border is not set.",
@@ -259,6 +271,7 @@
     },
     "GetWidowControl": {
       "description": "Returns the widow control value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetWidowControl/",
       "params": [],
       "returns": {
         "description": "Returns _true_ if widow control is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",

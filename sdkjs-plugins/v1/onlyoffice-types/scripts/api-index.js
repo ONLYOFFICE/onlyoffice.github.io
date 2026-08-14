@@ -53,10 +53,15 @@ function packageMeta() {
   return { package: pkg.name, version: pkg.version };
 }
 
-// Signatures only - this is the file an agent is expected to hold in context, so it carries nothing
-// it doesn't need to answer "does this member exist, and what is its shape".
+// Names and signatures only - this is the file an agent is expected to hold in context, so it
+// carries nothing beyond what answers "does this exist, and what is its shape".
+//
+// Classes are listed even when they have no methods of their own (56 of the 67 in the Forms
+// namespace are exactly that - a documented shell whose members are inherited). Keying only off
+// methods, as this first did, made those types unanswerable from the index: an agent scanning it
+// would conclude `Forms.ApiChart` does not exist.
 function buildEditorIndex(editorDir) {
-  const entries = {};
+  const classes = {};
 
   const classesDir = path.join(editorDir, 'classes');
   if (fs.existsSync(classesDir)) {
@@ -65,29 +70,37 @@ function buildEditorIndex(editorDir) {
       if (name.endsWith('.json')) {
         const cls = name.replace(/\.json$/, '');
         const data = JSON.parse(fs.readFileSync(full, 'utf8'));
-        for (const [method, m] of Object.entries(data.methods || {})) {
-          entries[`${cls}.${method}`] = m.signature || '';
-        }
+        classes[cls] = Object.fromEntries(
+          Object.entries(data.methods || {}).map(([method, m]) => [method, m.signature || ''])
+        );
       } else if (fs.statSync(full).isDirectory()) {
+        classes[name] = {};
         for (const methodFile of fs.readdirSync(full)) {
-          // `_class.json` holds the class's own prose, not a member - counting it would add one
-          // phantom entry per sharded class to the index.
+          // `_class.json` holds the class's own prose, not a member.
           if (methodFile === '_class.json') continue;
           const data = JSON.parse(fs.readFileSync(path.join(full, methodFile), 'utf8'));
-          entries[`${name}.${methodFile.replace(/\.json$/, '')}`] = data.signature || '';
+          classes[name][methodFile.replace(/\.json$/, '')] = data.signature || '';
         }
       }
     }
   }
 
-  const executeMethods = path.join(editorDir, 'executeMethods.json');
-  if (fs.existsSync(executeMethods)) {
-    for (const [name, m] of Object.entries(JSON.parse(fs.readFileSync(executeMethods, 'utf8')))) {
-      entries[`executeMethod:${name}`] = m.signature || m.args || '';
-    }
-  }
+  const readNames = (file) => (fs.existsSync(file)
+    ? Object.keys(JSON.parse(fs.readFileSync(file, 'utf8')))
+    : []);
 
-  return entries;
+  const executeMethodsFile = path.join(editorDir, 'executeMethods.json');
+  const executeMethods = fs.existsSync(executeMethodsFile)
+    ? Object.fromEntries(Object.entries(JSON.parse(fs.readFileSync(executeMethodsFile, 'utf8')))
+      .map(([name, m]) => [name, m.signature || m.args || '']))
+    : {};
+
+  return {
+    classes,
+    typedefs: readNames(path.join(editorDir, 'typedefs.json')),
+    events: readNames(path.join(editorDir, 'events.json')),
+    executeMethods,
+  };
 }
 
 function rebuildRootIndex() {
@@ -98,7 +111,15 @@ function rebuildRootIndex() {
       if (!fs.statSync(dir).isDirectory()) continue;
       const indexFile = path.join(dir, 'index.json');
       if (!fs.existsSync(indexFile)) continue;
-      editors[editor] = { members: Object.keys(JSON.parse(fs.readFileSync(indexFile, 'utf8'))).length };
+      const index = JSON.parse(fs.readFileSync(indexFile, 'utf8'));
+      const classes = index.classes || {};
+      editors[editor] = {
+        classes: Object.keys(classes).length,
+        methods: Object.values(classes).reduce((n, ms) => n + Object.keys(ms).length, 0),
+        typedefs: (index.typedefs || []).length,
+        events: (index.events || []).length,
+        executeMethods: Object.keys(index.executeMethods || {}).length,
+      };
     }
   }
 

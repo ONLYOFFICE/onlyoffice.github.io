@@ -1,11 +1,13 @@
 {
   "description": "Class representing a Scheme Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiSchemeColor/",
   "extends": [
     "ApiUniColor"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiSchemeColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiSchemeColor/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"schemeColor\""

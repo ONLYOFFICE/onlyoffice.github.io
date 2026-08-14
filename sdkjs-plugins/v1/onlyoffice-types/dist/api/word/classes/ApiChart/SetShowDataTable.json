@@ -1,5 +1,6 @@
 {
   "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetShowDataTable/",
   "params": [
     {
       "description": "Whether to show or hide the data table below the chart.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing an image.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiImage/",
   "extends": [
     "ApiDrawing"
   ],
@@ -18,6 +19,7 @@
     },
     "GetParentSheet": {
       "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"

@@ -1,5 +1,6 @@
 {
   "description": "Appends the specified text to the end of the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/AddText/",
   "params": [
     {
       "description": "The text to add.",

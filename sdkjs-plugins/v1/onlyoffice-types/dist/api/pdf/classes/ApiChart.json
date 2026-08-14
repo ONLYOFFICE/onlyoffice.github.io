@@ -1,11 +1,13 @@
 {
   "description": "Class representing a chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/",
   "extends": [
     "ApiDrawing"
   ],
   "methods": {
     "ApplyChartStyle": {
       "description": "Sets a style to the current chart by style ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/ApplyChartStyle/",
       "params": [
         {
           "description": "One of the styles available in the editor.",
@@ -20,6 +22,7 @@
     },
     "GetAllSeries": {
       "description": "Returns all series from the chart space.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetAllSeries/",
       "params": [],
       "returns": {
         "type": "ApiChartSeries[]"
@@ -28,6 +31,7 @@
     },
     "GetChartType": {
       "description": "Returns a type of the chart object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetChartType/",
       "params": [],
       "returns": {
         "type": "ChartTypeLegacy"
@@ -36,6 +40,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiChart class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"chart\""
@@ -44,6 +49,7 @@
     },
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -52,6 +58,7 @@
     },
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -60,6 +67,7 @@
     },
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -68,6 +76,7 @@
     },
     "GetSeries": {
       "description": "Returns the series with a specific index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetSeries/",
       "params": [
         {
           "description": "Series index.",
@@ -82,6 +91,7 @@
     },
     "GetTitle": {
       "description": "Returns the chart title text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The chart title text or null if the chart has no title.",
@@ -91,6 +101,7 @@
     },
     "GetType": {
       "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ChartType"
@@ -99,6 +110,7 @@
     },
     "RemoveSeria": {
       "description": "Removes the specified series from the current chart.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/RemoveSeria/",
       "params": [
         {
           "description": "The index of the chart series.",
@@ -113,6 +125,7 @@
     },
     "SetAxisNumFormat": {
       "description": "Sets the specified numeric format to the axis values.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetAxisNumFormat/",
       "params": [
         {
           "description": "Numeric format (can be custom format).",
@@ -132,6 +145,7 @@
     },
     "SetCategoryName": {
       "description": "Sets a name to the specified chart category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetCategoryName/",
       "params": [
         {
           "description": "The name which will be set to the specified chart category.",
@@ -151,6 +165,7 @@
     },
     "SetDataPointFill": {
       "description": "Sets the fill to the data point in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetDataPointFill/",
       "params": [
         {
           "description": "The fill type used to fill the data point.",
@@ -181,6 +196,7 @@
     },
     "SetDataPointNumFormat": {
       "description": "Sets the specified numeric format to the chart data point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetDataPointNumFormat/",
       "params": [
         {
           "description": "Numeric format (can be custom format).",
@@ -210,6 +226,7 @@
     },
     "SetDataPointOutLine": {
       "description": "Sets the outline to the data point in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetDataPointOutLine/",
       "params": [
         {
           "description": "The stroke used to create the data point outline.",
@@ -239,6 +256,7 @@
     },
     "SetHorAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",
@@ -253,6 +271,7 @@
     },
     "SetHorAxisMajorTickMark": {
       "description": "Specifies major tick mark for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisMajorTickMark/",
       "params": [
         {
           "description": "The type of tick mark appearance.",
@@ -267,6 +286,7 @@
     },
     "SetHorAxisMinorTickMark": {
       "description": "Specifies minor tick mark for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisMinorTickMark/",
       "params": [
         {
           "description": "The type of tick mark appearance.",
@@ -281,6 +301,7 @@
     },
     "SetHorAxisOrientation": {
       "description": "Specifies the horizontal axis orientation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisOrientation/",
       "params": [
         {
           "description": "The `true` value will set the normal data direction for the horizontal axis (from minimum to maximum).",
@@ -295,6 +316,7 @@
     },
     "SetHorAxisTickLabelPosition": {
       "description": "Spicifies tick labels position for the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisTickLabelPosition/",
       "params": [
         {
           "description": "The type for the position of chart horizontal tick labels.",
@@ -309,6 +331,7 @@
     },
     "SetHorAxisTitle": {
       "description": "Specifies the chart horizontal axis title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetHorAxisTitle/",
       "params": [
         {
           "description": "The title which will be displayed for the horizontal axis of the current chart.",
@@ -333,6 +356,7 @@
     },
     "SetLegendFill": {
       "description": "Sets the fill to the chart legend.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetLegendFill/",
       "params": [
         {
           "description": "The fill type used to fill the legend.",
@@ -347,6 +371,7 @@
     },
     "SetLegendFontSize": {
       "description": "Specifies the legend font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetLegendFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",
@@ -361,6 +386,7 @@
     },
     "SetLegendOutLine": {
       "description": "Sets the outline to the chart legend.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetLegendOutLine/",
       "params": [
         {
           "description": "The stroke used to create the legend outline.",
@@ -375,6 +401,7 @@
     },
     "SetLegendPos": {
       "description": "Specifies the chart legend position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetLegendPos/",
       "params": [
         {
           "description": "The position of the chart legend inside the chart window.",
@@ -389,6 +416,7 @@
     },
     "SetMajorHorizontalGridlines": {
       "description": "Specifies major horizontal gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMajorHorizontalGridlines/",
       "params": [
         {
           "description": "The stroke used to create the element shadow.",
@@ -403,6 +431,7 @@
     },
     "SetMajorVerticalGridlines": {
       "description": "Specifies major vertical gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMajorVerticalGridlines/",
       "params": [
         {
           "description": "The stroke used to create the element shadow.",
@@ -417,6 +446,7 @@
     },
     "SetMarkerFill": {
       "description": "Sets the fill to the marker in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMarkerFill/",
       "params": [
         {
           "description": "The fill type used to fill the marker.",
@@ -447,6 +477,7 @@
     },
     "SetMarkerOutLine": {
       "description": "Sets the outline to the marker in the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMarkerOutLine/",
       "params": [
         {
           "description": "The stroke used to create the marker outline.",
@@ -477,6 +508,7 @@
     },
     "SetMinorHorizontalGridlines": {
       "description": "Specifies minor horizontal gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMinorHorizontalGridlines/",
       "params": [
         {
           "description": "The stroke used to create the element shadow.",
@@ -491,6 +523,7 @@
     },
     "SetMinorVerticalGridlines": {
       "description": "Specifies minor vertical gridline visual properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetMinorVerticalGridlines/",
       "params": [
         {
           "description": "The stroke used to create the element shadow.",
@@ -505,6 +538,7 @@
     },
     "SetPlotAreaFill": {
       "description": "Sets the fill to the chart plot area.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetPlotAreaFill/",
       "params": [
         {
           "description": "The fill type used to fill the plot area.",
@@ -519,6 +553,7 @@
     },
     "SetPlotAreaOutLine": {
       "description": "Sets the outline to the chart plot area.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetPlotAreaOutLine/",
       "params": [
         {
           "description": "The stroke used to create the plot area outline.",
@@ -533,6 +568,7 @@
     },
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -547,6 +583,7 @@
     },
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -561,6 +598,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -580,6 +618,7 @@
     },
     "SetSeriaName": {
       "description": "Sets a name to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriaName/",
       "params": [
         {
           "description": "The name which will be set to the specified chart series.",
@@ -599,6 +638,7 @@
     },
     "SetSeriaNumFormat": {
       "description": "Sets the specified numeric format to the chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriaNumFormat/",
       "params": [
         {
           "description": "Numeric format (can be custom format).",
@@ -618,6 +658,7 @@
     },
     "SetSeriaValues": {
       "description": "Sets values to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriaValues/",
       "params": [
         {
           "description": "The array of the data which will be set to the specified chart series.",
@@ -637,6 +678,7 @@
     },
     "SetSeriesFill": {
       "description": "Sets the fill to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriesFill/",
       "params": [
         {
           "description": "The fill type used to fill the series.",
@@ -662,6 +704,7 @@
     },
     "SetSeriesOutLine": {
       "description": "Sets the outline to the specified chart series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriesOutLine/",
       "params": [
         {
           "description": "The stroke used to create the series outline.",
@@ -687,6 +730,7 @@
     },
     "SetShowDataLabels": {
       "description": "Specifies which chart data labels are shown for the chart.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetShowDataLabels/",
       "params": [
         {
           "description": "Whether to show or hide the source table column names used for the data which the chart will be build from.",
@@ -716,6 +760,7 @@
     },
     "SetShowDataTable": {
       "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetShowDataTable/",
       "params": [
         {
           "description": "Whether to show or hide the data table below the chart.",
@@ -737,6 +782,7 @@
     },
     "SetShowPointDataLabel": {
       "description": "Spicifies the show options for data labels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetShowPointDataLabel/",
       "params": [
         {
           "description": "The series index from the array of the data used to build the chart from.",
@@ -776,6 +822,7 @@
     },
     "SetTitle": {
       "description": "Specifies the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetTitle/",
       "params": [
         {
           "description": "The title which will be displayed for the current chart.",
@@ -800,6 +847,7 @@
     },
     "SetTitleFill": {
       "description": "Sets the fill to the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetTitleFill/",
       "params": [
         {
           "description": "The fill type used to fill the title.",
@@ -814,6 +862,7 @@
     },
     "SetTitleOutLine": {
       "description": "Sets the outline to the chart title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetTitleOutLine/",
       "params": [
         {
           "description": "The stroke used to create the title outline.",
@@ -828,6 +877,7 @@
     },
     "SetVerAxisOrientation": {
       "description": "Specifies the vertical axis orientation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVerAxisOrientation/",
       "params": [
         {
           "description": "The `true` value will set the normal data direction for the vertical axis (from minimum to maximum).",
@@ -842,6 +892,7 @@
     },
     "SetVerAxisTitle": {
       "description": "Specifies the chart vertical axis title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVerAxisTitle/",
       "params": [
         {
           "description": "The title which will be displayed for the vertical axis of the current chart.",
@@ -866,6 +917,7 @@
     },
     "SetVertAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVertAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",
@@ -880,6 +932,7 @@
     },
     "SetVertAxisMajorTickMark": {
       "description": "Specifies major tick mark for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVertAxisMajorTickMark/",
       "params": [
         {
           "description": "The type of tick mark appearance.",
@@ -894,6 +947,7 @@
     },
     "SetVertAxisMinorTickMark": {
       "description": "Specifies minor tick mark for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVertAxisMinorTickMark/",
       "params": [
         {
           "description": "The type of tick mark appearance.",
@@ -908,6 +962,7 @@
     },
     "SetVertAxisTickLabelPosition": {
       "description": "Spicifies tick labels position for the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetVertAxisTickLabelPosition/",
       "params": [
         {
           "description": "The type for the position of chart vertical tick labels.",
@@ -922,6 +977,7 @@
     },
     "SetXValues": {
       "description": "Sets the x-axis values to all chart series. It is used with the scatter charts only.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetXValues/",
       "params": [
         {
           "description": "The array of the data which will be set to the x-axis data points.",

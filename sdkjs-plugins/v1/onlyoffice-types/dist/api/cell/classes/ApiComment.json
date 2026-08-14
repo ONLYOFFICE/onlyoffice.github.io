@@ -1,5 +1,6 @@
 {
   "description": "Class representing a comment.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiComment/",
   "methods": {
     "AddReply": {
       "description": "Adds a reply to a comment.",

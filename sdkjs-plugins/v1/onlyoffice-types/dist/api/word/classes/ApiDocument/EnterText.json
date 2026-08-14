@@ -1,5 +1,6 @@
 {
   "description": "Add text to the document on the cursor position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/EnterText/",
   "params": [
     {
       "description": "The text to add to document.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing the text properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/",
   "methods": {
     "GetBold": {
       "description": "Gets the bold property from the current text properties.",

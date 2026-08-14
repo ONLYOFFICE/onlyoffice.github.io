@@ -1,11 +1,13 @@
 {
   "description": "Class representing a data bar conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/",
   "extends": [
     "ApiFormatCondition"
   ],
   "methods": {
     "Delete": {
       "description": "Deletes the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "void"
@@ -15,6 +17,7 @@
     },
     "GetAppliesTo": {
       "description": "Returns the range of cells to which the current conditional formatting rule applies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetAppliesTo/",
       "params": [],
       "returns": {
         "description": "The range of cells affected by the current condition, or null if no range is set.",
@@ -25,6 +28,7 @@
     },
     "GetAxisColor": {
       "description": "Returns the axis color of the data bar conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetAxisColor/",
       "params": [],
       "returns": {
         "description": "The axis color as an ApiColor object, or null if no color is specified.",
@@ -35,6 +39,7 @@
     },
     "GetAxisPosition": {
       "description": "Returns the axis position of the data bar conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetAxisPosition/",
       "params": [],
       "returns": {
         "description": "The axis position setting for the data bar.",
@@ -45,6 +50,7 @@
     },
     "GetBarBorderColor": {
       "description": "Returns the bar border color of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetBarBorderColor/",
       "params": [],
       "returns": {
         "description": "Returns the ApiColor object representing the bar border color, or null if not specified.",
@@ -55,6 +61,7 @@
     },
     "GetBarColor": {
       "description": "Returns the bar color of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetBarColor/",
       "params": [],
       "returns": {
         "description": "Returns the ApiColor object representing the bar color, or null if the bar color is not specified.",
@@ -65,6 +72,7 @@
     },
     "GetBarFillType": {
       "description": "Returns the bar fill type of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetBarFillType/",
       "params": [],
       "returns": {
         "description": "The fill type setting for the data bar (solid or gradient).",
@@ -75,6 +83,7 @@
     },
     "GetDateOperator": {
       "description": "Returns the date operator for time period conditions.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetDateOperator/",
       "params": [],
       "returns": {
         "description": "The time period operator that defines how the date condition is evaluated,\ror null if the rule is not date-based.",
@@ -85,6 +94,7 @@
     },
     "GetDirection": {
       "description": "Returns the direction of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetDirection/",
       "params": [],
       "returns": {
         "description": "The direction setting for the data bar (context, left-to-right, or right-to-left).",
@@ -95,6 +105,7 @@
     },
     "GetFillColor": {
       "description": "Returns the background color for the format condition. Returns 'No Fill' when the background color of the format condition is null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFillColor/",
       "params": [],
       "returns": {
         "description": "The background color applied by the format condition, or 'No Fill' if none is set.",
@@ -105,6 +116,7 @@
     },
     "GetFont": {
       "description": "Returns the font applied by the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFont/",
       "params": [],
       "returns": {
         "description": "An ApiFont object representing the font applied by the format condition, or null if no font is defined.",
@@ -115,6 +127,7 @@
     },
     "GetFormula": {
       "description": "Returns the formula of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetFormula/",
       "params": [],
       "returns": {
         "description": "Returns the formula string.",
@@ -125,6 +138,7 @@
     },
     "GetFormula1": {
       "description": "Returns the first formula used by the current conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula1/",
       "params": [],
       "returns": {
         "description": "The first formula.",
@@ -135,6 +149,7 @@
     },
     "GetFormula2": {
       "description": "Returns the second formula used by the current conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula2/",
       "params": [],
       "returns": {
         "description": "The second formula.",
@@ -145,6 +160,7 @@
     },
     "GetMaxPointType": {
       "description": "Returns the type of the maximum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetMaxPointType/",
       "params": [],
       "returns": {
         "description": "The type of the maximum value condition, or null if not specified.",
@@ -155,6 +171,7 @@
     },
     "GetMaxPointValue": {
       "description": "Returns the value of the maximum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetMaxPointValue/",
       "params": [],
       "returns": {
         "description": "The value of the maximum value condition.",
@@ -165,6 +182,7 @@
     },
     "GetMinPointType": {
       "description": "Returns the type of the minimum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetMinPointType/",
       "params": [],
       "returns": {
         "description": "The type of the minimum value condition, or null if not specified.",
@@ -175,6 +193,7 @@
     },
     "GetMinPointValue": {
       "description": "Returns the value of the minimum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetMinPointValue/",
       "params": [],
       "returns": {
         "description": "The value of the minimum value condition.",
@@ -185,6 +204,7 @@
     },
     "GetNegativeBarColor": {
       "description": "Returns the negative bar color of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetNegativeBarColor/",
       "params": [],
       "returns": {
         "description": "Returns the ApiColor object representing the negative bar color, or null if not specified.",
@@ -195,6 +215,7 @@
     },
     "GetNegativeBorderColor": {
       "description": "Returns the negative bar border color of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetNegativeBorderColor/",
       "params": [],
       "returns": {
         "description": "Returns the ApiColor object representing the negative bar border color, or null if not specified.",
@@ -205,6 +226,7 @@
     },
     "GetNumberFormat": {
       "description": "Returns the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetNumberFormat/",
       "params": [],
       "returns": {
         "description": "The number format.",
@@ -215,6 +237,7 @@
     },
     "GetOperator": {
       "description": "Returns the format condition operator.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetOperator/",
       "params": [],
       "returns": {
         "description": "The format condition operator.",
@@ -225,6 +248,7 @@
     },
     "GetPTCondition": {
       "description": "Returns the pivot table condition object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPTCondition/",
       "params": [],
       "returns": {
         "description": "The pivot table condition object.",
@@ -235,6 +259,7 @@
     },
     "GetParent": {
       "description": "Returns the parent range object of the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "The parent range object.",
@@ -245,6 +270,7 @@
     },
     "GetPercentMax": {
       "description": "Returns the percent maximum value of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetPercentMax/",
       "params": [],
       "returns": {
         "description": "The maximum length of the data bar in percent.",
@@ -255,6 +281,7 @@
     },
     "GetPercentMin": {
       "description": "Returns the percent minimum value of the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetPercentMin/",
       "params": [],
       "returns": {
         "description": "Returns the minimum length of the data bar in percent.",
@@ -265,6 +292,7 @@
     },
     "GetPriority": {
       "description": "Returns the priority value of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPriority/",
       "params": [],
       "returns": {
         "description": "The priority value of the conditional formatting rule.",
@@ -275,6 +303,7 @@
     },
     "GetScopeType": {
       "description": "Returns the scope type of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetScopeType/",
       "params": [],
       "returns": {
         "description": "Returns \"xlSelectionScope\" for normal ranges, \"xlDataFieldScope\" for entire worksheet, \"xlFieldsScope\" for pivot tables.",
@@ -285,6 +314,7 @@
     },
     "GetShowValue": {
       "description": "Returns whether the data bar displays the cell value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetShowValue/",
       "params": [],
       "returns": {
         "description": "True if the data bar shows the value, false otherwise.",
@@ -295,6 +325,7 @@
     },
     "GetStopIfTrue": {
       "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetStopIfTrue/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -304,6 +335,7 @@
     },
     "GetText": {
       "description": "Returns the text value used in text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetText/",
       "params": [],
       "returns": {
         "description": "The text value used in text-based conditional formatting rules.",
@@ -314,6 +346,7 @@
     },
     "GetTextOperator": {
       "description": "Returns the text operator for text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetTextOperator/",
       "params": [],
       "returns": {
         "description": "The operator defining how the text comparison is performed,\ror null if the rule is not text-based.",
@@ -324,6 +357,7 @@
     },
     "GetType": {
       "description": "Returns the type of the data bar conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetType/",
       "params": [],
       "returns": {
         "description": "The type of the data bar conditional formatting rule.",
@@ -334,6 +368,7 @@
     },
     "Modify": {
       "description": "Modifies the current format condition with the specified parameters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Modify/",
       "params": [
         {
           "description": "The format condition type.",
@@ -369,6 +404,7 @@
     },
     "ModifyAppliesToRange": {
       "description": "Sets the cell range to which the current conditional formatting rule applies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/ModifyAppliesToRange/",
       "params": [
         {
           "description": "The range to which the current conditional formatting rule will be applied.",
@@ -384,6 +420,7 @@
     },
     "SetAxisColor": {
       "description": "Sets the axis color for the data bar conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetAxisColor/",
       "params": [
         {
           "description": "The axis color as an ApiColor object.",
@@ -399,6 +436,7 @@
     },
     "SetAxisPosition": {
       "description": "Sets the axis position for the data bar conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetAxisPosition/",
       "params": [
         {
           "description": "The axis position setting for the data bar.",
@@ -414,6 +452,7 @@
     },
     "SetBarBorderColor": {
       "description": "Sets the bar border color for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetBarBorderColor/",
       "params": [
         {
           "description": "The ApiColor object for the bar borders.",
@@ -429,6 +468,7 @@
     },
     "SetBarColor": {
       "description": "Sets the bar color for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetBarColor/",
       "params": [
         {
           "description": "The ApiColor object representing the bar color.",
@@ -444,6 +484,7 @@
     },
     "SetBarFillType": {
       "description": "Sets the bar fill type for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetBarFillType/",
       "params": [
         {
           "description": "The fill type setting for the data bar (solid or gradient).",
@@ -459,6 +500,7 @@
     },
     "SetBorders": {
       "description": "Sets the border style for the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetBorders/",
       "params": [
         {
           "description": "Specifies the cell border position.",
@@ -484,6 +526,7 @@
     },
     "SetDateOperator": {
       "description": "Sets the date operator for time period conditions.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetDateOperator/",
       "params": [
         {
           "description": "The date operator for time period conditions.",
@@ -499,6 +542,7 @@
     },
     "SetDirection": {
       "description": "Sets the direction for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetDirection/",
       "params": [
         {
           "description": "The direction setting for the data bar (context, left-to-right, or right-to-left).",
@@ -514,6 +558,7 @@
     },
     "SetFillColor": {
       "description": "Sets the background color to the format condition with the previously created color object.\nSets 'No Fill' when previously created color object is null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFillColor/",
       "params": [
         {
           "description": "The color object that specifies the background color for the format condition.",
@@ -529,6 +574,7 @@
     },
     "SetFirstPriority": {
       "description": "Sets the priority value for the current conditional formatting rule to \"1\" so that it will be evaluated before all other rules on the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFirstPriority/",
       "params": [],
       "returns": {
         "type": "void"
@@ -538,6 +584,7 @@
     },
     "SetLastPriority": {
       "description": "Sets the evaluation order for the current conditional formatting rule so it is evaluated after all other rules on the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetLastPriority/",
       "params": [],
       "returns": {
         "type": "void"
@@ -547,6 +594,7 @@
     },
     "SetMaxPointType": {
       "description": "Sets the type for the maximum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetMaxPointType/",
       "params": [
         {
           "description": "The type of the maximum value condition.",
@@ -562,6 +610,7 @@
     },
     "SetMaxPointValue": {
       "description": "Sets the value for the maximum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetMaxPointValue/",
       "params": [
         {
           "description": "The value of the maximum value condition.",
@@ -577,6 +626,7 @@
     },
     "SetMinPointType": {
       "description": "Sets the type for the minimum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetMinPointType/",
       "params": [
         {
           "description": "The type of the minimum value condition.",
@@ -592,6 +642,7 @@
     },
     "SetMinPointValue": {
       "description": "Sets the value for the minimum value condition for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetMinPointValue/",
       "params": [
         {
           "description": "The value of the minimum value condition.",
@@ -607,6 +658,7 @@
     },
     "SetNegativeBarColor": {
       "description": "Sets the negative bar color for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetNegativeBarColor/",
       "params": [
         {
           "description": "The ApiColor object for the negative bars.",
@@ -622,6 +674,7 @@
     },
     "SetNegativeBorderColor": {
       "description": "Sets the negative bar border color for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetNegativeBorderColor/",
       "params": [
         {
           "description": "The ApiColor object for the negative bar borders.",
@@ -637,6 +690,7 @@
     },
     "SetNumberFormat": {
       "description": "Sets the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetNumberFormat/",
       "params": [
         {
           "description": "The number format code (e.g., \"General\", \"#,##0.00\", etc.)",
@@ -652,6 +706,7 @@
     },
     "SetPercentMax": {
       "description": "Sets the percent maximum value for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetPercentMax/",
       "params": [
         {
           "description": "The maximum length of the data bar in percent.",
@@ -667,6 +722,7 @@
     },
     "SetPercentMin": {
       "description": "Sets the percent minimum value for the data bar.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetPercentMin/",
       "params": [
         {
           "description": "The minimum length of the data bar in percent.",
@@ -682,6 +738,7 @@
     },
     "SetPriority": {
       "description": "Sets the priority value of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetPriority/",
       "params": [
         {
           "description": "The priority value (1-based).",
@@ -697,6 +754,7 @@
     },
     "SetScopeType": {
       "description": "Sets the scope type for the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetScopeType/",
       "params": [
         {
           "description": "The scope type: \"xlSelectionScope\", \"xlDataFieldScope\", or \"xlFieldsScope\".",
@@ -712,6 +770,7 @@
     },
     "SetShowValue": {
       "description": "Specifies whether the data bar displays the cell value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetShowValue/",
       "params": [
         {
           "description": "True to show the value, false to hide it.",
@@ -727,6 +786,7 @@
     },
     "SetStopIfTrue": {
       "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetStopIfTrue/",
       "params": [
         {
           "description": "True to stop evaluating additional rules.",
@@ -742,6 +802,7 @@
     },
     "SetText": {
       "description": "Sets the text value used in text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetText/",
       "params": [
         {
           "description": "The text value to compare against.",
@@ -757,6 +818,7 @@
     },
     "SetTextOperator": {
       "description": "Sets the text operator for text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetTextOperator/",
       "params": [
         {
           "description": "The text operator: \"xlContains\", \"xlDoesNotContain\", \"xlBeginsWith\", \"xlEndsWith\".",

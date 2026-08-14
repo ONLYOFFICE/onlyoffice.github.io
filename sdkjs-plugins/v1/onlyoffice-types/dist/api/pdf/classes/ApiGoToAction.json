@@ -1,8 +1,10 @@
 {
   "description": "Class representing a GoTo action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiGoToAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"goToAction\""
@@ -11,6 +13,7 @@
     },
     "GetPage": {
       "description": "Gets desctination page index",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetPage/",
       "params": [],
       "returns": {
         "type": "number"
@@ -19,6 +22,7 @@
     },
     "GetRect": {
       "description": "Gets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetRect/",
       "params": [],
       "returns": {
         "type": "Rect"
@@ -27,6 +31,7 @@
     },
     "GetType": {
       "description": "Gets goto type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "GoToType"
@@ -35,6 +40,7 @@
     },
     "GetZoom": {
       "description": "Gets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/GetRect/",
       "params": [],
       "returns": {
         "type": "Rect"
@@ -43,6 +49,7 @@
     },
     "SetPage": {
       "description": "Sets desctination page index",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetPage/",
       "params": [
         {
           "name": "page",
@@ -56,6 +63,7 @@
     },
     "SetRect": {
       "description": "Sets goto destination rect",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetRect/",
       "params": [
         {
           "name": "rect",
@@ -69,6 +77,7 @@
     },
     "SetType": {
       "description": "Sets goto type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiGoToAction/Methods/SetType/",
       "params": [
         {
           "name": "type",

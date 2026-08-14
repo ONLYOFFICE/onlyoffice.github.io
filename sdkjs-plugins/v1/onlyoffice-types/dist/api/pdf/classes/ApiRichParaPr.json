@@ -1,8 +1,10 @@
 {
   "description": "Class representing the rich paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParaPr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiRichParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParaPr/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"richParaPr\""

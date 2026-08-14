@@ -1,5 +1,6 @@
 {
   "description": "Class representing a Preset Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresetColor/",
   "extends": [
     "ApiUniColor"
   ],

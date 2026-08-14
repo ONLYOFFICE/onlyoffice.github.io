@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base field widget.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/",
   "methods": {
     "Delete": {
       "description": "Removes widget from parent field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -11,6 +13,7 @@
     },
     "GetActions": {
       "description": "Gets actions collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetActions/",
       "params": [],
       "returns": {
         "type": "ApiActionCollection"
@@ -19,6 +22,7 @@
     },
     "GetBackgroundColor": {
       "description": "Gets widget background color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -27,6 +31,7 @@
     },
     "GetBorderColor": {
       "description": "Gets widget border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -35,6 +40,7 @@
     },
     "GetBorderStyle": {
       "description": "Gets widget border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderStyle/",
       "params": [],
       "returns": {
         "type": "WidgetBorderStyle"
@@ -43,6 +49,7 @@
     },
     "GetBorderWidth": {
       "description": "Gets widget border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderWidth/",
       "params": [],
       "returns": {
         "type": "WidgetBorderWidth"
@@ -51,6 +58,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiBaseWidget class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"baseWidget\""
@@ -59,6 +67,7 @@
     },
     "GetParent": {
       "description": "Gets parent field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetParent/",
       "params": [],
       "returns": {
         "type": "ApiField"
@@ -67,6 +76,7 @@
     },
     "GetPosition": {
       "description": "Gets widget position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetPosition/",
       "params": [],
       "returns": {
         "type": "Point"
@@ -75,6 +85,7 @@
     },
     "GetRect": {
       "description": "Sets field rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetRect/",
       "params": [],
       "returns": {
         "type": "Rect"
@@ -83,6 +94,7 @@
     },
     "GetTextColor": {
       "description": "Gets widget text color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetTextColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -91,6 +103,7 @@
     },
     "GetTextSize": {
       "description": "Gets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetTextSize/",
       "params": [],
       "returns": {
         "type": "pt"
@@ -99,6 +112,7 @@
     },
     "IsAutoFit": {
       "description": "Checks if text is autofit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/IsAutoFit/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -107,6 +121,7 @@
     },
     "SetAutoFit": {
       "description": "Sets text autofit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetAutoFit/",
       "params": [
         {
           "description": "Specifies whether text autofit is enabled.",
@@ -121,6 +136,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets widget background color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "The background color.",
@@ -135,6 +151,7 @@
     },
     "SetBorderColor": {
       "description": "Sets widget border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -149,6 +166,7 @@
     },
     "SetBorderStyle": {
       "description": "Sets widget border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderStyle/",
       "params": [
         {
           "description": "The border style.",
@@ -163,6 +181,7 @@
     },
     "SetBorderWidth": {
       "description": "Sets widget border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderWidth/",
       "params": [
         {
           "description": "the width to set to the border.",
@@ -177,6 +196,7 @@
     },
     "SetPosition": {
       "description": "Sets widget position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetPosition/",
       "params": [
         {
           "description": "The new position of the widget.",
@@ -191,6 +211,7 @@
     },
     "SetRect": {
       "description": "Sets field rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetRect/",
       "params": [
         {
           "description": "The new bounding rectangle for the widget.",
@@ -205,6 +226,7 @@
     },
     "SetTextColor": {
       "description": "Sets widget text color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetTextColor/",
       "params": [
         {
           "description": "The text color.",
@@ -219,6 +241,7 @@
     },
     "SetTextSize": {
       "description": "Sets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetTextSize/",
       "params": [
         {
           "description": "The font size in points.",

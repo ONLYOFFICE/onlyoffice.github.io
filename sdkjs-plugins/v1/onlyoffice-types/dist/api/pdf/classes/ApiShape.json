@@ -1,11 +1,13 @@
 {
   "description": "Class representing a shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/",
   "extends": [
     "ApiDrawing"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns the type of the ApiShape class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"shape\""
@@ -14,6 +16,7 @@
     },
     "GetContent": {
       "description": "Returns the shape inner contents where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetContent/",
       "params": [],
       "returns": {
         "type": "ApiDocumentContent"
@@ -22,6 +25,7 @@
     },
     "GetDocContent": {
       "description": "Returns the shape inner contents where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetDocContent/",
       "params": [],
       "returns": {
         "type": "ApiDocumentContent"
@@ -30,6 +34,7 @@
     },
     "GetFill": {
       "description": "Gets the fill properties from the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetFill/",
       "params": [],
       "returns": {
         "type": "ApiFill | null"
@@ -38,6 +43,7 @@
     },
     "GetGeometry": {
       "description": "Returns the geometry object from the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetGeometry/",
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -46,6 +52,7 @@
     },
     "GetLine": {
       "description": "Gets the outline properties from the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetLine/",
       "params": [],
       "returns": {
         "type": "ApiStroke | null"
@@ -54,6 +61,7 @@
     },
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -62,6 +70,7 @@
     },
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -70,6 +79,7 @@
     },
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -78,6 +88,7 @@
     },
     "GetTextFit": {
       "description": "Returns the text autofit type of the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetTextFit/",
       "params": [],
       "returns": {
         "description": "The text autofit type.",
@@ -88,6 +99,7 @@
     },
     "GetVerticalTextAlign": {
       "description": "Gets the vertical alignment from the shape content where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetVerticalTextAlign/",
       "params": [],
       "returns": {
         "type": "VerticalTextAlign"
@@ -96,6 +108,7 @@
     },
     "SetFill": {
       "description": "Sets the fill properties to the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetFill/",
       "params": [
         {
           "description": "The fill type used to fill the shape.",
@@ -111,6 +124,7 @@
     },
     "SetGeometry": {
       "description": "Sets a custom geometry for the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetGeometry/",
       "params": [
         {
           "description": "The geometry to set.",
@@ -125,6 +139,7 @@
     },
     "SetLine": {
       "description": "Sets the outline properties to the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetLine/",
       "params": [
         {
           "description": "The stroke used to create the shape outline.",
@@ -140,6 +155,7 @@
     },
     "SetPaddings": {
       "description": "Sets the text paddings to the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetPaddings/",
       "params": [
         {
           "description": "Left padding.",
@@ -170,6 +186,7 @@
     },
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -184,6 +201,7 @@
     },
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -198,6 +216,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -217,6 +236,7 @@
     },
     "SetTextFit": {
       "description": "Sets the text autofit type to the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetTextFit/",
       "params": [
         {
           "description": "The text autofit type.",
@@ -233,6 +253,7 @@
     },
     "SetVerticalTextAlign": {
       "description": "Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetVerticalTextAlign/",
       "params": [
         {
           "description": "The type of the vertical alignment for the shape inner contents.",

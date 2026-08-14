@@ -1,5 +1,6 @@
 {
   "description": "Get horizontal flip of current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipH/",
   "params": [],
   "returns": {
     "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",

@@ -1,5 +1,6 @@
 {
   "description": "Sets the relative width of the object (image, shape, chart) bounding box.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeWidth/",
   "params": [
     {
       "description": "The document element which will be taken as a countdown point for the object width.",

@@ -1,5 +1,6 @@
 {
   "description": "Sets the text properties to the chart point data label.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetPointDataLabelTextPr/",
   "params": [
     {
       "description": "The series index from the array of the data used to build the chart from.",

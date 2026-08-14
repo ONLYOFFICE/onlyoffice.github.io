@@ -1,5 +1,6 @@
 {
   "description": "Returns the highlight color of the forms in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFormsHighlight/",
   "params": [],
   "returns": {
     "description": "Returns the highlight color, or _null_ if the highlight is disabled.",

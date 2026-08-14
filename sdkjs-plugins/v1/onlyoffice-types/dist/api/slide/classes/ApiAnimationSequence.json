@@ -1,8 +1,10 @@
 {
   "description": "Class representing an animation sequence (main sequence or interactive sequence).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/",
   "methods": {
     "AddEffect": {
       "description": "Adds an animation effect to the sequence.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/Methods/AddEffect/",
       "params": [
         {
           "description": "The drawing object to animate.",
@@ -30,6 +32,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiAnimationSequence class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"animationSequence\""
@@ -39,6 +42,7 @@
     },
     "GetCount": {
       "description": "Returns the number of effects in the sequence.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/Methods/GetCount/",
       "params": [],
       "returns": {
         "description": "The number of effects.",
@@ -49,6 +53,7 @@
     },
     "GetEffect": {
       "description": "Returns the effect at the specified index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/Methods/GetEffect/",
       "params": [
         {
           "description": "The zero-based index of the effect.",
@@ -65,6 +70,7 @@
     },
     "RemoveAllEffects": {
       "description": "Removes all effects from the sequence.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiAnimationSequence/Methods/RemoveAllEffects/",
       "params": [],
       "returns": {
         "description": "True if effects were removed successfully.",

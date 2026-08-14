@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor down.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorDown/",
   "params": [
     {
       "description": "Number of movements.",

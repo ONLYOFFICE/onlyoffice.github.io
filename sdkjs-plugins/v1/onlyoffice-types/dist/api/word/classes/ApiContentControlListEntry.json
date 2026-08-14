@@ -1,5 +1,6 @@
 {
   "description": "Class representing an entry of the combo box / drop-down list content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/",
   "methods": {
     "Delete": {
       "description": "Deletes the specified item in the combo box / drop-down list content control.",

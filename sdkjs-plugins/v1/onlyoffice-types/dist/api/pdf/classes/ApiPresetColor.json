@@ -1,11 +1,13 @@
 {
   "description": "Class representing a Preset Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPresetColor/",
   "extends": [
     "ApiUniColor"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiPresetColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPresetColor/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"presetColor\""

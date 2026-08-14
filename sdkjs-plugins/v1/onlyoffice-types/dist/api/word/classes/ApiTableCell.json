@@ -1,5 +1,6 @@
 {
   "description": "Class representing a table cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/",
   "extends": [
     "ApiTableCellPr"
   ],
@@ -80,6 +81,7 @@
     },
     "AddText": {
       "description": "Appends text to the end of the cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/Methods/AddText/",
       "params": [
         {
           "description": "The text to append.",
@@ -108,6 +110,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -153,6 +156,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -226,6 +230,7 @@
     },
     "GetText": {
       "description": "Returns the inner text of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -693,6 +698,7 @@
     },
     "SetText": {
       "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCell/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",

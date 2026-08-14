@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/",
   "methods": {
     "AddReply": {
       "description": "Adds reply on this annot.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/AddReply/",
       "params": [
         {
           "description": "The text annotation to use as a reply.",
@@ -17,6 +19,7 @@
     },
     "Delete": {
       "description": "Removes annotation from document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -25,6 +28,7 @@
     },
     "GetAuthorName": {
       "description": "Gets annotation author name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetAuthorName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -33,6 +37,7 @@
     },
     "GetBorderColor": {
       "description": "Gets annotation border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -41,6 +46,7 @@
     },
     "GetBorderEffectIntensity": {
       "description": "Gets annotation border effect intensity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderEffectIntensity/",
       "params": [],
       "returns": {
         "type": "number"
@@ -49,6 +55,7 @@
     },
     "GetBorderEffectStyle": {
       "description": "Gets annotation border effect style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderEffectStyle/",
       "params": [],
       "returns": {
         "type": "AnnotBorderEffectStyle"
@@ -57,6 +64,7 @@
     },
     "GetBorderStyle": {
       "description": "Gets annotation border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderStyle/",
       "params": [],
       "returns": {
         "type": "AnnotBorderStyle"
@@ -65,6 +73,7 @@
     },
     "GetBorderWidth": {
       "description": "Gets annotation border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetBorderWidth/",
       "params": [],
       "returns": {
         "type": "pt"
@@ -73,6 +82,7 @@
     },
     "GetContents": {
       "description": "Gets annotation contents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetContents/",
       "params": [],
       "returns": {
         "type": "string"
@@ -81,6 +91,7 @@
     },
     "GetCreationDate": {
       "description": "Gets annotation creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetCreationDate/",
       "params": [],
       "returns": {
         "type": "number"
@@ -89,6 +100,7 @@
     },
     "GetDashPattern": {
       "description": "Gets annotation dash pattern.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetDashPattern/",
       "params": [],
       "returns": {
         "type": "number[]"
@@ -97,6 +109,7 @@
     },
     "GetDisplay": {
       "description": "Gets annotation display type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetDisplay/",
       "params": [],
       "returns": {
         "type": "DisplayType"
@@ -105,6 +118,7 @@
     },
     "GetFillColor": {
       "description": "Gets annotation fill color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetFillColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -113,6 +127,7 @@
     },
     "GetModDate": {
       "description": "Gets annotation last modification date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetModDate/",
       "params": [],
       "returns": {
         "type": "number"
@@ -121,6 +136,7 @@
     },
     "GetOpacity": {
       "description": "Gets annotation opacity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetOpacity/",
       "params": [],
       "returns": {
         "type": "string"
@@ -129,6 +145,7 @@
     },
     "GetPosition": {
       "description": "Gets annotation position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetPosition/",
       "params": [],
       "returns": {
         "type": "Point"
@@ -137,6 +154,7 @@
     },
     "GetRect": {
       "description": "Gets annotation rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetRect/",
       "params": [],
       "returns": {
         "type": "Rect"
@@ -145,6 +163,7 @@
     },
     "GetReplies": {
       "description": "Gets replies on this annot.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetReplies/",
       "params": [],
       "returns": {
         "type": "ApiTextAnnotation[]"
@@ -153,6 +172,7 @@
     },
     "GetSubject": {
       "description": "Gets annotation subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetSubject/",
       "params": [],
       "returns": {
         "type": "string"
@@ -161,6 +181,7 @@
     },
     "GetUniqueName": {
       "description": "Gets annotation unique name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/GetUniqueName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -169,6 +190,7 @@
     },
     "SetAuthorName": {
       "description": "Sets annotation author name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetAuthorName/",
       "params": [
         {
           "description": "The author name.",
@@ -183,6 +205,7 @@
     },
     "SetBorderColor": {
       "description": "Sets annotation border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -197,6 +220,7 @@
     },
     "SetBorderEffectIntensity": {
       "description": "Sets annotation border effect intensity.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderEffectIntensity/",
       "params": [
         {
           "description": "The border effect intensity. Must be greater than or equal to 0.",
@@ -211,6 +235,7 @@
     },
     "SetBorderEffectStyle": {
       "description": "Sets annotation border effect style.\n<note> Can be applied to circle, square, freeText and polygon annotations </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderEffectStyle/",
       "params": [
         {
           "description": "The border effect style: **\"none\"** or **\"cloud\"**.",
@@ -225,6 +250,7 @@
     },
     "SetBorderStyle": {
       "description": "Sets annotation border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderStyle/",
       "params": [
         {
           "description": "The border style: **\"solid\"** or **\"dashed\"**.",
@@ -239,6 +265,7 @@
     },
     "SetBorderWidth": {
       "description": "Sets annotation border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetBorderWidth/",
       "params": [
         {
           "description": "The border width in points.",
@@ -253,6 +280,7 @@
     },
     "SetContents": {
       "description": "Sets annotation contents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetContents/",
       "params": [
         {
           "description": "The annotation text contents.",
@@ -267,6 +295,7 @@
     },
     "SetCreationDate": {
       "description": "Sets annotation creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetCreationDate/",
       "params": [
         {
           "description": "The annotation creation date as a numeric timestamp.",
@@ -281,6 +310,7 @@
     },
     "SetDashPattern": {
       "description": "Sets annotation dash pattern.\n<note> The border style property must be set to \"dashed\". </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetDashPattern/",
       "params": [
         {
           "description": "A dash array defining a pattern of dashes and gaps to be used in drawing a dashed border. For example, a value of [3, 2] specifies a border drawn with 3-point dashes alternating with 2-point gaps.",
@@ -295,6 +325,7 @@
     },
     "SetDisplay": {
       "description": "Sets annotation display type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetDisplay/",
       "params": [
         {
           "description": "The display type for the annotation.",
@@ -309,6 +340,7 @@
     },
     "SetFillColor": {
       "description": "Sets annotation fill color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetFillColor/",
       "params": [
         {
           "description": "color to set fill (omit the argument to set no fill)",
@@ -323,6 +355,7 @@
     },
     "SetModDate": {
       "description": "Sets annotation last modification date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetModDate/",
       "params": [
         {
           "description": "The annotation last modification date as a numeric timestamp.",
@@ -337,6 +370,7 @@
     },
     "SetOpacity": {
       "description": "Sets annotation opacity.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetOpacity/",
       "params": [
         {
           "description": "The opacity value from 0 (transparent) to 100 (opaque).",
@@ -351,6 +385,7 @@
     },
     "SetPosition": {
       "description": "Sets annotation position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetPosition/",
       "params": [
         {
           "description": "The new position of the annotation.",
@@ -365,6 +400,7 @@
     },
     "SetRect": {
       "description": "Sets annotation rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetRect/",
       "params": [
         {
           "description": "The new bounding rectangle for the annotation.",
@@ -379,6 +415,7 @@
     },
     "SetSubject": {
       "description": "Sets annotation subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetSubject/",
       "params": [
         {
           "description": "The annotation subject text.",
@@ -393,6 +430,7 @@
     },
     "SetUniqueName": {
       "description": "Sets annotation unique name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetUniqueName/",
       "params": [
         {
           "description": "The unique name for the annotation.",

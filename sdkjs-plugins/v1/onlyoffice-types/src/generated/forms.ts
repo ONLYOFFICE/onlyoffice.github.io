@@ -2,24 +2,10 @@
 // Editor type: form
 
 export namespace Forms {
-  /**
-   * Types of all supported forms.
-   *
-   * @example
-   * ```js
-   * let copyTextForm = textForm.Copy();
-   * ```
-   */
+  /** Types of all supported forms. */
   export type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm;
 
-  /**
-   * Axis position in the chart.
-   *
-   * @example
-   * ```js
-   * chart.SetAxieNumFormat("top", "0.00");
-   * ```
-   */
+  /** Axis position in the chart. */
   export type AxisPos = "top" | "bottom" | "right" | "left";
 
   /** The Base64 image string. */
@@ -31,11 +17,6 @@ export namespace Forms {
    * over the created shape surface.
    * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched
    * to fit the created shape surface.
-   *
-   * @example
-   * ```js
-   * let blipFill = Api.CreateBlipFill("https://example.com/myimage.png", "tile");
-   * ```
    */
   export type BlipFillType = "tile" | "stretch";
 
@@ -58,22 +39,10 @@ export namespace Forms {
    * A border type which will be added to the document element.
    * **"none"** - no border will be added to the created element or the selected element side.
    * **"single"** - a single border will be added to the created element or the selected element side.
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 24, 0, 0, 255, 0);
-   * ```
    */
   export type BorderType = "none" | "single";
 
-  /**
-   * Possible values for the caption label.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaptionCrossRef("Table", "pageNum", caption);
-   * ```
-   */
+  /** Possible values for the caption label. */
   export type CaptionLabel = "Table" | "Equation" | "Figure";
 
   /**
@@ -83,11 +52,6 @@ export namespace Forms {
    * **"Roman"** - upper Roman.
    * **"roman"** - lower Roman.
    * **"Arabic"** - arabic.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
-   * ```
    */
   export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
@@ -98,53 +62,19 @@ export namespace Forms {
    * **"colon"** - the ":" punctuation mark.
    * **"longDash"** - the "—" punctuation mark.
    * **"dash"** - the "-" punctuation mark.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
-   * ```
    */
   export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
-  /**
-   * This type specifies the available chart types which can be used to create a new chart.
-   *
-   * @example
-   * ```js
-   * // ChartType used in text documents
-   * // The resulting chart will have a 'bar3D' type:
-   * var chart = Api.CreateChart("bar3D", [[200, 240, 280],[250, 260, 280]], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
-   *
-   * // ChartType used in spreadsheets
-   * // The resulting chart will have a 'bar3D' type:
-   * var chart = worksheet.AddChart("'Sheet1'!$A$1:$D$3", true, "bar3D", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);
-   * ```
-   */
+  /** This type specifies the available chart types which can be used to create a new chart. */
   export type ChartType = "ColumnClustered" | "ColumnStacked" | "ColumnStacked100" | "3DColumnClustered" | "3DColumnStacked" | "3DColumnStacked100" | "3DColumn" | "BarClustered" | "BarStacked" | "BarStacked100" | "3DBarClustered" | "3DBarStacked" | "3DBarStacked100" | "Line" | "LineStacked" | "LineStacked100" | "LineMarkers" | "LineMarkersStacked" | "LineMarkersStacked100" | "3DLine" | "Pie" | "3DPie" | "Doughnut" | "XYScatter" | "XYScatterLines" | "XYScatterLinesNoMarkers" | "XYScatterSmooth" | "XYScatterSmoothNoMarkers" | "StockHLC" | "StockOHLC" | "StockVHLC" | "StockVOHLC" | "Area" | "AreaStacked" | "AreaStacked100" | "Combo" | "ComboColumnClusteredLine" | "ComboColumnClusteredLineSecondaryAxis" | "Radar" | "RadarMarkers" | "RadarFilled" | "unknown";
 
   /** This type specifies the legacy chart type names which are kept for backward compatibility. */
   export type ChartTypeLegacy = "bar" | "barStacked" | "barStackedPercent" | "bar3D" | "barStacked3D" | "barStackedPercent3D" | "barStackedPercent3DPerspective" | "horizontalBar" | "horizontalBarStacked" | "horizontalBarStackedPercent" | "horizontalBar3D" | "horizontalBarStacked3D" | "horizontalBarStackedPercent3D" | "lineNormal" | "lineStacked" | "lineStackedPercent" | "lineNormalMarker" | "lineStackedMarker" | "lineStackedPerMarker" | "line3D" | "pie" | "pie3D" | "doughnut" | "scatter" | "scatterLine" | "scatterLineMarker" | "scatterSmooth" | "scatterSmoothMarker" | "stock" | "area" | "areaStacked" | "areaStackedPercent" | "comboCustom" | "comboBarLine" | "comboBarLineSecondary" | "radar" | "radarMarker" | "radarFilled" | "unknown";
 
-  /**
-   * Checkbox / radio button properties.
-   *
-   * @example
-   * ```js
-   * let checkBoxFormPr = {"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true};
-   * let checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPr);
-   * ```
-   */
+  /** Checkbox / radio button properties. */
   export type CheckBoxFormPr = FormPrBase | CheckBoxFormPrBase;
 
-  /**
-   * Specific checkbox / radio button properties.
-   *
-   * @example
-   * ```js
-   * let checkBoxFormPrBase = {"radio": true};
-   * let checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPrBase)
-   * ```
-   */
+  /** Specific checkbox / radio button properties. */
   export interface CheckBoxFormPrBase {
     /**
      * Specifies if the current checkbox is a radio button. In this case, the key parameter is considered
@@ -165,26 +95,10 @@ export namespace Forms {
     label: string;
   }
 
-  /**
-   * Combo box / dropdown list properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPr = {"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);
-   * ```
-   */
+  /** Combo box / dropdown list properties. */
   export type ComboBoxFormPr = FormPrBase | ComboBoxFormPrBase;
 
-  /**
-   * Specific combo box / dropdown list properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPrBase = {"editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPrBase);
-   * ```
-   */
+  /** Specific combo box / dropdown list properties. */
   export interface ComboBoxFormPrBase {
     /** Specifies if the combo box text can be edited. */
     editable: boolean;
@@ -205,27 +119,13 @@ export namespace Forms {
     items: (string | string[])[];
   }
 
-  /**
-   * A dictionary of users and their comments.
-   *
-   * @example
-   * ```js
-   * let commentsReport = oDocument.GetCommentsReport();
-   * ```
-   */
+  /** A dictionary of users and their comments. */
   export interface CommentReport {
     /** The comments grouped by username. */
     username?: UserComments;
   }
 
-  /**
-   * Represents a single comment record.
-   *
-   * @example
-   * ```js
-   * let commentsReport = oDocument.GetCommentsReport();
-   * ```
-   */
+  /** Represents a single comment record. */
   export interface CommentReportRecord {
     /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
@@ -288,26 +188,10 @@ export namespace Forms {
   /** Available dash type for line. */
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
-  /**
-   * The date form properties.
-   *
-   * @example
-   * ```js
-   * let dateFormPr = {"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"};
-   * let dateForm = Api.CreateDateForm(dateFormPr);
-   * ```
-   */
+  /** The date form properties. */
   export type DateFormPr = FormPrBase | DateFormPrBase;
 
-  /**
-   * Specific date form properties.
-   *
-   * @example
-   * ```js
-   * let dateFormPrBase = {"format": "mm.dd.yyyy", "lang": "en-US"};
-   * let dateForm = Api.CreateDateForm(dateFormPrBase);
-   * ```
-   */
+  /** Specific date form properties. */
   export interface DateFormPrBase {
     /** The date format, ex: mm.dd.yyyy */
     format: string;
@@ -319,14 +203,7 @@ export namespace Forms {
     lang: string;
   }
 
-  /**
-   * Any valid element which can be added to the document structure.
-   *
-   * @example
-   * ```js
-   * doc.AddElement(paragraph);
-   * ```
-   */
+  /** Any valid element which can be added to the document structure. */
   export type DocumentElement = ApiParagraph | ApiTable | ApiBlockLvlSdt;
 
   /** Any valid drawing element. */
@@ -335,14 +212,7 @@ export namespace Forms {
   /** Available drawing element for grouping. */
   export type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
 
-  /**
-   * This type specifies the type of drawing lock.
-   *
-   * @example
-   * ```js
-   * let lockValue = drawing.GetLockValue("noSelect");
-   * ```
-   */
+  /** This type specifies the type of drawing lock. */
   export type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
 
   /** English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs. */
@@ -351,14 +221,7 @@ export namespace Forms {
   /** The available fill types. */
   export type FillType = "solid" | "gradient" | "pattern" | "blip" | "nofill";
 
-  /**
-   * Form data.
-   *
-   * @example
-   * ```js
-   * let formData = {key: "CompanyName", value: "OnlyOffice", type: "text"};
-   * ```
-   */
+  /** Form data. */
   export interface FormData {
     /** The form key. If the current form is a radio button, then this field contains the group key. */
     key: string;
@@ -394,15 +257,7 @@ export namespace Forms {
     lang?: string;
   }
 
-  /**
-   * Form insertion specific properties.
-   *
-   * @example
-   * ```js
-   * let textFormInsertPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "Name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false, "placeholderFromSelection": true, "keepSelectedTextInForm": false};
-   * doc.InsertTextForm(textFormInsertPr);
-   * ```
-   */
+  /** Form insertion specific properties. */
   export interface FormInsertPr {
     /** Specifies if the currently selected text should be saved as a placeholder of the inserted form. */
     placeholderFromSelection?: boolean;
@@ -411,15 +266,7 @@ export namespace Forms {
     keepSelectedTextInForm?: boolean;
   }
 
-  /**
-   * Common form properties.
-   *
-   * @example
-   * ```js
-   * let formPrBase = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name"};
-   * let textForm = Api.CreateTextForm(formPrBase);
-   * ```
-   */
+  /** Common form properties. */
   export interface FormPrBase {
     /** The form key. */
     key: string;
@@ -440,24 +287,12 @@ export namespace Forms {
     placeholder: string;
   }
 
-  /**
-   * The specific form type.
-   *
-   * @example
-   * ```js
-   * let formsData = doc.GetFormsData();
-   * ```
-   */
+  /** The specific form type. */
   export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio" | "complex" | "signature";
 
   /**
    * Form type.
    * The available form types.
-   *
-   * @example
-   * ```js
-   * let formType = textForm.GetFormType();
-   * ```
    */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
@@ -476,11 +311,6 @@ export namespace Forms {
    * **"title"** - a header or footer which is applied to the title page.
    * **"even"** - a header or footer which can be applied to even pages to distinguish them from the odd
    * ones (which will be considered default).
-   *
-   * @example
-   * ```js
-   * let docContent = finalSection.RemoveHeader("title");
-   * ```
    */
   export type HdrFtrType = "default" | "title" | "even";
 
@@ -490,24 +320,10 @@ export namespace Forms {
   /** The line end type. */
   export type LineEndType = "none" | "arrow" | "diamond" | "oval" | "stealth" | "triangle";
 
-  /**
-   * Standard numeric format.
-   *
-   * @example
-   * ```js
-   * worksheet.GetRange("A1").SetOrientation("xlUpward");
-   * ```
-   */
+  /** Standard numeric format. */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
-  /**
-   * The types of elements that can be added to the paragraph structure.
-   *
-   * @example
-   * ```js
-   * paragraph.AddElement(run, 0);
-   * ```
-   */
+  /** The types of elements that can be added to the paragraph structure. */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath;
 
   /**
@@ -522,36 +338,13 @@ export namespace Forms {
   /** The path fill type. */
   export type PathFillType = "none" | "norm" | "lighten" | "lightenLess" | "darken" | "darkenLess";
 
-  /**
-   * The available preset patterns which can be used for the fill.
-   *
-   * @example
-   * ```js
-   * let fill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0));
-   * ```
-   */
+  /** The available preset patterns which can be used for the fill. */
   export type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
 
-  /**
-   * Picture form properties.
-   *
-   * @example
-   * ```js
-   * let pictureFormPr = {"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50};
-   * let pictureForm = Api.CreatePictureForm(pictureFormPr);
-   * ```
-   */
+  /** Picture form properties. */
   export type PictureFormPr = FormPrBase | PictureFormPrBase;
 
-  /**
-   * Specific picture form properties.
-   *
-   * @example
-   * ```js
-   * let comboBoxFormPr = {"editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]};
-   * let comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);
-   * ```
-   */
+  /** Specific picture form properties. */
   export interface PictureFormPrBase {
     /** The condition to scale an image in the picture form: "always", "never", "tooBig" or "tooSmall". */
     scaleFlag: ScaleFlag;
@@ -579,34 +372,13 @@ export namespace Forms {
     shiftY: percentage;
   }
 
-  /**
-   * 60000th of a degree (5400000 = 90 degrees).
-   *
-   * @example
-   * ```js
-   * let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);
-   * ```
-   */
+  /** 60000th of a degree (5400000 = 90 degrees). */
   export type PositiveFixedAngle = number;
 
-  /**
-   * The 1000th of a percent (100000 = 100%).
-   *
-   * @example
-   * ```js
-   * let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);
-   * ```
-   */
+  /** The 1000th of a percent (100000 = 100%). */
   export type PositivePercentage = number;
 
-  /**
-   * The available preset color names.
-   *
-   * @example
-   * ```js
-   * let schemeColor = Api.CreatePresetColor("lightYellow");
-   * ```
-   */
+  /** The available preset color names. */
   export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
   /** The reading order (left-to-right or right-to-left). */
@@ -615,58 +387,22 @@ export namespace Forms {
   /**
    * The possible values for the base which the relative horizontal positioning of an object will be
    * calculated from.
-   *
-   * @example
-   * ```js
-   * drawing.SetHorAlign("page", "center");
-   * ```
    */
   export type RelFromH = "character" | "column" | "insideMargin" | "leftMargin" | "rightMargin" | "margin" | "outsideMargin" | "page";
 
   /**
    * The possible values for the base which the relative vertical positioning of an object will be
    * calculated from.
-   *
-   * @example
-   * ```js
-   * drawing.SetVerAlign("page", "center");
-   * ```
    */
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
-  /**
-   * A dictionary of users and their review changes.
-   *
-   * @example
-   * ```js
-   * let reviewRecord = {
-   * 	"John Smith" : [{Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161},
-   * 					{Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}],
-   * 	"Mark Pottato" : [{Type: "ParaRem", Date: 1679941755942},
-   * 					{Type: "TextPr", Date: 1679941757832}]
-   * }
-   * ```
-   */
+  /** A dictionary of users and their review changes. */
   export interface ReviewReport {
     /** The review changes grouped by username. */
     username?: UserReviewChanges;
   }
 
-  /**
-   * Represents a single review change record.
-   *
-   * @example
-   * ```js
-   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
-   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
-   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
-   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
-   * let reviewRecord = {
-   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
-   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
-   * };
-   * ```
-   */
+  /** Represents a single review change record. */
   export interface ReviewReportRecord {
     /** The review record type. */
     Type: ReviewReportRecordType;
@@ -681,21 +417,7 @@ export namespace Forms {
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
-  /**
-   * Review record type.
-   *
-   * @example
-   * ```js
-   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
-   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
-   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
-   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
-   * let reviewRecord = {
-   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
-   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
-   * };
-   * ```
-   */
+  /** Review record type. */
   export type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
 
   /** The role properties. */
@@ -704,34 +426,13 @@ export namespace Forms {
     color: string;
   }
 
-  /**
-   * The condition to scale an image in the picture form.
-   *
-   * @example
-   * ```js
-   * pictureForm.SetScaleFlag("tooBig");
-   * ```
-   */
+  /** The condition to scale an image in the picture form. */
   export type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
 
-  /**
-   * The available color scheme identifiers.
-   *
-   * @example
-   * ```js
-   * let schemeColor = Api.CreateSchemeColor("accent2");
-   * ```
-   */
+  /** The available color scheme identifiers. */
   export type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
 
-  /**
-   * The lock type of the content control.
-   *
-   * @example
-   * ```js
-   * inlineLvlSdt.SetLock("sdtContentLocked");
-   * ```
-   */
+  /** The lock type of the content control. */
   export type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
 
   /**
@@ -771,14 +472,7 @@ export namespace Forms {
     rotateWithShape?: boolean;
   }
 
-  /**
-   * This type specifies the preset shape geometry that will be used for a shape.
-   *
-   * @example
-   * ```js
-   * let drawing = Api.CreateShape("diamond", 100 * 36000, 100 * 36000, fill, stroke);
-   * ```
-   */
+  /** This type specifies the preset shape geometry that will be used for a shape. */
   export type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
 
   /** The shading information object. */
@@ -790,14 +484,7 @@ export namespace Forms {
     Color: ApiColor;
   }
 
-  /**
-   * A shade type which can be added to the document element.
-   *
-   * @example
-   * ```js
-   * tablePr.SetShd("clear", 0, 255, 0, false);
-   * ```
-   */
+  /** A shade type which can be added to the document element. */
   export type ShdType = "nil" | "clear";
 
   /**
@@ -812,24 +499,10 @@ export namespace Forms {
    */
   export type SizeRelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page";
 
-  /**
-   * The style type used for the document element.
-   *
-   * @example
-   * ```js
-   * let normalStyle = doc.GetDefaultStyle("paragraph");
-   * ```
-   */
+  /** The style type used for the document element. */
   export type StyleType = "paragraph" | "table" | "run" | "numbering";
 
-  /**
-   * Custom tab types.
-   *
-   * @example
-   * ```js
-   * paraPr.SetTabs([1000, 1500, 3000], ["center", "left", "right"]);
-   * ```
-   */
+  /** Custom tab types. */
   export type TabJc = "clear" | "left" | "right" | "center";
 
   /** A paragraph tab stop. */
@@ -886,11 +559,6 @@ export namespace Forms {
    * **"bandedRowEven"** - specifies that the table formatting is applied to even numbered groupings of
    * columns.
    * **"wholeTable"** - specifies that the conditional formatting is applied to the whole table.
-   *
-   * @example
-   * ```js
-   * tableStyle.GetConditionalTableStyle("topLeftCell").GetTableCellPr().SetShd("clear", 255, 0, 0);
-   * ```
    */
   export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
@@ -902,11 +570,6 @@ export namespace Forms {
    * **"nul"** - sets the table or table cell width to be of a zero value.
    * **"percent"** - sets the table or table cell width to be measured in percent to the parent
    * container.
-   *
-   * @example
-   * ```js
-   * tableCell.SetWidth("twips", 2000);
-   * ```
    */
   export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
@@ -922,37 +585,13 @@ export namespace Forms {
     value?: string;
   }
 
-  /**
-   * Properties for inserting a text field.
-   *
-   * @example
-   * ```js
-   * let textFormInsertPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "Name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false, "placeholderFromSelection": true, "keepSelectedTextInForm": false};
-   * doc.InsertTextForm(textFormInsertPr);
-   * ```
-   */
+  /** Properties for inserting a text field. */
   export type TextFormInsertPr = FormPrBase | TextFormPrBase | FormInsertPr;
 
-  /**
-   * Text field properties.
-   *
-   * @example
-   * ```js
-   * let textFormPr = {"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false};
-   * let textForm = Api.CreateTextForm(textFormPr);
-   * ```
-   */
+  /** Text field properties. */
   export type TextFormPr = FormPrBase | TextFormPrBase;
 
-  /**
-   * Specific text field properties.
-   *
-   * @example
-   * ```js
-   * let textFormPrBase = {"comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false};
-   * let textForm = Api.CreateTextForm(textFormPrBase);
-   * ```
-   */
+  /** Specific text field properties. */
   export interface TextFormPrBase {
     /**
      * Specifies if the text field should be a comb of characters with the same cell width. The maximum
@@ -979,14 +618,7 @@ export namespace Forms {
     autoFit: boolean;
   }
 
-  /**
-   * Text transform type.
-   *
-   * @example
-   * ```js
-   * let textArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", fill, stroke, 0, 150 * 36000, 50 * 36000);
-   * ```
-   */
+  /** Text transform type. */
   export type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
 
   /**
@@ -997,22 +629,10 @@ export namespace Forms {
    * values.
    * **"high"** - sets the position of the selected tick labels in the part of the chart with higher
    * values.
-   *
-   * @example
-   * ```js
-   * chart.SetVertAxisTickLabelPosition("nextTo");
-   * ```
    */
   export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
-  /**
-   * The type of tick mark appearance.
-   *
-   * @example
-   * ```js
-   * chart.SetVertAxisMajorTickMark("cross");
-   * ```
-   */
+  /** The type of tick mark appearance. */
   export type TickMark = "cross" | "in" | "none" | "out";
 
   /** Options for converting document content to an HTML string. */
@@ -1042,13 +662,6 @@ export namespace Forms {
   /**
    * Table of contents properties which specify whether to generate the table of contents from the
    * outline levels or the specified styles.
-   *
-   * @example
-   * ```js
-   * let tocBuildFromPr = {"OutlineLvls": 9};
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": tocBuildFromPr, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
    */
   export interface TocBuildFromPr {
     /** The highest heading level included in the table of contents (the start of the outline range). */
@@ -1069,25 +682,10 @@ export namespace Forms {
    * **"dot"** - "......."
    * **"dash"** - "-------"
    * **"underline"** - "_______"
-   *
-   * @example
-   * ```js
-   * let tocLeader = "dot";
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": tocLeader, "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
    */
   export type TocLeader = "dot" | "dash" | "underline" | "none";
 
-  /**
-   * Table of contents properties.
-   *
-   * @example
-   * ```js
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Table of contents properties. */
   export interface TocPr {
     /** Specifies whether to show page numbers in the table of contents. */
     ShowPageNums?: boolean;
@@ -1108,28 +706,10 @@ export namespace Forms {
     TocStyle?: TocStyle;
   }
 
-  /**
-   * Possible values for the table of contents style.
-   *
-   * @example
-   * ```js
-   * let tocStyle = "standard";
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": tocStyle};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Possible values for the table of contents style. */
   export type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
 
-  /**
-   * Table of contents style levels.
-   *
-   * @example
-   * ```js
-   * let tocStyleLvl = [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}];
-   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"StylesLvls": tocStyleLvl}, "TocStyle": "standard"};
-   * doc.AddTableOfContents(tocPr);
-   * ```
-   */
+  /** Table of contents style levels. */
   export interface TocStyleLvl {
     /** Style name (for example, "Heading 1"). */
     Name: string;
@@ -1138,15 +718,7 @@ export namespace Forms {
     Lvl: number;
   }
 
-  /**
-   * Table of figures properties.
-   *
-   * @example
-   * ```js
-   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": "distinctive"};
-   * doc.AddTableOfFigures(tofPr);
-   * ```
-   */
+  /** Table of figures properties. */
   export interface TofPr {
     /** Specifies whether to show page numbers in the table of figures. */
     ShowPageNums?: boolean;
@@ -1173,16 +745,7 @@ export namespace Forms {
     TofStyle?: TofStyle;
   }
 
-  /**
-   * Possible values for the table of figures style.
-   *
-   * @example
-   * ```js
-   * let tofStyle = "distinctive";
-   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": tofStyle};
-   * doc.AddTableOfFigures(tofPr);
-   * ```
-   */
+  /** Possible values for the table of figures style. */
   export type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
 
   /** Represents a user's comment history. */
@@ -1200,32 +763,13 @@ export namespace Forms {
   /**
    * The available text vertical alignment (used to align text in a shape with a placement for text
    * inside it).
-   *
-   * @example
-   * ```js
-   * drawing.SetVerticalTextAlign("top");
-   * ```
    */
   export type VerticalTextAlign = "top" | "center" | "bottom";
 
-  /**
-   * The watermark direction.
-   *
-   * @example
-   * ```js
-   * watermarkSettings.SetDirection("clockwise45");
-   * ```
-   */
+  /** The watermark direction. */
   export type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45" | "clockwise90" | "counterclockwise90";
 
-  /**
-   * The watermark type.
-   *
-   * @example
-   * ```js
-   * watermarkSettings.SetType("text");
-   * ```
-   */
+  /** The watermark type. */
   export type WatermarkType = "none" | "text" | "image";
 
   /**
@@ -1252,25 +796,10 @@ export namespace Forms {
    * "4.1.1" you refer to "1" only);
    * **"fullCtxParaNum** - the full paragraph number, e.g. "4.1.1";
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddBookmarkCrossRef("pageNum", bookmark);
-   * ```
    */
   export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
-  /**
-   * A numeric value from 0 to 255.
-   *
-   * @example
-   * ```js
-   * // The resulting color is green, the bytes are measured in decimal numbers:
-   * let rgbColorGreen = Api.CreateRGBColor(0, 255, 0);
-   * // The resulting color is red, the bytes are measured in hexadecimal numbers:
-   * let rgbColorRed = Api.CreateRGBColor(0xff, 0, 0);
-   * ```
-   */
+  /** A numeric value from 0 to 255. */
   export type byte = number;
 
   /**
@@ -1280,11 +809,6 @@ export namespace Forms {
    * **"captionText"** - the caption text only;
    * **"pageNum"** - the page number containing the referenced object;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddCaptionCrossRef("table", "pageNum", caption);
-   * ```
    */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
@@ -1295,11 +819,6 @@ export namespace Forms {
    * **"aboveBelow"** - the words "above" or "below" depending on the item position;
    * **"formEndnoteNum"** - the form number formatted as an endnote. The numbering of the actual endnotes
    * is not affected.
-   *
-   * @example
-   * ```js
-   * paragraph.AddEndnoteCrossRef("pageNum", endnoteParagraph);
-   * ```
    */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
@@ -1310,11 +829,6 @@ export namespace Forms {
    * **"aboveBelow"** - the words "above" or "below" depending on the position of the item;
    * **"formFootnoteNum"** - the form number formatted as a footnote. The numbering of the actual
    * footnotes is not affected.
-   *
-   * @example
-   * ```js
-   * paragraph.AddFootnoteCrossRef("pageNum", footnoteParagraph);
-   * ```
    */
   export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
@@ -1328,52 +842,19 @@ export namespace Forms {
    * instead of "4.B" you receive "B" only;
    * **"fullCtxHeadingNum"** - the full heading number even if the cursor pointer is in the same section;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddHeadingCrossRef("pageNum", headingParagraph);
-   * ```
    */
   export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
-  /**
-   * Available highlight colors.
-   *
-   * @example
-   * ```js
-   * paragraph.SetHighlight("green");
-   * ```
-   */
+  /** Available highlight colors. */
   export type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
 
-  /**
-   * Half-points (2 half-points = 1 point).
-   *
-   * @example
-   * ```js
-   * textPr.SetFontSize(22);
-   * ```
-   */
+  /** Half-points (2 half-points = 1 point). */
   export type hps = number;
 
-  /**
-   * 240ths of a line.
-   *
-   * @example
-   * ```js
-   * paraPr.SetSpacingLine(240, "auto");
-   * ```
-   */
+  /** 240ths of a line. */
   export type line240 = number;
 
-  /**
-   * 1 millimetre equals 1/10th of a centimetre.
-   *
-   * @example
-   * ```js
-   * textForm.SetCellWidth(7);
-   * ```
-   */
+  /** 1 millimetre equals 1/10th of a centimetre. */
   export type mm = number;
 
   /**
@@ -1386,52 +867,19 @@ export namespace Forms {
    * **"text"** - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to
    * "Terms and Conditions" only;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
-   *
-   * @example
-   * ```js
-   * paragraph.AddNumberedCrossRef("pageNum", numberedParagraph, true, true);
-   * ```
    */
   export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
-  /**
-   * Value from 0 to 100.
-   *
-   * @example
-   * ```js
-   * pictureForm.SetPicturePosition(70, 70);
-   * ```
-   */
+  /** Value from 0 to 100. */
   export type percentage = number;
 
-  /**
-   * A point.
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 24, 1, 0, 255, 0);
-   * ```
-   */
+  /** A point. */
   export type pt = number;
 
-  /**
-   * Eighths of a point (24 eighths of a point = 3 points).
-   *
-   * @example
-   * ```js
-   * paraPr.SetBottomBorder("single", 48, 0, 0, 255, 0);
-   * ```
-   */
+  /** Eighths of a point (24 eighths of a point = 3 points). */
   export type pt_8 = number;
 
-  /**
-   * Twentieths of a point (equivalent to 1/1440th of an inch).
-   *
-   * @example
-   * ```js
-   * paragraph.SetEqualColumns(2, 720);
-   * ```
-   */
+  /** Twentieths of a point (equivalent to 1/1440th of an inch). */
   export type twips = number;
 
   /**
@@ -1457,6 +905,8 @@ export namespace Forms {
      * @default base64img = false
      * @default demoteHeadings = false
      * @default renderHTMLTags = false
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ConvertDocument/
      */
     ConvertDocument(convertType?: "markdown" | "html", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string;
 
@@ -1464,19 +914,6 @@ export namespace Forms {
      * Creates a checkbox / radio button with the specified checkbox / radio button properties.
      *
      * @param formPr - Checkbox / radio button properties.
-     *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateCheckBoxForm/
      */
@@ -1486,14 +923,6 @@ export namespace Forms {
      * Creates a combo box / dropdown list with the specified combo box / dropdown list properties.
      *
      * @param formPr - Combo box / dropdown list properties.
-     *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComboBoxForm/
      */
@@ -1513,14 +942,6 @@ export namespace Forms {
      *
      * @param formPr - Date form properties.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * ```
-     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateDateForm/
      */
     CreateDateForm(formPr: DateFormPr): ApiDateForm;
@@ -1529,15 +950,6 @@ export namespace Forms {
      * Creates a picture form with the specified picture form properties.
      *
      * @param formPr - Picture form properties.
-     *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreatePictureForm/
      */
@@ -1558,14 +970,6 @@ export namespace Forms {
      *
      * @param formPr - Text field properties.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * ```
-     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateTextForm/
      */
     CreateTextForm(formPr: TextFormPr): ApiTextForm;
@@ -1579,6 +983,8 @@ export namespace Forms {
      * @param newLine - A character which is used to specify the line break character in the source text.
      * @default tab = "\t"
      * @default newLine = "\r\n"
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ReplaceTextSmart/
      */
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
   }
@@ -1603,43 +1009,23 @@ export namespace Forms {
   export interface ApiChartSeries {
   }
 
-  /** Class representing a document checkbox / radio button. */
+  /**
+   * Class representing a document checkbox / radio button.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/
+   */
   export interface ApiCheckBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -1649,6 +1035,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -1656,6 +1044,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -1663,6 +1053,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -1670,6 +1062,8 @@ export namespace Forms {
      * Returns the choice name of the current radio button.
      *
      * @since 8.3.2
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetChoiceName/
      */
     GetChoiceName(): string;
 
@@ -1678,57 +1072,21 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetClassType/
      */
     GetClassType(): "checkBoxForm";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -1737,6 +1095,8 @@ export namespace Forms {
      * Returns an empty string if the current form is not a radio button or nothing is selected.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetGroupValue/
      */
     GetGroupValue(): string;
 
@@ -1744,6 +1104,8 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -1751,6 +1113,8 @@ export namespace Forms {
      * Returns the label of the current check box.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetLabel/
      */
     GetLabel(): string;
 
@@ -1758,6 +1122,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -1767,6 +1133,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -1774,6 +1142,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -1782,32 +1152,15 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
     /**
      * Returns the radio group key if the current checkbox is a radio button.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * checkBoxForm.SetRadioGroup("Marital status");
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * checkBoxForm.SetRadioGroup("Marital status");
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * let radioGroup = checkBoxForm.GetRadioGroup();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Radio group name of the radio buttons in this document: " + radioGroup);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetRadioGroup/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetRadioGroup/
      */
     GetRadioGroup(): string;
 
@@ -1815,6 +1168,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -1822,25 +1177,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -1848,41 +1193,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -1890,6 +1208,8 @@ export namespace Forms {
      * Returns the current state of the checkbox form as a boolean value.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/GetValue/
      */
     GetValue(): boolean;
 
@@ -1900,44 +1220,14 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
     /**
      * Returns the state of the current checkbox (checked or not).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * checkBoxForm.SetChecked(true);
-     * let checked = checkBoxForm.IsChecked();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The second radio button from this document is checked: " + checked);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/IsChecked/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/IsChecked/
      */
     IsChecked(): boolean;
 
@@ -1945,69 +1235,29 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current checkbox is a radio button.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * let radioButton = checkBoxForm.IsRadioButton();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The second form from this document is a radio button: " + radioButton);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/IsRadioButton/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/IsRadioButton/
      */
     IsRadioButton(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -2018,17 +1268,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -2038,16 +1278,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -2057,16 +1288,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -2075,21 +1297,7 @@ export namespace Forms {
      *
      * @param isChecked - Specifies if the current checkbox will be checked (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"key": "Marital status", "tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * checkBoxForm.SetChecked(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetChecked/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetChecked/
      */
     SetChecked(isChecked: boolean): boolean;
 
@@ -2098,6 +1306,8 @@ export namespace Forms {
      *
      * @param choiceName - The radio button choice name.
      * @since 8.3.2
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetChoiceName/
      */
     SetChoiceName(choiceName: string): boolean;
 
@@ -2106,20 +1316,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -2128,6 +1325,8 @@ export namespace Forms {
      *
      * @param value - The choice name of the radio button to select.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetGroupValue/
      */
     SetGroupValue(value: string): boolean;
 
@@ -2136,6 +1335,8 @@ export namespace Forms {
      *
      * @param label - The label.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetLabel/
      */
     SetLabel(label: string): boolean;
 
@@ -2145,6 +1346,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -2154,16 +1357,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -2172,26 +1366,7 @@ export namespace Forms {
      *
      * @param sKey - Radio group key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * checkBoxForm.SetRadioGroup("Marital status");
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Married");
-     * paragraph.AddLineBreak();
-     * checkBoxForm = Api.CreateCheckBoxForm({"tip": "Specify your marital status", "required": true, "placeholder": "Marital status", "radio": true});
-     * checkBoxForm.SetRadioGroup("Marital status");
-     * paragraph.AddElement(checkBoxForm);
-     * paragraph.AddText(" Single");
-     * let radioGroup = checkBoxForm.GetRadioGroup();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Radio group name of the radio buttons in this document: " + radioGroup);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetRadioGroup/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetRadioGroup/
      */
     SetRadioGroup(sKey: string): boolean;
 
@@ -2200,20 +1375,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -2222,6 +1384,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -2230,6 +1394,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -2239,19 +1405,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -2260,20 +1414,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -2282,6 +1423,8 @@ export namespace Forms {
      *
      * @param value - Specifies if the checkbox will be checked (true) or not (false).
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiCheckBoxForm/Methods/SetValue/
      */
     SetValue(value: boolean): boolean;
 
@@ -2293,20 +1436,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -2314,28 +1444,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -2344,43 +1453,23 @@ export namespace Forms {
   export interface ApiColor {
   }
 
-  /** Class representing a document combo box / drop-down list. */
+  /**
+   * Class representing a document combo box / drop-down list.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/
+   */
   export interface ApiComboBoxForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -2390,6 +1479,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -2397,6 +1488,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -2404,6 +1497,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -2412,57 +1507,21 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetClassType/
      */
     GetClassType(): "comboBoxForm";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -2470,31 +1529,15 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
     /**
      * Returns the list values from the current combo box.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * comboBoxForm.SetListValues(["Latvia", "USA", "UK"]);
-     * let listValues = comboBoxForm.GetListValues();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Combo box list values: ");
-     * paragraph.AddLineBreak();
-     * for (let i = 0; i < listValues.length; i++ ){
-     * 	paragraph.AddText(listValues[i]);
-     * 	paragraph.AddLineBreak();
-     * }
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/GetListValues/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetListValues/
      */
     GetListValues(): string[];
 
@@ -2502,6 +1545,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -2511,6 +1556,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -2518,6 +1565,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -2526,6 +1575,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -2533,6 +1584,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -2540,25 +1593,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -2566,41 +1609,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -2608,6 +1624,8 @@ export namespace Forms {
      * Returns the current text value of the combo box form.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -2618,19 +1636,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -2638,19 +1644,7 @@ export namespace Forms {
      * Checks if the combo box text can be edited. If it is not editable, then this form is a drop-down
      * list.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let editable = comboBoxForm.IsEditable();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first combo box from this document is editable: " + editable);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/IsEditable/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/IsEditable/
      */
     IsEditable(): boolean;
 
@@ -2658,45 +1652,22 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -2707,17 +1678,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -2726,16 +1687,7 @@ export namespace Forms {
      *
      * @param sValue - The combo box list value that will be selected.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * comboBoxForm.SelectListValue("USA");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SelectListValue/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SelectListValue/
      */
     SelectListValue(sValue: string): boolean;
 
@@ -2745,16 +1697,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -2764,16 +1707,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -2782,20 +1716,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -2804,16 +1725,7 @@ export namespace Forms {
      *
      * @param aListString - The combo box list values.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * comboBoxForm.SetListValues(["Latvia", "USA", "UK"]);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SetListValues/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetListValues/
      */
     SetListValues(aListString: string[]): boolean;
 
@@ -2823,6 +1735,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -2832,16 +1746,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -2850,20 +1755,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -2872,6 +1764,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -2880,6 +1774,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -2889,16 +1785,7 @@ export namespace Forms {
      *
      * @param sText - The combo box text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": true, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * comboBoxForm.SetText("France");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiComboBoxForm/Methods/SetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetText/
      */
     SetText(sText: string): boolean;
 
@@ -2908,19 +1795,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -2929,20 +1804,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -2952,6 +1814,8 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComboBoxForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -2963,20 +1827,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -2984,28 +1835,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -3018,33 +1848,26 @@ export namespace Forms {
   export interface ApiCommentReply {
   }
 
-  /** Class representing a complex field. */
+  /**
+   * Class representing a complex field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/
+   */
   export interface ApiComplexForm extends Omit<ApiFormBase, "GetValue"> {
     /**
      * Appends the text content of the given form to the end of the current complex form.
      *
      * @param value - The text or the form to add.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/Add/
      */
     Add(value: string | ApiDateForm | ApiPictureForm | ApiCheckBoxForm | ApiComboBoxForm | ApiTextForm): boolean;
 
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
@@ -3052,24 +1875,15 @@ export namespace Forms {
      * Clears all content from the current complex form, resetting it to its placeholder state.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/ClearContent/
      */
     ClearContent(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -3079,6 +1893,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -3086,6 +1902,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -3093,6 +1911,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -3101,57 +1921,21 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetClassType/
      */
     GetClassType(): "form";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -3159,6 +1943,8 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -3166,6 +1952,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -3175,6 +1963,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -3182,6 +1972,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -3190,6 +1982,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -3197,6 +1991,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -3204,6 +2000,8 @@ export namespace Forms {
      * Returns an ordered list of subforms.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetSubForms/
      */
     GetSubForms(): ApiForm[];
 
@@ -3211,25 +2009,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -3237,41 +2025,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -3279,6 +2040,8 @@ export namespace Forms {
      * Returns the current text value of the complex form.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -3289,19 +2052,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -3309,45 +2060,22 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -3358,17 +2086,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -3378,16 +2096,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -3397,16 +2106,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -3415,20 +2115,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -3438,6 +2125,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -3447,16 +2136,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -3465,20 +2145,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -3487,6 +2154,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -3495,6 +2164,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -3504,19 +2175,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -3525,20 +2184,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -3547,6 +2193,8 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/
      */
     SetValue(value: string | boolean): boolean;
 
@@ -3558,20 +2206,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -3579,28 +2214,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -3644,43 +2258,23 @@ export namespace Forms {
   export interface ApiCustomXmlParts {
   }
 
-  /** Class representing a document date field. */
+  /**
+   * Class representing a document date field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/
+   */
   export interface ApiDateForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -3690,6 +2284,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -3697,6 +2293,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -3704,6 +2302,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -3712,19 +2312,7 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetClassType/
      */
     GetClassType(): "dateForm";
 
@@ -3733,44 +2321,22 @@ export namespace Forms {
      *
      * @returns The date object, or undefined if the form is a placeholder.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetDate/
      */
     GetDate(): undefined | Date;
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -3779,20 +2345,7 @@ export namespace Forms {
      *
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetFormat("dddd, dd MMMM yyyy");
-     * let format = dateForm.GetFormat();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has format: " + format);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetFormat/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetFormat/
      */
     GetFormat(): string;
 
@@ -3800,6 +2353,8 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -3808,20 +2363,7 @@ export namespace Forms {
      *
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetLanguage("en-CA");
-     * let langId = dateForm.GetLanguage();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has setted language: " + langId);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetLanguage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetLanguage/
      */
     GetLanguage(): string;
 
@@ -3829,6 +2371,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -3838,6 +2382,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -3845,6 +2391,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -3853,6 +2401,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -3860,6 +2410,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -3867,25 +2419,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -3893,22 +2435,7 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
@@ -3918,39 +2445,14 @@ export namespace Forms {
      * @returns The Unix timestamp in milliseconds, or undefined if the form is a placeholder.
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetTime(new Date().getTime());
-     * let timeStamp = dateForm.GetTime();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has setted time: " + new Date(timeStamp));
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/GetTime/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetTime/
      */
     GetTime(): undefined | number;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -3958,6 +2460,8 @@ export namespace Forms {
      * Returns the date of the current form.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/GetValue/
      */
     GetValue(): Date | undefined;
 
@@ -3968,19 +2472,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -3988,45 +2480,22 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -4037,17 +2506,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -4057,16 +2516,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -4076,16 +2526,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -4094,6 +2535,8 @@ export namespace Forms {
      *
      * @param date - The date object or the date in the string format.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetDate/
      */
     SetDate(date: Date | string): boolean;
 
@@ -4102,20 +2545,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -4125,20 +2555,7 @@ export namespace Forms {
      * @param sFormat - The date format. For example, mm.dd.yyyy
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetFormat("dddd, dd MMMM yyyy");
-     * let format = dateForm.GetFormat();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has format: " + format);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetFormat/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetFormat/
      */
     SetFormat(sFormat: string): boolean;
 
@@ -4149,20 +2566,7 @@ export namespace Forms {
      *   RFC 4646/BCP 47. Example: "en-CA".
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetLanguage("en-CA");
-     * let langId = dateForm.GetLanguage();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has setted language: " + langId);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetLanguage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetLanguage/
      */
     SetLanguage(sLangId: string): boolean;
 
@@ -4172,6 +2576,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -4181,16 +2587,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -4199,20 +2596,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -4221,6 +2605,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -4229,6 +2615,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -4238,19 +2626,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -4260,20 +2636,7 @@ export namespace Forms {
      * @param nTimeStamp - The timestamp that will be set to the current date form.
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let dateForm = Api.CreateDateForm({"key": "Nowadays", "tip": "Enter current date", "required": true, "placeholder": "Your date here", "format": "mm.dd.yyyy", "lang": "en-US"});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(dateForm);
-     * dateForm.SetTime(new Date().getTime());
-     * let timeStamp = dateForm.GetTime();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first date form from this document has setted time: " + new Date(timeStamp));
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDateForm/Methods/SetTime/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetTime/
      */
     SetTime(nTimeStamp: number): boolean;
 
@@ -4282,20 +2645,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -4304,6 +2654,8 @@ export namespace Forms {
      *
      * @param value - The date object or the date in the string format.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDateForm/Methods/SetValue/
      */
     SetValue(value: Date | string): boolean;
 
@@ -4315,20 +2667,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -4336,28 +2675,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -4368,10 +2686,18 @@ export namespace Forms {
    * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/
    */
   export interface ApiDocument extends ApiDocumentContent {
-    /** Clears all forms in the document. */
+    /**
+     * Clears all forms in the document.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/ClearAllFields/
+     */
     ClearAllFields(): boolean;
 
-    /** Returns all existing forms in the document. */
+    /**
+     * Returns all existing forms in the document.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetAllForms/
+     */
     GetAllForms(): ApiForm[];
 
     /**
@@ -4380,6 +2706,8 @@ export namespace Forms {
      * @param role - The form role.
      * @returns A list of all form keys attached to the specified role.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormKeysByRole/
      */
     GetFormKeysByRole(role: string): string[];
 
@@ -4400,6 +2728,8 @@ export namespace Forms {
      * @returns Returns true/false for checkboxes and string for other form types. Returns null if there is no
      *   form with the specified key.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormValueByKey/
      */
     GetFormValueByKey(key: string): null | boolean | string;
 
@@ -4408,6 +2738,8 @@ export namespace Forms {
      *
      * @param key - The form key.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByKey/
      */
     GetFormsByKey(key: string): ApiForm[];
 
@@ -4416,6 +2748,8 @@ export namespace Forms {
      *
      * @param role - The form role.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByRole/
      */
     GetFormsByRole(role: string): ApiForm[];
 
@@ -4423,6 +2757,8 @@ export namespace Forms {
      * Returns a list of all forms in the document with the specified tag name.
      *
      * @param sTag - Form tag.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByTag/
      */
     GetFormsByTag(sTag: string): ApiForm[];
 
@@ -4431,6 +2767,8 @@ export namespace Forms {
      * If a form was created and not assigned to any part of the document, it won't appear in this list.
      *
      * @since 8.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsData/
      */
     GetFormsData(): FormData[];
 
@@ -4439,10 +2777,16 @@ export namespace Forms {
      *
      * @returns Returns the highlight color, or _null_ if the highlight is disabled.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsHighlight/
      */
     GetFormsHighlight(): ApiColor | null;
 
-    /** Returns a list of all tags that are used for all forms in the document. */
+    /**
+     * Returns a list of all tags that are used for all forms in the document.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetTagsOfAllForms/
+     */
     GetTagsOfAllForms(): string[];
 
     /**
@@ -4459,6 +2803,8 @@ export namespace Forms {
      *
      * @param arrData - An array of form data to set to the specified forms.
      * @since 8.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsData/
      */
     SetFormsData(arrData: FormData[]): boolean;
 
@@ -4467,6 +2813,8 @@ export namespace Forms {
      *
      * @param color - The highlight color for the forms.
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsHighlight/
      */
     SetFormsHighlight(color: ApiColor): boolean;
   }
@@ -4491,43 +2839,23 @@ export namespace Forms {
   export interface ApiFill {
   }
 
-  /** Class representing a document form base. */
+  /**
+   * Class representing a document form base.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/
+   */
   export interface ApiFormBase {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -4537,6 +2865,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -4544,6 +2874,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -4551,63 +2883,29 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
     /**
      * Returns a type of the ApiFormBase class.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetClassType/
      */
     GetClassType(): "form";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
@@ -4615,6 +2913,8 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -4622,6 +2922,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -4631,6 +2933,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -4638,6 +2942,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -4646,6 +2952,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -4653,6 +2961,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -4660,25 +2970,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -4686,41 +2986,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -4728,6 +3001,8 @@ export namespace Forms {
      * Returns the current value of the form field.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetValue/
      */
     GetValue(): string | boolean;
 
@@ -4738,19 +3013,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -4758,45 +3021,22 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -4807,17 +3047,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -4827,16 +3057,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -4846,16 +3067,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -4864,20 +3076,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -4887,6 +3086,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -4896,16 +3097,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -4914,20 +3106,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -4936,6 +3115,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -4944,6 +3125,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -4953,19 +3136,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -4974,20 +3145,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -4996,6 +3154,8 @@ export namespace Forms {
      *
      * @param value - The value to set.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/
      */
     SetValue(value: string | boolean): boolean;
 
@@ -5007,20 +3167,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -5028,28 +3175,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -5210,43 +3336,23 @@ export namespace Forms {
   export interface ApiPathCommand {
   }
 
-  /** Class representing a document picture form. */
+  /**
+   * Class representing a document picture form.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/
+   */
   export interface ApiPictureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -5256,6 +3362,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -5263,6 +3371,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -5270,6 +3380,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -5278,76 +3390,28 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetClassType/
      */
     GetClassType(): "pictureForm";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
     /**
      * Returns an image in the base64 format from the current picture form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png");
-     * let base64img = pictureForm.GetImage();
-     * let drawing = Api.CreateImage(base64img, 60 * 36000, 35 * 36000);
-     * paragraph.AddDrawing(drawing);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetImage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetImage/
      */
     GetImage(): Base64Img;
 
@@ -5355,6 +3419,8 @@ export namespace Forms {
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -5362,6 +3428,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -5371,6 +3439,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -5379,27 +3449,7 @@ export namespace Forms {
      *
      * @returns Array of two numbers [shiftX, shiftY]
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetPicturePosition(70, 70);
-     * let position = pictureForm.GetPicturePosition();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Picture position: ");
-     * paragraph.AddLineBreak();
-     * for (let i = 0; i < position.length; i++ ){
-     * 	let shift = position[i];
-     * 	paragraph.AddText("" + shift);
-     * 	paragraph.AddLineBreak();
-     * }
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetPicturePosition/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetPicturePosition/
      */
     GetPicturePosition(): percentage[];
 
@@ -5407,6 +3457,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -5415,6 +3467,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -5422,26 +3476,15 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
     /**
      * Returns the current scaling condition of the picture form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * let scaleFlag = pictureForm.GetScaleFlag();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Picture scale flag: " + scaleFlag);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/GetScaleFlag/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetScaleFlag/
      */
     GetScaleFlag(): ScaleFlag;
 
@@ -5449,25 +3492,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -5475,41 +3508,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -5517,6 +3523,8 @@ export namespace Forms {
      * Returns the current image of the picture form as a base64 encoded string.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -5527,19 +3535,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -5547,87 +3543,36 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the aspect ratio of the current picture form is locked or not.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetLockAspectRatio(true);
-     * let lock = pictureForm.IsLockAspectRatio();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The aspect ratio of the first picture form in this document is locked: " + lock);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/IsLockAspectRatio/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/IsLockAspectRatio/
      */
     IsLockAspectRatio(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
     /**
      * Checks if the form border width is respected or not.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetRespectBorders(true);
-     * let respectBorders = pictureForm.IsRespectBorders();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The borders of the first picture form in this document are respected when scaling the image: " + respectBorders);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/IsRespectBorders/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/IsRespectBorders/
      */
     IsRespectBorders(): boolean;
 
@@ -5638,17 +3583,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -5658,16 +3593,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -5677,16 +3603,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -5695,20 +3612,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -5718,16 +3622,7 @@ export namespace Forms {
      * @param imageSrc - The image source where the image to be inserted should be taken from (currently, only internet
      *   URL or base64 encoded images are supported).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetImage/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetImage/
      */
     SetImage(imageSrc: string): boolean;
 
@@ -5737,6 +3632,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -5746,21 +3643,7 @@ export namespace Forms {
      * @param isLock - Specifies if the aspect ratio of the current picture form will be locked (true) or not (false).
      * @default isLock = true
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetLockAspectRatio(true);
-     * let lock = pictureForm.IsLockAspectRatio();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The aspect ratio of the first picture form in this document is locked: " + lock);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetLockAspectRatio/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetLockAspectRatio/
      */
     SetLockAspectRatio(isLock?: boolean): boolean;
 
@@ -5773,27 +3656,7 @@ export namespace Forms {
      * @param nShiftX - Horizontal position measured in percent.
      * @param nShiftY - Vertical position measured in percent.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "respectBorders": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetPicturePosition(70, 70);
-     * let position = pictureForm.GetPicturePosition();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Picture position: ");
-     * paragraph.AddLineBreak();
-     * for (let i = 0; i < position.length; i++ ){
-     * 	let shift = position[i];
-     * 	paragraph.AddText("" + shift);
-     * 	paragraph.AddLineBreak();
-     * }
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetPicturePosition/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetPicturePosition/
      */
     SetPicturePosition(nShiftX: percentage, nShiftY: percentage): boolean;
 
@@ -5803,16 +3666,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -5821,20 +3675,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -5844,21 +3685,7 @@ export namespace Forms {
      * @param isRespect - Specifies if the form border width will be respected (true) or not (false).
      * @default isRespect = true
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "scaleFlag": "tooBig", "lockAspectRatio": true, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetRespectBorders(true);
-     * let respectBorders = pictureForm.IsRespectBorders();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The borders of the first picture form in this document are respected when scaling the image: " + respectBorders);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetRespectBorders/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetRespectBorders/
      */
     SetRespectBorders(isRespect?: boolean): boolean;
 
@@ -5867,6 +3694,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -5875,21 +3704,7 @@ export namespace Forms {
      *
      * @param sScaleFlag - Picture scaling condition: "always", "never", "tooBig" or "tooSmall".
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let pictureForm = Api.CreatePictureForm({"key": "Personal information", "tip": "Upload your photo", "required": true, "placeholder": "Photo", "lockAspectRatio": true, "respectBorders": false, "shiftX": 50, "shiftY": 50});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(pictureForm);
-     * pictureForm.SetImage("https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png");
-     * pictureForm.SetScaleFlag("tooBig");
-     * let scaleFlag = pictureForm.GetScaleFlag();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Picture scale flag: " + scaleFlag);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPictureForm/Methods/SetScaleFlag/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetScaleFlag/
      */
     SetScaleFlag(sScaleFlag: ScaleFlag): boolean;
 
@@ -5898,6 +3713,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -5907,19 +3724,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -5928,20 +3733,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -5950,6 +3742,8 @@ export namespace Forms {
      *
      * @param value - The image source (URL or base64 encoded image).
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiPictureForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -5961,20 +3755,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -5982,28 +3763,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -6046,12 +3806,24 @@ export namespace Forms {
   export interface ApiShape extends ApiDrawing {
   }
 
-  /** Class representing a document picture form. */
+  /**
+   * Class representing a document picture form.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/
+   */
   export interface ApiSignatureForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
-    /** Clears the current form. */
+    /**
+     * Clears the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
+     */
     Clear(): boolean;
 
-    /** Copies the current form (copies with the shape if it exists). */
+    /**
+     * Copies the current form (copies with the shape if it exists).
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
+     */
     Copy(): ApiForm;
 
     /**
@@ -6060,6 +3832,8 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
@@ -6067,6 +3841,8 @@ export namespace Forms {
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -6074,6 +3850,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -6081,19 +3859,31 @@ export namespace Forms {
      * Returns a type of the ApiSignatureForm class.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/GetClassType/
      */
     GetClassType(): "signatureForm";
 
-    /** Returns the current form key. */
+    /**
+     * Returns the current form key.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
+     */
     GetFormKey(): string;
 
-    /** Returns a type of the current form. */
+    /**
+     * Returns a type of the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
+     */
     GetFormType(): FormType;
 
     /**
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -6101,6 +3891,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -6110,6 +3902,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -6117,6 +3911,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -6125,6 +3921,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -6132,6 +3930,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -6139,25 +3939,39 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
-    /** Returns the text from the current form. */
+    /**
+     * Returns the text from the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
+     */
     GetText(): string;
 
     /**
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
-    /** Returns the tip text of the current form. */
+    /**
+     * Returns the tip text of the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
+     */
     GetTipText(): string;
 
     /**
      * Returns the current image of the signature form as a base64 encoded string.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -6167,6 +3981,8 @@ export namespace Forms {
      * The null value will be returned for the inline forms.
      *
      * @returns returns the shape in which the form is placed.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -6174,13 +3990,23 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
-    /** Checks if the current form is fixed size. */
+    /**
+     * Checks if the current form is fixed size.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
+     */
     IsFixed(): boolean;
 
-    /** Checks if the current form is required. */
+    /**
+     * Checks if the current form is required.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
+     */
     IsRequired(): boolean;
 
     /**
@@ -6189,6 +4015,8 @@ export namespace Forms {
      * @param isAfter - Specifies whether a cursor will be placed before (false) or after (true) the current form.
      * @default isAfter = true
      * @since 8.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -6197,6 +4025,8 @@ export namespace Forms {
      *
      * @param color - The background color.
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -6205,6 +4035,8 @@ export namespace Forms {
      *
      * @param color - The border color.
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -6212,6 +4044,8 @@ export namespace Forms {
      * Sets a key to the current form.
      *
      * @param sKey - Form key.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -6221,6 +4055,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -6229,6 +4065,8 @@ export namespace Forms {
      * *Can't be set to checkbox or radio button.*
      *
      * @param sText - The text that will be set to the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -6236,6 +4074,8 @@ export namespace Forms {
      * Specifies if the current form should be required.
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -6244,6 +4084,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -6252,6 +4094,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -6260,6 +4104,8 @@ export namespace Forms {
      * *Used if possible for this type of form*
      *
      * @param textPr - The text properties that will be set to the current form.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -6267,6 +4113,8 @@ export namespace Forms {
      * Sets the tip text to the current form.
      *
      * @param sText - Tip text.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -6275,6 +4123,8 @@ export namespace Forms {
      *
      * @param value - The image source (URL or base64 encoded image).
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiSignatureForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -6285,12 +4135,16 @@ export namespace Forms {
      * @param height - The wrapper shape height measured in twentieths of a point (1/1440 of an inch).
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
     /**
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }
@@ -6339,43 +4193,23 @@ export namespace Forms {
   export interface ApiTableStylePr {
   }
 
-  /** Class representing a document text field. */
+  /**
+   * Class representing a document text field.
+   *
+   * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/
+   */
   export interface ApiTextForm extends Omit<ApiFormBase, "GetClassType" | "GetValue" | "SetValue"> {
     /**
      * Clears the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * textForm.Clear();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document was cleared.");
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/
      */
     Clear(): boolean;
 
     /**
      * Copies the current form (copies with the shape if it exists).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let copyTextForm = textForm.Copy();
-     * paragraph.AddLineBreak();
-     * paragraph.AddElement(copyTextForm);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/
      */
     Copy(): ApiForm;
 
@@ -6385,16 +4219,24 @@ export namespace Forms {
      * @param keepContent - Specifies if the content will be deleted or not.
      * @returns returns false if form wasn't added to the document.
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/
      */
     Delete(keepContent: boolean): boolean;
 
-    /** Returns the allowed symbols for the current text field. */
+    /**
+     * Returns the allowed symbols for the current text field.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetAllowedSymbols/
+     */
     GetAllowedSymbols(): string;
 
     /**
      * Returns the background color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/
      */
     GetBackgroundColor(): ApiColor;
 
@@ -6402,6 +4244,8 @@ export namespace Forms {
      * Returns the border color of the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/
      */
     GetBorderColor(): ApiColor;
 
@@ -6410,21 +4254,7 @@ export namespace Forms {
      *
      * @returns if this method returns -1 -> the form has no limit for characters
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetCharactersLimit(5);
-     * textForm.SetText("John Smith");
-     * let limit = textForm.GetCharactersLimit();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Characters limit: " + limit);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/GetCharactersLimit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetCharactersLimit/
      */
     GetCharactersLimit(): number;
 
@@ -6433,67 +4263,37 @@ export namespace Forms {
      *
      * @since 9.0.4
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let classType = textForm.GetClassType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Class type: " + classType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetClassType/
      */
     GetClassType(): "textForm";
 
     /**
      * Returns the current form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let key = comboBoxForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/
      */
     GetFormKey(): string;
 
     /**
      * Returns a type of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let formType = textForm.GetFormType();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form type: " + formType);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/
      */
     GetFormType(): FormType;
 
-    /** Returns the format of the current text field. */
+    /**
+     * Returns the format of the current text field.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetFormat/
+     */
     GetFormat(): TextFormFormat;
 
     /**
      * Returns an internal id of the current form.
      *
      * @since 9.2.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/
      */
     GetInternalId(): string;
 
@@ -6501,6 +4301,8 @@ export namespace Forms {
      * Returns the lock state of the current form.
      *
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/
      */
     GetLock(): boolean;
 
@@ -6510,6 +4312,8 @@ export namespace Forms {
      *
      * @returns returns null if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/
      */
     GetParent(): ParagraphLikeContainer;
 
@@ -6517,6 +4321,8 @@ export namespace Forms {
      * Returns the placeholder text from the current form.
      *
      * @since 9.1.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/
      */
     GetPlaceholderText(): string;
 
@@ -6525,6 +4331,8 @@ export namespace Forms {
      *
      * @returns returns -1 if the form has no parent.
      * @since 9.5.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/
      */
     GetPosInParent(): number;
 
@@ -6532,6 +4340,8 @@ export namespace Forms {
      * Returns the role of the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/
      */
     GetRole(): string;
 
@@ -6539,25 +4349,15 @@ export namespace Forms {
      * Returns the tag attribute for the current form.
      *
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/
      */
     GetTag(): string;
 
     /**
      * Returns the text from the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let text = textForm.GetText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form text: " + text);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/
      */
     GetText(): string;
 
@@ -6565,41 +4365,14 @@ export namespace Forms {
      * Returns the text properties from the current form.
      * *Used if possible for this type of form*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * let formTextPr = textForm.GetTextPr();
-     * formTextPr.SetItalic(true);
-     * textForm.SetTextPr(formTextPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/
      */
     GetTextPr(): ApiTextPr;
 
     /**
      * Returns the tip text of the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let comboBoxForm = Api.CreateComboBoxForm({"key": "Personal information", "tip": "Choose your country", "required": true, "placeholder": "Country", "editable": false, "autoFit": false, "items": ["Latvia", "USA", "UK"]});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(comboBoxForm);
-     * let tipText = comboBoxForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/
      */
     GetTipText(): string;
 
@@ -6607,6 +4380,8 @@ export namespace Forms {
      * Returns the current text value of the text form.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/GetValue/
      */
     GetValue(): string;
 
@@ -6617,19 +4392,7 @@ export namespace Forms {
      *
      * @returns returns the shape in which the form is placed.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let shape = textForm.GetWrapperShape();
-     * let stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
-     * shape.SetOutLine(stroke);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/
      */
     GetWrapperShape(): ApiShape;
 
@@ -6637,39 +4400,14 @@ export namespace Forms {
      * Checks if the text field content is autofit, i.e. whether the font size adjusts to the size of the
      * fixed size form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let autoFit = textForm.IsAutoFit();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is autofit: " + autoFit);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsAutoFit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsAutoFit/
      */
     IsAutoFit(): boolean;
 
     /**
      * Checks if the text field is a comb of characters with the same cell width.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetComb(true);
-     * let comb = textForm.IsComb();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is comb: " + comb);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsComb/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsComb/
      */
     IsComb(): boolean;
 
@@ -6677,64 +4415,29 @@ export namespace Forms {
      * Checks if the current form is filled.
      *
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/
      */
     IsFilled(): boolean;
 
     /**
      * Checks if the current form is fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is fixed: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/
      */
     IsFixed(): boolean;
 
     /**
      * Checks if the current text field is multiline.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let multiline = textForm.IsMultiline();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is multiline: " + multiline);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/IsMultiline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/IsMultiline/
      */
     IsMultiline(): boolean;
 
     /**
      * Checks if the current form is required.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/
      */
     IsRequired(): boolean;
 
@@ -6745,17 +4448,7 @@ export namespace Forms {
      * @default isAfter = true
      * @since 8.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("The cursor will be placed after the current form.");
-     * textForm.MoveCursorOutside(true);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/
      */
     MoveCursorOutside(isAfter?: boolean): boolean;
 
@@ -6764,6 +4457,8 @@ export namespace Forms {
      * as input.
      *
      * @param symbols - A string of allowed characters.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetAllowedSymbols/
      */
     SetAllowedSymbols(symbols: string): boolean;
 
@@ -6773,21 +4468,7 @@ export namespace Forms {
      *
      * @param bAutoFit - Defines if the text field content is autofit (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "multiLine": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(6 * 240, 2 * 240);
-     * textForm.SetAutoFit(true);
-     * let autoFit = textForm.IsAutoFit();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is autofit: " + autoFit);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetAutoFit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetAutoFit/
      */
     SetAutoFit(bAutoFit: boolean): boolean;
 
@@ -6797,16 +4478,7 @@ export namespace Forms {
      * @param color - The background color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBackgroundColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/
      */
     SetBackgroundColor(color?: ApiColor): boolean;
 
@@ -6816,16 +4488,7 @@ export namespace Forms {
      * @param color - The border color.
      * @since 9.1.0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetBorderColor(255, 111, 61);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/
      */
     SetBorderColor(color?: ApiColor): boolean;
 
@@ -6836,17 +4499,7 @@ export namespace Forms {
      *   less, then the width will be set automatically. Must be >= 1 and <= 558.8.
      * @default nCellWidth = 0
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetComb(true);
-     * textForm.SetCellWidth(7);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCellWidth/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetCellWidth/
      */
     SetCellWidth(nCellWidth?: mm): boolean;
 
@@ -6857,21 +4510,7 @@ export namespace Forms {
      *   will be set. A limit is required to be set if a comb of characters is applied. Maximum value for
      *   this parameter is 1000000.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetCharactersLimit(5);
-     * textForm.SetText("John Smith");
-     * let limit = textForm.GetCharactersLimit();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Characters limit: " + limit);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetCharactersLimit/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetCharactersLimit/
      */
     SetCharactersLimit(nChars: number): boolean;
 
@@ -6881,20 +4520,7 @@ export namespace Forms {
      *
      * @param bComb - Defines if the text field is a comb of characters (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "maxCharacters": 10, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetComb(true);
-     * let comb = textForm.IsComb();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is comb: " + comb);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetComb/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetComb/
      */
     SetComb(bComb: boolean): boolean;
 
@@ -6903,20 +4529,7 @@ export namespace Forms {
      *
      * @param sKey - Form key.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetFormKey("Personal information");
-     * let key = textForm.GetFormKey();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Form key: " + key);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/
      */
     SetFormKey(sKey: string): boolean;
 
@@ -6924,6 +4537,8 @@ export namespace Forms {
      * Sets the format for the current text field.
      *
      * @param format - The format to set.
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetFormat/
      */
     SetFormat(format: TextFormFormat): boolean;
 
@@ -6933,6 +4548,8 @@ export namespace Forms {
      * @param isLock - Specifies whether to lock the form (true) or unlock it (false).
      * @returns Returns true if the operation is successful.
      * @since 9.3.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/
      */
     SetLock(isLock: boolean): boolean;
 
@@ -6942,21 +4559,7 @@ export namespace Forms {
      * @param bMultiline - Defines if the current text field is multiline (true) or not (false).
      * @returns return false, if the text field is not fixed size.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(3 * 240, 3 * 240);
-     * textForm.SetMultiline(true);
-     * let multiline = textForm.IsMultiline();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first text form from this document is multiline: " + multiline);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetMultiline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetMultiline/
      */
     SetMultiline(bMultiline: boolean): boolean;
 
@@ -6966,16 +4569,7 @@ export namespace Forms {
      *
      * @param sText - The text that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetPlaceholderText("First name");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/
      */
     SetPlaceholderText(sText: string): boolean;
 
@@ -6984,20 +4578,7 @@ export namespace Forms {
      *
      * @param bRequired - Defines if the current form is required (true) or not (false).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetRequired(true);
-     * let required = textForm.IsRequired();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document is required: " + required);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/
      */
     SetRequired(bRequired: boolean): boolean;
 
@@ -7006,6 +4587,8 @@ export namespace Forms {
      *
      * @param role - The role which will be attached to the current form.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/
      */
     SetRole(role: string): boolean;
 
@@ -7014,6 +4597,8 @@ export namespace Forms {
      *
      * @param tag - The tag which will be added to the current container.
      * @since 9.0.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/
      */
     SetTag(tag: string): boolean;
 
@@ -7022,16 +4607,7 @@ export namespace Forms {
      *
      * @param text - The text that will be set to the current text field.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetText("John Smith");
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextForm/Methods/SetText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetText/
      */
     SetText(text: string): boolean;
 
@@ -7041,19 +4617,7 @@ export namespace Forms {
      *
      * @param textPr - The text properties that will be set to the current form.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * let textPr = Api.CreateTextPr();
-     * textPr.SetFontSize(30);
-     * textPr.SetBold(true);
-     * textForm.SetTextPr(textPr);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/
      */
     SetTextPr(textPr: ApiTextPr): boolean;
 
@@ -7062,20 +4626,7 @@ export namespace Forms {
      *
      * @param sText - Tip text.
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.SetTipText("Enter your first name");
-     * let tipText = textForm.GetTipText();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("Tip text: " + tipText);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/
      */
     SetTipText(sText: string): boolean;
 
@@ -7084,6 +4635,8 @@ export namespace Forms {
      *
      * @param value - The text value to set.
      * @since 9.4.0
+     *
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiTextForm/Methods/SetValue/
      */
     SetValue(value: string): boolean;
 
@@ -7095,20 +4648,7 @@ export namespace Forms {
      * @param keepPosition - Save position on the page (it can be a little bit slow, because it runs the document
      *   calculation).
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let fixed = textForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/
      */
     ToFixed(width: twips, height: twips, keepPosition: boolean): boolean;
 
@@ -7116,28 +4656,7 @@ export namespace Forms {
      * Converts the current form to an inline form.
      * *Picture form can't be converted to an inline form, it's always a fixed size object.*
      *
-     * @example
-     * ```js
-     * let doc = Api.GetDocument();
-     * let textForm = Api.CreateTextForm({"key": "Personal information", "tip": "Enter your first name", "required": true, "placeholder": "First name", "comb": true, "maxCharacters": 10, "cellWidth": 3, "multiLine": false, "autoFit": false});
-     * let paragraph = doc.GetElement(0);
-     * paragraph.AddElement(textForm);
-     * textForm.ToFixed(10 * 240, 2 * 240);
-     * let copyForm = textForm.Copy();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddElement(copyForm);
-     * doc.Push(paragraph);
-     * copyForm.ToInline();
-     * let fixed = textForm.IsFixed();
-     * let fixedCopy = copyForm.IsFixed();
-     * paragraph = Api.CreateParagraph();
-     * paragraph.AddText("The first form from this document has a fixed size: " + fixed);
-     * paragraph.AddLineBreak();
-     * paragraph.AddText("The second form from this document has a fixed size: " + fixedCopy);
-     * doc.Push(paragraph);
-     * ```
-     *
-     * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/
+     * @see https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/
      */
     ToInline(): boolean;
   }

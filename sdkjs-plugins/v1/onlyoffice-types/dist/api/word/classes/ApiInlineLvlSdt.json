@@ -1,5 +1,6 @@
 {
   "description": "Class representing a container for the paragraph elements.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/",
   "methods": {
     "AddComment": {
       "description": "Adds a comment to the current inline content control.\n<note>Please note that this inline content control must be in the document.</note>",
@@ -59,6 +60,7 @@
     },
     "AddListItem": {
       "description": "Adds an item to a combo box list or drop-down list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddListItem/",
       "params": [
         {
           "description": "The name of the item to add to the list.",
@@ -148,6 +150,7 @@
     },
     "GetAppearance": {
       "description": "Returns the visualization type of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetAppearance/",
       "params": [],
       "returns": {
         "description": "type - The visualization type of the content control.",
@@ -158,6 +161,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -167,6 +171,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -188,6 +193,7 @@
     },
     "GetColor": {
       "description": "Returns the tag color of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetColor/",
       "params": [],
       "returns": {
         "description": "Returns the tag color, or _null_ if no color is set.",
@@ -198,6 +204,7 @@
     },
     "GetDataBinding": {
       "description": "Retrieves the data binding of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDataBinding/",
       "params": [],
       "returns": {
         "description": "Returns the data binding of the content control if it exists, otherwise `null`.",
@@ -208,6 +215,7 @@
     },
     "GetDataForXmlMapping": {
       "description": "Returns the content control data for the XML mapping.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDataForXmlMapping/",
       "params": [],
       "returns": {
         "description": "The string data representing the contents of the current content control.",
@@ -218,6 +226,7 @@
     },
     "GetDate": {
       "description": "Retrieves the selected date value from a date picker content control and returns it as a Date object.\n\nThrows: Error if the content control is not a date picker.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDate/",
       "params": [],
       "returns": {
         "description": "Date object representing the selected date in the date picker control, or undefined if the form is a placeholder.",
@@ -258,6 +267,7 @@
     },
     "GetElementIndex": {
       "description": "Returns the position (index) of the specified element within the current inline content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElementIndex/",
       "params": [
         {
           "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",
@@ -286,6 +296,7 @@
     },
     "GetId": {
       "description": "Returns a unique ID for the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -328,6 +339,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current inline content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the content control has no parent.",
@@ -402,6 +414,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current inline content control within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the content control has no parent.",
@@ -447,6 +460,7 @@
     },
     "IsCheckBox": {
       "description": "Checks if the content control is a checkbox.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsCheckBox/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a checkbox, otherwise `false`.",
@@ -457,6 +471,7 @@
     },
     "IsCheckBoxChecked": {
       "description": "Determines whether a checkbox content control is currently checked or unchecked.\n\nThrows: Error if the content control is not a checkbox.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsCheckBoxChecked/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the checkbox is checked, `false` if the checkbox is unchecked.",
@@ -467,6 +482,7 @@
     },
     "IsComboBox": {
       "description": "Checks whether the content control is a combo box list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsComboBox/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a combo box list, otherwise `false`.",
@@ -477,6 +493,7 @@
     },
     "IsDatePicker": {
       "description": "Checks whether the content control is a datepicker.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsDatePicker/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a datepicker, otherwise `false`.",
@@ -487,6 +504,7 @@
     },
     "IsDropDownList": {
       "description": "Checks whether the content control is a drop-down list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsDropDownList/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a drop-down list, otherwise `false`.",
@@ -509,6 +527,7 @@
     },
     "IsPicture": {
       "description": "Checks whether the content control is a picture control.\nThis method verifies if the content control is specifically a picture control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsPicture/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a picture, otherwise `false`.",
@@ -589,6 +608,7 @@
     },
     "RemoveListItem": {
       "description": "Removes an item from a combo box list or drop-down list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveListItem/",
       "params": [
         {
           "description": "The value of the item to remove from the list.",
@@ -605,6 +625,7 @@
     },
     "Select": {
       "description": "Selects the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Select/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -614,6 +635,7 @@
     },
     "SelectListItem": {
       "description": "Sets the selected item for a combo box list or drop-down list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SelectListItem/",
       "params": [
         {
           "description": "The name of the item to be selected in the list.",
@@ -648,6 +670,7 @@
     },
     "SetAppearance": {
       "description": "Sets the visualization type of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetAppearance/",
       "params": [
         {
           "description": "The desired visualization type.",
@@ -663,6 +686,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color to the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "The background color.",
@@ -679,6 +703,7 @@
     },
     "SetBorderColor": {
       "description": "Sets the border color to the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -695,6 +720,7 @@
     },
     "SetCheckBoxChecked": {
       "description": "Sets the checkbox value for the content control.\nThis method updates the checkbox state of the content control to either checked or unchecked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetCheckBoxChecked/",
       "params": [
         {
           "description": "The state to set for the checkbox. `true` for checked, `false` for unchecked.",
@@ -711,6 +737,7 @@
     },
     "SetColor": {
       "description": "Sets the tag color of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetColor/",
       "params": [
         {
           "description": "The tag color. Pass _null_ to remove the color.",
@@ -726,6 +753,7 @@
     },
     "SetDataBinding": {
       "description": "Sets the data binding for the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDataBinding/",
       "params": [
         {
           "description": "The data binding to associate with the content control.",
@@ -741,6 +769,7 @@
     },
     "SetDate": {
       "description": "Sets the value for the datepicker content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDate/",
       "params": [
         {
           "description": "The date value to set for the datepicker.",
@@ -757,6 +786,7 @@
     },
     "SetDateFormat": {
       "description": "Sets the date format for the datepicker content control.\nThis method allows setting the format in which the date should be displayed in the datepicker content control.\nThe format string should be specified using common date format patterns (e.g., \"mm.dd.yyyy\").",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDateFormat/",
       "params": [
         {
           "description": "The desired date format (e.g., \"mm.dd.yyyy\").",
@@ -773,6 +803,7 @@
     },
     "SetId": {
       "description": "Specifies a unique ID for the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetId/",
       "params": [
         {
           "description": "The numerical ID which will be specified for the current content control.",
@@ -824,6 +855,7 @@
     },
     "SetPicture": {
       "description": "Sets the content (image) for the picture content control.\nThis method updates the picture inside a content control by setting an image from a provided URL.\nThe URL should be an internet link to the image.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPicture/",
       "params": [
         {
           "description": "The URL of the image to be used for the content control.\rCurrently, only internet URLs are supported.",
@@ -840,6 +872,7 @@
     },
     "SetPictureSize": {
       "description": "Sets the size for the picture in a content control.\nThis method adjusts the width and height of the image if the content control is a picture.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPictureSize/",
       "params": [
         {
           "description": "The desired image width .",
@@ -934,6 +967,7 @@
     },
     "UpdateFromXmlMapping": {
       "description": "Updates the content control using the value from the XML mapping.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/UpdateFromXmlMapping/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the update was successful, otherwise `false`.",

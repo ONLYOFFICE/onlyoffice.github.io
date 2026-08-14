@@ -1,8 +1,10 @@
 {
   "description": "Class representing a collection of pivot filters applied to a pivot field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotFilters/",
   "methods": {
     "Add": {
       "description": "Adds a new filter to the pivot field. This method is VBA-compatible and follows the PivotFilters.Add signature from Excel VBA.\nSupports all major filter types including label filters, value filters, top/bottom filters, and date filters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPivotFilters/Methods/Add/",
       "params": [
         {
           "description": "The type of filter to add. Must match VBA XlPivotFilterType enum values.",

@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor into the header of the specified page and switches the document into the header editing mode. The cursor is positioned at the beginning of the header.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorToHeader/",
   "params": [
     {
       "description": "The page number. If not specified, the current page is used.",

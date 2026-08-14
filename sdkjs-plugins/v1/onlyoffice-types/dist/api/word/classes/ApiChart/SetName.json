@@ -1,5 +1,6 @@
 {
   "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetName/",
   "params": [
     {
       "description": "The name which will be set to the current drawing.",

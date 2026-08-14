@@ -1,5 +1,6 @@
 {
   "description": "Returns the position (index) of the specified element within the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetElementIndex/",
   "params": [
     {
       "description": "The inline element (run, inline content control, form, etc.) whose index will be returned.",

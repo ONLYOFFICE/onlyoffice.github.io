@@ -1,5 +1,6 @@
 {
   "description": "Class representing a chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/",
   "extends": [
     "ApiDrawing"
   ],
@@ -24,6 +25,7 @@
     },
     "CreateTextRange": {
       "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/CreateTextRange/",
       "params": [],
       "returns": {
         "type": "ApiTextRange | null"
@@ -66,6 +68,7 @@
     },
     "GetHyperlink": {
       "description": "Returns the hyperlink from the current drawing object (shape or image).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetHyperlink/",
       "params": [],
       "returns": {
         "description": "Returns the hyperlink object or null if no hyperlink is set.",
@@ -75,6 +78,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal ID of the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -83,6 +87,7 @@
     },
     "GetParent": {
       "description": "Returns the drawing parent object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParent/",
       "params": [],
       "returns": {
         "type": "ApiSlide | ApiLayout | ApiMaster | null"
@@ -91,6 +96,7 @@
     },
     "GetParentLayout": {
       "description": "Returns the drawing parent slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentLayout/",
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide layout.",
@@ -100,6 +106,7 @@
     },
     "GetParentMaster": {
       "description": "Returns the drawing parent slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentMaster/",
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide master.",
@@ -109,6 +116,7 @@
     },
     "GetParentSlide": {
       "description": "Returns the drawing parent slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentSlide/",
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide.",
@@ -118,6 +126,7 @@
     },
     "GetPlaceholder": {
       "description": "Returns a placeholder from the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPlaceholder/",
       "params": [],
       "returns": {
         "description": "returns null if placeholder doesn't exist.",
@@ -127,6 +136,7 @@
     },
     "GetPosX": {
       "description": "Gets the x position of the drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPosX/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -135,6 +145,7 @@
     },
     "GetPosY": {
       "description": "Gets the y position of the drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPosY/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -161,6 +172,7 @@
     },
     "GetTextRange": {
       "description": "Returns an ApiTextRange covering the full text content of the shape, or null if the shape has no text body (use CreateTextRange to create one).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetTextRange/",
       "params": [],
       "returns": {
         "type": "ApiTextRange | null"
@@ -170,6 +182,7 @@
     },
     "GetTitle": {
       "description": "Returns the chart title text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The chart title text or null if the chart has no title.",
@@ -179,6 +192,7 @@
     },
     "GetType": {
       "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ChartType"
@@ -187,6 +201,7 @@
     },
     "IsTextRange": {
       "description": "Checks whether the drawing has an associated text body.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/IsTextRange/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -214,6 +229,7 @@
     },
     "ReplacePlaceholder": {
       "description": "Replaces the placeholder by a drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/ReplacePlaceholder/",
       "params": [
         {
           "description": "The drawing object that will replace the placeholder.",
@@ -228,6 +244,7 @@
     },
     "SetAxisNumFormat": {
       "description": "Sets the specified numeric format to the axis values.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetAxisNumFormat/",
       "params": [
         {
           "description": "Numeric format (can be custom format).",
@@ -270,6 +287,7 @@
     },
     "SetDataLabelsTextPr": {
       "description": "Sets the text properties to the chart data labels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataLabelsTextPr/",
       "params": [
         {
           "description": "The text properties to apply to the data labels.",
@@ -386,6 +404,7 @@
     },
     "SetHorAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",
@@ -500,6 +519,7 @@
     },
     "SetHyperlink": {
       "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetHyperlink/",
       "params": [
         {
           "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
@@ -727,6 +747,7 @@
     },
     "SetPlaceholder": {
       "description": "Sets the specified placeholder to the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPlaceholder/",
       "params": [
         {
           "description": "Placeholder object.",
@@ -778,6 +799,7 @@
     },
     "SetPointDataLabelTextPr": {
       "description": "Sets the text properties to the chart point data label.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetPointDataLabelTextPr/",
       "params": [
         {
           "description": "The series index from the array of the data used to build the chart from.",
@@ -804,6 +826,7 @@
     },
     "SetPosX": {
       "description": "Sets the x position of the drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosX/",
       "params": [
         {
           "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
@@ -818,6 +841,7 @@
     },
     "SetPosY": {
       "description": "Sets the y position of the drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosY/",
       "params": [
         {
           "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
@@ -832,6 +856,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the drawing on the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosition/",
       "params": [
         {
           "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
@@ -1011,6 +1036,7 @@
     },
     "SetShowDataTable": {
       "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowDataTable/",
       "params": [
         {
           "description": "Whether to show or hide the data table below the chart.",
@@ -1185,6 +1211,7 @@
     },
     "SetVertAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",

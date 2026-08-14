@@ -1,11 +1,13 @@
 {
   "description": "Class representing a color scale conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScale/",
   "extends": [
     "ApiFormatCondition"
   ],
   "methods": {
     "Delete": {
       "description": "Deletes the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "void"
@@ -15,6 +17,7 @@
     },
     "GetAppliesTo": {
       "description": "Returns the range of cells to which the current conditional formatting rule applies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetAppliesTo/",
       "params": [],
       "returns": {
         "description": "The range of cells affected by the current condition, or null if no range is set.",
@@ -25,6 +28,7 @@
     },
     "GetColorScaleCriteria": {
       "description": "Returns the collection of criteria that define this color scale rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScale/Methods/GetColorScaleCriteria/",
       "params": [],
       "returns": {
         "description": "An array of ApiColorScaleCriterion objects representing the color scale criteria,\ror `null` if the rule is not a color scale type.",
@@ -35,6 +39,7 @@
     },
     "GetDateOperator": {
       "description": "Returns the date operator for time period conditions.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetDateOperator/",
       "params": [],
       "returns": {
         "description": "The time period operator that defines how the date condition is evaluated,\ror null if the rule is not date-based.",
@@ -45,6 +50,7 @@
     },
     "GetFillColor": {
       "description": "Returns the background color for the format condition. Returns 'No Fill' when the background color of the format condition is null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFillColor/",
       "params": [],
       "returns": {
         "description": "The background color applied by the format condition, or 'No Fill' if none is set.",
@@ -55,6 +61,7 @@
     },
     "GetFont": {
       "description": "Returns the font applied by the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFont/",
       "params": [],
       "returns": {
         "description": "An ApiFont object representing the font applied by the format condition, or null if no font is defined.",
@@ -65,6 +72,7 @@
     },
     "GetFormula1": {
       "description": "Returns the first formula used by the current conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula1/",
       "params": [],
       "returns": {
         "description": "The first formula.",
@@ -75,6 +83,7 @@
     },
     "GetFormula2": {
       "description": "Returns the second formula used by the current conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula2/",
       "params": [],
       "returns": {
         "description": "The second formula.",
@@ -85,6 +94,7 @@
     },
     "GetNumberFormat": {
       "description": "Returns the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetNumberFormat/",
       "params": [],
       "returns": {
         "description": "The number format.",
@@ -95,6 +105,7 @@
     },
     "GetOperator": {
       "description": "Returns the format condition operator.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetOperator/",
       "params": [],
       "returns": {
         "description": "The format condition operator.",
@@ -105,6 +116,7 @@
     },
     "GetPTCondition": {
       "description": "Returns the pivot table condition object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPTCondition/",
       "params": [],
       "returns": {
         "description": "The pivot table condition object.",
@@ -115,6 +127,7 @@
     },
     "GetParent": {
       "description": "Returns the parent range object of the current format condition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "The parent range object.",
@@ -125,6 +138,7 @@
     },
     "GetPriority": {
       "description": "Returns the priority value of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPriority/",
       "params": [],
       "returns": {
         "description": "The priority value of the conditional formatting rule.",
@@ -135,6 +149,7 @@
     },
     "GetScopeType": {
       "description": "Returns the scope type of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetScopeType/",
       "params": [],
       "returns": {
         "description": "Returns \"xlSelectionScope\" for normal ranges, \"xlDataFieldScope\" for entire worksheet, \"xlFieldsScope\" for pivot tables.",
@@ -145,6 +160,7 @@
     },
     "GetStopIfTrue": {
       "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetStopIfTrue/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -154,6 +170,7 @@
     },
     "GetText": {
       "description": "Returns the text value used in text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetText/",
       "params": [],
       "returns": {
         "description": "The text value used in text-based conditional formatting rules.",
@@ -164,6 +181,7 @@
     },
     "GetTextOperator": {
       "description": "Returns the text operator for text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetTextOperator/",
       "params": [],
       "returns": {
         "description": "The operator defining how the text comparison is performed,\ror null if the rule is not text-based.",
@@ -174,6 +192,7 @@
     },
     "GetType": {
       "description": "Returns the type of the color scale conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScale/Methods/GetType/",
       "params": [],
       "returns": {
         "description": "The type of the color scale conditional formatting rule.",
@@ -184,6 +203,7 @@
     },
     "Modify": {
       "description": "Modifies the current format condition with the specified parameters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Modify/",
       "params": [
         {
           "description": "The format condition type.",
@@ -219,6 +239,7 @@
     },
     "ModifyAppliesToRange": {
       "description": "Sets the cell range to which the current conditional formatting rule applies.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/ModifyAppliesToRange/",
       "params": [
         {
           "description": "The range to which the current conditional formatting rule will be applied.",
@@ -234,6 +255,7 @@
     },
     "SetBorders": {
       "description": "Sets the border style for the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetBorders/",
       "params": [
         {
           "description": "Specifies the cell border position.",
@@ -259,6 +281,7 @@
     },
     "SetDateOperator": {
       "description": "Sets the date operator for time period conditions.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetDateOperator/",
       "params": [
         {
           "description": "The date operator for time period conditions.",
@@ -274,6 +297,7 @@
     },
     "SetFillColor": {
       "description": "Sets the background color to the format condition with the previously created color object.\nSets 'No Fill' when previously created color object is null.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFillColor/",
       "params": [
         {
           "description": "The color object that specifies the background color for the format condition.",
@@ -289,6 +313,7 @@
     },
     "SetFirstPriority": {
       "description": "Sets the priority value for the current conditional formatting rule to \"1\" so that it will be evaluated before all other rules on the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFirstPriority/",
       "params": [],
       "returns": {
         "type": "void"
@@ -298,6 +323,7 @@
     },
     "SetLastPriority": {
       "description": "Sets the evaluation order for the current conditional formatting rule so it is evaluated after all other rules on the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetLastPriority/",
       "params": [],
       "returns": {
         "type": "void"
@@ -307,6 +333,7 @@
     },
     "SetNumberFormat": {
       "description": "Sets the number format applied to a cell when the conditional formatting rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetNumberFormat/",
       "params": [
         {
           "description": "The number format code (e.g., \"General\", \"#,##0.00\", etc.)",
@@ -322,6 +349,7 @@
     },
     "SetPriority": {
       "description": "Sets the priority value of the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetPriority/",
       "params": [
         {
           "description": "The priority value (1-based).",
@@ -337,6 +365,7 @@
     },
     "SetScopeType": {
       "description": "Sets the scope type for the conditional formatting rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetScopeType/",
       "params": [
         {
           "description": "The scope type: \"xlSelectionScope\", \"xlDataFieldScope\", or \"xlFieldsScope\".",
@@ -352,6 +381,7 @@
     },
     "SetStopIfTrue": {
       "description": "Sets whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetStopIfTrue/",
       "params": [
         {
           "description": "True to stop evaluating additional rules.",
@@ -367,6 +397,7 @@
     },
     "SetText": {
       "description": "Sets the text value used in text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetText/",
       "params": [
         {
           "description": "The text value to compare against.",
@@ -382,6 +413,7 @@
     },
     "SetTextOperator": {
       "description": "Sets the text operator for text-based conditional formatting rules.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetTextOperator/",
       "params": [
         {
           "description": "The text operator: \"xlContains\", \"xlDoesNotContain\", \"xlBeginsWith\", \"xlEndsWith\".",

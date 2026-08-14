@@ -1,11 +1,13 @@
 {
   "description": "Class representing a combobox field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/",
   "extends": [
     "ApiBaseListField"
   ],
   "methods": {
     "AddOption": {
       "description": "Adds new option to list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/AddOption/",
       "params": [
         {
           "description": "list option to add",
@@ -26,6 +28,7 @@
     },
     "ClearFormat": {
       "description": "Clears format of field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/ClearFormat/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -34,6 +37,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiComboboxField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"comboboxField\""
@@ -42,6 +46,7 @@
     },
     "GetFormattedValue": {
       "description": "Gets formatted value of a field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/GetFormattedValue/",
       "params": [],
       "returns": {
         "type": "string"
@@ -50,6 +55,7 @@
     },
     "GetOption": {
       "description": "Gets option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOption/",
       "params": [
         {
           "description": "The option index.",
@@ -64,6 +70,7 @@
     },
     "GetOptions": {
       "description": "Gets all options from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOptions/",
       "params": [],
       "returns": {
         "type": "ListOption[]"
@@ -72,6 +79,7 @@
     },
     "GetPlaceholder": {
       "description": "Gets text field placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/GetPlaceholder/",
       "params": [],
       "returns": {
         "type": "string"
@@ -80,6 +88,7 @@
     },
     "GetRegularExp": {
       "description": "Gets text widget regular validate expression.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/GetRegularExp/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -88,6 +97,7 @@
     },
     "GetValueIndexes": {
       "description": "Gets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetValueIndexes/",
       "params": [],
       "returns": {
         "type": "number[]"
@@ -96,6 +106,7 @@
     },
     "IsCommitOnSelChange": {
       "description": "Checks if field can commit on selection change.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/IsCommitOnSelChange/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -104,6 +115,7 @@
     },
     "IsEditable": {
       "description": "Checks if field is editable.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/IsEditable/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -112,6 +124,7 @@
     },
     "MoveOption": {
       "description": "Moves option to specified position in list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/MoveOption/",
       "params": [
         {
           "description": "The current index of the option to move.",
@@ -131,6 +144,7 @@
     },
     "RemoveOption": {
       "description": "Removes option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/RemoveOption/",
       "params": [
         {
           "description": "The option index.",
@@ -145,6 +159,7 @@
     },
     "SetCommitOnSelChange": {
       "description": "Sets whether the field commits changes immediately after selection changes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetCommitOnSelChange/",
       "params": [
         {
           "description": "Specifies whether selection changes are committed immediately.",
@@ -159,6 +174,7 @@
     },
     "SetDateFormat": {
       "description": "Sets date format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetDateFormat/",
       "params": [
         {
           "description": "date format (e.g. \"dd.mm.yyyy\")",
@@ -173,6 +189,7 @@
     },
     "SetEditable": {
       "description": "Sets whether custom text can be entered.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetEditable/",
       "params": [
         {
           "description": "Specifies whether custom text can be entered.",
@@ -187,6 +204,7 @@
     },
     "SetMask": {
       "description": "Sets mask for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetMask/",
       "params": [
         {
           "description": "The input mask (e.g. \"(999)999-9999\").",
@@ -201,6 +219,7 @@
     },
     "SetNumberFormat": {
       "description": "Sets number format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetNumberFormat/",
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -235,6 +254,7 @@
     },
     "SetPercentageFormat": {
       "description": "Sets percentage format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetPercentageFormat/",
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -254,6 +274,7 @@
     },
     "SetPlaceholder": {
       "description": "Sets text field placeholder.\n<note>Makes combobox editable</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetPlaceholder/",
       "params": [
         {
           "description": "field placeholder",
@@ -268,6 +289,7 @@
     },
     "SetRegularExp": {
       "description": "Sets regular expression validate string for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetRegularExp/",
       "params": [
         {
           "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
@@ -282,6 +304,7 @@
     },
     "SetSpecialFormat": {
       "description": "Sets special format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetSpecialFormat/",
       "params": [
         {
           "description": "the formatting style to apply to the value",
@@ -296,6 +319,7 @@
     },
     "SetTimeFormat": {
       "description": "Sets time format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetTimeFormat/",
       "params": [
         {
           "description": "available time format",
@@ -310,6 +334,7 @@
     },
     "SetValidateRange": {
       "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetValidateRange/",
       "params": [
         {
           "description": "If true, enables minimum value validation using `greaterThanValue`.",
@@ -343,6 +368,7 @@
     },
     "SetValueIndexes": {
       "description": "Sets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetValueIndexes/",
       "params": [
         {
           "description": "The indexes of the selected values.",

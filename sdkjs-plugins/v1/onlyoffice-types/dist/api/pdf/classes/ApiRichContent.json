@@ -1,8 +1,10 @@
 {
   "description": "Class representing a rich content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/",
   "methods": {
     "AddElement": {
       "description": "Adds a rich paragraph using its position in rich content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/AddElement/",
       "params": [
         {
           "description": "The position where the rich paragraph will be added.",
@@ -22,6 +24,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiRichContent class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"richContent\""
@@ -30,6 +33,7 @@
     },
     "GetContent": {
       "description": "Returns an array of rich paragraphs from the current rich content object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetContent/",
       "params": [
         {
           "description": "Specifies if the copies of the document elements will be returned or not.",
@@ -44,6 +48,7 @@
     },
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetCurrentParagraph/",
       "params": [],
       "returns": {
         "type": "ApiRichParagraph"
@@ -52,6 +57,7 @@
     },
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetCurrentRun/",
       "params": [],
       "returns": {
         "type": "ApiRichRun"
@@ -60,6 +66,7 @@
     },
     "GetElement": {
       "description": "Returns an rich paragraph by its position in the content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetElement/",
       "params": [
         {
           "description": "The element position that will be taken from the content.",
@@ -74,6 +81,7 @@
     },
     "Push": {
       "description": "Pushes a rich paragraph to a rich content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/Push/",
       "params": [
         {
           "description": "The rich paragraph which will be pushed to the rich content.",

@@ -1,5 +1,6 @@
 {
   "description": "Sets the size of the object (image, shape, chart) bounding box.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetSize/",
   "params": [
     {
       "description": "The object width measured in English measure units.",

@@ -1,5 +1,6 @@
 {
   "description": "Sets the outline properties to the specified graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetOutLine/",
   "params": [
     {
       "description": "The stroke used to create the graphic object outline.",

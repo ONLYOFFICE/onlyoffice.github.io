@@ -1,5 +1,6 @@
 {
   "description": "Scales the width of the figure using the specified coefficient.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ScaleWidth/",
   "params": [
     {
       "description": "The coefficient by which the figure width will be scaled.",

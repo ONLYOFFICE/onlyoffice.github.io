@@ -1,5 +1,6 @@
 {
   "description": "Class that contains the font attributes (font name, font size, color, and so on).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/",
   "methods": {
     "GetBold": {
       "description": "Returns the bold property of the specified font.",

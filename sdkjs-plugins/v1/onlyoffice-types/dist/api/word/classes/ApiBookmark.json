@@ -1,5 +1,6 @@
 {
   "description": "Class representing a bookmark in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/",
   "methods": {
     "Delete": {
       "description": "Deletes the current bookmark from the document.",

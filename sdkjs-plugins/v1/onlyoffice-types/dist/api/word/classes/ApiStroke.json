@@ -1,8 +1,10 @@
 {
   "description": "Class representing a stroke.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/",
   "methods": {
     "GetBeginArrow": {
       "description": "Returns the beginning arrow properties of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetBeginArrow/",
       "params": [],
       "returns": {
         "type": "object | null"
@@ -24,6 +26,7 @@
     },
     "GetDashType": {
       "description": "Gets the dash type of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetDashType/",
       "params": [],
       "returns": {
         "description": "returns dash type (\"solid\", \"dash\", etc.) or null.",
@@ -33,6 +36,7 @@
     },
     "GetEndArrow": {
       "description": "Returns the ending arrow properties of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetEndArrow/",
       "params": [],
       "returns": {
         "type": "object | null"
@@ -42,6 +46,7 @@
     },
     "GetFill": {
       "description": "Gets the fill (color) of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetFill/",
       "params": [],
       "returns": {
         "type": "ApiFill | null"
@@ -50,6 +55,7 @@
     },
     "GetWidth": {
       "description": "Gets the width of the stroke in English Metric Units.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/GetWidth/",
       "params": [],
       "returns": {
         "type": "EMU | null"
@@ -58,6 +64,7 @@
     },
     "SetBeginArrow": {
       "description": "Sets the beginning arrow of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/SetBeginArrow/",
       "params": [
         {
           "description": "The type of the beginning arrow.",
@@ -85,6 +92,7 @@
     },
     "SetEndArrow": {
       "description": "Sets the ending arrow of the stroke.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStroke/Methods/SetEndArrow/",
       "params": [
         {
           "description": "The type of the ending arrow.",

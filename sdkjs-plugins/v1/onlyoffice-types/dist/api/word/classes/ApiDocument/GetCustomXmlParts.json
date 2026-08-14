@@ -1,5 +1,6 @@
 {
   "description": "Retrieves the custom XML manager associated with the document.\nThis manager allows manipulation and access to custom XML parts within the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCustomXmlParts/",
   "params": [],
   "returns": {
     "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",

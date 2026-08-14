@@ -1,8 +1,10 @@
 {
   "description": "Class representing a custom XML part.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/",
   "methods": {
     "Delete": {
       "description": "Deletes the XML from the custom XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/Delete/",
       "params": [],
       "returns": {
         "description": "True if the XML was successfully deleted.",
@@ -13,6 +15,7 @@
     },
     "DeleteAttribute": {
       "description": "Deletes an attribute from the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/DeleteAttribute/",
       "params": [
         {
           "description": "The XPath of the node from which to delete the attribute.",
@@ -34,6 +37,7 @@
     },
     "DeleteElement": {
       "description": "Deletes an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/DeleteElement/",
       "params": [
         {
           "description": "The XPath of the node to delete.",
@@ -50,6 +54,7 @@
     },
     "GetAttribute": {
       "description": "Returns an attribute from the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetAttribute/",
       "params": [
         {
           "description": "The XPath of the node from which to get the attribute.",
@@ -71,6 +76,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlPart class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"customXmlPart\""
@@ -79,6 +85,7 @@
     },
     "GetId": {
       "description": "Returns the ID of the custom XML part.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -87,6 +94,7 @@
     },
     "GetNodes": {
       "description": "Retrieves nodes from custom XML based on the provided XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetNodes/",
       "params": [
         {
           "description": "The XPath expression to search for nodes.",
@@ -103,6 +111,7 @@
     },
     "GetXml": {
       "description": "Retrieves the XML string from the custom XML part.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetXml/",
       "params": [],
       "returns": {
         "description": "The XML string.",
@@ -113,6 +122,7 @@
     },
     "InsertAttribute": {
       "description": "Inserts an attribute into the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/InsertAttribute/",
       "params": [
         {
           "description": "The XPath of the node to insert the attribute into.",
@@ -139,6 +149,7 @@
     },
     "InsertElement": {
       "description": "Inserts an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/InsertElement/",
       "params": [
         {
           "description": "The XPath of the parent node where the new element will be inserted.",
@@ -166,6 +177,7 @@
     },
     "UpdateAttribute": {
       "description": "Updates an attribute of the XML node at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/UpdateAttribute/",
       "params": [
         {
           "description": "The XPath of the node whose attribute should be updated.",
@@ -192,6 +204,7 @@
     },
     "UpdateElement": {
       "description": "Updates an XML element at the specified XPath.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/UpdateElement/",
       "params": [
         {
           "description": "The XPath of the node to update.",

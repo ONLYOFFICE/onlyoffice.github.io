@@ -1,8 +1,10 @@
 {
   "description": "Class representing worksheet autofilters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/",
   "methods": {
     "ApplyFilter": {
       "description": "Reapplies the AutoFilter to the worksheet using the existing filter criteria.\n\nThis method corresponds to the Excel AutoFilter.ApplyFilter behavior:\nit does not change the currently defined filter conditions; it only\nreevaluates which rows should be visible based on the active filters.\nIf no AutoFilter is defined for the worksheet, the method does nothing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/ApplyFilter/",
       "params": [],
       "returns": {
         "type": "void"
@@ -11,6 +13,7 @@
     },
     "GetFilterMode": {
       "description": "Returns a value that indicates whether the worksheet has an AutoFilter applied.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetFilterMode/",
       "params": [],
       "returns": {
         "description": "true if the worksheet has an AutoFilter; otherwise, false.",
@@ -20,6 +23,7 @@
     },
     "GetFilters": {
       "description": "Returns the array of ApiFilter objects that represents the filters applied to the AutoFilter range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetFilters/",
       "params": [],
       "returns": {
         "type": "ApiFilter[]"
@@ -28,6 +32,7 @@
     },
     "GetParent": {
       "description": "Returns the parent object for the AutoFilter — either the ApiWorksheet the filter is applied to,\nor the ApiListObject if the filter belongs to a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "The parent worksheet or table object.",
@@ -37,6 +42,7 @@
     },
     "GetRange": {
       "description": "Returns the ApiRange object that represents the AutoFilter range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/GetRange/",
       "params": [],
       "returns": {
         "description": "The range to which the AutoFilter is applied; null if no AutoFilter is defined.",
@@ -46,6 +52,7 @@
     },
     "ShowAllData": {
       "description": "Clears all filters and displays all rows in the AutoFilter range.\n\nThis method corresponds to the Excel AutoFilter.ShowAllData behavior:\nit removes any active filtering from the worksheet while preserving the\nAutoFilter drop-downs on the header row. If no AutoFilter is defined\nfor the worksheet, the method does nothing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAutoFilter/Methods/ShowAllData/",
       "params": [],
       "returns": {
         "type": "void"

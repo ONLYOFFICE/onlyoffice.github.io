@@ -1,8 +1,10 @@
 {
   "description": "Class representing a text range within a presentation shape's text frame.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/",
   "methods": {
     "AddText": {
       "description": "Adds a text to the specified position. The current range is expanded to include the added text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/AddText/",
       "params": [
         {
           "description": "The text that will be added.",
@@ -25,6 +27,7 @@
     },
     "Delete": {
       "description": "Deletes the contents of the current text range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/Delete/",
       "params": [],
       "returns": {
         "description": "returns false if the range is empty.",
@@ -35,6 +38,7 @@
     },
     "ExpandTo": {
       "description": "Returns a new range that spans both this range and the given range. The current range is not changed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/ExpandTo/",
       "params": [
         {
           "name": "oRange",
@@ -49,6 +53,7 @@
     },
     "Find": {
       "description": "Finds the first occurrence of the given text within this range and returns it as a new ApiTextRange.\nReturns null if the text is not found.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/Find/",
       "params": [
         {
           "description": "Text to search for.",
@@ -82,6 +87,7 @@
     },
     "GetAllParagraphs": {
       "description": "Returns all Paragraph objects within this range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetAllParagraphs/",
       "params": [],
       "returns": {
         "type": "ApiParagraph[]"
@@ -91,6 +97,7 @@
     },
     "GetClassType": {
       "description": "Returns the class type identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"textRange\""
@@ -100,6 +107,7 @@
     },
     "GetEndPos": {
       "description": "Returns the end position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetEndPos/",
       "params": [],
       "returns": {
         "type": "number"
@@ -109,6 +117,7 @@
     },
     "GetParagraph": {
       "description": "Returns the paragraph at the given index within this range.\nReturns null if the index is out of bounds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetParagraph/",
       "params": [
         {
           "name": "nIndex",
@@ -123,6 +132,7 @@
     },
     "GetRange": {
       "description": "Returns a new ApiTextRange that represents a sub-range of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetRange/",
       "params": [
         {
           "description": "Start offset (0-based) relative to the beginning of this range.",
@@ -145,6 +155,7 @@
     },
     "GetStartPos": {
       "description": "Returns the start position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetStartPos/",
       "params": [],
       "returns": {
         "type": "number"
@@ -154,6 +165,7 @@
     },
     "GetText": {
       "description": "Returns the text content of the range. Paragraph breaks are represented as \"\\r\".",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -206,6 +218,7 @@
     },
     "GetTextPr": {
       "description": "Returns the merged text properties of the entire range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/GetTextPr/",
       "params": [],
       "returns": {
         "type": "ApiTextPr"
@@ -215,6 +228,7 @@
     },
     "IntersectWith": {
       "description": "Returns a new range that is the intersection of this range and the given range. The current range is not changed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/IntersectWith/",
       "params": [
         {
           "name": "oRange",
@@ -229,6 +243,7 @@
     },
     "MoveCursorToPos": {
       "description": "Moves a cursor to the specified position within the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/MoveCursorToPos/",
       "params": [
         {
           "description": "The desired cursor position.",
@@ -245,6 +260,7 @@
     },
     "Replace": {
       "description": "Replaces all occurrences of the specified text within this range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/Replace/",
       "params": [
         {
           "description": "Text to search for.",
@@ -278,6 +294,7 @@
     },
     "Select": {
       "description": "Selects the text range in the editor.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/Select/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -287,6 +304,7 @@
     },
     "SetBold": {
       "description": "Sets bold formatting for the contents of the current text range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetBold/",
       "params": [
         {
           "name": "isBold",
@@ -301,6 +319,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in the current text Range are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetCaps/",
       "params": [
         {
           "description": "Specifies if the Range contents are displayed capitalized or not.",
@@ -316,6 +335,7 @@
     },
     "SetColor": {
       "description": "Sets the text color of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetColor/",
       "params": [
         {
           "name": "color",
@@ -330,6 +350,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of the current Range are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetDoubleStrikeout/",
       "params": [
         {
           "name": "isDoubleStrikeout",
@@ -344,6 +365,7 @@
     },
     "SetEndPos": {
       "description": "Sets the end position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetEndPos/",
       "params": [
         {
           "description": "End position.",
@@ -359,6 +381,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetFontFamily/",
       "params": [
         {
           "description": "The font family or families used for the current text Range.",
@@ -374,6 +397,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current text Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetFontSize/",
       "params": [
         {
           "description": "The text size value measured in half-points (1/144 of an inch).",
@@ -389,6 +413,7 @@
     },
     "SetHighlight": {
       "description": "Specifies a highlighting color which is applied as a background to the contents of the current Range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetHighlight/",
       "params": [
         {
           "name": "sColor",
@@ -403,6 +428,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetItalic/",
       "params": [
         {
           "name": "isItalic",
@@ -417,6 +443,7 @@
     },
     "SetPosition": {
       "description": "Specifies the amount by which text is raised or lowered for the current Range in relation to the default\nbaseline of the surrounding non-positioned text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetPosition/",
       "params": [
         {
           "description": "Specifies a positive (raised text) or negative (lowered text)\rmeasurement in half-points (1/144 of an inch).",
@@ -432,6 +459,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the lowercase letter characters in the current text Range are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetSmallCaps/",
       "params": [
         {
           "description": "Specifies if the contents of the current Range are displayed capitalized two points smaller or not.",
@@ -447,6 +475,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetSpacing/",
       "params": [
         {
           "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
@@ -462,6 +491,7 @@
     },
     "SetStartPos": {
       "description": "Sets the start position of the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetStartPos/",
       "params": [
         {
           "description": "Start position.",
@@ -477,6 +507,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of the current Range are displayed with a single horizontal line through the range center.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetStrikeout/",
       "params": [
         {
           "name": "isStrikeout",
@@ -491,6 +522,7 @@
     },
     "SetText": {
       "description": "Replaces all text content with the given string. Use \"\\r\" to separate paragraphs.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetText/",
       "params": [
         {
           "description": "New text value.",
@@ -507,6 +539,7 @@
     },
     "SetTextPr": {
       "description": "Sets the text properties to the current text range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetTextPr/",
       "params": [
         {
           "description": "The text properties that will be applied to the current range.",
@@ -522,6 +555,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of the current Range are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetUnderline/",
       "params": [
         {
           "description": "Specifies if the contents of the current Range are displayed underlined or not.",
@@ -537,6 +571,7 @@
     },
     "SetVertAlign": {
       "description": "Specifies the alignment which will be applied to the Range contents in relation to the default appearance of the Range text:\n**\"baseline\"** - the characters in the current text Range will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text Range will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text Range will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextRange/Methods/SetVertAlign/",
       "params": [
         {
           "description": "The vertical alignment type applied to the text contents.",

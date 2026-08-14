@@ -1,5 +1,6 @@
 {
   "description": "Class representing a container for the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/",
   "methods": {
     "AddCaption": {
       "description": "Adds a caption paragraph after (or before) the current content control.\n<note>Please note that the current content control must be in the document (not in the footer/header).\nAnd if the current content control is placed in a shape, then a caption is added after (or before) the parent shape.</note>",
@@ -229,6 +230,7 @@
     },
     "GetAppearance": {
       "description": "Gets the visualization of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetAppearance/",
       "params": [],
       "returns": {
         "description": "type - The type of visualization.",
@@ -239,6 +241,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -248,6 +251,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -291,6 +295,7 @@
     },
     "GetDataForXmlMapping": {
       "description": "Returns the content control data for the XML mapping.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetDataForXmlMapping/",
       "params": [],
       "returns": {
         "description": "The string data representing the contents of the current content control.",
@@ -313,6 +318,7 @@
     },
     "GetId": {
       "description": "Returns a unique ID for the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -355,6 +361,7 @@
     },
     "GetParent": {
       "description": "Returns the document content that contains the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the content control has no parent.",
@@ -464,6 +471,7 @@
     },
     "IsPicture": {
       "description": "Checks whether the content control is a picture control.\nThis method verifies if the content control is specifically a picture control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/IsPicture/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a picture, otherwise `false`.",
@@ -597,6 +605,7 @@
     },
     "SetAppearance": {
       "description": "Sets the visualization of the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetAppearance/",
       "params": [
         {
           "description": "The desired type of visualization.",
@@ -612,6 +621,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color to the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "The background color.",
@@ -628,6 +638,7 @@
     },
     "SetBorderColor": {
       "description": "Sets the border color to the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -644,6 +655,7 @@
     },
     "SetDataBinding": {
       "description": "Sets the data binding for the content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetDataBinding/",
       "params": [
         {
           "description": "The data binding to associate with the content control.",
@@ -659,6 +671,7 @@
     },
     "SetId": {
       "description": "Specifies a unique ID for the current content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetId/",
       "params": [
         {
           "description": "The numerical ID which will be specified for the current content control.",
@@ -710,6 +723,7 @@
     },
     "SetPicture": {
       "description": "Sets the content (image) for the picture content control.\nThis method updates the picture inside a content control by setting an image from a provided URL.\nThe URL should be an internet link to the image.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/SetPicture/",
       "params": [
         {
           "description": "The URL of the image to be used for the content control.\rCurrently, only internet URLs are supported.",
@@ -803,6 +817,7 @@
     },
     "UpdateFromXmlMapping": {
       "description": "Updates the content control using the value from the XML mapping.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBlockLvlSdt/Methods/UpdateFromXmlMapping/",
       "params": [],
       "returns": {
         "description": "Returns `true` if the update was successful, otherwise `false`.",

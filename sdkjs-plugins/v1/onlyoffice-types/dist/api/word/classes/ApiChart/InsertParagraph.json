@@ -1,5 +1,6 @@
 {
   "description": "Inserts a paragraph at the specified position.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/InsertParagraph/",
   "params": [
     {
       "description": "Text or paragraph.",

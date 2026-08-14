@@ -1,5 +1,6 @@
 {
   "description": "Sets the width of the specified column (by index) of the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetColumnWidth/",
   "params": [
     {
       "description": "The zero-based column index.",

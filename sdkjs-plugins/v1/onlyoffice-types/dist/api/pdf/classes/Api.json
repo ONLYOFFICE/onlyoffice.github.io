@@ -1,7 +1,9 @@
 {
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/",
   "methods": {
     "CentimetersToPoints": {
       "description": "Converts centimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CentimetersToPoints/",
       "params": [
         {
           "description": "The number of centimeters to convert to points.",
@@ -16,6 +18,7 @@
     },
     "Color": {
       "description": "Creates an ApiColor from a universal input. The method recognizes several call signatures and either delegates to a narrower factory or constructs an ApiColor directly.\n**Numeric components**: \"Api.Color(r, g, b)\" or \"Api.Color(r, g, b, a)\" creates an RGB or RGBA color from byte components (0-255).\n**Packed integer**: \"Api.Color(0xRRGGBB)\" creates an RGB color from a 24-bit integer.\n**Full HEX string**: \"Api.Color('#RRGGBB')\" or \"Api.Color('RRGGBB')\" creates a HEX color; the leading \"#\" is optional.\n**Short HEX string**: \"Api.Color('#RGB')\" expands each digit by duplication, so \"#F0A\" becomes \"#FF00AA\".\n**Theme color name**: \"Api.Color('accent1')\" creates a theme color; any value of SchemeColorId is accepted.\n**Preset color name**: \"Api.Color('aliceBlue')\" resolves any value of PresetColor to its RGB equivalent.\n**Auto color**: \"Api.Color('auto')\" creates an auto color.\nFor a single string argument, the resolution priority is: \"auto\", a string starting with \"#\", a theme name, a preset name, a bare 6-digit HEX. Theme and preset palettes do not overlap. A 3-digit shorthand is accepted only with the leading \"#\".\nUnsupported inputs (objects, arrays, an existing ApiColor, unknown strings, no arguments) return a black color (#000000).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/Color/",
       "params": [
         {
           "description": "The universal color input. With three or four arguments, the red component (0-255).",
@@ -48,6 +51,7 @@
     },
     "CreateBlipFill": {
       "description": "Creates a blip fill to apply to the object using the selected image as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateBlipFill/",
       "params": [
         {
           "description": "The path to the image used for the blip fill (currently only internet URL or Base64 encoded images are supported).",
@@ -67,6 +71,7 @@
     },
     "CreateBullet": {
       "description": "Creates a bullet for a paragraph with the character or symbol specified with the sSymbol parameter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateBullet/",
       "params": [
         {
           "description": "The character or symbol which will be used to create the bullet for the paragraph.",
@@ -81,6 +86,7 @@
     },
     "CreateButtonField": {
       "description": "Creates a button field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateButtonField/",
       "params": [
         {
           "description": "widget rect",
@@ -95,6 +101,7 @@
     },
     "CreateCaretAnnot": {
       "description": "Creates caret annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCaretAnnot/",
       "params": [
         {
           "description": "region to apply caret.",
@@ -109,6 +116,7 @@
     },
     "CreateChart": {
       "description": "Creates a chart with the parameters specified.\n:::note\nValues of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).\n:::",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateChart/",
       "params": [
         {
           "description": "The chart type used for the chart display.",
@@ -166,6 +174,7 @@
     },
     "CreateCheckboxField": {
       "description": "Creates a checkbox field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCheckboxField/",
       "params": [
         {
           "description": "widget rect",
@@ -180,6 +189,7 @@
     },
     "CreateCircleAnnot": {
       "description": "Creates circle annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCircleAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -194,6 +204,7 @@
     },
     "CreateComboboxField": {
       "description": "Creates a combobox field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateComboboxField/",
       "params": [
         {
           "description": "widget rect",
@@ -208,6 +219,7 @@
     },
     "CreateCustomGeometry": {
       "description": "Creates a new custom geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCustomGeometry/",
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -217,6 +229,7 @@
     },
     "CreateDateField": {
       "description": "Creates a text date field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateDateField/",
       "params": [
         {
           "description": "widget rect",
@@ -231,6 +244,7 @@
     },
     "CreateFreeTextAnnot": {
       "description": "Creates freeText annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateFreeTextAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -245,6 +259,7 @@
     },
     "CreateGoToAction": {
       "description": "Creates a GoTo action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateGoToAction/",
       "params": [
         {
           "name": "page",
@@ -271,6 +286,7 @@
     },
     "CreateGradientStop": {
       "description": "Creates a gradient stop used for different types of gradients.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateGradientStop/",
       "params": [
         {
           "description": "The color used for the gradient stop.",
@@ -291,6 +307,7 @@
     },
     "CreateHideShowFormsAction": {
       "description": "Creates a hide-show forms action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateHideShowFormsAction/",
       "params": [
         {
           "description": "to hide - true, to show - false",
@@ -310,6 +327,7 @@
     },
     "CreateHighlightAnnot": {
       "description": "Creates highlight annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateHighlightAnnot/",
       "params": [
         {
           "description": "region to apply highlight.",
@@ -324,6 +342,7 @@
     },
     "CreateImage": {
       "description": "Creates an image with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateImage/",
       "params": [
         {
           "description": "The image source where the image to be inserted should be taken from (currently,\ronly internet URL or Base64 encoded images are supported).",
@@ -348,6 +367,7 @@
     },
     "CreateImageField": {
       "description": "Creates a image field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateImageField/",
       "params": [
         {
           "description": "widget rect",
@@ -362,6 +382,7 @@
     },
     "CreateInkAnnot": {
       "description": "Creates ink annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateInkAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -381,6 +402,7 @@
     },
     "CreateJsAction": {
       "description": "Creates a js action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateJsAction/",
       "params": [
         {
           "name": "script",
@@ -394,6 +416,7 @@
     },
     "CreateLineAnnot": {
       "description": "Creates line annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateLineAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -418,6 +441,7 @@
     },
     "CreateLinearGradientFill": {
       "description": "Creates a linear gradient fill to apply to the object using the selected linear gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateLinearGradientFill/",
       "params": [
         {
           "description": "The array of gradient color stops measured in 1000th of percent.",
@@ -437,6 +461,7 @@
     },
     "CreateListboxField": {
       "description": "Creates a listbox field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateListboxField/",
       "params": [
         {
           "description": "widget rect",
@@ -451,6 +476,7 @@
     },
     "CreateMath": {
       "description": "Creates a math equation from a linear text string. The resulting object can be inserted into\na paragraph the same way as a run (e.g. via {@link ApiParagraph#AddElement} or {@link ApiParagraph#Push}).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateMath/",
       "params": [
         {
           "description": "An equation written as a linear text string.",
@@ -472,6 +498,7 @@
     },
     "CreateNamedAction": {
       "description": "Creates a named action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateNamedAction/",
       "params": [
         {
           "name": "name",
@@ -485,6 +512,7 @@
     },
     "CreateNoFill": {
       "description": "Creates no fill and removes the fill from the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateNoFill/",
       "params": [],
       "returns": {
         "type": "ApiFill"
@@ -493,6 +521,7 @@
     },
     "CreateNumbering": {
       "description": "Creates a bullet for a paragraph with the numbering character or symbol specified with the numType parameter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateNumbering/",
       "params": [
         {
           "description": "The numbering type the paragraphs will be numbered with.",
@@ -512,6 +541,7 @@
     },
     "CreateParagraph": {
       "description": "Creates a new paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateParagraph/",
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -520,6 +550,7 @@
     },
     "CreatePatternFill": {
       "description": "Creates a pattern fill to apply to the object using the selected pattern as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePatternFill/",
       "params": [
         {
           "description": "The pattern type used for the fill selected from one of the available pattern types.",
@@ -545,6 +576,7 @@
     },
     "CreatePolyLineAnnot": {
       "description": "Creates polyline annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePolyLineAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -564,6 +596,7 @@
     },
     "CreatePolygonAnnot": {
       "description": "Creates polygon annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePolygonAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -583,6 +616,7 @@
     },
     "CreatePresetColor": {
       "description": "Creates a color selecting it from one of the available color presets.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePresetColor/",
       "params": [
         {
           "description": "A preset selected from the list of the available color preset names.",
@@ -598,6 +632,7 @@
     },
     "CreatePresetGeometry": {
       "description": "Creates a geometry using one of the available preset shapes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePresetGeometry/",
       "params": [
         {
           "description": "The preset name.",
@@ -614,6 +649,7 @@
     },
     "CreateRGBColor": {
       "description": "Creates an RGB color setting the appropriate values for the red, green and blue color components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRGBColor/",
       "params": [
         {
           "description": "Red color component value.",
@@ -638,6 +674,7 @@
     },
     "CreateRadialGradientFill": {
       "description": "Creates a radial gradient fill to apply to the object using the selected radial gradient as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRadialGradientFill/",
       "params": [
         {
           "description": "The array of gradient color stops measured in 1000th of percent.",
@@ -652,6 +689,7 @@
     },
     "CreateRadiobuttonField": {
       "description": "Creates a radiobutton field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRadiobuttonField/",
       "params": [
         {
           "description": "widget rect",
@@ -666,6 +704,7 @@
     },
     "CreateRedactAnnot": {
       "description": "Creates redact annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRedactAnnot/",
       "params": [
         {
           "description": "region to apply redact.",
@@ -680,6 +719,7 @@
     },
     "CreateResetFormsAction": {
       "description": "Creates a reset forms action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateHideShowFormsAction/",
       "params": [
         {
           "description": "will all fields be reset except the fields whose names are specified",
@@ -699,6 +739,7 @@
     },
     "CreateRichParaPr": {
       "description": "Creates the empty rich paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRichParaPr/",
       "params": [],
       "returns": {
         "type": "ApiParaPr"
@@ -707,6 +748,7 @@
     },
     "CreateRichParagraph": {
       "description": "Creates a new rich paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRichParagraph/",
       "params": [],
       "returns": {
         "type": "ApiRichParagraph"
@@ -715,6 +757,7 @@
     },
     "CreateRichRun": {
       "description": "Creates a new rich run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRichRun/",
       "params": [],
       "returns": {
         "type": "ApiRichRun"
@@ -723,6 +766,7 @@
     },
     "CreateRichTextPr": {
       "description": "Creates the empty rich text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRichTextPr/",
       "params": [],
       "returns": {
         "type": "ApiTextPr"
@@ -731,6 +775,7 @@
     },
     "CreateRun": {
       "description": "Creates a new smaller text block to be inserted to the current paragraph or table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateRun/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -739,6 +784,7 @@
     },
     "CreateSchemeColor": {
       "description": "Creates a complex color scheme selecting from one of the available schemes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSchemeColor/",
       "params": [
         {
           "description": "The color scheme identifier.",
@@ -753,6 +799,7 @@
     },
     "CreateShadow": {
       "description": "Creates a shadow which can be applied to a graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateShadow/",
       "params": [
         {
           "description": "The shadow properties.",
@@ -768,6 +815,7 @@
     },
     "CreateShape": {
       "description": "Creates a shape with the parameters specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateShape/",
       "params": [
         {
           "description": "The shape type which specifies the preset shape geometry.",
@@ -807,6 +855,7 @@
     },
     "CreateSignatureField": {
       "description": "Creates a signature field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSignatureField/",
       "params": [
         {
           "description": "widget rect",
@@ -821,6 +870,7 @@
     },
     "CreateSolidFill": {
       "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSolidFill/",
       "params": [
         {
           "description": "The color used for the element fill.",
@@ -836,6 +886,7 @@
     },
     "CreateSquareAnnot": {
       "description": "Creates square annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateSquareAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -850,6 +901,7 @@
     },
     "CreateStampAnnot": {
       "description": "Creates stamp annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateStampAnnot/",
       "params": [
         {
           "description": "annotation rect (only x1, y1 coordinates will be used, since the stamp dimensions are reserved).",
@@ -881,6 +933,7 @@
     },
     "CreateStrikeoutAnnot": {
       "description": "Creates strikeout annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateStrikeoutAnnot/",
       "params": [
         {
           "description": "region to apply strikeout.",
@@ -895,6 +948,7 @@
     },
     "CreateStroke": {
       "description": "Creates a stroke adding shadows to the element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateStroke/",
       "params": [
         {
           "description": "The width of the shadow measured in English measure units.",
@@ -921,6 +975,7 @@
     },
     "CreateTable": {
       "description": "Creates a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTable/",
       "params": [
         {
           "description": "Number of rows.",
@@ -940,6 +995,7 @@
     },
     "CreateTableRowPr": {
       "description": "Creates the empty table row properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTableRowPr/",
       "params": [],
       "returns": {
         "type": "ApiTableRowPr"
@@ -949,6 +1005,7 @@
     },
     "CreateTextAnnot": {
       "description": "Creates text annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTextAnnot/",
       "params": [
         {
           "description": "annotation rect.",
@@ -963,6 +1020,7 @@
     },
     "CreateTextField": {
       "description": "Creates a text field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTextField/",
       "params": [
         {
           "description": "widget rect",
@@ -977,6 +1035,7 @@
     },
     "CreateTextPr": {
       "description": "Creates the empty text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTextPr/",
       "params": [],
       "returns": {
         "type": "ApiTextPr"
@@ -985,6 +1044,7 @@
     },
     "CreateUnderlineAnnot": {
       "description": "Creates underline annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateUnderlineAnnot/",
       "params": [
         {
           "description": "region to apply underline.",
@@ -999,6 +1059,7 @@
     },
     "CreateUriAction": {
       "description": "Creates an URI action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateUriAction/",
       "params": [
         {
           "name": "uri",
@@ -1012,6 +1073,7 @@
     },
     "EmusToMillimeters": {
       "description": "Converts English Metric Units (EMUs) to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/EmusToMillimeters/",
       "params": [
         {
           "description": "The value in English Metric Units (EMUs).",
@@ -1027,6 +1089,7 @@
     },
     "EmusToPoints": {
       "description": "Converts EMUs (English Metric Units) to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/EmusToPoints/",
       "params": [
         {
           "description": "The number of EMUs to convert to points.",
@@ -1041,6 +1104,7 @@
     },
     "GetByInternalId": {
       "description": "Returns the object by it's internal ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/GetByInternalId/",
       "params": [
         {
           "description": "the object internal ID.",
@@ -1056,6 +1120,7 @@
     },
     "GetDocument": {
       "description": "Creates a text field with the specified text field properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/GetDocument/",
       "params": [],
       "returns": {
         "type": "ApiDocument"
@@ -1064,6 +1129,7 @@
     },
     "GetFullName": {
       "description": "Returns the full name of the currently opened file.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/GetFullName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -1072,6 +1138,7 @@
     },
     "HexColor": {
       "description": "Creates a color from a HEX string.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/HexColor/",
       "params": [
         {
           "description": "The HEX string representing a color.",
@@ -1086,6 +1153,7 @@
     },
     "InchesToPoints": {
       "description": "Converts inches to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/InchesToPoints/",
       "params": [
         {
           "description": "The number of inches to convert to points.",
@@ -1100,6 +1168,7 @@
     },
     "LinesToPoints": {
       "description": "Converts lines to points (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/LinesToPoints/",
       "params": [
         {
           "description": "The number of lines to convert to points.",
@@ -1114,6 +1183,7 @@
     },
     "MillimetersToEmus": {
       "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/MillimetersToEmus/",
       "params": [
         {
           "description": "The value in millimeters.",
@@ -1129,6 +1199,7 @@
     },
     "MillimetersToPixels": {
       "description": "Converts millimeters to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/MillimetersToPixels/",
       "params": [
         {
           "description": "The number of millimeters to convert to pixels.",
@@ -1143,6 +1214,7 @@
     },
     "MillimetersToPoints": {
       "description": "Converts millimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/MillimetersToPoints/",
       "params": [
         {
           "description": "The number of millimeters to convert to points.",
@@ -1157,6 +1229,7 @@
     },
     "PicasToPoints": {
       "description": "Converts picas to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PicasToPoints/",
       "params": [
         {
           "description": "The number of picas to convert to points.",
@@ -1171,6 +1244,7 @@
     },
     "PixelsToEmus": {
       "description": "Converts pixels to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PixelsToEmu/",
       "params": [
         {
           "description": "The number of pixels to convert to EMUs.",
@@ -1185,6 +1259,7 @@
     },
     "PixelsToPoints": {
       "description": "Converts pixels to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PixelsToPoints/",
       "params": [
         {
           "description": "The number of pixels to convert to points.",
@@ -1199,6 +1274,7 @@
     },
     "PointsToCentimeters": {
       "description": "Converts points to centimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToCentimeters/",
       "params": [
         {
           "description": "The number of points to convert to centimeters.",
@@ -1213,6 +1289,7 @@
     },
     "PointsToEmus": {
       "description": "Converts points to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToEmus/",
       "params": [
         {
           "description": "The number of points to convert to EMUs.",
@@ -1227,6 +1304,7 @@
     },
     "PointsToInches": {
       "description": "Converts points to inches.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToInches/",
       "params": [
         {
           "description": "The number of points to convert to inches.",
@@ -1241,6 +1319,7 @@
     },
     "PointsToLines": {
       "description": "Converts points to lines (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToLines/",
       "params": [
         {
           "description": "The number of points to convert to lines.",
@@ -1255,6 +1334,7 @@
     },
     "PointsToMillimeters": {
       "description": "Converts points to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToMillimeters/",
       "params": [
         {
           "description": "The number of points to convert to millimeters.",
@@ -1269,6 +1349,7 @@
     },
     "PointsToPicas": {
       "description": "Converts points to picas (1 pica = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToPicas/",
       "params": [
         {
           "description": "The number of points to convert to picas.",
@@ -1283,6 +1364,7 @@
     },
     "PointsToPixels": {
       "description": "Converts points to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToPixels/",
       "params": [
         {
           "description": "The number of points to convert to pixels.",
@@ -1297,6 +1379,7 @@
     },
     "PointsToTwips": {
       "description": "Converts points to twips.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/PointsToTwips/",
       "params": [
         {
           "description": "The number of points to convert to twips.",
@@ -1311,6 +1394,7 @@
     },
     "RGB": {
       "description": "Creates an RGB color from red, green and blue components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/RGB/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1335,6 +1419,7 @@
     },
     "RGBA": {
       "description": "Creates an RGBA color from red, green, blue and alpha components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/RGBA/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1364,6 +1449,7 @@
     },
     "ThemeColor": {
       "description": "Creates a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/ThemeColor/",
       "params": [
         {
           "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
@@ -1380,6 +1466,7 @@
     },
     "TwipsToPoints": {
       "description": "Converts twips to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/TwipsToPoints/",
       "params": [
         {
           "description": "The number of twips to convert to points.",

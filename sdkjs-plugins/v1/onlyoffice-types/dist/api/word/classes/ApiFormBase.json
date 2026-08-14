@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document form base.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/",
   "methods": {
     "Clear": {
       "description": "Clears the current form.",
@@ -27,6 +28,7 @@
     },
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Delete/",
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -43,6 +45,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -52,6 +55,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -97,6 +101,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -106,6 +111,7 @@
     },
     "GetLock": {
       "description": "Returns the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetLock/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -115,6 +121,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the form has no parent.",
@@ -125,6 +132,7 @@
     },
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPlaceholderText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -134,6 +142,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current form within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the form has no parent.",
@@ -144,6 +153,7 @@
     },
     "GetRole": {
       "description": "Returns the role of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetRole/",
       "params": [],
       "returns": {
         "type": "string"
@@ -153,6 +163,7 @@
     },
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTag/",
       "params": [],
       "returns": {
         "type": "string"
@@ -198,6 +209,7 @@
     },
     "GetValue": {
       "description": "Returns the current value of the form field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "string | boolean"
@@ -220,6 +232,7 @@
     },
     "IsFilled": {
       "description": "Checks if the current form is filled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFilled/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -331,6 +344,7 @@
     },
     "SetLock": {
       "description": "Sets the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetLock/",
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -383,6 +397,7 @@
     },
     "SetRole": {
       "description": "Sets the role to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRole/",
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -398,6 +413,7 @@
     },
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTag/",
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -449,6 +465,7 @@
     },
     "SetValue": {
       "description": "Sets the value of the form field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetValue/",
       "params": [
         {
           "description": "The value to set.",

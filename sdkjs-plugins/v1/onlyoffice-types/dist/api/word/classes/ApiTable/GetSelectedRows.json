@@ -1,5 +1,6 @@
 {
   "description": "Returns all rows that contain the currently selected cells.\nThis method identifies which rows contain selected cells and returns those complete row objects.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetSelectedRows/",
   "params": [],
   "returns": {
     "description": "An array of table row objects that contain at least one selected cell.",

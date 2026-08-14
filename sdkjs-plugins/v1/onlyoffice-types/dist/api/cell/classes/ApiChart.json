@@ -1,5 +1,6 @@
 {
   "description": "Class representing a chart.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/",
   "extends": [
     "ApiDrawing"
   ],
@@ -86,6 +87,7 @@
     },
     "GetParentSheet": {
       "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"
@@ -113,6 +115,7 @@
     },
     "GetTitle": {
       "description": "Returns the chart title text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The chart title text or null if the chart has no title.",
@@ -122,6 +125,7 @@
     },
     "GetType": {
       "description": "Returns a type of the chart object using the chart type names from the {@link ChartType} enumeration.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ChartType"
@@ -148,6 +152,7 @@
     },
     "SetAxisNumFormat": {
       "description": "Sets the specified numeric format to the axis values.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetAxisNumFormat/",
       "params": [
         {
           "description": "Numeric format (can be custom format).",
@@ -185,6 +190,7 @@
     },
     "SetDataLabelsTextPr": {
       "description": "Sets the text properties to the chart data labels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetDataLabelsTextPr/",
       "params": [
         {
           "description": "The text properties to apply to the data labels.",
@@ -268,6 +274,7 @@
     },
     "SetHorAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the horizontal axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetHorAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",
@@ -630,6 +637,7 @@
     },
     "SetPointDataLabelTextPr": {
       "description": "Sets the text properties to the chart point data label.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetPointDataLabelTextPr/",
       "params": [
         {
           "description": "The series index from the array of the data used to build the chart from.",
@@ -816,6 +824,7 @@
     },
     "SetShowDataTable": {
       "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetShowDataTable/",
       "params": [
         {
           "description": "Whether to show or hide the data table below the chart.",
@@ -990,6 +999,7 @@
     },
     "SetVertAxisLabelsFontSize": {
       "description": "Specifies font size for labels of the vertical axis.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetVertAxisLabelsFontSize/",
       "params": [
         {
           "description": "The text size value measured in points.",

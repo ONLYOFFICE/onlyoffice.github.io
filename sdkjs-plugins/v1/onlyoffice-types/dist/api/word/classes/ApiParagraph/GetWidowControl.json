@@ -1,5 +1,6 @@
 {
   "description": "Returns the widow control value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetWidowControl/",
   "params": [],
   "returns": {
     "description": "Returns _true_ if widow control is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",

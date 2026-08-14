@@ -1,5 +1,6 @@
 {
   "description": "Class representing a placeholder.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/",
   "methods": {
     "GetClassType": {
       "description": "Returns the type of the ApiPlaceholder class.",

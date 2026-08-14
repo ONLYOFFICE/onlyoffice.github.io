@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor to the left.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorLeft/",
   "params": [
     {
       "description": "Number of movements.",

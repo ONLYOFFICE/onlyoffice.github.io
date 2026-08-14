@@ -1,8 +1,10 @@
 {
   "description": "Class representing animation timeline for a slide.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/",
   "methods": {
     "AddInteractiveSequence": {
       "description": "Creates an interactive animation sequence triggered by clicking on a specified object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/AddInteractiveSequence/",
       "params": [
         {
           "description": "The drawing object that triggers the sequence when clicked.",
@@ -19,6 +21,7 @@
     },
     "GetAllEffects": {
       "description": "Returns all animation effects for the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetAllEffects/",
       "params": [],
       "returns": {
         "description": "Array of all animation effects.",
@@ -29,6 +32,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiTimeLine class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"timeLine\""
@@ -38,6 +42,7 @@
     },
     "GetInteractiveSequences": {
       "description": "Returns all interactive animation sequences for the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetInteractiveSequences/",
       "params": [],
       "returns": {
         "description": "Array of interactive animation sequences.",
@@ -48,6 +53,7 @@
     },
     "GetMainSequence": {
       "description": "Returns the main animation sequence for the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetMainSequence/",
       "params": [],
       "returns": {
         "description": "The main animation sequence.",

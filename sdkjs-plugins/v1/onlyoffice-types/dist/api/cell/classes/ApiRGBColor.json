@@ -1,5 +1,6 @@
 {
   "description": "Class representing an RGB Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRGBColor/",
   "extends": [
     "ApiUniColor"
   ],

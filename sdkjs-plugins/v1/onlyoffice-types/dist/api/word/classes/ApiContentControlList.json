@@ -1,5 +1,6 @@
 {
   "description": "Class representing a list of values of the combo box / drop-down list content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/",
   "methods": {
     "Add": {
       "description": "Adds a new value to the combo box / drop-down list content control.",

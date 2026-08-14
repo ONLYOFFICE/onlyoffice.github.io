@@ -4,6 +4,7 @@
   "methods": {
     "ConvertDocument": {
       "description": "Converts a document to Markdown or HTML text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ConvertDocument/",
       "params": [
         {
           "description": "Conversion type.",
@@ -164,6 +165,7 @@
     },
     "ReplaceTextSmart": {
       "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ReplaceTextSmart/",
       "params": [
         {
           "description": "An array of replacement strings.",

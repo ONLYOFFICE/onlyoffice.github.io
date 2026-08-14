@@ -1,5 +1,6 @@
 {
   "description": "Check if the current document content is an endnote.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/IsEndnote/",
   "params": [],
   "returns": {
     "type": "boolean"

@@ -1,8 +1,10 @@
 {
   "description": "Class representing document properties (similar to BuiltInDocumentProperties in VBA).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/",
   "methods": {
     "GetCategory": {
       "description": "Returns the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCategory/",
       "params": [],
       "returns": {
         "description": "The document category.",
@@ -13,6 +15,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiCore class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"core\""
@@ -22,6 +25,7 @@
     },
     "GetContentStatus": {
       "description": "Returns the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetContentStatus/",
       "params": [],
       "returns": {
         "description": "The document content status.",
@@ -32,6 +36,7 @@
     },
     "GetCreated": {
       "description": "Returns the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCreated/",
       "params": [],
       "returns": {
         "description": "The document creation date.",
@@ -42,6 +47,7 @@
     },
     "GetCreator": {
       "description": "Returns the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetCreator/",
       "params": [],
       "returns": {
         "description": "The document author.",
@@ -52,6 +58,7 @@
     },
     "GetDescription": {
       "description": "Returns the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetDescription/",
       "params": [],
       "returns": {
         "description": "The document description.",
@@ -62,6 +69,7 @@
     },
     "GetIdentifier": {
       "description": "Returns the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetIdentifier/",
       "params": [],
       "returns": {
         "description": "The document identifier.",
@@ -72,6 +80,7 @@
     },
     "GetKeywords": {
       "description": "Returns the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetKeywords/",
       "params": [],
       "returns": {
         "description": "The document keywords in the string format.",
@@ -82,6 +91,7 @@
     },
     "GetLanguage": {
       "description": "Returns the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLanguage/",
       "params": [],
       "returns": {
         "description": "The document language.",
@@ -92,6 +102,7 @@
     },
     "GetLastModifiedBy": {
       "description": "Returns the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLastModifiedBy/",
       "params": [],
       "returns": {
         "description": "The name of the user who last modified the document.",
@@ -102,6 +113,7 @@
     },
     "GetLastPrinted": {
       "description": "Returns the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetLastPrinted/",
       "params": [],
       "returns": {
         "description": "The date when the document was last printed.",
@@ -112,6 +124,7 @@
     },
     "GetModified": {
       "description": "Returns the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetModified/",
       "params": [],
       "returns": {
         "description": "The date when the document was last modified.",
@@ -122,6 +135,7 @@
     },
     "GetRevision": {
       "description": "Returns the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetRevision/",
       "params": [],
       "returns": {
         "description": "The document revision.",
@@ -132,6 +146,7 @@
     },
     "GetSubject": {
       "description": "Returns the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetSubject/",
       "params": [],
       "returns": {
         "description": "The document subject.",
@@ -142,6 +157,7 @@
     },
     "GetTitle": {
       "description": "Returns the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The document title.",
@@ -152,6 +168,7 @@
     },
     "GetVersion": {
       "description": "Returns the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/GetVersion/",
       "params": [],
       "returns": {
         "description": "The document version.",
@@ -162,6 +179,7 @@
     },
     "SetCategory": {
       "description": "Sets the document category.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCategory/",
       "params": [
         {
           "description": "The document category.",
@@ -177,6 +195,7 @@
     },
     "SetContentStatus": {
       "description": "Sets the document content status.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetContentStatus/",
       "params": [
         {
           "description": "The document content status.",
@@ -192,6 +211,7 @@
     },
     "SetCreated": {
       "description": "Sets the document creation date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCreated/",
       "params": [
         {
           "description": "The document creation date.",
@@ -207,6 +227,7 @@
     },
     "SetCreator": {
       "description": "Sets the document author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetCreator/",
       "params": [
         {
           "description": "The document author.",
@@ -222,6 +243,7 @@
     },
     "SetDescription": {
       "description": "Sets the document description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetDescription/",
       "params": [
         {
           "description": "The document description.",
@@ -237,6 +259,7 @@
     },
     "SetIdentifier": {
       "description": "Sets the document identifier.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetIdentifier/",
       "params": [
         {
           "description": "The document identifier.",
@@ -252,6 +275,7 @@
     },
     "SetKeywords": {
       "description": "Sets the document keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetKeywords/",
       "params": [
         {
           "description": "The document keywords in the string format.",
@@ -267,6 +291,7 @@
     },
     "SetLanguage": {
       "description": "Sets the document language.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLanguage/",
       "params": [
         {
           "description": "The document language.",
@@ -282,6 +307,7 @@
     },
     "SetLastModifiedBy": {
       "description": "Sets the name of the user who last modified the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLastModifiedBy/",
       "params": [
         {
           "description": "The name of the user who last modified the document.",
@@ -297,6 +323,7 @@
     },
     "SetLastPrinted": {
       "description": "Sets the date when the document was last printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetLastPrinted/",
       "params": [
         {
           "description": "The date when the document was last printed.",
@@ -312,6 +339,7 @@
     },
     "SetModified": {
       "description": "Sets the date when the document was last modified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetModified/",
       "params": [
         {
           "description": "The date when the document was last modified.",
@@ -327,6 +355,7 @@
     },
     "SetRevision": {
       "description": "Sets the document revision.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetRevision/",
       "params": [
         {
           "description": "The document revision.",
@@ -342,6 +371,7 @@
     },
     "SetSubject": {
       "description": "Sets the document subject.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetSubject/",
       "params": [
         {
           "description": "The document subject.",
@@ -357,6 +387,7 @@
     },
     "SetTitle": {
       "description": "Sets the document title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetTitle/",
       "params": [
         {
           "description": "The document title.",
@@ -372,6 +403,7 @@
     },
     "SetVersion": {
       "description": "Sets the document version.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCore/Methods/SetVersion/",
       "params": [
         {
           "description": "The document version.",

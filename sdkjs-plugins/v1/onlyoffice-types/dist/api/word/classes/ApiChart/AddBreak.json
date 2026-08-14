@@ -1,5 +1,6 @@
 {
   "description": "Inserts a break at the specified location in the main document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/AddBreak/",
   "params": [
     {
       "description": "The break type: page break (0) or line break (1).",

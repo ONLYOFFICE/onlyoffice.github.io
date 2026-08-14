@@ -1,5 +1,6 @@
 {
   "description": "Class representing a reference to a specified level of the numbering.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumberingLevel/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiNumberingLevel class.",

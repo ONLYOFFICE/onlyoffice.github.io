@@ -1,5 +1,6 @@
 {
   "description": "Sets the rotation angle to the current drawing object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRotation/",
   "params": [
     {
       "description": "New drawing rotation angle.",

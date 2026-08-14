@@ -1,5 +1,6 @@
 {
   "description": "Class representing a table row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRow/",
   "extends": [
     "ApiTableRowPr"
   ],
@@ -86,6 +87,7 @@
     },
     "GetHeight": {
       "description": "Returns the height of the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRow/Methods/GetHeight/",
       "params": [],
       "returns": {
         "type": "EMU | null"
@@ -107,6 +109,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRow/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -248,6 +251,7 @@
     },
     "SetRowPr": {
       "description": "Sets the properties to the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableRow/Methods/SetRowPr/",
       "params": [
         {
           "description": "The table row properties.",

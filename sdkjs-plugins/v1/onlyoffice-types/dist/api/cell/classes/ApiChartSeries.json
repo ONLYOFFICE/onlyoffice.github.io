@@ -1,5 +1,6 @@
 {
   "description": "Class representing a chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChartSeries/",
   "methods": {
     "ChangeChartType": {
       "description": "Tries to change the series type. Returns true if successful.",
@@ -45,6 +46,7 @@
     },
     "GetType": {
       "description": "Returns a chart type of the current series using the chart type names from the {@link ChartType} enumeration.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChartSeries/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ChartType"

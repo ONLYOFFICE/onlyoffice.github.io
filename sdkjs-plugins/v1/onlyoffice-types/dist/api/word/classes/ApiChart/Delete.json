@@ -1,5 +1,6 @@
 {
   "description": "Deletes the current graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Delete/",
   "params": [],
   "returns": {
     "description": "returns false if drawing object haven't parent.",

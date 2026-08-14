@@ -1,8 +1,10 @@
 {
   "description": "Class representing a paragraph bullet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBullet/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiBullet class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBullet/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"bullet\""
@@ -11,6 +13,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiBullet object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBullet/Methods/ToJSON/",
       "params": [],
       "returns": {
         "type": "object"

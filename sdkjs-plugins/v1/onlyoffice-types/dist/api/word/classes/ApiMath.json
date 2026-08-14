@@ -1,8 +1,10 @@
 {
   "description": "Class representing a mathematical equation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiMath/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiMath class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiMath/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"math\""
@@ -11,6 +13,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current math element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiMath/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the math element has no parent.",
@@ -21,6 +24,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current math element within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiMath/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the math element has no parent.",
@@ -31,6 +35,7 @@
     },
     "GetText": {
       "description": "Returns the inner text of the current math element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiMath/Methods/GetText/",
       "params": [
         {
           "description": "The format the text should be returned in.",

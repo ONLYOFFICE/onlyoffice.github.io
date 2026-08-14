@@ -1,5 +1,6 @@
 {
   "description": "Returns the width of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetWidth/",
   "params": [],
   "returns": {
     "type": "EMU"

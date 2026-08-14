@@ -1,5 +1,6 @@
 {
   "description": "Returns a collection of drawing objects from the document filtered by their names.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDrawingsByName/",
   "params": [
     {
       "description": "An array of drawing names to filter by.",

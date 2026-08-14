@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document section.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiSection class.",
@@ -15,6 +16,7 @@
     },
     "GetColumnsCount": {
       "description": "Returns number of columns in this section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -23,6 +25,7 @@
     },
     "GetColumnsSpaces": {
       "description": "Returns an array of distance values between the columns measured in twentieths of a point (1/1440 of an inch).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsSpaces/",
       "params": [],
       "returns": {
         "type": "twips[]"
@@ -31,6 +34,7 @@
     },
     "GetColumnsWidths": {
       "description": "Returns an array of column width values measured in twentieths of a point (1/1440 of an inch).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsWidths/",
       "params": [],
       "returns": {
         "type": "twips[]"
@@ -63,6 +67,7 @@
     },
     "GetFooterDistance": {
       "description": "Returns the distance from the bottom edge of the page to the bottom edge of the footer.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetFooterDistance/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -95,6 +100,7 @@
     },
     "GetHeaderDistance": {
       "description": "Returns the distance from the top edge of the page to the top edge of the header.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetHeaderDistance/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -128,6 +134,7 @@
     },
     "GetPageMarginBottom": {
       "description": "Returns the bottom page margin for all pages in the current section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginBottom/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -136,6 +143,7 @@
     },
     "GetPageMarginLeft": {
       "description": "Returns the left page margin for all pages in the current section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginLeft/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -144,6 +152,7 @@
     },
     "GetPageMarginRight": {
       "description": "Returns the right page margin for all pages in the current section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginRight/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -152,6 +161,7 @@
     },
     "GetPageMarginTop": {
       "description": "Returns the top page margin for all pages in the current section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginTop/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -304,6 +314,7 @@
     },
     "SetMargins": {
       "description": "Specifies the page margins for all the pages in this section. Alias for {@link ApiSection#SetPageMargins}.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetMargins/",
       "params": [
         {
           "description": "The left margin width measured in twentieths of a point (1/1440 of an inch).",

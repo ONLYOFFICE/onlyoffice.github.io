@@ -1,5 +1,6 @@
 {
   "description": "Class representing a small text block called 'run'.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/",
   "extends": [
     "ApiTextPr"
   ],
@@ -321,7 +322,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetBold/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetBold/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetBold(true);\noRun.AddText(\"This is a text run with the font set to bold.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -340,7 +341,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetCaps/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetCaps(true);\noRun.AddText(\"This is a text run with the font set to capitalized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -359,7 +360,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetDoubleStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetDoubleStrikeout/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetDoubleStrikeout(true);\noRun.AddText(\"This is a text run with the text struck out with two lines.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -378,7 +379,7 @@
     },
     "SetFill": {
       "description": "Sets the text color to the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFill/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFill/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noRun.SetFill(oFill);\noRun.AddText(\"This is a text run with the font color set to black.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -397,7 +398,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFontFamily/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontFamily/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontFamily(\"Comic Sans MS\");\noRun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -416,7 +417,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetFontSize/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontSize/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetFontSize(50);\noRun.AddText(\"This is a text run with the font size set to 25 points (50 half-points).\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -435,7 +436,7 @@
     },
     "SetHighlight": {
       "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetHighlight/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetHighlight/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is a text run with the text highlighted with light gray color.\");\noParagraph.AddElement(oRun);\noRun.SetHighlight(\"lightGray\");\noSlide.AddObject(oShape);"
       ],
@@ -453,7 +454,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetItalic/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetItalic/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetItalic(true);\noRun.AddText(\"This is a text run with the font set to italicized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -491,7 +492,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSmallCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSmallCaps/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetSmallCaps(true);\noRun.AddText(\"This is a text run with the font set to small capitalized letters.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -510,7 +511,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetSpacing/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetSpacing(80);\noRun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -529,7 +530,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetStrikeout/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetStrikeout(true);\noRun.AddText(\"This is a text run with the text struck out with a single line.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -585,7 +586,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetUnderline/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetUnderline/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetUnderline(true);\noRun.AddText(\"This is a text run with the text underlined with a single line.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],
@@ -604,7 +605,7 @@
     },
     "SetVertAlign": {
       "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetVertAlign/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetVertAlign/",
       "examples": [
         "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oRun = Api.CreateRun();\noRun.AddText(\"This is just a sample text. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"subscript\");\noRun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"baseline\");\noRun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\noParagraph.AddElement(oRun);\noRun = Api.CreateRun();\noRun.SetVertAlign(\"superscript\");\noRun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\noParagraph.AddElement(oRun);\noSlide.AddObject(oShape);"
       ],

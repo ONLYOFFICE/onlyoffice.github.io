@@ -1,5 +1,6 @@
 {
   "description": "Class representing gradient stop.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiGradientStop/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiGradientStop class.",

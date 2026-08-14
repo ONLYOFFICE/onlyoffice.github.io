@@ -1,5 +1,6 @@
 {
   "description": "Class representing a continuous region in a document. \nEach Range object is determined by the position of the start and end characters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/",
   "methods": {
     "AddBookmark": {
       "description": "Adds a bookmark to the specified range.",
@@ -53,6 +54,7 @@
     },
     "AddField": {
       "description": "Adds a field to the specified range by the field instruction code.\n<note> This method removes text within a range. </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/AddField/",
       "params": [
         {
           "description": "The field instruction code.",
@@ -362,6 +364,7 @@
     },
     "MoveCursorToPos": {
       "description": "Moves a cursor to a specified position of the current range object.\nIf there is any selection in the document, it will be removed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRange/Methods/MoveCursorToPos/",
       "params": [
         {
           "description": "The desired cursor position.",

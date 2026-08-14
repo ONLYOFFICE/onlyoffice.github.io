@@ -1,5 +1,6 @@
 {
   "description": "Specifies the minimum distance which will be maintained between the edges of the current drawing object and any\nsubsequent text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDistances/",
   "params": [
     {
       "description": "The distance from the left side of the current object and the subsequent text run measured in English measure units.",

@@ -1,11 +1,13 @@
 {
   "description": "Class representing a paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/",
   "extends": [
     "ApiParaPr"
   ],
   "methods": {
     "AddElement": {
       "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/AddElement/",
       "params": [
         {
           "description": "The document element which will be added at the current position. Returns false if the\roElement type is not supported by a paragraph.",
@@ -27,6 +29,7 @@
     },
     "AddLineBreak": {
       "description": "Adds a line break to the current position and starts the next element from a new line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/AddLineBreak/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -35,6 +38,7 @@
     },
     "AddTabStop": {
       "description": "Adds a tab stop to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/AddTabStop/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -43,6 +47,7 @@
     },
     "AddText": {
       "description": "Adds some text to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/AddText/",
       "params": [
         {
           "description": "The text that we want to insert into the current document element. It can be a string or an array of Unicode code points.",
@@ -63,6 +68,7 @@
     },
     "Copy": {
       "description": "Creates a paragraph copy. Ingnore comments, footnote references, complex fields.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Copy/",
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -71,6 +77,7 @@
     },
     "Delete": {
       "description": "Deletes the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Delete/",
       "params": [],
       "returns": {
         "description": "returns false if paragraph haven't parent.",
@@ -80,6 +87,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiParagraph class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"paragraph\""
@@ -88,6 +96,7 @@
     },
     "GetElement": {
       "description": "Returns a paragraph element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetElement/",
       "params": [
         {
           "description": "The position where the element which content we want to get must be located.",
@@ -102,6 +111,7 @@
     },
     "GetElementsCount": {
       "description": "Returns a number of elements in the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetElementsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -110,6 +120,7 @@
     },
     "GetFontNames": {
       "description": "Returns all font names from all elements inside the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetFontNames/",
       "params": [],
       "returns": {
         "description": "The font names used for the current paragraph.",
@@ -119,6 +130,7 @@
     },
     "GetIndFirstLine": {
       "description": "Returns the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndFirstLine/",
       "params": [],
       "returns": {
         "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -128,6 +140,7 @@
     },
     "GetIndLeft": {
       "description": "Returns the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndLeft/",
       "params": [],
       "returns": {
         "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -137,6 +150,7 @@
     },
     "GetIndRight": {
       "description": "Returns the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndRight/",
       "params": [],
       "returns": {
         "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -146,6 +160,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal ID of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -155,6 +170,7 @@
     },
     "GetJc": {
       "description": "Returns the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetJc/",
       "params": [],
       "returns": {
         "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
@@ -163,6 +179,7 @@
     },
     "GetLastRunWithText": {
       "description": "Returns the last Run with text in the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetLastRunWithText/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -171,6 +188,7 @@
     },
     "GetNext": {
       "description": "Returns the next paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetNext/",
       "params": [],
       "returns": {
         "description": "returns null if paragraph is last.",
@@ -180,6 +198,7 @@
     },
     "GetOutlineLvl": {
       "description": "Returns the outline level of the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetOutlineLvl/",
       "params": [],
       "returns": {
         "type": "number | undefined"
@@ -189,6 +208,7 @@
     },
     "GetParaPr": {
       "description": "Returns the paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetParaPr/",
       "params": [],
       "returns": {
         "type": "ApiParaPr"
@@ -197,6 +217,7 @@
     },
     "GetPrevious": {
       "description": "Returns the previous paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetPrevious/",
       "params": [],
       "returns": {
         "description": "returns null if paragraph is first.",
@@ -206,6 +227,7 @@
     },
     "GetSpacingAfter": {
       "description": "Returns the spacing after value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingAfter/",
       "params": [],
       "returns": {
         "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -215,6 +237,7 @@
     },
     "GetSpacingBefore": {
       "description": "Returns the spacing before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingBefore/",
       "params": [],
       "returns": {
         "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -224,6 +247,7 @@
     },
     "GetSpacingLineRule": {
       "description": "Returns the paragraph line spacing rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineRule/",
       "params": [],
       "returns": {
         "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
@@ -232,6 +256,7 @@
     },
     "GetSpacingLineValue": {
       "description": "Returns the paragraph line spacing value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineValue/",
       "params": [],
       "returns": {
         "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
@@ -241,6 +266,7 @@
     },
     "GetTabs": {
       "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetTabs/",
       "params": [],
       "returns": {
         "type": "TabStop[]"
@@ -250,6 +276,7 @@
     },
     "GetText": {
       "description": "Returns the paragraph text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -289,6 +316,7 @@
     },
     "InsertParagraph": {
       "description": "Inserts a paragraph at the specified position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/InsertParagraph/",
       "params": [
         {
           "description": "Text or paragraph.",
@@ -314,6 +342,7 @@
     },
     "IsEmpty": {
       "description": "Returns true if the paragraph has no content elements (only the paragraph end mark).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/IsEmpty/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -323,6 +352,7 @@
     },
     "Last": {
       "description": "Returns the last element of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Last/",
       "params": [],
       "returns": {
         "type": "ParagraphContent"
@@ -331,6 +361,7 @@
     },
     "Push": {
       "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Push/",
       "params": [
         {
           "description": "The document element which will be added at the current position. Returns false if the\roElement type is not supported by a paragraph.",
@@ -346,6 +377,7 @@
     },
     "RemoveAllElements": {
       "description": "Removes all the elements from the current paragraph.\n<note>When all the elements are removed from the paragraph, a new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/RemoveAllElements/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -354,6 +386,7 @@
     },
     "RemoveElement": {
       "description": "Removes an element using the position specified.\n<note>If the element you remove is the last paragraph element (i.e. all the elements are removed from the paragraph),\na new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/RemoveElement/",
       "params": [
         {
           "description": "The element position which we want to remove from the paragraph.",
@@ -368,6 +401,7 @@
     },
     "Select": {
       "description": "Selects the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Select/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -376,6 +410,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetBold/",
       "params": [
         {
           "description": "Specifies that the contents of this paragraph are displayed bold.",
@@ -391,6 +426,7 @@
     },
     "SetBullet": {
       "description": "Sets the bullet or numbering to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetBullet/",
       "params": [
         {
           "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
@@ -405,6 +441,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in this paragraph are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetCaps/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed capitalized.",
@@ -420,6 +457,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of this paragraph are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetDoubleStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed double struck through.",
@@ -435,6 +473,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetFontFamily/",
       "params": [
         {
           "description": "The font family or families used for the current paragraph.",
@@ -450,6 +489,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetFontSize/",
       "params": [
         {
           "description": "The text size value measured in half-points (1/144 of an inch).",
@@ -465,6 +505,7 @@
     },
     "SetHighlight": {
       "description": "Specifies a highlighting color which is applied as a background to the contents of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetHighlight/",
       "params": [
         {
           "description": "Available highlight color.",
@@ -480,6 +521,7 @@
     },
     "SetIndFirstLine": {
       "description": "Sets the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndFirstLine/",
       "params": [
         {
           "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -494,6 +536,7 @@
     },
     "SetIndLeft": {
       "description": "Sets the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndLeft/",
       "params": [
         {
           "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -508,6 +551,7 @@
     },
     "SetIndRight": {
       "description": "Sets the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndRight/",
       "params": [
         {
           "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -522,6 +566,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetItalic/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed italicized.",
@@ -537,6 +582,7 @@
     },
     "SetJc": {
       "description": "Sets the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetJc/",
       "params": [
         {
           "description": "The justification type that\rwill be applied to the paragraph contents.",
@@ -551,6 +597,7 @@
     },
     "SetOutlineLvl": {
       "description": "Sets the outline level for the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetOutlineLvl/",
       "params": [
         {
           "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
@@ -567,6 +614,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in this paragraph are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetSmallCaps/",
       "params": [
         {
           "description": "Specifies if the contents of the current paragraph are displayed capitalized two points smaller or not.",
@@ -582,6 +630,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetSpacing/",
       "params": [
         {
           "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
@@ -597,6 +646,7 @@
     },
     "SetSpacingAfter": {
       "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingAfter/",
       "params": [
         {
           "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -617,6 +667,7 @@
     },
     "SetSpacingBefore": {
       "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingBefore/",
       "params": [
         {
           "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -637,6 +688,7 @@
     },
     "SetSpacingLine": {
       "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingLine/",
       "params": [
         {
           "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
@@ -656,6 +708,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of this paragraph are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed struck through.",
@@ -671,6 +724,7 @@
     },
     "SetTabs": {
       "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetTabs/",
       "params": [
         {
           "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",
@@ -690,6 +744,7 @@
     },
     "SetText": {
       "description": "Replaces the paragraph content with the specified text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",
@@ -704,6 +759,7 @@
     },
     "SetTextPr": {
       "description": "Sets the paragraph text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetTextPr/",
       "params": [
         {
           "description": "The paragraph text properties.",
@@ -719,6 +775,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of this paragraph are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetUnderline/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed underlined.",
@@ -734,6 +791,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiParagraph object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/ToJSON/",
       "params": [
         {
           "description": "Specifies if the used numberings will be written to the JSON object or not.",

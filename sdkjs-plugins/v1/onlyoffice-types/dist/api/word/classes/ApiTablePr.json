@@ -1,5 +1,6 @@
 {
   "description": "Class representing the table properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiTablePr class.",
@@ -150,6 +151,7 @@
     },
     "SetTableBorderAll": {
       "description": "Specifies a border which will be displayed on all table cell borders.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderAll/",
       "params": [
         {
           "description": "The border style.",

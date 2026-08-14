@@ -1,5 +1,6 @@
 {
   "description": "Class representing a comment.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/",
   "methods": {
     "AddReply": {
       "description": "Adds a reply to a comment.",
@@ -76,6 +77,7 @@
     },
     "GetPosition": {
       "description": "Returns the position of the comment in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetPosition/",
       "params": [],
       "returns": {
         "description": "An object with the coordinates (in EMU) of the comment position.",
@@ -145,6 +147,7 @@
     },
     "GetUserId": {
       "description": "Returns the user ID of the comment author.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetUserId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -213,6 +216,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the comment in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetPosition/",
       "params": [
         {
           "description": "The X coordinate of the comment position in EMU.",

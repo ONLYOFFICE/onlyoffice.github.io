@@ -1,5 +1,6 @@
 {
   "description": "Class representing a slide master.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/",
   "methods": {
     "AddLayout": {
       "description": "Adds a layout to the specified slide master.",
@@ -143,6 +144,7 @@
     },
     "GetAllLayouts": {
       "description": "Returns all layouts from the slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllLayouts/",
       "params": [],
       "returns": {
         "description": "Returns an empty array if the slide master doesn't have layouts.",
@@ -177,6 +179,7 @@
     },
     "GetAllTables": {
       "description": "Returns an array with all tables from the slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllTables/",
       "params": [],
       "returns": {
         "description": "An array with all tables from the slide master.",
@@ -187,6 +190,7 @@
     },
     "GetBackground": {
       "description": "Returns the background fill of the current slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetBackground/",
       "params": [],
       "returns": {
         "description": "returns null if the slide master doesn't exist or has no background fill.",
@@ -247,6 +251,7 @@
     },
     "GetLayoutByType": {
       "description": "Returns the layout corresponding to the specified layout type of the slide master.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetLayoutByType/",
       "params": [
         {
           "description": "The layout type.",
@@ -356,6 +361,7 @@
     },
     "Search": {
       "description": "Searches for the specified text within the current slide master and returns all found occurrences as text ranges.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/Search/",
       "params": [
         {
           "description": "The text to search for.",

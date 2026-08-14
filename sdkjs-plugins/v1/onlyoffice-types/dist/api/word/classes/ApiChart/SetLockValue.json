@@ -1,5 +1,6 @@
 {
   "description": "Sets the lock value to the specified lock type of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetLockValue/",
   "params": [
     {
       "description": "Lock type in the string format.",

@@ -1,11 +1,13 @@
 {
   "description": "Class representing a strikeout annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStrikeoutAnnotation/",
   "extends": [
     "ApiBaseMarkupAnnotation"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiStrikeoutAnnotation class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiStrikeoutAnnotation/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"strikeoutAnnot\""
@@ -14,6 +16,7 @@
     },
     "GetQuads": {
       "description": "Gets quads from current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/GetQuads/",
       "params": [],
       "returns": {
         "type": "Quad[]"
@@ -22,6 +25,7 @@
     },
     "SetQuads": {
       "description": "Sets quads to current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/SetQuads/",
       "params": [
         {
           "description": "An array of quadrilaterals defining the highlighted regions.",

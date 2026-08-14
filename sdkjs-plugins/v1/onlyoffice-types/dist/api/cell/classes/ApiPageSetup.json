@@ -1,8 +1,10 @@
 {
   "description": "Class representing the page setup (print layout) of a worksheet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/",
   "methods": {
     "GetAlignMarginsHeaderFooter": {
       "description": "Returns whether the header and footer margins are aligned with the page margins.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetAlignMarginsHeaderFooter/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -12,6 +14,7 @@
     },
     "GetBottomMargin": {
       "description": "Returns the size of the bottom margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetBottomMargin/",
       "params": [],
       "returns": {
         "description": "The bottom margin size measured in millimeters.",
@@ -22,6 +25,7 @@
     },
     "GetCenterFooter": {
       "description": "Returns the center part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetCenterFooter/",
       "params": [],
       "returns": {
         "description": "The center footer text (may contain formatting codes such as &P, &D).",
@@ -32,6 +36,7 @@
     },
     "GetCenterHeader": {
       "description": "Returns the center part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetCenterHeader/",
       "params": [],
       "returns": {
         "description": "The center header text (may contain formatting codes such as &P, &D).",
@@ -42,6 +47,7 @@
     },
     "GetCenterHorizontally": {
       "description": "Returns whether the worksheet is centered horizontally on the page when printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetCenterHorizontally/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -51,6 +57,7 @@
     },
     "GetCenterVertically": {
       "description": "Returns whether the worksheet is centered vertically on the page when printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetCenterVertically/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -60,6 +67,7 @@
     },
     "GetDifferentFirstPageHeaderFooter": {
       "description": "Returns whether a different header and footer is used on the first printed page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetDifferentFirstPageHeaderFooter/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -69,6 +77,7 @@
     },
     "GetEvenPage": {
       "description": "Returns the header and footer of the even pages of the worksheet.\nThe returned object is meaningful when {@link ApiPageSetup#GetOddAndEvenPagesHeaderFooter} is enabled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetEvenPage/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -78,6 +87,7 @@
     },
     "GetFirstPage": {
       "description": "Returns the header and footer of the first page of the worksheet.\nThe returned object is meaningful when {@link ApiPageSetup#GetDifferentFirstPageHeaderFooter} is enabled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetFirstPage/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -87,6 +97,7 @@
     },
     "GetFirstPageNumber": {
       "description": "Returns the first page number used when the worksheet is printed.\nReturns null when the page numbering is automatic.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetFirstPageNumber/",
       "params": [],
       "returns": {
         "type": "number | null"
@@ -96,6 +107,7 @@
     },
     "GetFitToPagesTall": {
       "description": "Returns the number of pages tall the worksheet is scaled to when printed (0 means automatic).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetFitToPagesTall/",
       "params": [],
       "returns": {
         "type": "number"
@@ -105,6 +117,7 @@
     },
     "GetFitToPagesWide": {
       "description": "Returns the number of pages wide the worksheet is scaled to when printed (0 means automatic).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetFitToPagesWide/",
       "params": [],
       "returns": {
         "type": "number"
@@ -114,6 +127,7 @@
     },
     "GetFooterMargin": {
       "description": "Returns the distance from the bottom of the page to the footer.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetFooterMargin/",
       "params": [],
       "returns": {
         "description": "The footer margin size measured in millimeters.",
@@ -124,6 +138,7 @@
     },
     "GetHeaderMargin": {
       "description": "Returns the distance from the top of the page to the header.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetHeaderMargin/",
       "params": [],
       "returns": {
         "description": "The header margin size measured in millimeters.",
@@ -134,6 +149,7 @@
     },
     "GetLeftFooter": {
       "description": "Returns the left part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetLeftFooter/",
       "params": [],
       "returns": {
         "description": "The left footer text (may contain formatting codes such as &P, &D).",
@@ -144,6 +160,7 @@
     },
     "GetLeftHeader": {
       "description": "Returns the left part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetLeftHeader/",
       "params": [],
       "returns": {
         "description": "The left header text (may contain formatting codes such as &P, &D).",
@@ -154,6 +171,7 @@
     },
     "GetLeftMargin": {
       "description": "Returns the size of the left margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetLeftMargin/",
       "params": [],
       "returns": {
         "description": "The left margin size measured in millimeters.",
@@ -164,6 +182,7 @@
     },
     "GetOddAndEvenPagesHeaderFooter": {
       "description": "Returns whether different headers and footers are used on odd and even printed pages.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetOddAndEvenPagesHeaderFooter/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -173,6 +192,7 @@
     },
     "GetOrientation": {
       "description": "Returns the page orientation used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetOrientation/",
       "params": [],
       "returns": {
         "type": "PageOrientation"
@@ -182,6 +202,7 @@
     },
     "GetPaperSize": {
       "description": "Returns the paper size used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPaperSize/",
       "params": [],
       "returns": {
         "type": "PaperSize"
@@ -191,6 +212,7 @@
     },
     "GetParent": {
       "description": "Returns the worksheet that owns this page setup.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetParent/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"
@@ -200,6 +222,7 @@
     },
     "GetPrintArea": {
       "description": "Returns the range to be printed (the print area) as a string, or an empty string when the whole sheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPrintArea/",
       "params": [],
       "returns": {
         "type": "string"
@@ -209,6 +232,7 @@
     },
     "GetPrintGridlines": {
       "description": "Returns whether cell gridlines are printed with the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPrintGridlines/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -218,6 +242,7 @@
     },
     "GetPrintHeadings": {
       "description": "Returns whether row and column headings are printed with the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPrintHeadings/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -227,6 +252,7 @@
     },
     "GetPrintTitleColumns": {
       "description": "Returns the columns that are repeated at the left of each printed page, or an empty string if none.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPrintTitleColumns/",
       "params": [],
       "returns": {
         "type": "string"
@@ -236,6 +262,7 @@
     },
     "GetPrintTitleRows": {
       "description": "Returns the rows that are repeated at the top of each printed page, or an empty string if none.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetPrintTitleRows/",
       "params": [],
       "returns": {
         "type": "string"
@@ -245,6 +272,7 @@
     },
     "GetRightFooter": {
       "description": "Returns the right part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetRightFooter/",
       "params": [],
       "returns": {
         "description": "The right footer text (may contain formatting codes such as &P, &D).",
@@ -255,6 +283,7 @@
     },
     "GetRightHeader": {
       "description": "Returns the right part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetRightHeader/",
       "params": [],
       "returns": {
         "description": "The right header text (may contain formatting codes such as &P, &D).",
@@ -265,6 +294,7 @@
     },
     "GetRightMargin": {
       "description": "Returns the size of the right margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetRightMargin/",
       "params": [],
       "returns": {
         "description": "The right margin size measured in millimeters.",
@@ -275,6 +305,7 @@
     },
     "GetScaleWithDocHeaderFooter": {
       "description": "Returns whether the header and footer are scaled with the document when it is scaled for printing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetScaleWithDocHeaderFooter/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -284,6 +315,7 @@
     },
     "GetTopMargin": {
       "description": "Returns the size of the top margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetTopMargin/",
       "params": [],
       "returns": {
         "description": "The top margin size measured in millimeters.",
@@ -294,6 +326,7 @@
     },
     "GetZoom": {
       "description": "Returns the scaling factor (in percent) used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/GetZoom/",
       "params": [],
       "returns": {
         "description": "The scaling factor measured in percent (10-400).",
@@ -304,6 +337,7 @@
     },
     "SetAlignMarginsHeaderFooter": {
       "description": "Sets whether the header and footer margins are aligned with the page margins.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetAlignMarginsHeaderFooter/",
       "params": [
         {
           "description": "Specifies whether the header and footer are aligned with the page margins.",
@@ -320,6 +354,7 @@
     },
     "SetBottomMargin": {
       "description": "Sets the size of the bottom margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetBottomMargin/",
       "params": [
         {
           "description": "The bottom margin size measured in millimeters.",
@@ -336,6 +371,7 @@
     },
     "SetCenterFooter": {
       "description": "Sets the center part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetCenterFooter/",
       "params": [
         {
           "description": "The center footer text (may contain formatting codes such as &P, &D).",
@@ -352,6 +388,7 @@
     },
     "SetCenterHeader": {
       "description": "Sets the center part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetCenterHeader/",
       "params": [
         {
           "description": "The center header text (may contain formatting codes such as &P, &D).",
@@ -368,6 +405,7 @@
     },
     "SetCenterHorizontally": {
       "description": "Sets whether the worksheet is centered horizontally on the page when printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetCenterHorizontally/",
       "params": [
         {
           "description": "Specifies whether the worksheet is centered horizontally on the page.",
@@ -384,6 +422,7 @@
     },
     "SetCenterVertically": {
       "description": "Sets whether the worksheet is centered vertically on the page when printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetCenterVertically/",
       "params": [
         {
           "description": "Specifies whether the worksheet is centered vertically on the page.",
@@ -400,6 +439,7 @@
     },
     "SetDifferentFirstPageHeaderFooter": {
       "description": "Sets whether a different header and footer is used on the first printed page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetDifferentFirstPageHeaderFooter/",
       "params": [
         {
           "description": "Specifies whether a different header and footer is used on the first page.",
@@ -416,6 +456,7 @@
     },
     "SetFirstPageNumber": {
       "description": "Sets the first page number used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetFirstPageNumber/",
       "params": [
         {
           "description": "The first page number.",
@@ -432,6 +473,7 @@
     },
     "SetFitToPagesTall": {
       "description": "Sets the number of pages tall the worksheet is scaled to when printed (0 means automatic).\nSetting this property turns on the \"fit to page\" mode.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetFitToPagesTall/",
       "params": [
         {
           "description": "The number of pages tall (0 for automatic).",
@@ -448,6 +490,7 @@
     },
     "SetFitToPagesWide": {
       "description": "Sets the number of pages wide the worksheet is scaled to when printed (0 means automatic).\nSetting this property turns on the \"fit to page\" mode.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetFitToPagesWide/",
       "params": [
         {
           "description": "The number of pages wide (0 for automatic).",
@@ -464,6 +507,7 @@
     },
     "SetFooterMargin": {
       "description": "Sets the distance from the bottom of the page to the footer.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetFooterMargin/",
       "params": [
         {
           "description": "The footer margin size measured in millimeters.",
@@ -480,6 +524,7 @@
     },
     "SetHeaderMargin": {
       "description": "Sets the distance from the top of the page to the header.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetHeaderMargin/",
       "params": [
         {
           "description": "The header margin size measured in millimeters.",
@@ -496,6 +541,7 @@
     },
     "SetLeftFooter": {
       "description": "Sets the left part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetLeftFooter/",
       "params": [
         {
           "description": "The left footer text (may contain formatting codes such as &P, &D).",
@@ -512,6 +558,7 @@
     },
     "SetLeftHeader": {
       "description": "Sets the left part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetLeftHeader/",
       "params": [
         {
           "description": "The left header text (may contain formatting codes such as &P, &D).",
@@ -528,6 +575,7 @@
     },
     "SetLeftMargin": {
       "description": "Sets the size of the left margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetLeftMargin/",
       "params": [
         {
           "description": "The left margin size measured in millimeters.",
@@ -544,6 +592,7 @@
     },
     "SetOddAndEvenPagesHeaderFooter": {
       "description": "Sets whether different headers and footers are used on odd and even printed pages.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetOddAndEvenPagesHeaderFooter/",
       "params": [
         {
           "description": "Specifies whether different headers and footers are used on odd and even pages.",
@@ -560,6 +609,7 @@
     },
     "SetOrientation": {
       "description": "Sets the page orientation used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetOrientation/",
       "params": [
         {
           "description": "The page orientation type.",
@@ -576,6 +626,7 @@
     },
     "SetPaperSize": {
       "description": "Sets the paper size used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPaperSize/",
       "params": [
         {
           "description": "The paper size (an xlPaperSize constant name, e.g. \"xlPaperA4\").",
@@ -592,6 +643,7 @@
     },
     "SetPrintArea": {
       "description": "Sets the range to be printed (the print area). Pass an empty string to clear it and print the whole sheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPrintArea/",
       "params": [
         {
           "description": "The range address (e.g. \"A1:D20\"); comma-separated for several areas. Empty clears the print area.",
@@ -608,6 +660,7 @@
     },
     "SetPrintGridlines": {
       "description": "Sets whether cell gridlines are printed with the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPrintGridlines/",
       "params": [
         {
           "description": "Specifies whether the cell gridlines are printed.",
@@ -624,6 +677,7 @@
     },
     "SetPrintHeadings": {
       "description": "Sets whether row and column headings are printed with the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPrintHeadings/",
       "params": [
         {
           "description": "Specifies whether the row and column headings are printed.",
@@ -640,6 +694,7 @@
     },
     "SetPrintTitleColumns": {
       "description": "Sets the columns that are repeated at the left of each printed page. Pass an empty string to clear them.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPrintTitleColumns/",
       "params": [
         {
           "description": "The columns to repeat (e.g. \"$A:$A\"). Empty string clears the print title columns.",
@@ -656,6 +711,7 @@
     },
     "SetPrintTitleRows": {
       "description": "Sets the rows that are repeated at the top of each printed page. Pass an empty string to clear them.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetPrintTitleRows/",
       "params": [
         {
           "description": "The rows to repeat (e.g. \"$1:$1\"). Empty string clears the print title rows.",
@@ -672,6 +728,7 @@
     },
     "SetRightFooter": {
       "description": "Sets the right part of the footer used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetRightFooter/",
       "params": [
         {
           "description": "The right footer text (may contain formatting codes such as &P, &D).",
@@ -688,6 +745,7 @@
     },
     "SetRightHeader": {
       "description": "Sets the right part of the header used when the worksheet is printed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetRightHeader/",
       "params": [
         {
           "description": "The right header text (may contain formatting codes such as &P, &D).",
@@ -704,6 +762,7 @@
     },
     "SetRightMargin": {
       "description": "Sets the size of the right margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetRightMargin/",
       "params": [
         {
           "description": "The right margin size measured in millimeters.",
@@ -720,6 +779,7 @@
     },
     "SetScaleWithDocHeaderFooter": {
       "description": "Sets whether the header and footer are scaled with the document when it is scaled for printing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetScaleWithDocHeaderFooter/",
       "params": [
         {
           "description": "Specifies whether the header and footer are scaled with the document.",
@@ -736,6 +796,7 @@
     },
     "SetTopMargin": {
       "description": "Sets the size of the top margin.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetTopMargin/",
       "params": [
         {
           "description": "The top margin size measured in millimeters.",
@@ -752,6 +813,7 @@
     },
     "SetZoom": {
       "description": "Sets the scaling factor (in percent) used when the worksheet is printed.\nSetting this property turns off the \"fit to page\" mode.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPageSetup/Methods/SetZoom/",
       "params": [
         {
           "description": "The scaling factor measured in percent (10-400).",

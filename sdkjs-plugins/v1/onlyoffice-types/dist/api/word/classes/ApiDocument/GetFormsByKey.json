@@ -1,5 +1,6 @@
 {
   "description": "Returns a list of all forms in the document with the specified key.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFormsByKey/",
   "params": [
     {
       "description": "The form key.",

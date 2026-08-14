@@ -1,5 +1,6 @@
 {
   "description": "Returns a parent content control that contains the graphic object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentContentControl/",
   "params": [],
   "returns": {
     "description": "returns null if parent content control doesn't exist.",

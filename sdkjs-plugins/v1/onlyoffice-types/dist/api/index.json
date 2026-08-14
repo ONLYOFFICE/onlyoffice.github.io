@@ -1,19 +1,39 @@
 {
   "editors": {
     "cell": {
-      "members": 1840
+      "classes": 114,
+      "events": 1,
+      "executeMethods": 44,
+      "methods": 1796,
+      "typedefs": 164
     },
     "forms": {
-      "members": 426
+      "classes": 67,
+      "events": 1,
+      "executeMethods": 47,
+      "methods": 379,
+      "typedefs": 113
     },
     "pdf": {
-      "members": 1423
+      "classes": 109,
+      "events": 2,
+      "executeMethods": 30,
+      "methods": 1393,
+      "typedefs": 143
     },
     "slide": {
-      "members": 1123
+      "classes": 83,
+      "events": 5,
+      "executeMethods": 57,
+      "methods": 1066,
+      "typedefs": 108
     },
     "word": {
-      "members": 2152
+      "classes": 66,
+      "events": 19,
+      "executeMethods": 109,
+      "methods": 2043,
+      "typedefs": 103
     }
   },
   "howToUse": [

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a table row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/",
   "extends": [
     "ApiTableRowPr"
   ],
@@ -48,6 +49,7 @@
     },
     "GetHeight": {
       "description": "Returns the height of the current table row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetHeight/",
       "params": [],
       "returns": {
         "type": "EMU | null"
@@ -57,6 +59,7 @@
     },
     "GetNext": {
       "description": "Returns the next row if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetNext/",
       "params": [],
       "returns": {
         "description": "returns null if row is last.",
@@ -66,6 +69,7 @@
     },
     "GetParentTable": {
       "description": "Returns the parent table of the current row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetParentTable/",
       "params": [],
       "returns": {
         "description": "returns null if parent table doesn't exist.",
@@ -75,6 +79,7 @@
     },
     "GetPrevious": {
       "description": "Returns the previous row if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetPrevious/",
       "params": [],
       "returns": {
         "description": "returns null if row is first.",

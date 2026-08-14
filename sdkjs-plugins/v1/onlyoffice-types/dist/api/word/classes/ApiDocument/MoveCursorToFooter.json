@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor into the footer of the specified page and switches the document into the footer editing mode. The cursor is positioned at the beginning of the footer.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorToFooter/",
   "params": [
     {
       "description": "The page number. If not specified, the current page is used.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a container for paragraphs and tables.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/",
   "methods": {
     "AddElement": {
       "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
@@ -26,6 +27,7 @@
     },
     "AddText": {
       "description": "Appends the specified text to the end of the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/AddText/",
       "params": [
         {
           "description": "The text to add.",
@@ -41,6 +43,7 @@
     },
     "GetAllParagraphs": {
       "description": "Returns an array of all paragraphs from the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetAllParagraphs/",
       "params": [],
       "returns": {
         "type": "ApiParagraph[]"
@@ -61,6 +64,7 @@
     },
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -70,6 +74,7 @@
     },
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetCurrentRun/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -109,6 +114,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal ID of the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -118,6 +124,7 @@
     },
     "GetText": {
       "description": "Returns the inner text of the current document content object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -225,6 +232,7 @@
     },
     "SetText": {
       "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDocumentContent/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a theme font scheme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/",
   "methods": {
     "Copy": {
       "description": "Creates a copy of the current theme font scheme.",

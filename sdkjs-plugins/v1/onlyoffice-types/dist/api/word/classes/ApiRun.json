@@ -1,5 +1,6 @@
 {
   "description": "Class representing a small text block called 'run'.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/",
   "extends": [
     "ApiTextPr"
   ],
@@ -345,6 +346,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the run has no parent.",
@@ -368,6 +370,7 @@
     },
     "GetParentParagraph": {
       "description": "Returns a parent paragraph of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetParentParagraph/",
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -402,6 +405,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current run within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the run has no parent.",
@@ -637,7 +641,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetBold/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetBold/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetBold(true);\nrun.AddText(\"This is a text run with the font set to bold.\");\nparagraph.AddElement(run);"
       ],
@@ -656,7 +660,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetCaps/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetCaps(true);\nrun.AddText(\"This is a text run with the font set to capitalized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -675,7 +679,7 @@
     },
     "SetColor": {
       "description": "Sets the text color to the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetColor/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetColor/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetColor(255, 111, 61);\nrun.AddText(\"This is a text run with the font color set to orange.\");\nparagraph.AddElement(run);"
       ],
@@ -695,7 +699,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetDoubleStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetDoubleStrikeout/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetDoubleStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with two lines.\");\nparagraph.AddElement(run);"
       ],
@@ -714,7 +718,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetFontFamily/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontFamily/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Calibri Light\");\nrun.AddText(\"This is a text run with the font family set to 'Calibri Light'.\");\nparagraph.AddElement(run);"
       ],
@@ -733,7 +737,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetFontSize/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontSize/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is a text run with the font size set to 15 points (30 half-points).\");\nparagraph.AddElement(run);"
       ],
@@ -752,7 +756,7 @@
     },
     "SetHighlight": {
       "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetHighlight/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetHighlight/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetHighlight(\"lightGray\");\nrun.AddText(\"This is a text run with the text highlighted with light gray color.\");\nparagraph.AddElement(run);"
       ],
@@ -770,7 +774,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetItalic/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetItalic/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetItalic(true);\nrun.AddText(\"This is a text run with the font set to italicized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -789,7 +793,7 @@
     },
     "SetLanguage": {
       "description": "Specifies the languages which will be used to check spelling and grammar (if requested) when processing\nthe contents of the text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetLanguage/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetLanguage/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetLanguage(\"en-CA\");\nrun.AddText(\"This is a text run with the text language set to English (Canada).\");\nparagraph.AddElement(run);"
       ],
@@ -827,7 +831,7 @@
     },
     "SetPosition": {
       "description": "Specifies an amount by which text is raised or lowered for this run in relation to the default\nbaseline of the surrounding non-positioned text.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetPosition/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetPosition/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetPosition(10);\nrun.AddText(\"This is a text run with the text raised 5 points (10 half-points).\");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetPosition(-16);\nrun.AddText(\"This is a text run with the text lowered 8 points (16 half-points).\");\nparagraph.AddElement(run);"
       ],
@@ -846,7 +850,7 @@
     },
     "SetShd": {
       "description": "Specifies the shading applied to the contents of the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetShd/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetShd/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetShd(\"clear\", 255, 111, 61);\nrun.AddText(\"This is a text run with the text shading set to orange.\");\nparagraph.AddElement(run);"
       ],
@@ -871,7 +875,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetSmallCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSmallCaps/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSmallCaps(true);\nrun.AddText(\"This is a text run with the font set to small capitalized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -890,7 +894,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetSpacing/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSpacing/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSpacing(80);\nrun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\nparagraph.AddElement(run);"
       ],
@@ -909,7 +913,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStrikeout/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with a single line.\");\nparagraph.AddElement(run);"
       ],
@@ -928,7 +932,7 @@
     },
     "SetStyle": {
       "description": "The text style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle} method which sets\nthe selected or created style to the text.</note>",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetStyle/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStyle/",
       "examples": [
         "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\nparagraph.AddElement(run);"
       ],
@@ -984,7 +988,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetUnderline/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetUnderline/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetUnderline(true);\nrun.AddText(\"This is a text run with the text underlined with a single line.\");\nparagraph.AddElement(run);"
       ],
@@ -1003,7 +1007,7 @@
     },
     "SetVertAlign": {
       "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRun/Methods/SetVertAlign/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetVertAlign/",
       "examples": [
         "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"subscript\");\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"baseline\");\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"superscript\");\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);"
       ],

@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base class for color types.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUniColor/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiUniColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUniColor/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"uniColor\""

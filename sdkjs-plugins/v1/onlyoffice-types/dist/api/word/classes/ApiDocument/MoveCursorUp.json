@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor up.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorUp/",
   "params": [
     {
       "description": "Number of movements.",

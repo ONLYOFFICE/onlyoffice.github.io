@@ -1,5 +1,6 @@
 {
   "description": "Class representing a theme format scheme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/",
   "methods": {
     "ChangeBgFillStyles": {
       "description": "Sets the background fill styles to the current theme format scheme.",

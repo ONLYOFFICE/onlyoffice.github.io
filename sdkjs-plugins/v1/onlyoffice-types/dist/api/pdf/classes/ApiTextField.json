@@ -1,11 +1,13 @@
 {
   "description": "Class representing a text field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/",
   "extends": [
     "ApiBaseField"
   ],
   "methods": {
     "AddWidget": {
       "description": "Adds new widget - visual representation for field",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/AddWidget/",
       "params": [
         {
           "description": "page index to add widget",
@@ -25,6 +27,7 @@
     },
     "ClearFormat": {
       "description": "Clears format of field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/ClearFormat/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -33,6 +36,7 @@
     },
     "Delete": {
       "description": "Removes field from document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -41,6 +45,7 @@
     },
     "GetAllWidgets": {
       "description": "Gets array with widgets of the current field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetAllWidgets/",
       "params": [],
       "returns": {
         "description": "returns emptry array if the field is not added to the document.",
@@ -50,6 +55,7 @@
     },
     "GetCharLimit": {
       "description": "Gets the text field character limit.\n<note> Char limit 0 means field doesn't have char limit",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetCharLimit/",
       "params": [],
       "returns": {
         "type": "number"
@@ -58,6 +64,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiTextField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"textField\""
@@ -66,6 +73,7 @@
     },
     "GetFormattedValue": {
       "description": "Gets formatted value of a field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetFormattedValue/",
       "params": [],
       "returns": {
         "type": "string"
@@ -74,6 +82,7 @@
     },
     "GetFullName": {
       "description": "Gets field full name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetFullName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -82,6 +91,7 @@
     },
     "GetPartialName": {
       "description": "Gets field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetPartialName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -90,6 +100,7 @@
     },
     "GetPlaceholder": {
       "description": "Gets text field placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetPlaceholder/",
       "params": [],
       "returns": {
         "type": "string"
@@ -98,6 +109,7 @@
     },
     "GetRegularExp": {
       "description": "Gets text widget regular validate expression.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/GetRegularExp/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -106,6 +118,7 @@
     },
     "GetValue": {
       "description": "Gets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "string | string[]"
@@ -114,6 +127,7 @@
     },
     "IsComb": {
       "description": "Checks if the text field uses comb formatting.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsComb/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -122,6 +136,7 @@
     },
     "IsMultiline": {
       "description": "Checks if text field is multiline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsMultiline/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -130,6 +145,7 @@
     },
     "IsReadOnly": {
       "description": "Checks if field is read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsReadOnly/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -138,6 +154,7 @@
     },
     "IsRequired": {
       "description": "Checks if field is required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsRequired/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -146,6 +163,7 @@
     },
     "IsScrollLongText": {
       "description": "Checks if text field can scroll long text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/IsScrollLongText/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -154,6 +172,7 @@
     },
     "SetCharLimit": {
       "description": "Sets the text field character limit.\n<note> Character limit 0 means the field doesn't have a character limit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetCharLimit/",
       "params": [
         {
           "description": "The maximum number of characters allowed in the field.",
@@ -168,6 +187,7 @@
     },
     "SetComb": {
       "description": "Sets whether the text field uses comb formatting.\n<note>The character limit must be greater than 0.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetComb/",
       "params": [
         {
           "description": "Specifies whether comb formatting is enabled.",
@@ -182,6 +202,7 @@
     },
     "SetDateFormat": {
       "description": "Sets date format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetDateFormat/",
       "params": [
         {
           "description": "date format (e.g. \"dd.mm.yyyy\")",
@@ -196,6 +217,7 @@
     },
     "SetFullName": {
       "description": "Sets new field name if possible.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetFullName/",
       "params": [
         {
           "description": "The new full name for the field.",
@@ -210,6 +232,7 @@
     },
     "SetMask": {
       "description": "Sets the input mask for entered text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetMask/",
       "params": [
         {
           "description": "The input mask (e.g. \"(999)999-9999\").",
@@ -224,6 +247,7 @@
     },
     "SetMultiline": {
       "description": "Sets text field multiline prop.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetMultiline/",
       "params": [
         {
           "description": "will the field be multiline",
@@ -238,6 +262,7 @@
     },
     "SetNumberFormat": {
       "description": "Sets number format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetNumberFormat/",
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -272,6 +297,7 @@
     },
     "SetPartialName": {
       "description": "Sets new field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetPartialName/",
       "params": [
         {
           "description": "The new partial name for the field.",
@@ -286,6 +312,7 @@
     },
     "SetPercentageFormat": {
       "description": "Sets percentage format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetPercentageFormat/",
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -305,6 +332,7 @@
     },
     "SetPlaceholder": {
       "description": "Sets text field placeholder.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetPlaceholder/",
       "params": [
         {
           "description": "field placeholder",
@@ -319,6 +347,7 @@
     },
     "SetReadOnly": {
       "description": "Sets field read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetReadOnly/",
       "params": [
         {
           "description": "Specifies whether the field is read-only.",
@@ -333,6 +362,7 @@
     },
     "SetRegularExp": {
       "description": "Sets regular expression validate string for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetRegularExp/",
       "params": [
         {
           "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
@@ -347,6 +377,7 @@
     },
     "SetRequired": {
       "description": "Sets field required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetRequired/",
       "params": [
         {
           "description": "Specifies whether the field is required.",
@@ -361,6 +392,7 @@
     },
     "SetScrollLongText": {
       "description": "Sets whether the text field can scroll long text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetScrollLongText/",
       "params": [
         {
           "description": "Specifies whether long text can be scrolled.",
@@ -375,6 +407,7 @@
     },
     "SetSpecialFormat": {
       "description": "Sets special format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetSpecialFormat/",
       "params": [
         {
           "description": "the formatting style to apply to the value",
@@ -389,6 +422,7 @@
     },
     "SetTimeFormat": {
       "description": "Sets time format for field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetTimeFormat/",
       "params": [
         {
           "description": "available time format",
@@ -403,6 +437,7 @@
     },
     "SetValidateRange": {
       "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextField/Methods/SetValidateRange/",
       "params": [
         {
           "description": "If true, enables minimum value validation using `greaterThanValue`.",
@@ -436,6 +471,7 @@
     },
     "SetValue": {
       "description": "Sets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetValue/",
       "params": [
         {
           "description": "The new value for the field.",

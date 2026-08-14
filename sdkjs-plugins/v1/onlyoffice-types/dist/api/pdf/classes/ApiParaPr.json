@@ -1,8 +1,10 @@
 {
   "description": "Class representing the paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiParaPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"paraPr\""
@@ -11,6 +13,7 @@
     },
     "GetIndFirstLine": {
       "description": "Returns the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndFirstLine/",
       "params": [],
       "returns": {
         "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -20,6 +23,7 @@
     },
     "GetIndLeft": {
       "description": "Returns the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndLeft/",
       "params": [],
       "returns": {
         "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -29,6 +33,7 @@
     },
     "GetIndRight": {
       "description": "Returns the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndRight/",
       "params": [],
       "returns": {
         "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -38,6 +43,7 @@
     },
     "GetJc": {
       "description": "Returns the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetJc/",
       "params": [],
       "returns": {
         "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
@@ -46,6 +52,7 @@
     },
     "GetOutlineLvl": {
       "description": "Returns the outline level of the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetOutlineLvl/",
       "params": [],
       "returns": {
         "type": "number | undefined"
@@ -55,6 +62,7 @@
     },
     "GetSpacingAfter": {
       "description": "Returns the spacing after value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingAfter/",
       "params": [],
       "returns": {
         "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -64,6 +72,7 @@
     },
     "GetSpacingBefore": {
       "description": "Returns the spacing before value of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingBefore/",
       "params": [],
       "returns": {
         "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -73,6 +82,7 @@
     },
     "GetSpacingLineRule": {
       "description": "Returns the paragraph line spacing rule.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineRule/",
       "params": [],
       "returns": {
         "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
@@ -81,6 +91,7 @@
     },
     "GetSpacingLineValue": {
       "description": "Returns the paragraph line spacing value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineValue/",
       "params": [],
       "returns": {
         "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
@@ -90,6 +101,7 @@
     },
     "GetTabs": {
       "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetTabs/",
       "params": [],
       "returns": {
         "type": "TabStop[]"
@@ -99,6 +111,7 @@
     },
     "SetBullet": {
       "description": "Sets the bullet or numbering to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetBullet/",
       "params": [
         {
           "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
@@ -113,6 +126,7 @@
     },
     "SetIndFirstLine": {
       "description": "Sets the paragraph first line indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndFirstLine/",
       "params": [
         {
           "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -127,6 +141,7 @@
     },
     "SetIndLeft": {
       "description": "Sets the paragraph left side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndLeft/",
       "params": [
         {
           "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -141,6 +156,7 @@
     },
     "SetIndRight": {
       "description": "Sets the paragraph right side indentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndRight/",
       "params": [
         {
           "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -155,6 +171,7 @@
     },
     "SetJc": {
       "description": "Sets the paragraph contents justification.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetJc/",
       "params": [
         {
           "description": "The justification type that\rwill be applied to the paragraph contents.",
@@ -169,6 +186,7 @@
     },
     "SetOutlineLvl": {
       "description": "Sets the outline level for the specified properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetOutlineLvl/",
       "params": [
         {
           "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
@@ -185,6 +203,7 @@
     },
     "SetSpacingAfter": {
       "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingAfter/",
       "params": [
         {
           "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -205,6 +224,7 @@
     },
     "SetSpacingBefore": {
       "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingBefore/",
       "params": [
         {
           "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -225,6 +245,7 @@
     },
     "SetSpacingLine": {
       "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingLine/",
       "params": [
         {
           "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
@@ -244,6 +265,7 @@
     },
     "SetTabs": {
       "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetTabs/",
       "params": [
         {
           "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",

@@ -1,11 +1,13 @@
 {
   "description": "Class representing a radiobutton field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/",
   "extends": [
     "ApiCheckboxField"
   ],
   "methods": {
     "AddOption": {
       "description": "Adds options to checkbox group.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/AddOption/",
       "params": [
         {
           "description": "The page where the option will be added.",
@@ -31,6 +33,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiRadiobuttonField class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"radiobuttonField\""
@@ -39,6 +42,7 @@
     },
     "IsCheckInUnison": {
       "description": "Checks if field will check in unison.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/IsCheckInUnison/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -47,6 +51,7 @@
     },
     "IsToggleToOff": {
       "description": "Checks if the field can be toggled off.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/IsToggleToOff/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -55,6 +60,7 @@
     },
     "SetCheckInUnison": {
       "description": "Sets field in unison prop.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRadiobuttonField/Methods/SetCheckInUnison/",
       "params": [
         {
           "description": "Specifies whether fields with the same export value are checked together.",
@@ -69,6 +75,7 @@
     },
     "SetToggleToOff": {
       "description": "Sets whether the checked state can be toggled off.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiCheckboxField/Methods/SetToggleToOff/",
       "params": [
         {
           "description": "Specifies whether the checked state can be toggled off.",

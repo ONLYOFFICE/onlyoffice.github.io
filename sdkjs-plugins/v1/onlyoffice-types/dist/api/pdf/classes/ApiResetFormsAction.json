@@ -1,8 +1,10 @@
 {
   "description": "Class representing a reset form action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiResetFormsAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"resetFormsAction\""
@@ -11,6 +13,7 @@
     },
     "GetNames": {
       "description": "Gets names of fields to reset",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/Methods/GetNames/",
       "params": [],
       "returns": {
         "type": "string[]"
@@ -19,6 +22,7 @@
     },
     "IsAllExcept": {
       "description": "Will all fields be reset except the fields whose names are specified",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/Methods/IsAllExcept/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -27,6 +31,7 @@
     },
     "SetAllExcept": {
       "description": "Sets all fields be reset except the fields whose names are specified",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/Methods/SetAllExcept/",
       "params": [
         {
           "name": "isAllExcept",
@@ -40,6 +45,7 @@
     },
     "SetNames": {
       "description": "Sets names of fields to reset",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiResetFormsAction/Methods/GetNames/",
       "params": [
         {
           "name": "names",

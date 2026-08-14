@@ -1,5 +1,6 @@
 {
   "description": "Returns an internal ID of the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetInternalId/",
   "params": [],
   "returns": {
     "type": "string"

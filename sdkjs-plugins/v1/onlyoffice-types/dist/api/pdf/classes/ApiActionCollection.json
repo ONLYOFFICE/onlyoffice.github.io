@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base an action collection.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/",
   "methods": {
     "GetCalculate": {
       "description": "Gets Calculate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetCalculate/",
       "params": [],
       "returns": {
         "type": "ApiJsAction"
@@ -11,6 +13,7 @@
     },
     "GetClassType": {
       "description": "Gets class type of this object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"actionCollection\""
@@ -19,6 +22,7 @@
     },
     "GetFormat": {
       "description": "Gets Format action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetFormat/",
       "params": [],
       "returns": {
         "type": "ApiJsAction"
@@ -27,6 +31,7 @@
     },
     "GetKeystroke": {
       "description": "Gets Keystroke action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetKeystroke/",
       "params": [],
       "returns": {
         "type": "ApiJsAction"
@@ -35,6 +40,7 @@
     },
     "GetMouseDown": {
       "description": "Gets MouseDown action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseDown/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -43,6 +49,7 @@
     },
     "GetMouseEnter": {
       "description": "Gets MouseEnter action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseEnter/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -51,6 +58,7 @@
     },
     "GetMouseExit": {
       "description": "Gets MouseExit action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseExit/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -59,6 +67,7 @@
     },
     "GetMouseUp": {
       "description": "Gets MouseUp action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetMouseUp/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -67,6 +76,7 @@
     },
     "GetOnBlur": {
       "description": "Gets OnBlur action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetOnBlur/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -75,6 +85,7 @@
     },
     "GetOnFocus": {
       "description": "Gets OnFocus action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetOnFocus/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -83,6 +94,7 @@
     },
     "GetValidate": {
       "description": "Gets Validate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/GetValidate/",
       "params": [],
       "returns": {
         "type": "ApiJsAction"
@@ -91,6 +103,7 @@
     },
     "SetCalculate": {
       "description": "Sets the Calculate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetCalculate/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -105,6 +118,7 @@
     },
     "SetFormat": {
       "description": "Sets the Format action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetFormat/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -119,6 +133,7 @@
     },
     "SetKeystroke": {
       "description": "Sets the Keystroke action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetKeystroke/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -133,6 +148,7 @@
     },
     "SetMouseDown": {
       "description": "Sets the MouseDown action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseDown/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -147,6 +163,7 @@
     },
     "SetMouseEnter": {
       "description": "Sets the MouseEnter action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseEnter/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -161,6 +178,7 @@
     },
     "SetMouseExit": {
       "description": "Sets the MouseExit action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseExit/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -175,6 +193,7 @@
     },
     "SetMouseUp": {
       "description": "Sets the MouseUp action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetMouseUp/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -189,6 +208,7 @@
     },
     "SetOnBlur": {
       "description": "Sets the OnBlur action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetOnBlur/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -203,6 +223,7 @@
     },
     "SetOnFocus": {
       "description": "Sets the OnFocus action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetOnFocus/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",
@@ -217,6 +238,7 @@
     },
     "SetValidate": {
       "description": "Sets the Validate action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiActionCollection/Methods/SetValidate/",
       "params": [
         {
           "description": "The action to set, or `null` to remove it.",

@@ -1,5 +1,6 @@
 {
   "description": "Returns the highlight color of the content controls in the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetControlsHighlight/",
   "params": [],
   "returns": {
     "description": "Returns the highlight color, or _null_ if the highlight is disabled.",

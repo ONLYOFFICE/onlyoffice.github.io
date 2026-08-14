@@ -1,8 +1,10 @@
 {
   "description": "Class representing a path in geometry.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/",
   "methods": {
     "ArcTo": {
       "description": "Draws an arc from the current point using the specified width and height radii, start angle, and sweep angle.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/ArcTo/",
       "params": [
         {
           "description": "The width radius.",
@@ -33,6 +35,7 @@
     },
     "Close": {
       "description": "Closes the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/Close/",
       "params": [],
       "returns": {
         "type": "void"
@@ -42,6 +45,7 @@
     },
     "CubicBezTo": {
       "description": "Draws a cubic Bezier curve from the current point to the specified end point using two control points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/CubicBezTo/",
       "params": [
         {
           "description": "The X coordinate of the first control point.",
@@ -82,6 +86,7 @@
     },
     "GetCommand": {
       "description": "Returns a specific path command by its index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetCommand/",
       "params": [
         {
           "description": "The path command index.",
@@ -97,6 +102,7 @@
     },
     "GetCommandCount": {
       "description": "Returns the number of commands for the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetCommandCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -106,6 +112,7 @@
     },
     "GetCommands": {
       "description": "Returns all commands of the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetCommands/",
       "params": [],
       "returns": {
         "type": "ApiPathCommand[]"
@@ -115,6 +122,7 @@
     },
     "GetFill": {
       "description": "Returns the fill type of the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetFill/",
       "params": [],
       "returns": {
         "type": "PathFillType"
@@ -124,6 +132,7 @@
     },
     "GetHeight": {
       "description": "Returns the height of the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetHeight/",
       "params": [],
       "returns": {
         "type": "number"
@@ -133,6 +142,7 @@
     },
     "GetStroke": {
       "description": "Returns true if the current path is stroked, otherwise false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetStroke/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -142,6 +152,7 @@
     },
     "GetWidth": {
       "description": "Returns the width of the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/GetWidth/",
       "params": [],
       "returns": {
         "type": "number"
@@ -151,6 +162,7 @@
     },
     "LineTo": {
       "description": "Draws a line from the current point to the specified coordinates.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/LineTo/",
       "params": [
         {
           "description": "The X coordinate.",
@@ -171,6 +183,7 @@
     },
     "MoveTo": {
       "description": "Moves the current path to the specified coordinates.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/MoveTo/",
       "params": [
         {
           "description": "The X coordinate.",
@@ -191,6 +204,7 @@
     },
     "QuadBezTo": {
       "description": "Draws a quadratic Bezier curve from the current point to the specified end point using a control point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/QuadBezTo/",
       "params": [
         {
           "description": "The X coordinate of the control point.",
@@ -221,6 +235,7 @@
     },
     "SetFill": {
       "description": "Sets the fill type to the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/SetFill/",
       "params": [
         {
           "description": "The path fill type.",
@@ -236,6 +251,7 @@
     },
     "SetHeight": {
       "description": "Sets the height to the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/SetHeight/",
       "params": [
         {
           "description": "The path height in EMU.",
@@ -251,6 +267,7 @@
     },
     "SetStroke": {
       "description": "Sets whether the current path is stroked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/SetStroke/",
       "params": [
         {
           "description": "Specifies if the path is stroked (true) or not (false).",
@@ -266,6 +283,7 @@
     },
     "SetWidth": {
       "description": "Sets the width to the current path.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiPath/Methods/SetWidth/",
       "params": [
         {
           "description": "The path width in EMU.",

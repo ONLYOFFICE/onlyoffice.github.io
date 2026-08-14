@@ -1,5 +1,6 @@
 {
   "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetReadingOrder/",
   "params": [
     {
       "description": "The reading order.",

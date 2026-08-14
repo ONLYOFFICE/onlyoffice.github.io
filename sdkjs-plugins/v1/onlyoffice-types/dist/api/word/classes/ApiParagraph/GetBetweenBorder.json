@@ -1,5 +1,6 @@
 {
   "description": "Returns the between border of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBetweenBorder/",
   "params": [],
   "returns": {
     "description": "Returns the border properties object, or _undefined_ if the between border is not set.",

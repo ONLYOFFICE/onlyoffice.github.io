@@ -1,5 +1,6 @@
 {
   "description": "Retrieves the core properties interface for the current document.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCore/",
   "params": [],
   "returns": {
     "description": "The core document properties object.",

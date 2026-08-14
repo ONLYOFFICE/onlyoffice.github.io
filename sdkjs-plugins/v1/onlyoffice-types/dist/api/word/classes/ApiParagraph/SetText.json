@@ -1,5 +1,6 @@
 {
   "description": "Replaces the paragraph content with the specified text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetText/",
   "params": [
     {
       "description": "The text to set.",

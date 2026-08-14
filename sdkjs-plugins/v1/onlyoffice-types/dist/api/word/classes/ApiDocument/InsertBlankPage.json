@@ -1,5 +1,6 @@
 {
   "description": "Inserts a blank page to the current location.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/InsertBlankPage/",
   "params": [],
   "returns": {
     "type": "boolean"

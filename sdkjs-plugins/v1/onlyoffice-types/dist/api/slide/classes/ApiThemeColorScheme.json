@@ -1,5 +1,6 @@
 {
   "description": "Class representing a theme color scheme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/",
   "methods": {
     "ChangeColor": {
       "description": "Changes a color in the theme color scheme.",

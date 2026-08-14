@@ -1,5 +1,6 @@
 {
   "description": "Specifies a border which will be displayed on all table cell borders.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderAll/",
   "params": [
     {
       "description": "The border style.",

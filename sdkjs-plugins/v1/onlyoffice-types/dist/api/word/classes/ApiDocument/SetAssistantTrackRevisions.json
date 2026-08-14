@@ -1,5 +1,6 @@
 {
   "description": "Enables or disables AI-assisted change tracking in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetAssistantTrackRevisions/",
   "params": [
     {
       "description": "Specifies whether the change tracking mode is set or not.",

@@ -1,8 +1,10 @@
 {
   "description": "Class representing the table properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiTablePr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"tablePr\""
@@ -11,6 +13,7 @@
     },
     "GetTableDescription": {
       "description": "Returns the table description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/GetTableDescription/",
       "params": [],
       "returns": {
         "type": "string"
@@ -19,6 +22,7 @@
     },
     "GetTableTitle": {
       "description": "Returns the table title (caption).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/GetTableTitle/",
       "params": [],
       "returns": {
         "type": "string"
@@ -27,6 +31,7 @@
     },
     "SetCellSpacing": {
       "description": "Specifies the default table cell spacing (the spacing between adjacent cells and the edges of the table).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetCellSpacing/",
       "params": [
         {
           "description": "Spacing value measured in twentieths of a point (1/1440 of an inch). `\"Null\"` means that no spacing will be applied.",
@@ -41,6 +46,7 @@
     },
     "SetJc": {
       "description": "Specifies the alignment of the current table with respect to the text margins in the current section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetJc/",
       "params": [
         {
           "description": "The alignment type used for the current table placement.",
@@ -55,6 +61,7 @@
     },
     "SetShd": {
       "description": "Specifies the shading which is applied to the extents of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetShd/",
       "params": [
         {
           "description": "The shading type applied to the extents of the current table.",
@@ -90,6 +97,7 @@
     },
     "SetStyleColBandSize": {
       "description": "Specifies a number of columns which will comprise each table column band for this table style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetStyleColBandSize/",
       "params": [
         {
           "description": "The number of columns measured in positive integers.",
@@ -104,6 +112,7 @@
     },
     "SetStyleRowBandSize": {
       "description": "Specifies a number of rows which will comprise each table row band for this table style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetStyleRowBandSize/",
       "params": [
         {
           "description": "The number of rows measured in positive integers.",
@@ -118,6 +127,7 @@
     },
     "SetTableBorderAll": {
       "description": "Specifies a border which will be displayed on all table cell borders.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderAll/",
       "params": [
         {
           "description": "The border style.",
@@ -158,6 +168,7 @@
     },
     "SetTableBorderBottom": {
       "description": "Sets the border which will be displayed at the bottom of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderBottom/",
       "params": [
         {
           "description": "The bottom border style.",
@@ -197,6 +208,7 @@
     },
     "SetTableBorderInsideH": {
       "description": "Specifies the border which will be displayed on all horizontal table cell borders which are not on the outmost edge\nof the parent table (all horizontal borders which are not the topmost or bottommost borders).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderInsideH/",
       "params": [
         {
           "description": "The horizontal table cell border style.",
@@ -236,6 +248,7 @@
     },
     "SetTableBorderInsideV": {
       "description": "Specifies the border which will be displayed on all vertical table cell borders which are not on the outmost edge\nof the parent table (all vertical borders which are not the leftmost or rightmost borders).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderInsideV/",
       "params": [
         {
           "description": "The vertical table cell border style.",
@@ -275,6 +288,7 @@
     },
     "SetTableBorderLeft": {
       "description": "Sets the border which will be displayed on the left of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderLeft/",
       "params": [
         {
           "description": "The left border style.",
@@ -314,6 +328,7 @@
     },
     "SetTableBorderRight": {
       "description": "Sets the border which will be displayed on the right of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderRight/",
       "params": [
         {
           "description": "The right border style.",
@@ -353,6 +368,7 @@
     },
     "SetTableBorderTop": {
       "description": "Sets the border which will be displayed at the top of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableBorderTop/",
       "params": [
         {
           "description": "The top border style.",
@@ -392,6 +408,7 @@
     },
     "SetTableCellMarginBottom": {
       "description": "Specifies an amount of space which will be left between the bottom extent of the cell contents and the border\nof all table cells within the parent table (or table row).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableCellMarginBottom/",
       "params": [
         {
           "description": "The value for the amount of space below the bottom extent of the cell measured in\rtwentieths of a point (1/1440 of an inch).",
@@ -406,6 +423,7 @@
     },
     "SetTableCellMarginLeft": {
       "description": "Specifies an amount of space which will be left between the left extent of the cell contents and the left\nborder of all table cells within the parent table (or table row).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableCellMarginLeft/",
       "params": [
         {
           "description": "The value for the amount of space to the left extent of the cell measured in twentieths of a point (1/1440 of an inch).",
@@ -420,6 +438,7 @@
     },
     "SetTableCellMarginRight": {
       "description": "Specifies an amount of space which will be left between the right extent of the cell contents and the right\nborder of all table cells within the parent table (or table row).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableCellMarginRight/",
       "params": [
         {
           "description": "The value for the amount of space to the right extent of the cell measured in twentieths of a point (1/1440 of an inch).",
@@ -434,6 +453,7 @@
     },
     "SetTableCellMarginTop": {
       "description": "Specifies an amount of space which will be left between the top extent of the cell contents and the top border\nof all table cells within the parent table (or table row).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableCellMarginTop/",
       "params": [
         {
           "description": "The value for the amount of space above the top extent of the cell measured in twentieths of a point (1/1440 of an inch).",
@@ -448,6 +468,7 @@
     },
     "SetTableDescription": {
       "description": "Sets the table description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableDescription/",
       "params": [
         {
           "description": "The table description to be set.",
@@ -462,6 +483,7 @@
     },
     "SetTableInd": {
       "description": "Specifies the indentation which will be added before the leading edge of the current table in the document\n(the left edge in the left-to-right table, and the right edge in the right-to-left table).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableInd/",
       "params": [
         {
           "description": "The indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -476,6 +498,7 @@
     },
     "SetTableLayout": {
       "description": "Specifies the algorithm which will be used to lay out the contents of the current table within the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableLayout/",
       "params": [
         {
           "description": "The type of the table layout in the document.",
@@ -490,6 +513,7 @@
     },
     "SetTableTitle": {
       "description": "Sets the table title (caption).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetTableTitle/",
       "params": [
         {
           "description": "The table title to be set.",
@@ -504,6 +528,7 @@
     },
     "SetWidth": {
       "description": "Sets the preferred width to the current table.\n<note>Tables are created with the {@link ApiTable#SetWidth} method properties set by default, which always override the {@link ApiTablePr#SetWidth} method properties. That is why there is no use to try and apply {@link ApiTablePr#SetWidth}. We recommend you to use the  {@link ApiTablePr#SetWidth} method instead.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/SetWidth/",
       "params": [
         {
           "description": "Type of the width value from one of the available width values types.",
@@ -524,6 +549,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiTablePr object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTablePr/Methods/ToJSON/",
       "params": [],
       "returns": {
         "type": "object"

@@ -1,11 +1,13 @@
 {
   "description": "Class representing a document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/",
   "extends": [
     "ApiDocumentContent"
   ],
   "methods": {
     "AddElement": {
       "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/AddElement/",
       "params": [
         {
           "description": "The position where the current element will be added.",
@@ -25,6 +27,7 @@
     },
     "AddText": {
       "description": "Appends the specified text to the end of the document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/AddText/",
       "params": [
         {
           "description": "The text to add.",
@@ -40,6 +43,7 @@
     },
     "GetAllParagraphs": {
       "description": "Returns an array of all paragraphs from the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetAllParagraphs/",
       "params": [],
       "returns": {
         "type": "ApiParagraph[]"
@@ -48,6 +52,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiDocumentContent class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"documentContent\""
@@ -56,6 +61,7 @@
     },
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -65,6 +71,7 @@
     },
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetCurrentRun/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -74,6 +81,7 @@
     },
     "GetElement": {
       "description": "Returns an element by its position in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElement/",
       "params": [
         {
           "description": "The element position that will be taken from the document.",
@@ -88,6 +96,7 @@
     },
     "GetElementsCount": {
       "description": "Returns a number of elements in the current document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElementsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -96,6 +105,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal ID of the current document content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -105,6 +115,7 @@
     },
     "GetText": {
       "description": "Returns the inner text of the current document content object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -163,6 +174,7 @@
     },
     "Push": {
       "description": "Pushes a paragraph or a table to actually add it to the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/Push/",
       "params": [
         {
           "description": "The element type which will be pushed to the document.",
@@ -178,6 +190,7 @@
     },
     "RemoveAllElements": {
       "description": "Removes all the elements from the current document or from the current document element.\n<note>When all elements are removed, a new empty paragraph is automatically created. If you want to add\ncontent to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveAllElements/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -186,6 +199,7 @@
     },
     "RemoveElement": {
       "description": "Removes an element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveElement/",
       "params": [
         {
           "description": "The element number (position) in the document or inside other element.",
@@ -200,6 +214,7 @@
     },
     "SetText": {
       "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",

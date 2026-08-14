@@ -1,8 +1,10 @@
 {
   "description": "Class representing a theme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTheme/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiTheme class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTheme/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"theme\""
@@ -12,6 +14,7 @@
     },
     "GetName": {
       "description": "Returns the name of the theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTheme/Methods/GetName/",
       "params": [],
       "returns": {
         "description": "The theme name.",

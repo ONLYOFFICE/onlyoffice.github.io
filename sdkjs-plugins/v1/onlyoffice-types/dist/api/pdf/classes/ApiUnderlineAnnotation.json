@@ -1,11 +1,13 @@
 {
   "description": "Class representing a underline annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUnderlineAnnotation/",
   "extends": [
     "ApiBaseMarkupAnnotation"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiUnderlineAnnotation class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUnderlineAnnotation/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"underlineAnnot\""
@@ -14,6 +16,7 @@
     },
     "GetQuads": {
       "description": "Gets quads from current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/GetQuads/",
       "params": [],
       "returns": {
         "type": "Quad[]"
@@ -22,6 +25,7 @@
     },
     "SetQuads": {
       "description": "Sets quads to current markup annotation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseMarkupAnnotation/Methods/SetQuads/",
       "params": [
         {
           "description": "An array of quadrilaterals defining the highlighted regions.",

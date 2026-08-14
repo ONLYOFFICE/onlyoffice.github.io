@@ -1,11 +1,13 @@
 {
   "description": "Class representing an RGB Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRGBColor/",
   "extends": [
     "ApiUniColor"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiRGBColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRGBColor/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"rgbColor\""

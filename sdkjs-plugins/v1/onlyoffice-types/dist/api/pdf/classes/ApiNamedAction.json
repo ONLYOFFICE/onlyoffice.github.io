@@ -1,8 +1,10 @@
 {
   "description": "Class representing a named action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiNamedAction/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiNamedAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiNamedAction/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"namedAction\""
@@ -11,6 +13,7 @@
     },
     "GetName": {
       "description": "Gets a name of action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiNamedAction/Methods/GetName/",
       "params": [],
       "returns": {
         "type": "NamedActionType"
@@ -19,6 +22,7 @@
     },
     "SetName": {
       "description": "Sets a name of action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiNamedAction/Methods/SetName/",
       "params": [
         {
           "name": "name",

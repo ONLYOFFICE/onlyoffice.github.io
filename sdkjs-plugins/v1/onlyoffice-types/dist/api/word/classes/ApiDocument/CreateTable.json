@@ -1,5 +1,6 @@
 {
   "description": "Creates a new table with a specified number of rows and columns.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateTable/",
   "params": [
     {
       "description": "Number of rows.",

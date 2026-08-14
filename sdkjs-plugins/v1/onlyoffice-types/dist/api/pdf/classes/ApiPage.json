@@ -1,8 +1,10 @@
 {
   "description": "Class representing a document page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/",
   "methods": {
     "AddObject": {
       "description": "Adds an available object to a page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/AddObject/",
       "params": [
         {
           "description": "The annotation, field, or drawing to add to the page.",
@@ -17,6 +19,7 @@
     },
     "GetAllAnnots": {
       "description": "Gets all annots on page",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetAllAnnots/",
       "params": [],
       "returns": {
         "type": "ApiBaseAnnotation[]"
@@ -25,6 +28,7 @@
     },
     "GetAllDrawings": {
       "description": "Gets all drawing objects from the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetAllDrawings/",
       "params": [],
       "returns": {
         "type": "Drawing[]"
@@ -33,6 +37,7 @@
     },
     "GetAllWidgets": {
       "description": "Gets page widgets",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetAllWidgets/",
       "params": [],
       "returns": {
         "type": "ApiWidget[]"
@@ -41,6 +46,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiPage class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"page\""
@@ -49,6 +55,7 @@
     },
     "GetIndex": {
       "description": "Gets page index",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetIndex/",
       "params": [],
       "returns": {
         "type": "number"
@@ -57,6 +64,7 @@
     },
     "GetRotation": {
       "description": "Gets page rotation angle",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetRotation/",
       "params": [],
       "returns": {
         "type": "number"
@@ -65,6 +73,7 @@
     },
     "GetSelectedText": {
       "description": "Gets selected text on page",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetSelectedText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -73,6 +82,7 @@
     },
     "GetSelection": {
       "description": "Gets page selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetSelection/",
       "params": [],
       "returns": {
         "type": "PageSelection"
@@ -81,6 +91,7 @@
     },
     "GetSelectionQuads": {
       "description": "Gets page selection quads",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/GetSelectionQuads/",
       "params": [],
       "returns": {
         "type": "Quad[]"
@@ -89,6 +100,7 @@
     },
     "RecognizeContent": {
       "description": "Recognizes content on the page and returns an array of recognized objects.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/RecognizeContent/",
       "params": [],
       "returns": {
         "type": "Drawing[]"
@@ -97,6 +109,7 @@
     },
     "Search": {
       "description": "Search words and returns their quads.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/Search/",
       "params": [
         {
           "description": "The search options.",
@@ -112,6 +125,7 @@
     },
     "SetRotation": {
       "description": "Sets page rotation angle",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/SetRotation/",
       "params": [
         {
           "description": "The rotation angle in degrees. Must be a multiple of 90.",
@@ -126,6 +140,7 @@
     },
     "SetSelection": {
       "description": "Sets page selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPage/Methods/SetSelection/",
       "params": [
         {
           "description": "The selection to apply.",

@@ -1,5 +1,6 @@
 {
   "description": "Returns a list of all form keys attached to the specified role.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFormKeysByRole/",
   "params": [
     {
       "description": "The form role.",

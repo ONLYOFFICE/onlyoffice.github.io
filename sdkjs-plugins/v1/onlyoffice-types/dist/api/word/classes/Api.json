@@ -1,5 +1,6 @@
 {
   "description": "Base class",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/",
   "methods": {
     "AddComment": {
       "description": "Adds a comment to the specifed document element or array of Runs.",
@@ -39,6 +40,7 @@
     },
     "AutoColor": {
       "description": "Creates an auto-color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/AutoColor/",
       "params": [],
       "returns": {
         "description": "Instance of ApiColor with 'auto' type.",
@@ -48,6 +50,7 @@
     },
     "CentimetersToPoints": {
       "description": "Converts centimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CentimetersToPoints/",
       "params": [
         {
           "description": "The number of centimeters to convert to points.",
@@ -62,6 +65,7 @@
     },
     "Color": {
       "description": "Creates an ApiColor from a universal input. The method recognizes several call signatures and either delegates to a narrower factory or constructs an ApiColor directly.\n**Numeric components**: \"Api.Color(r, g, b)\" or \"Api.Color(r, g, b, a)\" creates an RGB or RGBA color from byte components (0-255).\n**Packed integer**: \"Api.Color(0xRRGGBB)\" creates an RGB color from a 24-bit integer.\n**Full HEX string**: \"Api.Color('#RRGGBB')\" or \"Api.Color('RRGGBB')\" creates a HEX color; the leading \"#\" is optional.\n**Short HEX string**: \"Api.Color('#RGB')\" expands each digit by duplication, so \"#F0A\" becomes \"#FF00AA\".\n**Theme color name**: \"Api.Color('accent1')\" creates a theme color; any value of SchemeColorId is accepted.\n**Preset color name**: \"Api.Color('aliceBlue')\" resolves any value of PresetColor to its RGB equivalent.\n**Auto color**: \"Api.Color('auto')\" creates an auto color.\nFor a single string argument, the resolution priority is: \"auto\", a string starting with \"#\", a theme name, a preset name, a bare 6-digit HEX. Theme and preset palettes do not overlap. A 3-digit shorthand is accepted only with the leading \"#\".\nUnsupported inputs (objects, arrays, an existing ApiColor, unknown strings, no arguments) return a black color (#000000).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/Color/",
       "params": [
         {
           "description": "The universal color input. With three or four arguments, the red component (0-255).",
@@ -247,6 +251,7 @@
     },
     "CreateCheckBoxContentControl": {
       "description": "Creates a checkbox content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateCheckBoxContentControl/",
       "params": [
         {
           "description": "The configuration object with the checkbox properties.",
@@ -263,6 +268,7 @@
     },
     "CreateComboBoxContentControl": {
       "description": "Creates a new combo box container with the given list of options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateComboBoxContentControl/",
       "params": [
         {
           "description": "An array of objects representing the items in the combo box.",
@@ -286,6 +292,7 @@
     },
     "CreateCustomGeometry": {
       "description": "Creates a new custom geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateCustomGeometry/",
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -295,6 +302,7 @@
     },
     "CreateDatePickerContentControl": {
       "description": "Creates a new date picker content control.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateDatePickerContentControl/",
       "params": [
         {
           "description": "The optional date picker properties.",
@@ -312,6 +320,7 @@
     },
     "CreateDropDownListContentControl": {
       "description": "Creates a new drop-down list container with the given list of options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateDropDownListContentControl/",
       "params": [
         {
           "description": "An array of objects representing the items in the drop-down list.",
@@ -469,6 +478,7 @@
     },
     "CreateMath": {
       "description": "Creates a math equation from a linear text string. The resulting object can be inserted into\na paragraph the same way as a run (e.g. via {@link ApiParagraph#AddElement} or {@link ApiParagraph#Push}).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateMath/",
       "params": [
         {
           "description": "An equation written as a linear text string.",
@@ -560,6 +570,7 @@
     },
     "CreateParaPr": {
       "description": "Creates the empty paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateParaPr/",
       "params": [],
       "returns": {
         "type": "ApiParaPr"
@@ -609,6 +620,7 @@
     },
     "CreatePictureContentControl": {
       "description": "Creates a new picture container.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePictureContentControl/",
       "params": [
         {
           "description": "The optional image width.",
@@ -651,6 +663,7 @@
     },
     "CreatePresetGeometry": {
       "description": "Creates a geometry using one of the available preset shapes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreatePresetGeometry/",
       "params": [
         {
           "description": "The preset name.",
@@ -772,6 +785,7 @@
     },
     "CreateShadow": {
       "description": "Creates a shadow which can be applied to a graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateShadow/",
       "params": [
         {
           "description": "The shadow properties.",
@@ -902,6 +916,7 @@
     },
     "CreateTableCellPr": {
       "description": "Creates the empty table cell properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableCellPr/",
       "params": [],
       "returns": {
         "type": "ApiTableCellPr"
@@ -910,6 +925,7 @@
     },
     "CreateTablePr": {
       "description": "Creates the empty table properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTablePr/",
       "params": [],
       "returns": {
         "type": "ApiTablePr"
@@ -918,6 +934,7 @@
     },
     "CreateTableRowPr": {
       "description": "Creates the empty table row properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableRowPr/",
       "params": [],
       "returns": {
         "type": "ApiTableRowPr"
@@ -926,6 +943,7 @@
     },
     "CreateTableStylePr": {
       "description": "Creates the empty table style properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableStylePr/",
       "params": [
         {
           "description": "The table part which the formatting properties must be applied to.",
@@ -1013,6 +1031,7 @@
     },
     "EmusToMillimeters": {
       "description": "Converts English Metric Units (EMUs) to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/EmusToMillimeters/",
       "params": [
         {
           "description": "The value in English Metric Units (EMUs).",
@@ -1028,6 +1047,7 @@
     },
     "EmusToPoints": {
       "description": "Converts EMUs (English Metric Units) to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/EmusToPoints/",
       "params": [
         {
           "description": "The number of EMUs to convert to points.",
@@ -1061,6 +1081,7 @@
     },
     "GetByInternalId": {
       "description": "Returns the object by it's internal ID.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetByInternalId/",
       "params": [
         {
           "description": "The object internal ID.",
@@ -1124,6 +1145,7 @@
     },
     "HexColor": {
       "description": "Creates a color from a HEX string.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/HexColor/",
       "params": [
         {
           "description": "The HEX string representing a color.",
@@ -1138,6 +1160,7 @@
     },
     "InchesToPoints": {
       "description": "Converts inches to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/InchesToPoints/",
       "params": [
         {
           "description": "The number of inches to convert to points.",
@@ -1152,6 +1175,7 @@
     },
     "LinesToPoints": {
       "description": "Converts lines to points (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/LinesToPoints/",
       "params": [
         {
           "description": "The number of lines to convert to points.",
@@ -1223,6 +1247,7 @@
     },
     "MillimetersToEmus": {
       "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MillimetersToEmus/",
       "params": [
         {
           "description": "The value in millimeters.",
@@ -1238,6 +1263,7 @@
     },
     "MillimetersToPixels": {
       "description": "Converts millimeters to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MillimetersToPixels/",
       "params": [
         {
           "description": "The number of millimeters to convert to pixels.",
@@ -1252,6 +1278,7 @@
     },
     "MillimetersToPoints": {
       "description": "Converts millimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MillimetersToPoints/",
       "params": [
         {
           "description": "The number of millimeters to convert to points.",
@@ -1266,6 +1293,7 @@
     },
     "PicasToPoints": {
       "description": "Converts picas to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PicasToPoints/",
       "params": [
         {
           "description": "The number of picas to convert to points.",
@@ -1280,6 +1308,7 @@
     },
     "PixelsToEmus": {
       "description": "Converts pixels to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PixelsToEmu/",
       "params": [
         {
           "description": "The number of pixels to convert to EMUs.",
@@ -1294,6 +1323,7 @@
     },
     "PixelsToPoints": {
       "description": "Converts pixels to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PixelsToPoints/",
       "params": [
         {
           "description": "The number of pixels to convert to points.",
@@ -1308,6 +1338,7 @@
     },
     "PointsToCentimeters": {
       "description": "Converts points to centimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToCentimeters/",
       "params": [
         {
           "description": "The number of points to convert to centimeters.",
@@ -1322,6 +1353,7 @@
     },
     "PointsToEmus": {
       "description": "Converts points to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToEmus/",
       "params": [
         {
           "description": "The number of points to convert to EMUs.",
@@ -1336,6 +1368,7 @@
     },
     "PointsToInches": {
       "description": "Converts points to inches.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToInches/",
       "params": [
         {
           "description": "The number of points to convert to inches.",
@@ -1350,6 +1383,7 @@
     },
     "PointsToLines": {
       "description": "Converts points to lines (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToLines/",
       "params": [
         {
           "description": "The number of points to convert to lines.",
@@ -1364,6 +1398,7 @@
     },
     "PointsToMillimeters": {
       "description": "Converts points to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToMillimeters/",
       "params": [
         {
           "description": "The number of points to convert to millimeters.",
@@ -1378,6 +1413,7 @@
     },
     "PointsToPicas": {
       "description": "Converts points to picas (1 pica = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToPicas/",
       "params": [
         {
           "description": "The number of points to convert to picas.",
@@ -1392,6 +1428,7 @@
     },
     "PointsToPixels": {
       "description": "Converts points to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToPixels/",
       "params": [
         {
           "description": "The number of points to convert to pixels.",
@@ -1406,6 +1443,7 @@
     },
     "PointsToTwips": {
       "description": "Converts points to twips.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/PointsToTwips/",
       "params": [
         {
           "description": "The number of points to convert to twips.",
@@ -1420,6 +1458,7 @@
     },
     "RGB": {
       "description": "Creates an RGB color from red, green and blue components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/RGB/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1444,6 +1483,7 @@
     },
     "RGBA": {
       "description": "Creates an RGBA color from red, green, blue and alpha components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/RGBA/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1533,6 +1573,7 @@
     },
     "ThemeColor": {
       "description": "Creates a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/ThemeColor/",
       "params": [
         {
           "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
@@ -1549,6 +1590,7 @@
     },
     "TwipsToPoints": {
       "description": "Converts twips to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/TwipsToPoints/",
       "params": [
         {
           "description": "The number of twips to convert to points.",

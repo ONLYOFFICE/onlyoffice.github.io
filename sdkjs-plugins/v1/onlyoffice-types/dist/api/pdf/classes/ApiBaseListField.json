@@ -1,11 +1,13 @@
 {
   "description": "Class representing a base list field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/",
   "extends": [
     "ApiBaseField"
   ],
   "methods": {
     "AddOption": {
       "description": "Adds new option to list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/AddOption/",
       "params": [
         {
           "description": "list option to add",
@@ -26,6 +28,7 @@
     },
     "AddWidget": {
       "description": "Adds new widget - visual representation for field",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/AddWidget/",
       "params": [
         {
           "description": "page index to add widget",
@@ -45,6 +48,7 @@
     },
     "Delete": {
       "description": "Removes field from document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -53,6 +57,7 @@
     },
     "GetAllWidgets": {
       "description": "Gets array with widgets of the current field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetAllWidgets/",
       "params": [],
       "returns": {
         "description": "returns emptry array if the field is not added to the document.",
@@ -62,6 +67,7 @@
     },
     "GetFullName": {
       "description": "Gets field full name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetFullName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -70,6 +76,7 @@
     },
     "GetOption": {
       "description": "Gets option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOption/",
       "params": [
         {
           "description": "The option index.",
@@ -84,6 +91,7 @@
     },
     "GetOptions": {
       "description": "Gets all options from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOptions/",
       "params": [],
       "returns": {
         "type": "ListOption[]"
@@ -92,6 +100,7 @@
     },
     "GetPartialName": {
       "description": "Gets field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetPartialName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -100,6 +109,7 @@
     },
     "GetValue": {
       "description": "Gets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "string | string[]"
@@ -108,6 +118,7 @@
     },
     "GetValueIndexes": {
       "description": "Gets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetValueIndexes/",
       "params": [],
       "returns": {
         "type": "number[]"
@@ -116,6 +127,7 @@
     },
     "IsCommitOnSelChange": {
       "description": "Checks if field can commit on selection change.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/IsCommitOnSelChange/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -124,6 +136,7 @@
     },
     "IsReadOnly": {
       "description": "Checks if field is read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsReadOnly/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -132,6 +145,7 @@
     },
     "IsRequired": {
       "description": "Checks if field is required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsRequired/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -140,6 +154,7 @@
     },
     "MoveOption": {
       "description": "Moves option to specified position in list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/MoveOption/",
       "params": [
         {
           "description": "The current index of the option to move.",
@@ -159,6 +174,7 @@
     },
     "RemoveOption": {
       "description": "Removes option from list options.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/RemoveOption/",
       "params": [
         {
           "description": "The option index.",
@@ -173,6 +189,7 @@
     },
     "SetCommitOnSelChange": {
       "description": "Sets whether the field commits changes immediately after selection changes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetCommitOnSelChange/",
       "params": [
         {
           "description": "Specifies whether selection changes are committed immediately.",
@@ -187,6 +204,7 @@
     },
     "SetFullName": {
       "description": "Sets new field name if possible.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetFullName/",
       "params": [
         {
           "description": "The new full name for the field.",
@@ -201,6 +219,7 @@
     },
     "SetPartialName": {
       "description": "Sets new field partial name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetPartialName/",
       "params": [
         {
           "description": "The new partial name for the field.",
@@ -215,6 +234,7 @@
     },
     "SetReadOnly": {
       "description": "Sets field read only",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetReadOnly/",
       "params": [
         {
           "description": "Specifies whether the field is read-only.",
@@ -229,6 +249,7 @@
     },
     "SetRequired": {
       "description": "Sets field required",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetRequired/",
       "params": [
         {
           "description": "Specifies whether the field is required.",
@@ -243,6 +264,7 @@
     },
     "SetValue": {
       "description": "Sets field value",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetValue/",
       "params": [
         {
           "description": "The new value for the field.",
@@ -257,6 +279,7 @@
     },
     "SetValueIndexes": {
       "description": "Sets selected value indexes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetValueIndexes/",
       "params": [
         {
           "description": "The indexes of the selected values.",

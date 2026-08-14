@@ -1,8 +1,10 @@
 {
   "description": "Class representing custom properties of the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/",
   "methods": {
     "Add": {
       "description": "Adds a custom property to the document with automatic type detection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/Add/",
       "params": [
         {
           "description": "The custom property name.",
@@ -24,6 +26,7 @@
     },
     "Get": {
       "description": "Returns the value of a custom property by its name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/Get/",
       "params": [
         {
           "description": "The custom property name.",
@@ -40,6 +43,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiCustomProperties class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"customProperties\""

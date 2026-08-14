@@ -513,6 +513,7 @@
     },
     "GetAutoFilter": {
       "description": "Returns the instante of ApiAutoFilter object that represents the worksheet AutoFilter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAutoFilter/",
       "params": [],
       "returns": {
         "type": "ApiAutoFilter"
@@ -587,6 +588,7 @@
     },
     "GetCustomXmlParts": {
       "description": "Retrieves the custom XML manager associated with the current sheet.\nThis manager allows manipulation and access to custom XML parts within the current sheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetCustomXmlParts/",
       "params": [],
       "returns": {
         "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",
@@ -642,6 +644,7 @@
     },
     "GetHyperlinks": {
       "description": "Returns a collection of all the hyperlinks on the worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetHyperlinks/",
       "params": [],
       "returns": {
         "type": "ApiHyperlinks"
@@ -699,6 +702,7 @@
     },
     "GetPageSetup": {
       "description": "Returns the page setup object that represents the print layout settings of the current worksheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetPageSetup/",
       "params": [],
       "returns": {
         "type": "ApiPageSetup"
@@ -850,6 +854,7 @@
     },
     "GetSelectedDrawings": {
       "description": "Returns selected drawings from the current sheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetSelectedDrawings/",
       "params": [],
       "returns": {
         "description": ".",
@@ -859,6 +864,7 @@
     },
     "GetSelectedShapes": {
       "description": "Returns selected shapes from the current sheet.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetSelectedShapes/",
       "params": [],
       "returns": {
         "description": ".",

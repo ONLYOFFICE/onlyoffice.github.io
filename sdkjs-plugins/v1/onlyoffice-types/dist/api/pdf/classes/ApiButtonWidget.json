@@ -1,11 +1,13 @@
 {
   "description": "Class representing a button widget.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/",
   "extends": [
     "ApiBaseWidget"
   ],
   "methods": {
     "Delete": {
       "description": "Removes widget from parent field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -14,6 +16,7 @@
     },
     "GetBackgroundColor": {
       "description": "Gets widget background color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -22,6 +25,7 @@
     },
     "GetBehavior": {
       "description": "Gets button widget behavior.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetBehavior/",
       "params": [],
       "returns": {
         "type": "ButtonBehavior"
@@ -30,6 +34,7 @@
     },
     "GetBorderColor": {
       "description": "Gets widget border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -38,6 +43,7 @@
     },
     "GetBorderStyle": {
       "description": "Gets widget border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderStyle/",
       "params": [],
       "returns": {
         "type": "WidgetBorderStyle"
@@ -46,6 +52,7 @@
     },
     "GetBorderWidth": {
       "description": "Gets widget border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetBorderWidth/",
       "params": [],
       "returns": {
         "type": "WidgetBorderWidth"
@@ -54,6 +61,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiButtonWidget class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"buttonWidget\""
@@ -62,6 +70,7 @@
     },
     "GetIconXPos": {
       "description": "Gets button widget icon x position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetIconXPos/",
       "params": [],
       "returns": {
         "type": "percentage"
@@ -70,6 +79,7 @@
     },
     "GetIconYPos": {
       "description": "Gets button widget icon y position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetIconYPos/",
       "params": [],
       "returns": {
         "type": "percentage"
@@ -78,6 +88,7 @@
     },
     "GetLabel": {
       "description": "Gets label from button widget field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetLabel/",
       "params": [
         {
           "description": "The appearance state.",
@@ -93,6 +104,7 @@
     },
     "GetLayout": {
       "description": "Gets button widget layout type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetLayout/",
       "params": [],
       "returns": {
         "type": "ButtonLayout"
@@ -101,6 +113,7 @@
     },
     "GetPosition": {
       "description": "Gets widget position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetPosition/",
       "params": [],
       "returns": {
         "type": "Point"
@@ -109,6 +122,7 @@
     },
     "GetRect": {
       "description": "Sets field rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetRect/",
       "params": [],
       "returns": {
         "type": "Rect"
@@ -117,6 +131,7 @@
     },
     "GetScaleHow": {
       "description": "Gets button widget scale when type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetScaleHow/",
       "params": [],
       "returns": {
         "type": "ButtonScaleHow"
@@ -125,6 +140,7 @@
     },
     "GetScaleWhen": {
       "description": "Gets button widget scale when type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/GetScaleWhen/",
       "params": [],
       "returns": {
         "type": "ButtonScaleWhen"
@@ -133,6 +149,7 @@
     },
     "GetTextColor": {
       "description": "Gets widget text color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetTextColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -141,6 +158,7 @@
     },
     "GetTextSize": {
       "description": "Gets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/GetTextSize/",
       "params": [],
       "returns": {
         "type": "pt"
@@ -149,6 +167,7 @@
     },
     "IsAutoFit": {
       "description": "Checks if text is autofit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/IsAutoFit/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -157,6 +176,7 @@
     },
     "IsFitBounds": {
       "description": "Checks if button widget is fit bounds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/IsFitBounds/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -165,6 +185,7 @@
     },
     "SetAutoFit": {
       "description": "Sets text autofit.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetAutoFit/",
       "params": [
         {
           "description": "Specifies whether text autofit is enabled.",
@@ -179,6 +200,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets widget background color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "The background color.",
@@ -193,6 +215,7 @@
     },
     "SetBehavior": {
       "description": "Sets button widget behavior.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetBehavior/",
       "params": [
         {
           "description": "The highlight behavior when the button is clicked.",
@@ -207,6 +230,7 @@
     },
     "SetBorderColor": {
       "description": "Sets widget border color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -221,6 +245,7 @@
     },
     "SetBorderStyle": {
       "description": "Sets widget border style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderStyle/",
       "params": [
         {
           "description": "The border style.",
@@ -235,6 +260,7 @@
     },
     "SetBorderWidth": {
       "description": "Sets widget border width.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetBorderWidth/",
       "params": [
         {
           "description": "the width to set to the border.",
@@ -249,6 +275,7 @@
     },
     "SetFitBounds": {
       "description": "Sets button widget fit bounds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetFitBounds/",
       "params": [
         {
           "description": "Specifies whether the icon is scaled to fit the button bounds.",
@@ -263,6 +290,7 @@
     },
     "SetIconXPos": {
       "description": "Sets button widget icon x position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetIconXPos/",
       "params": [
         {
           "description": "The horizontal position of the icon as a percentage of the button width.",
@@ -277,6 +305,7 @@
     },
     "SetIconYPos": {
       "description": "Sets button widget icon y position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetIconYPos/",
       "params": [
         {
           "description": "The vertical position of the icon as a percentage of the button height.",
@@ -291,6 +320,7 @@
     },
     "SetImage": {
       "description": "Sets image to button widget field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetImage/",
       "params": [
         {
           "description": "The image URL.",
@@ -312,6 +342,7 @@
     },
     "SetLabel": {
       "description": "Sets label to button widget field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetLabel/",
       "params": [
         {
           "description": "The button label.",
@@ -332,6 +363,7 @@
     },
     "SetLayout": {
       "description": "Sets button widget layout type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetLayout/",
       "params": [
         {
           "description": "The button layout.",
@@ -346,6 +378,7 @@
     },
     "SetPosition": {
       "description": "Sets widget position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetPosition/",
       "params": [
         {
           "description": "The new position of the widget.",
@@ -360,6 +393,7 @@
     },
     "SetRect": {
       "description": "Sets field rect.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetRect/",
       "params": [
         {
           "description": "The new bounding rectangle for the widget.",
@@ -374,6 +408,7 @@
     },
     "SetScaleHow": {
       "description": "Sets button widget scale how type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetScaleHow/",
       "params": [
         {
           "description": "The icon scaling mode.",
@@ -388,6 +423,7 @@
     },
     "SetScaleWhen": {
       "description": "Sets button widget scale when type",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiButtonWidget/Methods/SetScaleWhen/",
       "params": [
         {
           "description": "The condition that controls when the icon is scaled.",
@@ -402,6 +438,7 @@
     },
     "SetTextColor": {
       "description": "Sets widget text color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetTextColor/",
       "params": [
         {
           "description": "The text color.",
@@ -416,6 +453,7 @@
     },
     "SetTextSize": {
       "description": "Sets widget text size.\n<note> Text size === 0 means autofit </note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseWidget/Methods/SetTextSize/",
       "params": [
         {
           "description": "The font size in points.",

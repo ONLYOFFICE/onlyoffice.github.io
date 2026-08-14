@@ -1,11 +1,13 @@
 {
   "description": "Class representing a document picture form.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSignatureForm/",
   "extends": [
     "ApiFormBase"
   ],
   "methods": {
     "Clear": {
       "description": "Clears the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -14,6 +16,7 @@
     },
     "Copy": {
       "description": "Copies the current form (copies with the shape if it exists).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/",
       "params": [],
       "returns": {
         "type": "ApiForm"
@@ -22,6 +25,7 @@
     },
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Delete/",
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -38,6 +42,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -47,6 +52,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -56,6 +62,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiSignatureForm class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSignatureForm/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"signatureForm\""
@@ -65,6 +72,7 @@
     },
     "GetFormKey": {
       "description": "Returns the current form key.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/",
       "params": [],
       "returns": {
         "type": "string"
@@ -73,6 +81,7 @@
     },
     "GetFormType": {
       "description": "Returns a type of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/",
       "params": [],
       "returns": {
         "type": "FormType"
@@ -81,6 +90,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -90,6 +100,7 @@
     },
     "GetLock": {
       "description": "Returns the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetLock/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -99,6 +110,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the form has no parent.",
@@ -109,6 +121,7 @@
     },
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPlaceholderText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -118,6 +131,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current form within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the form has no parent.",
@@ -128,6 +142,7 @@
     },
     "GetRole": {
       "description": "Returns the role of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetRole/",
       "params": [],
       "returns": {
         "type": "string"
@@ -137,6 +152,7 @@
     },
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTag/",
       "params": [],
       "returns": {
         "type": "string"
@@ -146,6 +162,7 @@
     },
     "GetText": {
       "description": "Returns the text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -154,6 +171,7 @@
     },
     "GetTextPr": {
       "description": "Returns the text properties from the current form.\n*Used if possible for this type of form*",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/",
       "params": [],
       "returns": {
         "type": "ApiTextPr"
@@ -162,6 +180,7 @@
     },
     "GetTipText": {
       "description": "Returns the tip text of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -170,6 +189,7 @@
     },
     "GetValue": {
       "description": "Returns the current image of the signature form as a base64 encoded string.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSignatureForm/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "string"
@@ -179,6 +199,7 @@
     },
     "GetWrapperShape": {
       "description": "Returns a shape in which the form is placed to control the position and size of the fixed size form frame.\nThe null value will be returned for the inline forms.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/",
       "params": [],
       "returns": {
         "description": "returns the shape in which the form is placed.",
@@ -188,6 +209,7 @@
     },
     "IsFilled": {
       "description": "Checks if the current form is filled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFilled/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -197,6 +219,7 @@
     },
     "IsFixed": {
       "description": "Checks if the current form is fixed size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -205,6 +228,7 @@
     },
     "IsRequired": {
       "description": "Checks if the current form is required.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -213,6 +237,7 @@
     },
     "MoveCursorOutside": {
       "description": "Places a cursor before/after the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/",
       "params": [
         {
           "description": "Specifies whether a cursor will be placed before (false) or after (true) the current form.",
@@ -229,6 +254,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "The background color.",
@@ -245,6 +271,7 @@
     },
     "SetBorderColor": {
       "description": "Sets the border color to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/",
       "params": [
         {
           "description": "The border color.",
@@ -261,6 +288,7 @@
     },
     "SetFormKey": {
       "description": "Sets a key to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/",
       "params": [
         {
           "description": "Form key.",
@@ -275,6 +303,7 @@
     },
     "SetLock": {
       "description": "Sets the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetLock/",
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -291,6 +320,7 @@
     },
     "SetPlaceholderText": {
       "description": "Sets the placeholder text to the current form.\n*Can't be set to checkbox or radio button.*",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/",
       "params": [
         {
           "description": "The text that will be set to the current form.",
@@ -305,6 +335,7 @@
     },
     "SetRequired": {
       "description": "Specifies if the current form should be required.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/",
       "params": [
         {
           "description": "Defines if the current form is required (true) or not (false).",
@@ -319,6 +350,7 @@
     },
     "SetRole": {
       "description": "Sets the role to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRole/",
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -334,6 +366,7 @@
     },
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTag/",
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -349,6 +382,7 @@
     },
     "SetTextPr": {
       "description": "Sets the text properties to the current form.\n*Used if possible for this type of form*",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/",
       "params": [
         {
           "description": "The text properties that will be set to the current form.",
@@ -363,6 +397,7 @@
     },
     "SetTipText": {
       "description": "Sets the tip text to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/",
       "params": [
         {
           "description": "Tip text.",
@@ -377,6 +412,7 @@
     },
     "SetValue": {
       "description": "Sets an image to the signature form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSignatureForm/Methods/SetValue/",
       "params": [
         {
           "description": "The image source (URL or base64 encoded image).",
@@ -392,6 +428,7 @@
     },
     "ToFixed": {
       "description": "Converts the current form to a fixed size form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/",
       "params": [
         {
           "description": "The wrapper shape width measured in twentieths of a point (1/1440 of an inch).",
@@ -416,6 +453,7 @@
     },
     "ToInline": {
       "description": "Converts the current form to an inline form.\n*Picture form can't be converted to an inline form, it's always a fixed size object.*",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/",
       "params": [],
       "returns": {
         "type": "boolean"

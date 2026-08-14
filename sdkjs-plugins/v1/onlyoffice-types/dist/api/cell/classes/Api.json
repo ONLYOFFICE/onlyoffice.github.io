@@ -28,6 +28,7 @@
     },
     "AddCustomFunction": {
       "description": "Creates a new custom function.\nThe description of the function parameters and result is specified using JSDoc. The *@customfunction* tag is required in JSDoc.\nParameters and results can be specified as the *number / string / boolean / any / number[][] / string[][] / boolean[][] / any[][]* types.\nParameters can be required or optional. A user can also set a default value.\nThe passed function can be asynchronous (async function or function returning a Promise).\nInside the passed function, you can access the current cell address where the calculation is performed using *this.address*.\nYou can also access the addresses of function arguments using *this.args[0].address*, *this.args[1].address*, etc.\nThis method is not used in ONLYOFFICE Document Builder. Use AddCustomFunctionLibrary instead.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddCustomFunction/",
       "params": [
         {
           "description": "A new function for calculating. Can be synchronous or asynchronous.",
@@ -42,7 +43,7 @@
     },
     "AddCustomFunctionLibrary": {
       "description": "Registers a new custom functions library (see the **SetCustomFunctions** plugin method).\nThe description of the function parameters and result is specified using JSDoc. The *@customfunction* tag is required in JSDoc.\nParameters and results can be specified as the *number / string / boolean / any / number[][] / string[][] / boolean[][] / any[][]* types.\nParameters can be required or optional. A user can also set a default value.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddCustomFunction/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/AddCustomFunctionLibrary/",
       "examples": [
         "Api.AddCustomFunctionLibrary(\"LibraryName\", function(){\n    /**\n     * Function that returns the argument\n     * @customfunction\n     * @param {any} first First argument.\n     * @returns {any} second Second argument.\n    */\n    Api.AddCustomFunction(function ADD(first, second) {\n        return first + second;\n    });\n});\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('=ADD(1,2)');"
       ],
@@ -113,6 +114,7 @@
     },
     "Calculate": {
       "description": "Recalculates the cells that need recalculation (changed, added or volatile) across the active workbook, similar to Application.Calculate in VBA. Forces the recalc that is otherwise deferred until a macro finishes, so up-to-date formula results can be read within the same macro.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Calculate/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -122,6 +124,7 @@
     },
     "CentimetersToPoints": {
       "description": "Converts centimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CentimetersToPoints/",
       "params": [
         {
           "description": "The number of centimeters to convert to points.",
@@ -149,6 +152,7 @@
     },
     "Color": {
       "description": "Creates an ApiColor from a universal input. The method recognizes several call signatures and either delegates to a narrower factory or constructs an ApiColor directly.\n**Numeric components**: \"Api.Color(r, g, b)\" or \"Api.Color(r, g, b, a)\" creates an RGB or RGBA color from byte components (0-255).\n**Packed integer**: \"Api.Color(0xRRGGBB)\" creates an RGB color from a 24-bit integer.\n**Full HEX string**: \"Api.Color('#RRGGBB')\" or \"Api.Color('RRGGBB')\" creates a HEX color; the leading \"#\" is optional.\n**Short HEX string**: \"Api.Color('#RGB')\" expands each digit by duplication, so \"#F0A\" becomes \"#FF00AA\".\n**Theme color name**: \"Api.Color('accent1')\" creates a theme color; any value of SchemeColorId is accepted.\n**Preset color name**: \"Api.Color('aliceBlue')\" resolves any value of PresetColor to its RGB equivalent.\n**Auto color**: \"Api.Color('auto')\" creates an auto color.\nFor a single string argument, the resolution priority is: \"auto\", a string starting with \"#\", a theme name, a preset name, a bare 6-digit HEX. Theme and preset palettes do not overlap. A 3-digit shorthand is accepted only with the leading \"#\".\nUnsupported inputs (objects, arrays, an existing ApiColor, unknown strings, no arguments) return a black color (#000000).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Color/",
       "params": [
         {
           "description": "The universal color input. With three or four arguments, the red component (0-255).",
@@ -268,6 +272,7 @@
     },
     "CreateCustomGeometry": {
       "description": "Creates a new custom geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateCustomGeometry/",
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -324,6 +329,7 @@
     },
     "CreateMath": {
       "description": "Creates a math equation from a linear text string. The resulting object can be inserted into\na paragraph the same way as a run (e.g. via {@link ApiParagraph#AddElement} or {@link ApiParagraph#Push}).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateMath/",
       "params": [
         {
           "description": "An equation written as a linear text string.",
@@ -370,6 +376,7 @@
     },
     "CreateNumbering": {
       "description": "Creates a bullet for a paragraph with the numbering character or symbol specified with the numType parameter.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateNumbering/",
       "params": [
         {
           "description": "The numbering type the paragraphs will be numbered with.",
@@ -449,6 +456,7 @@
     },
     "CreatePresetGeometry": {
       "description": "Creates a geometry using one of the available preset shapes.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreatePresetGeometry/",
       "params": [
         {
           "description": "The preset name.",
@@ -541,6 +549,7 @@
     },
     "CreateShadow": {
       "description": "Creates a shadow which can be applied to a graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateShadow/",
       "params": [
         {
           "description": "The shadow properties.",
@@ -617,6 +626,7 @@
     },
     "EmusToMillimeters": {
       "description": "Converts English Metric Units (EMUs) to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/EmusToMillimeters/",
       "params": [
         {
           "description": "The value in English Metric Units (EMUs).",
@@ -632,6 +642,7 @@
     },
     "EmusToPoints": {
       "description": "Converts EMUs (English Metric Units) to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/EmusToPoints/",
       "params": [
         {
           "description": "The number of EMUs to convert to points.",
@@ -682,6 +693,7 @@
     },
     "GetActiveWorkbook": {
       "description": "Returns an object that represents the active workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetActiveWorkbook/",
       "params": [],
       "returns": {
         "type": "ApiWorkbook"
@@ -745,6 +757,7 @@
     },
     "GetCore": {
       "description": "Returns the core properties interface for the workbook.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetCore/",
       "params": [],
       "returns": {
         "type": "ApiCore"
@@ -754,6 +767,7 @@
     },
     "GetCustomProperties": {
       "description": "Returns the workbook custom properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetCustomProperties/",
       "params": [],
       "returns": {
         "type": "ApiCustomProperties"
@@ -972,6 +986,7 @@
     },
     "HexColor": {
       "description": "Creates a color from a HEX string.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/HexColor/",
       "params": [
         {
           "description": "The HEX string representing a color.",
@@ -986,6 +1001,7 @@
     },
     "InchesToPoints": {
       "description": "Converts inches to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/InchesToPoints/",
       "params": [
         {
           "description": "The number of inches to convert to points.",
@@ -1077,6 +1093,7 @@
     },
     "LinesToPoints": {
       "description": "Converts lines to points (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/LinesToPoints/",
       "params": [
         {
           "description": "The number of lines to convert to points.",
@@ -1091,6 +1108,7 @@
     },
     "MillimetersToEmus": {
       "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/MillimetersToEmus/",
       "params": [
         {
           "description": "The value in millimeters.",
@@ -1106,6 +1124,7 @@
     },
     "MillimetersToPixels": {
       "description": "Converts millimeters to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/MillimetersToPixels/",
       "params": [
         {
           "description": "The number of millimeters to convert to pixels.",
@@ -1120,6 +1139,7 @@
     },
     "MillimetersToPoints": {
       "description": "Converts millimeters to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/MillimetersToPoints/",
       "params": [
         {
           "description": "The number of millimeters to convert to points.",
@@ -1134,6 +1154,7 @@
     },
     "PicasToPoints": {
       "description": "Converts picas to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PicasToPoints/",
       "params": [
         {
           "description": "The number of picas to convert to points.",
@@ -1148,6 +1169,7 @@
     },
     "PixelsToEmus": {
       "description": "Converts pixels to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PixelsToEmu/",
       "params": [
         {
           "description": "The number of pixels to convert to EMUs.",
@@ -1162,6 +1184,7 @@
     },
     "PixelsToPoints": {
       "description": "Converts pixels to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PixelsToPoints/",
       "params": [
         {
           "description": "The number of pixels to convert to points.",
@@ -1176,6 +1199,7 @@
     },
     "PointsToCentimeters": {
       "description": "Converts points to centimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToCentimeters/",
       "params": [
         {
           "description": "The number of points to convert to centimeters.",
@@ -1190,6 +1214,7 @@
     },
     "PointsToEmus": {
       "description": "Converts points to EMUs (English Metric Units).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToEmus/",
       "params": [
         {
           "description": "The number of points to convert to EMUs.",
@@ -1204,6 +1229,7 @@
     },
     "PointsToInches": {
       "description": "Converts points to inches.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToInches/",
       "params": [
         {
           "description": "The number of points to convert to inches.",
@@ -1218,6 +1244,7 @@
     },
     "PointsToLines": {
       "description": "Converts points to lines (1 line = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToLines/",
       "params": [
         {
           "description": "The number of points to convert to lines.",
@@ -1232,6 +1259,7 @@
     },
     "PointsToMillimeters": {
       "description": "Converts points to millimeters.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToMillimeters/",
       "params": [
         {
           "description": "The number of points to convert to millimeters.",
@@ -1246,6 +1274,7 @@
     },
     "PointsToPicas": {
       "description": "Converts points to picas (1 pica = 12 points).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToPicas/",
       "params": [
         {
           "description": "The number of points to convert to picas.",
@@ -1260,6 +1289,7 @@
     },
     "PointsToPixels": {
       "description": "Converts points to pixels.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToPixels/",
       "params": [
         {
           "description": "The number of points to convert to pixels.",
@@ -1274,6 +1304,7 @@
     },
     "PointsToTwips": {
       "description": "Converts points to twips.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PointsToTwips/",
       "params": [
         {
           "description": "The number of points to convert to twips.",
@@ -1288,6 +1319,7 @@
     },
     "RGB": {
       "description": "Creates an RGB color from red, green and blue components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/RGB/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1312,6 +1344,7 @@
     },
     "RGBA": {
       "description": "Creates an RGBA color from red, green, blue and alpha components.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/RGBA/",
       "params": [
         {
           "description": "Red component (0-255).",
@@ -1360,6 +1393,7 @@
     },
     "Redraw": {
       "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link Api#Calculate} first if formula results must be up to date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Redraw/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -1519,6 +1553,7 @@
     },
     "ThemeColor": {
       "description": "Creates a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/ThemeColor/",
       "params": [
         {
           "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
@@ -1535,6 +1570,7 @@
     },
     "TwipsToPoints": {
       "description": "Converts twips to points.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/TwipsToPoints/",
       "params": [
         {
           "description": "The number of twips to convert to points.",

@@ -110,7 +110,7 @@ function fetchApiDefinitions() {
   return results;
 }
 
-function buildLegacyLookup(data) {
+function buildLegacyLookup(data, editor) {
   const classes = {};
   const typedefs = {};
 
@@ -143,7 +143,7 @@ function buildLegacyLookup(data) {
           description: item.description,
           params: describedParams(item),
           returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
-          docsUrl: methodDocsUrl(item.see),
+          docsUrl: methodDocsUrl(item.see, editor),
         };
       }
     }
@@ -167,7 +167,7 @@ async function fetchLegacyDescriptions(editor) {
   }
 
   try {
-    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')));
+    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')), editor);
   } catch (err) {
     throw new Error(`Could not read legacy API snapshot ${snapshotPath}: ${err.message}`);
   }
@@ -326,10 +326,20 @@ const DOCS_SECTIONS = {
   Pdf: 'pdf-api',
 };
 
-function parseSeeEntry(see) {
-  for (const entry of (Array.isArray(see) ? see : [see])) {
-    const match = /Examples\/([A-Za-z]+)\/([A-Za-z0-9_]+)\/Methods\/([A-Za-z0-9_]+)\.js/
-      .exec(String(entry || ''));
+// sdkjs writes the editor segment as a literal `{Editor}` placeholder
+// (`office-js-api/Examples/{Editor}/Api/Methods/GetDocument.js`) which the docs pipeline fills in
+// per editor. Without substituting it here the path simply failed to parse, so `docsUrl` came from
+// the pinned snapshot instead of from sdkjs - which is why PDF, the one editor with no snapshot, had
+// no documentation links at all despite sdkjs carrying 536 such paths for it. `Editor` is the
+// generator's current editor; `Forms` maps to the form-api section, which is where the docs put
+// every Forms class that has methods of its own.
+const EDITOR_SEGMENT = { word: 'Word', cell: 'Cell', slide: 'Slide', forms: 'Forms', pdf: 'Pdf' };
+
+function parseSeeEntry(see, editor) {
+  const placeholder = EDITOR_SEGMENT[editor];
+  for (const raw of (Array.isArray(see) ? see : [see])) {
+    const entry = String(raw || '').replace(/\{Editor\}/g, placeholder || '');
+    const match = /Examples\/([A-Za-z]+)\/([A-Za-z0-9_]+)\/Methods\/([A-Za-z0-9_]+)\.js/.exec(entry);
     // "Enumerations" is a real segment here, but typedefs have no per-editor reference page.
     if (match && DOCS_SECTIONS[match[1]]) {
       return { section: DOCS_SECTIONS[match[1]], className: match[2], methodName: match[3] };
@@ -338,16 +348,16 @@ function parseSeeEntry(see) {
   return null;
 }
 
-function methodDocsUrl(see) {
-  const parsed = parseSeeEntry(see);
+function methodDocsUrl(see, editor) {
+  const parsed = parseSeeEntry(see, editor);
   // A `constructor.js` example documents the class itself, not a callable member - the reference
   // site has no /Methods/constructor/ page for it.
   if (!parsed || parsed.methodName === 'constructor') return '';
   return `${DOCS_BASE}/${parsed.section}/${parsed.className}/Methods/${parsed.methodName}/`;
 }
 
-function classDocsUrl(see) {
-  const parsed = parseSeeEntry(see);
+function classDocsUrl(see, editor) {
+  const parsed = parseSeeEntry(see, editor);
   return parsed ? `${DOCS_BASE}/${parsed.section}/${parsed.className}/` : '';
 }
 
@@ -383,7 +393,7 @@ function buildOverloadParams(params, ownOptional) {
   return [requiredOnly, anchored];
 }
 
-function extractClasses(data) {
+function extractClasses(data, editor) {
   const classes = {};
 
   for (const item of data) {
@@ -393,7 +403,7 @@ function extractClasses(data) {
         description: item.description || '',
         since: item.since || '',
         deprecated: item.deprecated || '',
-        docsUrl: classDocsUrl(item.see),
+        docsUrl: classDocsUrl(item.see, editor),
         // sdkjs classes commonly do `ApiOleObject.prototype = Object.create(ApiDrawing.prototype)`
         // and JSDoc-tag the relationship with `@extends {ApiDrawing}` (-> `augments` here) -
         // without modeling that as a real TS `extends`, every method tagged `@memberof ApiDrawing`
@@ -464,7 +474,7 @@ function extractClasses(data) {
           returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
           since: item.since || '',
           deprecated: item.deprecated || '',
-          docsUrl: methodDocsUrl(item.see),
+          docsUrl: methodDocsUrl(item.see, editor),
           see: item.see || [],
         };
       }
@@ -490,7 +500,7 @@ function extractClasses(data) {
   for (const classData of Object.values(classes)) {
     if (classData.docsUrl) continue;
     for (const method of Object.values(classData.methods)) {
-      const url = classDocsUrl(method.see);
+      const url = classDocsUrl(method.see, editor);
       if (url) {
         classData.docsUrl = url;
         break;
@@ -672,9 +682,16 @@ function renderJsDoc(doc, indent) {
   }
   if (tags.length > 0) blocks.push(tags);
 
-  for (const example of examples) {
-    blocks.push(['@example', '```js', ...example.split('\n').map((line) => line.trimEnd()), '```']);
-  }
+  // Examples are deliberately NOT emitted into the declarations - they go to `dist/api/` instead
+  // (see buildApiIndexSection, which reads the same `examples` off this description).
+  //
+  // They were 47% of the generated .d.ts by size, and that weight bought little where it landed: a
+  // multi-kilobyte snippet is unreadable in a hover tooltip, and an agent reading the .d.ts spends
+  // half its budget on them. Every member that has an example also has a verified `docsUrl` (2712 of
+  // 2712 measured), so the hover keeps the description, `@param`/`@returns`, `@since` and a one-click
+  // link to the full example - while the JSON tree, where per-class files make size a non-issue,
+  // keeps the code itself for the consumer that actually benefits from having it inline.
+  void examples;
   if (doc.docsUrl) blocks.push([`@see ${doc.docsUrl}`]);
 
   if (blocks.length === 0) return '';
@@ -1034,7 +1051,7 @@ function generateDtsFile(data, typeName, namespaceName, legacy) {
   let body = '';
 
   const typedefs = extractTypedefs(data);
-  const classes = extractClasses(data);
+  const classes = extractClasses(data, typeName);
   applyLegacyDescriptions(classes, typedefs, legacy);
 
   const typedefNames = Object.keys(typedefs).sort();

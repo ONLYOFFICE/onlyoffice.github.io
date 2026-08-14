@@ -1,5 +1,6 @@
 {
   "description": "Adds a new combo box content control to the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddComboBoxContentControl/",
   "params": [
     {
       "description": "An array of objects representing the items in the combo box.",

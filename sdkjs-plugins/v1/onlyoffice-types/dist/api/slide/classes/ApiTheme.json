@@ -1,5 +1,6 @@
 {
   "description": "Class representing a presentation theme.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/",
   "methods": {
     "GetClassType": {
       "description": "Returns the type of the ApiTheme class.",

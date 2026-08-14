@@ -1,5 +1,6 @@
 {
   "description": "Class representing a Paragraph hyperlink.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiHyperlink/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiHyperlink class.",

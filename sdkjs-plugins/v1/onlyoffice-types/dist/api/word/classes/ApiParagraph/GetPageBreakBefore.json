@@ -1,5 +1,6 @@
 {
   "description": "Returns the page break before value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetPageBreakBefore/",
   "params": [],
   "returns": {
     "description": "Returns _true_ if the paragraph is rendered at the beginning of a new page,\r_false_ if it is not, or _undefined_ if the value is not set.",

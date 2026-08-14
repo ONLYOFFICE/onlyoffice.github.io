@@ -1,5 +1,6 @@
 {
   "description": "Class representing a shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/",
   "extends": [
     "ApiDrawing"
   ],
@@ -42,6 +43,7 @@
     },
     "GetGeometry": {
       "description": "Returns the geometry object from the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/GetGeometry/",
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -51,6 +53,7 @@
     },
     "GetLine": {
       "description": "Gets the outline properties from the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/GetLine/",
       "params": [],
       "returns": {
         "type": "ApiStroke | null"
@@ -59,6 +62,7 @@
     },
     "GetParentSheet": {
       "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"
@@ -68,6 +72,7 @@
     },
     "GetVerticalTextAlign": {
       "description": "Gets the vertical alignment from the shape content where a paragraph or text runs can be inserted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/GetVerticalTextAlign/",
       "params": [],
       "returns": {
         "type": "VerticalTextAlign"
@@ -76,6 +81,7 @@
     },
     "SetGeometry": {
       "description": "Sets a custom geometry for the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/SetGeometry/",
       "params": [
         {
           "description": "The geometry to set.",
@@ -91,6 +97,7 @@
     },
     "SetLine": {
       "description": "Sets the outline properties to the current shape.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiShape/Methods/SetLine/",
       "params": [
         {
           "description": "The stroke used to create the shape outline.",

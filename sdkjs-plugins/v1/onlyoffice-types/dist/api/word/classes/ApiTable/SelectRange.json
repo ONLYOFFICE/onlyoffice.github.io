@@ -1,5 +1,6 @@
 {
   "description": "Selects a range of cells in the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SelectRange/",
   "params": [
     {
       "description": "The start cell index within the start row.",

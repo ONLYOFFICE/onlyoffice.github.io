@@ -1,11 +1,13 @@
 {
   "description": "Class representing a small text block called 'run'.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/",
   "extends": [
     "ApiRichTextPr"
   ],
   "methods": {
     "Copy": {
       "description": "Creates a copy of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/Methods/Copy/",
       "params": [],
       "returns": {
         "type": "ApiRichRun"
@@ -14,6 +16,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiRichRun class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"richRun\""
@@ -22,6 +25,7 @@
     },
     "GetParentParagraph": {
       "description": "Returns a parent paragraph of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/Methods/GetParentParagraph/",
       "params": [],
       "returns": {
         "type": "ApiRichParagraph"
@@ -30,6 +34,7 @@
     },
     "GetTextPr": {
       "description": "Returns the text properties of the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/Methods/GetTextPr/",
       "params": [],
       "returns": {
         "type": "ApiRichTextPr"
@@ -38,6 +43,7 @@
     },
     "SetTextPr": {
       "description": "Sets the text properties to the current run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichRun/Methods/SetTextPr/",
       "params": [
         {
           "description": "The text properties that will be set to the current run.",

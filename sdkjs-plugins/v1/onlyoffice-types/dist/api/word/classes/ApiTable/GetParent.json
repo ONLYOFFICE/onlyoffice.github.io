@@ -1,5 +1,6 @@
 {
   "description": "Returns the document content that contains the current table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetParent/",
   "params": [],
   "returns": {
     "description": "returns the main document, a document part (table cell, header/footer, footnote, etc.), or null if the table has no parent.",

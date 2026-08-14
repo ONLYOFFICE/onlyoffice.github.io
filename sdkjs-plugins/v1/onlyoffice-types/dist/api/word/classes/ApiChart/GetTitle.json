@@ -1,5 +1,6 @@
 {
   "description": "Returns the chart title text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetTitle/",
   "params": [],
   "returns": {
     "description": "The chart title text or null if the chart has no title.",

@@ -1,8 +1,10 @@
 {
   "description": "Class representing a single icon criterion.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/",
   "methods": {
     "GetIcon": {
       "description": "Returns the icon associated with the current icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetIcon/",
       "params": [],
       "returns": {
         "description": "The icon constant, or null if not available.",
@@ -13,6 +15,7 @@
     },
     "GetIndex": {
       "description": "Returns the index of the icon criterion in the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetIndex/",
       "params": [],
       "returns": {
         "description": "The 1-based index of the icon criterion.",
@@ -23,6 +26,7 @@
     },
     "GetOperator": {
       "description": "Returns the comparison operator of the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetOperator/",
       "params": [],
       "returns": {
         "description": "The operator (\"xlGreaterEqual\" or \"xlGreater\"), or null if not available.",
@@ -33,6 +37,7 @@
     },
     "GetType": {
       "description": "Returns the condition value type for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetType/",
       "params": [],
       "returns": {
         "description": "The condition value type, or null if not available.",
@@ -43,6 +48,7 @@
     },
     "GetValue": {
       "description": "Returns the threshold value for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/GetValue/",
       "params": [],
       "returns": {
         "description": "The threshold value, or null if not available.",
@@ -53,6 +59,7 @@
     },
     "SetIcon": {
       "description": "Sets the icon for the current icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetIcon/",
       "params": [
         {
           "description": "The icon constant to set.",
@@ -68,6 +75,7 @@
     },
     "SetOperator": {
       "description": "Sets the comparison operator for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetOperator/",
       "params": [
         {
           "description": "The operator to set (\"xlGreaterEqual\" or \"xlGreater\").",
@@ -83,6 +91,7 @@
     },
     "SetType": {
       "description": "Sets the condition value type for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetType/",
       "params": [
         {
           "description": "The condition value type. Only \"xlConditionValueNumber\", \"xlConditionValuePercent\", \"xlConditionValuePercentile\", or \"xlConditionValueFormula\" are supported.",
@@ -98,6 +107,7 @@
     },
     "SetValue": {
       "description": "Sets the threshold value for the icon criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconCriterion/Methods/SetValue/",
       "params": [
         {
           "description": "The threshold value to set.",

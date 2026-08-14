@@ -1,5 +1,6 @@
 {
   "description": "Class representing a small text block called 'run'.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/",
   "extends": [
     "ApiTextPr"
   ],
@@ -308,7 +309,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetBold/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetBold/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetBold(true);\nrun.AddText(\"This is a text run with the font set to bold.\");\nparagraph.AddElement(run);"
       ],
@@ -327,7 +328,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetCaps/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetCaps(true);\nrun.AddText(\"This is a text run with the font set to capitalized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -346,7 +347,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetDoubleStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetDoubleStrikeout/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetDoubleStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with two lines.\");\nparagraph.AddElement(run);"
       ],
@@ -365,7 +366,7 @@
     },
     "SetFill": {
       "description": "Sets the text color to the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetFill/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetFill/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nfill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\nrun.SetFill(fill);\nrun.AddText(\"This is a text run with the font color set to gray.\");\nparagraph.AddElement(run);"
       ],
@@ -384,7 +385,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetFontFamily/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetFontFamily/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontFamily(\"Comic Sans MS\");\nrun.AddText(\"This is a text run with the font family set to 'Comic Sans MS'.\");\nparagraph.AddElement(run);"
       ],
@@ -403,7 +404,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current text run.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetFontSize/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetFontSize/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetFontSize(30);\nrun.AddText(\"This is a text run with the font size set to 15 points (30 half-points).\");\nparagraph.AddElement(run);"
       ],
@@ -422,7 +423,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetItalic/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetItalic/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetItalic(true);\nrun.AddText(\"This is a text run with the font set to italicized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -460,7 +461,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetSmallCaps/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetSmallCaps/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSmallCaps(true);\nrun.AddText(\"This is a text run with the font set to small capitalized letters.\");\nparagraph.AddElement(run);"
       ],
@@ -479,7 +480,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetSpacing/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetSpacing/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetSpacing(80);\nrun.AddText(\"This is a text run with the text spacing set to 4 points (20 twentieths of a point).\");\nparagraph.AddElement(run);"
       ],
@@ -498,7 +499,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetStrikeout/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetStrikeout/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStrikeout(true);\nrun.AddText(\"This is a text run with the text struck out with a single line.\");\nparagraph.AddElement(run);"
       ],
@@ -554,7 +555,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetUnderline/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetUnderline/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetUnderline(true);\nrun.AddText(\"This is a text run with the text underlined with a single line.\");\nparagraph.AddElement(run);"
       ],
@@ -573,7 +574,7 @@
     },
     "SetVertAlign": {
       "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRun/Methods/SetVertAlign/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTextPr/Methods/SetVertAlign/",
       "examples": [
         "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"subscript\");\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"baseline\");\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetVertAlign(\"superscript\");\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);"
       ],

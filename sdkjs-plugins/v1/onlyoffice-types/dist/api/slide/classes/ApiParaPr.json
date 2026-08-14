@@ -1,5 +1,6 @@
 {
   "description": "Class representing the paragraph properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiParaPr class.",
@@ -127,6 +128,7 @@
     },
     "GetTabs": {
       "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetTabs/",
       "params": [],
       "returns": {
         "type": "TabStop[]"

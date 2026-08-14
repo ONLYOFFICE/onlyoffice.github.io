@@ -1,8 +1,10 @@
 {
   "description": "Class representing a single header or footer section (left, center or right) of a page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHeaderFooter/",
   "methods": {
     "GetText": {
       "description": "Returns the text of this header or footer section.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHeaderFooter/Methods/GetText/",
       "params": [],
       "returns": {
         "description": "The section text (may contain formatting codes such as &P, &D).",
@@ -13,6 +15,7 @@
     },
     "SetText": {
       "description": "Sets the text of this header or footer section, preserving the other two sections.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiHeaderFooter/Methods/SetText/",
       "params": [
         {
           "description": "The section text (may contain formatting codes such as &P, &D).",

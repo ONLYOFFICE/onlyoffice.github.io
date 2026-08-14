@@ -1,5 +1,6 @@
 {
   "description": "Class representing the table cell properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableCellPr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiTableCellPr class.",

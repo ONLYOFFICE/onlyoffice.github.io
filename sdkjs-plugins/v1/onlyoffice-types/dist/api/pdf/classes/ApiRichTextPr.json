@@ -1,8 +1,10 @@
 {
   "description": "Class representing the rich text properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichTextPr/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiRichTextPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichTextPr/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"richTextPr\""

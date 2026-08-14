@@ -1,8 +1,10 @@
 {
   "description": "Class representing a single AutoFilter column.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/",
   "methods": {
     "GetCriteria1": {
       "description": "Returns the first criteria associated with the filter for this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetCriteria1/",
       "params": [],
       "returns": {
         "description": "The first criteria for the filter.",
@@ -12,6 +14,7 @@
     },
     "GetCriteria2": {
       "description": "Returns the second criteria associated with the filter for this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetCriteria2/",
       "params": [],
       "returns": {
         "description": "The second criteria for the filter, or null if not applicable.",
@@ -21,6 +24,7 @@
     },
     "GetOn": {
       "description": "Indicates whether any filter is applied on this column.\n\nThe property is true when at least one of the following underlying\nstructures is present for the column:\n- Filters\n- CustomFiltersObj\n- DynamicFilter\n- ColorFilter\n- Top10",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetOn/",
       "params": [],
       "returns": {
         "description": "True if a filter is applied; otherwise, false.",
@@ -30,6 +34,7 @@
     },
     "GetOperator": {
       "description": "Returns the operator used for the filter on this column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetOperator/",
       "params": [],
       "returns": {
         "description": "The operator for the current filter.",
@@ -39,6 +44,7 @@
     },
     "GetParent": {
       "description": "Returns the parent filters collection for this filter column.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFilter/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "The parent filters collection.",

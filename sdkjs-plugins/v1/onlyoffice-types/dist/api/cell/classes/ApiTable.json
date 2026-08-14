@@ -1,5 +1,6 @@
 {
   "description": "Class representing a table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/",
   "extends": [
     "ApiDrawing",
     "ApiTablePr"
@@ -7,6 +8,7 @@
   "methods": {
     "GetParentSheet": {
       "description": "Returns the parent sheet of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"

@@ -1,5 +1,6 @@
 {
   "description": "Moves the cursor to the right.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorRight/",
   "params": [
     {
       "description": "Number of movements.",

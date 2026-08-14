@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base pdf action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAction/",
   "methods": {
     "GetNext": {
       "description": "Returns next action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAction/Methods/GetNext/",
       "params": [],
       "returns": {
         "type": "ApiBaseAction"
@@ -11,6 +13,7 @@
     },
     "SetNext": {
       "description": "Sets next action.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseAnnotation/Methods/SetNext/",
       "params": [
         {
           "name": "action",

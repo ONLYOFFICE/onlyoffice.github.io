@@ -1,5 +1,6 @@
 {
   "description": "Adds a new checkbox content control to the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddCheckBoxContentControl/",
   "params": [
     {
       "description": "The configuration object for the checkbox.",

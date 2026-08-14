@@ -1,5 +1,6 @@
 {
   "description": "Returns the current run where the cursor is located.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetCurrentRun/",
   "params": [],
   "returns": {
     "type": "ApiRun"

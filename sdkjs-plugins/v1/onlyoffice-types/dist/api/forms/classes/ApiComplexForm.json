@@ -1,11 +1,13 @@
 {
   "description": "Class representing a complex field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/",
   "extends": [
     "ApiFormBase"
   ],
   "methods": {
     "Add": {
       "description": "Appends the text content of the given form to the end of the current complex form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/Add/",
       "params": [
         {
           "description": "The text or the form to add.",
@@ -21,7 +23,7 @@
     },
     "Clear": {
       "description": "Clears the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Clear/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"John Smith\");\ntextForm.Clear();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document was cleared.\");\ndoc.Push(paragraph);"
       ],
@@ -33,6 +35,7 @@
     },
     "ClearContent": {
       "description": "Clears all content from the current complex form, resetting it to its placeholder state.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/ClearContent/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -42,7 +45,7 @@
     },
     "Copy": {
       "description": "Copies the current form (copies with the shape if it exists).",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Copy/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet copyTextForm = textForm.Copy();\nparagraph.AddLineBreak();\nparagraph.AddElement(copyTextForm);"
       ],
@@ -54,6 +57,7 @@
     },
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/",
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -70,6 +74,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -79,6 +84,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -88,7 +94,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiComplexForm class.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetClassType/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet classType = textForm.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
@@ -101,7 +107,7 @@
     },
     "GetFormKey": {
       "description": "Returns the current form key.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormKey/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/",
       "examples": [
         "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet key = comboBoxForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
       ],
@@ -113,7 +119,7 @@
     },
     "GetFormType": {
       "description": "Returns a type of the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetFormType/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet formType = textForm.GetFormType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form type: \" + formType);\ndoc.Push(paragraph);"
       ],
@@ -125,6 +131,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -134,6 +141,7 @@
     },
     "GetLock": {
       "description": "Returns the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -143,6 +151,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the form has no parent.",
@@ -153,6 +162,7 @@
     },
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -162,6 +172,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current form within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the form has no parent.",
@@ -172,6 +183,7 @@
     },
     "GetRole": {
       "description": "Returns the role of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/",
       "params": [],
       "returns": {
         "type": "string"
@@ -181,6 +193,7 @@
     },
     "GetSubForms": {
       "description": "Returns an ordered list of subforms.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetSubForms/",
       "params": [],
       "returns": {
         "type": "ApiForm[]"
@@ -190,6 +203,7 @@
     },
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/",
       "params": [],
       "returns": {
         "type": "string"
@@ -199,7 +213,7 @@
     },
     "GetText": {
       "description": "Returns the text from the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetText/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet text = textForm.GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form text: \" + text);\ndoc.Push(paragraph);"
       ],
@@ -211,7 +225,7 @@
     },
     "GetTextPr": {
       "description": "Returns the text properties from the current form.\n*Used if possible for this type of form*",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTextPr/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);\nlet formTextPr = textForm.GetTextPr();\nformTextPr.SetItalic(true);\ntextForm.SetTextPr(formTextPr);"
       ],
@@ -223,7 +237,7 @@
     },
     "GetTipText": {
       "description": "Returns the tip text of the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTipText/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/",
       "examples": [
         "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet tipText = comboBoxForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form tip text: \" + tipText);\ndoc.Push(paragraph);"
       ],
@@ -235,6 +249,7 @@
     },
     "GetValue": {
       "description": "Returns the current text value of the complex form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiComplexForm/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "string"
@@ -244,7 +259,7 @@
     },
     "GetWrapperShape": {
       "description": "Returns a shape in which the form is placed to control the position and size of the fixed size form frame.\nThe null value will be returned for the inline forms.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetWrapperShape/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet shape = textForm.GetWrapperShape();\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nshape.SetOutLine(stroke);"
       ],
@@ -257,6 +272,7 @@
     },
     "IsFilled": {
       "description": "Checks if the current form is filled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -266,7 +282,7 @@
     },
     "IsFixed": {
       "description": "Checks if the current form is fixed size.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFixed/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is fixed: \" + fixed);\ndoc.Push(paragraph);"
       ],
@@ -278,7 +294,7 @@
     },
     "IsRequired": {
       "description": "Checks if the current form is required.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsRequired/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
       ],
@@ -290,7 +306,7 @@
     },
     "MoveCursorOutside": {
       "description": "Places a cursor before/after the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/MoveCursorOutside/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"The cursor will be placed after the current form.\");\ntextForm.MoveCursorOutside(true);"
       ],
@@ -310,7 +326,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color to the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBackgroundColor/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBackgroundColor(255, 111, 61);"
       ],
@@ -330,7 +346,7 @@
     },
     "SetBorderColor": {
       "description": "Sets the border color to the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetBorderColor/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBorderColor(255, 111, 61);"
       ],
@@ -350,7 +366,7 @@
     },
     "SetFormKey": {
       "description": "Sets a key to the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetFormKey/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetFormKey(\"Personal information\");\nlet key = textForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
       ],
@@ -368,6 +384,7 @@
     },
     "SetLock": {
       "description": "Sets the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/",
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -384,7 +401,7 @@
     },
     "SetPlaceholderText": {
       "description": "Sets the placeholder text to the current form.\n*Can't be set to checkbox or radio button.*",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetPlaceholderText/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetPlaceholderText(\"First name\");"
       ],
@@ -402,7 +419,7 @@
     },
     "SetRequired": {
       "description": "Specifies if the current form should be required.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRequired/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetRequired(true);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
       ],
@@ -420,6 +437,7 @@
     },
     "SetRole": {
       "description": "Sets the role to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/",
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -435,6 +453,7 @@
     },
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/",
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -450,7 +469,7 @@
     },
     "SetTextPr": {
       "description": "Sets the text properties to the current form.\n*Used if possible for this type of form*",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTextPr/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);"
       ],
@@ -468,7 +487,7 @@
     },
     "SetTipText": {
       "description": "Sets the tip text to the current form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTipText/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetTipText(\"Enter your first name\");\nlet tipText = textForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tip text: \" + tipText);\ndoc.Push(paragraph);"
       ],
@@ -486,6 +505,7 @@
     },
     "SetValue": {
       "description": "Sets the value of the form field.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/",
       "params": [
         {
           "description": "The value to set.",
@@ -501,7 +521,7 @@
     },
     "ToFixed": {
       "description": "Converts the current form to a fixed size form.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToFixed/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\ndoc.Push(paragraph);"
       ],
@@ -529,7 +549,7 @@
     },
     "ToInline": {
       "description": "Converts the current form to an inline form.\n*Picture form can't be converted to an inline form, it's always a fixed size object.*",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/ToInline/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet copyForm = textForm.Copy();\nparagraph = Api.CreateParagraph();\nparagraph.AddElement(copyForm);\ndoc.Push(paragraph);\ncopyForm.ToInline();\nlet fixed = textForm.IsFixed();\nlet fixedCopy = copyForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\nparagraph.AddLineBreak();\nparagraph.AddText(\"The second form from this document has a fixed size: \" + fixedCopy);\ndoc.Push(paragraph);"
       ],

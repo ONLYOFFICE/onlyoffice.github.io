@@ -1,8 +1,10 @@
 {
   "description": "Class representing a slide.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/",
   "methods": {
     "AddComment": {
       "description": "Adds a comment to the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddComment/",
       "params": [
         {
           "description": "The X position (in EMU) of the comment (defaults to 0).",
@@ -39,6 +41,7 @@
     },
     "AddNotesText": {
       "description": "Adds a text to the notes page of the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddNotesText/",
       "params": [
         {
           "description": "The text to be added to the notes page.",
@@ -257,6 +260,7 @@
     },
     "GetAllTables": {
       "description": "Returns an array with all tables from the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllTables/",
       "params": [],
       "returns": {
         "description": "An array with all tables from the current slide.",
@@ -267,6 +271,7 @@
     },
     "GetBackground": {
       "description": "Returns the background fill of the current presentation slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetBackground/",
       "params": [],
       "returns": {
         "description": "returns null if the slide doesn't exist or has no background fill.",
@@ -333,6 +338,7 @@
     },
     "GetNotesPage": {
       "description": "Returns the notes page from the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetNotesPage/",
       "params": [],
       "returns": {
         "type": "ApiNotesPage | null"
@@ -355,6 +361,7 @@
     },
     "GetSlideShowTransition": {
       "description": "Returns the slide show transition of the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetSlideShowTransition/",
       "params": [],
       "returns": {
         "description": "Returns the slide show transition or null if the slide has no transition.",
@@ -378,6 +385,7 @@
     },
     "GetTimeLine": {
       "description": "Returns the animation timeline for the slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetTimeLine/",
       "params": [],
       "returns": {
         "description": "The animation timeline for the slide.",
@@ -487,6 +495,7 @@
     },
     "Search": {
       "description": "Searches for the specified text within the current slide and returns all found occurrences as text ranges.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Search/",
       "params": [
         {
           "description": "The text to search for.",
@@ -542,6 +551,7 @@
     },
     "SetSlideShowTransition": {
       "description": "Sets the slide show transition to the current slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetSlideShowTransition/",
       "params": [
         {
           "description": "The slide show transition to be applied.",

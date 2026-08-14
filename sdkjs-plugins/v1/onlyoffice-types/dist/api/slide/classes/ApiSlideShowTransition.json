@@ -1,8 +1,10 @@
 {
   "description": "Class representing a slide show transition.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/",
   "methods": {
     "GetAdvanceOnClick": {
       "description": "Returns whether the slide advances on mouse click.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceOnClick/",
       "params": [],
       "returns": {
         "description": "True if the slide advances on mouse click; otherwise false.",
@@ -13,6 +15,7 @@
     },
     "GetAdvanceOnTime": {
       "description": "Returns whether the slide advances after a specified time.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceOnTime/",
       "params": [],
       "returns": {
         "description": "True if the slide advances after a specified time; otherwise false.",
@@ -23,6 +26,7 @@
     },
     "GetAdvanceTime": {
       "description": "Returns the slide advance time in milliseconds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetAdvanceTime/",
       "params": [],
       "returns": {
         "description": "The slide advance time in milliseconds if set; otherwise undefined.",
@@ -33,6 +37,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiSlideShowTransition class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"slideShowTransition\""
@@ -42,6 +47,7 @@
     },
     "GetDuration": {
       "description": "Returns the transition duration in milliseconds for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetDuration/",
       "params": [],
       "returns": {
         "description": "The transition duration in milliseconds.",
@@ -52,6 +58,7 @@
     },
     "GetEntryEffect": {
       "description": "Returns the entry effect for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetEntryEffect/",
       "params": [],
       "returns": {
         "description": "The name of the entry effect in string format.",
@@ -62,6 +69,7 @@
     },
     "GetSpeed": {
       "description": "Returns the transition speed (similar to PowerPoint VBA Speed property).\nMaps duration to speed based on OOXML spd attribute logic:\n- fast: duration <= 500ms\n- medium: 500ms < duration <= 750ms\n- slow: duration > 750ms",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/GetSpeed/",
       "params": [],
       "returns": {
         "description": "The transition speed in string format.",
@@ -72,6 +80,7 @@
     },
     "SetAdvanceOnClick": {
       "description": "Sets whether the slide advances on mouse click.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceOnClick/",
       "params": [
         {
           "description": "True to advance the slide on mouse click; otherwise false.",
@@ -88,6 +97,7 @@
     },
     "SetAdvanceOnTime": {
       "description": "Sets whether the slide advances after a specified time.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceOnTime/",
       "params": [
         {
           "description": "True to advance the slide after a specified time; otherwise false.",
@@ -104,6 +114,7 @@
     },
     "SetAdvanceTime": {
       "description": "Sets the slide advance time in milliseconds.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetAdvanceTime/",
       "params": [
         {
           "description": "The slide advance time in milliseconds.",
@@ -120,6 +131,7 @@
     },
     "SetDuration": {
       "description": "Sets the transition duration in milliseconds for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetDuration/",
       "params": [
         {
           "description": "The transition duration in milliseconds.",
@@ -136,6 +148,7 @@
     },
     "SetEntryEffect": {
       "description": "Sets the entry effect for the slide show transition.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetEntryEffect/",
       "params": [
         {
           "description": "The name of the entry effect in string format.",
@@ -152,6 +165,7 @@
     },
     "SetSpeed": {
       "description": "Sets the transition speed (similar to PowerPoint VBA Speed property).\nConverts speed to duration based on standard values:\n- fast = 500ms\n- medium = 750ms\n- slow = 1000ms",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlideShowTransition/Methods/SetSpeed/",
       "params": [
         {
           "description": "The transition speed in string format.",

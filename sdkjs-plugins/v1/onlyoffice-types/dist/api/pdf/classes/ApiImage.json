@@ -1,11 +1,13 @@
 {
   "description": "Class representing an image.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiImage/",
   "extends": [
     "ApiDrawing"
   ],
   "methods": {
     "GetClassType": {
       "description": "Returns the type of the ApiImage class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiImage/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"image\""
@@ -14,6 +16,7 @@
     },
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -22,6 +25,7 @@
     },
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -30,6 +34,7 @@
     },
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -38,6 +43,7 @@
     },
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -52,6 +58,7 @@
     },
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -66,6 +73,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",

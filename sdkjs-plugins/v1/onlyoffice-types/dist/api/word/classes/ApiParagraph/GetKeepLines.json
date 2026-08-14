@@ -1,5 +1,6 @@
 {
   "description": "Returns the keep lines value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepLines/",
   "params": [],
   "returns": {
     "description": "Returns _true_ if all lines of the paragraph are kept on a single page,\r_false_ if they are not, or _undefined_ if the value is not set.",

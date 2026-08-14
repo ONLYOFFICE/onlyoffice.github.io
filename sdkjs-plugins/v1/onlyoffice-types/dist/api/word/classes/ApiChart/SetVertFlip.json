@@ -1,5 +1,6 @@
 {
   "description": "Flips the current drawing vertically.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVertFlip/",
   "params": [
     {
       "description": "Specifies if the figure will be flipped vertically or not.",

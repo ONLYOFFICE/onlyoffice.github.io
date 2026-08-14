@@ -1,5 +1,6 @@
 {
   "description": "Returns the current paragraph where the cursor is located.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
   "params": [],
   "returns": {
     "type": "ApiParagraph"

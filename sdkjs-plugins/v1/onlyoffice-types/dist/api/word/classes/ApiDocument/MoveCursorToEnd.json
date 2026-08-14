@@ -1,5 +1,6 @@
 {
   "description": "Moves a cursor to the end of the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorToEnd/",
   "params": [],
   "returns": {
     "type": "boolean"

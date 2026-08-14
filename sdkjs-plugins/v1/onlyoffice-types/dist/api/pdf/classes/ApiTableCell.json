@@ -1,8 +1,10 @@
 {
   "description": "Class representing a table cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/",
   "methods": {
     "AddText": {
       "description": "Appends text to the end of the cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/AddText/",
       "params": [
         {
           "description": "The text to append.",
@@ -18,6 +20,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor | null"
@@ -27,6 +30,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiTableCell class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"tableCell\""
@@ -35,6 +39,7 @@
     },
     "GetContent": {
       "description": "Returns the current cell content.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetContent/",
       "params": [],
       "returns": {
         "type": "ApiDocumentContent"
@@ -43,6 +48,7 @@
     },
     "GetNext": {
       "description": "Returns the next cell if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetNext/",
       "params": [],
       "returns": {
         "description": "returns null if cell is last.",
@@ -53,6 +59,7 @@
     },
     "GetParentRow": {
       "description": "Returns a parent row of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetParentRow/",
       "params": [],
       "returns": {
         "description": "returns null if parent row doesn't exist.",
@@ -63,6 +70,7 @@
     },
     "GetParentTable": {
       "description": "Returns a parent table of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetParentTable/",
       "params": [],
       "returns": {
         "description": "returns null if parent table doesn't exist.",
@@ -73,6 +81,7 @@
     },
     "GetPrevious": {
       "description": "Returns the previous cell if exists.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetPrevious/",
       "params": [],
       "returns": {
         "description": "returns null is cell is first.",
@@ -83,6 +92,7 @@
     },
     "GetRowIndex": {
       "description": "Returns an index of the parent row.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetRowIndex/",
       "params": [],
       "returns": {
         "type": "number | null"
@@ -92,6 +102,7 @@
     },
     "GetText": {
       "description": "Returns the inner text of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -150,6 +161,7 @@
     },
     "Select": {
       "description": "Selects the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/Select/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -159,6 +171,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color of the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "If not passed, the background color will be cleared (see arguments below for RGB triplet form).",
@@ -175,6 +188,7 @@
     },
     "SetCellBorderBottom": {
       "description": "Sets the border which shall be displayed at the bottom of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderBottom/",
       "params": [
         {
           "description": "The width of the current border.",
@@ -194,6 +208,7 @@
     },
     "SetCellBorderLeft": {
       "description": "Sets the border which shall be displayed at the left of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderLeft/",
       "params": [
         {
           "description": "The width of the current border.",
@@ -213,6 +228,7 @@
     },
     "SetCellBorderRight": {
       "description": "Sets the border which shall be displayed at the right of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderRight/",
       "params": [
         {
           "description": "The width of the current border.",
@@ -232,6 +248,7 @@
     },
     "SetCellBorderTop": {
       "description": "Sets the border which shall be displayed at the top of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellBorderTop/",
       "params": [
         {
           "description": "The width of the current border.",
@@ -251,6 +268,7 @@
     },
     "SetCellMarginBottom": {
       "description": "Specifies an amount of space which shall be left between the bottom extent of the cell contents and the border\nof a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginBottom/",
       "params": [
         {
           "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell bottom margin with specified value for the current cell.",
@@ -265,6 +283,7 @@
     },
     "SetCellMarginLeft": {
       "description": "Specifies an amount of space which shall be left between the left extent of the current cell contents and the\nleft edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginLeft/",
       "params": [
         {
           "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell left margin with specified value for the current cell.",
@@ -279,6 +298,7 @@
     },
     "SetCellMarginRight": {
       "description": "Specifies an amount of space which shall be left between the right extent of the current cell contents and the\nright edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginRight/",
       "params": [
         {
           "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell right margin with specified value for the current cell.",
@@ -293,6 +313,7 @@
     },
     "SetCellMarginTop": {
       "description": "Specifies an amount of space which shall be left between the top extent of the current cell contents and the\ntop edge border of a specific individual table cell within a table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetCellMarginTop/",
       "params": [
         {
           "description": "The cell margin. If this value is `null`, the default margin is used.\rotherwise override the table cell top margin with specified value for the current cell.",
@@ -307,6 +328,7 @@
     },
     "SetColumnBackgroundColor": {
       "description": "Sets the background color to all cells in the column containing the current cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetColumnBackgroundColor/",
       "params": [
         {
           "description": "If not passed, the background color will be cleared.",
@@ -323,6 +345,7 @@
     },
     "SetShd": {
       "description": "Specifies the shading which shall be applied to the extents of the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetShd/",
       "params": [
         {
           "description": "The shading type or fill to apply.",
@@ -352,6 +375,7 @@
     },
     "SetText": {
       "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",
@@ -367,6 +391,7 @@
     },
     "SetTextDirection": {
       "description": "Specifies the direction of the text flow for the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetTextDirection/",
       "params": [
         {
           "description": "The text flow direction.",
@@ -381,6 +406,7 @@
     },
     "SetVerticalAlign": {
       "description": "Specifies the vertical alignment for text within the current table cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetVerticalAlign/",
       "params": [
         {
           "description": "The vertical alignment type.",
@@ -395,6 +421,7 @@
     },
     "SetWidth": {
       "description": "Specifies the preferred width for this cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableCell/Methods/SetWidth/",
       "params": [
         {
           "description": "The type of the width value.",

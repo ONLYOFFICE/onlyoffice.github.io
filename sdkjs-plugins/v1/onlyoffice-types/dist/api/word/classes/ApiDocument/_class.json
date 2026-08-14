@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/",
   "extends": [
     "ApiDocumentContent"
   ],

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a base class for fill.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiFill/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiFill class.",
@@ -15,6 +16,7 @@
     },
     "GetType": {
       "description": "Gets the fill type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiFill/Methods/GetType/",
       "params": [],
       "returns": {
         "description": "returns \"solid\", \"gradient\", \"pattern\", \"blip\", \"nofill\" or null.",

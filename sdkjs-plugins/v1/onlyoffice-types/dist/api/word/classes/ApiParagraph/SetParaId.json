@@ -1,5 +1,6 @@
 {
   "description": "Specifies a unique ID for the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetParaId/",
   "params": [
     {
       "description": "The numerical ID which will be specified for the current paragraph. Value MUST be greater than 0 and less than 0x80000000.",

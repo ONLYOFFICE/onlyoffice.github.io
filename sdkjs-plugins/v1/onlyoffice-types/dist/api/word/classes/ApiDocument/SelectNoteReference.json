@@ -1,5 +1,6 @@
 {
   "description": "Select the reference to this footnote/endnote. If this document content is not a footnote/endnote, do nothing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/SelectNoteReference/",
   "params": [],
   "returns": {
     "description": "Returns true if the reference was selected successfully.",

@@ -1,8 +1,10 @@
 {
   "description": "Class representing a hide-show action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiHideShowFormsAction class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"hideShowAction\""
@@ -11,6 +13,7 @@
     },
     "GetNames": {
       "description": "Gets names of fields to hide",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/Methods/GetNames/",
       "params": [],
       "returns": {
         "type": "string[]"
@@ -19,6 +22,7 @@
     },
     "IsHide": {
       "description": "Checks if action hide fields",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/Methods/IsHide/",
       "params": [],
       "returns": {
         "description": "if false then show fields",
@@ -28,6 +32,7 @@
     },
     "SetHide": {
       "description": "Sets action hide fields",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/Methods/SetHide/",
       "params": [
         {
           "name": "isHide",
@@ -41,6 +46,7 @@
     },
     "SetNames": {
       "description": "Sets names of fields to hide",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHideShowFormsAction/Methods/GetNames/",
       "params": [
         {
           "name": "names",

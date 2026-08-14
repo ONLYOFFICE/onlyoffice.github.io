@@ -1,8 +1,10 @@
 {
   "description": "Class representing a base class for the color types.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/",
   "methods": {
     "FromJSON": {
       "description": "Converts the JSON object into the ApiColor object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/FromJSON/",
       "params": [
         {
           "description": "JSON representation of the color.",
@@ -32,6 +34,7 @@
     },
     "GetHex": {
       "description": "Gets the HEX string representation of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/GetHex/",
       "params": [],
       "returns": {
         "description": "A six-digit uppercase hex string, e.g. \"FF00AA\".",
@@ -55,6 +58,7 @@
     },
     "GetRGBA": {
       "description": "Gets the RGBA components of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/GetRGBA/",
       "params": [],
       "returns": {
         "type": "object"
@@ -64,6 +68,7 @@
     },
     "GetThemeName": {
       "description": "Gets the theme color name if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/GetThemeName/",
       "params": [],
       "returns": {
         "description": "The theme color name or null if not a theme color.",
@@ -74,6 +79,7 @@
     },
     "IsThemeColor": {
       "description": "Returns true if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/IsThemeColor/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -83,6 +89,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiColor object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColor/Methods/ToJSON/",
       "params": [],
       "returns": {
         "description": "JSON string representation of the color.",

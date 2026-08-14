@@ -1,5 +1,6 @@
 {
   "description": "Class representing the numbering properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiNumbering/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiNumbering class.",

@@ -1,8 +1,10 @@
 {
   "description": "Class representing a notes page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/",
   "methods": {
     "AddBodyShapeText": {
       "description": "Adds a text to the body shape of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/AddBodyShapeText/",
       "params": [
         {
           "description": "The text to be added to the body shape.",
@@ -19,6 +21,7 @@
     },
     "GetBodyShape": {
       "description": "Returns a shape with the type=\"body\" attribute from the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetBodyShape/",
       "params": [],
       "returns": {
         "type": "ApiShape | null"
@@ -28,6 +31,7 @@
     },
     "GetBodyShapeText": {
       "description": "Returns the text from the body shape of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetBodyShapeText/",
       "params": [],
       "returns": {
         "description": "The text from the body shape.",
@@ -38,6 +42,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiNotesPage class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"notesPage\""
@@ -47,6 +52,7 @@
     },
     "GetTheme": {
       "description": "Returns a theme of the current notes page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiNotesPage/Methods/GetTheme/",
       "params": [],
       "returns": {
         "description": "Returns null if the notes page master or theme doesn't exist.",

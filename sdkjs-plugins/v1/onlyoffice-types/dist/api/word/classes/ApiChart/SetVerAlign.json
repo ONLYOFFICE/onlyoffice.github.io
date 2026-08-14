@@ -1,5 +1,6 @@
 {
   "description": "Specifies how the floating object will be vertically aligned.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVerAlign/",
   "params": [
     {
       "description": "The document element which will be taken as a countdown point for the object vertical alignment.",

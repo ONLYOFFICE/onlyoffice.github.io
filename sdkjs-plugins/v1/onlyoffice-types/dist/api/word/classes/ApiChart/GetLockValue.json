@@ -1,5 +1,6 @@
 {
   "description": "Returns the lock value for the specified lock type of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetLockValue/",
   "params": [
     {
       "description": "Lock type in the string format.",

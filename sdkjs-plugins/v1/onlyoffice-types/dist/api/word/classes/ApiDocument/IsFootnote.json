@@ -1,5 +1,6 @@
 {
   "description": "Check if the current document content is a footnote.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/IsFootnote/",
   "params": [],
   "returns": {
     "type": "boolean"

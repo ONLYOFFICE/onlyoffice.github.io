@@ -1,5 +1,6 @@
 {
   "description": "Returns the bottom border of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBottomBorder/",
   "params": [],
   "returns": {
     "description": "Returns the border properties object, or _undefined_ if the bottom border is not set.",

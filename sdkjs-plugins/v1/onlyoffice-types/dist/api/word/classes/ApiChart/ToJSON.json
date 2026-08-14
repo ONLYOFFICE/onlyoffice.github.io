@@ -1,5 +1,6 @@
 {
   "description": "Converts the ApiDrawing object into the JSON object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ToJSON/",
   "params": [
     {
       "description": "Specifies if the used numberings will be written to the JSON object or not.",

@@ -1,5 +1,6 @@
 {
   "description": "Return current table from the current document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetActiveTable/",
   "params": [],
   "returns": {
     "type": "ApiTable | null"

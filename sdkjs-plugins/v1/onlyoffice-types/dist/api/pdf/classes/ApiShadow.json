@@ -1,8 +1,10 @@
 {
   "description": "Class representing a shadow.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShadow/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiShadow class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShadow/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"shadow\""
@@ -11,6 +13,7 @@
     },
     "GetSettings": {
       "description": "Returns the settings of the current shadow.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShadow/Methods/GetSettings/",
       "params": [],
       "returns": {
         "type": "ShadowSettings"

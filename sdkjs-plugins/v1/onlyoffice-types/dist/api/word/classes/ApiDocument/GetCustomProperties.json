@@ -1,5 +1,6 @@
 {
   "description": "Retrieves the custom properties from the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCustomProperties/",
   "params": [],
   "returns": {
     "type": "ApiCustomProperties"

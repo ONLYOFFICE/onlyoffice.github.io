@@ -1,5 +1,6 @@
 {
   "description": "Returns the footnote or endnote content if the cursor is currently inside one, otherwise returns null.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentFootEndnote/",
   "params": [],
   "returns": {
     "type": "ApiDocumentContent"

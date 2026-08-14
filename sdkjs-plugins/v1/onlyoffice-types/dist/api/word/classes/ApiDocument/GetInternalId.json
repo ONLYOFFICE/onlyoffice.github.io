@@ -1,5 +1,6 @@
 {
   "description": "Returns an internal ID of the current document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetInternalId/",
   "params": [],
   "returns": {
     "type": "string"

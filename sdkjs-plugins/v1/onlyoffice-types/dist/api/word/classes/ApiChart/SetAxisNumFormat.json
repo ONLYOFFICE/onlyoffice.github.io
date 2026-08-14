@@ -1,5 +1,6 @@
 {
   "description": "Sets the specified numeric format to the axis values.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetAxisNumFormat/",
   "params": [
     {
       "description": "Numeric format (can be custom format).",

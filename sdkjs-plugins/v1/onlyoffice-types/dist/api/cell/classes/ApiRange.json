@@ -66,6 +66,7 @@
     },
     "ClearContents": {
       "description": "Clears all contents from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ClearContents/",
       "params": [],
       "returns": {
         "type": "void"
@@ -75,6 +76,7 @@
     },
     "ClearFormats": {
       "description": "Clears all formatting from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ClearFormats/",
       "params": [],
       "returns": {
         "type": "void"
@@ -84,6 +86,7 @@
     },
     "ClearHyperlinks": {
       "description": "Clears all hyperlinks from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ClearHyperlinks/",
       "params": [],
       "returns": {
         "type": "void"
@@ -319,6 +322,7 @@
     },
     "GetCellsCount": {
       "description": "Returns a number of cells in the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCellsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -406,6 +410,7 @@
     },
     "GetColumnsCount": {
       "description": "Returns a number of columns in the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetColumnsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -498,6 +503,7 @@
     },
     "GetFormatConditions": {
       "description": "Returns the collection of conditional formatting rules for the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetFormatConditions/",
       "params": [],
       "returns": {
         "type": "ApiFormatConditions"
@@ -520,6 +526,7 @@
     },
     "GetFormulaArray": {
       "description": "Returns an array formula from the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetFormulaArray/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -542,6 +549,7 @@
     },
     "GetHyperlinks": {
       "description": "Returns a collection of all the hyperlinks in the range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetHyperlinks/",
       "params": [],
       "returns": {
         "type": "ApiHyperlinks"
@@ -654,6 +662,7 @@
     },
     "GetRowsCount": {
       "description": "Returns a number of rows in the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRowsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -675,6 +684,7 @@
     },
     "GetValidation": {
       "description": "Returns the data validation object associated with this range. If no validation object exists yet, it will be created.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetValidation/",
       "params": [],
       "returns": {
         "type": "ApiValidation"
@@ -1122,6 +1132,7 @@
     },
     "SetFormulaArray": {
       "description": "Sets an array formula to the current range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetFormulaArray/",
       "params": [
         {
           "description": "The general value for the cell or cell range.",
@@ -1237,6 +1248,7 @@
     },
     "SetReadingOrder": {
       "description": "Sets the direction (reading order) of the text in the current cell range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetReadingOrder/",
       "params": [
         {
           "description": "The direction (reading order) that will be applied to the cell contents.",

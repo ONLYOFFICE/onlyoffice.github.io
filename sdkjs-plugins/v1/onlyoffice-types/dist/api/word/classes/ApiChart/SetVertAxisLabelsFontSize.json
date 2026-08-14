@@ -1,5 +1,6 @@
 {
   "description": "Specifies font size for labels of the vertical axis.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetVertAxisLabelsFontSize/",
   "params": [
     {
       "description": "The text size value measured in points.",

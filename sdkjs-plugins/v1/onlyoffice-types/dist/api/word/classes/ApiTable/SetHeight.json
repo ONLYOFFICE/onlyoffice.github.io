@@ -1,5 +1,6 @@
 {
   "description": "Sets the total height of the current table, distributing it evenly among the table rows.\nThe value is applied as a minimum height for each row, so a row can be taller if its content requires more space.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetHeight/",
   "params": [
     {
       "description": "The table height in English measure units.",

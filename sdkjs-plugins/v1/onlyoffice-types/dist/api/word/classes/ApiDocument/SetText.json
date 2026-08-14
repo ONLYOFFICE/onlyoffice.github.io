@@ -1,5 +1,6 @@
 {
   "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/SetText/",
   "params": [
     {
       "description": "The text to set.",

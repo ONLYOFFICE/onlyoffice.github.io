@@ -1,5 +1,6 @@
 {
   "description": "Creates a new paragraph and appends it to the end of the document content.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/AddParagraph/",
   "params": [],
   "returns": {
     "type": "ApiParagraph"

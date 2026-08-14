@@ -1,8 +1,10 @@
 {
   "description": "Class representing a path command.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/",
   "methods": {
     "GetHR": {
       "description": "Returns the height radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetHR/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -12,6 +14,7 @@
     },
     "GetStartAngle": {
       "description": "Returns the start angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetStartAngle/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -21,6 +24,7 @@
     },
     "GetSweepAngle": {
       "description": "Returns the sweep angle of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetSweepAngle/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -30,6 +34,7 @@
     },
     "GetType": {
       "description": "Returns the type of the current path command.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "PathCommandType"
@@ -39,6 +44,7 @@
     },
     "GetWR": {
       "description": "Returns the width radius of the arc.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetWR/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -48,6 +54,7 @@
     },
     "GetX": {
       "description": "Returns the X coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -57,6 +64,7 @@
     },
     "GetX0": {
       "description": "Returns the X coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX0/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -66,6 +74,7 @@
     },
     "GetX1": {
       "description": "Returns the X coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX1/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -75,6 +84,7 @@
     },
     "GetX2": {
       "description": "Returns the X coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetX2/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -84,6 +94,7 @@
     },
     "GetY": {
       "description": "Returns the Y coordinate for the \"moveTo\"/\"lineTo\" path commands.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -93,6 +104,7 @@
     },
     "GetY0": {
       "description": "Returns the Y coordinate of the first control point for the Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY0/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -102,6 +114,7 @@
     },
     "GetY1": {
       "description": "Returns the Y coordinate of the second control point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY1/",
       "params": [],
       "returns": {
         "type": "string | null"
@@ -111,6 +124,7 @@
     },
     "GetY2": {
       "description": "Returns the Y coordinate of the end point for the cubic Bezier curves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiPathCommand/Methods/GetY2/",
       "params": [],
       "returns": {
         "type": "string | null"

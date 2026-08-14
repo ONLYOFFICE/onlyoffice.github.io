@@ -1,5 +1,6 @@
 {
   "description": "Class representing a graphical object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/",
   "methods": {
     "AddBreak": {
       "description": "Inserts a break at the specified location in the main document.",
@@ -71,6 +72,7 @@
     },
     "GetAllowOverlap": {
       "description": "Returns whether the drawing object is allowed to overlap other drawing objects.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetAllowOverlap/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -101,6 +103,7 @@
     },
     "GetDescription": {
       "description": "Gets the description of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetDescription/",
       "params": [],
       "returns": {
         "description": "The description of the current drawing, or null if not set.",
@@ -111,6 +114,7 @@
     },
     "GetFill": {
       "description": "Gets the fill formatting properties from the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFill/",
       "params": [],
       "returns": {
         "type": "ApiFill | null"
@@ -120,6 +124,7 @@
     },
     "GetFlipH": {
       "description": "Get horizontal flip of current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipH/",
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
@@ -130,6 +135,7 @@
     },
     "GetFlipV": {
       "description": "Get vertical flip of current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipV/",
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
@@ -152,6 +158,7 @@
     },
     "GetLine": {
       "description": "Gets the outline properties from the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetLine/",
       "params": [],
       "returns": {
         "type": "ApiStroke | null"
@@ -161,6 +168,7 @@
     },
     "GetLockAspect": {
       "description": "Returns whether the aspect ratio of the drawing is locked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetLockAspect/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -188,6 +196,7 @@
     },
     "GetName": {
       "description": "Returns the name of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetName/",
       "params": [],
       "returns": {
         "description": "Name of drawing.",
@@ -276,6 +285,7 @@
     },
     "GetRotation": {
       "description": "Returns the rotation angle of the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetRotation/",
       "params": [],
       "returns": {
         "type": "number"
@@ -285,6 +295,7 @@
     },
     "GetShadow": {
       "description": "Returns the shadow of the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetShadow/",
       "params": [],
       "returns": {
         "type": "ApiShadow | null"
@@ -294,6 +305,7 @@
     },
     "GetTitle": {
       "description": "Gets the title of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The title of the current drawing, or null if not set.",
@@ -421,6 +433,7 @@
     },
     "SetAllowOverlap": {
       "description": "Sets whether the drawing object is allowed to overlap other drawing objects.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetAllowOverlap/",
       "params": [
         {
           "description": "Specifies whether this drawing object can overlap other drawing objects.",
@@ -436,6 +449,7 @@
     },
     "SetDescription": {
       "description": "Sets the description of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDescription/",
       "params": [
         {
           "description": "The description to set for the current drawing.",
@@ -503,6 +517,7 @@
     },
     "SetFlipH": {
       "description": "Sets the horizontal flip of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetFlipH/",
       "params": [
         {
           "description": "Specifies if the figure will be flipped horizontally or not.",
@@ -519,6 +534,7 @@
     },
     "SetFlipV": {
       "description": "Sets the vertical flip of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetFlipV/",
       "params": [
         {
           "description": "Specifies if the figure will be flipped vertically or not.",
@@ -608,6 +624,7 @@
     },
     "SetLockAspect": {
       "description": "Sets whether the aspect ratio of the drawing is locked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetLockAspect/",
       "params": [
         {
           "description": "Specifies whether the aspect ratio of this drawing is locked.",
@@ -647,6 +664,7 @@
     },
     "SetName": {
       "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetName/",
       "params": [
         {
           "description": "The name which will be set to the current drawing.",
@@ -682,6 +700,7 @@
     },
     "SetRelativeHeight": {
       "description": "Sets the relative height of the object (image, shape, chart) bounding box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeHeight/",
       "params": [
         {
           "description": "The document element which will be taken as a countdown point for the object height.",
@@ -704,6 +723,7 @@
     },
     "SetRelativeWidth": {
       "description": "Sets the relative width of the object (image, shape, chart) bounding box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeWidth/",
       "params": [
         {
           "description": "The document element which will be taken as a countdown point for the object width.",
@@ -726,6 +746,7 @@
     },
     "SetRotation": {
       "description": "Sets the rotation angle to the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRotation/",
       "params": [
         {
           "description": "New drawing rotation angle.",
@@ -741,6 +762,7 @@
     },
     "SetShadow": {
       "description": "Sets the shadow to the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetShadow/",
       "params": [
         {
           "description": "The shadow to apply, or null to remove the current shadow.",
@@ -780,6 +802,7 @@
     },
     "SetTitle": {
       "description": "Sets the title of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetTitle/",
       "params": [
         {
           "description": "The title to set for the current drawing.",
@@ -911,6 +934,7 @@
     },
     "Unselect": {
       "description": "Removes the current graphic object from the selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Unselect/",
       "params": [],
       "returns": {
         "type": "boolean"

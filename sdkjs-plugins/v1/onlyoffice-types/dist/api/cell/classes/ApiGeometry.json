@@ -1,8 +1,10 @@
 {
   "description": "Class representing the shape geometry.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/",
   "methods": {
     "AddAdj": {
       "description": "Adds a new adjustment parameter to the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddAdj/",
       "params": [
         {
           "description": "The adjustment name.",
@@ -23,6 +25,7 @@
     },
     "AddConnectionPoint": {
       "description": "Adds a connection point to the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddConnectionPoint/",
       "params": [
         {
           "description": "The angle of the connection point.",
@@ -48,6 +51,7 @@
     },
     "AddGuide": {
       "description": "Adds a guide (formula) to the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddGuide/",
       "params": [
         {
           "description": "The guide name.",
@@ -83,6 +87,7 @@
     },
     "AddPath": {
       "description": "Adds a new path to the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddPath/",
       "params": [],
       "returns": {
         "type": "ApiPath | null"
@@ -92,6 +97,7 @@
     },
     "GetAdjValue": {
       "description": "Returns the adjustment value by its name from the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetAdjValue/",
       "params": [
         {
           "description": "The adjustment name.",
@@ -107,6 +113,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiGeometry class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"geometry\""
@@ -115,6 +122,7 @@
     },
     "GetPath": {
       "description": "Returns a geometry path by its index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPath/",
       "params": [
         {
           "description": "The path index.",
@@ -130,6 +138,7 @@
     },
     "GetPathCount": {
       "description": "Returns the number of paths in the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPathCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -139,6 +148,7 @@
     },
     "GetPaths": {
       "description": "Returns all paths of the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPaths/",
       "params": [],
       "returns": {
         "type": "ApiPath[]"
@@ -148,6 +158,7 @@
     },
     "GetPreset": {
       "description": "Returns the name of the preset shape if the current geometry is based on a preset.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPreset/",
       "params": [],
       "returns": {
         "type": "ShapeType"
@@ -157,6 +168,7 @@
     },
     "IsCustom": {
       "description": "Checks whether the current geometry is custom.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/IsCustom/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -166,6 +178,7 @@
     },
     "SetAdjValue": {
       "description": "Sets the specified adjustment parameter for the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/SetAdjValue/",
       "params": [
         {
           "description": "The adjustment name.",
@@ -186,6 +199,7 @@
     },
     "SetTextRect": {
       "description": "Sets the text rectangle for the current geometry.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/SetTextRect/",
       "params": [
         {
           "description": "The left guide name or value.",

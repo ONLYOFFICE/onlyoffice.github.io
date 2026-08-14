@@ -1,11 +1,13 @@
 {
   "description": "Class representing a table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/",
   "extends": [
     "ApiDrawing"
   ],
   "methods": {
     "AddColumn": {
       "description": "Adds a new column to the end of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/AddColumn/",
       "params": [
         {
           "description": "The cell used as an insertion reference.",
@@ -27,6 +29,7 @@
     },
     "AddColumns": {
       "description": "Adds the new columns to the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/AddColumns/",
       "params": [
         {
           "description": "The cell after which the new columns will be added. If not specified, the new columns will be added at the end of the table.",
@@ -55,6 +58,7 @@
     },
     "AddElement": {
       "description": "Adds a paragraph using its position in the cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/AddElement/",
       "params": [
         {
           "description": "The cell where the specified element will be added.",
@@ -80,6 +84,7 @@
     },
     "AddRow": {
       "description": "Adds a new row to the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/AddRow/",
       "params": [
         {
           "description": "The cell used as an insertion reference.",
@@ -101,6 +106,7 @@
     },
     "AddRows": {
       "description": "Adds the new rows to the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/AddRows/",
       "params": [
         {
           "description": "The cell after which the new rows will be added. If not specified, the new rows will be added at the end of the table.",
@@ -129,6 +135,7 @@
     },
     "GetCell": {
       "description": "Returns a cell by its position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetCell/",
       "params": [
         {
           "description": "The row index in the current table.",
@@ -149,6 +156,7 @@
     },
     "GetClassType": {
       "description": "Returns the type of the ApiTable object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"table\""
@@ -157,6 +165,7 @@
     },
     "GetColumnWidth": {
       "description": "Returns the width of the specified column (by index) of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetColumnWidth/",
       "params": [
         {
           "description": "The zero-based column index.",
@@ -172,6 +181,7 @@
     },
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -180,6 +190,7 @@
     },
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -188,6 +199,7 @@
     },
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
       "params": [],
       "returns": {
         "type": "EMU"
@@ -196,6 +208,7 @@
     },
     "GetRow": {
       "description": "Returns a row by its index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetRow/",
       "params": [
         {
           "description": "The zero-based row index in the table.",
@@ -210,6 +223,7 @@
     },
     "GetRowsCount": {
       "description": "Returns a number of rows in the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetRowsCount/",
       "params": [],
       "returns": {
         "type": "number"
@@ -219,6 +233,7 @@
     },
     "GetSelectedCells": {
       "description": "Returns the selected cells of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetSelectedCells/",
       "params": [],
       "returns": {
         "description": "An array of the currently selected cells (empty if there is no cell selection).",
@@ -229,6 +244,7 @@
     },
     "GetSelectedColumnsCells": {
       "description": "Returns all cells from the columns that contain the currently selected cells.\nThis method identifies which columns contain selected cells and then returns all cells\nin those columns, not just the selected cells themselves.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetSelectedColumnsCells/",
       "params": [],
       "returns": {
         "description": "An array of all cells from the columns that contain selected cells.",
@@ -239,6 +255,7 @@
     },
     "GetSelectedRows": {
       "description": "Returns the rows that contain the currently selected cells of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetSelectedRows/",
       "params": [],
       "returns": {
         "description": "An array of the rows that contain selected cells (empty if there is no cell selection).",
@@ -249,6 +266,7 @@
     },
     "GetTableDescription": {
       "description": "Returns the table description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetTableDescription/",
       "params": [],
       "returns": {
         "type": "string"
@@ -258,6 +276,7 @@
     },
     "GetTableLook": {
       "description": "Gets table look properties",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetTableLook/",
       "params": [],
       "returns": {
         "type": "TableLook"
@@ -266,6 +285,7 @@
     },
     "GetTableTitle": {
       "description": "Returns the table title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/GetTableTitle/",
       "params": [],
       "returns": {
         "type": "string"
@@ -275,6 +295,7 @@
     },
     "MergeCells": {
       "description": "Merges an array of cells. If merge is successful, it will return merged cell, otherwise \"null\".\n**Warning**: The number of cells in any row and the number of rows in the current table may be changed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/MergeCells/",
       "params": [
         {
           "description": "The cells to merge.",
@@ -289,6 +310,7 @@
     },
     "RemoveColumn": {
       "description": "Removes a table column with the specified cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/RemoveColumn/",
       "params": [
         {
           "description": "A cell from the column to remove.",
@@ -304,6 +326,7 @@
     },
     "RemoveRow": {
       "description": "Removes a table row with the specified cell.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/RemoveRow/",
       "params": [
         {
           "description": "A cell from the row to remove.",
@@ -319,6 +342,7 @@
     },
     "SelectRange": {
       "description": "Selects a range of cells in the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SelectRange/",
       "params": [
         {
           "description": "The start cell index within the start row.",
@@ -349,6 +373,7 @@
     },
     "SetBackgroundColor": {
       "description": "Sets the background color for all cells in the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetBackgroundColor/",
       "params": [
         {
           "description": "If not passed, the background color will be cleared.",
@@ -365,6 +390,7 @@
     },
     "SetColumnWidth": {
       "description": "Sets the width of the specified column in the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetColumnWidth/",
       "params": [
         {
           "description": "The zero-based column index.",
@@ -386,6 +412,7 @@
     },
     "SetHeight": {
       "description": "Sets the total height of the current table, distributing it evenly among the table rows.\nThe value is applied as a minimum height for each row, so a row can be taller if its content requires more space.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetHeight/",
       "params": [
         {
           "description": "The table height in English measure units.",
@@ -402,6 +429,7 @@
     },
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -416,6 +444,7 @@
     },
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -430,6 +459,7 @@
     },
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -449,6 +479,7 @@
     },
     "SetShd": {
       "description": "Specifies the shading which shall be applied to the extents of the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetShd/",
       "params": [
         {
           "description": "The shading type or fill to apply.",
@@ -478,6 +509,7 @@
     },
     "SetSize": {
       "description": "Sets the table size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetSize/",
       "params": [
         {
           "description": "The table width measured in English measure units.",
@@ -498,6 +530,7 @@
     },
     "SetStyle": {
       "description": "Sets the style for the current table.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetStyle/",
       "params": [
         {
           "description": "The table style to apply.",
@@ -513,6 +546,7 @@
     },
     "SetTableDescription": {
       "description": "Sets the table description.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetTableDescription/",
       "params": [
         {
           "description": "The table description to be set.",
@@ -528,6 +562,7 @@
     },
     "SetTableLook": {
       "description": "Specifies the components of the conditional formatting of the referenced table style (if one exists)\nwhich shall be applied to the set of table rows with the current table-level property exceptions. A table style\ncan specify up to six different optional conditional formats [Example: Different formatting for first column],\nwhich then can be applied or omitted from individual table rows in the parent table.\n\nThe default setting is to apply the row and column banding formatting, but not the first row, last row, first\ncolumn, or last column formatting.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetTableLook/",
       "params": [
         {
           "description": "Specifies that the first column conditional formatting shall be applied to the\r    table.",
@@ -567,6 +602,7 @@
     },
     "SetTableTitle": {
       "description": "Sets the table title.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTable/Methods/SetTableTitle/",
       "params": [
         {
           "description": "The table title to be set.",

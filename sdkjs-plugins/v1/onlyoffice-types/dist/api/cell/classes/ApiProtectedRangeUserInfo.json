@@ -1,5 +1,6 @@
 {
   "description": "Class representing a user from the current protected range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRangeUserInfo/",
   "methods": {
     "GetId": {
       "description": "Returns the ID property of the current user's information.",

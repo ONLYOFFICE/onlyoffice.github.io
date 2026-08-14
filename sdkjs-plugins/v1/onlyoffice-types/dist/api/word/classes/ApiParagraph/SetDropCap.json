@@ -1,5 +1,6 @@
 {
   "description": "Creates a drop cap from the first letter of the current paragraph. A drop cap is a large initial letter that\ndrops down two or more lines.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetDropCap/",
   "params": [
     {
       "description": "The drop cap type: \"none\" removes the drop cap, \"drop\" places\rit within the text, \"margin\" places it in the margin.",

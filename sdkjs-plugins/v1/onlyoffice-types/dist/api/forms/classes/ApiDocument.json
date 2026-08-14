@@ -7,6 +7,7 @@
   "methods": {
     "ClearAllFields": {
       "description": "Clears all forms in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/ClearAllFields/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -15,6 +16,7 @@
     },
     "GetAllForms": {
       "description": "Returns all existing forms in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetAllForms/",
       "params": [],
       "returns": {
         "type": "ApiForm[]"
@@ -23,6 +25,7 @@
     },
     "GetFormKeysByRole": {
       "description": "Returns a list of all form keys attached to the specified role.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormKeysByRole/",
       "params": [
         {
           "description": "The form role.",
@@ -49,6 +52,7 @@
     },
     "GetFormValueByKey": {
       "description": "Returns the form value for the specified key. For a group of radio buttons returns Choice, i.e. the name of the selected item.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormValueByKey/",
       "params": [
         {
           "description": "The form key.",
@@ -65,6 +69,7 @@
     },
     "GetFormsByKey": {
       "description": "Returns a list of all forms in the document with the specified key.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByKey/",
       "params": [
         {
           "description": "The form key.",
@@ -80,6 +85,7 @@
     },
     "GetFormsByRole": {
       "description": "Returns a list of all forms in the document with the specified role name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByRole/",
       "params": [
         {
           "description": "The form role.",
@@ -95,6 +101,7 @@
     },
     "GetFormsByTag": {
       "description": "Returns a list of all forms in the document with the specified tag name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsByTag/",
       "params": [
         {
           "description": "Form tag.",
@@ -109,6 +116,7 @@
     },
     "GetFormsData": {
       "description": "Returns the data from all forms present in the current document.\nIf a form was created and not assigned to any part of the document, it won't appear in this list.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsData/",
       "params": [],
       "returns": {
         "type": "FormData[]"
@@ -118,6 +126,7 @@
     },
     "GetFormsHighlight": {
       "description": "Returns the highlight color of the forms in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetFormsHighlight/",
       "params": [],
       "returns": {
         "description": "Returns the highlight color, or _null_ if the highlight is disabled.",
@@ -128,6 +137,7 @@
     },
     "GetTagsOfAllForms": {
       "description": "Returns a list of all tags that are used for all forms in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/GetTagsOfAllForms/",
       "params": [],
       "returns": {
         "type": "string[]"
@@ -151,6 +161,7 @@
     },
     "SetFormsData": {
       "description": "Sets the data to the specified forms.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsData/",
       "params": [
         {
           "description": "An array of form data to set to the specified forms.",
@@ -166,6 +177,7 @@
     },
     "SetFormsHighlight": {
       "description": "Sets the highlight to the forms in the document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiDocument/Methods/SetFormsHighlight/",
       "params": [
         {
           "description": "The highlight color for the forms.",

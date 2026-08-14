@@ -1,8 +1,10 @@
 {
   "description": "Class representing data validation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/",
   "methods": {
     "Add": {
       "description": "Adds data validation to the specified range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Add/",
       "params": [
         {
           "description": "The validation type.",
@@ -41,6 +43,7 @@
     },
     "Delete": {
       "description": "Deletes the object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "void"
@@ -49,6 +52,7 @@
     },
     "GetAlertStyle": {
       "description": "Returns the validation alert style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetAlertStyle/",
       "params": [],
       "returns": {
         "type": "ValidationAlertStyle"
@@ -57,6 +61,7 @@
     },
     "GetErrorMessage": {
       "description": "Returns the data validation error message.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetErrorMessage/",
       "params": [],
       "returns": {
         "type": "string"
@@ -65,6 +70,7 @@
     },
     "GetErrorTitle": {
       "description": "Returns the title of the data-validation error dialog box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetErrorTitle/",
       "params": [],
       "returns": {
         "type": "string"
@@ -73,6 +79,7 @@
     },
     "GetFormula1": {
       "description": "Returns the first formula in the data validation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetFormula1/",
       "params": [],
       "returns": {
         "type": "string"
@@ -81,6 +88,7 @@
     },
     "GetFormula2": {
       "description": "Returns the second formula in the data validation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetFormula2/",
       "params": [],
       "returns": {
         "type": "string"
@@ -89,6 +97,7 @@
     },
     "GetIgnoreBlank": {
       "description": "Returns whether blank values are permitted by the range data validation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetIgnoreBlank/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -97,6 +106,7 @@
     },
     "GetInCellDropdown": {
       "description": "Returns whether data validation displays a drop-down list that contains acceptable values.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInCellDropdown/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -105,6 +115,7 @@
     },
     "GetInputMessage": {
       "description": "Returns the data validation input message.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInputMessage/",
       "params": [],
       "returns": {
         "type": "string"
@@ -113,6 +124,7 @@
     },
     "GetInputTitle": {
       "description": "Returns the title of the data-validation input dialog box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInputTitle/",
       "params": [],
       "returns": {
         "type": "string"
@@ -121,6 +133,7 @@
     },
     "GetOperator": {
       "description": "Returns the data validation operator.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetOperator/",
       "params": [],
       "returns": {
         "type": "ValidationOperator"
@@ -129,6 +142,7 @@
     },
     "GetParent": {
       "description": "Returns the parent range object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetParent/",
       "params": [],
       "returns": {
         "type": "ApiRange"
@@ -137,6 +151,7 @@
     },
     "GetShowError": {
       "description": "Returns whether the data validation error message will be displayed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetShowError/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -145,6 +160,7 @@
     },
     "GetShowInput": {
       "description": "Returns whether the data validation input message will be displayed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetShowInput/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -153,6 +169,7 @@
     },
     "GetType": {
       "description": "Returns the validation type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ValidationType"
@@ -161,6 +178,7 @@
     },
     "Modify": {
       "description": "Modifies data validation for a range.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Modify/",
       "params": [
         {
           "description": "The validation type.",
@@ -200,6 +218,7 @@
     },
     "SetErrorMessage": {
       "description": "Sets the data validation error message.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetErrorMessage/",
       "params": [
         {
           "description": "The error message.",
@@ -214,6 +233,7 @@
     },
     "SetErrorTitle": {
       "description": "Sets the title of the data-validation error dialog box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetErrorTitle/",
       "params": [
         {
           "description": "The error dialog title.",
@@ -228,6 +248,7 @@
     },
     "SetIgnoreBlank": {
       "description": "Sets whether blank values are permitted by the range data validation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetIgnoreBlank/",
       "params": [
         {
           "description": "Specifies whether blank values are permitted.",
@@ -242,6 +263,7 @@
     },
     "SetInCellDropdown": {
       "description": "Sets whether data validation displays a drop-down list that contains acceptable values.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInCellDropdown/",
       "params": [
         {
           "description": "Specifies whether to display a drop-down list.",
@@ -256,6 +278,7 @@
     },
     "SetInputMessage": {
       "description": "Sets the data validation input message.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInputMessage/",
       "params": [
         {
           "description": "The input message.",
@@ -270,6 +293,7 @@
     },
     "SetInputTitle": {
       "description": "Sets the title of the data-validation input dialog box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInputTitle/",
       "params": [
         {
           "description": "The input dialog title.",
@@ -284,6 +308,7 @@
     },
     "SetShowError": {
       "description": "Sets whether the data validation error message will be displayed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetShowError/",
       "params": [
         {
           "description": "Specifies whether to show error message.",
@@ -298,6 +323,7 @@
     },
     "SetShowInput": {
       "description": "Sets whether the data validation input message will be displayed.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetShowInput/",
       "params": [
         {
           "description": "Specifies whether to show input message.",

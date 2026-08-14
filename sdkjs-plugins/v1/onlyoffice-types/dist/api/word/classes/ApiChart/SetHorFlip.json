@@ -1,5 +1,6 @@
 {
   "description": "Flips the current drawing horizontally.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetHorFlip/",
   "params": [
     {
       "description": "Specifies if the figure will be flipped horizontally or not.",

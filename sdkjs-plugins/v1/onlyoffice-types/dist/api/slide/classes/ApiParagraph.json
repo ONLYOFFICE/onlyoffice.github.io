@@ -1,5 +1,6 @@
 {
   "description": "Class representing a paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/",
   "extends": [
     "ApiParaPr"
   ],
@@ -146,6 +147,7 @@
     },
     "GetFontNames": {
       "description": "Returns all font names from all elements inside the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetFontNames/",
       "params": [],
       "returns": {
         "description": "The font names used for the current paragraph.",
@@ -194,6 +196,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal ID of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -215,6 +218,7 @@
     },
     "GetLastRunWithText": {
       "description": "Returns the last Run with text in the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetLastRunWithText/",
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -322,6 +326,7 @@
     },
     "GetTabs": {
       "description": "Returns the custom tab stops of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetTabs/",
       "params": [],
       "returns": {
         "type": "TabStop[]"
@@ -331,6 +336,7 @@
     },
     "GetText": {
       "description": "Returns the paragraph text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetText/",
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -370,6 +376,7 @@
     },
     "InsertParagraph": {
       "description": "Inserts a paragraph at the specified position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/InsertParagraph/",
       "params": [
         {
           "description": "Text or paragraph.",
@@ -395,6 +402,7 @@
     },
     "IsEmpty": {
       "description": "Returns true if the paragraph has no content elements (only the paragraph end mark).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/IsEmpty/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -404,6 +412,7 @@
     },
     "Last": {
       "description": "Returns the last element of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/Last/",
       "params": [],
       "returns": {
         "type": "ParagraphContent"
@@ -412,6 +421,7 @@
     },
     "Push": {
       "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/Push/",
       "params": [
         {
           "description": "The document element which will be added at the current position. Returns false if the\roElement type is not supported by a paragraph.",
@@ -457,6 +467,7 @@
     },
     "Select": {
       "description": "Selects the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/Select/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -465,6 +476,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetBold/",
       "params": [
         {
           "description": "Specifies that the contents of this paragraph are displayed bold.",
@@ -498,6 +510,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in this paragraph are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetCaps/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed capitalized.",
@@ -513,6 +526,7 @@
     },
     "SetColor": {
       "description": "Sets the text color to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetColor/",
       "params": [
         {
           "description": "The text color.",
@@ -529,6 +543,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of this paragraph are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetDoubleStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed double struck through.",
@@ -544,6 +559,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetFontFamily/",
       "params": [
         {
           "description": "The font family or families used for the current paragraph.",
@@ -559,6 +575,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetFontSize/",
       "params": [
         {
           "description": "The text size value measured in half-points (1/144 of an inch).",
@@ -647,6 +664,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetItalic/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed italicized.",
@@ -697,6 +715,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in this paragraph are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetSmallCaps/",
       "params": [
         {
           "description": "Specifies if the contents of the current paragraph are displayed capitalized two points smaller or not.",
@@ -712,6 +731,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetSpacing/",
       "params": [
         {
           "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
@@ -798,6 +818,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of this paragraph are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed struck through.",
@@ -836,6 +857,7 @@
     },
     "SetText": {
       "description": "Replaces the paragraph content with the specified text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetText/",
       "params": [
         {
           "description": "The text to set.",
@@ -850,6 +872,7 @@
     },
     "SetTextPr": {
       "description": "Sets the paragraph text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetTextPr/",
       "params": [
         {
           "description": "The paragraph text properties.",
@@ -865,6 +888,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of this paragraph are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetUnderline/",
       "params": [
         {
           "description": "Specifies that the contents of the current paragraph are displayed underlined.",
@@ -880,6 +904,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiParagraph object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/ToJSON/",
       "params": [
         {
           "description": "Specifies if the used numberings will be written to the JSON object or not.",

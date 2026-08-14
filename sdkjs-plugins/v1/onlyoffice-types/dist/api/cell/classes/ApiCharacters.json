@@ -1,5 +1,6 @@
 {
   "description": "Class representing characters in an object that contains text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/",
   "methods": {
     "Delete": {
       "description": "Deletes the ApiCharacters object.",

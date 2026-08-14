@@ -1,5 +1,6 @@
 {
   "description": "Class representing a slide layout.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/",
   "methods": {
     "AddObject": {
       "description": "Adds an object (image, shape or chart) to the current slide layout.",
@@ -154,6 +155,7 @@
     },
     "GetAllTables": {
       "description": "Returns an array with all tables from the current slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllTables/",
       "params": [],
       "returns": {
         "description": "An array with all tables from the current slide layout.",
@@ -164,6 +166,7 @@
     },
     "GetBackground": {
       "description": "Returns the background fill of the current slide layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetBackground/",
       "params": [],
       "returns": {
         "description": "returns null if the slide layout doesn't exist or has no background fill.",
@@ -205,6 +208,7 @@
     },
     "GetLayoutType": {
       "description": "Returns the type of the current layout.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetLayoutType/",
       "params": [],
       "returns": {
         "description": "The layout type.",
@@ -300,6 +304,7 @@
     },
     "Search": {
       "description": "Searches for the specified text within the current slide layout and returns all found occurrences as text ranges.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Search/",
       "params": [
         {
           "description": "The text to search for.",

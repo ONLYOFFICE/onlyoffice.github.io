@@ -1,5 +1,6 @@
 {
   "description": "Returns the top border of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetTopBorder/",
   "params": [],
   "returns": {
     "description": "Returns the border properties object, or _undefined_ if the top border is not set.",

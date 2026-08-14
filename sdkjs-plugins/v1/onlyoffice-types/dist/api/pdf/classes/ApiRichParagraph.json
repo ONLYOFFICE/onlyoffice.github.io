@@ -1,11 +1,13 @@
 {
   "description": "Class representing a rich paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/",
   "extends": [
     "ApiRichParaPr"
   ],
   "methods": {
     "AddElement": {
       "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/AddElement/",
       "params": [
         {
           "description": "The element which will be added at the current position.",
@@ -26,6 +28,7 @@
     },
     "AddText": {
       "description": "Adds some text to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/AddText/",
       "params": [
         {
           "description": "The text that we want to insert into the current paragraph.",
@@ -40,6 +43,7 @@
     },
     "Copy": {
       "description": "Creates a paragraph copy.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Copy/",
       "params": [],
       "returns": {
         "type": "ApiRichParagraph"
@@ -48,6 +52,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiRichParagraph class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"richParagraph\""
@@ -56,6 +61,7 @@
     },
     "GetElement": {
       "description": "Returns a paragraph element using the position specified.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetElement/",
       "params": [
         {
           "description": "The position where the element which content we want to get must be located.",
@@ -70,6 +76,7 @@
     },
     "GetNext": {
       "description": "Returns the next paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetNext/",
       "params": [],
       "returns": {
         "description": "returns null if paragraph is last.",
@@ -79,6 +86,7 @@
     },
     "GetParaPr": {
       "description": "Returns the paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetParaPr/",
       "params": [],
       "returns": {
         "type": "ApiRichParaPr"
@@ -87,6 +95,7 @@
     },
     "GetPrevious": {
       "description": "Returns the previous paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/GetPrevious/",
       "params": [],
       "returns": {
         "description": "returns null if paragraph is first.",
@@ -96,6 +105,7 @@
     },
     "Last": {
       "description": "Returns the last element of the paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Last/",
       "params": [],
       "returns": {
         "type": "ApiRichRun"
@@ -104,6 +114,7 @@
     },
     "Push": {
       "description": "Adds an element to the current paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/Push/",
       "params": [
         {
           "description": "The element to add at the end of the paragraph.",
@@ -118,6 +129,7 @@
     },
     "SetParaPr": {
       "description": "Sets the paragraph properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/SetParaPr/",
       "params": [
         {
           "description": "The paragraph properties to apply.",
@@ -132,6 +144,7 @@
     },
     "SetReadingOrder": {
       "description": "Specifies the reading order for the current paragraph.\nPossible values are:\n**null** - use the standart direction parameter;\n**\"ltr\"** - left-to-right text direction;\n**\"rtl\"** - right-to-left text direction.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichParagraph/Methods/SetReadingOrder/",
       "params": [
         {
           "description": "The reading order.",

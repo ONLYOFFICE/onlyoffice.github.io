@@ -1,5 +1,6 @@
 {
   "description": "Class representing a graphical object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiDrawing class.",
@@ -15,6 +16,7 @@
     },
     "GetDescription": {
       "description": "Gets the description of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetDescription/",
       "params": [],
       "returns": {
         "description": "The description of the current drawing, or null if not set.",
@@ -25,6 +27,7 @@
     },
     "GetFill": {
       "description": "Gets the fill formatting properties from the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetFill/",
       "params": [],
       "returns": {
         "type": "ApiFill | null"
@@ -34,6 +37,7 @@
     },
     "GetFlipH": {
       "description": "Get horizontal flip of current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetFlipH/",
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
@@ -44,6 +48,7 @@
     },
     "GetFlipV": {
       "description": "Get vertical flip of current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetFlipV/",
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
@@ -66,6 +71,7 @@
     },
     "GetLine": {
       "description": "Gets the outline properties from the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetLine/",
       "params": [],
       "returns": {
         "type": "ApiStroke | null"
@@ -75,6 +81,7 @@
     },
     "GetLockAspect": {
       "description": "Returns whether the aspect ratio of the drawing is locked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetLockAspect/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -102,6 +109,7 @@
     },
     "GetName": {
       "description": "Returns the name of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -124,6 +132,7 @@
     },
     "GetRotation": {
       "description": "Returns the rotation angle of the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetRotation/",
       "params": [],
       "returns": {
         "type": "number"
@@ -133,6 +142,7 @@
     },
     "GetShadow": {
       "description": "Returns the shadow of the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetShadow/",
       "params": [],
       "returns": {
         "type": "ApiShadow | null"
@@ -142,6 +152,7 @@
     },
     "GetTitle": {
       "description": "Gets the title of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetTitle/",
       "params": [],
       "returns": {
         "description": "The title of the current drawing, or null if not set.",
@@ -164,6 +175,7 @@
     },
     "Select": {
       "description": "Selects the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/Select/",
       "params": [
         {
           "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
@@ -180,6 +192,7 @@
     },
     "SetDescription": {
       "description": "Sets the description of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetDescription/",
       "params": [
         {
           "description": "The description to set for the current drawing.",
@@ -196,6 +209,7 @@
     },
     "SetFill": {
       "description": "Sets the fill formatting properties to the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetFill/",
       "params": [
         {
           "description": "The fill type used to fill the graphic object.",
@@ -212,6 +226,7 @@
     },
     "SetFlipH": {
       "description": "Sets the horizontal flip of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetFlipH/",
       "params": [
         {
           "description": "Specifies if the figure will be flipped horizontally or not.",
@@ -228,6 +243,7 @@
     },
     "SetFlipV": {
       "description": "Sets the vertical flip of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetFlipV/",
       "params": [
         {
           "description": "Specifies if the figure will be flipped vertically or not.",
@@ -244,6 +260,7 @@
     },
     "SetLockAspect": {
       "description": "Sets whether the aspect ratio of the drawing is locked.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetLockAspect/",
       "params": [
         {
           "description": "Specifies whether the aspect ratio of this drawing is locked.",
@@ -283,6 +300,7 @@
     },
     "SetName": {
       "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetName/",
       "params": [
         {
           "description": "The name which will be set to the current drawing.",
@@ -299,6 +317,7 @@
     },
     "SetOutLine": {
       "description": "Sets the outline properties to the specified graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetOutLine/",
       "params": [
         {
           "description": "The stroke used to create the graphic object outline.",
@@ -348,6 +367,7 @@
     },
     "SetRotation": {
       "description": "Sets the rotation angle to the current drawing object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetRotation/",
       "params": [
         {
           "description": "New drawing rotation angle.",
@@ -363,6 +383,7 @@
     },
     "SetShadow": {
       "description": "Sets the shadow to the current graphic object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetShadow/",
       "params": [
         {
           "description": "The shadow to apply, or null to remove the current shadow.",
@@ -402,6 +423,7 @@
     },
     "SetTitle": {
       "description": "Sets the title of the current drawing.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetTitle/",
       "params": [
         {
           "description": "The title to set for the current drawing.",
@@ -418,6 +440,7 @@
     },
     "Unselect": {
       "description": "Removes the current drawing from the selection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/Unselect/",
       "params": [],
       "returns": {
         "description": "Returns false if the drawing or controller is not available, otherwise returns true.",

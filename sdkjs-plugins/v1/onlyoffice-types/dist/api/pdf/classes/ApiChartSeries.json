@@ -1,8 +1,10 @@
 {
   "description": "Class representing a chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChartSeries/",
   "methods": {
     "ChangeChartType": {
       "description": "Tries to change the series type. Returns true if successful.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChartSeries/Methods/ChangeChartType/",
       "params": [
         {
           "description": "Chart type.",
@@ -17,6 +19,7 @@
     },
     "GetChartType": {
       "description": "Returns a chart type of the current series.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChartSeries/Methods/GetChartType/",
       "params": [],
       "returns": {
         "type": "ChartTypeLegacy"
@@ -25,6 +28,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiChartSeries class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChartSeries/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"chartSeries\""
@@ -33,6 +37,7 @@
     },
     "GetType": {
       "description": "Returns a chart type of the current series using the chart type names from the {@link ChartType} enumeration.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChartSeries/Methods/GetType/",
       "params": [],
       "returns": {
         "type": "ChartType"

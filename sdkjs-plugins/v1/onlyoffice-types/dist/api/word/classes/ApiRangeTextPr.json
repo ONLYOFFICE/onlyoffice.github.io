@@ -1,10 +1,12 @@
 {
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/",
   "extends": [
     "ApiTextPr"
   ],
   "methods": {
     "GetBold": {
       "description": "Gets the bold property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetBold/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -14,6 +16,7 @@
     },
     "GetCaps": {
       "description": "Returns whether the text with the current text properties are capitalized.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetCaps/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -23,6 +26,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiTextPr class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"textPr\""
@@ -31,6 +35,7 @@
     },
     "GetColor": {
       "description": "Gets the RGB color from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -40,6 +45,7 @@
     },
     "GetDoubleStrikeout": {
       "description": "Gets the double strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetDoubleStrikeout/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -49,6 +55,7 @@
     },
     "GetFontFamily": {
       "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontFamily/",
       "params": [],
       "returns": {
         "type": "string"
@@ -58,6 +65,7 @@
     },
     "GetFontSize": {
       "description": "Gets the font size from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontSize/",
       "params": [],
       "returns": {
         "type": "hps"
@@ -67,6 +75,7 @@
     },
     "GetHighlight": {
       "description": "Gets the highlight property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetHighlight/",
       "params": [],
       "returns": {
         "type": "string"
@@ -76,6 +85,7 @@
     },
     "GetItalic": {
       "description": "Gets the italic property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetItalic/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -85,6 +95,7 @@
     },
     "GetLanguage": {
       "description": "Gets the language from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetLanguage/",
       "params": [],
       "returns": {
         "type": "string"
@@ -94,6 +105,7 @@
     },
     "GetOutLine": {
       "description": "Gets the text outline from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetOutLine/",
       "params": [],
       "returns": {
         "type": "ApiStroke"
@@ -103,6 +115,7 @@
     },
     "GetPosition": {
       "description": "Gets the text position from the current text properties measured in half-points (1/144 of an inch).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetPosition/",
       "params": [],
       "returns": {
         "type": "hps"
@@ -112,6 +125,7 @@
     },
     "GetShd": {
       "description": "Gets the text shading from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetShd/",
       "params": [],
       "returns": {
         "type": "Shd | undefined"
@@ -121,6 +135,7 @@
     },
     "GetSmallCaps": {
       "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSmallCaps/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -130,6 +145,7 @@
     },
     "GetSpacing": {
       "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSpacing/",
       "params": [],
       "returns": {
         "type": "twips"
@@ -139,6 +155,7 @@
     },
     "GetStrikeout": {
       "description": "Gets the strikeout property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStrikeout/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -148,6 +165,7 @@
     },
     "GetStyle": {
       "description": "Gets the style of the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStyle/",
       "params": [],
       "returns": {
         "description": "The used style.",
@@ -158,6 +176,7 @@
     },
     "GetTextFill": {
       "description": "Gets the text fill from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetTextFill/",
       "params": [],
       "returns": {
         "type": "ApiFill"
@@ -167,6 +186,7 @@
     },
     "GetUnderline": {
       "description": "Gets the underline property from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetUnderline/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -176,6 +196,7 @@
     },
     "GetVertAlign": {
       "description": "Gets the vertical alignment type from the current text properties.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetVertAlign/",
       "params": [],
       "returns": {
         "type": "string"
@@ -185,6 +206,7 @@
     },
     "SetBold": {
       "description": "Sets the bold property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetBold/",
       "params": [
         {
           "description": "Specifies that the contents of the run are displayed bold.",
@@ -200,6 +222,7 @@
     },
     "SetCaps": {
       "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetCaps/",
       "params": [
         {
           "description": "Specifies that the contents of the current run are displayed capitalized.",
@@ -215,6 +238,7 @@
     },
     "SetColor": {
       "description": "Sets the text color to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetColor/",
       "params": [
         {
           "description": "The text color.",
@@ -231,6 +255,7 @@
     },
     "SetDoubleStrikeout": {
       "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetDoubleStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current run are displayed double struck through.",
@@ -246,6 +271,7 @@
     },
     "SetFontFamily": {
       "description": "Sets all 4 font slots with the specified font family.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontFamily/",
       "params": [
         {
           "description": "The font family or families used for the current text run.",
@@ -261,6 +287,7 @@
     },
     "SetFontSize": {
       "description": "Sets the font size to the characters of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontSize/",
       "params": [
         {
           "description": "The text size value measured in half-points (1/144 of an inch).",
@@ -276,6 +303,7 @@
     },
     "SetHighlight": {
       "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetHighlight/",
       "params": [
         {
           "description": "Available highlight color.",
@@ -290,6 +318,7 @@
     },
     "SetItalic": {
       "description": "Sets the italic property to the text character.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetItalic/",
       "params": [
         {
           "description": "Specifies that the contents of the current run are displayed italicized.",
@@ -305,6 +334,7 @@
     },
     "SetLanguage": {
       "description": "Specifies the languages which will be used to check spelling and grammar (if requested) when processing\nthe contents of the text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetLanguage/",
       "params": [
         {
           "description": "The possible value for this parameter is a language identifier as defined by\rRFC 4646/BCP 47. Example: \"en-CA\".",
@@ -320,6 +350,7 @@
     },
     "SetOutLine": {
       "description": "Sets the text outline to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetOutLine/",
       "params": [
         {
           "description": "The stroke used to create the text outline.",
@@ -335,6 +366,7 @@
     },
     "SetPosition": {
       "description": "Specifies an amount by which text is raised or lowered for this run in relation to the default\nbaseline of the surrounding non-positioned text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetPosition/",
       "params": [
         {
           "description": "Specifies a positive (raised text) or negative (lowered text)\rmeasurement in half-points (1/144 of an inch).",
@@ -350,6 +382,7 @@
     },
     "SetShd": {
       "description": "Specifies the shading applied to the contents of the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetShd/",
       "params": [
         {
           "description": "The shading type applied to the contents of the current text run.",
@@ -371,6 +404,7 @@
     },
     "SetSmallCaps": {
       "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSmallCaps/",
       "params": [
         {
           "description": "Specifies if the contents of the current run are displayed capitalized two points smaller or not.",
@@ -386,6 +420,7 @@
     },
     "SetSpacing": {
       "description": "Sets the text spacing measured in twentieths of a point.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSpacing/",
       "params": [
         {
           "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
@@ -401,6 +436,7 @@
     },
     "SetStrikeout": {
       "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStrikeout/",
       "params": [
         {
           "description": "Specifies that the contents of the current run are displayed struck through.",
@@ -416,6 +452,7 @@
     },
     "SetStyle": {
       "description": "The text style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle} method which sets\nthe selected or created style to the text.</note>",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStyle/",
       "params": [
         {
           "description": "The style which must be applied to the text character.",
@@ -431,6 +468,7 @@
     },
     "SetTextFill": {
       "description": "Sets the text fill to the current text run.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetTextFill/",
       "params": [
         {
           "description": "The color or pattern used to fill the text color.",
@@ -446,6 +484,7 @@
     },
     "SetUnderline": {
       "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetUnderline/",
       "params": [
         {
           "description": "Specifies that the contents of the current run are displayed underlined.",
@@ -461,6 +500,7 @@
     },
     "SetVertAlign": {
       "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetVertAlign/",
       "params": [
         {
           "description": "The vertical alignment type applied to the text contents.",
@@ -476,6 +516,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiTextPr object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/ToJSON/",
       "params": [
         {
           "description": "Specifies if the used styles will be written to the JSON object or not.",

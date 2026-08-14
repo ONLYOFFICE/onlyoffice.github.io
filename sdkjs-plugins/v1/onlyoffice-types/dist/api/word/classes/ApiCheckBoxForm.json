@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document checkbox / radio button.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/",
   "extends": [
     "ApiFormBase"
   ],
@@ -30,6 +31,7 @@
     },
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/Delete/",
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -46,6 +48,7 @@
     },
     "GetBackgroundColor": {
       "description": "Returns the background color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBackgroundColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -55,6 +58,7 @@
     },
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetBorderColor/",
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -64,6 +68,7 @@
     },
     "GetChoiceName": {
       "description": "Returns the choice name of the current radio button.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetChoiceName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -73,7 +78,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiCheckBoxForm class.",
-      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetClassType/",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetClassType/",
       "examples": [
         "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet classType = textForm.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
@@ -110,6 +115,7 @@
     },
     "GetGroupValue": {
       "description": "Returns the choice name of the currently selected radio button in the group.\nReturns an empty string if the current form is not a radio button or nothing is selected.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetGroupValue/",
       "params": [],
       "returns": {
         "type": "string"
@@ -119,6 +125,7 @@
     },
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetInternalId/",
       "params": [],
       "returns": {
         "type": "string"
@@ -128,6 +135,7 @@
     },
     "GetLabel": {
       "description": "Returns the label of the current check box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetLabel/",
       "params": [],
       "returns": {
         "type": "string"
@@ -137,6 +145,7 @@
     },
     "GetLock": {
       "description": "Returns the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetLock/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -146,6 +155,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the form has no parent.",
@@ -156,6 +166,7 @@
     },
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPlaceholderText/",
       "params": [],
       "returns": {
         "type": "string"
@@ -165,6 +176,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current form within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the form has no parent.",
@@ -187,6 +199,7 @@
     },
     "GetRole": {
       "description": "Returns the role of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetRole/",
       "params": [],
       "returns": {
         "type": "string"
@@ -196,6 +209,7 @@
     },
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/GetTag/",
       "params": [],
       "returns": {
         "type": "string"
@@ -241,6 +255,7 @@
     },
     "GetValue": {
       "description": "Returns the current state of the checkbox form as a boolean value.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/GetValue/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -275,6 +290,7 @@
     },
     "IsFilled": {
       "description": "Checks if the current form is filled.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/IsFilled/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -398,6 +414,7 @@
     },
     "SetChoiceName": {
       "description": "Sets the choice name for the current radio button.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetChoiceName/",
       "params": [
         {
           "description": "The radio button choice name.",
@@ -431,6 +448,7 @@
     },
     "SetGroupValue": {
       "description": "Selects the radio button with the specified choice name in the group.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetGroupValue/",
       "params": [
         {
           "description": "The choice name of the radio button to select.",
@@ -446,6 +464,7 @@
     },
     "SetLabel": {
       "description": "Sets the label for the current check box.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetLabel/",
       "params": [
         {
           "description": "The label.",
@@ -461,6 +480,7 @@
     },
     "SetLock": {
       "description": "Sets the lock state of the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetLock/",
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -531,6 +551,7 @@
     },
     "SetRole": {
       "description": "Sets the role to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetRole/",
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -546,6 +567,7 @@
     },
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiFormBase/Methods/SetTag/",
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -597,6 +619,7 @@
     },
     "SetValue": {
       "description": "Sets the state of the checkbox form.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCheckBoxForm/Methods/SetValue/",
       "params": [
         {
           "description": "Specifies if the checkbox will be checked (true) or not (false).",

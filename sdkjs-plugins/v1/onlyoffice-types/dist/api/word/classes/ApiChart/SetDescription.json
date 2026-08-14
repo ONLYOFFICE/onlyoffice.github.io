@@ -1,5 +1,6 @@
 {
   "description": "Sets the description of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDescription/",
   "params": [
     {
       "description": "The description to set for the current drawing.",

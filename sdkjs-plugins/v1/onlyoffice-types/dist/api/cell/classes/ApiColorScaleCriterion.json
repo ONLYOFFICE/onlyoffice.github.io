@@ -1,8 +1,10 @@
 {
   "description": "Class representing single criterion in a color scale conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/",
   "methods": {
     "GetColor": {
       "description": "Returns the format color of the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/GetColor/",
       "params": [],
       "returns": {
         "description": "An ApiColor object representing the criterion's color, or `null` if no color is set.",
@@ -13,6 +15,7 @@
     },
     "GetIndex": {
       "description": "Returns the index indicating which threshold the criterion represents.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/GetIndex/",
       "params": [],
       "returns": {
         "description": "Returns 0 for minimum threshold, 1 for midpoint (3-color scale) or maximum (2-color scale), and 2 for maximum threshold (3-color scale only).",
@@ -23,6 +26,7 @@
     },
     "GetType": {
       "description": "Returns the type of the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/GetType/",
       "params": [],
       "returns": {
         "description": "The type of the color scale criterion.",
@@ -33,6 +37,7 @@
     },
     "GetValue": {
       "description": "Returns the value of the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/GetValue/",
       "params": [],
       "returns": {
         "description": "The value of the color scale criterion, or `null` if not set.",
@@ -43,6 +48,7 @@
     },
     "SetColor": {
       "description": "Sets the format color for the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/SetColor/",
       "params": [
         {
           "description": "The ApiColor object specifying the color.",
@@ -58,6 +64,7 @@
     },
     "SetType": {
       "description": "Sets the type for the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/SetType/",
       "params": [
         {
           "description": "The type of the color scale criterion.",
@@ -73,6 +80,7 @@
     },
     "SetValue": {
       "description": "Sets the value for the color scale criterion.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiColorScaleCriterion/Methods/SetValue/",
       "params": [
         {
           "description": "The value of the color scale criterion.",

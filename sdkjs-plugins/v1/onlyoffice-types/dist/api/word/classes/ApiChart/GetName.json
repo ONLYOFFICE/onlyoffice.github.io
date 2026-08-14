@@ -1,5 +1,6 @@
 {
   "description": "Returns the name of the current drawing.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetName/",
   "params": [],
   "returns": {
     "description": "Name of drawing.",

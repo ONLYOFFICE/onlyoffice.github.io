@@ -1,8 +1,10 @@
 {
   "description": "Class representing a collection of format conditions.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/",
   "methods": {
     "Add": {
       "description": "Adds a new format condition to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/Add/",
       "params": [
         {
           "description": "The format condition type.",
@@ -37,6 +39,7 @@
     },
     "AddAboveAverage": {
       "description": "Adds a new above average conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddAboveAverage/",
       "params": [],
       "returns": {
         "description": "The created above average rule, or null if the operation fails.",
@@ -47,6 +50,7 @@
     },
     "AddColorScale": {
       "description": "Adds a new color scale conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddColorScale/",
       "params": [
         {
           "description": "The type of color scale (2 for two-color scale, 3 for three-color scale).",
@@ -64,6 +68,7 @@
     },
     "AddDatabar": {
       "description": "Adds a new data bar conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddDatabar/",
       "params": [],
       "returns": {
         "description": "The created data bar rule, or null if the operation fails.",
@@ -74,6 +79,7 @@
     },
     "AddIconSetCondition": {
       "description": "Adds a new icon set conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddIconSetCondition/",
       "params": [],
       "returns": {
         "description": "The created icon set rule, or null if the operation fails.",
@@ -84,6 +90,7 @@
     },
     "AddTop10": {
       "description": "Adds a new top 10 conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddTop10/",
       "params": [],
       "returns": {
         "description": "The created top 10 rule, or null if the operation fails.",
@@ -94,6 +101,7 @@
     },
     "AddUniqueValues": {
       "description": "Adds a new unique values conditional formatting rule to the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/AddUniqueValues/",
       "params": [],
       "returns": {
         "description": "The created unique values rule, or null if the operation fails.",
@@ -104,6 +112,7 @@
     },
     "Delete": {
       "description": "Deletes all format conditions from the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/Delete/",
       "params": [],
       "returns": {
         "type": "void"
@@ -113,6 +122,7 @@
     },
     "GetCount": {
       "description": "Returns the number of conditional formatting rules in the collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetCount/",
       "params": [],
       "returns": {
         "description": "The number of conditional formatting rules in the collection.",
@@ -123,6 +133,7 @@
     },
     "GetItem": {
       "description": "Returns a format condition by its index.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetItem/",
       "params": [
         {
           "description": "The index of the format condition (1-based).",
@@ -139,6 +150,7 @@
     },
     "GetParent": {
       "description": "Returns the parent range object associated with the current conditional formatting collection.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatConditions/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "The parent range object.",

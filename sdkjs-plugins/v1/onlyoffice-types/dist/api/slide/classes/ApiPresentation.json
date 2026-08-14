@@ -1,5 +1,6 @@
 {
   "description": "Class representing a presentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/",
   "methods": {
     "AddMaster": {
       "description": "Adds the slide master to the presentation slide masters collection.",
@@ -29,6 +30,7 @@
     },
     "AddMathEquation": {
       "description": "Adds a math equation to the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddMathEquation/",
       "params": [
         {
           "description": "The math equation text.",
@@ -103,6 +105,7 @@
     },
     "EnterText": {
       "description": "Add text to the document on the cursor position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/EnterText/",
       "params": [
         {
           "description": "The text to add to document.",
@@ -118,6 +121,7 @@
     },
     "GetActiveShape": {
       "description": "Returns the shape that is currently selected or being edited in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetActiveShape/",
       "params": [],
       "returns": {
         "description": "The active shape object, or null if no shape is currently active.",
@@ -128,6 +132,7 @@
     },
     "GetActiveTable": {
       "description": "Returns the table that is currently selected or being edited in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetActiveTable/",
       "params": [],
       "returns": {
         "description": "The active table object, or null if no table is currently active.",
@@ -138,6 +143,7 @@
     },
     "GetAllCharts": {
       "description": "Returns an array with all the chart objects from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllCharts/",
       "params": [],
       "returns": {
         "type": "ApiChart[]"
@@ -159,6 +165,7 @@
     },
     "GetAllDrawings": {
       "description": "Returns an array with all the drawing objects from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllDrawings/",
       "params": [],
       "returns": {
         "type": "Drawing[]"
@@ -168,6 +175,7 @@
     },
     "GetAllImages": {
       "description": "Returns an array with all the image objects from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllImages/",
       "params": [],
       "returns": {
         "type": "ApiImage[]"
@@ -177,6 +185,7 @@
     },
     "GetAllOleObjects": {
       "description": "Returns an array with all the OLE objects from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllOleObjects/",
       "params": [],
       "returns": {
         "type": "ApiOleObject[]"
@@ -186,6 +195,7 @@
     },
     "GetAllShapes": {
       "description": "Returns an array with all the shape objects from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllShapes/",
       "params": [],
       "returns": {
         "type": "ApiShape[]"
@@ -215,6 +225,7 @@
     },
     "GetAllTables": {
       "description": "Returns an array with all tables from the current presentation (including slide masters and slide layouts).",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllTables/",
       "params": [],
       "returns": {
         "description": "An array with all tables from the current presentation.",
@@ -237,6 +248,7 @@
     },
     "GetCore": {
       "description": "Returns the core properties interface for the current presentation.\nThis method is used to view or modify standard metadata such as title, author, and keywords.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCore/",
       "params": [],
       "returns": {
         "type": "ApiCore"
@@ -270,6 +282,7 @@
     },
     "GetCurrentVisibleSlide": {
       "description": "Returns the current visible slide.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCurrentVisibleSlide/",
       "params": [],
       "returns": {
         "description": "Returns null if the current slide is not found or not visible.",
@@ -280,6 +293,7 @@
     },
     "GetCustomProperties": {
       "description": "Returns the custom properties from the current presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCustomProperties/",
       "params": [],
       "returns": {
         "type": "ApiCustomProperties"
@@ -289,6 +303,7 @@
     },
     "GetCustomXmlParts": {
       "description": "Retrieves the custom XML manager associated with the presentation.\nThis manager allows manipulation and access to custom XML parts within the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCustomXmlParts/",
       "params": [],
       "returns": {
         "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",
@@ -311,6 +326,7 @@
     },
     "GetDrawingsByName": {
       "description": "Returns a collection of drawing objects from the document content filtered by their names.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetDrawingsByName/",
       "params": [
         {
           "description": "An array of drawing names to filter by.",
@@ -338,6 +354,7 @@
     },
     "GetLoopUntilStopped": {
       "description": "Returns whether the presentation loops continuously until the user stops it.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetLoopUntilStopped/",
       "params": [],
       "returns": {
         "description": "True if the presentation is set to loop until stopped; otherwise, false.",
@@ -409,6 +426,7 @@
     },
     "GetStyle": {
       "description": "Returns the presentation style by its name.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetStyle/",
       "params": [
         {
           "description": "The name of the table style to look up.",
@@ -436,6 +454,7 @@
     },
     "InsertParagraphBreak": {
       "description": "Add paragraph to the document on the cursor position.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/InsertParagraphBreak/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -445,6 +464,7 @@
     },
     "MoveCursorDown": {
       "description": "Moves the cursor down.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/MoveCursorDown/",
       "params": [
         {
           "description": "Number of movements.",
@@ -467,6 +487,7 @@
     },
     "MoveCursorLeft": {
       "description": "Moves the cursor to the left.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/MoveCursorLeft/",
       "params": [
         {
           "description": "Number of movements.",
@@ -495,6 +516,7 @@
     },
     "MoveCursorRight": {
       "description": "Moves the cursor to the right.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/MoveCursorRight/",
       "params": [
         {
           "description": "Number of movements.",
@@ -523,6 +545,7 @@
     },
     "MoveCursorUp": {
       "description": "Moves the cursor up.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/MoveCursorUp/",
       "params": [
         {
           "description": "Number of movements.",
@@ -598,6 +621,7 @@
     },
     "Search": {
       "description": "Searches for the specified text in the presentation and returns all found occurrences as text ranges.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/Search/",
       "params": [
         {
           "description": "The text to search for.",
@@ -625,6 +649,7 @@
     },
     "SearchAndReplace": {
       "description": "Finds and replaces the text in the presentation.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SearchAndReplace/",
       "params": [
         {
           "description": "The properties to find and replace.",
@@ -680,6 +705,7 @@
     },
     "SetLoopUntilStopped": {
       "description": "Sets whether the presentation loops continuously until the user stops it.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetLoopUntilStopped/",
       "params": [
         {
           "description": "True to set the presentation to loop until stopped; false otherwise.",

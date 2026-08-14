@@ -1,5 +1,6 @@
 {
   "description": "Scales the height of the figure using the specified coefficient.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ScaleHeight/",
   "params": [
     {
       "description": "The coefficient by which the figure height will be scaled.",

@@ -1,5 +1,6 @@
 {
   "description": "Class representing a style.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiStyle class.",
@@ -138,6 +139,7 @@
     },
     "SetConditionalTableStyle": {
       "description": "Sets conditional formatting properties that are applied to table parts matching the specified table style type.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetConditionalTableStyle/",
       "params": [
         {
           "description": "The conditional table style properties.",
@@ -171,6 +173,7 @@
     },
     "SetParaPr": {
       "description": "Sets the paragraph properties to the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetParaPr/",
       "params": [
         {
           "description": "The paragraph properties that will be set.",
@@ -186,6 +189,7 @@
     },
     "SetTableCellPr": {
       "description": "Sets the table cell properties to the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetTableCellPr/",
       "params": [
         {
           "description": "The table cell properties that will be set.",
@@ -201,6 +205,7 @@
     },
     "SetTablePr": {
       "description": "Sets the table properties to the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetTablePr/",
       "params": [
         {
           "description": "The table properties that will be set.",
@@ -216,6 +221,7 @@
     },
     "SetTableRowPr": {
       "description": "Sets the table row properties to the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetTableRowPr/",
       "params": [
         {
           "description": "The table row properties that will be set.",
@@ -231,6 +237,7 @@
     },
     "SetTextPr": {
       "description": "Sets the text properties to the current style.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiStyle/Methods/SetTextPr/",
       "params": [
         {
           "description": "The text properties that will be set.",

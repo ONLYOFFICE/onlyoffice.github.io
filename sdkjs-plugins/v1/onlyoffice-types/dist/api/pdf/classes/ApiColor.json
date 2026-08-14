@@ -1,8 +1,10 @@
 {
   "description": "Represents a color that can be applied to text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/",
   "methods": {
     "FromJSON": {
       "description": "Converts the JSON object into the ApiColor object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/FromJSON/",
       "params": [
         {
           "description": "JSON representation of the color.",
@@ -19,6 +21,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiColor class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"color\""
@@ -28,6 +31,7 @@
     },
     "GetHex": {
       "description": "Gets the HEX string representation of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/GetHex/",
       "params": [],
       "returns": {
         "description": "A six-digit uppercase hex string, e.g. \"FF00AA\".",
@@ -38,6 +42,7 @@
     },
     "GetRGB": {
       "description": "Gets the RGB components of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/GetRGB/",
       "params": [],
       "returns": {
         "type": "object"
@@ -47,6 +52,7 @@
     },
     "GetRGBA": {
       "description": "Gets the RGBA components of the color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/GetRGBA/",
       "params": [],
       "returns": {
         "type": "object"
@@ -56,6 +62,7 @@
     },
     "GetThemeName": {
       "description": "Gets the theme color name if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/GetThemeName/",
       "params": [],
       "returns": {
         "description": "The theme color name or null if not a theme color.",
@@ -66,6 +73,7 @@
     },
     "IsThemeColor": {
       "description": "Returns true if the color is a theme color.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/IsThemeColor/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -75,6 +83,7 @@
     },
     "ToJSON": {
       "description": "Converts the ApiColor object into the JSON object.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiColor/Methods/ToJSON/",
       "params": [],
       "returns": {
         "description": "JSON string representation of the color.",

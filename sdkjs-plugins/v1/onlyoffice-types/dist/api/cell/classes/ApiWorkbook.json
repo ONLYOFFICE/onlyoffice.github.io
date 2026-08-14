@@ -4,6 +4,7 @@
   "methods": {
     "Calculate": {
       "description": "Recalculates the cells that need recalculation (changed, added or volatile) across the workbook. Forces the recalc that is otherwise deferred until a macro finishes, so up-to-date formula results can be read within the same macro.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/Calculate/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -13,6 +14,7 @@
     },
     "GetActiveChart": {
       "description": "Returns the active chart of the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetActiveChart/",
       "params": [],
       "returns": {
         "type": "ApiChart | null"
@@ -22,6 +24,7 @@
     },
     "GetActiveSheet": {
       "description": "Returns the active sheet of the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetActiveSheet/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet"
@@ -41,6 +44,7 @@
     },
     "GetCustomProperties": {
       "description": "Returns the custom properties of the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetCustomProperties/",
       "params": [],
       "returns": {
         "type": "ApiCustomProperties"
@@ -50,6 +54,7 @@
     },
     "GetDrawingsByName": {
       "description": "Returns drawings with the specified names from the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetDrawingsByName/",
       "params": [
         {
           "description": "An array of drawing names.",
@@ -66,6 +71,7 @@
     },
     "GetName": {
       "description": "Returns the name of the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetName/",
       "params": [],
       "returns": {
         "type": "string"
@@ -75,6 +81,7 @@
     },
     "GetSheets": {
       "description": "Returns a sheet collection that represents all the sheets in the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetSheets/",
       "params": [],
       "returns": {
         "type": "ApiWorksheet[]"
@@ -84,6 +91,7 @@
     },
     "GetTheme": {
       "description": "Returns the theme of the workbook.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetTheme/",
       "params": [],
       "returns": {
         "type": "ApiTheme"
@@ -93,6 +101,7 @@
     },
     "Redraw": {
       "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link ApiWorkbook#Calculate} first if formula results must be up to date.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/Redraw/",
       "params": [],
       "returns": {
         "type": "boolean"
@@ -102,6 +111,7 @@
     },
     "Save": {
       "description": "Saves changes to the specified document.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/Save/",
       "params": [],
       "returns": {
         "type": "void"

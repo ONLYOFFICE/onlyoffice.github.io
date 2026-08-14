@@ -1,5 +1,6 @@
 {
   "description": "Class representing a document text field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTextForm/",
   "extends": [
     "ApiFormBase"
   ]

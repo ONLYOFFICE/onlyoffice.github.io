@@ -1,5 +1,6 @@
 {
   "description": "Class representing freeze panes.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/",
   "methods": {
     "FreezeAt": {
       "description": "Sets the frozen cells in the active worksheet view. The range provided corresponds to the cells that will be frozen in the top- and left-most pane.",

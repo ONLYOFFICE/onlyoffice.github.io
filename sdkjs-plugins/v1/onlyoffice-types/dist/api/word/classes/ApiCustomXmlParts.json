@@ -1,8 +1,10 @@
 {
   "description": "Class representing a custom XML manager, which provides methods to manage custom XML parts in the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/",
   "methods": {
     "Add": {
       "description": "Adds a new custom XML part to the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/Add/",
       "params": [
         {
           "description": "The XML string to be added.",
@@ -19,6 +21,7 @@
     },
     "GetAll": {
       "description": "Returns all custom XML parts from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetAll/",
       "params": [],
       "returns": {
         "description": "An array of all custom XML parts.",
@@ -29,6 +32,7 @@
     },
     "GetById": {
       "description": "Returns a custom XML part by its ID from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetById/",
       "params": [
         {
           "description": "The XML part ID.",
@@ -45,6 +49,7 @@
     },
     "GetByNamespace": {
       "description": "Returns custom XML parts by namespace from the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetByNamespace/",
       "params": [
         {
           "description": "The namespace of the XML parts.",
@@ -61,6 +66,7 @@
     },
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlParts class.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetClassType/",
       "params": [],
       "returns": {
         "type": "\"customXmlParts\""
@@ -69,6 +75,7 @@
     },
     "GetCount": {
       "description": "Returns a number of custom XML parts in the XML manager.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetCount/",
       "params": [],
       "returns": {
         "description": "The number of custom XML parts.",

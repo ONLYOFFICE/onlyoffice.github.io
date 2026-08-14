@@ -1,5 +1,6 @@
 {
   "description": "Class representing a Paragraph hyperlink.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/",
   "methods": {
     "GetClassType": {
       "description": "Returns a type of the ApiHyperlink class.",
@@ -69,6 +70,7 @@
     },
     "GetParent": {
       "description": "Returns the parent element (a paragraph or an inline content control) that directly contains the current hyperlink.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetParent/",
       "params": [],
       "returns": {
         "description": "returns null if the hyperlink has no parent.",
@@ -79,6 +81,7 @@
     },
     "GetPosInParent": {
       "description": "Returns the position (index) of the current hyperlink within its parent element.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetPosInParent/",
       "params": [],
       "returns": {
         "description": "returns -1 if the hyperlink has no parent.",

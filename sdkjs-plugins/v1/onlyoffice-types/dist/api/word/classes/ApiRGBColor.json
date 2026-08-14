@@ -1,5 +1,6 @@
 {
   "description": "Class representing an RGB Color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiRGBColor/",
   "extends": [
     "ApiUniColor"
   ],
@@ -18,6 +19,7 @@
     },
     "GetRGB": {
       "description": "Returns a color value in RGB format.",
+      "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiUniColor/Methods/GetRGB/",
       "params": [],
       "returns": {
         "type": "number"

@@ -1,5 +1,6 @@
 {
   "description": "Returns the keep next value of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetKeepNext/",
   "params": [],
   "returns": {
     "description": "Returns _true_ if the paragraph is kept on the same page as the following paragraph,\r_false_ if it is not, or _undefined_ if the value is not set.",
