@@ -1179,10 +1179,22 @@ function buildGenerationManifest(paths) {
         : paths.sdkjs;
       sourceFiles.push({
         repository: sourceRepo === paths.sdkjsForms ? 'sdkjs-forms' : 'sdkjs',
-        path: path.relative(sourceRepo, sourcePath),
+        // Forward slashes always: `path.relative` yields the host separator, so a Windows run
+        // recorded `word\apiBuilder.js` and the same commit regenerated on Linux produced
+        // `word/apiBuilder.js` - a diff in a file `check-generated` compares, with nothing about the
+        // types actually changed. These are repository-relative identifiers, not host paths.
+        path: path.relative(sourceRepo, sourcePath).split(path.sep).join('/'),
         sha256: sha256File(sourcePath),
       });
     }
+  }
+
+  // Cheap self-check rather than a separate script: the manifest is compared across machines by
+  // `check-generated`, so a host separator leaking back into a path is a portability bug that must
+  // fail at generation time, not show up as a mystery diff in someone else's CI.
+  const hostPaths = sourceFiles.filter((file) => file.path.includes('\\'));
+  if (hostPaths.length > 0) {
+    throw new Error(`Manifest paths must use forward slashes, got: ${hostPaths.map((f) => f.path).join(', ')}`);
   }
 
   // generate-plugin-methods.js owns `repositories.sdkjsExt` and `pluginMethodSourceFiles` - it reads
@@ -1192,9 +1204,13 @@ function buildGenerationManifest(paths) {
   const existing = readExistingManifest();
 
   return {
+    // Only versions that are pinned by package-lock.json, and therefore identical for everyone
+    // running `npm ci` on this commit. The Node version used to be recorded here too, but it is
+    // ambient rather than pinned: any contributor or CI runner on a different Node rewrote the
+    // manifest and failed `check-generated` with nothing about the types changed. jsdoc genuinely
+    // affects the parsed doclets and typescript the runtime index, so those stay.
     generator: {
       packageVersion: JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')).version,
-      node: process.version,
       jsdoc: packageVersion('jsdoc'),
       typescript: packageVersion('typescript'),
     },

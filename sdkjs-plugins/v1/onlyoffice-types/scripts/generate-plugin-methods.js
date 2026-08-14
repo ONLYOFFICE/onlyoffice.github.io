@@ -502,6 +502,8 @@ function writeExtProvenance(paths, usedSources) {
     .sort()
     .map((file) => ({
       repository: 'sdkjs-ext',
+      // Forward slashes for the same reason generate-types.js normalizes `sourceFiles`: these are
+      // repository-relative identifiers compared across machines by `check-generated`.
       path: path.relative(paths.sdkjsExt, file).split(path.sep).join('/'),
       sha256: sha256File(file),
     }));

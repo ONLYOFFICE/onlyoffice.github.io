@@ -59,6 +59,12 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   `GetClassType`) are Omitted.
 - `any` can no longer reappear through an untested fallback path (undocumented property, empty
   typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+- `generation-manifest.json` was not reproducible across machines, and `check-generated` diffs it:
+  source paths came from `path.relative` and so carried the host separator (`word\apiBuilder.js` on
+  Windows, `word/apiBuilder.js` on Linux), and the recorded Node version changed with whoever ran
+  the generator. Paths are normalised to forward slashes (asserted at generation time) and the Node
+  version is gone - `jsdoc` and `typescript` stay because package-lock.json pins them, so they are
+  identical for everyone on a given commit, which is exactly what Node was not.
 - Generation was silently non-deterministic in `sdkjs-ext`. It contributes real methods to Word and
   Slide, but a missing checkout was skipped by a `fs.existsSync` filter: generation exited 0 having
   produced 104 Word methods instead of 109 and 51 Slide methods instead of 57. A missing declared
