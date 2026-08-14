@@ -20,6 +20,14 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   to be held in context), and each class has its own detail file, sharded per method above 80 KB so
   that outliers like `ApiWorksheetFunction` (416 members) can't reintroduce the same problem.
   Member-for-member identical to the old index - 6677 methods, 287 `executeMethod` names.
+- `@example` blocks are no longer emitted into the declarations; they live in `dist/api/` only. They
+  were 47% of the generated `.d.ts` by size (1.95 MB of 4.17 MB), and that weight bought little where
+  it landed - a multi-kilobyte snippet is unreadable in a hover tooltip, and an agent reading the
+  `.d.ts` spent half its budget on them. Every member carrying an example also carries a verified
+  `docsUrl` (2712 of 2712), so hovers keep the description, `@param`/`@returns`, `@since` and a
+  one-click link to the full example, while the JSON tree - where per-class files make size a
+  non-issue - keeps all 2712 examples inline. Declarations dropped to 2.20 MB and the ambient bundle
+  from 4.3 MB to 2.36 MB.
 - `peerDependencies` now requires `typescript >=5.0.0`. It always did in practice - `index.d.ts`
   re-exports the editor namespaces with `export type *`, which 4.x rejects outright (`TS1383`) - the
   declared floor was simply wrong.
@@ -66,6 +74,23 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   `GetClassType`) are Omitted.
 - `any` can no longer reappear through an untested fallback path (undocumented property, empty
   typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+- `@see` links to api.onlyoffice.com are derived from sdkjs instead of the pinned snapshot, which
+  more than doubles them (2804 → 6980) and gives PDF documentation links for the first time
+  (0 → 1478). sdkjs writes the editor segment as a literal `{Editor}` placeholder
+  (`office-js-api/Examples/{Editor}/Api/Methods/GetDocument.js`) that the docs pipeline fills in per
+  editor; not substituting it meant the path failed to parse, so every link came from the snapshot -
+  and PDF, the one editor without a snapshot, got none at all despite sdkjs carrying 536 such paths
+  for it. This removes the second hidden dependency on the snapshot, after prose.
+
+  About 10% of the links point at pages the documentation site has not published yet: the site
+  tracks 9.1.0 while these types come from 9.5.0. They resolve as it catches up, and are
+  deliberately *not* filtered against a local docs checkout - doing so would suppress correct links
+  to pages that are about to exist, and tie this package's output to the site's release cadence
+  rather than to the API.
+- The compact per-editor index was keyed off methods, so a class with no methods of its own was
+  absent from it entirely - 56 of the 67 classes in the Forms namespace, whose members are all
+  inherited. An agent scanning the index would have concluded `Forms.ApiChart` does not exist. It
+  now lists classes, typedefs and events by name regardless.
 - Descriptions were taken from the pinned `office-js-api-declarations` snapshot in preference to
   sdkjs, which meant newer prose was discarded for older: `Api.CreateTable`'s `Breaking Change` note
   about the 9.4.0 parameter-order reversal existed in sdkjs and never reached the types. Measured

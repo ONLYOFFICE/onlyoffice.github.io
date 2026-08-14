@@ -130,36 +130,41 @@ PDF is the visible control case - it has no snapshot, and therefore no `@example
 Every generated class, typedef, property and method carries a real multi-line JSDoc block, so a hover
 in the editor shows what the reference site shows:
 
-````typescript
+```typescript
 /**
  * Adds a comment to the current document selection, or to the current word if no text is selected.
  *
- * @param sText - The comment text (required).
- * @param sAuthor - The author's name (optional).
+ * @param sText - The comment text.
+ * @param sAuthor - The author's name.
  * @returns Returns null if the comment was not added.
- *
- * @example
- * ```js
- * let doc = Api.GetDocument();
- * doc.AddComment("This is a comment to the document.", "Jane");
- * ```
  *
  * @see https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddComment/
  */
 AddComment(sText: string, sAuthor?: string, sUserId?: string): ApiComment;
-````
+```
 
 Everything in that block comes from the sources above, not from hand-written prose:
 
 - the description, with the docs' inline HTML (`<b>"tile"</b>`) translated to markdown;
 - `@param`/`@returns` from the documented arguments and return value - param prose is merged by
   parameter *name*, since the snapshot occasionally documents a different arity than current sdkjs;
+- `@default`, from a parameter's `[name=value]` form;
 - `@since`, where sdkjs records the editor version a member first appeared in;
-- `@example`, from the docs' "## Try it" snippet (its `document-builder={...}` fence directive, which
-  means nothing outside the docs site, is dropped);
-- `@see`, derived from the `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` path
-  already present in the JSDoc - the same three segments address the public reference page, so the
-  link is data-driven rather than guessed and can't point at a page that doesn't exist.
+- `@see`, built from the `@see office-js-api/Examples/{Editor}/<Class>/Methods/<Method>.js` path in
+  the source doclet. `{Editor}` is a literal placeholder that the docs pipeline fills in per editor,
+  and so does this generator - substituting it is what makes the link derive from sdkjs rather than
+  from the snapshot, which is why PDF has documentation links at all.
+
+**Examples are deliberately absent from the declarations.** They were 47% of the generated `.d.ts`
+by size, and a multi-kilobyte snippet is unreadable in a hover tooltip while costing every reader -
+compiler and agent alike - the bytes. They live in `dist/api/` instead, where per-class files make
+size a non-issue; every member that has one also has a `docsUrl` (2712 of 2712 measured), so the
+hover keeps a one-click route to the full example.
+
+Roughly 10% of `@see` links point at pages the documentation site has not published yet, because it
+trails sdkjs by several minor versions. They start resolving as it catches up. Do not filter them
+against a local docs checkout: that would drop correct links to pages about to exist, and make this
+package's output depend on the site's release cadence instead of the API's.
 
 ## Type-checking
 
