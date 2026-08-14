@@ -31,8 +31,11 @@ side of this is the [Versioning](README.md#versioning) table). To cut a release:
    prints e.g. `v9.5.0.150`. The **first three segments** are the package version - `9.5.0`. The
    fourth is a build number and is not part of it. A trailing `-<n>-g<sha>` (e.g.
    `v9.5.0.150-2-g586ec09e`) means the checkout is *n* commits past that tag: fine while developing,
-   but move to the exact tag before publishing, or the manifest will record a version the released
-   types were not actually generated from.
+   but not for a release, or the manifest records a version the types were not generated from.
+   `npm run check-release-sources` enforces this - it regenerates with `--require-clean-sources
+   --require-release-tag` and fails if any source checkout is dirty or sits off a tag. Run it
+   instead of `check-generated` when cutting a release; do not rely on remembering the rule, which
+   is how `9.5.0` came to record `v9.5.0.150-2-g586ec09e2d`.
 2. Regenerate (`npm run generate`) and run the checks below. `src/generated/generation-manifest.json`
    records the commit *and* that `describe` string, so the mapping from a published version back to
    its source is auditable later - do not hand-edit it.

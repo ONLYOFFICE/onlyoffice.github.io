@@ -114,6 +114,7 @@
     "generate-schema": "node scripts/generate-config-schema.js",
     "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
+    "check-release-sources": "npm run generate -- --require-clean-sources --require-release-tag && git diff --exit-code -- src/generated",
     "check-runtime-index": "npm run generate-runtime-index && git diff --exit-code -- dist/api-index.json",
     "check-schema": "npm run generate-schema && git diff --exit-code -- schemas/config.schema.json",
     "check-runtime": "node scripts/check-runtime-contract.js",

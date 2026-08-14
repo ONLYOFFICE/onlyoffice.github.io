@@ -1144,6 +1144,20 @@ function buildGenerationManifest(paths) {
     throw new Error('Source checkout is dirty; --require-clean-sources requires clean sdkjs and sdkjs-forms repositories.');
   }
 
+  // A release's version is the editor version its sources carry, so generating from a checkout that
+  // sits *past* a tag produces types labelled with a release they were not built from. `git describe`
+  // appends `-<commits>-g<sha>` in exactly that case; a checkout on the tag itself has no suffix.
+  // This used to be prose in CONTRIBUTING ("move to the exact tag before publishing") and was
+  // promptly violated - the 9.5.0 manifest recorded `v9.5.0.150-2-g586ec09e2d` - so it is a check now.
+  if (process.argv.includes('--require-release-tag')) {
+    const offTag = Object.entries(repositories)
+      .filter(([, repo]) => repo.describe && /-\d+-g[0-9a-f]+$/.test(repo.describe))
+      .map(([name, repo]) => `${name} is at ${repo.describe}`);
+    if (offTag.length > 0) {
+      throw new Error(`--require-release-tag requires every source checkout to sit exactly on a tag: ${offTag.join('; ')}. Check out the release tag and regenerate.`);
+    }
+  }
+
   const sourceFiles = [];
   const seen = new Set();
 
