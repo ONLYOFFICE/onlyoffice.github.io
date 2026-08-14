@@ -447,7 +447,7 @@
           "signature": "executeCommand: ExecuteCommandCallback;"
         },
         "executeMethod": {
-          "signature": "executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) & ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) & ((methodName: 'ResizeWindow', args?: [frameId: string, size: number, minSize: number, maxSize: number]) => void) & (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) & (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) & (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) & (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void) & (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T], callback?: (result: FormsMethodReturn<T>) => void) => void);"
+          "signature": "executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) & ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) & ((methodName: 'ResizeWindow', args?: [frameId: string, size: [width: number, height: number], minSize?: [width: number, height: number], maxSize?: [width: number, height: number]], callback?: (result: 'resize_result') => void) => void) & (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) & (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) & (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) & (<T extends PdfMethodName>(methodName: T, args?: PdfMethodArgs[T], callback?: (result: PdfMethodReturn<T>) => void) => void) & (<T extends FormsMethodName>(methodName: T, args?: FormsMethodArgs[T], callback?: (result: FormsMethodReturn<T>) => void) => void);"
         },
         "getInputHelper": {
           "description": "Returns the {@link InputHelper} created by {@link AscPlugin.createInputHelper}.",
@@ -775,7 +775,7 @@
     "PluginEditorEventName": {
       "description": "Editor content events (paragraph/page changes) - a distinct registry from PluginEventName, which covers plugin-window-level events (theme, resize, ...)",
       "kind": "type",
-      "type": "'onChangeCurrentPage' | 'onParagraphText' | 'onPargraphAdd' | 'onParagraphRemove' | string"
+      "type": "'onChangeCurrentPage' | 'onParagraphText' | 'onParagraphAdd' | 'onParagraphRemove' | string"
     },
     "PluginEventCallback": {
       "kind": "type",

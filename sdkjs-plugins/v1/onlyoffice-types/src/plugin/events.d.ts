@@ -94,7 +94,7 @@ type PluginEventCallback<T = unknown> = (...args: T[]) => void;
 type PluginEventHandler<K extends keyof PluginEventMap> = (...args: PluginEventMap[K]) => void;
 
 /** Editor content events (paragraph/page changes) - a distinct registry from PluginEventName, which covers plugin-window-level events (theme, resize, ...) */
-type PluginEditorEventName = 'onChangeCurrentPage' | 'onParagraphText' | 'onPargraphAdd' | 'onParagraphRemove' | string;
+type PluginEditorEventName = 'onChangeCurrentPage' | 'onParagraphText' | 'onParagraphAdd' | 'onParagraphRemove' | string;
 
 type PluginEditorEventCallback<T = unknown> = (...args: T[]) => void;
 

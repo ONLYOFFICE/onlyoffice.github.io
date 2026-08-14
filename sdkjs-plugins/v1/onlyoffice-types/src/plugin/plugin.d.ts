@@ -224,12 +224,15 @@ interface AscPlugin {
     executeMethod: ((methodName: 'CloseWindow', args?: [windowId: number]) => void) &
         ((methodName: 'ShowButton', args?: [buttonId: string, visible: boolean, align?: string]) => void) &
         /**
-         * Like CloseWindow/ShowButton, undocumented on api.onlyoffice.com but real and callable -
-         * `common/apiBase_plugins.js`'s own `pluginMethod_ResizeWindow` takes exactly these 4
-         * params (frameId, size, minSize, maxSize), not the single `aSize: number[]` this used to
-         * be typed as here.
+         * Like CloseWindow/ShowButton, undocumented on api.onlyoffice.com but real and callable.
+         * sdkjs's own JSDoc for `pluginMethod_ResizeWindow` types size/minSize/maxSize as plain
+         * `number`, but the web runtime (`onPluginWindowResize` in web-apps' Plugins.js) reads
+         * `size[0]`/`size[1]` and `minSize.length`/`maxSize[0]` - all three are `[width, height]`
+         * pairs on the wire, which is also how every real caller (e.g. the antidote and mendeley
+         * plugins) passes them. minSize/maxSize are omitted when only resizing, and the callback
+         * fires with `"resize_result"` once the window has been resized.
          */
-        ((methodName: 'ResizeWindow', args?: [frameId: string, size: number, minSize: number, maxSize: number]) => void) &
+        ((methodName: 'ResizeWindow', args?: [frameId: string, size: [width: number, height: number], minSize?: [width: number, height: number], maxSize?: [width: number, height: number]], callback?: (result: 'resize_result') => void) => void) &
         (<T extends WordMethodName>(methodName: T, args?: WordMethodArgs[T], callback?: (result: WordMethodReturn<T>) => void) => void) &
         (<T extends CellMethodName>(methodName: T, args?: CellMethodArgs[T], callback?: (result: CellMethodReturn<T>) => void) => void) &
         (<T extends SlideMethodName>(methodName: T, args?: SlideMethodArgs[T], callback?: (result: SlideMethodReturn<T>) => void) => void) &

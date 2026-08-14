@@ -8,6 +8,10 @@
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
+    // Nothing in this package actually emits (every script passes --noEmit), but TS 6 errors on
+    // inferring the common source directory, and the tsconfig.test.*.json children pull in files
+    // from test/ and src/overrides/ - so rootDir must cover the whole package, not src/generated.
+    "rootDir": ".",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
