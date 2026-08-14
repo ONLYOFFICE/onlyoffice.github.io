@@ -59,6 +59,12 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   `GetClassType`) are Omitted.
 - `any` can no longer reappear through an untested fallback path (undocumented property, empty
   typedef, JSDoc's own `{any}` tag) - all three now resolve to `unknown` instead.
+- `PluginConfig` required `offered` and `version`, which the reference documents as optional and
+  which real plugins omit (only 17 of 54 shipped configs carry `offered`). The mismatch was hidden
+  because the checked-in `config.schema.json` had gone stale and still required neither, so
+  `validate-schema` was checking configs against an outdated schema instead of the current types.
+  Both are optional now, `guid`/`name`/`variations` remain required, and `npm run check-schema`
+  guards the schema against drifting from the types again.
 - The documentation examples were type-checked against `declare var Api: any`, so every `Api.*` call
   in them - the whole editor object model - was unchecked; only the `executeMethod` shapes were
   really covered. `npm test` now runs one program per editor, each with that editor's real global

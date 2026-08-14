@@ -48,10 +48,15 @@ interface PluginConfig {
     minVersion?: string;
     name: string;
     nameLocale?: Record<string, string>;
-    offered: string;
+    /** The plugin author who proposed the plugin for publication. */
+    offered?: string;
     url?: string;
     variations: VariationConfig[];
-    version: string;
+    /**
+     * The plugin's own version, e.g. `"1.0"`. Optional per the reference, and genuinely omitted by
+     * shipped plugins - `guid`, `name` and `variations` are the only required top-level fields.
+     */
+    version?: string;
 }
 
 interface InstalledPluginInfo {

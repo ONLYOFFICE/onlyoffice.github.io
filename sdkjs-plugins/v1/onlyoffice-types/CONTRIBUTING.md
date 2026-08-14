@@ -5,6 +5,23 @@ working on `@onlyoffice/plugins-types` itself (as opposed to consuming it in a p
 [README.md](README.md) for that). See also [AGENTS.md](AGENTS.md) for a condensed version aimed at
 coding agents.
 
+## Moving out of the monorepo
+
+The published metadata already points at the package's own repository
+(`github.com/ONLYOFFICE/plugins-types`, package at the root, `master` branch), matching how
+`@onlyoffice/doceditor-types` is laid out. Two checks still read sibling directories of the
+monorepo and are the real work of the move:
+
+- `check-runtime-contract.js` reads `../plugins.dev.js` - the vendored plugin runtime.
+- `validate-config-schema.js` reads `../../content/*/config.json` - the 52 real plugin configs the
+  schema is validated against.
+
+Both currently get their input for free by sitting next to the thing they validate. After the move
+they need either a vendored copy inside the package (and then a freshness check of their own, or
+they quietly validate against a stale snapshot) or a checkout path passed in the way `SDKJS_PATH`
+already is for the generators. Everything else - generation, the type checks, the ambient bundle,
+the index - is already location-independent.
+
 ## Releasing
 
 The package version mirrors the editor version the types were generated from (the consumer-facing
@@ -192,6 +209,12 @@ re-exports every editor namespace with `export type * from "..."`, which TypeScr
 5.0 on (4.9 rejects it with `TS1383: Only named exports may use 'export type'`). Lowering the floor
 without first rewriting those 14 re-exports as named `export type { ... }` lists ships a package that
 fails to parse on the very first file.
+
+`npm run check-schema` regenerates `schemas/config.schema.json` from the types and fails if the
+checked-in copy differs. It exists because the schema is a build artifact with no other guard:
+it silently went stale once, still requiring only `variations` while `PluginConfig` had grown two
+more required fields, so `validate-schema` was passing against an outdated schema rather than
+against the types it claims to mirror. Run it after touching anything under `src/config/`.
 
 `npm run validate-schema` checks `schemas/config.schema.json` against every real `config.json`
 already in this monorepo (`sdkjs-plugins/content/*/config.json`) - not part of `npm test` since it

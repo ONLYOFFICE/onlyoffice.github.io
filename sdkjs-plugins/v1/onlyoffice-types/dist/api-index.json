@@ -114904,7 +114904,9 @@
             "signature": "nameLocale?: Record<string, string>;"
           },
           "offered": {
-            "signature": "offered: string;"
+            "description": "The plugin author who proposed the plugin for publication.",
+            "optional": true,
+            "signature": "offered?: string;"
           },
           "onlyofficeScheme": {
             "description": "Marks the plugin as belonging to ONLYOFFICE's own scheme/catalog rather than a third party.",
@@ -114919,7 +114921,9 @@
             "signature": "variations: VariationConfig[];"
           },
           "version": {
-            "signature": "version: string;"
+            "description": "The plugin's own version, e.g. `\"1.0\"`. Optional per the reference, and genuinely omitted by\nshipped plugins - `guid`, `name` and `variations` are the only required top-level fields.",
+            "optional": true,
+            "signature": "version?: string;"
           }
         }
       },
