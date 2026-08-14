@@ -682,16 +682,15 @@ function renderJsDoc(doc, indent) {
   }
   if (tags.length > 0) blocks.push(tags);
 
-  // Examples are deliberately NOT emitted into the declarations - they go to `dist/api/` instead
-  // (see buildApiIndexSection, which reads the same `examples` off this description).
-  //
-  // They were 47% of the generated .d.ts by size, and that weight bought little where it landed: a
-  // multi-kilobyte snippet is unreadable in a hover tooltip, and an agent reading the .d.ts spends
-  // half its budget on them. Every member that has an example also has a verified `docsUrl` (2712 of
-  // 2712 measured), so the hover keeps the description, `@param`/`@returns`, `@since` and a one-click
-  // link to the full example - while the JSON tree, where per-class files make size a non-issue,
-  // keeps the code itself for the consumer that actually benefits from having it inline.
-  void examples;
+  // Every example, uncapped and without exception. This was briefly removed on the grounds that
+  // examples are ~47% of the generated .d.ts, which turned out to be the wrong benchmark: TypeScript
+  // itself ships `lib.dom.d.ts` at 1.8 MB in every install, so declarations of this size are
+  // unremarkable. And the "unreadable in a tooltip" case is 5 members out of 2712 (18 exceed 2 KB,
+  // median 492 B) - not worth a size threshold that would split members into documented and
+  // undocumented by an arbitrary rule. `dist/api/` keeps its own copy for consumers reading JSON.
+  for (const example of examples) {
+    blocks.push(['@example', '```js', ...example.split('\n').map((line) => line.trimEnd()), '```']);
+  }
   if (doc.docsUrl) blocks.push([`@see ${doc.docsUrl}`]);
 
   if (blocks.length === 0) return '';

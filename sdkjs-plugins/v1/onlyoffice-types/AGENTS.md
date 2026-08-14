@@ -72,10 +72,11 @@ three channels, and confusing them is the most common source of broken plugin co
 
   Rule of thumb for which half to search: `<editor>/…` answers what you do *inside* a `callCommand`
   body; `runtime.json` answers how you write the plugin around it.
-- Every generated member's JSDoc carries the description, `@param`/`@returns`, `@default`, `@since`
-  and an `@see` link to api.onlyoffice.com (hover in the editor). Runnable **examples are only in
-  `dist/api/`**, not in the `.d.ts` - they were half its size and unreadable in a tooltip. If you
-  want to see how a member is used, read its detail file rather than grepping the declarations.
+- Every generated member's JSDoc carries the same information (hover in the editor): description,
+  `@param`/`@returns`, `@default`, `@since`, a runnable `@example` and an `@see` link to
+  api.onlyoffice.com. About 10% of those links point at pages the docs site has not published yet -
+  it trails sdkjs by a few minor versions - so a 404 there means "not documented yet", not "wrong
+  member".
 - `dist/ambient/` holds a flattened no-import `.d.ts` bundle for Monaco-style tooling
   (`addExtraLib()`): load `onlyoffice-plugins-types.ambient.d.ts` plus exactly one
   `onlyoffice-plugins-types.<editor>-api.ambient.d.ts` addon, in that order.

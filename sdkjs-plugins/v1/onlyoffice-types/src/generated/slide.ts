@@ -8,10 +8,24 @@ export namespace Slide {
   /** Animation trigger type. */
   export type AnimationTriggerType = "onclick" | "withprevious" | "afterprevious";
 
-  /** Types of all supported forms. */
+  /**
+   * Types of all supported forms.
+   *
+   * @example
+   * ```js
+   * let copyTextForm = textForm.Copy();
+   * ```
+   */
   export type ApiForm = ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm;
 
-  /** Axis position in the chart. */
+  /**
+   * Axis position in the chart.
+   *
+   * @example
+   * ```js
+   * chart.SetAxieNumFormat("top", "0.00");
+   * ```
+   */
   export type AxisPos = "top" | "bottom" | "right" | "left";
 
   /** The Base64 image string. */
@@ -23,6 +37,11 @@ export namespace Slide {
    * over the created shape surface.
    * **"stretch"** - if the image is smaller than the shape which is filled, the image will be stretched
    * to fit the created shape surface.
+   *
+   * @example
+   * ```js
+   * let blipFill = Api.CreateBlipFill("https://example.com/myimage.png", "tile");
+   * ```
    */
   export type BlipFillType = "tile" | "stretch";
 
@@ -41,13 +60,35 @@ export namespace Slide {
     Color: ApiColor;
   }
 
-  /** A border type. */
+  /**
+   * A border type.
+   *
+   * @example
+   * ```js
+   * paraPr.SetBottomBorder("single", 24, 0, 0, 255, 0);
+   * ```
+   */
   export type BorderType = "none" | "single";
 
-  /** A bullet type which will be added to the paragraph in spreadsheet or presentation. */
+  /**
+   * A bullet type which will be added to the paragraph in spreadsheet or presentation.
+   *
+   * @example
+   * ```js
+   * // The paragraph will be starting with the Arabic numeral which has parenthesis
+   * let bullet = Api.CreateNumbering("ArabicParenR");
+   * ```
+   */
   export type BulletType = "None" | "ArabicPeriod" | "ArabicParenR" | "RomanUcPeriod" | "RomanLcPeriod" | "AlphaLcParenR" | "AlphaLcPeriod" | "AlphaUcParenR" | "AlphaUcPeriod";
 
-  /** Possible values for the caption label. */
+  /**
+   * Possible values for the caption label.
+   *
+   * @example
+   * ```js
+   * paragraph.AddCaptionCrossRef("Table", "pageNum", caption);
+   * ```
+   */
   export type CaptionLabel = "Table" | "Equation" | "Figure";
 
   /**
@@ -57,6 +98,11 @@ export namespace Slide {
    * **"Roman"** - upper Roman.
    * **"roman"** - lower Roman.
    * **"Arabic"** - arabic.
+   *
+   * @example
+   * ```js
+   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
+   * ```
    */
   export type CaptionNumberingFormat = "ALPHABETIC" | "alphabetic" | "Roman" | "roman" | "Arabic";
 
@@ -67,10 +113,28 @@ export namespace Slide {
    * **"colon"** - the ":" punctuation mark.
    * **"longDash"** - the "—" punctuation mark.
    * **"dash"** - the "-" punctuation mark.
+   *
+   * @example
+   * ```js
+   * paragraph.AddCaption("", "Figure", false, "Arabic", false, undefined, "hyphen");
+   * ```
    */
   export type CaptionSep = "hyphen" | "period" | "colon" | "longDash" | "dash";
 
-  /** This type specifies the available chart types which can be used to create a new chart. */
+  /**
+   * This type specifies the available chart types which can be used to create a new chart.
+   *
+   * @example
+   * ```js
+   * // ChartType used in text documents
+   * // The resulting chart will have a 'bar3D' type:
+   * var chart = Api.CreateChart("bar3D", [[200, 240, 280],[250, 260, 280]], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+   *
+   * // ChartType used in spreadsheets
+   * // The resulting chart will have a 'bar3D' type:
+   * var chart = worksheet.AddChart("'Sheet1'!$A$1:$D$3", true, "bar3D", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);
+   * ```
+   */
   export type ChartType = "ColumnClustered" | "ColumnStacked" | "ColumnStacked100" | "3DColumnClustered" | "3DColumnStacked" | "3DColumnStacked100" | "3DColumn" | "BarClustered" | "BarStacked" | "BarStacked100" | "3DBarClustered" | "3DBarStacked" | "3DBarStacked100" | "Line" | "LineStacked" | "LineStacked100" | "LineMarkers" | "LineMarkersStacked" | "LineMarkersStacked100" | "3DLine" | "Pie" | "3DPie" | "Doughnut" | "XYScatter" | "XYScatterLines" | "XYScatterLinesNoMarkers" | "XYScatterSmooth" | "XYScatterSmoothNoMarkers" | "StockHLC" | "StockOHLC" | "StockVHLC" | "StockVOHLC" | "Area" | "AreaStacked" | "AreaStacked100" | "Combo" | "ComboColumnClusteredLine" | "ComboColumnClusteredLineSecondaryAxis" | "Radar" | "RadarMarkers" | "RadarFilled" | "unknown";
 
   /** This type specifies the legacy chart type names which are kept for backward compatibility. */
@@ -88,13 +152,27 @@ export namespace Slide {
     label: string;
   }
 
-  /** A dictionary of users and their comments. */
+  /**
+   * A dictionary of users and their comments.
+   *
+   * @example
+   * ```js
+   * let commentsReport = oDocument.GetCommentsReport();
+   * ```
+   */
   export interface CommentReport {
     /** The comments grouped by username. */
     username?: UserComments;
   }
 
-  /** Represents a single comment record. */
+  /**
+   * Represents a single comment record.
+   *
+   * @example
+   * ```js
+   * let commentsReport = oDocument.GetCommentsReport();
+   * ```
+   */
   export interface CommentReportRecord {
     /** Specifies whether the comment is a response. */
     IsAnswer: boolean;
@@ -157,7 +235,14 @@ export namespace Slide {
   /** Available dash type for line. */
   export type DashType = "dash" | "dashDot" | "dot" | "lgDash" | "lgDashDot" | "lgDashDotDot" | "solid" | "sysDash" | "sysDashDot" | "sysDashDotDot" | "sysDot";
 
-  /** Any valid element which can be added to the document structure. */
+  /**
+   * Any valid element which can be added to the document structure.
+   *
+   * @example
+   * ```js
+   * doc.AddElement(paragraph);
+   * ```
+   */
   export type DocumentElement = ApiParagraph;
 
   /** Any valid drawing element. */
@@ -166,7 +251,14 @@ export namespace Slide {
   /** Available drawing element for grouping. */
   export type DrawingForGroup = ApiShape | ApiGroup | ApiImage | ApiChart;
 
-  /** This type specifies the type of drawing lock. */
+  /**
+   * This type specifies the type of drawing lock.
+   *
+   * @example
+   * ```js
+   * let lockValue = drawing.GetLockValue("noSelect");
+   * ```
+   */
   export type DrawingLockType = "noGrp" | "noUngrp" | "noSelect" | "noRot" | "noChangeAspect" | "noMove" | "noResize" | "noEditPoints" | "noAdjustHandles" | "noChangeArrowheads" | "noChangeShapeType" | "noDrilldown" | "noTextEdit" | "noCrop" | "txBox";
 
   /** English measure unit. 1 mm = 36000 EMUs, 1 inch = 914400 EMUs. */
@@ -178,7 +270,14 @@ export namespace Slide {
   /** The available fill types. */
   export type FillType = "solid" | "gradient" | "pattern" | "blip" | "nofill";
 
-  /** Form data. */
+  /**
+   * Form data.
+   *
+   * @example
+   * ```js
+   * let formData = {key: "CompanyName", value: "OnlyOffice", type: "text"};
+   * ```
+   */
   export interface FormData {
     /** The form key. If the current form is a radio button, then this field contains the group key. */
     key: string;
@@ -214,12 +313,24 @@ export namespace Slide {
     lang?: string;
   }
 
-  /** The specific form type. */
+  /**
+   * The specific form type.
+   *
+   * @example
+   * ```js
+   * let formsData = doc.GetFormsData();
+   * ```
+   */
   export type FormSpecificType = "text" | "checkBox" | "picture" | "comboBox" | "dropDownList" | "dateTime" | "radio" | "complex" | "signature";
 
   /**
    * Form type.
    * The available form types.
+   *
+   * @example
+   * ```js
+   * let formType = textForm.GetFormType();
+   * ```
    */
   export type FormType = "textForm" | "comboBoxForm" | "dropDownForm" | "checkBoxForm" | "radioButtonForm" | "pictureForm" | "complexForm" | "dateForm" | "signatureForm";
 
@@ -238,6 +349,11 @@ export namespace Slide {
    * **"title"** - a header or footer which is applied to the title page.
    * **"even"** - a header or footer which can be applied to even pages to distinguish them from the odd
    * ones (which will be considered default).
+   *
+   * @example
+   * ```js
+   * let docContent = finalSection.RemoveHeader("title");
+   * ```
    */
   export type HdrFtrType = "default" | "title" | "even";
 
@@ -250,10 +366,24 @@ export namespace Slide {
   /** The line end type. */
   export type LineEndType = "none" | "arrow" | "diamond" | "oval" | "stealth" | "triangle";
 
-  /** Standard numeric format. */
+  /**
+   * Standard numeric format.
+   *
+   * @example
+   * ```js
+   * worksheet.GetRange("A1").SetOrientation("xlUpward");
+   * ```
+   */
   export type NumFormat = "General" | "0" | "0.00" | "#,##0" | "#,##0.00" | "0%" | "0.00%" | "0.00E+00" | "# ?/?" | "# ??/??" | "m/d/yyyy" | "d-mmm-yy" | "d-mmm" | "mmm-yy" | "h:mm AM/PM" | "h:mm:ss AM/PM" | "h:mm" | "h:mm:ss" | "m/d/yyyy h:mm" | "#,##0_);(#,##0)" | "#,##0_);[Red](#,##0)" | "#,##0.00_);(#,##0.00)" | "#,##0.00_);[Red](#,##0.00)" | "mm:ss" | "[h]:mm:ss" | "mm:ss.0" | "##0.0E+0" | "@";
 
-  /** The types of elements that can be added to the paragraph structure. */
+  /**
+   * The types of elements that can be added to the paragraph structure.
+   *
+   * @example
+   * ```js
+   * paragraph.AddElement(run, 0);
+   * ```
+   */
   export type ParagraphContent = ApiUnsupported | ApiRun | ApiHyperlink;
 
   /**
@@ -268,19 +398,47 @@ export namespace Slide {
   /** The path fill type. */
   export type PathFillType = "none" | "norm" | "lighten" | "lightenLess" | "darken" | "darkenLess";
 
-  /** The available preset patterns which can be used for the fill. */
+  /**
+   * The available preset patterns which can be used for the fill.
+   *
+   * @example
+   * ```js
+   * let fill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0));
+   * ```
+   */
   export type PatternType = "cross" | "dashDnDiag" | "dashHorz" | "dashUpDiag" | "dashVert" | "diagBrick" | "diagCross" | "divot" | "dkDnDiag" | "dkHorz" | "dkUpDiag" | "dkVert" | "dnDiag" | "dotDmnd" | "dotGrid" | "horz" | "horzBrick" | "lgCheck" | "lgConfetti" | "lgGrid" | "ltDnDiag" | "ltHorz" | "ltUpDiag" | "ltVert" | "narHorz" | "narVert" | "openDmnd" | "pct10" | "pct20" | "pct25" | "pct30" | "pct40" | "pct5" | "pct50" | "pct60" | "pct70" | "pct75" | "pct80" | "pct90" | "plaid" | "shingle" | "smCheck" | "smConfetti" | "smGrid" | "solidDmnd" | "sphere" | "trellis" | "upDiag" | "vert" | "wave" | "wdDnDiag" | "wdUpDiag" | "weave" | "zigZag";
 
   /** Available placeholder types. */
   export type PlaceholderType = "body" | "chart" | "clipArt" | "ctrTitle" | "diagram" | "date" | "footer" | "header" | "media" | "object" | "picture" | "sldImage" | "sldNumber" | "subTitle" | "table" | "title";
 
-  /** 60000th of a degree (5400000 = 90 degrees). */
+  /**
+   * 60000th of a degree (5400000 = 90 degrees).
+   *
+   * @example
+   * ```js
+   * let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);
+   * ```
+   */
   export type PositiveFixedAngle = number;
 
-  /** The 1000th of a percent (100000 = 100%). */
+  /**
+   * The 1000th of a percent (100000 = 100%).
+   *
+   * @example
+   * ```js
+   * let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);
+   * ```
+   */
   export type PositivePercentage = number;
 
-  /** The available preset color names. */
+  /**
+   * The available preset color names.
+   *
+   * @example
+   * ```js
+   * let schemeColor = Api.CreatePresetColor("lightYellow");
+   * ```
+   */
   export type PresetColor = "aliceBlue" | "antiqueWhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedAlmond" | "blue" | "blueViolet" | "brown" | "burlyWood" | "cadetBlue" | "chartreuse" | "chocolate" | "coral" | "cornflowerBlue" | "cornsilk" | "crimson" | "cyan" | "darkBlue" | "darkCyan" | "darkGoldenrod" | "darkGray" | "darkGreen" | "darkGrey" | "darkKhaki" | "darkMagenta" | "darkOliveGreen" | "darkOrange" | "darkOrchid" | "darkRed" | "darkSalmon" | "darkSeaGreen" | "darkSlateBlue" | "darkSlateGray" | "darkSlateGrey" | "darkTurquoise" | "darkViolet" | "deepPink" | "deepSkyBlue" | "dimGray" | "dimGrey" | "dkBlue" | "dkCyan" | "dkGoldenrod" | "dkGray" | "dkGreen" | "dkGrey" | "dkKhaki" | "dkMagenta" | "dkOliveGreen" | "dkOrange" | "dkOrchid" | "dkRed" | "dkSalmon" | "dkSeaGreen" | "dkSlateBlue" | "dkSlateGray" | "dkSlateGrey" | "dkTurquoise" | "dkViolet" | "dodgerBlue" | "firebrick" | "floralWhite" | "forestGreen" | "fuchsia" | "gainsboro" | "ghostWhite" | "gold" | "goldenrod" | "gray" | "green" | "greenYellow" | "grey" | "honeydew" | "hotPink" | "indianRed" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderBlush" | "lawnGreen" | "lemonChiffon" | "lightBlue" | "lightCoral" | "lightCyan" | "lightGoldenrodYellow" | "lightGray" | "lightGreen" | "lightGrey" | "lightPink" | "lightSalmon" | "lightSeaGreen" | "lightSkyBlue" | "lightSlateGray" | "lightSlateGrey" | "lightSteelBlue" | "lightYellow" | "lime" | "limeGreen" | "linen" | "ltBlue" | "ltCoral" | "ltCyan" | "ltGoldenrodYellow" | "ltGray" | "ltGreen" | "ltGrey" | "ltPink" | "ltSalmon" | "ltSeaGreen" | "ltSkyBlue" | "ltSlateGray" | "ltSlateGrey" | "ltSteelBlue" | "ltYellow" | "magenta" | "maroon" | "medAquamarine" | "medBlue" | "mediumAquamarine" | "mediumBlue" | "mediumOrchid" | "mediumPurple" | "mediumSeaGreen" | "mediumSlateBlue" | "mediumSpringGreen" | "mediumTurquoise" | "mediumVioletRed" | "medOrchid" | "medPurple" | "medSeaGreen" | "medSlateBlue" | "medSpringGreen" | "medTurquoise" | "medVioletRed" | "midnightBlue" | "mintCream" | "mistyRose" | "moccasin" | "navajoWhite" | "navy" | "oldLace" | "olive" | "oliveDrab" | "orange" | "orangeRed" | "orchid" | "paleGoldenrod" | "paleGreen" | "paleTurquoise" | "paleVioletRed" | "papayaWhip" | "peachPuff" | "peru" | "pink" | "plum" | "powderBlue" | "purple" | "red" | "rosyBrown" | "royalBlue" | "saddleBrown" | "salmon" | "sandyBrown" | "seaGreen" | "seaShell" | "sienna" | "silver" | "skyBlue" | "slateBlue" | "slateGray" | "slateGrey" | "snow" | "springGreen" | "steelBlue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whiteSmoke" | "yellow" | "yellowGreen";
 
   /** The reading order (left-to-right or right-to-left). */
@@ -289,22 +447,58 @@ export namespace Slide {
   /**
    * The possible values for the base which the relative horizontal positioning of an object will be
    * calculated from.
+   *
+   * @example
+   * ```js
+   * drawing.SetHorAlign("page", "center");
+   * ```
    */
   export type RelFromH = "character" | "column" | "insideMargin" | "leftMargin" | "rightMargin" | "margin" | "outsideMargin" | "page";
 
   /**
    * The possible values for the base which the relative vertical positioning of an object will be
    * calculated from.
+   *
+   * @example
+   * ```js
+   * drawing.SetVerAlign("page", "center");
+   * ```
    */
   export type RelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page" | "line" | "paragraph";
 
-  /** A dictionary of users and their review changes. */
+  /**
+   * A dictionary of users and their review changes.
+   *
+   * @example
+   * ```js
+   * let reviewRecord = {
+   * 	"John Smith" : [{Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161},
+   * 					{Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189}],
+   * 	"Mark Pottato" : [{Type: "ParaRem", Date: 1679941755942},
+   * 					{Type: "TextPr", Date: 1679941757832}]
+   * }
+   * ```
+   */
   export interface ReviewReport {
     /** The review changes grouped by username. */
     username?: UserReviewChanges;
   }
 
-  /** Represents a single review change record. */
+  /**
+   * Represents a single review change record.
+   *
+   * @example
+   * ```js
+   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
+   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
+   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
+   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
+   * let reviewRecord = {
+   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
+   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
+   * };
+   * ```
+   */
   export interface ReviewReportRecord {
     /** The review record type. */
     Type: ReviewReportRecordType;
@@ -319,16 +513,51 @@ export namespace Slide {
     ReviewedElement: ApiParagraph | ApiTable;
   }
 
-  /** Review record type. */
+  /**
+   * Review record type.
+   *
+   * @example
+   * ```js
+   * let reviewReportRecord1 = {Type: "TextRem", Value: "Hello, Mark!", Date: 1679941734161};
+   * let reviewReportRecord2 = {Type: "TextAdd", Value: "Dear Mr. Pottato.", Date: 1679941736189};
+   * let reviewReportRecord3 = {Type: "ParaRem", Date: 1679941755942};
+   * let reviewReportRecord4 = {Type: "TextPr", Date: 1679941757832};
+   * let reviewRecord = {
+   * 	"John Smith" : [reviewReportRecord1, reviewReportRecord2],
+   * 	"Mark Pottato" : [reviewReportRecord3, reviewReportRecord4]
+   * };
+   * ```
+   */
   export type ReviewReportRecordType = "TextAdd" | "TextRem" | "ParaAdd" | "ParaRem" | "TextPr" | "ParaPr" | "Unknown";
 
-  /** The condition to scale an image in the picture form. */
+  /**
+   * The condition to scale an image in the picture form.
+   *
+   * @example
+   * ```js
+   * pictureForm.SetScaleFlag("tooBig");
+   * ```
+   */
   export type ScaleFlag = "always" | "never" | "tooBig" | "tooSmall";
 
-  /** The available color scheme identifiers. */
+  /**
+   * The available color scheme identifiers.
+   *
+   * @example
+   * ```js
+   * let schemeColor = Api.CreateSchemeColor("accent2");
+   * ```
+   */
   export type SchemeColorId = "accent1" | "accent2" | "accent3" | "accent4" | "accent5" | "accent6" | "bg1" | "bg2" | "dk1" | "dk2" | "lt1" | "lt2" | "tx1" | "tx2";
 
-  /** The lock type of the content control. */
+  /**
+   * The lock type of the content control.
+   *
+   * @example
+   * ```js
+   * inlineLvlSdt.SetLock("sdtContentLocked");
+   * ```
+   */
   export type SdtLock = "unlocked" | "contentLocked" | "sdtContentLocked" | "sdtLocked";
 
   /**
@@ -371,7 +600,14 @@ export namespace Slide {
     rotateWithShape?: boolean;
   }
 
-  /** This type specifies the preset shape geometry that will be used for a shape. */
+  /**
+   * This type specifies the preset shape geometry that will be used for a shape.
+   *
+   * @example
+   * ```js
+   * let drawing = Api.CreateShape("diamond", 100 * 36000, 100 * 36000, fill, stroke);
+   * ```
+   */
   export type ShapeType = "accentBorderCallout1" | "accentBorderCallout2" | "accentBorderCallout3" | "accentCallout1" | "accentCallout2" | "accentCallout3" | "actionButtonBackPrevious" | "actionButtonBeginning" | "actionButtonBlank" | "actionButtonDocument" | "actionButtonEnd" | "actionButtonForwardNext" | "actionButtonHelp" | "actionButtonHome" | "actionButtonInformation" | "actionButtonMovie" | "actionButtonReturn" | "actionButtonSound" | "arc" | "bentArrow" | "bentConnector2" | "bentConnector3" | "bentConnector4" | "bentConnector5" | "bentUpArrow" | "bevel" | "blockArc" | "borderCallout1" | "borderCallout2" | "borderCallout3" | "bracePair" | "bracketPair" | "callout1" | "callout2" | "callout3" | "can" | "chartPlus" | "chartStar" | "chartX" | "chevron" | "chord" | "circularArrow" | "cloud" | "cloudCallout" | "corner" | "cornerTabs" | "cube" | "curvedConnector2" | "curvedConnector3" | "curvedConnector4" | "curvedConnector5" | "curvedDownArrow" | "curvedLeftArrow" | "curvedRightArrow" | "curvedUpArrow" | "decagon" | "diagStripe" | "diamond" | "dodecagon" | "donut" | "doubleWave" | "downArrow" | "downArrowCallout" | "ellipse" | "ellipseRibbon" | "ellipseRibbon2" | "flowChartAlternateProcess" | "flowChartCollate" | "flowChartConnector" | "flowChartDecision" | "flowChartDelay" | "flowChartDisplay" | "flowChartDocument" | "flowChartExtract" | "flowChartInputOutput" | "flowChartInternalStorage" | "flowChartMagneticDisk" | "flowChartMagneticDrum" | "flowChartMagneticTape" | "flowChartManualInput" | "flowChartManualOperation" | "flowChartMerge" | "flowChartMultidocument" | "flowChartOfflineStorage" | "flowChartOffpageConnector" | "flowChartOnlineStorage" | "flowChartOr" | "flowChartPredefinedProcess" | "flowChartPreparation" | "flowChartProcess" | "flowChartPunchedCard" | "flowChartPunchedTape" | "flowChartSort" | "flowChartSummingJunction" | "flowChartTerminator" | "foldedCorner" | "frame" | "funnel" | "gear6" | "gear9" | "halfFrame" | "heart" | "heptagon" | "hexagon" | "homePlate" | "horizontalScroll" | "irregularSeal1" | "irregularSeal2" | "leftArrow" | "leftArrowCallout" | "leftBrace" | "leftBracket" | "leftCircularArrow" | "leftRightArrow" | "leftRightArrowCallout" | "leftRightCircularArrow" | "leftRightRibbon" | "leftRightUpArrow" | "leftUpArrow" | "lightningBolt" | "line" | "lineInv" | "mathDivide" | "mathEqual" | "mathMinus" | "mathMultiply" | "mathNotEqual" | "mathPlus" | "moon" | "nonIsoscelesTrapezoid" | "noSmoking" | "notchedRightArrow" | "octagon" | "parallelogram" | "pentagon" | "pie" | "pieWedge" | "plaque" | "plaqueTabs" | "plus" | "quadArrow" | "quadArrowCallout" | "rect" | "ribbon" | "ribbon2" | "rightArrow" | "rightArrowCallout" | "rightBrace" | "rightBracket" | "round1Rect" | "round2DiagRect" | "round2SameRect" | "roundRect" | "rtTriangle" | "smileyFace" | "snip1Rect" | "snip2DiagRect" | "snip2SameRect" | "snipRoundRect" | "squareTabs" | "star10" | "star12" | "star16" | "star24" | "star32" | "star4" | "star5" | "star6" | "star7" | "star8" | "straightConnector1" | "stripedRightArrow" | "sun" | "swooshArrow" | "teardrop" | "trapezoid" | "triangle" | "upArrowCallout" | "upDownArrow" | "upDownArrow" | "upDownArrowCallout" | "uturnArrow" | "verticalScroll" | "wave" | "wedgeEllipseCallout" | "wedgeRectCallout" | "wedgeRoundRectCallout";
 
   /** The shading information object. */
@@ -383,7 +619,14 @@ export namespace Slide {
     Color: ApiColor;
   }
 
-  /** A shade type which can be added to the document element. */
+  /**
+   * A shade type which can be added to the document element.
+   *
+   * @example
+   * ```js
+   * tablePr.SetShd("clear", 0, 255, 0, false);
+   * ```
+   */
   export type ShdType = "nil" | "clear";
 
   /**
@@ -398,10 +641,24 @@ export namespace Slide {
    */
   export type SizeRelFromV = "bottomMargin" | "insideMargin" | "topMargin" | "margin" | "outsideMargin" | "page";
 
-  /** The style type used for the document element. */
+  /**
+   * The style type used for the document element.
+   *
+   * @example
+   * ```js
+   * let normalStyle = doc.GetDefaultStyle("paragraph");
+   * ```
+   */
   export type StyleType = "paragraph" | "table" | "run" | "numbering";
 
-  /** Types of custom tab. */
+  /**
+   * Types of custom tab.
+   *
+   * @example
+   * ```js
+   * paraPr.SetTabs([1000, 1500, 3000], ["center", "left", "right"]);
+   * ```
+   */
   export type TabJc = "clear" | "left" | "right" | "center";
 
   /** A paragraph tab stop. */
@@ -458,6 +715,11 @@ export namespace Slide {
    * **"bandedRowEven"** - specifies that the table formatting is applied to even numbered groupings of
    * columns.
    * **"wholeTable"** - specifies that the conditional formatting is applied to the whole table.
+   *
+   * @example
+   * ```js
+   * tableStyle.GetConditionalTableStyle("topLeftCell").GetTableCellPr().SetShd("clear", 255, 0, 0);
+   * ```
    */
   export type TableStyleOverrideType = "topLeftCell" | "topRightCell" | "bottomLeftCell" | "bottomRightCell" | "firstRow" | "lastRow" | "firstColumn" | "lastColumn" | "bandedColumn" | "bandedColumnEven" | "bandedRow" | "bandedRowEven" | "wholeTable";
 
@@ -469,6 +731,11 @@ export namespace Slide {
    * **"nul"** - sets the table or table cell width to be of a zero value.
    * **"percent"** - sets the table or table cell width to be measured in percent to the parent
    * container.
+   *
+   * @example
+   * ```js
+   * tableCell.SetWidth("twips", 2000);
+   * ```
    */
   export type TableWidth = "auto" | "twips" | "nul" | "percent";
 
@@ -487,7 +754,14 @@ export namespace Slide {
     value?: string;
   }
 
-  /** Text transform type. */
+  /**
+   * Text transform type.
+   *
+   * @example
+   * ```js
+   * let textArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", fill, stroke, 0, 150 * 36000, 50 * 36000);
+   * ```
+   */
   export type TextTransform = "textArchDown" | "textArchDownPour" | "textArchUp" | "textArchUpPour" | "textButton" | "textButtonPour" | "textCanDown" | "textCanUp" | "textCascadeDown" | "textCascadeUp" | "textChevron" | "textChevronInverted" | "textCircle" | "textCirclePour" | "textCurveDown" | "textCurveUp" | "textDeflate" | "textDeflateBottom" | "textDeflateInflate" | "textDeflateInflateDeflate" | "textDeflateTop" | "textDoubleWave1" | "textFadeDown" | "textFadeLeft" | "textFadeRight" | "textFadeUp" | "textInflate" | "textInflateBottom" | "textInflateTop" | "textPlain" | "textRingInside" | "textRingOutside" | "textSlantDown" | "textSlantUp" | "textStop" | "textTriangle" | "textTriangleInverted" | "textWave1" | "textWave2" | "textWave4" | "textNoShape";
 
   /**
@@ -497,10 +771,22 @@ export namespace Slide {
    * **"low"** - set the position of the selected tick labels in the part of the chart with lower values.
    * **"high"** - set the position of the selected tick labels in the part of the chart with higher
    * values.
+   *
+   * @example
+   * ```js
+   * chart.SetVertAxisTickLabelPosition("nextTo");
+   * ```
    */
   export type TickLabelPosition = "none" | "nextTo" | "low" | "high";
 
-  /** The available types of tick mark appearance. */
+  /**
+   * The available types of tick mark appearance.
+   *
+   * @example
+   * ```js
+   * chart.SetVertAxisMajorTickMark("cross");
+   * ```
+   */
   export type TickMark = "cross" | "in" | "none" | "out";
 
   /** Options for converting document content to an HTML string. */
@@ -530,6 +816,13 @@ export namespace Slide {
   /**
    * Table of contents properties which specify whether to generate the table of contents from the
    * outline levels or the specified styles.
+   *
+   * @example
+   * ```js
+   * let tocBuildFromPr = {"OutlineLvls": 9};
+   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": tocBuildFromPr, "TocStyle": "standard"};
+   * doc.AddTableOfContents(tocPr);
+   * ```
    */
   export interface TocBuildFromPr {
     /** The highest heading level included in the table of contents (the start of the outline range). */
@@ -550,10 +843,25 @@ export namespace Slide {
    * **"dot"** - "......."
    * **"dash"** - "-------"
    * **"underline"** - "_______"
+   *
+   * @example
+   * ```js
+   * let tocLeader = "dot";
+   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": tocLeader, "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
+   * doc.AddTableOfContents(tocPr);
+   * ```
    */
   export type TocLeader = "dot" | "dash" | "underline" | "none";
 
-  /** Table of contents properties. */
+  /**
+   * Table of contents properties.
+   *
+   * @example
+   * ```js
+   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": "standard"};
+   * doc.AddTableOfContents(tocPr);
+   * ```
+   */
   export interface TocPr {
     /** Specifies whether to show page numbers in the table of contents. */
     ShowPageNums?: boolean;
@@ -574,10 +882,28 @@ export namespace Slide {
     TocStyle?: TocStyle;
   }
 
-  /** Possible values for the table of contents style. */
+  /**
+   * Possible values for the table of contents style.
+   *
+   * @example
+   * ```js
+   * let tocStyle = "standard";
+   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"OutlineLvls": 9}, "TocStyle": tocStyle};
+   * doc.AddTableOfContents(tocPr);
+   * ```
+   */
   export type TocStyle = "simple" | "online" | "standard" | "modern" | "classic";
 
-  /** Table of contents style levels. */
+  /**
+   * Table of contents style levels.
+   *
+   * @example
+   * ```js
+   * let tocStyleLvl = [{Name: "Heading 1", Lvl: 2}, {Name: "Heading 2", Lvl: 3}];
+   * let tocPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": {"StylesLvls": tocStyleLvl}, "TocStyle": "standard"};
+   * doc.AddTableOfContents(tocPr);
+   * ```
+   */
   export interface TocStyleLvl {
     /** Style name (for example, "Heading 1"). */
     Name: string;
@@ -586,7 +912,15 @@ export namespace Slide {
     Lvl: number;
   }
 
-  /** Table of figures properties. */
+  /**
+   * Table of figures properties.
+   *
+   * @example
+   * ```js
+   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": "distinctive"};
+   * doc.AddTableOfFigures(tofPr);
+   * ```
+   */
   export interface TofPr {
     /** Specifies whether to show page numbers in the table of figures. */
     ShowPageNums?: boolean;
@@ -613,7 +947,16 @@ export namespace Slide {
     TofStyle?: TofStyle;
   }
 
-  /** Possible values for the table of figures style. */
+  /**
+   * Possible values for the table of figures style.
+   *
+   * @example
+   * ```js
+   * let tofStyle = "distinctive";
+   * let tofPr = {"ShowPageNums": true, "RightAlgn": true, "LeaderType": "dot", "FormatAsLinks": true, "BuildFrom": "Figure", "LabelNumber": true, "TofStyle": tofStyle};
+   * doc.AddTableOfFigures(tofPr);
+   * ```
+   */
   export type TofStyle = "simple" | "online" | "classic" | "distinctive" | "centered" | "formal";
 
   /** The available slide transition speed values (similar to PowerPoint VBA ppTransitionSpeed). */
@@ -634,13 +977,32 @@ export namespace Slide {
   /**
    * The available text vertical alignment (used to align text in a shape with a placement for text
    * inside it).
+   *
+   * @example
+   * ```js
+   * drawing.SetVerticalTextAlign("top");
+   * ```
    */
   export type VerticalTextAlign = "top" | "center" | "bottom";
 
-  /** The watermark direction. */
+  /**
+   * The watermark direction.
+   *
+   * @example
+   * ```js
+   * watermarkSettings.SetDirection("clockwise45");
+   * ```
+   */
   export type WatermarkDirection = "horizontal" | "clockwise45" | "counterclockwise45" | "clockwise90" | "counterclockwise90";
 
-  /** The watermark type. */
+  /**
+   * The watermark type.
+   *
+   * @example
+   * ```js
+   * watermarkSettings.SetType("text");
+   * ```
+   */
   export type WatermarkType = "none" | "text" | "image";
 
   /**
@@ -667,10 +1029,25 @@ export namespace Slide {
    * "4.1.1" you refer to "1" only);
    * **"fullCtxParaNum** - the full paragraph number, e.g. "4.1.1";
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
+   *
+   * @example
+   * ```js
+   * paragraph.AddBookmarkCrossRef("pageNum", bookmark);
+   * ```
    */
   export type bookmarkRefTo = "text" | "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "aboveBelow";
 
-  /** A numeric value from 0 to 255. */
+  /**
+   * A numeric value from 0 to 255.
+   *
+   * @example
+   * ```js
+   * // The resulting color is green, the bytes are measured in decimal numbers:
+   * let rgbColorGreen = Api.CreateRGBColor(0, 255, 0);
+   * // The resulting color is red, the bytes are measured in hexadecimal numbers:
+   * let rgbColorRed = Api.CreateRGBColor(0xff, 0, 0);
+   * ```
+   */
   export type byte = number;
 
   /**
@@ -680,6 +1057,11 @@ export namespace Slide {
    * **"captionText"** - the caption text only;
    * **"pageNum"** - the page number containing the referenced object;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
+   *
+   * @example
+   * ```js
+   * paragraph.AddCaptionCrossRef("table", "pageNum", caption);
+   * ```
    */
   export type captionRefTo = "entireCaption" | "labelNumber" | "captionText" | "pageNum" | "aboveBelow";
 
@@ -690,6 +1072,11 @@ export namespace Slide {
    * **"aboveBelow"** - the words "above" or "below" depending on the item position;
    * **"formEndnoteNum"** - the form number formatted as an endnote. The numbering of the actual endnotes
    * is not affected.
+   *
+   * @example
+   * ```js
+   * paragraph.AddEndnoteCrossRef("pageNum", endnoteParagraph);
+   * ```
    */
   export type endnoteRefTo = "endnoteNum" | "pageNum" | "aboveBelow" | "formEndnoteNum";
 
@@ -700,6 +1087,11 @@ export namespace Slide {
    * **"aboveBelow"** - the words "above" or "below" depending on the position of the item;
    * **"formFootnoteNum"** - the form number formatted as a footnote. The numbering of the actual
    * footnotes is not affected.
+   *
+   * @example
+   * ```js
+   * paragraph.AddFootnoteCrossRef("pageNum", footnoteParagraph);
+   * ```
    */
   export type footnoteRefTo = "footnoteNum" | "pageNum" | "aboveBelow" | "formFootnoteNum";
 
@@ -713,19 +1105,52 @@ export namespace Slide {
    * instead of "4.B" you receive "B" only;
    * **"fullCtxHeadingNum"** - the full heading number even if the cursor pointer is in the same section;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
+   *
+   * @example
+   * ```js
+   * paragraph.AddHeadingCrossRef("pageNum", headingParagraph);
+   * ```
    */
   export type headingRefTo = "text" | "pageNum" | "headingNum" | "noCtxHeadingNum" | "fullCtxHeadingNum" | "aboveBelow";
 
-  /** Available highlight colors. */
+  /**
+   * Available highlight colors.
+   *
+   * @example
+   * ```js
+   * paragraph.SetHighlight("green");
+   * ```
+   */
   export type highlightColor = "black" | "blue" | "cyan" | "green" | "magenta" | "red" | "yellow" | "white" | "darkBlue" | "darkCyan" | "darkGreen" | "darkMagenta" | "darkRed" | "darkYellow" | "darkGray" | "lightGray" | "none";
 
-  /** Half-points (2 half-points = 1 point). */
+  /**
+   * Half-points (2 half-points = 1 point).
+   *
+   * @example
+   * ```js
+   * textPr.SetFontSize(22);
+   * ```
+   */
   export type hps = number;
 
-  /** 240ths of a line. */
+  /**
+   * 240ths of a line.
+   *
+   * @example
+   * ```js
+   * paraPr.SetSpacingLine(240, "auto");
+   * ```
+   */
   export type line240 = number;
 
-  /** 1 millimetre equals 1/10th of a centimetre. */
+  /**
+   * 1 millimetre equals 1/10th of a centimetre.
+   *
+   * @example
+   * ```js
+   * textForm.SetCellWidth(7);
+   * ```
+   */
   export type mm = number;
 
   /**
@@ -738,19 +1163,52 @@ export namespace Slide {
    * **"text"** - the paragraph text value, e.g. if you have "4.1.1. Terms and Conditions", you refer to
    * "Terms and Conditions" only;
    * **"aboveBelow"** - the words "above" or "below" depending on the item position.
+   *
+   * @example
+   * ```js
+   * paragraph.AddNumberedCrossRef("pageNum", numberedParagraph, true, true);
+   * ```
    */
   export type numberedRefTo = "pageNum" | "paraNum" | "noCtxParaNum" | "fullCtxParaNum" | "text" | "aboveBelow";
 
-  /** Value from 0 to 100. */
+  /**
+   * Value from 0 to 100.
+   *
+   * @example
+   * ```js
+   * pictureForm.SetPicturePosition(70, 70);
+   * ```
+   */
   export type percentage = number;
 
-  /** A point. */
+  /**
+   * A point.
+   *
+   * @example
+   * ```js
+   * paraPr.SetBottomBorder("single", 24, 1, 0, 255, 0);
+   * ```
+   */
   export type pt = number;
 
-  /** Eighths of a point (24 eighths of a point = 3 points). */
+  /**
+   * Eighths of a point (24 eighths of a point = 3 points).
+   *
+   * @example
+   * ```js
+   * paraPr.SetBottomBorder("single", 48, 0, 0, 255, 0);
+   * ```
+   */
   export type pt_8 = number;
 
-  /** Twentieths of a point (equivalent to 1/1440th of an inch). */
+  /**
+   * Twentieths of a point (equivalent to 1/1440th of an inch).
+   *
+   * @example
+   * ```js
+   * paragraph.SetEqualColumns(2, 720);
+   * ```
+   */
   export type twips = number;
 
   /** @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/ */
@@ -801,6 +1259,18 @@ export namespace Slide {
      *   images are supported).
      * @param blipFillType - The type of the fill used for the blip fill (tile or stretch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateBlipFill("https://api.onlyoffice.com/content/img/docbuilder/examples/icon_DocumentEditors.png", "tile");
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("star10", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateBlipFill/
      */
     CreateBlipFill(imageUrl: string, blipFillType: BlipFillType): ApiFill;
@@ -809,6 +1279,23 @@ export namespace Slide {
      * Creates a bullet for a paragraph with the character or symbol specified with the sSymbol parameter.
      *
      * @param sSymbol - The character or symbol which will be used to create the bullet for the paragraph.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oBullet = Api.CreateBullet("-");
+     * oParagraph.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the bulleted paragraph.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateBullet/
      */
@@ -836,6 +1323,25 @@ export namespace Slide {
      *   format is "General".
      * @default sType = "bar"
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24, ["0", "0.00"]);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetShowPointDataLabel(1, 0, false, false, true, false);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateChart/
      */
     CreateChart(aSeries: number[][], aSeriesNames: number[] | string[], aCatNames: number[] | string[], nWidth: EMU, nHeight: EMU, nStyleIndex: number, aNumFormats: NumFormat[] | string[]): ApiChart;
@@ -857,6 +1363,20 @@ export namespace Slide {
      * @param pos - The position of the gradient stop measured in 1000th of percent.
      * @since 9.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateGradientStop/
      */
     CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop;
@@ -870,6 +1390,22 @@ export namespace Slide {
      *
      * @param drawings - An array of drawings to group.
      * @since 8.3.0
+     *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape1 = Api.CreateShape("rect", 300 * 36000, 130 * 36000, oFill1, oStroke);
+     * let oShape2 = Api.CreateShape("rect", 150 * 36000, 80 * 36000, oFill2, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oShape2.SetPosition(3100000, 1867200);
+     * let oGroup = Api.CreateGroup([oShape1, oShape2]);
+     * oSlide.AddObject(oGroup);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateGroup/
      */
@@ -898,6 +1434,15 @@ export namespace Slide {
      * @param nWidth - The image width in English measure units.
      * @param nHeight - The image height in English measure units.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oShape = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/step2_1.png", 300 * 36000, 150 * 36000);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateImage/
      */
     CreateImage(sImageSrc: string, nWidth: EMU, nHeight: EMU): ApiImage;
@@ -907,6 +1452,26 @@ export namespace Slide {
      *
      * @param oMaster - Parent slide master.
      * @default oMaster = null
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = Api.CreateLayout(oMaster);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("picture");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oLayout.AddObject(oShape);
+     * oSlide1.ApplyLayout(oLayout);
+     * var oSlide2 = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide2);
+     * oSlide2.ApplyLayout(oLayout);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateLayout/
      */
@@ -919,6 +1484,20 @@ export namespace Slide {
      * @param gradientStops - The array of gradient color stops measured in 1000th of percent.
      * @param angle - The angle measured in 60000th of a degree that will define the gradient direction.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateLinearGradientFill/
      */
     CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill;
@@ -929,6 +1508,29 @@ export namespace Slide {
      * @param oTheme - The presentation theme object.
      * @default oTheme = ApiPresentation.GetMaster(0).GetTheme()
      * @returns returns null if presentation theme doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = Api.CreateMaster();
+     * var nCountBefore = oPresentation.GetMastersCount();
+     * oPresentation.AddMaster(nCountBefore, oMaster);
+     * var nCountAfter = oPresentation.GetMastersCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters before adding new master: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of masters after adding new master: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateMaster/
      */
@@ -950,6 +1552,21 @@ export namespace Slide {
 
     /**
      * Creates no fill and removes the fill from the element.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The stroke of this shape is transparent.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateNoFill/
      */
@@ -976,12 +1593,41 @@ export namespace Slide {
      * @param sData - The OLE object string data.
      * @param sAppId - The application ID associated with the current OLE object.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateOleObject/
      */
     CreateOleObject(sImageSrc: string, nWidth: EMU, nHeight: EMU, sData: string, sAppId: string): ApiOleObject;
 
     /**
      * Creates a new paragraph.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is an example of a paragraph inside a shape. Nothing special.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateParagraph/
      */
@@ -995,6 +1641,18 @@ export namespace Slide {
      * @param fgColor - The foreground color used for the pattern creation.
      * @since 9.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePatternFill/
      */
     CreatePatternFill(patternType: PatternType, bgColor: ApiColor, fgColor: ApiColor): ApiFill;
@@ -1005,6 +1663,21 @@ export namespace Slide {
      * @param sType - The placeholder type ("body", "chart", "clipArt", "ctrTitle", "diagram", "date", "footer",
      *   "header", "media", "object", "picture", "sldImage", "sldNumber", "subTitle", "table", "title").
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("picture");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePlaceholder/
      */
     CreatePlaceholder(sType: string): ApiPlaceholder;
@@ -1014,6 +1687,20 @@ export namespace Slide {
      *
      * @param presetColor - A preset selected from the list of the available color preset names.
      * @returns ;
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreatePresetColor("peachPuff"), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreatePresetColor/
      */
@@ -1037,6 +1724,21 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oRGBColor = Api.CreateRGBColor(255, 111, 61);
+     * var oGs1 = Api.CreateGradientStop(Api.CreatePresetColor("peachPuff"), 0);
+     * var oGs2 = Api.CreateGradientStop(oRGBColor, 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRGBColor/
      */
     CreateRGBColor(r: number, g: number, b: number): ApiRGBColor;
@@ -1047,12 +1749,49 @@ export namespace Slide {
      *
      * @param gradientStops - The array of gradient color stops measured in 1000th of percent.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreatePresetColor("peachPuff"), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRadialGradientFill/
      */
     CreateRadialGradientFill(gradientStops: number[]): ApiFill;
 
     /**
      * Creates a new smaller text block to be inserted to the current paragraph or table.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.SetFontSize(60);
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetFontSize(60);
+     * oRun.SetFontFamily("Comic Sans MS");
+     * oRun.AddText("This is a text run with the font family set to 'Comic Sans MS'.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateRun/
      */
@@ -1062,6 +1801,19 @@ export namespace Slide {
      * Creates a complex color scheme selecting from one of the available schemes.
      *
      * @param schemeColorId - The color scheme identifier.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oSchemeColor = Api.CreateSchemeColor("dk1");
+     * var oFill = Api.CreateSolidFill(oSchemeColor);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("curvedUpArrow", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSchemeColor/
      */
@@ -1091,12 +1843,46 @@ export namespace Slide {
      * @default nWidth = 914400
      * @default nHeight = 914400
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.SetFontSize(60);
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetFontSize(60);
+     * oRun.SetFontFamily("Comic Sans MS");
+     * oRun.AddText("This is a text run with the font family set to 'Comic Sans MS'.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateShape/
      */
     CreateShape(sType?: ShapeType, nWidth?: EMU, nHeight?: EMU, oFill?: ApiFill, oStroke?: ApiStroke): ApiShape;
 
     /**
      * Creates a new slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSlide/
      */
@@ -1118,6 +1904,19 @@ export namespace Slide {
      * @param color - The color used for the element fill.
      * @since 9.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oRGBColor = Api.CreateRGBColor(255, 111, 61);
+     * var oFill = Api.CreateSolidFill(oRGBColor);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.SetPosition(608400, 1267200);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSolidFill/
      */
     CreateSolidFill(color: ApiColor): ApiFill;
@@ -1130,6 +1929,21 @@ export namespace Slide {
      * @param sDash - The type of line dash.
      * @default sDash = "solid"
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(3 * 36000, oFill1);
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oSlide.AddObject(oShape);
+     * oShape.SetPosition(608400, 1267200);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateStroke/
      */
@@ -1144,6 +1958,15 @@ export namespace Slide {
      *
      * @param rows - Number of rows.
      * @param cols - Number of columns.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTable/
      */
@@ -1161,6 +1984,30 @@ export namespace Slide {
     /**
      * Creates the empty text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oTextPr = Api.CreateTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetBold(true);
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is a sample text with the font size set to 25 points and the font weight set to bold.");
+     * oRun.SetTextPr(oTextPr);
+     * oParagraph.AddElement(oRun);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTextPr/
      */
     CreateTextPr(): ApiTextPr;
@@ -1174,6 +2021,30 @@ export namespace Slide {
      * @param oFormatScheme - Theme format scheme. Required parameter.
      * @param oFontScheme - Theme font scheme. Required parameter.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTheme/
      */
     CreateTheme(sName: string, oMaster: ApiMaster, oClrScheme: ApiThemeColorScheme, oFormatScheme: ApiThemeFormatScheme, oFontScheme: ApiThemeFontScheme): ApiTheme | null;
@@ -1185,6 +2056,29 @@ export namespace Slide {
      *   defining a list of twelve colors. The array should contain a sequence of colors: 2 dark, 2
      *   light, 6 primary, a color for a hyperlink and a color for the followed hyperlink.
      * @param sName - Theme color scheme name.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetColorScheme(oClrScheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * [200, 240, 280],
+     * [250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeColorScheme/
      */
@@ -1201,6 +2095,41 @@ export namespace Slide {
      * @param mnCs - The minor theme font applied to the complex script text.
      * @param sName - Theme font scheme name.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This text is written in the Times New Roman font.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeFontScheme/
      */
     CreateThemeFontScheme(mjLatin: string, mjEa: string, mjCs: string, mnLatin: string, mnEa: string, mnCs: string, sName: string): ApiThemeFontScheme;
@@ -1213,6 +2142,30 @@ export namespace Slide {
      *   intense fills.
      * @param arrLine - This array contains the line styles. It should be consist of subtle, moderate and intense lines.
      * @param sName - Theme format scheme name.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateThemeFormatScheme/
      */
@@ -1242,6 +2195,24 @@ export namespace Slide {
      * @default nIndLeft = ApiPresentation.GetWidth() / 2
      * @default nIndTop = ApiPresentation.GetHeight() / 2
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(72);
+     * oTextPr.SetBold(true);
+     * oTextPr.SetCaps(true);
+     * oTextPr.SetColor(51, 51, 51, false);
+     * oTextPr.SetFontFamily("Comic Sans MS");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * var oTextArt = Api.CreateWordArt(oTextPr, "onlyoffice", "textArchUp", oFill, oStroke, 0, 100 * 36000, 30 * 36000);
+     * oSlide.AddObject(oTextArt);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateWordArt/
      */
     CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nIndLeft?: EMU, nIndTop?: EMU): ApiDrawing;
@@ -1270,6 +2241,33 @@ export namespace Slide {
      *
      * @param sMessage - The JSON object to convert.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oThemeMaster = oMaster.GetTheme();
+     * var oFontScheme = oThemeMaster.GetFontScheme();
+     * oFontScheme.SetFonts("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oFontScheme.SetSchemeName("New font scheme name");
+     * var json = oFontScheme.ToJSON();
+     * var oFontSchemeFromJSON = Api.FromJSON(json);
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetFontScheme(oFontSchemeFromJSON);
+     * var sType = oFontSchemeFromJSON.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/FromJSON/
      */
     FromJSON(sMessage: object): void;
@@ -1277,12 +2275,53 @@ export namespace Slide {
     /**
      * Returns the full name of the currently opened file.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sName = Api.GetFullName();
+     * oParagraph.AddText("File name: " + sName);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetFullName/
      */
     GetFullName(): string;
 
     /**
      * Returns the main presentation.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetPresentation/
      */
@@ -1485,12 +2524,60 @@ export namespace Slide {
      * @default tab = "\t"
      * @default newLine = "\r\n"
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oFParagraph = oDocContent.GetElement(0);
+     * oFParagraph.AddText("This is the text for the first line. The line break is added after it.");
+     * oFParagraph.AddLineBreak();
+     * var oSParagraph = Api.CreateParagraph();
+     * oSParagraph.AddTabStop();
+     * oSParagraph.AddText("This is just a sample text with a tab stop before it.");
+     * oDocContent.AddElement(oSParagraph);
+     * oSlide.AddObject(oShape);
+     * // todo_example problem (how to make select in slide)
+     * // var oRange1 = oFParagraph.GetRange();
+     * // var oRange2 = oSParagraph.GetRange();
+     * // var oRange3 = oRange1.ExpandTo(oRange2);
+     * // oRange3.Select();
+     * var arr = ["test_1", "test_2"];
+     * Api.ReplaceTextSmart(arr, "", "");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/ReplaceTextSmart/
      */
     ReplaceTextSmart(textStrings: string[], tab?: string, newLine?: string): boolean;
 
     /**
      * Saves changes to the specified document.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This shape with paragraph in it is saved to the document.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * Api.Save();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/Save/
      */
@@ -1522,6 +2609,13 @@ export namespace Slide {
      * @param eventName - The event name.
      * @param callback - Function to be called when the event fires.
      *
+     * @example
+     * ```js
+     * Api.attachEvent("asc_onHyperlinkClick", function() {
+     * 	console.log("HYPERLINK!!!");
+     * });
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/attachEvent/
      */
     attachEvent(eventName: string, callback: (...args: unknown[]) => unknown): void;
@@ -1530,6 +2624,11 @@ export namespace Slide {
      * Unsubscribes from the specified event.
      *
      * @param eventName - The event name.
+     *
+     * @example
+     * ```js
+     * Api.detachEvent("asc_onHyperlinkClick");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/detachEvent/
      */
@@ -1755,6 +2854,28 @@ export namespace Slide {
     /**
      * Returns a type of the ApiBullet class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oBullet = Api.CreateBullet("-");
+     * oParagraph.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the bulleted paragraph.");
+     * var sClassType = oBullet.GetClassType();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiBullet/Methods/GetClassType/
      */
     GetClassType(): "bullet";
@@ -1778,6 +2899,29 @@ export namespace Slide {
      *
      * @param nStyleId - One of the styles available in the editor.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.ApplyChartStyle(2);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oChart.SetSeriesOutLine(oStroke, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oChart.SetSeriesOutLine(oStroke, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/ApplyChartStyle/
      */
     ApplyChartStyle(nStyleId: unknown): boolean;
@@ -1794,6 +2938,36 @@ export namespace Slide {
     /**
      * Returns all series from the chart space.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("comboBarLine", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * var aAllSeries = oChart.GetAllSeries();
+     * var oSeries, sSeriesType, sTitle = "";
+     * for(var nSeries = 0; nSeries < aAllSeries.length; ++nSeries) {
+     * 	oSeries = aAllSeries[nSeries];
+     * 	sSeriesType = oSeries.GetChartType();
+     * 	sTitle += ((nSeries + 1) + " Series Type = " + sSeriesType + "\n");
+     * }
+     * oChart.SetTitle(sTitle, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetAllSeries/
      */
     GetAllSeries(): ApiChartSeries[];
@@ -1807,6 +2981,30 @@ export namespace Slide {
 
     /**
      * Returns a type of the ApiChart class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * var sClassType = oChart.GetClassType();
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview: Class Type = " + sClassType, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetClassType/
      */
@@ -1890,6 +3088,34 @@ export namespace Slide {
      *
      * @param nIdx - Series index.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("comboBarLine", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * var aAllSeries = oChart.GetAllSeries();
+     * var oSeries, sSeriesType, sTitle = "";
+     * oSeries = oChart.GetSeries(0);
+     * sSeriesType = oSeries.GetChartType();
+     * sTitle += ("Series Type = " + sSeriesType + "\n");
+     * oChart.SetTitle(sTitle, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/GetSeries/
      */
     GetSeries(nIdx: number): ApiChartSeries;
@@ -1935,6 +3161,24 @@ export namespace Slide {
      *
      * @param nSeria - The index of the chart series.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.RemoveSeria(1);
+     * oChart.SetTitle("The Estimated Costs series was removed from the current chart.");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/RemoveSeria/
      */
     RemoveSeria(nSeria: number): boolean;
@@ -1964,6 +3208,25 @@ export namespace Slide {
      * @param sName - The name which will be set to the specified chart category.
      * @param nCategory - The index of the chart category.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetCategoryName("2013", 0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetCategoryName/
      */
     SetCategoryName(sName: string, nCategory: number): boolean;
@@ -1988,6 +3251,26 @@ export namespace Slide {
      * @param bAllSeries - Specifies if the fill will be applied to the specified data point in all series.
      * @default bAllSeries = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));
+     * oChart.SetDataPointFill(oFill, 0, 0, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointFill/
      */
     SetDataPointFill(oFill: ApiFill, nSeries: number, nDataPoint: number, bAllSeries?: boolean): boolean;
@@ -2000,6 +3283,26 @@ export namespace Slide {
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the numeric format will be applied to the specified data point in all series.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24, ["0", "0.00"]);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetShowPointDataLabel(1, 0, false, false, true, false);
+     * oChart.SetDataPointNumFormat("0.00", 0, 0, true);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointNumFormat/
      */
     SetDataPointNumFormat(sFormat: NumFormat | string, nSeria: number, nDataPoint: number, bAllSeries: boolean): boolean;
@@ -2011,6 +3314,26 @@ export namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param nDataPoint - The index of the data point in the specified chart series.
      * @param bAllSeries - Specifies if the outline will be applied to the specified data point in all series.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetDataPointOutLine(oStroke, 0, 0, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetDataPointOutLine/
      */
@@ -2030,6 +3353,32 @@ export namespace Slide {
      *
      * @param sTickMark - The type of tick mark appearance.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetHorAxisMajorTickMark("cross");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisMajorTickMark/
      */
     SetHorAxisMajorTickMark(sTickMark: TickMark): boolean;
@@ -2038,6 +3387,32 @@ export namespace Slide {
      * Specifies minor tick mark for the horizontal axis.
      *
      * @param sTickMark - The type of tick mark appearance.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetHorAxisMinorTickMark("in");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisMinorTickMark/
      */
@@ -2049,6 +3424,28 @@ export namespace Slide {
      * @param bIsMinMax - The `true` value will set the normal data direction for the horizontal axis (from minimum to
      *   maximum).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetHorAxisOrientation(false);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisOrientation/
      */
     SetHorAxisOrientation(bIsMinMax: boolean): boolean;
@@ -2057,6 +3454,28 @@ export namespace Slide {
      * Spicifies tick labels position for the horizontal axis.
      *
      * @param sTickLabelPosition - The type for the position of chart horizontal tick labels.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetHorAxisTickLabelPosition("high");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTickLabelPosition/
      */
@@ -2068,6 +3487,29 @@ export namespace Slide {
      * @param sTitle - The title which will be displayed for the horizontal axis of the current chart.
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the horizontal axis title is written in bold font or not.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetHorAxisTitle/
      */
@@ -2089,6 +3531,26 @@ export namespace Slide {
      *
      * @param oFill - The fill type used to fill the legend.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));
+     * oChart.SetLegendFill(oFill);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFill/
      */
     SetLegendFill(oFill: ApiFill): boolean;
@@ -2097,6 +3559,28 @@ export namespace Slide {
      * Specifies the legend font size.
      *
      * @param nFontSize - The text size value measured in points.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetLegendFontSize(16);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendFontSize/
      */
@@ -2107,6 +3591,26 @@ export namespace Slide {
      *
      * @param oStroke - The stroke used to create the legend outline.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetLegendOutLine(oStroke);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendOutLine/
      */
     SetLegendOutLine(oStroke: ApiStroke): boolean;
@@ -2115,6 +3619,29 @@ export namespace Slide {
      * Specifies the chart legend position.
      *
      * @param sLegendPos - The position of the chart legend inside the chart window.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetLegendPos/
      */
@@ -2125,6 +3652,29 @@ export namespace Slide {
      *
      * @param oStroke - The stroke used to create the element shadow.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(1 * 15000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMajorHorizontalGridlines(oStroke);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMajorHorizontalGridlines/
      */
     SetMajorHorizontalGridlines(oStroke: ApiStroke): boolean;
@@ -2133,6 +3683,29 @@ export namespace Slide {
      * Specifies major vertical gridline visual properties.
      *
      * @param oStroke - The stroke used to create the element shadow.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(1 * 15000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMajorVerticalGridlines(oStroke);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMajorVerticalGridlines/
      */
@@ -2147,6 +3720,28 @@ export namespace Slide {
      * @param bAllMarkers - Specifies if the fill will be applied to all markers in the specified chart series.
      * @default bAllMarkers = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMarkerFill/
      */
     SetMarkerFill(oFill: ApiFill, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
@@ -2160,6 +3755,27 @@ export namespace Slide {
      * @param bAllMarkers - Specifies if the outline will be applied to all markers in the specified chart series.
      * @default bAllMarkers = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMarkerOutLine/
      */
     SetMarkerOutLine(oStroke: ApiStroke, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean;
@@ -2169,6 +3785,29 @@ export namespace Slide {
      *
      * @param oStroke - The stroke used to create the element shadow.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(1 * 10000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMinorHorizontalGridlines(oStroke);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMinorHorizontalGridlines/
      */
     SetMinorHorizontalGridlines(oStroke: ApiStroke): boolean;
@@ -2177,6 +3816,29 @@ export namespace Slide {
      * Specifies minor vertical gridline visual properties.
      *
      * @param oStroke - The stroke used to create the element shadow.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(1 * 10000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMinorVerticalGridlines(oStroke);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetMinorVerticalGridlines/
      */
@@ -2197,6 +3859,26 @@ export namespace Slide {
      *
      * @param oFill - The fill type used to fill the plot area.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));
+     * oChart.SetPlotAreaFill(oFill);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetPlotAreaFill/
      */
     SetPlotAreaFill(oFill: ApiFill): boolean;
@@ -2205,6 +3887,26 @@ export namespace Slide {
      * Sets the outline to the chart plot area.
      *
      * @param oStroke - The stroke used to create the plot area outline.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetPlotAreaOutLine(oStroke);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetPlotAreaOutLine/
      */
@@ -2261,6 +3963,25 @@ export namespace Slide {
      * @param sName - The name which will be set to the specified chart series.
      * @param nSeria - The index of the chart series.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetSeriaName("Projected Sales", 0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaName/
      */
     SetSeriaName(sName: string, nSeria: number): boolean;
@@ -2271,6 +3992,25 @@ export namespace Slide {
      * @param sFormat - Numeric format (can be custom format).
      * @param nSeria - Series index.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24, ["0", "0.00"]);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetSeriaNumFormat("0.00", 0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaNumFormat/
      */
     SetSeriaNumFormat(sFormat: NumFormat | string, nSeria: number): boolean;
@@ -2280,6 +4020,28 @@ export namespace Slide {
      *
      * @param aValues - The array of the data which will be set to the specified chart series.
      * @param nSeria - The index of the chart series.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetSeriaValues([260, 270, 300], 1);
+     * oChart.SetShowPointDataLabel(1, 0, false, false, true, false);
+     * oChart.SetShowPointDataLabel(1, 1, false, false, true, false);
+     * oChart.SetShowPointDataLabel(1, 2, false, false, true, false);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriaValues/
      */
@@ -2293,6 +4055,24 @@ export namespace Slide {
      * @param bAll - Specifies if the fill will be applied to all series.
      * @default bAll = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriesFill/
      */
     SetSeriesFill(oFill: ApiFill, nSeries: number, bAll?: boolean): boolean;
@@ -2304,6 +4084,27 @@ export namespace Slide {
      * @param nSeries - The index of the chart series.
      * @param bAll - Specifies if the outline will be applied to all series.
      * @default bAll = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oChart.SetSeriesOutLine(oStroke, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oChart.SetSeriesOutLine(oStroke, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriesOutLine/
      */
@@ -2318,6 +4119,29 @@ export namespace Slide {
      *   build from.
      * @param bShowVal - Whether to show or hide the chart data values.
      * @param bShowPercent - Whether to show or hide the percent for the data values (works with stacked chart types).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowDataLabels/
      */
@@ -2347,6 +4171,28 @@ export namespace Slide {
      * @param bShowVal - Whether to show or hide the chart data values.
      * @param bShowPercent - Whether to show or hide the percent for the data values (works with stacked chart types).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetShowPointDataLabel(1, 0, false, false, true, false);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowPointDataLabel/
      */
     SetShowPointDataLabel(nSeriesIndex: number, nPointIndex: number, bShowSerName: boolean, bShowCatName: boolean, bShowVal: boolean, bShowPercent: boolean): boolean;
@@ -2358,6 +4204,29 @@ export namespace Slide {
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the chart title is written in bold font or not.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitle/
      */
     SetTitle(sTitle: string, nFontSize: pt, bIsBold: boolean): boolean;
@@ -2367,6 +4236,27 @@ export namespace Slide {
      *
      * @param oFill - The fill type used to fill the title.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetTitleFill(oFill);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitleFill/
      */
     SetTitleFill(oFill: ApiFill): boolean;
@@ -2375,6 +4265,27 @@ export namespace Slide {
      * Sets the outline to the chart title.
      *
      * @param oStroke - The stroke used to create the title outline.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetTitle("Financial Overview", 13);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetTitleOutLine(oStroke);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetTitleOutLine/
      */
@@ -2386,6 +4297,27 @@ export namespace Slide {
      * @param bIsMinMax - The `true` value will set the normal data direction for the vertical axis (from minimum to
      *   maximum).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetTitle("Financial Overview", 13);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetTitleOutLine(oStroke);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisOrientation/
      */
     SetVerAxisOrientation(bIsMinMax: boolean): boolean;
@@ -2396,6 +4328,29 @@ export namespace Slide {
      * @param sTitle - The title which will be displayed for the vertical axis of the current chart.
      * @param nFontSize - The text size value measured in points.
      * @param bIsBold - Specifies if the vertical axis title is written in bold font or not.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVerAxisTitle/
      */
@@ -2415,6 +4370,32 @@ export namespace Slide {
      *
      * @param sTickMark - The type of tick mark appearance.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetVertAxisMajorTickMark("cross");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisMajorTickMark/
      */
     SetVertAxisMajorTickMark(sTickMark: TickMark): boolean;
@@ -2423,6 +4404,31 @@ export namespace Slide {
      * Specifies minor tick mark for the vertical axis.
      *
      * @param sTickMark - The type of tick mark appearance.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetVertAxisMinorTickMark("out");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisMinorTickMark/
      */
@@ -2433,6 +4439,28 @@ export namespace Slide {
      *
      * @param sTickLabelPosition - The type for the position of chart vertical tick labels.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetVertAxisTickLabelPosition("high");
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetVertAxisTickLabelPosition/
      */
     SetVertAxisTickLabelPosition(sTickLabelPosition: TickLabelPosition): boolean;
@@ -2441,6 +4469,29 @@ export namespace Slide {
      * Sets the x-axis values to all chart series. It is used with the scatter charts only.
      *
      * @param aValues - The array of the data which will be set to the x-axis data points.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("scatter", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oChart.SetXValues(["2020", "2021", "2022"]);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oChart.SetMarkerFill(oFill, 0, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 0, 0, true);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * oChart.SetMarkerFill(oFill, 1, 0, true);
+     * oChart.SetMarkerOutLine(oStroke, 1, 0, true);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetXValues/
      */
@@ -2458,6 +4509,37 @@ export namespace Slide {
      *
      * @param sType - Chart type.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("comboBarLine", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * var aAllSeries = oChart.GetAllSeries();
+     * var oSeries, sSeriesType, sTitle = "";
+     * oSeries = oChart.GetSeries(0);
+     * sSeriesType = oSeries.GetChartType();
+     * sTitle += "Old Series Type = " + sSeriesType + "\n";
+     * oSeries.ChangeChartType("area");
+     * sSeriesType = oSeries.GetChartType();
+     * sTitle += "New Series Type = " + sSeriesType;
+     * oChart.SetTitle(sTitle, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/ChangeChartType/
      */
     ChangeChartType(sType: ChartType): boolean;
@@ -2465,12 +4547,68 @@ export namespace Slide {
     /**
      * Returns a chart type of the current series.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("comboBarLine", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * var aAllSeries = oChart.GetAllSeries();
+     * var oSeries, sSeriesType, sTitle = "";
+     * oSeries = oChart.GetSeries(0);
+     * sSeriesType = oSeries.GetChartType();
+     * sTitle += "Series Type = " + sSeriesType + "\n";
+     * oChart.SetTitle(sTitle, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/GetChartType/
      */
     GetChartType(): ChartTypeLegacy;
 
     /**
      * Returns a type of the ApiChartSeries class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("comboBarLine", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * var aAllSeries = oChart.GetAllSeries();
+     * var oSeries, sClassType, sTitle = "";
+     * oSeries = oChart.GetSeries(0);
+     * sClassType = oSeries.GetClassType();
+     * sTitle += "Class Type = " + sClassType + "\n";
+     * oChart.SetTitle(sTitle, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChartSeries/Methods/GetClassType/
      */
@@ -2601,12 +4739,53 @@ export namespace Slide {
      * @default nPos = -1
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's reply text: " + oReply.GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/AddReply/
      */
     AddReply(sText: string, sAuthorName?: string, sUserId?: string, nPos?: number): ApiComment;
 
     /**
      * Deletes the current comment from the document.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].Delete();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The comment was just deleted from the current presentation.");
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/Delete/
      */
@@ -2615,12 +4794,51 @@ export namespace Slide {
     /**
      * Returns the comment author's name.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's author: " + arrComments[0].GetAuthorName());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetAuthorName/
      */
     GetAuthorName(): string;
 
     /**
      * Returns a type of the ApiComment class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var sType = arrComments[0].GetClassType();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Type: " + sType);
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetClassType/
      */
@@ -2638,12 +4856,51 @@ export namespace Slide {
     /**
      * Returns the quote text of the current comment.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's quote text: " + arrComments[0].GetQuoteText());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetQuoteText/
      */
     GetQuoteText(): number;
 
     /**
      * Returns a number of the comment replies.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment replies count: " + arrComments[0].GetRepliesCount());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetRepliesCount/
      */
@@ -2652,6 +4909,25 @@ export namespace Slide {
     /**
      * Returns the comment text.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment: " + arrComments[0].GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetText/
      */
     GetText(): string;
@@ -2659,12 +4935,50 @@ export namespace Slide {
     /**
      * Returns the timestamp of the comment creation in the current time zone format.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Timestamp: " + arrComments[0].GetTime());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTime/
      */
     GetTime(): number;
 
     /**
      * Returns the timestamp of the comment creation in UTC format.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Timestamp UTC: " + arrComments[0].GetTimeUTC());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/GetTimeUTC/
      */
@@ -2695,6 +5009,29 @@ export namespace Slide {
      * @default bRemoveAll = false
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * arrComments[0].AddReply("Reply 2", "John Smith", "uid-1");
+     * arrComments[0].RemoveReplies(0, 1, false);
+     * var oReply = arrComments[0].GetReply(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment replies count: " + arrComments[0].GetRepliesCount());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/RemoveReplies/
      */
     RemoveReplies(nPos?: number, nCount?: number, bRemoveAll?: boolean): ApiComment;
@@ -2704,6 +5041,26 @@ export namespace Slide {
      *
      * @param sAuthorName - The comment author's name.
      * @returns this
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetAuthorName("Mark Potato");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's author: " + arrComments[0].GetAuthorName());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetAuthorName/
      */
@@ -2725,6 +5082,26 @@ export namespace Slide {
      * @param bSolved - Specifies if a comment is solved or not.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetSolved(true);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The comment is solved.");
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetSolved/
      */
     SetSolved(bSolved: boolean): ApiComment;
@@ -2734,6 +5111,26 @@ export namespace Slide {
      *
      * @param sText - The comment text.
      * @returns this
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetText("New comment text");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment text: " + arrComments[0].GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetText/
      */
@@ -2745,6 +5142,26 @@ export namespace Slide {
      * @param nTimeStamp - The timestamp of the comment creation in the current time zone format.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetTime(Date.now());
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Timestamp: " + arrComments[0].GetTime());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTime/
      */
     SetTime(nTimeStamp: number | string): ApiComment;
@@ -2755,6 +5172,26 @@ export namespace Slide {
      * @param nTimeStamp - The timestamp of the comment creation in UTC format.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetTimeUTC(Date.now());
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Timestamp UTC: " + arrComments[0].GetTimeUTC());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetTimeUTC/
      */
     SetTimeUTC(nTimeStamp: number | string): ApiComment;
@@ -2764,6 +5201,26 @@ export namespace Slide {
      *
      * @param sUserId - The user ID of the comment author.
      * @returns this
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].SetUserId("uid-2");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The ID of the user who commented on this presentation is uid-2.");
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiComment/Methods/SetUserId/
      */
@@ -2779,6 +5236,27 @@ export namespace Slide {
     /**
      * Returns the comment reply author's name.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's reply author: " + oReply.GetAuthorName());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetAuthorName/
      */
     GetAuthorName(): string;
@@ -2786,12 +5264,54 @@ export namespace Slide {
     /**
      * Returns a type of the ApiCommentReply class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Type: " + oReply.GetClassType());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetClassType/
      */
     GetClassType(): "commentReply";
 
     /**
      * Returns the comment reply text.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's reply text: " + oReply.GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/GetText/
      */
@@ -2803,6 +5323,28 @@ export namespace Slide {
      * @param sAuthorName - The comment reply author's name.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * oReply.SetAuthorName("Mark Potato");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's reply author: " + oReply.GetAuthorName());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetAuthorName/
      */
     SetAuthorName(sAuthorName: string): ApiCommentReply;
@@ -2813,6 +5355,28 @@ export namespace Slide {
      * @param sText - The comment reply text.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * oReply.SetText("New reply text.");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment's reply text: " + oReply.GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetText/
      */
     SetText(sText: string): ApiCommentReply;
@@ -2822,6 +5386,28 @@ export namespace Slide {
      *
      * @param sUserId - The user ID of the comment reply author.
      * @returns this
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * arrComments[0].AddReply("Reply 1", "John Smith", "uid-1");
+     * var oReply = arrComments[0].GetReply(0);
+     * oReply.SetUserId("uid-2");
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The comment's reply user Id is uid-2.");
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiCommentReply/Methods/SetUserId/
      */
@@ -3786,6 +6372,24 @@ export namespace Slide {
      * @param nPos - The position where the current element will be added.
      * @param oElement - The document element which will be added at the current position.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it.");
+     * oDocContent.AddElement(oParagraph);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/AddElement/
      */
     AddElement(nPos: number, oElement: DocumentElement): boolean;
@@ -3809,6 +6413,22 @@ export namespace Slide {
 
     /**
      * Returns a type of the ApiDocumentContent class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oDocContent.GetClassType();
+     * oParagraph.AddText("Class Type: " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetClassType/
      */
@@ -3837,12 +6457,52 @@ export namespace Slide {
      *
      * @param nPos - The element position that will be taken from the document.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oBullet = Api.CreateNumbering("ArabicParenR", 1);
+     * oParagraph.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the numbered paragraph.");
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the numbered paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElement/
      */
     GetElement(nPos: number): DocumentElement;
 
     /**
      * Returns a number of elements in the current document.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("We got the first paragraph inside the shape.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of elements inside the shape: " + oDocContent.GetElementsCount());
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Line breaks are NOT counted into the number of elements.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElementsCount/
      */
@@ -3892,6 +6552,24 @@ export namespace Slide {
      * @param oElement - The element type which will be pushed to the document.
      * @returns returns false if oElement is unsupported.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it.");
+     * oDocContent.AddElement(oParagraph);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/Push/
      */
     Push(oElement: DocumentElement): boolean;
@@ -3902,6 +6580,25 @@ export namespace Slide {
      * add
      * content to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is just a sample paragraph.");
+     * oDocContent.RemoveAllElements();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveAllElements/
      */
     RemoveAllElements(): boolean;
@@ -3910,6 +6607,25 @@ export namespace Slide {
      * Removes an element using the position specified.
      *
      * @param nPos - The element number (position) in the document or inside other element.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is the first paragraph.");
+     * oDocContent.RemoveElement(0);
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is the second paragraph. The first paragraph was removed from the document content.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveElement/
      */
@@ -3936,6 +6652,23 @@ export namespace Slide {
     /**
      * Creates a copy of the specified drawing object.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oShape);
+     * var oCopyShape = oShape.Copy();
+     * oSlide = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide);
+     * oSlide.AddObject(oCopyShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/Copy/
      */
     Copy(): ApiDrawing;
@@ -3954,6 +6687,37 @@ export namespace Slide {
      *
      * @returns false if drawing doesn't exist or drawing hasn't a parent.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing1 = Api.CreateShape("rect", 3212465, 963295, oFill, oStroke);
+     * oSlide.AddObject(oDrawing1);
+     * var oDrawing2 = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oDrawing2.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oDrawing2.SetHorAxisTitle("Year", 11);
+     * oDrawing2.SetLegendPos("bottom");
+     * oDrawing2.SetShowDataLabels(false, false, true, false);
+     * oDrawing2.SetTitle("Financial Overview", 13);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oDrawing2.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oDrawing2.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oDrawing2);
+     * oDrawing2.Delete();
+     * var oDocContent = oDrawing1.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The chart was deleted from this slide.");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/Delete/
      */
     Delete(): boolean;
@@ -3971,6 +6735,25 @@ export namespace Slide {
 
     /**
      * Returns the type of the ApiDrawing class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * var aDrawings = oSlide.GetAllDrawings();
+     * var sType = aDrawings[0].GetClassType();
+     * var oDocContent = oDrawing.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sType);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetClassType/
      */
@@ -4020,6 +6803,22 @@ export namespace Slide {
     /**
      * Returns the height of the current drawing.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var nHeight = oShape.GetHeight();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Drawing height: " + nHeight);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetHeight/
      */
     GetHeight(): EMU;
@@ -4063,6 +6862,24 @@ export namespace Slide {
      *
      * @param sType - Lock type in the string format.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetLockValue("noSelect", true);
+     * var oDocContent = oShape.GetContent();
+     * var bLockValue = oShape.GetLockValue("noSelect");
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This drawing cannot be selected: " + bLockValue);
+     * oDocContent.AddElement(0, oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetLockValue/
      */
     GetLockValue(sType: DrawingLockType): boolean;
@@ -4079,6 +6896,25 @@ export namespace Slide {
     /**
      * Returns the drawing parent object.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * var oParent = oShape.GetParent();
+     * var sType = oParent.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type of the shape parent = " + sType);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParent/
      */
     GetParent(): ApiSlide | ApiLayout | ApiMaster | null;
@@ -4087,6 +6923,27 @@ export namespace Slide {
      * Returns the drawing parent slide layout.
      *
      * @returns return null if parent ins't a slide layout.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oLayout.AddObject(oShape);
+     * var oParent = oShape.GetParentLayout();
+     * var sType = oParent.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type of the shape parent = " + sType);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentLayout/
      */
@@ -4097,6 +6954,26 @@ export namespace Slide {
      *
      * @returns return null if parent ins't a slide master.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oMaster.AddObject(oShape);
+     * var oParent = oShape.GetParentMaster();
+     * var sType = oParent.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type of the shape parent = " + sType);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentMaster/
      */
     GetParentMaster(): ApiMaster | null;
@@ -4106,6 +6983,25 @@ export namespace Slide {
      *
      * @returns return null if parent ins't a slide.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * var oParent = oShape.GetParentSlide();
+     * var sType = oParent.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type of the shape parent = " + sType);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentSlide/
      */
     GetParentSlide(): ApiSlide | null;
@@ -4114,6 +7010,28 @@ export namespace Slide {
      * Returns a placeholder from the current drawing object.
      *
      * @returns returns null if placeholder doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("chart");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oSlide.AddObject(oShape);
+     * oPlaceholder = oShape.GetPlaceholder();
+     * var sType = oPlaceholder.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type of the element from the shape = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPlaceholder/
      */
@@ -4174,6 +7092,22 @@ export namespace Slide {
     /**
      * Returns the width of the current drawing.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var nWidth = oShape.GetWidth();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Drawing width: " + nWidth);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetWidth/
      */
     GetWidth(): EMU;
@@ -4203,6 +7137,18 @@ export namespace Slide {
      *   (false).
      * @default isReplace = false
      * @since 9.3.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var aAllDrawings = oSlide.GetAllDrawings();
+     * if(aAllDrawings.length > 0)
+     * {
+     * 	var oDrawing = aAllDrawings[0];
+     * 	oDrawing.Select();
+     * }
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/Select/
      */
@@ -4269,6 +7215,24 @@ export namespace Slide {
      * @param sType - Lock type in the string format.
      * @param bValue - Specifies if the specified lock is applied to the current drawing.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetLockValue("noSelect", true);
+     * var oDocContent = oShape.GetContent();
+     * var bLockValue = oShape.GetLockValue("noSelect");
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This drawing cannot be selected: " + bLockValue);
+     * oDocContent.AddElement(0, oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetLockValue/
      */
     SetLockValue(sType: DrawingLockType, bValue: boolean): boolean;
@@ -4304,6 +7268,21 @@ export namespace Slide {
      * @param oPlaceholder - Placeholder object.
      * @returns returns false if parameter isn't a placeholder.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("picture");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPlaceholder/
      */
     SetPlaceholder(oPlaceholder: ApiPlaceholder): boolean;
@@ -4336,6 +7315,25 @@ export namespace Slide {
      * @param nPosY - The distance from the top side of the slide to the upper side of the drawing measured in English
      *   measure units.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is an example of a paragraph inside a shape. Nothing special.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosition/
      */
     SetPosition(nPosX: EMU, nPosY: EMU): void;
@@ -4367,6 +7365,25 @@ export namespace Slide {
      * @param nWidth - The object width measured in English measure units.
      * @param nHeight - The object height measured in English measure units.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is an example of a paragraph inside a shape. Nothing special.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetSize/
      */
     SetSize(nWidth: EMU, nHeight: EMU): boolean;
@@ -4384,6 +7401,21 @@ export namespace Slide {
 
     /**
      * Converts the ApiDrawing object into the JSON object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * var json = oDrawing.ToJSON();
+     * var oDrawingFromJSON = Api.FromJSON(json);
+     * oDrawingFromJSON.SetPosition(608400, 1267200);
+     * oDrawingFromJSON.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawingFromJSON);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/ToJSON/
      */
@@ -4415,6 +7447,26 @@ export namespace Slide {
   export interface ApiFill {
     /**
      * Returns a type of the ApiFill class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oFill.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiFill/Methods/GetClassType/
      */
@@ -4583,6 +7635,26 @@ export namespace Slide {
     /**
      * Returns a type of the ApiGradientStop class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oGs1.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiGradientStop/Methods/GetClassType/
      */
     GetClassType(): "gradientStop";
@@ -4607,6 +7679,36 @@ export namespace Slide {
      * Returns a type of the ApiGroup class.
      *
      * @since 8.3.0
+     *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * let oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     *
+     * let oShape1 = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill1, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape1);
+     *
+     * let oShape2 = Api.CreateShape("flowChartOnlineStorage", 100 * 36000, 65 * 36000, oFill2, oStroke);
+     * oShape2.SetPosition(304200, 633600);
+     * oSlide.AddObject(oShape2);
+     *
+     * let oGroup = oSlide.GroupDrawings([oShape1, oShape2]);
+     * let sClassType = oGroup.GetClassType();
+     *
+     * let oDocContent1 = oShape1.GetDocContent();
+     * let oParagraph1 = oDocContent1.GetElement(0);
+     * oParagraph1.AddText("Class Type = " + sClassType);
+     *
+     * let oDocContent2 = oShape2.GetDocContent();
+     * let oParagraph2 = oDocContent2.GetElement(0);
+     * oParagraph2.AddText("Class Type = " + sClassType);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiGroup/Methods/GetClassType/
      */
@@ -4773,6 +7875,36 @@ export namespace Slide {
      *   ungrouped.
      * @since 8.3.0
      *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * let oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     *
+     * let oShape1 = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill1, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape1);
+     *
+     * let oShape2 = Api.CreateShape("flowChartOnlineStorage", 100 * 36000, 65 * 36000, oFill2, oStroke);
+     * oShape2.SetPosition(304200, 633600);
+     * oSlide.AddObject(oShape2);
+     *
+     * let oGroup = oSlide.GroupDrawings([oShape1, oShape2]);
+     * oGroup.Ungroup();
+     *
+     * let oDocContent1 = oShape1.GetDocContent();
+     * let oParagraph1 = oDocContent1.GetElement(0);
+     * oParagraph1.AddText("Shapes are ungrouped");
+     *
+     * let oDocContent2 = oShape2.GetDocContent();
+     * let oParagraph2 = oDocContent2.GetElement(0);
+     * oParagraph2.AddText("Shapes are ungrouped");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiGroup/Methods/Ungroup/
      */
     Ungroup(): ApiDrawing[] | null;
@@ -4857,6 +7989,27 @@ export namespace Slide {
 
     /**
      * Returns the type of the ApiImage class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oImage = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/step2_1.png", 100 * 36000, 50 * 36000);
+     * oSlide.AddObject(oImage);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oImage.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiImage/Methods/GetClassType/
      */
@@ -5033,6 +8186,25 @@ export namespace Slide {
      * @param oDrawing - The object which will be added to the current slide layout.
      * @returns returns false if slide layout doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oLayout.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This shape was added to the current layout.");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/AddObject/
      */
     AddObject(oDrawing: ApiDrawing): boolean;
@@ -5041,6 +8213,23 @@ export namespace Slide {
      * Clears the slide layout background.
      *
      * @returns return false if slide layout doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oLayout.SetBackground(oFill);
+     * oSlide.FollowLayoutBackground();
+     * oSlide = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide);
+     * oLayout.ClearBackground();
+     * oSlide.FollowLayoutBackground();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/ClearBackground/
      */
@@ -5053,6 +8242,25 @@ export namespace Slide {
      * @returns returns new ApiLayout object that represents the copy of slide layout. Returns null if slide
      *   layout doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oLayout.AddObject(oShape);
+     * oSlide = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide);
+     * var oCopyLayout = oLayout.Copy();
+     * oMaster.AddLayout(1, oCopyLayout);
+     * oSlide.ApplyLayout(oCopyLayout);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Copy/
      */
     Copy(): ApiLayout | null;
@@ -5061,6 +8269,30 @@ export namespace Slide {
      * Deletes the specified object from the parent slide master if it exists.
      *
      * @returns return false if parent slide master doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oMaster.GetLayoutsCount();
+     * var oLayout = oMaster.GetLayout(0);
+     * oLayout.Delete();
+     * var nCountAfter = oMaster.GetLayoutsCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of layouts before deletion: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of layouts after deletion: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Delete/
      */
@@ -5075,6 +8307,24 @@ export namespace Slide {
      * @returns returns new ApiLayout object that represents the copy of slide layout. Returns null if slide
      *   layout doesn't exist or is not in the slide master.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oLayout.AddObject(oShape);
+     * oSlide = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide);
+     * var oDuplicateLayout = oLayout.Duplicate(1);
+     * oSlide.ApplyLayout(oDuplicateLayout);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/Duplicate/
      */
     Duplicate(nPos?: number): ApiLayout | null;
@@ -5084,12 +8334,52 @@ export namespace Slide {
      *
      * @returns returns false if master is null or master hasn't background.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oMaster.SetBackground(oFill);
+     * var oLayout = oMaster.GetLayout(0);
+     * oLayout.FollowMasterBackground();
+     * oSlide.FollowLayoutBackground();
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/FollowMasterBackground/
      */
     FollowMasterBackground(): boolean;
 
     /**
      * Returns an array with all the chart objects from the slide layout.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oLayout.AddObject(oChart);
+     * var aCharts = oLayout.GetAllCharts();
+     * var oStroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * aCharts[0].SetMinorHorizontalGridlines(oStroke);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllCharts/
      */
@@ -5098,12 +8388,53 @@ export namespace Slide {
     /**
      * Returns an array with all the drawing objects from the slide layout.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.RemoveAllObjects();
+     * oLayout.AddObject(oDrawing);
+     * var aDrawings = oLayout.GetAllDrawings();
+     * var oPlaceholder = Api.CreatePlaceholder("picture");
+     * aDrawings[0].SetPlaceholder(oPlaceholder);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllDrawings/
      */
     GetAllDrawings(): Drawing[];
 
     /**
      * Returns an array with all the image objects from the slide layout.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oImage = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png", 60 * 36000, 35 * 36000);
+     * oLayout.AddObject(oImage);
+     * var aImages = oLayout.GetAllImages();
+     * var sType = aImages[0].GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(61, 74, 107));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllImages/
      */
@@ -5112,12 +8443,57 @@ export namespace Slide {
     /**
      * Returns an array with all the OLE objects from the slide layout.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oOleObject = Api.CreateOleObject("https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oLayout.AddObject(oOleObject);
+     * var aOleObjects = oLayout.GetAllOleObjects();
+     * var sAppId = aOleObjects[0].GetApplicationId();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 224, 204), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The application ID for the current OLE object: " + sAppId);
+     * oLayout.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllOleObjects/
      */
     GetAllOleObjects(): ApiOleObject[];
 
     /**
      * Returns an array with all the shape objects from the slide layout.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.RemoveAllObjects();
+     * oLayout.AddObject(oShape);
+     * var aShapes = oLayout.GetAllShapes();
+     * var oDocContent = aShapes[0].GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is a sample shape which was added to the current layout.");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetAllShapes/
      */
@@ -5146,6 +8522,26 @@ export namespace Slide {
     /**
      * Returns the type of the ApiLayout class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var sType = oLayout.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetClassType/
      */
     GetClassType(): "layout";
@@ -5155,6 +8551,18 @@ export namespace Slide {
      *
      * @param sType - The placeholder type.
      * @since 8.2.0
+     *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * let oMaster = oPresentation.GetMaster(0);
+     * let oLayout = oMaster.GetLayout(0);
+     * let aDrawingsWithPh = oLayout.GetDrawingsByPlaceholderType("ctrTitle");
+     * for (let i = 0; i < aDrawingsWithPh.length; i++) {
+     *     aDrawingsWithPh[i].Delete();
+     * }
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetDrawingsByPlaceholderType/
      */
@@ -5173,6 +8581,26 @@ export namespace Slide {
      * Returns the parent slide master of the current layout.
      *
      * @returns returns null if parent slide master doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oLayout = oSlide.GetLayout();
+     * var oMaster = oLayout.GetMaster();
+     * var sType = oMaster.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GetMaster/
      */
@@ -5193,6 +8621,23 @@ export namespace Slide {
      * @param aDrawings - An array of drawings to group.
      * @since 8.3.0
      *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * let oLayout = oSlide.GetLayout();
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape1 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill1, oStroke);
+     * let oShape2 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill2, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oShape2.SetPosition(608400, 1400000);
+     * oLayout.AddObject(oShape1);
+     * oLayout.AddObject(oShape2);
+     * oLayout.GroupDrawings([oShape1, oShape2]);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/GroupDrawings/
      */
     GroupDrawings(aDrawings: DrawingForGroup[]): ApiGroup;
@@ -5202,6 +8647,32 @@ export namespace Slide {
      *
      * @param nPos - Position where the specified slide layout will be moved to.
      * @returns returns false if layout or parent slide master doesn't exist or position is invalid.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout1 = oMaster.GetLayout(3);
+     * oSlide1.ApplyLayout(oLayout1);
+     * oLayout1.MoveTo(7);
+     * var oLayout2 = oMaster.GetLayout(7);
+     * var oSlide2 = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide2);
+     * oSlide2.ApplyLayout(oLayout2);
+     * var oSlide3 = Api.CreateSlide();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide3.AddObject(oShape);
+     * var oDocContent = oShape.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The third layout was moved to the seventh position within the same collection.");
+     * oPresentation.AddSlide(oSlide3);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/MoveTo/
      */
@@ -5214,6 +8685,30 @@ export namespace Slide {
      * @param nCount - The number of elements to delete.
      * @default nCount = 1
      * @returns returns false if layout doesn't exist or position is invalid or layout hasn't objects.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("cube", 3212465, 963295, oFill, oStroke);
+     * oDrawing.SetPosition(30 * 36000, 1267200);
+     * oDrawing.SetSize(150 * 36000, 130 * 36000);
+     * var oCopyDrawing = oDrawing.Copy();
+     * oCopyDrawing.SetPosition(160 * 36000, 1267200);
+     * oCopyDrawing.SetSize(150 * 36000, 130 * 36000);
+     * oLayout.AddObject(oDrawing);
+     * oLayout.AddObject(oCopyDrawing);
+     * oLayout.RemoveObject(1, 1);
+     * var oDocContent = oDrawing.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The second cube was removed from this layout.");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/RemoveObject/
      */
@@ -5239,6 +8734,19 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the presentation slide layout background.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oLayout.SetBackground(oFill);
+     * oSlide.FollowLayoutBackground();
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/SetBackground/
      */
     SetBackground(oApiFill: ApiFill): boolean;
@@ -5247,6 +8755,26 @@ export namespace Slide {
      * Sets a name to the current layout.
      *
      * @param sName - Layout name to be set.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * oLayout.SetName("New layout");
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("A new name was set to the current layout.");
+     * oLayout.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/SetName/
      */
@@ -5259,6 +8787,29 @@ export namespace Slide {
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
      * @default bWriteMaster = false
      * @default bWriteTableStyles = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var json = oLayout.ToJSON(true, false);
+     * var oLayoutFromJSON = Api.FromJSON(json);
+     * oMaster.AddLayout(0, oLayoutFromJSON);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var sType = oLayoutFromJSON.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Class type = " + sType);
+     * oLayoutFromJSON.AddObject(oShape);
+     * oSlide.ApplyLayout(oLayoutFromJSON);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiLayout/Methods/ToJSON/
      */
@@ -5279,6 +8830,30 @@ export namespace Slide {
      * @default nPos = ApiMaster.GetLayoutsCount()
      * @returns returns false if oLayout isn't a layout.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oMaster.GetLayoutsCount();
+     * var oLayout = Api.CreateLayout();
+     * oMaster.AddLayout(0, oLayout);
+     * var nCountAfter = oMaster.GetLayoutsCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of layouts before adding new layout: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of layouts after adding new layout: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/AddLayout/
      */
     AddLayout(oLayout: ApiLayout): boolean;
@@ -5290,6 +8865,20 @@ export namespace Slide {
      * @param oDrawing - The object which will be added to the current slide master.
      * @returns returns false if slide master doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oMaster.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/AddObject/
      */
     AddObject(oDrawing: ApiDrawing): boolean;
@@ -5298,6 +8887,21 @@ export namespace Slide {
      * Clears the slide master background.
      *
      * @returns return false if slide master doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * oMaster.ClearBackground();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oMaster.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/ClearBackground/
      */
@@ -5309,6 +8913,30 @@ export namespace Slide {
      * @returns returns new ApiMaster object that represents the copy of slide master. Returns null if slide
      *   doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oPresentation.GetMastersCount();
+     * var oCopyMaster = oMaster.Copy();
+     * oPresentation.AddMaster(1, oCopyMaster);
+     * var nCountAfter = oPresentation.GetMastersCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters before adding the copied master: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of masters after adding the copied master: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/Copy/
      */
     Copy(): ApiMaster | null;
@@ -5319,6 +8947,29 @@ export namespace Slide {
      *
      * @returns return false if master doesn't exist or is not in the presentation or couldn't be deleted (e.g.
      *   the last master).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oPresentation.GetMastersCount();
+     * oMaster.Delete();
+     * var nCountAfter = oPresentation.GetMastersCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters before deletion: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of masters after deletion: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/Delete/
      */
@@ -5333,12 +8984,62 @@ export namespace Slide {
      * @returns returns new ApiMaster object that represents the copy of slide master. Returns null if slide
      *   master doesn't exist or is not in the presentation.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oPresentation.GetMastersCount();
+     * oMaster.Duplicate(1);
+     * var nCountAfter = oPresentation.GetMastersCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters before duplicating: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of masters after duplicating: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/Duplicate/
      */
     Duplicate(nPos?: number): ApiMaster | null;
 
     /**
      * Returns an array with all the chart objects from the slide master.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oMaster.AddObject(oChart);
+     * oSlide.RemoveAllObjects();
+     * var aCharts = oMaster.GetAllCharts();
+     * var oStroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * aCharts[0].SetMinorHorizontalGridlines(oStroke);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllCharts/
      */
@@ -5347,12 +9048,51 @@ export namespace Slide {
     /**
      * Returns an array with all the drawing objects from the slide master.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.RemoveAllObjects();
+     * oMaster.AddObject(oDrawing);
+     * var aDrawings = oMaster.GetAllDrawings();
+     * var oPlaceholder = Api.CreatePlaceholder("picture");
+     * aDrawings[0].SetPlaceholder(oPlaceholder);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllDrawings/
      */
     GetAllDrawings(): Drawing[];
 
     /**
      * Returns an array with all the image objects from the slide master.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oImage = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png", 60 * 36000, 35 * 36000);
+     * oMaster.AddObject(oImage);
+     * var aImages = oMaster.GetAllImages();
+     * var sType = aImages[0].GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(61, 74, 107));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllImages/
      */
@@ -5371,12 +9111,56 @@ export namespace Slide {
     /**
      * Returns an array with all the OLE objects from the slide master.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oOleObject = Api.CreateOleObject("https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oMaster.AddObject(oOleObject);
+     * var aOleObjects = oMaster.GetAllOleObjects();
+     * var sAppId = aOleObjects[0].GetApplicationId();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 224, 204), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The application ID for the current OLE object: " + sAppId);
+     * oMaster.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllOleObjects/
      */
     GetAllOleObjects(): ApiOleObject[];
 
     /**
      * Returns an array with all the shape objects from the slide master.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oMaster.AddObject(oShape);
+     * var aShapes = oMaster.GetAllShapes();
+     * var sType = aShapes[0].GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oShape.SetVerticalTextAlign("center");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetAllShapes/
      */
@@ -5405,6 +9189,25 @@ export namespace Slide {
     /**
      * Returns the type of the ApiMaster class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var sType = oMaster.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetClassType/
      */
     GetClassType(): "master";
@@ -5415,6 +9218,17 @@ export namespace Slide {
      * @param sType - The placeholder type.
      * @since 8.2.0
      *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * let oMaster = oPresentation.GetMaster(0);
+     * let aDrawingsWithPh = oMaster.GetDrawingsByPlaceholderType("title");
+     * for (let i = 0; i < aDrawingsWithPh.length; i++) {
+     *     aDrawingsWithPh[i].Delete();
+     * }
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetDrawingsByPlaceholderType/
      */
     GetDrawingsByPlaceholderType(sType: PlaceholderType): Drawing[];
@@ -5424,6 +9238,22 @@ export namespace Slide {
      *
      * @param nPos - Layout position.
      * @returns returns null if position is invalid.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = Api.CreateLayout();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oLayout.AddObject(oShape);
+     * oMaster.AddLayout(0, oLayout);
+     * oSlide.ApplyLayout(oMaster.GetLayout(0));
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetLayout/
      */
@@ -5442,6 +9272,25 @@ export namespace Slide {
     /**
      * Returns a number of layout objects.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nLayouts = oMaster.GetLayoutsCount();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of layouts = " + nLayouts);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetLayoutsCount/
      */
     GetLayoutsCount(): number;
@@ -5450,6 +9299,30 @@ export namespace Slide {
      * Returns a theme of the slide master.
      *
      * @returns returns null if theme doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * oTheme.SetColorScheme(oClrScheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GetTheme/
      */
@@ -5460,6 +9333,24 @@ export namespace Slide {
      *
      * @param aDrawings - An array of drawings to group.
      * @since 8.3.0
+     *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * let oLayout = oSlide.GetLayout();
+     * let oMaster = oLayout.GetMaster();
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape1 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill1, oStroke);
+     * let oShape2 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill2, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oShape2.SetPosition(608400, 1400000);
+     * oMaster.AddObject(oShape1);
+     * oMaster.AddObject(oShape2);
+     * oMaster.GroupDrawings([oShape1, oShape2]);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/GroupDrawings/
      */
@@ -5473,6 +9364,29 @@ export namespace Slide {
      * @default nCount = 1
      * @returns return false if position is invalid.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var nCountBefore = oMaster.GetLayoutsCount();
+     * oMaster.RemoveLayout(0, 2);
+     * var nCountAfter = oMaster.GetLayoutsCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of layouts before deletion: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of layouts after deletion: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/RemoveLayout/
      */
     RemoveLayout(nPos: number, nCount?: number): boolean;
@@ -5484,6 +9398,29 @@ export namespace Slide {
      * @param nCount - Number of objects to delete.
      * @default nCount = 1
      * @returns returns false if master doesn't exist or position is invalid or master hasn't objects.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("cube", 3212465, 963295, oFill, oStroke);
+     * oDrawing.SetPosition(30 * 36000, 1267200);
+     * oDrawing.SetSize(150 * 36000, 130 * 36000);
+     * var oCopyDrawing = oDrawing.Copy();
+     * oCopyDrawing.SetPosition(170 * 36000, 1267200);
+     * oCopyDrawing.SetSize(150 * 36000, 130 * 36000);
+     * oMaster.AddObject(oDrawing);
+     * oMaster.AddObject(oCopyDrawing);
+     * oMaster.RemoveObject(1, 1);
+     * var oDocContent = oDrawing.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("The second cube was removed from this master.");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/RemoveObject/
      */
@@ -5509,6 +9446,22 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the presentation slide master background.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * oMaster.ClearBackground();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oMaster.AddObject(oShape);
+     * oMaster.SetBackground(oFill);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/SetBackground/
      */
     SetBackground(oApiFill: ApiFill): boolean;
@@ -5520,6 +9473,47 @@ export namespace Slide {
      * @param oTheme - Presentation theme.
      * @returns return false if oTheme isn't a theme or slide master doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(0, oFill2);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(0, Api.CreateRGBColor(51, 51, 51));
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(0, oFill1);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oMaster.SetTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/SetTheme/
      */
     SetTheme(oTheme: ApiTheme): boolean;
@@ -5529,6 +9523,26 @@ export namespace Slide {
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
      * @default bWriteTableStyles = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var json = oMaster.ToJSON(true);
+     * var oMasterFromJSON = Api.FromJSON(json);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sType = oMasterFromJSON.GetClassType();
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiMaster/Methods/ToJSON/
      */
@@ -5641,6 +9655,28 @@ export namespace Slide {
     /**
      * Returns the application ID from the current OLE object.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * var sAppId = oOleObject.GetApplicationId();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The application ID for the current OLE object: " + sAppId);
+     * oSlide.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetApplicationId/
      */
     GetApplicationId(): string;
@@ -5648,12 +9684,56 @@ export namespace Slide {
     /**
      * Returns a type of the ApiOleObject class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * var sType = oOleObject.GetClassType();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Class type: " + sType);
+     * oSlide.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetClassType/
      */
     GetClassType(): "oleObject";
 
     /**
      * Returns the string data from the current OLE object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * var sData = oOleObject.GetData();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The OLE object data: " + sData);
+     * oSlide.AddObject(oDrawing);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/GetData/
      */
@@ -5765,6 +9845,18 @@ export namespace Slide {
      *
      * @param sAppId - The application ID associated with the current OLE object.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * oOleObject.SetApplicationId("asc.{E5773A43-F9B3-4E81-81D9-CE0A132470E7}");
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/SetApplicationId/
      */
     SetApplicationId(sAppId: string): boolean;
@@ -5773,6 +9865,18 @@ export namespace Slide {
      * Sets the data to the current OLE object.
      *
      * @param sData - The OLE object string data.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * oOleObject.SetData("https://youtu.be/eJxpkjQG6Ew");
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiOleObject/Methods/SetData/
      */
@@ -5841,6 +9945,32 @@ export namespace Slide {
     /**
      * Returns a type of the ApiParaPr class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * var sClassType = oParaPr.GetClassType();
+     * oParaPr.SetIndFirstLine(1440);
+     * oParagraph.AddText("This is the first paragraph with the indent of 1 inch set to the first line. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetClassType/
      */
     GetClassType(): "paraPr";
@@ -5851,6 +9981,33 @@ export namespace Slide {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndFirstLine(1440);
+     * oParagraph.AddText("This is the first paragraph with the indent of 1 inch set to the first line. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndFirstLine = oParaPr.GetIndFirstLine();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("First line indent: " + nIndFirstLine);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
     GetIndFirstLine(): twips | undefined;
@@ -5859,6 +10016,33 @@ export namespace Slide {
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndLeft(2880);
+     * oParagraph.AddText("This is the first paragraph with the indent of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndLeft = oParaPr.GetIndLeft();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Left indent: " + nIndLeft);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
@@ -5870,12 +10054,67 @@ export namespace Slide {
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndRight(2880);
+     * oParaPr.SetJc("right");
+     * oParagraph.AddText("This is the first paragraph with the right offset of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndRight = oParaPr.GetIndRight();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Right indent: " + nIndRight);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
     GetIndRight(): twips | undefined;
 
     /**
      * Returns the paragraph contents justification.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetJc("center");
+     * oParagraph.AddText("This is a paragraph with the text in it aligned by the center. ");
+     * oParagraph.AddText("The justification is specified in the paragraph style. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var sJc = oParaPr.GetJc();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Justification: " + sJc);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetJc/
      */
@@ -5896,6 +10135,33 @@ export namespace Slide {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingAfter(1440);
+     * oParagraph.AddText("This is an example of setting a space after a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nSpacingAfter = oParaPr.GetSpacingAfter();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing after : " + nSpacingAfter);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
     GetSpacingAfter(): twips;
@@ -5906,12 +10172,66 @@ export namespace Slide {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is an example of setting a space before a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the second paragraph has this offset enabled.");
+     * var oParagraph2 = Api.CreateParagraph();
+     * oParagraph2.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * var oParaPr = oParagraph2.GetParaPr();
+     * oParaPr.SetSpacingBefore(1440);
+     * oDocContent.Push(oParagraph2);
+     * var nSpacingBefore = oParaPr.GetSpacingBefore();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing before: " + nSpacingBefore);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
     GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * var sSpacingLineRule = oParaPr.GetSpacingLineRule();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing line rule : " + sSpacingLineRule);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineRule/
      */
@@ -5921,6 +10241,32 @@ export namespace Slide {
      * Returns the paragraph line spacing value.
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * var nSpacingLineValue = oParaPr.GetSpacingLineValue();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing line value : " + nSpacingLineValue);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
@@ -5941,6 +10287,26 @@ export namespace Slide {
      * @param oBullet - The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering}
      *   method.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * var oBullet = Api.CreateBullet("-");
+     * oParaPr.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the bulleted paragraph.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetBullet/
      */
     SetBullet(oBullet: ApiBullet): void;
@@ -5951,6 +10317,29 @@ export namespace Slide {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndFirstLine(1440);
+     * oParagraph.AddText("This is the first paragraph with the indent of 1 inch set to the first line. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
     SetIndFirstLine(nValue: twips): boolean;
@@ -5959,6 +10348,28 @@ export namespace Slide {
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndLeft(2880);
+     * oParagraph.AddText("This is the first paragraph with the indent of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
@@ -5970,6 +10381,28 @@ export namespace Slide {
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndRight(2880);
+     * oParagraph.AddText("This is the first paragraph with the right offset of 2 inches set to it. ");
+     * oParagraph.AddText("This offset is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
     SetIndRight(nValue: twips): boolean;
@@ -5978,6 +10411,28 @@ export namespace Slide {
      * Sets the paragraph contents justification.
      *
      * @param sJc - The justification type that will be applied to the paragraph contents.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetJc("center");
+     * oParagraph.AddText("This is a paragraph with the text in it aligned by the center. ");
+     * oParagraph.AddText("The justification is specified in the paragraph style. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetJc/
      */
@@ -6010,6 +10465,30 @@ export namespace Slide {
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
      * @default isAfterAuto = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingAfter(1440);
+     * oParagraph.AddText("This is an example of setting a space after a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the first paragraph has this offset enabled.");
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
     SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
@@ -6025,6 +10504,31 @@ export namespace Slide {
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
      * @default isBeforeAuto = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParagraph.AddText("This is an example of setting a space before a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the second paragraph has this offset enabled.");
+     * oParagraph = Api.CreateParagraph();
+     * oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingBefore(1440);
+     * oParagraph.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
     SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
@@ -6039,6 +10543,29 @@ export namespace Slide {
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
     SetSpacingLine(nLine: twips | line240, sLineRule: "auto" | "atLeast" | "exact"): boolean;
@@ -6052,6 +10579,35 @@ export namespace Slide {
      *   in twentieths of a point (1/1440 of an inch).
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetTabs([1440, 4320, 7200], ["left", "center", "right"]);
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 1 inch left");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 3 inches center");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 5 inches right");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
@@ -6073,6 +10629,25 @@ export namespace Slide {
      *   element will be added at the end of the current paragraph.
      * @returns Returns `false` if the type of `oElement` is not supported by paragraph content.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is the text for a text run. Nothing special.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/AddElement/
      */
     AddElement(oElement: ParagraphContent, nPos?: number): boolean;
@@ -6080,12 +10655,53 @@ export namespace Slide {
     /**
      * Adds a line break to the current position and starts the next element from a new line.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is a text inside the shape aligned left.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("This is a text after the line break.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/AddLineBreak/
      */
     AddLineBreak(): ApiRun;
 
     /**
      * Adds a tab stop to the current paragraph.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is just a sample text. After it three tab stops will be added.");
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("This is the text which starts after the tab stops.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/AddTabStop/
      */
@@ -6100,12 +10716,52 @@ export namespace Slide {
      *   points passed in the "text" parameter. When the widths are specified, the characters are added
      *   preserving these exact widths.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is a text inside the shape aligned left.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("This is a text after the line break.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/AddText/
      */
     AddText(text: string | number[], widths?: number[]): ApiRun;
 
     /**
      * Creates a paragraph copy. Ingnore comments, footnote references, complex fields.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is just a sample text that was copied.");
+     * oDocContent.Push(oParagraph);
+     * var oCopyParagraph = oParagraph.Copy();
+     * oDocContent.Push(oCopyParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/Copy/
      */
@@ -6116,12 +10772,53 @@ export namespace Slide {
      *
      * @returns returns false if paragraph haven't parent.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oDocContent.Push(oParagraph);
+     * oParagraph.Delete();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is the second paragraph. The first paragraph was removed from the shape content.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/Delete/
      */
     Delete(): boolean;
 
     /**
      * Returns a type of the ApiParagraph class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oParagraph.GetClassType();
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetClassType/
      */
@@ -6132,12 +10829,66 @@ export namespace Slide {
      *
      * @param nPos - The position where the element which content we want to get must be located.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.RemoveAllElements();
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is the text for the first text run. Do not forget a space at its end to separate from the second one. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the text for the second run. We will set it bold afterwards. It also needs space at its end. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the text for the third run. It ends the paragraph.");
+     * oParagraph.AddElement(oRun);
+     * oRun = oParagraph.GetElement(2);
+     * oRun.SetBold(true);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetElement/
      */
     GetElement(nPos: number): ParagraphContent;
 
     /**
      * Returns a number of elements in the current paragraph.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.RemoveAllElements();
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("Number of paragraph elements at this point: ");
+     * oRun.AddTabStop();
+     * oRun.AddText("" + oParagraph.GetElementsCount());
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * oRun.AddText("Number of paragraph elements after we added a text run: ");
+     * oRun.AddTabStop();
+     * oRun.AddText("" + oParagraph.GetElementsCount());
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetElementsCount/
      */
@@ -6158,6 +10909,33 @@ export namespace Slide {
      * @returns The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndFirstLine(1440);
+     * oParagraph.AddText("This is the first paragraph with the indent of 1 inch set to the first line. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndFirstLine = oParaPr.GetIndFirstLine();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("First line indent: " + nIndFirstLine);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndFirstLine/
      */
     GetIndFirstLine(): twips | undefined;
@@ -6166,6 +10944,33 @@ export namespace Slide {
      * Returns the paragraph left side indentation.
      *
      * @returns The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndLeft(2880);
+     * oParagraph.AddText("This is the first paragraph with the indent of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndLeft = oParaPr.GetIndLeft();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Left indent: " + nIndLeft);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndLeft/
      */
@@ -6176,6 +10981,34 @@ export namespace Slide {
      *
      * @returns The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndRight(2880);
+     * oParaPr.SetJc("right");
+     * oParagraph.AddText("This is the first paragraph with the right offset of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nIndRight = oParaPr.GetIndRight();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Right indent: " + nIndRight);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetIndRight/
      */
@@ -6193,6 +11026,33 @@ export namespace Slide {
     /**
      * Returns the paragraph contents justification.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetJc("center");
+     * oParagraph.AddText("This is a paragraph with the text in it aligned by the center. ");
+     * oParagraph.AddText("The justification is specified in the paragraph style. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var sJc = oParaPr.GetJc();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Justification: " + sJc);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetJc/
      */
     GetJc(): "left" | "right" | "both" | "center" | undefined;
@@ -6208,6 +11068,30 @@ export namespace Slide {
      * Returns the next paragraph.
      *
      * @returns returns null if paragraph is last.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph1 = Api.CreateParagraph();
+     * oParagraph1.AddText("This is the first paragraph.");
+     * oDocContent.Push(oParagraph1);
+     * var oParagraph2 = Api.CreateParagraph();
+     * oParagraph2.AddText("This is the second paragraph.");
+     * oDocContent.Push(oParagraph2);
+     * oSlide.AddObject(oShape);
+     * var oNextParagraph = oParagraph1.GetNext();
+     * oNextParagraph.SetBold(true);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetNext/
      */
@@ -6225,6 +11109,30 @@ export namespace Slide {
     /**
      * Returns the paragraph properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingAfter(1440);
+     * oParagraph.AddText("This is an example of setting a space after a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the first paragraph has this offset enabled.");
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetParaPr/
      */
     GetParaPr(): ApiParaPr;
@@ -6233,6 +11141,30 @@ export namespace Slide {
      * Returns the previous paragraph.
      *
      * @returns returns null if paragraph is first.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph1 = Api.CreateParagraph();
+     * oParagraph1.AddText("This is the first paragraph.");
+     * oDocContent.Push(oParagraph1);
+     * var oParagraph2 = Api.CreateParagraph();
+     * oParagraph2.AddText("This is the second paragraph.");
+     * oDocContent.Push(oParagraph2);
+     * oSlide.AddObject(oShape);
+     * var oPreviousParagraph = oParagraph2.GetPrevious();
+     * oPreviousParagraph.SetBold(true);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetPrevious/
      */
@@ -6244,6 +11176,33 @@ export namespace Slide {
      * @returns The value of the spacing after the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingAfter(1440);
+     * oParagraph.AddText("This is an example of setting a space after a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * var nSpacingAfter = oParaPr.GetSpacingAfter();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing after : " + nSpacingAfter);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingAfter/
      */
     GetSpacingAfter(): twips;
@@ -6254,12 +11213,66 @@ export namespace Slide {
      * @returns The value of the spacing before the current paragraph measured in twentieths of a point (1/1440
      *   of an inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is an example of setting a space before a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the second paragraph has this offset enabled.");
+     * var oParagraph2 = Api.CreateParagraph();
+     * oParagraph2.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * var oParaPr = oParagraph2.GetParaPr();
+     * oParaPr.SetSpacingBefore(1440);
+     * oDocContent.Push(oParagraph2);
+     * var nSpacingBefore = oParaPr.GetSpacingBefore();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing before: " + nSpacingBefore);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingBefore/
      */
     GetSpacingBefore(): twips;
 
     /**
      * Returns the paragraph line spacing rule.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * var sSpacingLineRule = oParaPr.GetSpacingLineRule();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing line rule : " + sSpacingLineRule);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineRule/
      */
@@ -6269,6 +11282,32 @@ export namespace Slide {
      * Returns the paragraph line spacing value.
      *
      * @returns to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * var nSpacingLineValue = oParaPr.GetSpacingLineValue();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Spacing line value : " + nSpacingLineValue);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetSpacingLineValue/
      */
@@ -6348,6 +11387,26 @@ export namespace Slide {
      * created. If you want to add
      * content to this run, use the {@link ApiParagraph#GetElement} method.</note>
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is the first text run in the current paragraph.");
+     * oParagraph.RemoveAllElements();
+     * oParagraph.AddText("We removed all the paragraph elements and added a new text run inside it.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/RemoveAllElements/
      */
     RemoveAllElements(): boolean;
@@ -6360,6 +11419,42 @@ export namespace Slide {
      * content to this run, use the {@link ApiParagraph#GetElement} method.</note>
      *
      * @param nPos - The element position which we want to remove from the paragraph.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph = oDocContent.GetElement(0);
+     * oParagraph.RemoveAllElements();
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is the first paragraph element. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the second paragraph element. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the third paragraph element (it will be removed from the paragraph and we will not see it). ");
+     * oParagraph.AddElement(oRun);
+     * oParagraph.AddLineBreak();
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the fourth paragraph element - it became the third, because we removed the previous run from the paragraph. ");
+     * oParagraph.AddElement(oRun);
+     * oParagraph.AddLineBreak();
+     * oRun = Api.CreateRun();
+     * oRun.AddText("Please note that line breaks are not counted into paragraph elements!");
+     * oParagraph.AddElement(oRun);
+     * oParagraph.RemoveElement(3);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/RemoveElement/
      */
@@ -6387,6 +11482,26 @@ export namespace Slide {
      *
      * @param oBullet - The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering}
      *   method.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * var oBullet = Api.CreateBullet("-");
+     * oParaPr.SetBullet(oBullet);
+     * oParagraph.AddText(" This is an example of the bulleted paragraph.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetBullet/
      */
@@ -6452,6 +11567,25 @@ export namespace Slide {
      * @param sColor - Available highlight color.
      * @returns this
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is just a sample text. ");
+     * oParagraph.SetHighlight("lightGray");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetHighlight/
      */
     SetHighlight(sColor: highlightColor): ApiParagraph;
@@ -6462,6 +11596,29 @@ export namespace Slide {
      * @param nValue - The paragraph first line indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndFirstLine(1440);
+     * oParagraph.AddText("This is the first paragraph with the indent of 1 inch set to the first line. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndFirstLine/
      */
     SetIndFirstLine(nValue: twips): boolean;
@@ -6470,6 +11627,28 @@ export namespace Slide {
      * Sets the paragraph left side indentation.
      *
      * @param nValue - The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndLeft(2880);
+     * oParagraph.AddText("This is the first paragraph with the indent of 2 inches set to it. ");
+     * oParagraph.AddText("This indent is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndLeft/
      */
@@ -6480,6 +11659,28 @@ export namespace Slide {
      *
      * @param nValue - The paragraph right side indentation value measured in twentieths of a point (1/1440 of an
      *   inch).
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetIndRight(2880);
+     * oParagraph.AddText("This is the first paragraph with the right offset of 2 inches set to it. ");
+     * oParagraph.AddText("This offset is set by the paragraph style. No paragraph inline style is applied. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetIndRight/
      */
@@ -6499,6 +11700,28 @@ export namespace Slide {
      * Sets the paragraph contents justification.
      *
      * @param sJc - The justification type that will be applied to the paragraph contents.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetJc("center");
+     * oParagraph.AddText("This is a paragraph with the text in it aligned by the center. ");
+     * oParagraph.AddText("The justification is specified in the paragraph style. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetJc/
      */
@@ -6555,6 +11778,30 @@ export namespace Slide {
      * @param isAfterAuto - The true value disables the spacing after the current paragraph.
      * @default isAfterAuto = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingAfter(1440);
+     * oParagraph.AddText("This is an example of setting a space after a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the first paragraph has this offset enabled.");
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingAfter/
      */
     SetSpacingAfter(nAfter: twips, isAfterAuto?: boolean): boolean;
@@ -6570,6 +11817,31 @@ export namespace Slide {
      * @param isBeforeAuto - The true value disables the spacing before the current paragraph.
      * @default isBeforeAuto = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParagraph.AddText("This is an example of setting a space before a paragraph. ");
+     * oParagraph.AddText("The second paragraph will have an offset of one inch from the top. ");
+     * oParagraph.AddText("This is due to the fact that the second paragraph has this offset enabled.");
+     * oParagraph = Api.CreateParagraph();
+     * oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingBefore(1440);
+     * oParagraph.AddText("This is the second paragraph and it is one inch away from the first paragraph.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingBefore/
      */
     SetSpacingBefore(nBefore: twips, isBeforeAuto?: boolean): boolean;
@@ -6583,6 +11855,29 @@ export namespace Slide {
      * @param nLine - The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths
      *   of a line.
      * @param sLineRule - The rule that determines the measuring units of the line spacing.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetSpacingLine(3 * 240, "auto");
+     * oParagraph.AddText("Paragraph 1. Spacing: 3 times of a common paragraph line spacing.");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oParagraph.AddText("These sentences are used to add lines for demonstrative purposes. ");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetSpacingLine/
      */
@@ -6608,6 +11903,35 @@ export namespace Slide {
      *   in twentieths of a point (1/1440 of an inch).
      * @param aVal - An array of the styles of custom tab stops, which determines the behavior of the tab stop and
      *   the alignment which will be applied to text entered at the current custom tab stop.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oParaPr = oParagraph.GetParaPr();
+     * oParaPr.SetTabs([1440, 4320, 7200], ["left", "center", "right"]);
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 1 inch left");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 3 inches center");
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddTabStop();
+     * oParagraph.AddText("Custom tab - 5 inches right");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/SetTabs/
      */
@@ -6982,6 +12306,26 @@ export namespace Slide {
     /**
      * Returns the type of the ApiPlaceholder class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("chart");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * var sType = oPlaceholder.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetClassType/
      */
     GetClassType(): "placeholder";
@@ -7001,6 +12345,24 @@ export namespace Slide {
      *
      * @returns Returns the placeholder type.
      * @since 8.2.0
+     *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * let oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * let oPlaceholder = Api.CreatePlaceholder("chart");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * let oContent = oShape.GetContent();
+     * let oParagraph = oContent.GetElement(0);
+     * oParagraph.AddText('Placeholder type in this shape is: "' + oPlaceholder.GetType() + '"');
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/GetType/
      */
@@ -7023,6 +12385,22 @@ export namespace Slide {
      * @param sType - Placeholder type
      * @returns returns false if placeholder type doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oPlaceholder = Api.CreatePlaceholder("chart");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oPlaceholder.SetType("picture");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPlaceholder/Methods/SetType/
      */
     SetType(sType: PlaceholderType): boolean;
@@ -7041,6 +12419,29 @@ export namespace Slide {
      * @param apiMaster - The slide master to be added.
      * @default pos = ApiPresentation.GetMastersCount()
      * @returns return false if position is invalid or apiMaster doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = Api.CreateMaster();
+     * var nCountBefore = oPresentation.GetMastersCount();
+     * oPresentation.AddMaster(nCountBefore, oMaster);
+     * var nCountAfter = oPresentation.GetMastersCount();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters before adding new master: " + nCountBefore);
+     * oParagraph.AddLineBreak();
+     * oParagraph.AddText("Number of masters after adding new master: " + nCountAfter);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddMaster/
      */
@@ -7065,6 +12466,17 @@ export namespace Slide {
      * @param nIndex - Index of the slide to be added. If not specified, the slide will be added to the end of the
      *   presentation.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/AddSlide/
      */
     AddSlide(oSlide: ApiSlide, nIndex: number): void;
@@ -7075,12 +12487,55 @@ export namespace Slide {
      * @param oApiTheme - The presentation theme.
      * @returns returns false if param isn't theme or presentation doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ApplyTheme/
      */
     ApplyTheme(oApiTheme: ApiTheme): boolean;
 
     /**
      * Creates a new history point.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("This is just a sample text.");
+     * oPresentation.CreateNewHistoryPoint();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("New history point was just created.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/CreateNewHistoryPoint/
      */
@@ -7127,6 +12582,25 @@ export namespace Slide {
 
     /**
      * Returns all comments from the current presentation.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * Api.pluginMethod_AddComment({"UserName": "John Smith", "Text": "Comment 1"});
+     * var arrComments = oPresentation.GetAllComments();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Comment text: " + arrComments[0].GetText());
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetAllComments/
      */
@@ -7200,6 +12674,22 @@ export namespace Slide {
     /**
      * Returns a type of the ApiPresentation class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oPresentation.GetClassType();
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetClassType/
      */
     GetClassType(): "presentation";
@@ -7217,12 +12707,40 @@ export namespace Slide {
     /**
      * Returns the index for the current slide.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var nCurrentSlideIndex = oPresentation.GetCurSlideIndex();
+     * oParagraph.AddText("Current Slide Index = " + nCurrentSlideIndex);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCurSlideIndex/
      */
     GetCurSlideIndex(): number;
 
     /**
      * Returns the current slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetCurrentSlide/
      */
@@ -7273,6 +12791,24 @@ export namespace Slide {
      * **Subject** - this property allows you to simplify your documents classification.
      * **Comment** - this property allows you to simplify your documents classification.
      *
+     * @example
+     * ```js
+     * const oPresentation = Api.GetPresentation();
+     * const oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * const oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * const oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * const oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * const oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * const oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * const oDocContent = oShape.GetDocContent();
+     * const oParagraph = oDocContent.GetElement(0);
+     * const oDocInfo = oPresentation.GetDocumentInfo();
+     * oParagraph.AddText('This document has been created with: ' + oDocInfo.Application);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetDocumentInfo/
      */
     GetDocumentInfo(): object;
@@ -7289,6 +12825,22 @@ export namespace Slide {
 
     /**
      * Returns the presentation height in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var nHeight = oPresentation.GetHeight();
+     * oParagraph.AddText("Height = " + nHeight);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetHeight/
      */
@@ -7310,12 +12862,49 @@ export namespace Slide {
      * @param nPos - Slide master position in the presentation
      * @returns returns null if position is invalid.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var sType = oMaster.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetMaster/
      */
     GetMaster(nPos: number): ApiMaster | null;
 
     /**
      * Returns a number of slide masters.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var nMasters = oPresentation.GetMastersCount();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of masters = " + nMasters);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetMastersCount/
      */
@@ -7326,12 +12915,44 @@ export namespace Slide {
      *
      * @param nIndex - The slide number (position) in the presentation.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetSlideByIndex/
      */
     GetSlideByIndex(nIndex: number): ApiSlide;
 
     /**
      * Returns a number of slides.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * var oSlide2 = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide2);
+     * var nSlides = oPresentation.GetSlidesCount();
+     * oSlide1.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Number of slides = " + nSlides);
+     * oSlide1.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetSlidesCount/
      */
@@ -7349,6 +12970,22 @@ export namespace Slide {
 
     /**
      * Returns the presentation width in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var nHeight = oPresentation.GetWidth();
+     * oParagraph.AddText("Height = " + nHeight);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/GetWidth/
      */
@@ -7428,6 +13065,28 @@ export namespace Slide {
      * @default nStart = 0
      * @default nCount = ApiPresentation.GetSlidesCount()
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * oPresentation.RemoveSlides(0, 1);
+     * oSlide.RemoveAllObjects();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oPresentation.GetClassType();
+     * oParagraph.AddText("A slide with no background was removed from this presentation.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/RemoveSlides/
      */
     RemoveSlides(nStart?: number, nCount?: number): boolean;
@@ -7439,6 +13098,17 @@ export namespace Slide {
      *   URL or Base64 encoded images are supported).
      * @param Width - The image width in English measure units.
      * @param Height - The image height in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oDrawing = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png", 300 * 36000, 150 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * oDrawing.Select();
+     * oPresentation.ReplaceCurrentImage("https://helpcenter.onlyoffice.com/images/Help/GettingStarted/Documents/big/EditDocument.png", 60 * 36000, 35 * 36000);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ReplaceCurrentImage/
      */
@@ -7481,6 +13151,22 @@ export namespace Slide {
      * @param sLangId - The possible value for this parameter is a language identifier as defined by RFC 4646/BCP 47.
      *   Example: "en-CA".
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetLanguage("en-CA");
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("English (Canada) will be used to check spelling and grammar in this presentation (if requested).");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetLanguage/
      */
     SetLanguage(sLangId: string): boolean;
@@ -7501,6 +13187,22 @@ export namespace Slide {
      *
      * @param nWidth - The presentation width in English measure units.
      * @param nHeight - The presentation height in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The size of this presentation was changed: width - 254 mm, height - 190 mm.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SetSizes/
      */
@@ -7523,6 +13225,27 @@ export namespace Slide {
      * @default bWriteAllMasLayouts = false
      * @default bWriteTableStyles = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var json = oPresentation.SlidesToJSON(0, 0, true, true, true, true);
+     * var aSlidesFromJSON = Api.FromJSON(json);
+     * var oSlideFromJSON = aSlidesFromJSON[0];
+     * oPresentation.AddSlide(oSlideFromJSON);
+     * var sType = oSlideFromJSON.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * var oDocContent = oDrawing.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Class type = " + sType);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/SlidesToJSON/
      */
     SlidesToJSON(nStart?: number, nEnd?: number, bWriteLayout?: boolean, bWriteMaster?: boolean, bWriteAllMasLayouts?: boolean, bWriteTableStyles?: boolean): object[];
@@ -7532,6 +13255,24 @@ export namespace Slide {
      *
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
      * @default bWriteTableStyles = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var json = oPresentation.ToJSON(true);
+     * var oPresentationFromJSON = Api.FromJSON(json);
+     * var oSlide = oPresentationFromJSON.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var sType = oPresentationFromJSON.GetClassType();
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresentation/Methods/ToJSON/
      */
@@ -7547,6 +13288,27 @@ export namespace Slide {
     /**
      * Returns a type of the ApiPresetColor class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oPresetColor = Api.CreatePresetColor("peachPuff");
+     * var oGs1 = Api.CreateGradientStop(oPresetColor, 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oPresetColor.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiPresetColor/Methods/GetClassType/
      */
     GetClassType(): "presetColor";
@@ -7560,6 +13322,27 @@ export namespace Slide {
   export interface ApiRGBColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiRGBColor class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oRGBColor = Api.CreateRGBColor(255, 213, 191);
+     * var oGs1 = Api.CreateGradientStop(oRGBColor, 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oRGBColor.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRGBColor/Methods/GetClassType/
      */
@@ -7886,12 +13669,54 @@ export namespace Slide {
     /**
      * Adds a line break to the current run position and starts the next element from a new line.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is the text for the first line. Nothing special.");
+     * oRun.AddLineBreak();
+     * oRun.AddText("This is the text which starts from the beginning of the second line. ");
+     * oRun.AddText("It is written in two text runs, you need a space at the end of the first run sentence to separate them.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddLineBreak/
      */
     AddLineBreak(): boolean;
 
     /**
      * Adds a tab stop to the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.SetFontSize(30);
+     * oRun.AddText("This is just a sample text. After it three tab stops will be added.");
+     * oRun.AddTabStop();
+     * oRun.AddTabStop();
+     * oRun.AddTabStop();
+     * oRun.AddText("This is the text which starts after the tab stops.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddTabStop/
      */
@@ -7906,12 +13731,55 @@ export namespace Slide {
      *   points passed in the "text" parameter. When the widths are specified, the characters are added
      *   preserving these exact widths.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.SetFontSize(30);
+     * oRun.AddText("This is just a sample text. Nothing special.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/AddText/
      */
     AddText(text: string | number[], widths?: number[]): boolean;
 
     /**
      * Clears the content from the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.SetFontSize(30);
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("But you will not see it in the resulting document, as it will be cleared.");
+     * oParagraph.AddElement(oRun);
+     * oRun.ClearContent();
+     * oParagraph = Api.CreateParagraph();
+     * oRun = Api.CreateRun();
+     * oRun.AddText("The text in the previous paragraph cannot be seen, as it has been cleared.");
+     * oParagraph.AddElement(oRun);
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/ClearContent/
      */
@@ -7920,12 +13788,52 @@ export namespace Slide {
     /**
      * Creates a copy of the current run.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text that was copied. ");
+     * oParagraph.AddElement(oRun);
+     * var oCopyRun = oRun.Copy();
+     * oParagraph.AddElement(oCopyRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Copy/
      */
     Copy(): ApiRun;
 
     /**
      * Deletes the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun.Delete();
+     * oRun = Api.CreateRun();
+     * oRun.AddText("This is the second run. The first run was removed from the paragraph.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/Delete/
      */
@@ -7936,6 +13844,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetBold(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bBold = oTextPr.GetBold();
+     * oParagraph.AddText("Bold property: " + bBold);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetBold/
      */
     GetBold(): boolean;
@@ -7945,12 +13878,56 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetCaps(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bCaps = oTextPr.GetCaps();
+     * oParagraph.AddText("Property of the capitalized letters: " + bCaps);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetCaps/
      */
     GetCaps(): boolean;
 
     /**
      * Returns a type of the ApiRun class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var sClassType = oRun.GetClassType();
+     * oRun.SetFontSize(30);
+     * oRun.AddText("Class Type = " + sClassType);
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetClassType/
      */
@@ -7961,6 +13938,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetDoubleStrikeout(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bDoubleStrikeout = oTextPr.GetDoubleStrikeout();
+     * oParagraph.AddText("Double strikeout property: " + bDoubleStrikeout);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetDoubleStrikeout/
      */
     GetDoubleStrikeout(): boolean;
@@ -7969,6 +13971,33 @@ export namespace Slide {
      * Gets the text color from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetFill(oFill);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oFill = oTextPr.GetFill();
+     * var sType = oFill.GetClassType();
+     * oParagraph.AddText("Text color type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFill/
      */
@@ -7980,6 +14009,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontFamily("Arial");
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var sFontFamily = oTextPr.GetFontFamily();
+     * oParagraph.AddText("Font family: " + sFontFamily);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontFamily/
      */
     GetFontFamily(): string;
@@ -7988,6 +14042,37 @@ export namespace Slide {
      * Returns all font names from all elements inside the current run.
      *
      * @returns The font names used for the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetFontFamily("Comic Sans MS");
+     * oRun.AddText("This is a text run with the font family set to 'Comic Sans MS'.");
+     * oParagraph.AddElement(oRun);
+     * oParagraph.AddLineBreak();
+     * var aFontNames = oRun.GetFontNames();
+     * oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Run font names: ");
+     * oParagraph.AddLineBreak();
+     * for (let i = 0; i < aFontNames.length; i++ ){
+     * 	oParagraph.AddText(aFontNames[i]);
+     * 	oParagraph.AddLineBreak();
+     * }
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetFontNames/
      */
@@ -7998,6 +14083,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(60);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var nFontSize = oTextPr.GetFontSize();
+     * oParagraph.AddText("Font size: " + nFontSize);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontSize/
      */
     GetFontSize(): hps;
@@ -8006,6 +14116,31 @@ export namespace Slide {
      * Gets the highlight property from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetHighlight("lightGray");
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var sHighlight = oTextPr.GetHighlight();
+     * oParagraph.AddText("Highlight property: " + sHighlight);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetHighlight/
      */
@@ -8016,6 +14151,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetItalic(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bItalic = oTextPr.GetItalic();
+     * oParagraph.AddText("Italic property: " + bItalic);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetItalic/
      */
     GetItalic(): boolean;
@@ -8024,6 +14184,33 @@ export namespace Slide {
      * Gets the text outline from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oTextPr.SetOutLine(oStroke);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oStroke = oTextPr.GetOutLine();
+     * var sType = oStroke.GetClassType();
+     * oParagraph.AddText("Text outline type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetOutLine/
      */
@@ -8035,6 +14222,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetSmallCaps(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bSmallCaps = oTextPr.GetSmallCaps();
+     * oParagraph.AddText("Property of the small capitalized letters: " + bSmallCaps);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSmallCaps/
      */
     GetSmallCaps(): boolean;
@@ -8043,6 +14255,31 @@ export namespace Slide {
      * Gets the text spacing from the current text properties measured in twentieths of a point.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetSpacing(80);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var nSpacing = oTextPr.GetSpacing();
+     * oParagraph.AddText("Text spacing: " + nSpacing);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
@@ -8053,6 +14290,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetStrikeout(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bStrikeout = oTextPr.GetStrikeout();
+     * oParagraph.AddText("Strikeout property: " + bStrikeout);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetStrikeout/
      */
     GetStrikeout(): boolean;
@@ -8062,12 +14324,59 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetTextFill(oFill);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oFill = oTextPr.GetTextFill();
+     * var sType = oFill.GetClassType();
+     * oParagraph.AddText("Text fill type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetTextFill/
      */
     GetTextFill(): ApiFill;
 
     /**
      * Returns the text properties of the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(30);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font size set to 15 points using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/GetTextPr/
      */
@@ -8078,12 +14387,56 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetUnderline(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bUnderline = oTextPr.GetUnderline();
+     * oParagraph.AddText("Underline property: " + bUnderline);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetUnderline/
      */
     GetUnderline(): boolean;
 
     /**
      * Removes all the elements from the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text.");
+     * oRun.RemoveAllElements();
+     * oRun.AddText("All elements from this run were removed before adding this text.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/RemoveAllElements/
      */
@@ -8094,6 +14447,27 @@ export namespace Slide {
      *
      * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetBold(true);
+     * oRun.AddText("This is a text run with the font set to bold.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetBold/
      */
@@ -8106,6 +14480,27 @@ export namespace Slide {
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetCaps(true);
+     * oRun.AddText("This is a text run with the font set to capitalized letters.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetCaps/
      */
     SetCaps(isCaps: boolean): ApiTextPr;
@@ -8117,6 +14512,27 @@ export namespace Slide {
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetDoubleStrikeout(true);
+     * oRun.AddText("This is a text run with the text struck out with two lines.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetDoubleStrikeout/
      */
     SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr;
@@ -8126,6 +14542,28 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the text color.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oRun.SetFill(oFill);
+     * oRun.AddText("This is a text run with the font color set to black.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFill/
      */
@@ -8137,6 +14575,27 @@ export namespace Slide {
      * @param sFontFamily - The font family or families used for the current text run.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetFontFamily("Comic Sans MS");
+     * oRun.AddText("This is a text run with the font family set to 'Comic Sans MS'.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontFamily/
      */
     SetFontFamily(sFontFamily: string): ApiTextPr;
@@ -8146,6 +14605,27 @@ export namespace Slide {
      *
      * @param nSize - The text size value measured in half-points (1/144 of an inch).
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetFontSize(50);
+     * oRun.AddText("This is a text run with the font size set to 25 points (50 half-points).");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontSize/
      */
@@ -8157,6 +14637,24 @@ export namespace Slide {
      *
      * @param sColor - Available highlight color.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is a text run with the text highlighted with light gray color.");
+     * oParagraph.AddElement(oRun);
+     * oRun.SetHighlight("lightGray");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetHighlight/
      */
     SetHighlight(sColor: highlightColor): ApiTextPr;
@@ -8167,6 +14665,27 @@ export namespace Slide {
      * @param isItalic - Specifies that the contents of the current run are displayed italicized.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetItalic(true);
+     * oRun.AddText("This is a text run with the font set to italicized letters.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetItalic/
      */
     SetItalic(isItalic: boolean): ApiTextPr;
@@ -8176,6 +14695,28 @@ export namespace Slide {
      *
      * @param oStroke - The stroke used to create the text outline.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oTextPr.SetOutLine(oStroke);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a text run with the black text outline set using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetOutLine/
      */
@@ -8191,6 +14732,27 @@ export namespace Slide {
      *   not.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetSmallCaps(true);
+     * oRun.AddText("This is a text run with the font set to small capitalized letters.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSmallCaps/
      */
     SetSmallCaps(isSmallCaps: boolean): ApiTextPr;
@@ -8200,6 +14762,27 @@ export namespace Slide {
      *
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetSpacing(80);
+     * oRun.AddText("This is a text run with the text spacing set to 4 points (20 twentieths of a point).");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/
      */
@@ -8212,6 +14795,27 @@ export namespace Slide {
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetStrikeout(true);
+     * oRun.AddText("This is a text run with the text struck out with a single line.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetStrikeout/
      */
     SetStrikeout(isStrikeout: boolean): ApiTextPr;
@@ -8222,6 +14826,28 @@ export namespace Slide {
      * @param oApiFill - The color or pattern used to fill the text color.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetTextFill(oFill);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the black text fill set using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetTextFill/
      */
     SetTextFill(oApiFill: ApiFill): ApiTextPr;
@@ -8230,6 +14856,27 @@ export namespace Slide {
      * Sets the text properties to the current run.
      *
      * @param oTextPr - The text properties that will be set to the current run.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is a sample text with the font size set to 15 points and the font weight set to bold.");
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(30);
+     * oTextPr.SetBold(true);
+     * oRun.SetTextPr(oTextPr);
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiRun/Methods/SetTextPr/
      */
@@ -8242,6 +14889,27 @@ export namespace Slide {
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetUnderline(true);
+     * oRun.AddText("This is a text run with the text underlined with a single line.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetUnderline/
      */
@@ -8260,6 +14928,35 @@ export namespace Slide {
      * @param sType - The vertical alignment type applied to the text contents.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetVertAlign("subscript");
+     * oRun.AddText("This is a text run with the text aligned below the baseline vertically. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetVertAlign("baseline");
+     * oRun.AddText("This is a text run with the text aligned by the baseline vertically. ");
+     * oParagraph.AddElement(oRun);
+     * oRun = Api.CreateRun();
+     * oRun.SetVertAlign("superscript");
+     * oRun.AddText("This is a text run with the text aligned above the baseline vertically.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetVertAlign/
      */
     SetVertAlign(sType: "baseline" | "subscript" | "superscript"): ApiTextPr;
@@ -8273,6 +14970,25 @@ export namespace Slide {
   export interface ApiSchemeColor extends Omit<ApiUniColor, "GetClassType"> {
     /**
      * Returns a type of the ApiSchemeColor class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oSchemeColor = Api.CreateSchemeColor("dk1");
+     * var oFill = Api.CreateSolidFill(oSchemeColor);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oSchemeColor.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSchemeColor/Methods/GetClassType/
      */
@@ -8367,12 +15083,49 @@ export namespace Slide {
     /**
      * Returns the type of the ApiShape class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oShape.GetClassType();
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetClassType/
      */
     GetClassType(): "shape";
 
     /**
      * Returns the shape inner contents where a paragraph or text runs can be inserted.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetContent();
+     * oShape.SetVerticalTextAlign("bottom");
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it ");
+     * oParagraph.AddText("aligning it vertically by the bottom.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetContent/
      */
@@ -8381,6 +15134,26 @@ export namespace Slide {
     /**
      * Deprecated in 6.2.
      * Returns the shape inner contents where a paragraph or text runs can be inserted.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oShape.SetVerticalTextAlign("bottom");
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it ");
+     * oParagraph.AddText("aligning it vertically by the bottom.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/GetDocContent/
      */
@@ -8639,6 +15412,26 @@ export namespace Slide {
      *
      * @param verticalAlign - The type of the vertical alignment for the shape inner contents.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartOnlineStorage", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oShape.SetVerticalTextAlign("bottom");
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("We removed all elements from the shape and added a new paragraph inside it ");
+     * oParagraph.AddText("aligning it vertically by the bottom.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiShape/Methods/SetVerticalTextAlign/
      */
     SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean;
@@ -8688,6 +15481,29 @@ export namespace Slide {
      * @param oDrawing - The object which will be added to the current presentation slide.
      * @returns returns false if slide doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddObject/
      */
     AddObject(oDrawing: ApiDrawing): boolean;
@@ -8699,6 +15515,15 @@ export namespace Slide {
      * @param oLayout - Layout to be applied.
      * @returns returns false if slide doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(4);
+     * oSlide.ApplyLayout(oLayout);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ApplyLayout/
      */
     ApplyLayout(oLayout: ApiLayout): boolean;
@@ -8709,6 +15534,43 @@ export namespace Slide {
      * @param oApiTheme - Presentation theme.
      * @returns returns false if master is null or master hasn't background.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oSlide.ApplyTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ApplyTheme/
      */
     ApplyTheme(oApiTheme: ApiTheme): boolean;
@@ -8717,6 +15579,18 @@ export namespace Slide {
      * Clears the slide background.
      *
      * @returns return false if slide doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * var oDuplicateSlide = oSlide.Duplicate(1);
+     * oDuplicateSlide.ClearBackground();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ClearBackground/
      */
@@ -8728,6 +15602,18 @@ export namespace Slide {
      * @returns returns new ApiSlide object that represents the duplicate slide. Returns null if slide doesn't
      *   exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * var oCopySlide = oSlide.Copy();
+     * oPresentation.AddSlide(oCopySlide);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Copy/
      */
     Copy(): ApiSlide | null;
@@ -8736,6 +15622,19 @@ export namespace Slide {
      * Deletes the current slide from the presentation.
      *
      * @returns returns false if slide doesn't exist or is not in the presentation.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.Delete();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Delete/
      */
@@ -8749,6 +15648,17 @@ export namespace Slide {
      * @returns returns new ApiSlide object that represents the duplicate slide. Returns null if slide doesn't
      *   exist or is not in the presentation.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * var oDuplicateSlide = oSlide.Duplicate(1);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Duplicate/
      */
     Duplicate(nPos?: number): ApiSlide | null;
@@ -8757,6 +15667,17 @@ export namespace Slide {
      * Sets the layout background as the background of the slide.
      *
      * @returns returns false if layout is null or layout hasn't background or slide doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oLayout.SetBackground(oFill);
+     * oSlide.FollowLayoutBackground();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/FollowLayoutBackground/
      */
@@ -8767,12 +15688,49 @@ export namespace Slide {
      *
      * @returns returns false if master is null or master hasn't background or slide doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oLayout = oMaster.GetLayout(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oLayout.SetBackground(oFill);
+     * oSlide.FollowMasterBackground();
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/FollowMasterBackground/
      */
     FollowMasterBackground(): boolean;
 
     /**
      * Returns an array with all the chart objects from the slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 13);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oChart.SetSeriesFill(oFill, 0, false);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oChart.SetSeriesFill(oFill, 1, false);
+     * oSlide.AddObject(oChart);
+     * var aCharts = oSlide.GetAllCharts();
+     * var oStroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));
+     * aCharts[0].SetMinorHorizontalGridlines(oStroke);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllCharts/
      */
@@ -8781,12 +15739,49 @@ export namespace Slide {
     /**
      * Returns an array with all the drawing objects from the slide.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * var aDrawings = oSlide.GetAllDrawings();
+     * var oPlaceholder = Api.CreatePlaceholder("chart");
+     * aDrawings[0].SetPlaceholder(oPlaceholder);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllDrawings/
      */
     GetAllDrawings(): Drawing[];
 
     /**
      * Returns an array with all the image objects from the slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oImage = Api.CreateImage("https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png", 60 * 36000, 35 * 36000);
+     * oSlide.AddObject(oImage);
+     * var aImages = oSlide.GetAllImages();
+     * var sType = aImages[0].GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllImages/
      */
@@ -8795,12 +15790,50 @@ export namespace Slide {
     /**
      * Returns an array with all the OLE objects from the slide.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oOleObject = Api.CreateOleObject("https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp", 130 * 36000, 90 * 36000, "https://youtu.be/SKGz4pmnpgY", "asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}");
+     * oOleObject.SetSize(200 * 36000, 130 * 36000);
+     * oOleObject.SetPosition(70 * 36000, 30 * 36000);
+     * oSlide.AddObject(oOleObject);
+     * var aOleObjects = oSlide.GetAllOleObjects();
+     * var sAppId = aOleObjects[0].GetApplicationId();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("rect", 300 * 36000, 15 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(20 * 36000, 170 * 36000);
+     * var oDocContent = oDrawing.GetContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The application ID for the current OLE object: " + sAppId);
+     * oSlide.AddObject(oDrawing);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllOleObjects/
      */
     GetAllOleObjects(): ApiOleObject[];
 
     /**
      * Returns an array with all the shape objects from the slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oShape);
+     * var aShapes = oSlide.GetAllShapes();
+     * aShapes[0].SetSize(150 * 36000, 65 * 36000);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllShapes/
      */
@@ -8829,6 +15862,24 @@ export namespace Slide {
     /**
      * Returns the type of the ApiSlide class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var sClassType = oSlide.GetClassType();
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetClassType/
      */
     GetClassType(): "slide";
@@ -8839,12 +15890,48 @@ export namespace Slide {
      * @param sType - The placeholder type.
      * @since 8.2.0
      *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * let oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * let oPlaceholder = Api.CreatePlaceholder("chart");
+     * oShape.SetPlaceholder(oPlaceholder);
+     * oSlide.AddObject(oShape);
+     * let aDrawingsWithPh = oSlide.GetDrawingsByPlaceholderType("chart");
+     * for (let i = 0; i < aDrawingsWithPh.length; i++) {
+     *     aDrawingsWithPh[i].Delete();
+     * }
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetDrawingsByPlaceholderType/
      */
     GetDrawingsByPlaceholderType(sType: PlaceholderType): Drawing[];
 
     /**
      * Returns the slide height in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("rect", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var nSlideHeight = oSlide.GetHeight();
+     * oParagraph.AddText("The slide height = " + nSlideHeight / 36000 + " mm");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetHeight/
      */
@@ -8854,6 +15941,16 @@ export namespace Slide {
      * Returns a layout of the current slide.
      *
      * @returns returns null if slide or layout doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oLayout = oSlide.GetLayout();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oLayout.SetBackground(oFill);
+     * oSlide.FollowLayoutBackground();
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetLayout/
      */
@@ -8872,6 +15969,24 @@ export namespace Slide {
      * Returns a position of the current slide in the presentation.
      *
      * @returns returns -1 if slide doesn't exist or is not in the presentation.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var nIndex = oSlide.GetSlideIndex();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Slide index = " + nIndex);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetSlideIndex/
      */
@@ -8892,6 +16007,29 @@ export namespace Slide {
      *
      * @returns returns null if slide or layout or master or theme doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oTheme = oSlide.GetTheme();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * oTheme.SetColorScheme(oClrScheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetTheme/
      */
     GetTheme(): ApiTheme | null;
@@ -8909,12 +16047,54 @@ export namespace Slide {
     /**
      * Returns the visibility of the current presentation slide.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.SetVisible(false);
+     * var bVisible = oSlide.GetVisible();
+     * oSlide = oPresentation.GetSlideByIndex(1);
+     * oSlide.RemoveAllObjects();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oShape);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("The first slide visibility: " + bVisible);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetVisible/
      */
     GetVisible(): boolean;
 
     /**
      * Returns the slide width in English measure units.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("rect", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var nSlideWidth = oSlide.GetWidth();
+     * oParagraph.AddText("The slide width = " + nSlideWidth / 36000 + " mm");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetWidth/
      */
@@ -8926,6 +16106,22 @@ export namespace Slide {
      * @param aDrawings - An array of drawings to group.
      * @since 8.3.0
      *
+     * @example
+     * ```js
+     * let oPresentation = Api.GetPresentation();
+     * let oSlide = oPresentation.GetSlideByIndex(0);
+     * let oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * let oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));
+     * let oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * let oShape1 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill1, oStroke);
+     * let oShape2 = Api.CreateShape("flowChartMagneticTape", 150 * 36000, 60 * 36000, oFill2, oStroke);
+     * oShape1.SetPosition(608400, 1267200);
+     * oShape2.SetPosition(608400, 1400000);
+     * oSlide.AddObject(oShape1);
+     * oSlide.AddObject(oShape2);
+     * oSlide.GroupDrawings([oShape1, oShape2]);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GroupDrawings/
      */
     GroupDrawings(aDrawings: DrawingForGroup[]): ApiGroup;
@@ -8936,12 +16132,46 @@ export namespace Slide {
      * @param nPos - Position where the current slide will be moved to.
      * @returns returns false if slide doesn't exist or position is invalid or slide is not in the presentation.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * oSlide.MoveTo(0);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/MoveTo/
      */
     MoveTo(nPos: number): boolean;
 
     /**
      * Removes all the objects from the current slide.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(254 * 36000, 190 * 36000);
+     * var oSlide = oPresentation.GetCurrentSlide();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("rect", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * oShape = Api.CreateShape("flowChartMagneticTape", 200 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("All objects were removed from this slide before adding this shape.");
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/RemoveAllObjects/
      */
@@ -8954,6 +16184,24 @@ export namespace Slide {
      * @param nCount - The number of elements to delete.
      * @default nCount = 1
      * @returns returns false if slide doesn't exist or position is invalid or slide hasn't objects.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("cube", 3212465, 963295, oFill, oStroke);
+     * oDrawing.SetPosition(30 * 36000, 1267200);
+     * oDrawing.SetSize(150 * 36000, 130 * 36000);
+     * var oCopyDrawing = oDrawing.Copy();
+     * oCopyDrawing.SetPosition(170 * 36000, 1267200);
+     * oCopyDrawing.SetSize(150 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * oSlide.AddObject(oCopyDrawing);
+     * oSlide.RemoveObject(1, 1);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/RemoveObject/
      */
@@ -8988,6 +16236,17 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the presentation slide background.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * oSlide.SetBackground(oFill);
+     * oPresentation.AddSlide(oSlide);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetBackground/
      */
     SetBackground(oApiFill: ApiFill): boolean;
@@ -9008,6 +16267,14 @@ export namespace Slide {
      *
      * @param value - Slide visibility.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = Api.CreateSlide();
+     * oSlide.SetVisible(false);
+     * oPresentation.AddSlide(oSlide);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetVisible/
      */
     SetVisible(value: boolean): boolean;
@@ -9024,6 +16291,26 @@ export namespace Slide {
      * @default bWriteMaster = false
      * @default bWriteAllMasLayouts = false
      * @default bWriteTableStyles = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var json = oSlide.ToJSON(true, true, true, true);
+     * var oSlideFromJSON = Api.FromJSON(json);
+     * oPresentation.AddSlide(oSlideFromJSON);
+     * var sType = oSlideFromJSON.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oDrawing = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oDrawing.SetPosition(608400, 1267200);
+     * oDrawing.SetSize(300 * 36000, 130 * 36000);
+     * oSlide.AddObject(oDrawing);
+     * var oDocContent = oDrawing.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.AddText("Class type = " + sType);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ToJSON/
      */
@@ -9375,6 +16662,25 @@ export namespace Slide {
     /**
      * Returns a type of the ApiStroke class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);
+     * var oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(3 * 36000, oFill1);
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oStroke.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiStroke/Methods/GetClassType/
      */
     GetClassType(): "stroke";
@@ -9458,6 +16764,24 @@ export namespace Slide {
      *   parameter will be ignored.
      * @default isBefore = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * oPresentation.SetSizes(300 * 36000, 190 * 36000);
+     * var oTable = Api.CreateTable(2, 4);
+     * oTable.SetPosition(0 * 36000, 60 * 36000);
+     * oTable.AddColumn(1, true);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(1);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("New column was added here.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/AddColumn/
      */
     AddColumn(oCell?: ApiTableCell, isBefore?: boolean): void;
@@ -9496,6 +16820,22 @@ export namespace Slide {
      * @param isBefore - Adds a new row before or after the specified cell. If no cell is specified, then this parameter
      *   will be ignored.
      * @default isBefore = false
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * oTable.AddRow(1, true);
+     * var oRow = oTable.GetRow(1);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("New row was added here.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/AddRow/
      */
@@ -9538,6 +16878,22 @@ export namespace Slide {
 
     /**
      * Returns the type of the ApiTable object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * var sClassType = oTable.GetClassType();
+     * oParagraph.AddText("Class type: " + sClassType);
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/GetClassType/
      */
@@ -9632,6 +16988,22 @@ export namespace Slide {
      * Returns a row by its index.
      *
      * @param nIndex - The row index (position) in the table.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * oTable.AddRow(1, true);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is a sample text in the first row.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/GetRow/
      */
@@ -9729,6 +17101,24 @@ export namespace Slide {
      *
      * @param aCells - The array of cells.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell1 = oRow.GetCell(0);
+     * var oCell2 = oRow.GetCell(1);
+     * oTable.MergeCells([oCell1, oCell2]);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This cell was formed by merging two cells.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/MergeCells/
      */
     MergeCells(aCells: ApiTableCell[]): ApiTableCell;
@@ -9739,6 +17129,23 @@ export namespace Slide {
      * @param oCell - The table cell from the column which will be removed.
      * @returns result of deletion
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(1);
+     * oTable.RemoveColumn(oCell);
+     * oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("The second column was removed.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/RemoveColumn/
      */
     RemoveColumn(oCell: ApiTableCell): boolean;
@@ -9748,6 +17155,24 @@ export namespace Slide {
      *
      * @param oCell - The table cell from the row which will be removed.
      * @returns result of deletion
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * oTable.RemoveRow(oCell);
+     * oRow = oTable.GetRow(0);
+     * oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("The first row was removed.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/RemoveRow/
      */
@@ -9891,6 +17316,16 @@ export namespace Slide {
      * @param r - Red color component value.
      * @param g - Green color component value.
      * @param b - Blue color component value.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * oTable.SetShd("clear", 255, 111, 61);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/SetShd/
      */
@@ -10137,6 +17572,16 @@ export namespace Slide {
      * @param isHorBand - Specifies that the horizontal banding conditional formatting shall not be applied to the table.
      * @param isVerBand - Specifies that the vertical banding conditional formatting shall not be applied to the table.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * oTable.SetTableLook(true, false, false, false, false, true);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/SetTableLook/
      */
     SetTableLook(isFirstColumn: boolean, isFirstRow: boolean, isLastColumn: boolean, isLastRow: boolean, isHorBand: boolean, isVerBand: boolean): void;
@@ -10171,6 +17616,24 @@ export namespace Slide {
      * @param bWriteTableStyles - Specifies whether to write used table styles to the JSON object (true) or not (false).
      * @default bWriteTableStyles = false
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oTable = Api.CreateTable(2, 4);
+     * var json = oTable.ToJSON(true);
+     * var oTableFromJSON = Api.FromJSON(json);
+     * var sType = oTableFromJSON.GetClassType();
+     * var oRow = oTableFromJSON.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("Class type = " + sType);
+     * oContent.Push(oParagraph);
+     * oSlide.AddObject(oTableFromJSON);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTable/Methods/ToJSON/
      */
     ToJSON(bWriteTableStyles?: boolean): object;
@@ -10204,12 +17667,43 @@ export namespace Slide {
     /**
      * Returns the type of the ApiTableCell class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * var sClassType = oCell.GetClassType();
+     * oParagraph.AddText("Class type: " + sClassType);
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetClassType/
      */
     GetClassType(): "tableCell";
 
     /**
      * Returns the current cell content.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is a sample text in the cell.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetContent/
      */
@@ -10342,6 +17836,19 @@ export namespace Slide {
      * @param oApiFill - The color or pattern used to fill the current border.
      * @since 9.5.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oCell.SetCellBorderBottom(2, oFill);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderBottom/
      */
     SetCellBorderBottom(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
@@ -10353,6 +17860,19 @@ export namespace Slide {
      * @param fSize - The width of the current border.
      * @param oApiFill - The color or pattern used to fill the current border.
      * @since 9.5.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oCell.SetCellBorderLeft(2, oFill);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderLeft/
      */
@@ -10366,6 +17886,19 @@ export namespace Slide {
      * @param oApiFill - The color or pattern used to fill the current border.
      * @since 9.5.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oCell.SetCellBorderRight(2, oFill);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderRight/
      */
     SetCellBorderRight(sType: BorderType, fSize: mm, oApiFill: ApiFill): boolean;
@@ -10377,6 +17910,19 @@ export namespace Slide {
      * @param fSize - The width of the current border.
      * @param oApiFill - The color or pattern used to fill the current border.
      * @since 9.5.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oCell.SetCellBorderTop(2, oFill);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderTop/
      */
@@ -10390,6 +17936,22 @@ export namespace Slide {
      * @param nValue - If this value is `null`, then default table cell bottom margin shall be used, otherwise override
      *   the table cell bottom margin with specified value for the current cell.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * oCell.SetCellMarginBottom(600);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginBottom/
      */
     SetCellMarginBottom(nValue: twips): void;
@@ -10401,6 +17963,22 @@ export namespace Slide {
      *
      * @param nValue - If this value is `null`, then default table cell left margin shall be used, otherwise override
      *   the table cell left margin with specified value for the current cell.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * oCell.SetCellMarginLeft(720);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginLeft/
      */
@@ -10414,6 +17992,22 @@ export namespace Slide {
      * @param nValue - If this value is `null`, then default table cell right margin shall be used, otherwise override
      *   the table cell right margin with specified value for the current cell.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * oCell.SetCellMarginRight(600);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginRight/
      */
     SetCellMarginRight(nValue: twips): void;
@@ -10425,6 +18019,22 @@ export namespace Slide {
      *
      * @param nValue - If this value is `null`, then default table cell top margin shall be used, otherwise override
      *   the table cell top margin with specified value for the current cell.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * oCell.SetCellMarginTop(720);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginTop/
      */
@@ -10448,6 +18058,19 @@ export namespace Slide {
      * @param g - Green color component value.
      * @param b - Blue color component value.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oCell.SetShd(oFill);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetShd/
      */
     SetShd(sType: ShdType | ApiFill, r: number, g: number, b: number): void;
@@ -10468,6 +18091,23 @@ export namespace Slide {
      *
      * @param sType - The type of the text flow direction.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * oRow.SetHeight(30 * 36000);
+     * var oCell = oRow.GetCell(0);
+     * oCell.SetTextDirection("tbrl");
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetTextDirection/
      */
     SetTextDirection(sType: TextFlowDirection): void;
@@ -10476,6 +18116,23 @@ export namespace Slide {
      * Specifies the vertical alignment for text within the current table cell.
      *
      * @param sType - The type of the vertical alignment.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(1);
+     * oRow.SetHeight(30 * 36000);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is just a sample text.");
+     * oContent.Push(oParagraph);
+     * oCell.SetVerticalAlign("bottom");
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetVerticalAlign/
      */
@@ -10801,6 +18458,21 @@ export namespace Slide {
      *
      * @param nPos - The cell position in the table row.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("This is a sample text in the cell of the first row.");
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCell/
      */
     GetCell(nPos: number): ApiTableCell;
@@ -10808,12 +18480,44 @@ export namespace Slide {
     /**
      * Returns a number of cells in the current row.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var nCellsCount = oRow.GetCellsCount();
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.AddText("The number of cells in the row: " + nCellsCount);
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCellsCount/
      */
     GetCellsCount(): number;
 
     /**
      * Returns the type of the ApiTableRow class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * var oCell = oRow.GetCell(0);
+     * var oContent = oCell.GetContent();
+     * var oParagraph = Api.CreateParagraph();
+     * var sClassType = oRow.GetClassType();
+     * oParagraph.AddText("Class type: " + sClassType);
+     * oContent.Push(oParagraph);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetClassType/
      */
@@ -10860,6 +18564,17 @@ export namespace Slide {
      *
      * @param nValue - The row height in English measure units.
      * @since 5.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oTable = Api.CreateTable(2, 4);
+     * var oRow = oTable.GetRow(0);
+     * oRow.SetHeight(30 * 36000);
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oTable);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/SetHeight/
      */
@@ -10908,6 +18623,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetBold(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bBold = oTextPr.GetBold();
+     * oParagraph.AddText("Bold property: " + bBold);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetBold/
      */
     GetBold(): boolean;
@@ -10917,12 +18657,58 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetCaps(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bCaps = oTextPr.GetCaps();
+     * oParagraph.AddText("Property of the capitalized letters: " + bCaps);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetCaps/
      */
     GetCaps(): boolean;
 
     /**
      * Returns a type of the ApiTextPr class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oParagraph.SetJc("left");
+     * var sClassType = oTextPr.GetClassType();
+     * oRun.AddText("Class Type = " + sClassType);
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetClassType/
      */
@@ -10933,6 +18719,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetDoubleStrikeout(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bDoubleStrikeout = oTextPr.GetDoubleStrikeout();
+     * oParagraph.AddText("Double strikeout property: " + bDoubleStrikeout);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetDoubleStrikeout/
      */
     GetDoubleStrikeout(): boolean;
@@ -10941,6 +18752,33 @@ export namespace Slide {
      * Gets the text color from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetFill(oFill);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oFill = oTextPr.GetFill();
+     * var sType = oFill.GetClassType();
+     * oParagraph.AddText("Text color type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFill/
      */
@@ -10952,6 +18790,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontFamily("Arial");
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var sFontFamily = oTextPr.GetFontFamily();
+     * oParagraph.AddText("Font family: " + sFontFamily);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontFamily/
      */
     GetFontFamily(): string;
@@ -10960,6 +18823,31 @@ export namespace Slide {
      * Gets the font size from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(60);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var nFontSize = oTextPr.GetFontSize();
+     * oParagraph.AddText("Font size: " + nFontSize);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetFontSize/
      */
@@ -10970,6 +18858,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetHighlight("lightGray");
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var sHighlight = oTextPr.GetHighlight();
+     * oParagraph.AddText("Highlight property: " + sHighlight);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetHighlight/
      */
     GetHighlight(): string;
@@ -10979,6 +18892,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetItalic(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bItalic = oTextPr.GetItalic();
+     * oParagraph.AddText("Italic property: " + bItalic);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetItalic/
      */
     GetItalic(): boolean;
@@ -10987,6 +18925,33 @@ export namespace Slide {
      * Gets the text outline from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oTextPr.SetOutLine(oStroke);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oStroke = oTextPr.GetOutLine();
+     * var sType = oStroke.GetClassType();
+     * oParagraph.AddText("Text outline type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetOutLine/
      */
@@ -10998,6 +18963,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetSmallCaps(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bSmallCaps = oTextPr.GetSmallCaps();
+     * oParagraph.AddText("Property of the small capitalized letters: " + bSmallCaps);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSmallCaps/
      */
     GetSmallCaps(): boolean;
@@ -11006,6 +18996,31 @@ export namespace Slide {
      * Gets the text spacing from the current text properties measured in twentieths of a point.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetSpacing(80);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var nSpacing = oTextPr.GetSpacing();
+     * oParagraph.AddText("Text spacing: " + nSpacing);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetSpacing/
      */
@@ -11016,6 +19031,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetStrikeout(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bStrikeout = oTextPr.GetStrikeout();
+     * oParagraph.AddText("Strikeout property: " + bStrikeout);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetStrikeout/
      */
     GetStrikeout(): boolean;
@@ -11024,6 +19064,33 @@ export namespace Slide {
      * Gets the text fill from the current text properties.
      *
      * @since 8.1.0
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetTextFill(oFill);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * oFill = oTextPr.GetTextFill();
+     * var sType = oFill.GetClassType();
+     * oParagraph.AddText("Text fill type: " + sType);
+     * oDocContent.Push(oParagraph);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetTextFill/
      */
@@ -11034,6 +19101,31 @@ export namespace Slide {
      *
      * @since 8.1.0
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * oRun.AddText("This is just a sample text. ");
+     * oRun.AddText("The text properties are changed and the style is added to the paragraph. ");
+     * oRun.AddLineBreak();
+     * oParagraph.AddElement(oRun);
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetUnderline(true);
+     * oSlide.AddObject(oShape);
+     * oParagraph = Api.CreateParagraph();
+     * var bUnderline = oTextPr.GetUnderline();
+     * oParagraph.AddText("Underline property: " + bUnderline);
+     * oDocContent.Push(oParagraph);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/GetUnderline/
      */
     GetUnderline(): boolean;
@@ -11043,6 +19135,27 @@ export namespace Slide {
      *
      * @param isBold - Specifies that the contents of the run are displayed bold.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetBold(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font weight set to bold using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetBold/
      */
@@ -11055,6 +19168,27 @@ export namespace Slide {
      * @param isCaps - Specifies that the contents of the current run are displayed capitalized.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetCaps(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape set to capital letters using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetCaps/
      */
     SetCaps(isCaps: boolean): ApiTextPr;
@@ -11066,6 +19200,27 @@ export namespace Slide {
      * @param isDoubleStrikeout - Specifies that the contents of the current run are displayed double struck through.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetDoubleStrikeout(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape struck out with two lines using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetDoubleStrikeout/
      */
     SetDoubleStrikeout(isDoubleStrikeout: boolean): ApiTextPr;
@@ -11075,6 +19230,27 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the text color.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetFill(oFill);
+     * oRun.AddText("This is a text run with the font color set to black using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFill/
      */
@@ -11086,6 +19262,27 @@ export namespace Slide {
      * @param sFontFamily - The font family or families used for the current text run.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetFontFamily("Comic Sans MS");
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font family set to 'Comic Sans MS' using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontFamily/
      */
     SetFontFamily(sFontFamily: string): ApiTextPr;
@@ -11095,6 +19292,26 @@ export namespace Slide {
      *
      * @param nSize - The text size value measured in half-points (1/144 of an inch).
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(30);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font size set to 15 points using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetFontSize/
      */
@@ -11106,6 +19323,27 @@ export namespace Slide {
      *
      * @param sColor - Available highlight color.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetHighlight("lightGray");
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the text highlighted with light gray color using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetHighlight/
      */
     SetHighlight(sColor: highlightColor): ApiTextPr;
@@ -11116,6 +19354,27 @@ export namespace Slide {
      * @param isItalic - Specifies that the contents of the current run are displayed italicized.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetItalic(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font set to italicized letters using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetItalic/
      */
     SetItalic(isItalic: boolean): ApiTextPr;
@@ -11125,6 +19384,28 @@ export namespace Slide {
      *
      * @param oStroke - The stroke used to create the text outline.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oStroke = Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));
+     * oTextPr.SetOutLine(oStroke);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a text run with the black text outline set using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetOutLine/
      */
@@ -11140,6 +19421,27 @@ export namespace Slide {
      *   not.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetSmallCaps(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the font set to small capitalized letters using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSmallCaps/
      */
     SetSmallCaps(isSmallCaps: boolean): ApiTextPr;
@@ -11149,6 +19451,27 @@ export namespace Slide {
      *
      * @param nSpacing - The value of the text spacing measured in twentieths of a point (1/1440 of an inch).
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetSpacing(80);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the spacing set to 4 points (80 twentieths of a point) using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetSpacing/
      */
@@ -11161,6 +19484,27 @@ export namespace Slide {
      * @param isStrikeout - Specifies that the contents of the current run are displayed struck through.
      * @returns this text properties.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetStrikeout(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a struck out text inside the shape.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetStrikeout/
      */
     SetStrikeout(isStrikeout: boolean): ApiTextPr;
@@ -11170,6 +19514,28 @@ export namespace Slide {
      *
      * @param oApiFill - The color or pattern used to fill the text color.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oTextPr.SetTextFill(oFill);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a sample text inside the shape with the black text fill set using the text properties.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetTextFill/
      */
@@ -11182,6 +19548,27 @@ export namespace Slide {
      *
      * @param isUnderline - Specifies that the contents of the current run are displayed underlined.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetUnderline(true);
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is an underlined text inside the shape.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetUnderline/
      */
@@ -11199,6 +19586,27 @@ export namespace Slide {
      *
      * @param sType - The vertical alignment type applied to the text contents.
      * @returns this text properties.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * var oRun = Api.CreateRun();
+     * var oTextPr = oRun.GetTextPr();
+     * oTextPr.SetFontSize(50);
+     * oTextPr.SetVertAlign("superscript");
+     * oParagraph.SetJc("left");
+     * oRun.AddText("This is a text inside the shape with vertical alignment set to 'superscript'.");
+     * oParagraph.AddElement(oRun);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTextPr/Methods/SetVertAlign/
      */
@@ -11607,12 +20015,56 @@ export namespace Slide {
     /**
      * Returns the type of the ApiTheme class.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var sType = oTheme.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetClassType/
      */
     GetClassType(): "theme";
 
     /**
      * Returns the color scheme of the current theme.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oClrScheme = oTheme.GetColorScheme();
+     * oClrScheme.ChangeColor(0, Api.CreateRGBColor(255, 111, 61));
+     * oClrScheme.ChangeColor(1, Api.CreateRGBColor(51, 51, 51));
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetColorScheme/
      */
@@ -11621,12 +20073,54 @@ export namespace Slide {
     /**
      * Returns the font scheme of the current theme.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFontScheme = oTheme.GetFontScheme();
+     * var sType = oFontScheme.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFontScheme/
      */
     GetFontScheme(): ApiThemeFontScheme;
 
     /**
      * Returns the format scheme of the current theme.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * var sType = oFormatScheme.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetFormatScheme/
      */
@@ -11636,6 +20130,26 @@ export namespace Slide {
      * Returns the slide master of the current theme.
      *
      * @returns returns null if slide master doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oTheme = oSlide.GetTheme();
+     * var oMaster = oTheme.GetMaster();
+     * var sType = oMaster.GetClassType();
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/GetMaster/
      */
@@ -11647,6 +20161,29 @@ export namespace Slide {
      * @param oApiColorScheme - Theme color scheme.
      * @returns return false if color scheme doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetColorScheme(oClrScheme);
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetColorScheme/
      */
     SetColorScheme(oApiColorScheme: ApiThemeColorScheme): boolean;
@@ -11657,6 +20194,27 @@ export namespace Slide {
      * @param oApiFontScheme - Theme font scheme.
      * @returns return false if font scheme doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetFontScheme(oFontScheme);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * var oDocContent = oShape.GetDocContent();
+     * oDocContent.RemoveAllElements();
+     * var oParagraph = Api.CreateParagraph();
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("This is an example of a paragraph with a new font scheme set.");
+     * oDocContent.Push(oParagraph);
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFontScheme/
      */
     SetFontScheme(oApiFontScheme: ApiThemeFontScheme): boolean;
@@ -11666,6 +20224,39 @@ export namespace Slide {
      *
      * @param oApiFormatScheme - Theme format scheme.
      * @returns return false if format scheme doesn't exist.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetFormatScheme(oFormatScheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTheme/Methods/SetFormatScheme/
      */
@@ -11684,6 +20275,30 @@ export namespace Slide {
      * @param nPos - Color position in the color scheme which will be changed.
      * @param oColor - New color of the theme color scheme.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oClrScheme = oTheme.GetColorScheme();
+     * oClrScheme.ChangeColor(0, Api.CreateRGBColor(255, 111, 61));
+     * oClrScheme.ChangeColor(1, Api.CreateRGBColor(51, 51, 51));
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/ChangeColor/
      */
     ChangeColor(nPos: number, oColor: ApiUniColor | ApiRGBColor): boolean;
@@ -11691,12 +20306,80 @@ export namespace Slide {
     /**
      * Creates a copy of the current theme color scheme.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme1 = oMaster.GetTheme();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * oTheme1.SetColorScheme(oClrScheme);
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide1.AddObject(oChart);
+     * var oCopyClrScheme = oClrScheme.Copy();
+     * oSlide1.ApplyTheme(oTheme1);
+     * var oSlide2 = Api.CreateSlide();
+     * oSlide2.RemoveAllObjects();
+     * oPresentation.AddSlide(oSlide2);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme2 = Api.CreateTheme("New theme", oMaster, oCopyClrScheme, oFormatScheme, oFontScheme);
+     * oSlide2.ApplyTheme(oTheme2);
+     * oSlide2.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/Copy/
      */
     Copy(): ApiThemeColorScheme;
 
     /**
      * Returns the type of the ApiThemeColorScheme class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * oTheme.SetColorScheme(oClrScheme);
+     * var sType = oClrScheme.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/GetClassType/
      */
@@ -11707,12 +20390,62 @@ export namespace Slide {
      *
      * @param sName - Theme color scheme name.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * oTheme.SetColorScheme(oClrScheme);
+     * oClrScheme.SetSchemeName("New color scheme name");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New name was set to the theme color scheme.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/SetSchemeName/
      */
     SetSchemeName(sName: string): boolean;
 
     /**
      * Converts the ApiThemeColorScheme object into the JSON object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var json = oClrScheme.ToJSON();
+     * var oClrSchemeFromJSON = Api.FromJSON(json);
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetColorScheme(oClrSchemeFromJSON);
+     * var sType = oClrSchemeFromJSON.GetClassType();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Class type = " + sType, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeColorScheme/Methods/ToJSON/
      */
@@ -11728,12 +20461,84 @@ export namespace Slide {
     /**
      * Creates a copy of the current theme font scheme.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * oSlide1.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme1 = oMaster.GetTheme();
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oTheme1.SetFontScheme(oFontScheme);
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New font scheme was set to this slide.");
+     * oSlide1.AddObject(oShape);
+     * var oCopyFontScheme = oFontScheme.Copy();
+     * oSlide1.ApplyTheme(oTheme1);
+     * var oSlide2 = Api.CreateSlide();
+     * oSlide2.RemoveAllObjects();
+     * oPresentation.AddSlide(oSlide2);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oTheme2 = Api.CreateTheme("New theme", oMaster, oClrScheme, oFormatScheme, oCopyFontScheme);
+     * oSlide2.ApplyTheme(oTheme2);
+     * oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));
+     * oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * oDocContent = oShape.GetDocContent();
+     * oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New font scheme was set to this slide.");
+     * oSlide2.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/Methods/Copy/
      */
     Copy(): ApiThemeFontScheme;
 
     /**
      * Returns the type of the ApiThemeFontScheme class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster();
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var sType = oFontScheme.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/Methods/GetClassType/
      */
@@ -11749,6 +20554,27 @@ export namespace Slide {
      * @param mnEa - The minor theme font applied to the east asian text.
      * @param mnCs - The minor theme font applied to the complex script text.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFontScheme = oTheme.GetFontScheme();
+     * oFontScheme.SetFonts("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New font scheme was set to this slide.");
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/Methods/SetFonts/
      */
     SetFonts(mjLatin: string, mjEa: string, mjCs: string, mnLatin: string, mnEa: string, mnCs: string): void;
@@ -11759,12 +20585,61 @@ export namespace Slide {
      * @param sName - Theme font scheme name.
      * @returns returns false if font scheme doesn't exist.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFontScheme = oTheme.GetFontScheme();
+     * oFontScheme.SetFonts("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oFontScheme.SetSchemeName("New font scheme name");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New name was set to the theme font scheme.");
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/Methods/SetSchemeName/
      */
     SetSchemeName(sName: string): boolean;
 
     /**
      * Converts the ApiThemeFontScheme object into the JSON object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oThemeMaster = oMaster.GetTheme();
+     * var oFontScheme = oThemeMaster.GetFontScheme();
+     * oFontScheme.SetFonts("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oFontScheme.SetSchemeName("New font scheme name");
+     * var json = oFontScheme.ToJSON();
+     * var oFontSchemeFromJSON = Api.FromJSON(json);
+     * var oTheme = oSlide.GetTheme();
+     * oTheme.SetFontScheme(oFontSchemeFromJSON);
+     * var sType = oFontSchemeFromJSON.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFontScheme/Methods/ToJSON/
      */
@@ -11784,6 +20659,39 @@ export namespace Slide {
      *   fills. If an array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oSlide.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oFormatScheme.ChangeBgFillStyles([oBgFill1, oBgFill2, oBgFill3]);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oTheme = Api.CreateTheme("Theme 1", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/ChangeBgFillStyles/
      */
     ChangeBgFillStyles(arrBgFill: ApiFill[]): void;
@@ -11794,6 +20702,39 @@ export namespace Slide {
      * @param arrFill - The array of fill styles must contain 3 elements - subtle, moderate and intense fills. If an
      *   array is empty or NoFill elements are in the array, it will be filled with the
      *   Api.CreateNoFill() elements.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oSlide.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * oFormatScheme.ChangeFillStyles([oFill1, oFill2, oFill3]);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oTheme = Api.CreateTheme("Theme 1", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Financial Overview", 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/ChangeFillStyles/
      */
@@ -11806,6 +20747,40 @@ export namespace Slide {
      *   array is empty or ApiStroke elements are with no fill, it will be filled with the
      *   Api.CreateStroke(0, Api.CreateNoFill()) elements.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oSlide.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(3 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(3 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(3 * 36000, oFill3);
+     * oFormatScheme.ChangeLineStyles([oStroke1, oStroke2, oFill3]);
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * oTheme = Api.CreateTheme("Theme 1", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme);
+     * oSlide.RemoveAllObjects();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Create a shape by yourself to see the stroke style set to this presentation.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/ChangeLineStyles/
      */
     ChangeLineStyles(arrLine: ApiStroke[]): void;
@@ -11813,12 +20788,68 @@ export namespace Slide {
     /**
      * Creates a copy of the current theme format scheme.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oSlide1 = oPresentation.GetSlideByIndex(0);
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21),
+     * 	Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], "New color scheme");
+     * var oFontScheme = Api.CreateThemeFontScheme("Arial", "Noto Sans Simplified Chinese", "Arabic", "Times New Roman", "Noto Serif Simplified Chinese", "Arabic", "New font scheme");
+     * var oTheme1 = Api.CreateTheme("Theme 1", oMaster, oClrScheme, oFormatScheme, oFontScheme);
+     * oPresentation.ApplyTheme(oTheme1);
+     * var oSlide2 = Api.CreateSlide();
+     * oPresentation.AddSlide(oSlide2);
+     * oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 218, 185), 0);
+     * oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(238, 203, 173), 100000);
+     * var oNewBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oNewBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(238, 203, 173), Api.CreateRGBColor(51, 51, 51));
+     * var oNewBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(238, 203, 173));
+     * var oCopyFormatScheme = oFormatScheme.Copy();
+     * oCopyFormatScheme.ChangeBgFillStyles([oNewBgFill1, oNewBgFill2, oNewBgFill3]);
+     * var oTheme2 = Api.CreateTheme("Theme 2", oMaster, oClrScheme, oCopyFormatScheme, oFontScheme);
+     * oSlide2.ApplyTheme(oTheme2);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/Copy/
      */
     Copy(): ApiThemeFormatScheme;
 
     /**
      * Returns the type of the ApiThemeFormatScheme class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * var sType = oFormatScheme.GetClassType();
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class type = " + sType);
+     * oSlide.RemoveAllObjects();
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/GetClassType/
      */
@@ -11829,12 +20860,69 @@ export namespace Slide {
      *
      * @param sName - Theme format scheme name.
      *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oMaster = oPresentation.GetMaster(0);
+     * var oTheme = oMaster.GetTheme();
+     * var oFormatScheme = oTheme.GetFormatScheme();
+     * oFormatScheme.SetSchemeName("New format scheme name");
+     * var oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("New name was set to the theme format scheme.");
+     * oSlide.AddObject(oShape);
+     * ```
+     *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/SetSchemeName/
      */
     SetSchemeName(sName: string): boolean;
 
     /**
      * Converts the ApiThemeFormatScheme object into the JSON object.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oTheme = oSlide.GetTheme();
+     * var oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke1 = Api.CreateStroke(1 * 36000, oFill1);
+     * var oFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oBgFill2 = Api.CreatePatternFill("dashDnDiag", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));
+     * var oStroke2 = Api.CreateStroke(1 * 36000, oFill2);
+     * var oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));
+     * var oStroke3 = Api.CreateStroke(1 * 36000, oFill3);
+     * var oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], "New format scheme");
+     * var json = oFormatScheme.ToJSON();
+     * var oFormatSchemeFromJSON = Api.FromJSON(json);
+     * oTheme.SetFormatScheme(oFormatSchemeFromJSON);
+     * var sType = oFormatSchemeFromJSON.GetClassType();
+     * var oChart = Api.CreateChart("bar3D", [
+     * 	[200, 240, 280],
+     * 	[250, 260, 280]
+     * ], ["Projected Revenue", "Estimated Costs"], [2014, 2015, 2016], 4051300, 2347595, 24);
+     * oChart.SetVerAxisTitle("USD In Hundred Thousands", 10);
+     * oChart.SetHorAxisTitle("Year", 11);
+     * oChart.SetLegendPos("bottom");
+     * oChart.SetShowDataLabels(false, false, true, false);
+     * oChart.SetTitle("Class type = " + sType, 20);
+     * oChart.SetSize(300 * 36000, 130 * 36000);
+     * oChart.SetPosition(608400, 1267200);
+     * oSlide.AddObject(oChart);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiThemeFormatScheme/Methods/ToJSON/
      */
@@ -11906,6 +20994,27 @@ export namespace Slide {
   export interface ApiUniColor {
     /**
      * Returns a type of the ApiUniColor class.
+     *
+     * @example
+     * ```js
+     * var oPresentation = Api.GetPresentation();
+     * var oSlide = oPresentation.GetSlideByIndex(0);
+     * oSlide.RemoveAllObjects();
+     * var oPresetColor = Api.CreatePresetColor("lightYellow");
+     * var oGs1 = Api.CreateGradientStop(oPresetColor, 0);
+     * var oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);
+     * var oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);
+     * var oStroke = Api.CreateStroke(0, Api.CreateNoFill());
+     * var oShape = Api.CreateShape("flowChartMagneticTape", 300 * 36000, 130 * 36000, oFill, oStroke);
+     * oShape.SetPosition(608400, 1267200);
+     * oShape.SetSize(300 * 36000, 130 * 36000);
+     * var oDocContent = oShape.GetDocContent();
+     * var sClassType = oPresetColor.GetClassType();
+     * var oParagraph = oDocContent.GetElement(0);
+     * oParagraph.SetJc("left");
+     * oParagraph.AddText("Class Type = " + sClassType);
+     * oSlide.AddObject(oShape);
+     * ```
      *
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiUniColor/Methods/GetClassType/
      */

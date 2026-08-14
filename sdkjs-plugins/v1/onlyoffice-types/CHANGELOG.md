@@ -20,14 +20,6 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   to be held in context), and each class has its own detail file, sharded per method above 80 KB so
   that outliers like `ApiWorksheetFunction` (416 members) can't reintroduce the same problem.
   Member-for-member identical to the old index - 6677 methods, 287 `executeMethod` names.
-- `@example` blocks are no longer emitted into the declarations; they live in `dist/api/` only. They
-  were 47% of the generated `.d.ts` by size (1.95 MB of 4.17 MB), and that weight bought little where
-  it landed - a multi-kilobyte snippet is unreadable in a hover tooltip, and an agent reading the
-  `.d.ts` spent half its budget on them. Every member carrying an example also carries a verified
-  `docsUrl` (2712 of 2712), so hovers keep the description, `@param`/`@returns`, `@since` and a
-  one-click link to the full example, while the JSON tree - where per-class files make size a
-  non-issue - keeps all 2712 examples inline. Declarations dropped to 2.20 MB and the ambient bundle
-  from 4.3 MB to 2.36 MB.
 - `peerDependencies` now requires `typescript >=5.0.0`. It always did in practice - `index.d.ts`
   re-exports the editor namespaces with `export type *`, which 4.x rejects outright (`TS1383`) - the
   declared floor was simply wrong.
@@ -99,6 +91,7 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   now wins, the snapshot fills genuine gaps, and its runnable examples are still used - the snapshot
   remains their only source, since sdkjs carries just a `@see` path to a file in another repository
   (all 3003 `@example` blocks are unchanged).
+- `generation-manifest.json` was not reproducible across machines, and `check-generated` diffs it:
   source paths came from `path.relative` and so carried the host separator (`word\apiBuilder.js` on
   Windows, `word/apiBuilder.js` on Linux), and the recorded Node version changed with whoever ran
   the generator. Paths are normalised to forward slashes (asserted at generation time) and the Node
