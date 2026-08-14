@@ -6,7 +6,7 @@
       "description": "Sets a user to the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/AddUser/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.AddUser(\"userId\", \"name\", \"CanView\");"
+        "// How do I allow a specific person to edit or view a locked range in a spreadsheet?\n\n// Protect a cell range and then give a named user permission to work with it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.AddUser(\"userId\", \"name\", \"CanView\");"
       ],
       "params": [
         {
@@ -36,7 +36,7 @@
       "description": "Removes a user from the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/DeleteUser/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.AddUser(\"userId\", \"name\", \"CanView\");\nprotectedRange.DeleteUser(\"userId\");"
+        "// How do I remove a person's permission to edit a locked range in a spreadsheet?\n\n// Take away an existing user's rights to a protected range by removing them from the access list in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.AddUser(\"userId\", \"name\", \"CanView\");\nprotectedRange.DeleteUser(\"userId\");"
       ],
       "params": [
         {
@@ -55,7 +55,7 @@
       "description": "Returns all users from the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/GetAllUsers/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nworksheet.AddProtectedRange(\"Protected range\", \"$A$1:$C$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"Protected range\");\nprotectedRange.AddUser(\"uid-1\", \"John Smith\", \"CanEdit\");\nprotectedRange.AddUser(\"uid-2\", \"Mark Potato\", \"CanView\");\nlet users = protectedRange.GetAllUsers();\nworksheet.GetRange(\"A3\").SetValue(users[0].GetName());"
+        "// How do I see all the people allowed to work with a locked range in a spreadsheet?\n\n// Retrieve the full access list for a protected range and read a user's name from it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nworksheet.AddProtectedRange(\"Protected range\", \"$A$1:$C$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"Protected range\");\nprotectedRange.AddUser(\"uid-1\", \"John Smith\", \"CanEdit\");\nprotectedRange.AddUser(\"uid-2\", \"Mark Potato\", \"CanView\");\nlet users = protectedRange.GetAllUsers();\nworksheet.GetRange(\"A3\").SetValue(users[0].GetName());"
       ],
       "params": [],
       "returns": {
@@ -68,7 +68,7 @@
       "description": "Returns an object that represents a user from the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/GetUser/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\").AddUser(\"userId\", \"name\", \"CanView\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nlet userInfo = protectedRange.GetUser(\"userId\");\nlet userName = userInfo.GetName();\nworksheet.GetRange(\"A3\").SetValue(\"User name: \" + userName);"
+        "// How do I find one person's access information for a locked range in a spreadsheet?\n\n// Fetch a single user's name and permissions from a protected range by their ID in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"$A$1:$B$1\").AddUser(\"userId\", \"name\", \"CanView\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nlet userInfo = protectedRange.GetUser(\"userId\");\nlet userName = userInfo.GetName();\nworksheet.GetRange(\"A3\").SetValue(\"User name: \" + userName);"
       ],
       "params": [
         {
@@ -87,7 +87,7 @@
       "description": "Sets the type of the \"Anyone\" user to the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/SetAnyoneType/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetAnyoneType(\"CanView\");"
+        "// How do I control what anyone without explicit permission can do with a locked range in a spreadsheet?\n\n// Restrict or open a protected range to everyone by choosing a blanket access level in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetAnyoneType(\"CanView\");"
       ],
       "params": [
         {
@@ -106,7 +106,7 @@
       "description": "Sets a range to the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/SetRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetRange(\"Sheet1!$A$2:$B$2\");"
+        "// How do I change which cells a protection lock applies to in a spreadsheet?\n\n// Redirect a named protection to a different group of cells without recreating it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetRange(\"Sheet1!$A$2:$B$2\");"
       ],
       "params": [
         {
@@ -126,7 +126,7 @@
       "description": "Sets a title to the current protected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiProtectedRange/Methods/SetTitle/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetTitle(\"protectedRangeNew\");"
+        "// How do I rename a protected range in a spreadsheet?\n\n// Update the label on a locked area so collaborators know what it protects in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetTitle(\"protectedRangeNew\");"
       ],
       "params": [
         {

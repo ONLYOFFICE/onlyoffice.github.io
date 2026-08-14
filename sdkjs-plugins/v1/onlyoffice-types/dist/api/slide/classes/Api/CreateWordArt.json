@@ -1,0 +1,73 @@
+{
+  "description": "Creates a Text Art object with the parameters specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateWordArt/",
+  "examples": [
+    "// How do I add decorative curved text to a presentation in a presentation?\n\n// Insert text art with custom formatting and text effects in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst run = Api.CreateRun();\nconst textPr = run.GetTextPr();\ntextPr.SetFontSize(72);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetColor(Api.HexColor('#333333'));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nconst textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 100 * 36000, 30 * 36000);\nslide.AddObject(textArt);"
+  ],
+  "params": [
+    {
+      "description": "The text properties.",
+      "name": "oTextPr",
+      "optional": true,
+      "type": "ApiTextPr"
+    },
+    {
+      "description": "The text for the Text Art object.",
+      "name": "sText",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "Text transform type.",
+      "name": "sTransform",
+      "optional": true,
+      "type": "TextTransform"
+    },
+    {
+      "description": "The color or pattern used to fill the Text Art object.",
+      "name": "oFill",
+      "optional": true,
+      "type": "ApiFill"
+    },
+    {
+      "description": "The stroke used to create the Text Art object shadow.",
+      "name": "oStroke",
+      "optional": true,
+      "type": "ApiStroke"
+    },
+    {
+      "description": "Rotation angle.",
+      "name": "nRotAngle",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "The Text Art width measured in English measure units.",
+      "name": "nWidth",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The Text Art heigth measured in English measure units.",
+      "name": "nHeight",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The Text Art left side indentation value measured in English measure units.",
+      "name": "nIndLeft",
+      "optional": true,
+      "type": "EMU"
+    },
+    {
+      "description": "The Text Art top side indentation value measured in English measure units.",
+      "name": "nIndTop",
+      "optional": true,
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "ApiDrawing"
+  },
+  "signature": "CreateWordArt(oTextPr?: ApiTextPr, sText?: string, sTransform?: TextTransform, oFill?: ApiFill, oStroke?: ApiStroke, nRotAngle?: number, nWidth?: EMU, nHeight?: EMU, nIndLeft?: EMU, nIndTop?: EMU): ApiDrawing"
+}

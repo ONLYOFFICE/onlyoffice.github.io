@@ -1,0 +1,12 @@
+{
+  "description": "Returns the rows or columns count.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCount/",
+  "examples": [
+    "// How do I find out how many cells are in a range in a spreadsheet?\n\n// Write the cell count of a range into a separate cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet count = worksheet.GetRange(\"A1:C1\").GetCount();\nworksheet.GetRange(\"A4\").SetValue(\"Count: \");\nworksheet.GetRange(\"B4\").SetValue(count);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetCount(): number"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the sum of the specified complex numbers.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSUM/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMSUM(\"1+3i\", \"0.1+1.5j\", \"-2+2.5i\"));"
+    "// How do I add two complex numbers in a spreadsheet?\n\n// Calculate the sum of multiple complex values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMSUM(\"1+3i\", \"0.1+1.5j\", \"-2+2.5i\"));"
   ],
   "params": [
     {

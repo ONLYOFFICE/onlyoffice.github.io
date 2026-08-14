@@ -1,0 +1,13 @@
+{
+  "description": "Returns the paragraph line spacing value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/GetSpacingLineValue/",
+  "examples": [
+    "// How do I find out the exact line height value used between lines in a paragraph in a spreadsheet?\n\n// Verify the spacing amount after increasing a paragraph's line height to confirm the numeric result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\nlet spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line value : \" + spacingLineValue);\ncontent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+    "type": "twips | line240 | undefined"
+  },
+  "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+}

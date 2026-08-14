@@ -1,0 +1,35 @@
+{
+  "description": "Creates stamp annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateStampAnnot/",
+  "examples": [
+    "// How do I mark a document with a stamp in a PDF?\n\n// Place a preset stamp at specified coordinates in a PDF.\n\nlet doc = Api.GetDocument();\nlet stampAnnot = Api.CreateStampAnnot([40, 40, 100, 100], 'SB_Approved');\nlet page = doc.GetPage(0);\npage.AddObject(stampAnnot);"
+  ],
+  "params": [
+    {
+      "description": "annotation rect (only x1, y1 coordinates will be used, since the stamp dimensions are reserved).",
+      "name": "rect",
+      "type": "Rect"
+    },
+    {
+      "description": "stamp type",
+      "name": "type",
+      "type": "StampType"
+    },
+    {
+      "description": "name of the author",
+      "name": "author",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "creation date (timeStamp)",
+      "name": "creationDate",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiStampAnnotation"
+  },
+  "signature": "CreateStampAnnot(rect: Rect, type: StampType, author?: string, creationDate?: number): ApiStampAnnotation"
+}

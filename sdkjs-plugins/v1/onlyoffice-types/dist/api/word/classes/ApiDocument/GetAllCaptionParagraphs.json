@@ -2,7 +2,7 @@
   "description": "Returns all caption paragraphs of the specified type from the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllCaptionParagraphs/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");\nlet captionParagraphs = doc.GetAllCaptionParagraphs(\"Figure\");\ncaptionParagraphs[0].SetCaps(true);"
+    "// How do I find every caption of a given type and modify its text style in a document?\n\n// Emphasize a specific caption by converting its letters to uppercase after inserting an image in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nconst logoUrl = 'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png';\nlet drawing = Api.CreateImage(logoUrl, 60 * 36000, 60 * 36000);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption('', 'Figure', false, 'Arabic', false, undefined, 'hyphen');\nlet captionParagraphs = doc.GetAllCaptionParagraphs('Figure');\ncaptionParagraphs[0].SetCaps(true);"
   ],
   "params": [
     {

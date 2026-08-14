@@ -1,6 +1,9 @@
 {
   "description": "Adds a new date picker content control to the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddDatePickerContentControl/",
+  "examples": [
+    "// How do I insert a date picker field into a document?\n\n// Let readers select a date from a calendar picker embedded in the document.\n\nlet doc = Api.GetDocument();\ndoc.AddDatePickerContentControl();"
+  ],
   "params": [
     {
       "description": "The optional date picker properties.",

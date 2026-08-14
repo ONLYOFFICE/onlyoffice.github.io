@@ -1,0 +1,23 @@
+{
+  "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetTabs/",
+  "examples": [
+    "// How do I set where tabs align text in a PDF?\n\n// Configure tab stop locations and alignment styles in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetTabs([1440, 4320, 7200], [\"left\", \"center\", \"right\"]);\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 1 inch left\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 3 inches center\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 5 inches right\");\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",
+      "name": "aPos",
+      "type": "twips[]"
+    },
+    {
+      "description": "An array of the styles of custom tab stops, which determines the behavior of the tab\rstop and the alignment which will be applied to text entered at the current custom tab stop.",
+      "name": "aVal",
+      "type": "TabJc[]"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetTabs(aPos: twips[], aVal: TabJc[]): boolean"
+}

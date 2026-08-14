@@ -6,7 +6,7 @@
       "description": "Returns a type of the ApiSection class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);\nlet classType = section.GetClassType();\nparagraph.AddText(\"Class Type = \" + classType);"
+        "// How do I find out what kind of object a section is in a document?\n\n// Confirm the category of a section by checking its type identifier in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);\nlet classType = section.GetClassType();\nparagraph.AddText(\"Class Type = \" + classType);"
       ],
       "params": [],
       "returns": {
@@ -17,6 +17,9 @@
     "GetColumnsCount": {
       "description": "Returns number of columns in this section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsCount/",
+      "examples": [
+        "// How do I find out how many columns a section has in a document?\n\n// Retrieve the total column count from a multi-column layout in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetNotEqualColumns([1440, 2880, 4320], [720, 480]);\nlet columnsCount = section.GetColumnsCount();\nparagraph.AddText(\"This is a text split into \" + columnsCount + \" non-equal columns. \");\nparagraph.AddText(\"The first column is 1 inch wide (1440 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This column is 2 inches wide (2880 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #1 is half an inch (720 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This column is 3 inches wide (4320 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #2 is 1/3 of an inch (480 twentieths of a point).\");"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -26,6 +29,9 @@
     "GetColumnsSpaces": {
       "description": "Returns an array of distance values between the columns measured in twentieths of a point (1/1440 of an inch).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsSpaces/",
+      "examples": [
+        "// How do I find out the spacing between each column in a document?\n\n// Retrieve the distances separating adjacent columns from a multi-column layout in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetNotEqualColumns([1440, 2880, 4320], [720, 480]);\nlet columnsCount = section.GetColumnsCount();\nlet columnsWidths = section.GetColumnsWidths();\nlet columnsSpaces = section.GetColumnsSpaces();\nparagraph.AddText(\"This is a text split into \" + columnsCount + \" non-equal columns. \");\nparagraph.AddText(\"The first column is 1 inch wide (\" + columnsWidths[0] + \" twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This column is 2 inches wide (\" + columnsWidths[1] + \" twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #1 is half an inch (\" + columnsSpaces[0] + \" twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This column is 3 inches wide (\" + columnsWidths[2] + \" twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #2 is 1/3 of an inch (\" + columnsSpaces[1] + \" twentieths of a point).\");"
+      ],
       "params": [],
       "returns": {
         "type": "twips[]"
@@ -35,6 +41,9 @@
     "GetColumnsWidths": {
       "description": "Returns an array of column width values measured in twentieths of a point (1/1440 of an inch).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetColumnsWidths/",
+      "examples": [
+        "// How do I find out how wide each column is in a document?\n\n// Retrieve the individual column widths from a multi-column layout in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetNotEqualColumns([1440, 2880, 4320], [720, 480]);\nlet columnsCount = section.GetColumnsCount();\nlet columnsWidths = section.GetColumnsWidths();\nparagraph.AddText(\"This is a text split into \" + columnsCount + \" non-equal columns. \");\nparagraph.AddText(\"The first column is 1 inch wide (\" + columnsWidths[0] + \" twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This column is 2 inches wide (\" + columnsWidths[1] + \" twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #1 is half an inch (720 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This column is 3 inches wide (\" + columnsWidths[2] + \" twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #2 is 1/3 of an inch (480 twentieths of a point).\");"
+      ],
       "params": [],
       "returns": {
         "type": "twips[]"
@@ -45,7 +54,7 @@
       "description": "Returns the content for the specified footer type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetFooter/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is a page footer\");"
+        "// How do I retrieve the footer from a specific section in a document?\n\n// Read the footer content to add or inspect text at the bottom of pages in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is a page footer\");"
       ],
       "params": [
         {
@@ -68,6 +77,9 @@
     "GetFooterDistance": {
       "description": "Returns the distance from the bottom edge of the page to the bottom edge of the footer.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetFooterDistance/",
+      "examples": [
+        "// How do I find out how much space separates the footer from the page bottom in a document?\n\n// Check the footer spacing to verify that the layout matches the intended design in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet footer = section.GetFooter(\"default\", true);\nsection.SetFooterDistance(1440);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is a page footer. \");\nparagraph.AddText(\"The distance from the page bottom to the footer is 1 inch (\" + section.GetFooterDistance() + \" twentieths of a point).\");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -78,7 +90,7 @@
       "description": "Returns the content for the specified header type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetHeader/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a header. \");\nparagraph.AddText(\"See it above.\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is a page header\");"
+        "// How do I retrieve the header from a specific section in a document?\n\n// Open the header region to add or inspect text that appears at the top of pages in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a header. \");\nparagraph.AddText(\"See it above.\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is a page header\");"
       ],
       "params": [
         {
@@ -101,6 +113,9 @@
     "GetHeaderDistance": {
       "description": "Returns the distance from the top edge of the page to the top edge of the header.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetHeaderDistance/",
+      "examples": [
+        "// How do I find out how much space separates the header from the page top in a document?\n\n// Check the header spacing to confirm that the layout matches the intended design in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a header. \");\nparagraph.AddText(\"Scroll up the page to see it.\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nsection.SetHeaderDistance(1440);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is a page header. \");\nparagraph.AddText(\"The distance from the page top to the header is 1 inch (\" + section.GetHeaderDistance() + \" twentieths of a point).\");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -111,7 +126,7 @@
       "description": "Returns the next section if exists.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetNext/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a new paragraph.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Scroll down to see the new section.\");\nlet section1 = doc.CreateSection(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph in the first section\");\ndoc.Push(paragraph);\nlet section2 = doc.CreateSection(paragraph);\nlet nextSection = section1.GetNext();\nnextSection.SetPageMargins(7200, 2880, 1440, 5760);"
+        "// How do I access the section that comes right after a given section in a document?\n\n// Move forward to the next section to adjust its layout settings in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a new paragraph.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Scroll down to see the new section.\");\nlet section1 = doc.CreateSection(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph in the first section\");\ndoc.Push(paragraph);\nlet section2 = doc.CreateSection(paragraph);\nlet nextSection = section1.GetNext();\nnextSection.SetPageMargins(7200, 2880, 1440, 5760);"
       ],
       "params": [],
       "returns": {
@@ -124,7 +139,7 @@
       "description": "Gets page height for current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageHeight/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nlet height = section.GetPageHeight();\nparagraph.AddText(\"Page height = \" + height);"
+        "// How do I find out the page height for a section in a document?\n\n// Retrieve the vertical page size to verify or display layout dimensions in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nlet height = section.GetPageHeight();\nparagraph.AddText(\"Page height = \" + height);"
       ],
       "params": [],
       "returns": {
@@ -135,6 +150,9 @@
     "GetPageMarginBottom": {
       "description": "Returns the bottom page margin for all pages in the current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginBottom/",
+      "examples": [
+        "// How do I find out the size of the bottom page margin for a section in a document?\n\n// Retrieve the bottom spacing value to verify the page layout is correct in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (\" + section.GetPageMarginLeft() + \" twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (\" + section.GetPageMarginTop() + \" twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (\" + section.GetPageMarginRight() + \" twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (\" + section.GetPageMarginBottom() + \" twentieths of a point). \");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -144,6 +162,9 @@
     "GetPageMarginLeft": {
       "description": "Returns the left page margin for all pages in the current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginLeft/",
+      "examples": [
+        "// How do I find out the size of the left page margin for a section in a document?\n\n// Retrieve the left spacing value to verify the page layout is correct in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (\" + section.GetPageMarginLeft() + \" twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (\" + section.GetPageMarginTop() + \" twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (\" + section.GetPageMarginRight() + \" twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (\" + section.GetPageMarginBottom() + \" twentieths of a point). \");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -153,6 +174,9 @@
     "GetPageMarginRight": {
       "description": "Returns the right page margin for all pages in the current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginRight/",
+      "examples": [
+        "// How do I find out the size of the right page margin for a section in a document?\n\n// Retrieve the right spacing value to verify the page layout is correct in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (\" + section.GetPageMarginLeft() + \" twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (\" + section.GetPageMarginTop() + \" twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (\" + section.GetPageMarginRight() + \" twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (\" + section.GetPageMarginBottom() + \" twentieths of a point). \");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -162,6 +186,9 @@
     "GetPageMarginTop": {
       "description": "Returns the top page margin for all pages in the current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageMarginTop/",
+      "examples": [
+        "// How do I find out the size of the top page margin for a section in a document?\n\n// Retrieve the top spacing value to verify the page layout is correct in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (\" + section.GetPageMarginLeft() + \" twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (\" + section.GetPageMarginTop() + \" twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (\" + section.GetPageMarginRight() + \" twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (\" + section.GetPageMarginBottom() + \" twentieths of a point). \");"
+      ],
       "params": [],
       "returns": {
         "type": "twips"
@@ -172,7 +199,7 @@
       "description": "Gets page width for current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPageWidth/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nlet width = section.GetPageWidth();\nparagraph.AddText(\"Page width = \" + width);"
+        "// How do I find out the page width for a section in a document?\n\n// Retrieve the horizontal page size to verify or display layout dimensions in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nlet width = section.GetPageWidth();\nparagraph.AddText(\"Page width = \" + width);"
       ],
       "params": [],
       "returns": {
@@ -184,7 +211,7 @@
       "description": "Returns the previous section if exists.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetPrevious/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a new paragraph.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Scroll down to see the new section.\");\nlet section1 = doc.CreateSection(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph in the first section\");\ndoc.Push(paragraph);\nlet section2 = doc.CreateSection(paragraph);\nlet previousSection = section2.GetPrevious();\npreviousSection.SetPageMargins(7200, 2880, 1440, 5760);"
+        "// How do I retrieve the section preceding the one I am working with in a document?\n\n// Navigate backward through sections to reach an earlier part of a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a new paragraph.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Scroll down to see the new section.\");\nlet section1 = doc.CreateSection(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph in the first section\");\ndoc.Push(paragraph);\nlet section2 = doc.CreateSection(paragraph);\nlet previousSection = section2.GetPrevious();\npreviousSection.SetPageMargins(7200, 2880, 1440, 5760);"
       ],
       "params": [],
       "returns": {
@@ -197,7 +224,7 @@
       "description": "Returns the start page number of the specified section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetStartPageNumber/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = paragraph.GetSection();\nsection.SetStartPageNumber(5);\nlet startPageNumber = section.GetStartPageNumber();\nparagraph.AddText(\"The start page number for this section is: \" + startPageNumber);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();"
+        "// How do I find out which page number a section begins on in a document?\n\n// Check where a section's page numbering starts within a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = paragraph.GetSection();\nsection.SetStartPageNumber(5);\nlet startPageNumber = section.GetStartPageNumber();\nparagraph.AddText(\"The start page number for this section is: \" + startPageNumber);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();"
       ],
       "params": [],
       "returns": {
@@ -209,6 +236,9 @@
     "GetType": {
       "description": "Returns the section break type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/GetType/",
+      "examples": [
+        "// How do I find out what kind of section break is used in a document?\n\n// Inspect the break style applied to a section to understand its flow in a document.\n\nconst doc = Api.GetDocument();\n\nconst firstParagraph = doc.GetElement(0);\nfirstParagraph.AddText('This is section #1 of the document. ');\nconst firstSection = doc.CreateSection(firstParagraph);\n\nconst possibleTypes = ['nextPage', 'oddPage', 'evenPage', 'continuous', 'nextColumn'];\nconst randomIndex = Math.random() * 5 >> 0;\n\nconst finalSection = doc.GetFinalSection();\nfinalSection.SetType(possibleTypes[randomIndex]);\n\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText('This is section #2 and we randomly set \\'' + finalSection.GetType() + '\\' type to it. ');\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The section break type.",
@@ -221,7 +251,7 @@
       "description": "Removes the footer of the specified type from the current section. After removal, the footer will be inherited from \nthe previous section, or if this is the first section in the document, no footer of the specified type will be presented.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/RemoveFooter/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page first was with a footer. \");\nparagraph.AddText(\"Scroll down the page to see if it was removed.\");\nlet section = doc.CreateSection(paragraph);\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer #1. \");\nparagraph.AddText(\"You will not see it, as it will be removed.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\ndoc.Push(paragraph);\nlet section1 = doc.GetFinalSection();\nfooter = section1.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer #2. \");\nparagraph.AddText(\"Only this footer can be seen, as the first one has been removed.\");\nsection.RemoveFooter(\"default\");"
+        "// How do I remove the footer that appears at the bottom of a section in a document?\n\n// Clear the bottom area of a section so no footer is shown in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page first was with a footer. \");\nparagraph.AddText(\"Scroll down the page to see if it was removed.\");\nlet section = doc.CreateSection(paragraph);\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer #1. \");\nparagraph.AddText(\"You will not see it, as it will be removed.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\ndoc.Push(paragraph);\nlet section1 = doc.GetFinalSection();\nfooter = section1.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer #2. \");\nparagraph.AddText(\"Only this footer can be seen, as the first one has been removed.\");\nsection.RemoveFooter(\"default\");"
       ],
       "params": [
         {
@@ -239,7 +269,7 @@
       "description": "Removes the header of the specified type from the current section. After removal, the header will be inherited from\nthe previous section, or if this is the first section in the document, no header of the specified type will be presented.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/RemoveHeader/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page first was with a header. \");\nparagraph.AddText(\"The header has been removed, you cannot see it. \");\nparagraph.AddText(\"Scroll down to the next page to see the header there.\");\nlet section = doc.CreateSection(paragraph);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is page header #1. \");\nparagraph.AddText(\"You will not see it, as it will be removed.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a page with a header. \");\ndoc.Push(paragraph);\nlet section1 = doc.GetFinalSection();\nheader = section1.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is page header #2. \");\nparagraph.AddText(\"Only this header can be seen, as the first one has been removed.\");\nsection.RemoveHeader(\"default\");"
+        "// How do I remove the header that appears at the top of a section in a document?\n\n// Clear the top area of a section so no header is shown in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page first was with a header. \");\nparagraph.AddText(\"The header has been removed, you cannot see it. \");\nparagraph.AddText(\"Scroll down to the next page to see the header there.\");\nlet section = doc.CreateSection(paragraph);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is page header #1. \");\nparagraph.AddText(\"You will not see it, as it will be removed.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a page with a header. \");\ndoc.Push(paragraph);\nlet section1 = doc.GetFinalSection();\nheader = section1.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is page header #2. \");\nparagraph.AddText(\"Only this header can be seen, as the first one has been removed.\");\nsection.RemoveHeader(\"default\");"
       ],
       "params": [
         {
@@ -257,7 +287,7 @@
       "description": "Specifies that all the text columns in the current section are of equal width.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetEqualColumns/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetEqualColumns(3, 720);\nparagraph.AddText(\"This is a text split into 3 equal columns. \");\nparagraph.AddText(\"The columns are separated by the distance of half an inch.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This sentence is used to add lines for demonstrative purposes.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This sentence is used to add lines for demonstrative purposes.\");"
+        "// How do I arrange text into evenly sized side-by-side columns in a document?\n\n// Lay out a section so all columns share an equal width throughout a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetEqualColumns(3, 720);\nparagraph.AddText(\"This is a text split into 3 equal columns. \");\nparagraph.AddText(\"The columns are separated by the distance of half an inch.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This sentence is used to add lines for demonstrative purposes.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This sentence is used to add lines for demonstrative purposes.\");"
       ],
       "params": [
         {
@@ -280,7 +310,7 @@
       "description": "Specifies the distance from the bottom edge of the page to the bottom edge of the footer.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetFooterDistance/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet footer = section.GetFooter(\"default\", true);\nsection.SetFooterDistance(1440);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is a page footer. \");\nparagraph.AddText(\"The distance from the page bottom to the footer is 1 inch (1440 twentieths of a point).\");"
+        "// How do I set the gap between the page bottom and the footer area in a document?\n\n// Adjust the spacing that separates the footer from the lower edge of a page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet footer = section.GetFooter(\"default\", true);\nsection.SetFooterDistance(1440);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is a page footer. \");\nparagraph.AddText(\"The distance from the page bottom to the footer is 1 inch (1440 twentieths of a point).\");"
       ],
       "params": [
         {
@@ -298,7 +328,7 @@
       "description": "Specifies the distance from the top edge of the page to the top edge of the header.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetHeaderDistance/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a header. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nsection.SetHeaderDistance(1440);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is a page header. \");\nparagraph.AddText(\"The distance from the page top to the header is 1 inch (1440 twentieths of a point).\");"
+        "// How do I set the gap between the page top and the header area in a document?\n\n// Adjust the spacing that separates the header from the upper edge of a page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a header. \");\nparagraph.AddText(\"Scroll up the page to see it.\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nsection.SetHeaderDistance(1440);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"This is a page header. \");\nparagraph.AddText(\"The distance from the page top to the header is 1 inch (1440 twentieths of a point).\");"
       ],
       "params": [
         {
@@ -347,7 +377,7 @@
       "description": "Specifies that all the columns in the current section have the different widths. Number of columns is equal \nto the length of the aWidth array. The length of the aSpaces array MUST BE equal to (aWidth.length - 1).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetNotEqualColumns/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetNotEqualColumns([1440, 2880, 4320], [720, 480]);\nparagraph.AddText(\"This is a text split into 3 non-equal columns. \");\nparagraph.AddText(\"The first column is 1 inch wide (1440 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This column is 2 inches wide (2880 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #1 is half an inch (720 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This column is 3 inches wide (4320 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #2 is 1/3 of an inch (480 twentieths of a point).\");"
+        "// How do I create columns that each have a different width in a document?\n\n// Lay out a section with unevenly sized columns to suit a custom design in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetNotEqualColumns([1440, 2880, 4320], [720, 480]);\nparagraph.AddText(\"This is a text split into 3 non-equal columns. \");\nparagraph.AddText(\"The first column is 1 inch wide (1440 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #2. \");\nparagraph.AddText(\"This column is 2 inches wide (2880 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #1 is half an inch (720 twentieths of a point).\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This text starts from column #3. \");\nparagraph.AddText(\"This column is 3 inches wide (4320 twentieths of a point). \");\nparagraph.AddText(\"The distance between this column and column #2 is 1/3 of an inch (480 twentieths of a point).\");"
       ],
       "params": [
         {
@@ -370,7 +400,7 @@
       "description": "Specifies the page margins for all the pages in this section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetPageMargins/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (7200 twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (2880 twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (1440 twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (5760 twentieths of a point). \");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);"
+        "// How do I define the blank space around the edges of each page in a document?\n\n// Adjust the border spacing on all sides of the pages within a section in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with margins set. \");\nparagraph.AddText(\"The left margin is 5 inches wide (7200 twentieths of a point). \");\nparagraph.AddText(\"The top margin is 2 inches high (2880 twentieths of a point). \");\nparagraph.AddText(\"The right margin is 1 inch wide (1440 twentieths of a point). \");\nparagraph.AddText(\"The bottom margin is 4 inches high (5760 twentieths of a point). \");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(7200, 2880, 1440, 5760);"
       ],
       "params": [
         {
@@ -403,7 +433,7 @@
       "description": "Specifies the properties (size and orientation) for all the pages in the current section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetPageSize/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a page size set. \");\nparagraph.AddText(\"The page width is 5 inches (7200 twentieths of a point). \");\nparagraph.AddText(\"The page height is 3 inches (4320 twentieths of a point). \");\nparagraph.AddText(\"The font size is default (11 points).\");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);"
+        "// How do I change the physical dimensions of the pages in a section in a document?\n\n// Resize the pages of a section to fit a custom paper format in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a page size set. \");\nparagraph.AddText(\"The page width is 5 inches (7200 twentieths of a point). \");\nparagraph.AddText(\"The page height is 3 inches (4320 twentieths of a point). \");\nparagraph.AddText(\"The font size is default (11 points).\");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);"
       ],
       "params": [
         {
@@ -432,7 +462,7 @@
       "description": "Sets the start page number for the specified section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetStartPageNumber/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This section starts with second page number\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Third page\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Fourth page\");\nlet section = paragraph.GetSection();\nsection.SetStartPageNumber(2);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();"
+        "// How do I control which number a section begins counting pages from in a document?\n\n// Begin a section from a specific page number rather than continuing the default count in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This section starts with second page number\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Third page\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Fourth page\");\nlet section = paragraph.GetSection();\nsection.SetStartPageNumber(2);\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"Page #\");\nparagraph.AddPageNumber();"
       ],
       "params": [
         {
@@ -451,7 +481,7 @@
       "description": "Specifies whether the current section in this document has the different header and footer for the section first page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetTitlePage/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page does not have a footer, as it is a title page. \");\nparagraph.AddText(\"Scroll down the page to see if the footer was removed.\");\nlet section = doc.CreateSection(paragraph);\nsection.SetTitlePage(true);\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer. \");\nparagraph.AddText(\"You will only see it for page #2.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is page #2 and it has a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\ndoc.Push(paragraph);"
+        "// How do I give the first page of a section its own distinct header and footer in a document?\n\n// Suppress the regular footer on the opening page of a section in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This page does not have a footer, as it is a title page. \");\nparagraph.AddText(\"Scroll down the page to see if the footer was removed.\");\nlet section = doc.CreateSection(paragraph);\nsection.SetTitlePage(true);\nlet footer = section.GetFooter(\"default\", true);\nparagraph = footer.GetElement(0);\nparagraph.AddText(\"This is page footer. \");\nparagraph.AddText(\"You will only see it for page #2.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is page #2 and it has a footer. \");\nparagraph.AddText(\"Scroll down the page to see it.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -469,7 +499,7 @@
       "description": "Specifies a type of the current section. The section type defines how the contents of the current \nsection are placed relative to the previous section.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/SetType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.CreateSection(paragraph);\nparagraph.AddText(\"This is section #1 of the document. \");\nsection = doc.GetFinalSection();\nsection.SetType(\"continuous\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is section #2 and we set 'Continuous' type to it. \");\nparagraph.AddText(\"As you can see, the section is not on a new page. \");\nparagraph.AddText(\"If this section had some other type (nextPage, oddPage, evenPage), it would start a new page.\");\ndoc.Push(paragraph);"
+        "// How do I make a section start without forcing a page break in a document?\n\n// Keep two sections flowing on the same page instead of splitting them across pages in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.CreateSection(paragraph);\nparagraph.AddText(\"This is section #1 of the document. \");\nsection = doc.GetFinalSection();\nsection.SetType(\"continuous\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is section #2 and we set 'Continuous' type to it. \");\nparagraph.AddText(\"As you can see, the section is not on a new page. \");\nparagraph.AddText(\"If this section had some other type (nextPage, oddPage, evenPage), it would start a new page.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -487,7 +517,7 @@
       "description": "Converts the ApiSection object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiSection/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a page size set in the current document section.\");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);\nlet json = section.ToJSON(false, true);\nlet sectionFromJSON = Api.FromJSON(json);\nlet type = sectionFromJSON.GetClassType();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class type = \" + type);"
+        "// How do I export a section's configuration so it can be stored or reused in a document?\n\n// Capture and restore the layout properties of a section in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a page with a page size set in the current document section.\");\nlet section = doc.GetFinalSection();\nsection.SetPageMargins(720, 720, 720, 720);\nsection.SetPageSize(7200, 4320);\nlet json = section.ToJSON(false, true);\nlet sectionFromJSON = Api.FromJSON(json);\nlet type = sectionFromJSON.GetClassType();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class type = \" + type);"
       ],
       "params": [
         {

@@ -5,6 +5,9 @@
     "Add": {
       "description": "Adds data validation to the specified range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Add/",
+      "examples": [
+        "// How do I restrict what values a user can enter into a cell range in a spreadsheet?\n\n// Enforce an input constraint on specific cells to prevent invalid entries in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Data Validation for decimal to be more than 10\");\nconst range = worksheet.GetRange(\"A2:A3\");\nrange.SetValue(\"10\");\nconst validation = worksheet.GetRange(\"A2\").GetValidation();\nvalidation.Add(\"xlValidateDecimal\", \"xlValidAlertWarning\", \"xlGreater\", \"12\");\nworksheet.GetRange(\"A4\").SetValue(\"Data Validation is now applied for A2 only\");"
+      ],
       "params": [
         {
           "description": "The validation type.",
@@ -44,6 +47,9 @@
     "Delete": {
       "description": "Deletes the object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Delete/",
+      "examples": [
+        "// How do I clear an existing input restriction from a cell range in a spreadsheet?\n\n// Lift a validation constraint so cells accept any value again in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Data Validation for decimals to be more than 10 for A2 and A3\");\nconst range = worksheet.GetRange(\"A2:A3\");\nrange.SetValue(\"10\");\nconst validation = range.GetValidation();\nvalidation.Add(\"xlValidateDecimal\", \"xlValidAlertWarning\", \"xlGreater\", \"12\");\nconst targetedRange = worksheet.GetRange(\"A2\");\ntargetedRange.GetValidation().Delete();\nworksheet.GetRange(\"A4\").SetValue(\"Data Validation is now removed for A2\");"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -53,6 +59,9 @@
     "GetAlertStyle": {
       "description": "Returns the validation alert style.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetAlertStyle/",
+      "examples": [
+        "// How do I check what kind of alert appears when invalid data is entered in a spreadsheet?\n\n// Inspect the warning type assigned to a cell's data validation rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertWarning\", \"xlGreater\", 10);\nlet alertStyle = validation.GetAlertStyle();\nworksheet.GetRange(\"B1\").SetValue(\"Alert style: \" + alertStyle);"
+      ],
       "params": [],
       "returns": {
         "type": "ValidationAlertStyle"
@@ -62,6 +71,9 @@
     "GetErrorMessage": {
       "description": "Returns the data validation error message.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetErrorMessage/",
+      "examples": [
+        "// How do I find out what error message appears after an invalid entry in a spreadsheet?\n\n// Retrieve the text displayed to users when they enter a value that fails validation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetErrorMessage(\"Value must be greater than 10\");\nlet errorMessage = validation.GetErrorMessage();\nworksheet.GetRange(\"B1\").SetValue(\"Error message: \" + errorMessage);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -71,6 +83,9 @@
     "GetErrorTitle": {
       "description": "Returns the title of the data-validation error dialog box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetErrorTitle/",
+      "examples": [
+        "// How do I find out what heading appears on the error popup for a validated cell in a spreadsheet?\n\n// Confirm the caption used in the error alert box assigned to a cell's rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetErrorTitle(\"Invalid Input\");\nlet errorTitle = validation.GetErrorTitle();\nworksheet.GetRange(\"B1\").SetValue(\"Error title: \" + errorTitle);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -80,6 +95,9 @@
     "GetFormula1": {
       "description": "Returns the first formula in the data validation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetFormula1/",
+      "examples": [
+        "// How do I find out what the first condition value is for a validated cell in a spreadsheet?\n\n// Verify the lower limit or single threshold defined in a cell's data validation rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nlet formula1 = validation.GetFormula1();\nworksheet.GetRange(\"B1\").SetValue(\"Formula1: \" + formula1);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -89,6 +107,9 @@
     "GetFormula2": {
       "description": "Returns the second formula in the data validation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetFormula2/",
+      "examples": [
+        "// How do I find out the second condition value used in a between-range validation in a spreadsheet?\n\n// Confirm the maximum limit defined when a validation rule checks values between two numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlBetween\", 10, 20);\nlet formula2 = validation.GetFormula2();\nworksheet.GetRange(\"B1\").SetValue(\"Formula2: \" + formula2);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -98,6 +119,9 @@
     "GetIgnoreBlank": {
       "description": "Returns whether blank values are permitted by the range data validation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetIgnoreBlank/",
+      "examples": [
+        "// How do I find out if blank entries are permitted in a validated cell in a spreadsheet?\n\n// Confirm whether leaving a cell empty skips the validation check in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetIgnoreBlank(true);\nlet ignoreBlank = validation.GetIgnoreBlank();\nworksheet.GetRange(\"B1\").SetValue(\"Ignore blank: \" + ignoreBlank);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -107,6 +131,9 @@
     "GetInCellDropdown": {
       "description": "Returns whether data validation displays a drop-down list that contains acceptable values.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInCellDropdown/",
+      "examples": [
+        "// How do I find out if a list validation rule displays a dropdown menu in a spreadsheet?\n\n// Confirm whether users see a pick list when clicking on a cell with list-based validation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateList\", null, null, \"Apple,Banana,Cherry\");\nlet hasDropdown = validation.GetInCellDropdown();\nworksheet.GetRange(\"B1\").SetValue(\"Has dropdown: \" + hasDropdown);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -116,6 +143,9 @@
     "GetInputMessage": {
       "description": "Returns the data validation input message.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInputMessage/",
+      "examples": [
+        "// How do I find out what instruction text is shown when clicking on a cell with a validation rule in a spreadsheet?\n\n// Retrieve the tooltip message displayed to guide users entering data into a restricted cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetInputMessage(\"Enter a number greater than 10\");\nlet inputMessage = validation.GetInputMessage();\nworksheet.GetRange(\"B1\").SetValue(\"Input message: \" + inputMessage);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -125,6 +155,9 @@
     "GetInputTitle": {
       "description": "Returns the title of the data-validation input dialog box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetInputTitle/",
+      "examples": [
+        "// How do I find out what title appears on the input prompt for a cell with a validation rule in a spreadsheet?\n\n// Confirm the label used at the top of the input message box assigned to a restricted cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetInputTitle(\"Enter Value\");\nlet inputTitle = validation.GetInputTitle();\nworksheet.GetRange(\"B1\").SetValue(\"Input title: \" + inputTitle);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -134,6 +167,9 @@
     "GetOperator": {
       "description": "Returns the data validation operator.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetOperator/",
+      "examples": [
+        "// How do I find out which condition operator is applied to a validated cell in a spreadsheet?\n\n// Determine whether a validation rule uses greater-than, between, or another comparison type in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nlet operator = validation.GetOperator();\nworksheet.GetRange(\"B1\").SetValue(\"Operator: \" + operator);"
+      ],
       "params": [],
       "returns": {
         "type": "ValidationOperator"
@@ -143,6 +179,9 @@
     "GetParent": {
       "description": "Returns the parent range object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetParent/",
+      "examples": [
+        "// How do I find out which cells a data validation rule belongs to in a spreadsheet?\n\n// Trace back from a validation object to the range of cells it is applied to in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:A5\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nlet parent = validation.GetParent();\nworksheet.GetRange(\"B1\").SetValue(\"Parent range: \" + parent.GetAddress());"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRange"
@@ -152,6 +191,9 @@
     "GetShowError": {
       "description": "Returns whether the data validation error message will be displayed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetShowError/",
+      "examples": [
+        "// How do I find out if an error message appears when someone enters a wrong value in a spreadsheet?\n\n// Confirm that invalid entries will trigger a visible warning in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetShowError(true);\nlet showError = validation.GetShowError();\nworksheet.GetRange(\"B1\").SetValue(\"Show error: \" + showError);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -161,6 +203,9 @@
     "GetShowInput": {
       "description": "Returns whether the data validation input message will be displayed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetShowInput/",
+      "examples": [
+        "// How do I find out if a guidance message appears when someone selects a restricted cell in a spreadsheet?\n\n// Confirm that a prompt will be shown to guide users before they enter a value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetShowInput(true);\nlet showInput = validation.GetShowInput();\nworksheet.GetRange(\"B1\").SetValue(\"Show input: \" + showInput);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -170,6 +215,9 @@
     "GetType": {
       "description": "Returns the validation type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/GetType/",
+      "examples": [
+        "// How do I find out what type of data rule is applied to a cell in a spreadsheet?\n\n// Identify whether a cell expects whole numbers, decimals, dates, or another category in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nlet validationType = validation.GetType();\nworksheet.GetRange(\"B1\").SetValue(\"Validation type: \" + validationType);"
+      ],
       "params": [],
       "returns": {
         "type": "ValidationType"
@@ -179,6 +227,9 @@
     "Modify": {
       "description": "Modifies data validation for a range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/Modify/",
+      "examples": [
+        "// How do I change the data rule that controls what values are allowed in selected cells in a spreadsheet?\n\n// Replace an existing entry limit with new conditions so the affected cells enforce different criteria in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Data Validation for decimal to be more than 10 for A2 and A5\");\nconst range = worksheet.GetRange(\"A2:A5\");\nconst targetRange = worksheet.GetRange(\"A4:A5\");\nrange.SetValue(\"10\");\nconst validation = range.GetValidation();\nvalidation.Add(\"xlValidateDecimal\", \"xlValidAlertWarning\", \"xlGreater\", \"12\");\ntargetRange.GetValidation().Modify(\"xlValidateDecimal\", \"xlValidAlertStop\", \"xlLess\", \"12\");\nworksheet.GetRange(\"A6\").SetValue(\"Data Validation is now modified for A4:A5, to accept values less than 12.\");"
+      ],
       "params": [
         {
           "description": "The validation type.",
@@ -219,6 +270,9 @@
     "SetErrorMessage": {
       "description": "Sets the data validation error message.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetErrorMessage/",
+      "examples": [
+        "// How do I write a custom explanation that pops up when a cell entry fails validation in a spreadsheet?\n\n// Give users a clear reason why their input was rejected by defining the alert text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetErrorMessage(\"The value must be greater than 10\");\nvalidation.SetShowError(true);\nworksheet.GetRange(\"B1\").SetValue(\"Error message has been set\");"
+      ],
       "params": [
         {
           "description": "The error message.",
@@ -234,6 +288,9 @@
     "SetErrorTitle": {
       "description": "Sets the title of the data-validation error dialog box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetErrorTitle/",
+      "examples": [
+        "// How do I set a custom title for the error popup that shows when validation fails in a spreadsheet?\n\n// Label the error window with a meaningful heading so users immediately understand what went wrong in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetErrorTitle(\"Invalid Input\");\nvalidation.SetShowError(true);\nworksheet.GetRange(\"B1\").SetValue(\"Error title has been set\");"
+      ],
       "params": [
         {
           "description": "The error dialog title.",
@@ -249,6 +306,9 @@
     "SetIgnoreBlank": {
       "description": "Sets whether blank values are permitted by the range data validation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetIgnoreBlank/",
+      "examples": [
+        "// How do I make a cell's validation rule apply even when the cell is left blank in a spreadsheet?\n\n// Require users to fill in a restricted cell rather than allowing them to skip it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetIgnoreBlank(false);\nworksheet.GetRange(\"B1\").SetValue(\"Blank values are not allowed\");"
+      ],
       "params": [
         {
           "description": "Specifies whether blank values are permitted.",
@@ -264,6 +324,9 @@
     "SetInCellDropdown": {
       "description": "Sets whether data validation displays a drop-down list that contains acceptable values.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInCellDropdown/",
+      "examples": [
+        "// How do I show a selectable list inside a cell that has a list-based validation rule in a spreadsheet?\n\n// Make it easier for users to enter valid data by displaying a clickable menu of options in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateList\", null, null, \"Apple,Banana,Cherry\");\nvalidation.SetInCellDropdown(true);\nworksheet.GetRange(\"B1\").SetValue(\"Dropdown is enabled for A1\");"
+      ],
       "params": [
         {
           "description": "Specifies whether to display a drop-down list.",
@@ -279,6 +342,9 @@
     "SetInputMessage": {
       "description": "Sets the data validation input message.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInputMessage/",
+      "examples": [
+        "// How do I add a helpful hint that shows up before someone types a value into a restricted cell in a spreadsheet?\n\n// Guide users toward acceptable entries by displaying instructions when they click on a validated cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetInputMessage(\"Please enter a value greater than 10\");\nvalidation.SetShowInput(true);\nworksheet.GetRange(\"B1\").SetValue(\"Input message has been set\");"
+      ],
       "params": [
         {
           "description": "The input message.",
@@ -294,6 +360,9 @@
     "SetInputTitle": {
       "description": "Sets the title of the data-validation input dialog box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetInputTitle/",
+      "examples": [
+        "// How do I add a title to the tooltip that guides users when they click on a restricted cell in a spreadsheet?\n\n// Name the input prompt so users know at a glance what kind of value a cell expects in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetInputTitle(\"Enter Value\");\nvalidation.SetShowInput(true);\nworksheet.GetRange(\"B1\").SetValue(\"Input title has been set\");"
+      ],
       "params": [
         {
           "description": "The input dialog title.",
@@ -309,6 +378,9 @@
     "SetShowError": {
       "description": "Sets whether the data validation error message will be displayed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetShowError/",
+      "examples": [
+        "// How do I make sure an error popup appears whenever someone enters a value that breaks a rule in a spreadsheet?\n\n// Decide whether users see a warning when their input does not meet the required criteria in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetErrorTitle(\"Error Title\");\nvalidation.SetErrorMessage(\"Invalid value entered\");\nvalidation.SetShowError(true);\nworksheet.GetRange(\"B1\").SetValue(\"Error message will be shown\");"
+      ],
       "params": [
         {
           "description": "Specifies whether to show error message.",
@@ -324,6 +396,9 @@
     "SetShowInput": {
       "description": "Sets whether the data validation input message will be displayed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiValidation/Methods/SetShowInput/",
+      "examples": [
+        "// How do I show or hide the hint message that guides users when they click a validated cell in a spreadsheet?\n\n// Toggle the input prompt on so users see instructions before entering a value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nlet validation = range.GetValidation();\nvalidation.Add(\"xlValidateWholeNumber\", \"xlValidAlertStop\", \"xlGreater\", 10);\nvalidation.SetInputTitle(\"Input Title\");\nvalidation.SetInputMessage(\"Please enter a number greater than 10\");\nvalidation.SetShowInput(true);\nworksheet.GetRange(\"B1\").SetValue(\"Input message will be shown\");"
+      ],
       "params": [
         {
           "description": "Specifies whether to show input message.",

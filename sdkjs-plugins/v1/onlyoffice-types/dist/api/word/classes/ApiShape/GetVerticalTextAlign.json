@@ -1,0 +1,9 @@
+{
+  "description": "Gets the vertical alignment from the shape content where a paragraph or text runs can be inserted.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetVerticalTextAlign/",
+  "params": [],
+  "returns": {
+    "type": "VerticalTextAlign"
+  },
+  "signature": "GetVerticalTextAlign(): VerticalTextAlign"
+}

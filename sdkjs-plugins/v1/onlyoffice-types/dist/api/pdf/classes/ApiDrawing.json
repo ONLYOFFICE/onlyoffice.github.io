@@ -5,6 +5,9 @@
     "Copy": {
       "description": "Creates a copy of the specified drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/Copy/",
+      "examples": [
+        "// How do I copy a shape to another location in a PDF?\n\n// Make an identical copy of a drawing object in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(150 * 36000, 65 * 36000);\npage.AddObject(shape);\n\nconst copyShape = shape.Copy();\nconst newPage = doc.AddPage(1);\nnewPage.AddObject(copyShape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiDrawing"
@@ -14,6 +17,9 @@
     "Delete": {
       "description": "Deletes the specified drawing object from the parent.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/Delete/",
+      "examples": [
+        "// How do I delete an object that's on a page in a PDF?\n\n// Eliminate a selected shape from the document in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing1 = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\npage.AddObject(drawing1);\ndrawing1.SetPosition(100000, 100000);\n\nconst drawing2 = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\ndrawing2.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\ndrawing2.SetHorAxisTitle(\"Year\", 11);\ndrawing2.SetLegendPos(\"bottom\");\ndrawing2.SetShowDataLabels(false, false, true, false);\ndrawing2.SetTitle(\"Financial Overview\", 13);\n\nfill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ndrawing2.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\ndrawing2.SetSeriesFill(fill, 1, false);\npage.AddObject(drawing2);\n\ndrawing2.Delete();\nconst docContent = drawing1.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"The chart was deleted from this page.\");"
+      ],
       "params": [],
       "returns": {
         "description": "false if drawing doesn't exist or drawing hasn't a parent.",
@@ -24,6 +30,9 @@
     "GetClassType": {
       "description": "Returns the type of the ApiDrawing class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the category of a drawing object in a PDF?\n\n// Determine the kind of object you're working with in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(150 * 36000, 65 * 36000);\npage.AddObject(drawing);\n\nconst aDrawings = page.GetAllDrawings();\nconst sType = aDrawings[0].GetClassType();\nconst docContent = drawing.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"drawing\""
@@ -76,6 +85,9 @@
     "GetHeight": {
       "description": "Returns the height of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetHeight/",
+      "examples": [
+        "// How do I get the height of a drawn object in a PDF?\n\n// Measure the tall-to-short dimension of a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst height = shape.GetHeight();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Drawing height: \" + height);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -131,6 +143,9 @@
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the category of a drawing object in a PDF?\n\n// Determine the kind of object you're working with in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(150 * 36000, 65 * 36000);\npage.AddObject(drawing);\n\nconst aDrawings = page.GetAllDrawings();\nconst sType = aDrawings[0].GetClassType();\nconst docContent = drawing.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -140,6 +155,9 @@
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
+      "examples": [
+        "// How do I check the X coordinate of an object in a PDF?\n\n// Read the horizontal distance of a shape from the left edge in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(`Drawing X position is: ${shape.GetPosX()}`);\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -149,6 +167,9 @@
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
+      "examples": [
+        "// How do I check the Y coordinate of an object in a PDF?\n\n// Read the vertical distance of a shape from the top edge in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(`Drawing Y position is: ${shape.GetPosY()}`);\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -158,6 +179,9 @@
     "GetRotation": {
       "description": "Returns the rotation angle of the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetRotation/",
+      "examples": [
+        "// How do I see how many degrees a shape is turned in a PDF?\n\n// Check how much an object is rotated from its default position in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 65 * 36000, 10 * 36000, fill, stroke);\nshape.SetPosition(100000, 2500000);\nshape.SetRotation(90);\n\nlet rotAngle = shape.GetRotation();\nlet docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Drawing rotation angle is: \" + rotAngle + \" degrees\");\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -188,6 +212,9 @@
     "GetWidth": {
       "description": "Returns the width of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetWidth/",
+      "examples": [
+        "// How do I get the width of a drawn object in a PDF?\n\n// Measure the left-to-right dimension of a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst width = shape.GetWidth();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Drawing width: \" + width);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -197,6 +224,9 @@
     "Select": {
       "description": "Selects the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/Select/",
+      "examples": [
+        "// How do I select a drawing object on a page in a PDF?\n\n// Pick an object to activate it for changes in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst height = shape.GetHeight();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Example drawing\");\npage.AddObject(shape);\n\nconst allDrawings = page.GetAllDrawings();\nif (allDrawings.length > 0) {\n\tconst drawing = allDrawings[0];\n\tdrawing.Select();\n}"
+      ],
       "params": [
         {
           "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
@@ -353,6 +383,9 @@
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
+      "examples": [
+        "// How do I adjust the horizontal position of a shape in a PDF?\n\n// Change the X coordinate of an object in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosX(608400);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -368,6 +401,9 @@
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
+      "examples": [
+        "// How do I move a shape to a different vertical location in a PDF?\n\n// Adjust the Y coordinate of a drawing element in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosY(808400);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -383,6 +419,9 @@
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
+      "examples": [
+        "// How do I reposition an object on the page in a PDF?\n\n// Place a shape at new coordinates in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(150 * 36000, 65 * 36000);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -403,6 +442,9 @@
     "SetRotation": {
       "description": "Sets the rotation angle to the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetRotation/",
+      "examples": [
+        "// How do I spin a shape to face a different direction in a PDF?\n\n// Change the rotation of a drawing element in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 65 * 36000, 10 * 36000, fill, stroke);\nshape.SetPosition(100000, 2500000);\nshape.SetRotation(90);\n\nconst rotAngle = shape.GetRotation();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Drawing rotation angle is set to: \" + rotAngle + \" degrees\");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "New drawing rotation angle.",
@@ -435,6 +477,9 @@
     "SetSize": {
       "description": "Sets the size of the object (image, shape, chart) bounding box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetSize/",
+      "examples": [
+        "// How do I make a shape larger or smaller in a PDF?\n\n// Modify the width and height of a drawing element in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(150 * 36000, 65 * 36000);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The object width measured in English measure units.",

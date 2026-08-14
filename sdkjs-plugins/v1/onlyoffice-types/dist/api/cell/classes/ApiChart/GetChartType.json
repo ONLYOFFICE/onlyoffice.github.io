@@ -1,0 +1,12 @@
+{
+  "description": "Returns a type of the chart object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/GetChartType/",
+  "examples": [
+    "// How do I find out what kind of chart has been inserted on a sheet in a spreadsheet?\n\n// Confirm the chart variety programmatically to use its name as a label in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nconst chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 5, 3 * 36000);\n\nchart.SetTitle('This is the ' + chart.GetChartType() + ' chart', 15);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ChartTypeLegacy"
+  },
+  "signature": "GetChartType(): ChartTypeLegacy"
+}

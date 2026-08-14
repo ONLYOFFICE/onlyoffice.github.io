@@ -2,7 +2,7 @@
   "description": "Adds the cells specified by a given condition or criteria.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUMIF/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet product = [\"Product\", \"Apple\", \"range\", \"Banana\"]\nlet totalValue = [\"Total Value\", \"$736.00\", \"$924.00\", \"$888.00\"];\n\nfor (let i = 0; i < product.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(product[i]);\n}\nfor (let n = 0; n < totalValue.length; n++) {\n    worksheet.GetRange(\"B\" + (n + 1)).SetValue(totalValue[n]);\n}\n\nlet func = Api.GetWorksheetFunction();\nlet range = worksheet.GetRange(\"B2:B4\");\nworksheet.GetRange(\"C4\").SetValue(func.SUMIF(range, \">800\"));"
+    "// Sum values based on a single condition using the SUMIF function.\n\n// Returns the total sum of cells that meet the specified criteria.\n\nlet worksheet = Api.GetActiveSheet();\nlet product = [\"Product\", \"Apple\", \"range\", \"Banana\"]\nlet totalValue = [\"Total Value\", \"$736.00\", \"$924.00\", \"$888.00\"];\n\nfor (let i = 0; i < product.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(product[i]);\n}\nfor (let n = 0; n < totalValue.length; n++) {\n    worksheet.GetRange(\"B\" + (n + 1)).SetValue(totalValue[n]);\n}\n\nlet func = Api.WorksheetFunction;\nlet range = worksheet.GetRange(\"B2:B4\");\nworksheet.GetRange(\"C4\").SetValue(func.SUMIF(range, \">800\"));"
   ],
   "params": [
     {

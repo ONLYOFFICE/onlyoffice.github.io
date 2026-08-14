@@ -1,0 +1,19 @@
+{
+  "description": "Sets a locale to the document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/SetLocale/",
+  "examples": [
+    "// How do I change the language and region used for dates, numbers, and text in a spreadsheet?\n\n// Switch the document locale to match the target audience's region in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nApi.SetLocale(\"en-CA\");\nworksheet.GetRange(\"A1\").SetValue(\"A sample spreadsheet with the language set to English (Canada).\");"
+  ],
+  "params": [
+    {
+      "description": "The locale specified.",
+      "name": "LCID",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the locale was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetLocale(LCID: number): boolean"
+}

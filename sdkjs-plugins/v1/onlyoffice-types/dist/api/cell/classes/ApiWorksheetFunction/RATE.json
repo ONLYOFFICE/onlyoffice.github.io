@@ -2,7 +2,7 @@
   "description": "Returns the interest rate per period for a loan or an investment. For example, use 6%/4 for quarterly payments at 6% APR.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RATE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.RATE(2*12, -500, 10000, 0));"
+    "// How do I determine the periodic interest rate from loan payment details in a spreadsheet?\n\n// Find the rate applied to each period when given the total payment schedule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.RATE(2*12, -500, 10000, 0));"
   ],
   "params": [
     {

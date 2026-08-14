@@ -2,7 +2,7 @@
   "description": "Returns the largest value in a set of values. Ignores logical values and text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MAX/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet max = func.MAX(123, 197, 46, 354, 67, 456);\nworksheet.GetRange(\"C1\").SetValue(max);"
+    "// How do I identify the highest sales amount from a list of quarterly results in a spreadsheet?\n\n// Get the maximum value from a collection of numbers in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet max = func.MAX(123, 197, 46, 354, 67, 456);\nworksheet.GetRange(\"C1\").SetValue(max);"
   ],
   "params": [
     {

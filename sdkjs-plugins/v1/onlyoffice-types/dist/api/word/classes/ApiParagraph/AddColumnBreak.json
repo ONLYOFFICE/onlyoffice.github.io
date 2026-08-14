@@ -2,7 +2,7 @@
   "description": "Adds a column break to the current position and starts the next element from a new column.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddColumnBreak/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetEqualColumns(2, 720);\nparagraph.AddText(\"This is the text for the first column. It is written all in one text run. Nothing special.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This is the text which starts from the beginning of the second column. \");\nparagraph.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");"
+    "// How do I force text to start at the top of the next column in a document?\n\n// Divide a paragraph across two columns by placing a break at a specific position in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet section = doc.GetFinalSection();\nsection.SetEqualColumns(2, 720);\nparagraph.AddText(\"This is the text for the first column. It is written all in one text run. Nothing special.\");\nparagraph.AddColumnBreak();\nparagraph.AddText(\"This is the text which starts from the beginning of the second column. \");\nparagraph.AddText(\"It is written in two text runs, you need a space at the end of the first run sentence to separate them.\");"
   ],
   "params": [],
   "returns": {

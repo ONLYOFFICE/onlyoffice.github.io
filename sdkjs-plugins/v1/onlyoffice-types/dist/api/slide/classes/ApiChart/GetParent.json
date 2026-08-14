@@ -1,0 +1,12 @@
+{
+  "description": "Returns the drawing parent object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParent/",
+  "examples": [
+    "// How do I locate what an object belongs to in a presentation?\n\n// Identify the parent element that holds a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\n\nconst slide = presentation.GetSlideByIndex(0);\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nslide.RemoveAllObjects();\nslide.AddObject(shape);\nconst parent = shape.GetParent();\nconst sType = parent.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the shape parent = \" + sType);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiSlide | ApiLayout | ApiMaster | null"
+  },
+  "signature": "GetParent(): ApiSlide | ApiLayout | ApiMaster | null"
+}

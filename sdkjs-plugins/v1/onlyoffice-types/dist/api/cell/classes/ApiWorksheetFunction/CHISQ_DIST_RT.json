@@ -2,7 +2,7 @@
   "description": "Returns the right-tailed probability of the chi-squared distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHISQ_DIST_RT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CHISQ_DIST_RT(12, 10));"
+    "// Determine the upper tail probability for comparing observed versus expected frequencies in a spreadsheet.\n\n// Assess how unusual a chi-squared test result is by measuring its right-tail probability in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CHISQ_DIST_RT(12, 10));"
   ],
   "params": [
     {

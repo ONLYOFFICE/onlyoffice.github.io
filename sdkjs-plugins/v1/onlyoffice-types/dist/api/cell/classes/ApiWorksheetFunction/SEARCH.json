@@ -2,7 +2,7 @@
   "description": "Returns the number of the character at which a specific character or text string is first found, reading left to right (not case-sensitive).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SEARCH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SEARCH(\"line\", \"Online Office\"));"
+    "// How do I locate the position of text within a longer string in a spreadsheet?\n\n// Search for a word and get its character position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SEARCH(\"line\", \"Online Office\"));"
   ],
   "params": [
     {

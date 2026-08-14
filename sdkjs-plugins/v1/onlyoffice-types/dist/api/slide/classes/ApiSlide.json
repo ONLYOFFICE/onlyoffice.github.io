@@ -5,6 +5,9 @@
     "AddComment": {
       "description": "Adds a comment to the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddComment/",
+      "examples": [
+        "// Create multiple comments with different properties and retrieve all comments from the presentation.\n\n// Display the comment details including text, author name, and user ID in a shape.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst commentText = \"Note: check method to add comments to slides.\";\nconst commentAuthor = \"Mark Pottato\";\nconst commentUserId = \"user-42\";\nconst posX = 20 * 36000;\nconst posY = 20 * 36000;\n\nslide.AddComment(posX, posY, commentText, commentAuthor, commentUserId);\nslide.AddComment(posX, posY, 'Author for this comment was not specified');\n\nconst fill = Api.CreateSolidFill(Api.RGB(50, 100, 150));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetDocContent().GetElement(0);\n\nconst comments = presentation.GetAllComments();\nfor (let i = 0; i < comments.length; i++) {\n\tconst comment = comments[i];\n\tparagraph.AddText('Comment' + (i + 1) + ':' + '\\n');\n\tparagraph.AddText('Text: ' + comment.GetText() + '\\n');\n\tparagraph.AddText('Author: ' + comment.GetAuthorName() + '\\n');\n\tparagraph.AddText('User ID: ' + comment.GetUserId() + '\\n');\n\tparagraph.AddLineBreak();\n}\n\nslide.RemoveAllObjects();\nshape.SetPosition(posX, posY);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The X position (in EMU) of the comment (defaults to 0).",
@@ -42,6 +45,9 @@
     "AddNotesText": {
       "description": "Adds a text to the notes page of the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddNotesText/",
+      "examples": [
+        "// Access the notes functionality and attempt to add a note message.\n\n// Verify the result and display a confirmation message in a shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 150 * 36000, fill, stroke);\nshape.SetPosition(0, 3 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\n\nconst isNotesAdded = slide.AddNotesText('This is a note added using AddNotesText method');\nif (isNotesAdded) {\n\tparagraph.AddText(\"Notes were successfully added to the slide.\");\n} else {\n\tparagraph.AddText(\"Failed to add notes.\");\n}\n\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The text to be added to the notes page.",
@@ -60,7 +66,7 @@
       "description": "Adds an object (image, shape or chart) to the current presentation slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/AddObject/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);"
+        "// Define chart data with two data series, axis titles, legend position, and styling.\n\n// Apply custom fill colors to chart series and position the chart on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nslide.AddObject(chart);"
       ],
       "params": [
         {
@@ -79,7 +85,7 @@
       "description": "Applies the specified layout to the current slide.\nThe layout must be in slide master.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ApplyLayout/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(4);\noSlide.ApplyLayout(oLayout);"
+        "// Retrieve the master slide and select a specific layout by index.\n\n// Set the layout to the slide using the master's layout definition.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst master = presentation.GetMaster(0);\nconst layout = master.GetLayout(4);\nslide.ApplyLayout(layout);"
       ],
       "params": [
         {
@@ -98,7 +104,7 @@
       "description": "Applies the specified theme to the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ApplyTheme/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oBgFill1 = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke1 = Api.CreateStroke(1 * 36000, oFill1);\nvar oFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oBgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51));\nvar oStroke2 = Api.CreateStroke(1 * 36000, oFill2);\nvar oFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oBgFill3 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke3 = Api.CreateStroke(1 * 36000, oFill3);\nvar oFormatScheme = Api.CreateThemeFormatScheme([oFill1, oFill2, oFill3], [oBgFill1, oBgFill2, oBgFill3], [oStroke1, oStroke2, oStroke3], \"New format scheme\");\nvar oFontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nvar oTheme = Api.CreateTheme(\"New theme\", oMaster, oClrScheme, oFormatScheme, oFontScheme);\noSlide.ApplyTheme(oTheme);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+        "// Define color schemes, gradient fills, pattern fills, format schemes, and font schemes.\n\n// Apply the complete theme to the slide and display a chart using the new theme colors.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst master = presentation.GetMaster(0);\n\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235),\n\tApi.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128),\n\tApi.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst bgFill1 = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke1 = Api.CreateStroke(1 * 36000, fill1);\nconst fill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst bgFill2 = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst stroke2 = Api.CreateStroke(1 * 36000, fill2);\nconst fill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst bgFill3 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke3 = Api.CreateStroke(1 * 36000, fill3);\n\nconst formatScheme = Api.CreateThemeFormatScheme([fill1, fill2, fill3], [bgFill1, bgFill2, bgFill3], [stroke1, stroke2, stroke3], \"New format scheme\");\n\nconst fontScheme = Api.CreateThemeFontScheme(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\n\nconst theme = Api.CreateTheme(\"New theme\", master, colorScheme, formatScheme, fontScheme);\nslide.ApplyTheme(theme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
       ],
       "params": [
         {
@@ -117,7 +123,7 @@
       "description": "Clears the slide background.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ClearBackground/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\nvar oDuplicateSlide = oSlide.Duplicate(1);\noDuplicateSlide.ClearBackground();"
+        "// How do I remove a slide's background in a presentation?\n\n// Create a duplicate of the slide and then clear its background in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\n\nconst duplicateSlide = slide.Duplicate(1);\nduplicateSlide.ClearBackground();"
       ],
       "params": [],
       "returns": {
@@ -130,7 +136,7 @@
       "description": "Creates a copy of the current slide object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Copy/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\nvar oCopySlide = oSlide.Copy();\noPresentation.AddSlide(oCopySlide);"
+        "// How do I copy a slide in a presentation?\n\n// Add the copied slide to the presentation in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\n\nconst copySlide = slide.Copy();\npresentation.AddSlide(copySlide);"
       ],
       "params": [],
       "returns": {
@@ -143,7 +149,7 @@
       "description": "Deletes the current slide from the presentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Delete/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);\noSlide = oPresentation.GetSlideByIndex(0);\noSlide.Delete();"
+        "// How do I delete a slide in a presentation?\n\n// Add a new slide and then remove it from the presentation.\n\nconst presentation = Api.GetPresentation();\nlet slide = Api.CreateSlide();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\npresentation.AddSlide(slide);\n\nslide = presentation.GetSlideByIndex(0);\nslide.Delete();"
       ],
       "params": [],
       "returns": {
@@ -156,7 +162,7 @@
       "description": "Creates a duplicate of the specified slide object, adds the new slide to the slides collection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Duplicate/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\nvar oDuplicateSlide = oSlide.Duplicate(1);"
+        "// How do I duplicate a slide in a presentation?\n\n// Select a slide and create a copy of it in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\nconst duplicateSlide = slide.Duplicate(1);"
       ],
       "params": [
         {
@@ -176,7 +182,7 @@
       "description": "Sets the layout background as the background of the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/FollowLayoutBackground/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noLayout.SetBackground(oFill);\noSlide.FollowLayoutBackground();"
+        "// How do I use a layout's background for a slide in a presentation?\n\n// Set the slide's background to match the layout it uses in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst master = presentation.GetMaster(0);\nconst layout = master.GetLayout(0);\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlayout.SetBackground(fill);\nslide.FollowLayoutBackground();"
       ],
       "params": [],
       "returns": {
@@ -189,7 +195,7 @@
       "description": "Sets the master background as the background of the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/FollowMasterBackground/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oMaster = oPresentation.GetMaster(0);\nvar oLayout = oMaster.GetLayout(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noLayout.SetBackground(oFill);\noSlide.FollowMasterBackground();"
+        "// How do I use a master slide's background for a slide in a presentation?\n\n// Set the slide's background to match its master slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst master = presentation.GetMaster(0);\nconst layout = master.GetLayout(0);\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlayout.SetBackground(fill);\nslide.FollowMasterBackground();"
       ],
       "params": [],
       "returns": {
@@ -202,7 +208,7 @@
       "description": "Returns an array with all the chart objects from the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllCharts/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 13);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noChart.SetSeriesFill(oFill, 0, false);\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noChart.SetSeriesFill(oFill, 1, false);\noSlide.AddObject(oChart);\nvar aCharts = oSlide.GetAllCharts();\nvar oStroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\naCharts[0].SetMinorHorizontalGridlines(oStroke);"
+        "// How do I access all the charts in a slide in a presentation?\n\n// Retrieve the chart objects and modify their properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nslide.AddObject(chart);\n\nconst allCharts = slide.GetAllCharts();\nconst stroke = Api.CreateStroke(1 * 150, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nallCharts[0].SetMinorHorizontalGridlines(stroke);"
       ],
       "params": [],
       "returns": {
@@ -214,7 +220,7 @@
       "description": "Returns an array with all the drawing objects from the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllDrawings/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noDrawing.SetPosition(608400, 1267200);\noDrawing.SetSize(300 * 36000, 130 * 36000);\noSlide.AddObject(oDrawing);\nvar aDrawings = oSlide.GetAllDrawings();\nvar oPlaceholder = Api.CreatePlaceholder(\"chart\");\naDrawings[0].SetPlaceholder(oPlaceholder);"
+        "// How do I access all the drawings in a slide in a presentation?\n\n// Retrieve the drawing objects and configure their properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(300 * 36000, 130 * 36000);\nslide.AddObject(drawing);\n\nconst allDrawings = slide.GetAllDrawings();\nconst placeholder = Api.CreatePlaceholder(\"chart\");\nallDrawings[0].SetPlaceholder(placeholder);"
       ],
       "params": [],
       "returns": {
@@ -226,7 +232,7 @@
       "description": "Returns an array with all the image objects from the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllImages/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oImage = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000);\noSlide.AddObject(oImage);\nvar aImages = oSlide.GetAllImages();\nvar sType = aImages[0].GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class type = \" + sType);\noSlide.AddObject(oShape);"
+        "// How do I access all the images in a slide in a presentation?\n\n// Retrieve the image objects and read their properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst image = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t60 * 36000, 60 * 36000\n);\nslide.AddObject(image);\nconst allImages = slide.GetAllImages();\nconst type = allImages[0].GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('flowChartMagneticTape', 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc('left');\nparagraph.AddText('Class type = ' + type);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -238,7 +244,7 @@
       "description": "Returns an array with all the OLE objects from the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllOleObjects/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oOleObject = Api.CreateOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\noOleObject.SetSize(200 * 36000, 130 * 36000);\noOleObject.SetPosition(70 * 36000, 30 * 36000);\noSlide.AddObject(oOleObject);\nvar aOleObjects = oSlide.GetAllOleObjects();\nvar sAppId = aOleObjects[0].GetApplicationId();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateLinearGradientFill([oGs1, oGs2], 5400000);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"rect\", 300 * 36000, 15 * 36000, oFill, oStroke);\noDrawing.SetPosition(20 * 36000, 170 * 36000);\nvar oDocContent = oDrawing.GetContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The application ID for the current OLE object: \" + sAppId);\noSlide.AddObject(oDrawing);"
+        "// How do I access all the embedded objects in a slide in a presentation?\n\n// Retrieve the embedded objects and access their properties in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst oleObject = Api.CreateOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}'\n);\noleObject.SetSize(200 * 36000, 130 * 36000);\noleObject.SetPosition(70 * 36000, 30 * 36000);\nslide.AddObject(oleObject);\nconst allOleObjects = slide.GetAllOleObjects();\nconst appId = allOleObjects[0].GetApplicationId();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rect', 300 * 36000, 15 * 36000, fill, stroke);\ndrawing.SetPosition(20 * 36000, 170 * 36000);\n\nconst docContent = drawing.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('The application ID for the current OLE object: ' + appId);\nslide.AddObject(drawing);"
       ],
       "params": [],
       "returns": {
@@ -250,7 +256,7 @@
       "description": "Returns an array with all the shape objects from the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllShapes/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noSlide.AddObject(oShape);\nvar aShapes = oSlide.GetAllShapes();\naShapes[0].SetSize(150 * 36000, 65 * 36000);"
+        "// How do I access all the shapes in a slide in a presentation?\n\n// Retrieve the shape objects and modify their dimensions in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nslide.AddObject(shape);\n\nconst allShapes = slide.GetAllShapes();\nallShapes[0].SetSize(150 * 36000, 65 * 36000);"
       ],
       "params": [],
       "returns": {
@@ -261,6 +267,9 @@
     "GetAllTables": {
       "description": "Returns an array with all tables from the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetAllTables/",
+      "examples": [
+        "// Retrieve tables using the GetAllTables method on a slide object.\n\n// Display the count of tables found on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst table = Api.CreateTable(2, 3);\ntable.GetRow(0).GetCell(0).GetContent().GetCurrentParagraph().AddText('US');\ntable.GetRow(0).GetCell(1).GetContent().GetCurrentParagraph().AddText('CH');\ntable.GetRow(0).GetCell(2).GetContent().GetCurrentParagraph().AddText('Others');\ntable.GetRow(1).GetCell(0).GetContent().GetCurrentParagraph().AddText('11.59');\ntable.GetRow(1).GetCell(1).GetContent().GetCurrentParagraph().AddText('8.27');\ntable.GetRow(1).GetCell(2).GetContent().GetCurrentParagraph().AddText('80.14');\nslide.AddObject(table);\n\nconst fillColor = Api.RGB(100, 100, 200);\nconst fill = Api.CreateSolidFill(fillColor);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 250 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(45 * 36000, 100 * 36000);\nslide.AddObject(shape);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Number of tables on slide: \" + slide.GetAllTables().length);"
+      ],
       "params": [],
       "returns": {
         "description": "An array with all tables from the current slide.",
@@ -284,7 +293,7 @@
       "description": "Returns the type of the ApiSlide class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetClassType/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sClassType = oSlide.GetClassType();\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+        "// Retrieve the class type using the GetClassType method and display in a shape.\n\n// Output the class type string for the slide object.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst classType = slide.GetClassType();\nparagraph.AddText(\"Class Type = \" + classType);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -296,7 +305,7 @@
       "description": "Returns an array of drawings by the specified placeholder type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetDrawingsByPlaceholderType/",
       "examples": [
-        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nlet oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nlet oPlaceholder = Api.CreatePlaceholder(\"chart\");\noShape.SetPlaceholder(oPlaceholder);\noSlide.AddObject(oShape);\nlet aDrawingsWithPh = oSlide.GetDrawingsByPlaceholderType(\"chart\");\nfor (let i = 0; i < aDrawingsWithPh.length; i++) {\n    aDrawingsWithPh[i].Delete();\n}"
+        "// Find all drawings with a specific placeholder type using GetDrawingsByPlaceholderType.\n\n// Delete the retrieved drawings from the presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);\nconst drawingsWithPh = slide.GetDrawingsByPlaceholderType(\"chart\");\nfor (let i = 0; i < drawingsWithPh.length; i++) {\n\tdrawingsWithPh[i].Delete();\n}"
       ],
       "params": [
         {
@@ -315,7 +324,7 @@
       "description": "Returns the slide height in English measure units.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetHeight/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar nSlideHeight = oSlide.GetHeight();\noParagraph.AddText(\"The slide height = \" + nSlideHeight / 36000 + \" mm\");\noSlide.AddObject(oShape);"
+        "// Retrieve the slide height using GetHeight and display the measurement on the slide.\n\n// Convert the height value from EMUs to millimeters for display.\n\nconst presentation = Api.GetPresentation();\npresentation.SetSizes(254 * 36000, 190 * 36000);\n\nconst slide = presentation.GetCurrentSlide();\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst slideHeight = slide.GetHeight();\nparagraph.AddText(\"The slide height = \" + slideHeight / 36000 + \" mm\");\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -327,7 +336,7 @@
       "description": "Returns a layout of the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetLayout/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oLayout = oSlide.GetLayout();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noLayout.SetBackground(oFill);\noSlide.FollowLayoutBackground();"
+        "// Retrieve the slide layout using GetLayout method.\n\n// Apply a background color to the layout using SetBackground.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst layout = slide.GetLayout();\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlayout.SetBackground(fill);\nslide.FollowLayoutBackground();"
       ],
       "params": [],
       "returns": {
@@ -339,6 +348,9 @@
     "GetNotesPage": {
       "description": "Returns the notes page from the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetNotesPage/",
+      "examples": [
+        "// Retrieve the notes page using GetNotesPage and check its availability.\n\n// Display the notes page status on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nshape.SetPosition(0, 3 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\n\nconst notesPage = slide.GetNotesPage();\nif (notesPage) {\n\tparagraph.AddText('Notes page exists on this slide');\n} else {\n\tparagraph.AddText('Notes page is not available');\n}\n\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiNotesPage | null"
@@ -350,7 +362,7 @@
       "description": "Returns a position of the current slide in the presentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetSlideIndex/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar nIndex = oSlide.GetSlideIndex();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Slide index = \" + nIndex);\noSlide.AddObject(oShape);"
+        "// Retrieve the slide index using GetSlideIndex method.\n\n// Display the slide index value on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst index = slide.GetSlideIndex();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Slide index = \" + index);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -362,6 +374,9 @@
     "GetSlideShowTransition": {
       "description": "Returns the slide show transition of the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetSlideShowTransition/",
+      "examples": [
+        "// Retrieve the transition settings using GetSlideShowTransition after setting a transition.\n\n// Display the transition effect and speed on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectUncoverRight');\ntransition.SetSpeed('medium');\nslide.SetSlideShowTransition(transition);\n\nconst retrievedTransition = slide.GetSlideShowTransition();\nconst transitionEffect = retrievedTransition.GetEntryEffect();\nconst transitionSpeed = retrievedTransition.GetSpeed();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t300 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Effect: ' + transitionEffect + '\\n');\nparagraph.AddText('Speed: ' + transitionSpeed);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns the slide show transition or null if the slide has no transition.",
@@ -374,7 +389,7 @@
       "description": "Returns a theme of the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetTheme/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\nvar oTheme = oSlide.GetTheme();\nvar oClrScheme = Api.CreateThemeColorScheme([Api.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117), Api.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), \n\tApi.CreateRGBColor(128, 43, 43), Api.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222), Api.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)], \"New color scheme\");\noTheme.SetColorScheme(oClrScheme);\noSlide.RemoveAllObjects();\nvar oChart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\noChart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\noChart.SetHorAxisTitle(\"Year\", 11);\noChart.SetLegendPos(\"bottom\");\noChart.SetShowDataLabels(false, false, true, false);\noChart.SetTitle(\"Financial Overview\", 20);\noChart.SetSize(300 * 36000, 130 * 36000);\noChart.SetPosition(608400, 1267200);\noSlide.AddObject(oChart);"
+        "// Retrieve the slide theme using GetTheme and modify its color scheme.\n\n// Apply the new theme color scheme and display a chart with the updated colors.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst theme = slide.GetTheme();\nconst colorScheme = Api.CreateThemeColorScheme([\n\tApi.CreateRGBColor(255, 111, 61), Api.CreateRGBColor(51, 51, 51), Api.CreateRGBColor(230, 179, 117),\n\tApi.CreateRGBColor(235, 235, 235), Api.CreateRGBColor(163, 21, 21), Api.CreateRGBColor(128, 43, 43),\n\tApi.CreateRGBColor(0, 0, 0), Api.CreateRGBColor(128, 128, 128), Api.CreateRGBColor(176, 196, 222),\n\tApi.CreateRGBColor(65, 105, 225), Api.CreateRGBColor(255, 255, 255), Api.CreateRGBColor(255, 213, 191)\n], \"New color scheme\");\ntheme.SetColorScheme(colorScheme);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\nchart.SetTitle(\"Financial Overview\", 20);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\nslide.AddObject(chart);"
       ],
       "params": [],
       "returns": {
@@ -386,6 +401,9 @@
     "GetTimeLine": {
       "description": "Returns the animation timeline for the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetTimeLine/",
+      "examples": [
+        "// Retrieve the timeline using GetTimeLine and access the main animation sequence.\n\n// Add a fade entrance animation effect to a shape.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t200 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(61, 74, 107)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nshape.SetPosition(100 * 36000, 100 * 36000);\nslide.AddObject(shape);\n\nconst timeLine = slide.GetTimeLine();\nconst mainSequence = timeLine.GetMainSequence();\nconst effect = mainSequence.AddEffect(shape, 'entranceFade', 'onclick');\n\nconst infoShape = Api.CreateShape(\n\t'rect',\n\t150 * 36000, 40 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(200, 200, 200)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ninfoShape.SetPosition(20 * 36000, 10 * 36000);\nconst content = infoShape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Animation added: fade effect');\nslide.AddObject(infoShape);"
+      ],
       "params": [],
       "returns": {
         "description": "The animation timeline for the slide.",
@@ -398,7 +416,7 @@
       "description": "Returns the visibility of the current presentation slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetVisible/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);\noSlide = oPresentation.GetSlideByIndex(0);\noSlide.SetVisible(false);\nvar bVisible = oSlide.GetVisible();\noSlide = oPresentation.GetSlideByIndex(1);\noSlide.RemoveAllObjects();\noFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\noStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noShape.SetSize(300 * 36000, 130 * 36000);\noSlide.AddObject(oShape);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"The first slide visibility: \" + bVisible);"
+        "// Retrieve the visibility status using GetVisible after setting slide visibility.\n\n// Display the visibility status on a different slide.\n\nconst presentation = Api.GetPresentation();\nlet slide = Api.CreateSlide();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst bgFill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(bgFill);\npresentation.AddSlide(slide);\n\nslide = presentation.GetSlideByIndex(0);\nslide.SetVisible(false);\nconst isVisible = slide.GetVisible();\n\nslide = presentation.GetSlideByIndex(1);\nslide.RemoveAllObjects();\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nslide.AddObject(shape);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"The first slide visibility: \" + isVisible);"
       ],
       "params": [],
       "returns": {
@@ -410,7 +428,7 @@
       "description": "Returns the slide width in English measure units.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GetWidth/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar nSlideWidth = oSlide.GetWidth();\noParagraph.AddText(\"The slide width = \" + nSlideWidth / 36000 + \" mm\");\noSlide.AddObject(oShape);"
+        "// Display the width value on the slide using a shape.\n\n// Retrieve the width measurement and show it in a text element.\n\nconst presentation = Api.GetPresentation();\npresentation.SetSizes(254 * 36000, 190 * 36000);\n\nconst slide = presentation.GetCurrentSlide();\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst slideWidth = slide.GetWidth();\nparagraph.AddText(\"The slide width = \" + slideWidth / 36000 + \" mm\");\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -422,7 +440,7 @@
       "description": "Groups an array of drawings in the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/GroupDrawings/",
       "examples": [
-        "let oPresentation = Api.GetPresentation();\nlet oSlide = oPresentation.GetSlideByIndex(0);\nlet oFill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet oFill2 = Api.CreateSolidFill(Api.CreateRGBColor(111, 255, 61));\nlet oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet oShape1 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, oFill1, oStroke);\nlet oShape2 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, oFill2, oStroke);\noShape1.SetPosition(608400, 1267200);\noShape2.SetPosition(608400, 1400000);\noSlide.AddObject(oShape1);\noSlide.AddObject(oShape2);\noSlide.GroupDrawings([oShape1, oShape2]);"
+        "// Create and position two shapes on the slide.\n\n// Combine them using the GroupDrawings method.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst fill2 = Api.CreateSolidFill(Api.RGB(111, 255, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape1 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, fill1, stroke);\nconst shape2 = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 60 * 36000, fill2, stroke);\nshape1.SetPosition(608400, 1267200);\nshape2.SetPosition(608400, 1400000);\nslide.AddObject(shape1);\nslide.AddObject(shape2);\nslide.GroupDrawings([shape1, shape2]);"
       ],
       "params": [
         {
@@ -441,7 +459,7 @@
       "description": "Moves the current slide to a specific location within the same collection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/MoveTo/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);\noSlide.MoveTo(0);"
+        "// Create a new slide and add it to the presentation.\n\n// Reposition the slide using the MoveTo method.\n\nconst presentation = Api.GetPresentation();\nconst slide = Api.CreateSlide();\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\npresentation.AddSlide(slide);\nslide.MoveTo(0);"
       ],
       "params": [
         {
@@ -460,7 +478,7 @@
       "description": "Removes all the objects from the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/RemoveAllObjects/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\noPresentation.SetSizes(254 * 36000, 190 * 36000);\nvar oSlide = oPresentation.GetCurrentSlide();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\noSlide.RemoveAllObjects();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\noFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noStroke = Api.CreateStroke(0, Api.CreateNoFill());\noShape = Api.CreateShape(\"flowChartMagneticTape\", 200 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"All objects were removed from this slide before adding this shape.\");\noSlide.AddObject(oShape);"
+        "// Clear the slide content before adding new shapes.\n\n// Add new objects to the cleaned slide.\n\nconst presentation = Api.GetPresentation();\npresentation.SetSizes(254 * 36000, 190 * 36000);\n\nconst slide = presentation.GetCurrentSlide();\nslide.RemoveAllObjects();\n\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 200 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nshape = Api.CreateShape(\"flowChartMagneticTape\", 200 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"All objects were removed from this slide before adding this shape.\");\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -472,7 +490,7 @@
       "description": "Removes objects (image, shape or chart) from the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/RemoveObject/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"cube\", 3212465, 963295, oFill, oStroke);\noDrawing.SetPosition(30 * 36000, 1267200);\noDrawing.SetSize(150 * 36000, 130 * 36000);\nvar oCopyDrawing = oDrawing.Copy();\noCopyDrawing.SetPosition(170 * 36000, 1267200);\noCopyDrawing.SetSize(150 * 36000, 130 * 36000);\noSlide.AddObject(oDrawing);\noSlide.AddObject(oCopyDrawing);\noSlide.RemoveObject(1, 1);"
+        "// Create multiple shapes on the slide.\n\n// Delete one of them using the RemoveObject method.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\ndrawing.SetPosition(30 * 36000, 1267200);\ndrawing.SetSize(150 * 36000, 130 * 36000);\n\nconst copyDrawing = drawing.Copy();\ncopyDrawing.SetPosition(170 * 36000, 1267200);\ncopyDrawing.SetSize(150 * 36000, 130 * 36000);\n\nslide.AddObject(drawing);\nslide.AddObject(copyDrawing);\nslide.RemoveObject(1, 1);"
       ],
       "params": [
         {
@@ -524,6 +542,9 @@
     "Select": {
       "description": "Selects the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/Select/",
+      "examples": [
+        "// Create multiple slides with different content.\n\n// Select the second slide to make it active.\n\nconst presentation = Api.GetPresentation();\nconst slide1 = presentation.GetSlideByIndex(0);\nslide1.RemoveAllObjects();\nconst slide2 = slide1.Copy();\npresentation.AddSlide(slide2);\n\nconst fill1 = Api.CreateSolidFill(Api.RGB(222, 190, 190));\nconst stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape1 = Api.CreateShape('rect', Api.MillimetersToEmus(200), Api.MillimetersToEmus(100), fill1, stroke1);\nshape1.GetContent().GetElement(0).AddText('This slide will not be selected.');\nslide1.AddObject(shape1);\n\nconst fill2 = Api.CreateSolidFill(Api.RGB(190, 215, 222));\nconst stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape2 = Api.CreateShape('rect', Api.MillimetersToEmus(200), Api.MillimetersToEmus(100), fill2, stroke2);\nshape2.GetContent().GetElement(0).AddText('This slide will be selected.');\nslide2.AddObject(shape2);\n\nslide2.Select();"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -535,7 +556,7 @@
       "description": "Sets the background to the current presentation slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetBackground/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\noSlide.SetBackground(oFill);\noPresentation.AddSlide(oSlide);"
+        "// Apply a radial gradient fill to the slide background.\n\n// Add the slide to the presentation with the new background.\n\nconst presentation = Api.GetPresentation();\nconst slide = Api.CreateSlide();\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nslide.SetBackground(fill);\npresentation.AddSlide(slide);"
       ],
       "params": [
         {
@@ -552,6 +573,9 @@
     "SetSlideShowTransition": {
       "description": "Sets the slide show transition to the current slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetSlideShowTransition/",
+      "examples": [
+        "// Configure the transition with entry effect and speed settings.\n\n// Set the advance on click property for the transition.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectRandom');\ntransition.SetSpeed('fast');\ntransition.SetAdvanceOnClick(true);\nslide.SetSlideShowTransition(transition);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t300 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.HexColor('#61cbd1')),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nconst content = shape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Transition parameters: random effect, fast speed, advance on click');\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The slide show transition to be applied.",
@@ -570,7 +594,7 @@
       "description": "Sets the visibility to the current presentation slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/SetVisible/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = Api.CreateSlide();\noSlide.SetVisible(false);\noPresentation.AddSlide(oSlide);"
+        "// Create a new slide in the presentation.\n\n// Hide the slide using the SetVisible method.\n\nconst presentation = Api.GetPresentation();\nconst slide = Api.CreateSlide();\nslide.SetVisible(false);\npresentation.AddSlide(slide);"
       ],
       "params": [
         {
@@ -588,7 +612,7 @@
       "description": "Converts the ApiSlide object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiSlide/Methods/ToJSON/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar json = oSlide.ToJSON(true, true, true, true);\nvar oSlideFromJSON = Api.FromJSON(json);\noPresentation.AddSlide(oSlideFromJSON);\nvar sType = oSlideFromJSON.GetClassType();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oDrawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noDrawing.SetPosition(608400, 1267200);\noDrawing.SetSize(300 * 36000, 130 * 36000);\noSlide.AddObject(oDrawing);\nvar oDocContent = oDrawing.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"Class type = \" + sType);"
+        "// Export the slide as JSON and reconstruct it from the JSON data.\n\n// Verify the class type of the reconstructed slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst json = slide.ToJSON(true, true, true, true);\nconst slideFromJSON = Api.FromJSON(json);\npresentation.AddSlide(slideFromJSON);\nconst classType = slideFromJSON.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(300 * 36000, 130 * 36000);\nslide.AddObject(drawing);\n\nconst docContent = drawing.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Class type = \" + classType);"
       ],
       "params": [
         {

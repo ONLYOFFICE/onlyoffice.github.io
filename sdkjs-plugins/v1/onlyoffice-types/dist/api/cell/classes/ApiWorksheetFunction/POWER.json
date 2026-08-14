@@ -2,7 +2,7 @@
   "description": "Returns the result of a number raised to a power.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/POWER/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.POWER(23, 4));"
+    "// What is the result of raising a number to a power in a spreadsheet?\n\n// Calculate an exponential value using a specific base and exponent in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.POWER(23, 4));"
   ],
   "params": [
     {

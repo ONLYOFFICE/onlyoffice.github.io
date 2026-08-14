@@ -2,7 +2,7 @@
   "description": "Returns the average (arithmetic mean) of the specified arguments, evaluating text and **false** in arguments as 0; **true** evaluates as 1.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AVERAGEA/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.AVERAGEA(78, 98, 46, 123, 45, true, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Average values when the range contains text or TRUE/FALSE entries in a spreadsheet.\n\n// Include non-numeric cells such as booleans when computing a mean in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.AVERAGEA(78, 98, 46, 123, 45, true, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

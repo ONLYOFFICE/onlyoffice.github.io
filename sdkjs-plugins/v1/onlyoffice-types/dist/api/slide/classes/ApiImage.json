@@ -19,7 +19,7 @@
       "description": "Returns the type of the ApiImage class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiImage/Methods/GetClassType/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oImage = Api.CreateImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/step2_1.png\", 100 * 36000, 50 * 36000);\noSlide.AddObject(oImage);\nvar oGs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nvar oGs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nvar oFill = Api.CreateRadialGradientFill([oGs1, oGs2]);\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar sClassType = oImage.GetClassType();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.SetJc(\"left\");\noParagraph.AddText(\"Class Type = \" + sClassType);\noSlide.AddObject(oShape);"
+        "// How do I identify the object type of an image in a presentation?\n\n// Retrieve the class type identifier of an image in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst image = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t60 * 36000, 60 * 36000\n);\nslide.AddObject(image);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('flowChartMagneticTape', 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst classType = image.GetClassType();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc('left');\nparagraph.AddText('Class Type = ' + classType);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -30,6 +30,9 @@
     "GetHyperlink": {
       "description": "Returns the hyperlink from the current drawing object (shape or image).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetHyperlink/",
+      "examples": [
+        "// How do I get the web address from a shape that has a hyperlink in a presentation?\n\n// Read and display the hyperlink information from a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(200, 230, 201));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\n\nconst hyperlink = Api.CreateHyperlink('https://api.onlyoffice.com/', 'ONLYOFFICE for developers');\nshape.SetHyperlink(hyperlink);\n\nconst retrievedHyperlink = shape.GetHyperlink();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nif (retrievedHyperlink) {\n  paragraph.AddText('Hyperlink: ' + retrievedHyperlink.GetScreenTipText());\n  paragraph.AddText(' (' + retrievedHyperlink.GetLinkedText() + ')');\n} else {\n  paragraph.AddText('No hyperlink found.');\n}\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns the hyperlink object or null if no hyperlink is set.",
@@ -40,6 +43,9 @@
     "GetInternalId": {
       "description": "Returns an internal ID of the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetInternalId/",
+      "examples": [
+        "// How do I retrieve the internal ID assigned to a shape in a presentation?\n\n// Extract and display the unique internal ID of a drawing object in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FADBD8'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\n\nconst internalId = shape.GetInternalId();\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Drawing internal ID: ' + internalId);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -49,6 +55,9 @@
     "GetParent": {
       "description": "Returns the drawing parent object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParent/",
+      "examples": [
+        "// How do I locate what an object belongs to in a presentation?\n\n// Identify the parent element that holds a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\n\nconst slide = presentation.GetSlideByIndex(0);\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nslide.RemoveAllObjects();\nslide.AddObject(shape);\nconst parent = shape.GetParent();\nconst sType = parent.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the shape parent = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiSlide | ApiLayout | ApiMaster | null"
@@ -58,6 +67,9 @@
     "GetParentLayout": {
       "description": "Returns the drawing parent slide layout.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentLayout/",
+      "examples": [
+        "// How do I access the layout a shape belongs to in a presentation?\n\n// Get the parent layout for a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst master = presentation.GetMaster(0);\nconst layout = master.GetLayout(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nlayout.AddObject(shape);\nconst parent = shape.GetParentLayout();\nconst sType = parent.GetClassType();\nslide.RemoveAllObjects();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the shape parent = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide layout.",
@@ -68,6 +80,9 @@
     "GetParentMaster": {
       "description": "Returns the drawing parent slide master.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentMaster/",
+      "examples": [
+        "// How do I access the master slide a shape belongs to in a presentation?\n\n// Retrieve the parent master for a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst master = presentation.GetMaster(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nmaster.AddObject(shape);\n\nconst parent = shape.GetParentMaster();\nconst sType = parent.GetClassType();\nslide.RemoveAllObjects();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the shape parent = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide master.",
@@ -78,6 +93,9 @@
     "GetParentSlide": {
       "description": "Returns the drawing parent slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetParentSlide/",
+      "examples": [
+        "// How do I locate the slide an object belongs to in a presentation?\n\n// Access the parent slide of a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nslide.RemoveAllObjects();\nslide.AddObject(shape);\n\nconst parent = shape.GetParentSlide();\nconst sType = parent.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the shape parent = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "description": "return null if parent ins't a slide.",
@@ -88,6 +106,9 @@
     "GetPlaceholder": {
       "description": "Returns a placeholder from the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPlaceholder/",
+      "examples": [
+        "// How do I find the placeholder for an object in a presentation?\n\n// Retrieve and check a shape's placeholder in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nlet placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);\nplaceholder = shape.GetPlaceholder();\nconst type = placeholder.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the element from the shape = \" + type);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "description": "returns null if placeholder doesn't exist.",
@@ -98,6 +119,9 @@
     "GetPosX": {
       "description": "Gets the x position of the drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPosX/",
+      "examples": [
+        "// How do I find the left edge coordinate of an object in a presentation?\n\n// Read and display the X position of a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#C8E6C9'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst posX = shape.GetPosX();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Drawing X position: ' + posX + ' EMU');"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -107,6 +131,9 @@
     "GetPosY": {
       "description": "Gets the y position of the drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPosY/",
+      "examples": [
+        "// How do I find the top edge coordinate of an object in a presentation?\n\n// Read and display the Y position of a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(230, 210, 230));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nslide.AddObject(shape);\n\nconst posY = shape.GetPosY();\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Drawing Y position: ' + posY + ' EMU');"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -136,6 +163,9 @@
     "ReplacePlaceholder": {
       "description": "Replaces the placeholder by a drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/ReplacePlaceholder/",
+      "examples": [
+        "// How do I swap a placeholder for an actual image in a presentation?\n\n// Insert an image into a shape that has a placeholder in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateNoFill();\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill);\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(174), Api.MillimetersToEmus(38), fill, stroke);\n\nconst placeholder = Api.CreatePlaceholder('body');\nplaceholder.SetType('picture');\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);\n\nconst shapeCopy = shape.Copy();\nshapeCopy.SetPosition(0, Api.MillimetersToEmus(48));\nslide.AddObject(shapeCopy);\n\nconst image = Api.CreateImage('https://api.onlyoffice.com/img/logo.svg', Api.MillimetersToEmus(200), Api.MillimetersToEmus(100));\nshapeCopy.ReplacePlaceholder(image);"
+      ],
       "params": [
         {
           "description": "The drawing object that will replace the placeholder.",
@@ -151,6 +181,9 @@
     "SetHyperlink": {
       "description": "Sets a hyperlink to the current drawing object (shape or image).\nPass null to remove the hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetHyperlink/",
+      "examples": [
+        "// How do I add a hyperlink to a shape or image in a presentation?\n\n// Attach a web link to a shape and a slide link to an image in a presentation.\n\nconst presentation = Api.GetPresentation();\npresentation.AddSlide(Api.CreateSlide());\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#e2e4f6'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\nslide.AddObject(shape);\n\nconst image = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000\n);\nimage.SetPosition(160 * 36000, 0);\nslide.AddObject(image);\n\nconst urlHyperlink = Api.CreateHyperlink('https://onlyoffice.com', 'Link to OnlyOffice website');\nconst pageHyperlink = Api.CreateHyperlink('ppaction://hlinksldjumpslide1', 'Link to the second slide');\nshape.SetHyperlink(urlHyperlink);\nimage.SetHyperlink(pageHyperlink);"
+      ],
       "params": [
         {
           "description": "The hyperlink object to be set to the drawing, or null to remove the hyperlink.",
@@ -167,6 +200,9 @@
     "SetPlaceholder": {
       "description": "Sets the specified placeholder to the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPlaceholder/",
+      "examples": [
+        "// How do I designate a shape as a placeholder for content in a presentation?\n\n// Create a shape and define what type of content it will accept in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nconst placeholder = Api.CreatePlaceholder(\"picture\");\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "Placeholder object.",
@@ -183,6 +219,9 @@
     "SetPosX": {
       "description": "Sets the x position of the drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosX/",
+      "examples": [
+        "// How do I change the horizontal position of a shape in a presentation?\n\n// Create a shape and move it to a specific distance from the left in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#F0D9B5'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(200), Api.MillimetersToEmus(100), fill, stroke);\nshape.SetPosition(0, 0);\nslide.AddObject(shape);\n\nshape.SetPosX(Api.MillimetersToEmus(50));\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('X position was changed to 50 mm.');"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",
@@ -198,6 +237,9 @@
     "SetPosY": {
       "description": "Sets the y position of the drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosY/",
+      "examples": [
+        "// How do I change the vertical position of a shape in a presentation?\n\n// Create a shape and move it to a specific distance from the top in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(176, 196, 222));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(200), Api.MillimetersToEmus(100), fill, stroke);\nshape.SetPosition(0, 0);\nslide.AddObject(shape);\n\nshape.SetPosY(Api.MillimetersToEmus(60));\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Y position was changed to 60 mm.');"
+      ],
       "params": [
         {
           "description": "The distance from the top side of the slide to the upper side of the drawing measured in English measure units.",
@@ -213,6 +255,9 @@
     "SetPosition": {
       "description": "Sets the position of the drawing on the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/SetPosition/",
+      "examples": [
+        "// Position defines where a shape appears on the slide.\n\n// Get a shape object from a slide and move it.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the slide to the left side of the drawing measured in English measure units.",

@@ -2,7 +2,7 @@
   "description": "Returns the price per $100 face value for a Treasury bill.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TBILLPRICE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TBILLPRICE(\"1/1/2018\", \"1/1/2019\", \"3.00%\"));"
+    "// Calculate the price based on Treasury bill settlement, maturity, and discount rate.\n\n// Apply the TBILLPRICE function with date and discount parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TBILLPRICE(\"1/1/2018\", \"1/1/2019\", \"3.00%\"));"
   ],
   "params": [
     {

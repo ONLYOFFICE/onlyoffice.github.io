@@ -2,7 +2,7 @@
   "description": "Returns the arcsine of a number in radians, in the range from *-Pi/2* to *Pi/2*.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ASIN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ASIN(0.25));"
+    "// Find the inverse sine using the ASIN function in a spreadsheet.\n\n// Determine the angle value from a sine number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ASIN(0.25));"
   ],
   "params": [
     {

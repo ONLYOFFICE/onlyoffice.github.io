@@ -1,0 +1,10 @@
+{
+  "description": "Recalculates the cells that need recalculation (changed, added or volatile) across the active workbook, similar to Application.Calculate in VBA. Forces the recalc that is otherwise deferred until a macro finishes, so up-to-date formula results can be read within the same macro.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Calculate/",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Calculate(): boolean",
+  "since": "9.5.0"
+}

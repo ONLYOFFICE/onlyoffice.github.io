@@ -2,7 +2,7 @@
   "description": "Returns a collection of OLE objects in the paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetAllOleObjects/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\nlet oleObjects = paragraph.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The application ID for the current OLE object: \" + appId);\ndoc.Push(paragraph);"
+    "// How do I get every OLE object from a paragraph in a document?\n\n// Read application metadata from embedded objects by collecting all OLE objects in a document.\n\nlet doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}'\n);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);\nlet oleObjects = paragraph.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText('The application ID for the current OLE object: ' + appId);\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

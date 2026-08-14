@@ -1,0 +1,18 @@
+{
+  "description": "Creates caret annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateCaretAnnot/",
+  "examples": [
+    "// How do I mark where text should be added in a PDF?\n\n// Create an insertion point indicator in a PDF.\n\nlet doc = Api.GetDocument();\nlet caretAnnot = Api.CreateCaretAnnot([[85.04985826771654,56.70000000000001,229.27237795275593,56.70000000000001,85.04985826771654,70.9988031496063,229.27237795275593,70.9988031496063]]);\nlet page = doc.GetPage(0);\npage.AddObject(caretAnnot);"
+  ],
+  "params": [
+    {
+      "description": "region to apply caret.",
+      "name": "rect",
+      "type": "Rect | Quad[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiCaretAnnotation"
+  },
+  "signature": "CreateCaretAnnot(rect: Rect | Quad[]): ApiCaretAnnotation"
+}

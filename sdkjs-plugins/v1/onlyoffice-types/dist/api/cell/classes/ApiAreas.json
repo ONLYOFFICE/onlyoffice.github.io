@@ -6,7 +6,7 @@
       "description": "Returns a value that represents the number of objects in the collection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAreas/Methods/GetCount/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet count = areas.GetCount();\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The number of ranges in the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').SetValue(count);"
+        "// How do I find the total number of distinct ranges within a multi-area selection in a spreadsheet?\n\n// Determine the size of an areas collection to loop over each range individually in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet count = areas.GetCount();\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The number of ranges in the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').SetValue(count);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Returns a single object from a collection by its ID.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAreas/Methods/GetItem/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet item = areas.GetItem(1);\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The first item from the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').Paste(item);"
+        "// How do I access one particular range out of a multi-area selection in a spreadsheet?\n\n// Pull out an individual area by index to work with it separately in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet item = areas.GetItem(1);\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The first item from the areas: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').Paste(item);"
       ],
       "params": [
         {
@@ -36,7 +36,7 @@
       "description": "Returns the parent object for the specified collection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiAreas/Methods/GetParent/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet parent = areas.GetParent();\nlet type = parent.GetClassType();\nrange = worksheet.GetRange('A4');\nrange.SetValue(\"The areas parent: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B4').Paste(parent);\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The type of the areas parent: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').SetValue(type);"
+        "// How do I find the range that owns an areas collection in a spreadsheet?\n\n// Navigate up from a group of areas to the single range that contains them all in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1:D1\");\nrange.SetValue(\"1\");\nrange.Select();\nlet areas = range.GetAreas();\nlet parent = areas.GetParent();\nlet type = parent.GetClassType();\nrange = worksheet.GetRange('A4');\nrange.SetValue(\"The areas parent: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B4').Paste(parent);\nrange = worksheet.GetRange('A5');\nrange.SetValue(\"The type of the areas parent: \");\nrange.AutoFit(false, true);\nworksheet.GetRange('B5').SetValue(type);"
       ],
       "params": [],
       "returns": {

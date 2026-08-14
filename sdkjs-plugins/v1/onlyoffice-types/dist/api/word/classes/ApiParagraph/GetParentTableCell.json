@@ -2,7 +2,7 @@
   "description": "Returns a table cell that contains the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParentTableCell/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTableCell = paragraph.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", 255, 111, 61, false);"
+    "// How do I find the table cell that holds a paragraph in a document?\n\n// Apply a background color to a cell by accessing it from a paragraph nested inside it in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTableCell = paragraph.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", Api.HexColor('#FF6F3D'));"
   ],
   "params": [],
   "returns": {

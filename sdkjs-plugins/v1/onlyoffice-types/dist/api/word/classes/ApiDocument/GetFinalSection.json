@@ -2,7 +2,7 @@
   "description": "Returns the document final section.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFinalSection/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nlet paragraph = header.GetElement(0);\nparagraph.AddText(\"This is the text in the default header\");\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontSize(22);\ntextPr.SetLanguage(\"en-US\");\ntextPr.SetFontFamily(\"Calibri\");\nlet paraPr = doc.GetDefaultParaPr();\nparaPr.SetSpacingLine(276, \"auto\");\nparaPr.SetSpacingAfter(200);\nparagraph = doc.GetElement(0);\nparagraph.AddText(\"This is a text in a paragraph.\");"
+    "// How do I get the last section of a document to modify its header in a document?\n\n// Set default text and paragraph styles while inserting a header into the closing section in a document.\n\nlet doc = Api.GetDocument();\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nlet paragraph = header.GetElement(0);\nparagraph.AddText(\"This is the text in the default header\");\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontSize(22);\ntextPr.SetLanguage(\"en-US\");\ntextPr.SetFontFamily(\"Calibri\");\nlet paraPr = doc.GetDefaultParaPr();\nparaPr.SetSpacingLine(276, \"auto\");\nparaPr.SetSpacingAfter(200);\nparagraph = doc.GetElement(0);\nparagraph.AddText(\"This is a text in a paragraph.\");"
   ],
   "params": [],
   "returns": {

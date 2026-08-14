@@ -2,7 +2,7 @@
   "description": "Specifies the shading which is applied to the extents of the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetShd/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We added an orange shading to the table:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntablePr.SetShd(\"clear\", 255, 111, 61, false);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+    "// How do I apply a background shade to a whole table in a document?\n\n// Give a table a colored backdrop to highlight it visually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We added an orange shading to the table:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntablePr.SetShd(\"clear\", Api.HexColor('#FF6F3D'));\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
   ],
   "params": [
     {

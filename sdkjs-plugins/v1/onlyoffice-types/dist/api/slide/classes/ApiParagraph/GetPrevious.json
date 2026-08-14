@@ -1,0 +1,13 @@
+{
+  "description": "Returns the previous paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/GetPrevious/",
+  "examples": [
+    "// How do I go back to the paragraph before the current one in a presentation?\n\n// Move to the previous paragraph and format it in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\n\nconst paragraph1 = Api.CreateParagraph();\nparagraph1.AddText(\"This is the first paragraph.\");\ndocContent.Push(paragraph1);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph.\");\ndocContent.Push(paragraph2);\n\nslide.AddObject(shape);\nconst previousParagraph = paragraph2.GetPrevious();\npreviousParagraph.SetBold(true);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if paragraph is first.",
+    "type": "ApiParagraph"
+  },
+  "signature": "GetPrevious(): ApiParagraph"
+}

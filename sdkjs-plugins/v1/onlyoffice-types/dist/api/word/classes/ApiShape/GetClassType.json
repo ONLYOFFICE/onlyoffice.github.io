@@ -1,0 +1,12 @@
+{
+  "description": "Returns a type of the ApiShape class.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetClassType/",
+  "examples": [
+    "// How do I find out the category of a drawing element in a document?\n\n// Confirm whether a drawn element belongs to the expected object type in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet classType = drawing.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndocContent.AddElement(0, paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "\"shape\""
+  },
+  "signature": "GetClassType(): \"shape\""
+}

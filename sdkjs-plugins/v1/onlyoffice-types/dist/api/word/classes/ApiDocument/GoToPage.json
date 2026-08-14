@@ -1,6 +1,9 @@
 {
   "description": "Moves a cursor to the start of the specified page in the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GoToPage/",
+  "examples": [
+    "// How do I navigate to a particular page number in a document?\n\n// Jump the editing position to a target page so that typed text lands on that page.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first page.\");\nlet oPage2 = Api.CreateParagraph();\noPage2.AddText(\"This is the second page.\");\noPage2.GetParaPr().SetPageBreakBefore(true);\ndoc.Push(oPage2);\nlet oPage3 = Api.CreateParagraph();\noPage3.AddText(\"This is the third page.\");\noPage3.GetParaPr().SetPageBreakBefore(true);\ndoc.Push(oPage3);\ndoc.GoToPage(1);\ndoc.EnterText(\"The cursor was moved to page 2.\");"
+  ],
   "params": [
     {
       "description": "The page index.",

@@ -2,7 +2,7 @@
   "description": "Returns the gamma distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GAMMADIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.GAMMADIST(10, 9, 2, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Calculate the probability distribution for gamma-distributed values.\n\n// Determine gamma distribution using GAMMADIST with shape and scale parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.GAMMADIST(10, 9, 2, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

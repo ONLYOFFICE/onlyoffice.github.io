@@ -2,7 +2,7 @@
   "description": "Returns the unit matrix for the specified dimension.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MUNIT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MUNIT(3));"
+    "// Create a unit matrix and place it in a cell in a spreadsheet.\n\n// Insert a matrix of ones and zeros into your spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MUNIT(3));"
   ],
   "params": [
     {

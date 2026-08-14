@@ -2,7 +2,7 @@
   "description": "Returns the sum of a power series based on the formula.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SERIESSUM/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SERIESSUM(5, 2, 1, 3));"
+    "// Calculate the sum of a power series using the SERIESSUM function.\n\n// Apply the function to compute and display the result in a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SERIESSUM(5, 2, 1, 3));"
   ],
   "params": [
     {

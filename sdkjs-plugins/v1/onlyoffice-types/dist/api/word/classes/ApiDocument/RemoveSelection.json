@@ -2,7 +2,7 @@
   "description": "Removes the current selection.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/RemoveSelection/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api ONLYOFFICE\");\nlet range = doc.GetRange(0, 2);\nrange.Select();\ndoc.RemoveSelection();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The selection from the word 'Api' was removed.\");\ndoc.Push(paragraph);"
+    "// How do I remove a selected portion of text in a document?\n\n// Programmatically select a range and then erase it to trim content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api ONLYOFFICE\");\nlet range = doc.GetRange(0, 2);\nrange.Select();\ndoc.RemoveSelection();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The selection from the word 'Api' was removed.\");\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

@@ -2,7 +2,7 @@
   "description": "Converts a number to text, using a currency format $#.##.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DOLLAR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DOLLAR(98.9997, 3));"
+    "// Format numeric values as currency strings with specified decimal places.\n\n// Use the DOLLAR function to convert numbers to formatted currency text.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DOLLAR(98.9997, 3));"
   ],
   "params": [
     {

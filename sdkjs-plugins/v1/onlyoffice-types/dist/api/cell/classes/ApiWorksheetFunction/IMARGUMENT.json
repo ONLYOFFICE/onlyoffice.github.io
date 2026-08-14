@@ -2,7 +2,7 @@
   "description": "Returns the argument Theta, an angle expressed in radians.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMARGUMENT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMARGUMENT(\"-2+2.5i\"));"
+    "// How do I find the argument of a complex number in a spreadsheet?\n\n// Calculate the phase angle of a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMARGUMENT(\"-2+2.5i\"));"
   ],
   "params": [
     {

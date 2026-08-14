@@ -1,0 +1,18 @@
+{
+  "description": "Sets the paragraph left side indentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetIndLeft/",
+  "examples": [
+    "// How do I add a left margin to a paragraph in a spreadsheet?\n\n// Move the entire paragraph body inward from the left to create a visual offset in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");"
+  ],
+  "params": [
+    {
+      "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nValue",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetIndLeft(nValue: twips): boolean"
+}

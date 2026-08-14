@@ -5,6 +5,9 @@
     "Add": {
       "description": "Adds a custom property to the document with automatic type detection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomProperties/Methods/Add/",
+      "examples": [
+        "// How do I attach extra metadata such as text, numbers, dates, and flags to a spreadsheet?\n\n// Extend a file with user-defined fields that store business data alongside the content in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst customProps = Api.GetCustomProperties();\n\ncustomProps.Add(\"CompanyName\", \"ONLYOFFICE\");\nconst companyName = customProps.Get(\"CompanyName\");\n\ncustomProps.Add(\"TrueBool\", true);\nconst trueBool = customProps.Get(\"TrueBool\");\n\ncustomProps.Add(\"NumberInt\", 3.0);\ncustomProps.Add(\"NumberReal\", 3.14);\nconst numberInt = customProps.Get(\"NumberInt\")\nconst numberReal = customProps.Get(\"NumberReal\")\n\ncustomProps.Add(\"BirthDate\", new Date(\"20 January 2000\"));\nconst birthDate = customProps.Get(\"BirthDate\");\nconst isOfLegalAge = (new Date().getFullYear() - birthDate.getFullYear()) >= 18;\n\nlet fill = Api.CreateSolidFill(Api.RGB(0, 100, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 100 * 36000,\n\tfill, stroke,\n\t0, 0, 5, 0\n);\n\nlet paragraph = shape.GetDocContent().GetElement(0);\n\nparagraph.AddText(\"CompanyName: \" + companyName);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nTrueBool: \" + trueBool);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nNumberInt: \" + numberInt);\nparagraph.AddText(\"\\nNumberReal: \" + numberReal);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nBirthDate: \" + birthDate.toDateString());\nparagraph.AddText(\"\\nIs of legal age: \" + isOfLegalAge);"
+      ],
       "params": [
         {
           "description": "The custom property name.",
@@ -27,6 +30,9 @@
     "Get": {
       "description": "Returns the value of a custom property by its name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomProperties/Methods/Get/",
+      "examples": [
+        "// How do I look up a specific custom metadata field by name in a spreadsheet?\n\n// Retrieve stored custom data and handle missing fields gracefully in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst customProps = Api.GetCustomProperties();\n\ncustomProps.Add(\"ExistingProp\", \"#123456\");\n\nconst existingProp = customProps.Get(\"ExistingProp\");\nconst nonExistentProp = customProps.Get(\"NonExistentProp\");\n\nlet fill = Api.CreateSolidFill(Api.RGB(0, 100, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t\"rect\",\n\t100 * 36000, 50 * 36000,\n\tfill, stroke,\n\t0, 0, 5, 0\n);\n\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"Existing Property Value: \" + existingProp);\nparagraph.AddText(\"\\nNon-Existent Property Value: \" + nonExistentProp);"
+      ],
       "params": [
         {
           "description": "The custom property name.",
@@ -44,6 +50,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomProperties class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomProperties/Methods/GetClassType/",
+      "examples": [
+        "// How do I confirm the category of the custom properties container in a spreadsheet?\n\n// Verify the identity of the metadata handler before working with custom fields in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst customProps = Api.GetCustomProperties();\nconst classType = customProps.GetClassType();\n\nlet fill = Api.CreateSolidFill(Api.RGB(0, 100, 200));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke, 0, 0, 5, 0);\n\nlet paragraph = shape.GetDocContent().GetElement(0);\nparagraph.AddText(\"ApiCustomProperties class type: \" + classType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customProperties\""

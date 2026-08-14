@@ -2,7 +2,7 @@
   "description": "Returns the number of days from the settlement date to the next coupon date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPDAYSNC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYSNC(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+    "// What is the time until the upcoming coupon payment from today in a spreadsheet?\n\n// Determine the gap between settlement and the next coupon maturity in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYSNC(\"1/10/2018\", \"6/15/2019\", 4, 1));"
   ],
   "params": [
     {

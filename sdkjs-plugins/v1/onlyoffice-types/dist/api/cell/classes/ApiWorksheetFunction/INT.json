@@ -2,7 +2,7 @@
   "description": "Rounds a number down to the nearest integer.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/INT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.INT(2.3));"
+    "// How do I round down a decimal number in a spreadsheet?\n\n// Truncate decimal places from a number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.INT(2.3));"
   ],
   "params": [
     {

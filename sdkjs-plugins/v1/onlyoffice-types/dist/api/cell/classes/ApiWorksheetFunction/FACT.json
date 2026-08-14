@@ -2,7 +2,7 @@
   "description": "Returns the factorial of a number, which is equal to *1*2*3*...** number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FACT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FACT(123));"
+    "// Calculate the factorial of a number.\n\n// Apply FACT function to get the factorial value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FACT(123));"
   ],
   "params": [
     {

@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that any lowercase characters in this paragraph are formatted for display only as their capital letter character equivalents.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetCaps/",
+  "examples": [
+    "// How do I display text in uppercase in a presentation?\n\n// Format text to show only uppercase characters in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the font set to capitalized letters.');\nparagraph.SetCaps(true);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed capitalized.",
+      "name": "isCaps",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetCaps(isCaps: boolean): ApiParagraph"
+}

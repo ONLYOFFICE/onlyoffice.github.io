@@ -1,0 +1,19 @@
+{
+  "description": "Sets the horizontal alignment of the text in the current cell range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetAlignHorizontal/",
+  "examples": [
+    "// How do I center or justify text across a group of cells in a spreadsheet?\n\n// Control whether cell content sits to the left, center, or right within each cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetAlignHorizontal(\"center\");"
+  ],
+  "params": [
+    {
+      "description": "The horizontal alignment that will be applied to the cell contents.",
+      "name": "sAlignment",
+      "type": "'left' | 'right' | 'center' | 'justify'"
+    }
+  ],
+  "returns": {
+    "description": "return false if sAlignment doesn't exist.",
+    "type": "boolean"
+  },
+  "signature": "SetAlignHorizontal(sAlignment: 'left' | 'right' | 'center' | 'justify'): boolean"
+}

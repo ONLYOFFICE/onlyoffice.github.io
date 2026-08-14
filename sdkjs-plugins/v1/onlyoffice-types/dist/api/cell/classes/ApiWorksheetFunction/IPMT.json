@@ -2,7 +2,7 @@
   "description": "Returns the interest payment for a given period for an investment, based on periodic, constant payments and a constant interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IPMT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IPMT(0.1/12, 1, 2*12, 2000, 0));"
+    "// How do I calculate the interest portion of a payment in a spreadsheet?\n\n// Find the interest amount paid in a loan period in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IPMT(0.1/12, 1, 2*12, 2000, 0));"
   ],
   "params": [
     {

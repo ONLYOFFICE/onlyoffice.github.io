@@ -2,7 +2,7 @@
   "description": "Calculates the payment for a loan based on constant payments and a constant interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PMT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PMT(0.08/12, 2*12, 10000, 0));"
+    "// How do I calculate what I need to pay each month on a loan in a spreadsheet?\n\n// Determine the regular payment required given an interest rate and loan period in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PMT(0.08/12, 2*12, 10000, 0));"
   ],
   "params": [
     {

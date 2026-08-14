@@ -1,0 +1,12 @@
+{
+  "description": "Creates the empty table cell properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableCellPr/",
+  "examples": [
+    "// How do I change the background color of a specific table cell in a document?\n\n// Style a single cell with gray shading using a custom table style in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the gray shading for cell #1:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet tableCellPr = Api.CreateTableCellPr();\ntableCellPr.SetShd(\"clear\", 0xEE, 0xEE, 0xEE);\ntableStylePr.SetTableCellPr(tableCellPr);\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTableCellPr"
+  },
+  "signature": "CreateTableCellPr(): ApiTableCellPr"
+}

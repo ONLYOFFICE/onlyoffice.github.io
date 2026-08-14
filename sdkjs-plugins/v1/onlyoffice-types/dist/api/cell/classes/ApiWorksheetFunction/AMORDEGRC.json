@@ -2,7 +2,7 @@
   "description": "Returns the prorated linear depreciation of an asset for each accounting period.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AMORDEGRC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.AMORDEGRC(3500, \"1/1/2018\", \"3/1/2018\", 500, 1, 0.25, 1));"
+    "// Determine asset value loss with the AMORDEGRC function in a spreadsheet.\n\n// Record the depreciation amount in a cell for financial tracking in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.AMORDEGRC(3500, \"1/1/2018\", \"3/1/2018\", 500, 1, 0.25, 1));"
   ],
   "params": [
     {

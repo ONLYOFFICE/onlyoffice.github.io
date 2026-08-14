@@ -1,6 +1,9 @@
 {
   "description": "Check if the current document content is a footnote.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/IsFootnote/",
+  "examples": [
+    "// How do I check if a note content block belongs to a footnote in a document?\n\n// Verify note type to decide whether to display bottom-of-page or end-of-document reference text.\n\nlet doc = Api.GetDocument();\nlet footnote = doc.AddFootnote();\nlet paragraph = footnote.GetElement(0);\nparagraph.AddText(\"Footnote text\");\n\nlet isFootnote = footnote.IsFootnote();\nlet isEndnote  = footnote.IsEndnote();\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddText(\"Footnote \" + isFootnote);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Endnote \" + isEndnote);"
+  ],
   "params": [],
   "returns": {
     "type": "boolean"

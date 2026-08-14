@@ -2,7 +2,7 @@
   "description": "Specifies the alignment which will be applied to the contents of this paragraph in relation to the default appearance of the paragraph text:\n**\"baseline\"** - the characters in the current paragraph will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current paragraph will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current paragraph will be aligned above the default text baseline.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetVertAlign/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text aligned below the baseline vertically.\");\nparagraph.SetVertAlign(\"subscript\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with the text aligned above the baseline vertically.\");\nparagraph.SetVertAlign(\"superscript\");\ndoc.Push(paragraph);"
+    "// How do I raise or lower the text of a paragraph relative to the baseline in a document?\n\n// Distinguish scientific notation or footnote markers by shifting paragraph text vertically in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text aligned below the baseline vertically.\");\nparagraph.SetVertAlign(\"subscript\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph with the text aligned above the baseline vertically.\");\nparagraph.SetVertAlign(\"superscript\");\ndoc.Push(paragraph);"
   ],
   "params": [
     {

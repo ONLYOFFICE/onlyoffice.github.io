@@ -2,7 +2,7 @@
   "description": "Converts a dollar price, expressed as a fraction, into a dollar price, expressed as a decimal number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DOLLARDE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DOLLARDE(1.03, 16));"
+    "// Transform prices from fractional notation to decimal notation.\n\n// Use the DOLLARDE function to convert fractional prices to decimal format.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DOLLARDE(1.03, 16));"
   ],
   "params": [
     {

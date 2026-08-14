@@ -25,6 +25,22 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'dist', 'ambient');
 
+// Flattening to global scope puts every declaration in the same namespace as the DOM lib, where a
+// name we share with it stops being a separate type and becomes a declaration *merge*. That is fine
+// when the shapes agree and fatal when they don't: sdkjs's `ImageData` typedef (a base64 image with
+// `src`/`width`/`height`) merges with the DOM's canvas `ImageData`, whose `width`/`height` are
+// `readonly`, and every consumer compiling with `"lib": ["DOM"]` gets TS2687. The modular package is
+// unaffected - there each file is a module and the name is local to it - so the rename belongs here,
+// not in the generator, where it would be a breaking change for npm consumers who import the type.
+const AMBIENT_RENAMES = {
+  ImageData: 'AscImageData',
+};
+
+// Names we merge with the DOM on purpose. `Window` is the whole point of `declare global` in
+// index.d.ts: it adds `Asc`/`AscDesktopEditor` to the real Window, and merging is what makes that
+// work.
+const INTENTIONAL_DOM_MERGES = new Set(['Window']);
+
 const BASE_FILES = [
   'src/generated/word.ts',
   'src/generated/cell.ts',
@@ -283,9 +299,45 @@ function buildBaseBundle() {
     return `// ---- ${relPath} ----\n${content}\n`;
   });
 
-  const body = dedupeTopLevelDeclarations(sections.join('\n'));
+  const body = applyAmbientRenames(dedupeTopLevelDeclarations(sections.join('\n')));
+  const bundle = [header, body, `// ---- window.Asc / window.AscDesktopEditor / window.AscSimpleRequest ----\n${globalBlock}\n`].join('\n');
 
-  return [header, body, `// ---- window.Asc / window.AscDesktopEditor / window.AscSimpleRequest ----\n${globalBlock}\n`].join('\n');
+  assertNoDomCollisions(bundle);
+  return bundle;
+}
+
+function applyAmbientRenames(body) {
+  let renamed = body;
+  for (const [from, to] of Object.entries(AMBIENT_RENAMES)) {
+    renamed = renamed.replace(new RegExp(`\\b${from}\\b`, 'g'), to);
+  }
+  return renamed;
+}
+
+function domGlobalNames() {
+  const libDir = path.dirname(require.resolve('typescript'));
+  const dom = fs.readFileSync(path.join(libDir, 'lib.dom.d.ts'), 'utf8');
+  const names = new Set();
+  for (const m of dom.matchAll(/^(?:interface|declare var|declare function|type)\s+([A-Za-z_$][\w$]*)/gm)) {
+    names.add(m[1]);
+  }
+  return names;
+}
+
+// A collision is only visible once the bundle is loaded next to the DOM lib, which nothing in this
+// repo's own type-checking does - so without this the next shared name would ship and surface as a
+// TS2687 in a consumer's project instead. Fails the build rather than renaming silently: a new
+// collision needs a human to decide whether it is an accident (rename) or an augmentation (allow).
+function assertNoDomCollisions(bundle) {
+  const dom = domGlobalNames();
+  const clashes = [];
+  for (const m of bundle.matchAll(/^(?:interface|type|declare var|declare function|declare namespace)\s+([A-Za-z_$][\w$]*)/gm)) {
+    const name = m[1];
+    if (dom.has(name) && !INTENTIONAL_DOM_MERGES.has(name)) clashes.push(name);
+  }
+  if (clashes.length > 0) {
+    throw new Error(`Ambient bundle declares global name(s) that collide with lib.dom: ${[...new Set(clashes)].join(', ')}. Add a rename to AMBIENT_RENAMES, or to INTENTIONAL_DOM_MERGES if merging is intended.`);
+  }
 }
 
 function buildEditorAddon(editorFile) {

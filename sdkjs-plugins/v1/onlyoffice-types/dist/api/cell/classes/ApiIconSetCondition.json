@@ -8,6 +8,9 @@
     "Delete": {
       "description": "Deletes the current format condition.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Delete/",
+      "examples": [
+        "// How do I delete an existing conditional formatting rule applied to cells in a spreadsheet?\n\n// Clear an unwanted formatting condition so cells revert to their default appearance in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Rules before deletion:\");\nworksheet.GetRange(\"C2\").SetValue(formatConditions.GetCount());\n\ncondition1.Delete();\n\nworksheet.GetRange(\"D1\").SetValue(\"Rules after deletion:\");\nworksheet.GetRange(\"D2\").SetValue(formatConditions.GetCount());"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -18,6 +21,9 @@
     "GetAppliesTo": {
       "description": "Returns the range of cells to which the current conditional formatting rule applies.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetAppliesTo/",
+      "examples": [
+        "// How do I find out which cells a conditional formatting rule is applied to in a spreadsheet?\n\n// Identify the target area of a formatting condition to verify it targets the correct cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet appliedRange = condition1.GetAppliesTo();\n\nworksheet.GetRange(\"C1\").SetValue(\"Rule applies to:\");\nworksheet.GetRange(\"C2\").SetValue(appliedRange.GetAddress());"
+      ],
       "params": [],
       "returns": {
         "description": "The range of cells affected by the current condition, or null if no range is set.",
@@ -29,6 +35,9 @@
     "GetDateOperator": {
       "description": "Returns the date operator for time period conditions.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetDateOperator/",
+      "examples": [
+        "// How do I check which date period a conditional formatting rule is set to highlight in a spreadsheet?\n\n// Inspect the date condition of a rule to confirm it targets the intended time window in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Dates\");\nworksheet.GetRange(\"A2\").SetValue(\"2023-01-15\");\nworksheet.GetRange(\"A3\").SetValue(\"2023-02-20\");\nworksheet.GetRange(\"A4\").SetValue(\"2023-03-10\");\nworksheet.GetRange(\"A5\").SetValue(\"2023-04-05\");\nworksheet.GetRange(\"A6\").SetValue(\"2023-05-25\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTimePeriod\", \"xlThisMonth\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet dateOperator = condition1.GetDateOperator();\n\nworksheet.GetRange(\"C1\").SetValue(\"Date operator:\");\nworksheet.GetRange(\"C2\").SetValue(dateOperator ? dateOperator : \"None\");"
+      ],
       "params": [],
       "returns": {
         "description": "The time period operator that defines how the date condition is evaluated,\ror null if the rule is not date-based.",
@@ -40,6 +49,9 @@
     "GetFillColor": {
       "description": "Returns the background color for the format condition. Returns 'No Fill' when the background color of the format condition is null.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFillColor/",
+      "examples": [
+        "// How do I find out what background color a conditional formatting rule applies to matching cells in a spreadsheet?\n\n// Confirm the highlight color of an existing rule before updating it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\nlet fillColor = Api.CreateColorFromRGB(255, 255, 0);\ncondition1.SetFillColor(fillColor);\n\nlet currentColor = condition1.GetFillColor();\n\nworksheet.GetRange(\"C1\").SetValue(\"Background color:\");\nworksheet.GetRange(\"C2\").SetValue(currentColor === \"No Fill\" ? \"No Fill\" : \"Color applied\");"
+      ],
       "params": [],
       "returns": {
         "description": "The background color applied by the format condition, or 'No Fill' if none is set.",
@@ -51,6 +63,9 @@
     "GetFont": {
       "description": "Returns the font applied by the current format condition.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFont/",
+      "examples": [
+        "// How do I retrieve the text style that a conditional formatting rule uses for highlighted cells in a spreadsheet?\n\n// Inspect and adjust the font of a formatting condition to ensure consistent text styling in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet font = condition1.GetFont();\nif (font) {\n    font.SetBold(true);\n    font.SetSize(14);\n}\n\nworksheet.GetRange(\"C1\").SetValue(\"Font applied:\");\nworksheet.GetRange(\"C2\").SetValue(\"Bold: \" + (font ? font.Bold : \"false\"));\nworksheet.GetRange(\"C3\").SetValue(\"Size: \" + (font ? font.Size : \"default\"));"
+      ],
       "params": [],
       "returns": {
         "description": "An ApiFont object representing the font applied by the format condition, or null if no font is defined.",
@@ -62,6 +77,9 @@
     "GetFormula": {
       "description": "Returns the formula associated with the icon set condition.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetFormula/",
+      "examples": [
+        "// How do I find out whether an icon set condition uses a formula to determine its thresholds in a spreadsheet?\n\n// Check if a formula drives the icon set rule instead of a fixed value in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Month');\nworksheet.GetRange('B1').SetValue('Revenue');\nworksheet.GetRange('A2').SetValue('January');\nworksheet.GetRange('A3').SetValue('February');\nworksheet.GetRange('A4').SetValue('March');\nworksheet.GetRange('A5').SetValue('April');\nworksheet.GetRange('B2').SetValue(12000);\nworksheet.GetRange('B3').SetValue(8500);\nworksheet.GetRange('B4').SetValue(15000);\nworksheet.GetRange('B5').SetValue(6200);\n\nconst range = worksheet.GetRange('B2:B5');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\n\nconst formula = iconCondition.GetFormula();\nif (formula) {\n\tworksheet.GetRange('D1').SetValue('Formula: ' + formula);\n} else {\n\tworksheet.GetRange('D1').SetValue('Icon set condition does not have a formula.');\n}\nworksheet.GetRange('D2').SetValue('Type: ' + iconCondition.GetType());"
+      ],
       "params": [],
       "returns": {
         "description": "The formula string, or empty string if no formula is set.",
@@ -73,6 +91,9 @@
     "GetFormula1": {
       "description": "Returns the first formula used by the current conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula1/",
+      "examples": [
+        "// How do I find the first comparison value that a conditional formatting rule uses in a spreadsheet?\n\n// Verify the lower or sole boundary of a formatting condition to confirm it is correctly defined in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet formula1 = condition1.GetFormula1();\n\nworksheet.GetRange(\"C1\").SetValue(\"First formula:\");\nworksheet.GetRange(\"C2\").SetValue(formula1);"
+      ],
       "params": [],
       "returns": {
         "description": "The first formula.",
@@ -84,6 +105,9 @@
     "GetFormula2": {
       "description": "Returns the second formula used by the current conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFormula2/",
+      "examples": [
+        "// How do I retrieve the second comparison value from a between-style formatting rule in a spreadsheet?\n\n// Check the upper limit of a formatting condition to ensure the highlighted range is accurate in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlBetween\", \"100\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet formula1 = condition1.GetFormula1();\nlet formula2 = condition1.GetFormula2();\n\nworksheet.GetRange(\"C1\").SetValue(\"First formula:\");\nworksheet.GetRange(\"C2\").SetValue(formula1);\nworksheet.GetRange(\"C3\").SetValue(\"Second formula:\");\nworksheet.GetRange(\"C4\").SetValue(formula2);"
+      ],
       "params": [],
       "returns": {
         "description": "The second formula.",
@@ -95,6 +119,9 @@
     "GetIconCriteria": {
       "description": "Returns a collection of icon criteria that represent the threshold values and icons for the icon set conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetIconCriteria/",
+      "examples": [
+        "// How do I access each individual threshold and icon setting within an icon set rule in a spreadsheet?\n\n// List the full set of criteria that control which icon each cell receives under a formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Performance\");\nworksheet.GetRange(\"A2\").SetValue(95);\nworksheet.GetRange(\"A3\").SetValue(75);\nworksheet.GetRange(\"A4\").SetValue(55);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nlet criteria = iconCondition.GetIconCriteria();\nworksheet.GetRange(\"B1\").SetValue(\"Number of criteria: \" + criteria.length);"
+      ],
       "params": [],
       "returns": {
         "description": "A collection of icon criteria objects, or null if the rule is not an icon set type.",
@@ -106,6 +133,9 @@
     "GetIconSet": {
       "description": "Returns the icon set type used in the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetIconSet/",
+      "examples": [
+        "// How do I find out which icon set a formatting rule is using in a spreadsheet?\n\n// Identify the icon collection assigned to a cell range's formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Score\");\nworksheet.GetRange(\"A2\").SetValue(85);\nworksheet.GetRange(\"A3\").SetValue(70);\nworksheet.GetRange(\"A4\").SetValue(45);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\niconCondition.SetIconSet(\"xl3TrafficLights1\");\n\nlet iconSet = iconCondition.GetIconSet();\nworksheet.GetRange(\"B1\").SetValue(\"Current icon set: \" + iconSet);"
+      ],
       "params": [],
       "returns": {
         "description": "The icon set type, or null if not applicable.",
@@ -117,6 +147,9 @@
     "GetNumberFormat": {
       "description": "Returns the number format applied to a cell when the conditional formatting rule evaluates to true.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetNumberFormat/",
+      "examples": [
+        "// How do I find out what number format a conditional formatting rule uses for highlighted cells in a spreadsheet?\n\n// Inspect the numeric display style of a formatting condition to confirm it presents values correctly in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(1234.56);\nworksheet.GetRange(\"A3\").SetValue(2500.75);\nworksheet.GetRange(\"A4\").SetValue(150.25);\nworksheet.GetRange(\"A5\").SetValue(3000.00);\nworksheet.GetRange(\"A6\").SetValue(750.50);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"2000\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\ncondition1.SetNumberFormat(\"$#,##0.00\");\n\nlet numberFormat = condition1.GetNumberFormat();\n\nworksheet.GetRange(\"C1\").SetValue(\"Number format:\");\nworksheet.GetRange(\"C2\").SetValue(numberFormat);"
+      ],
       "params": [],
       "returns": {
         "description": "The number format.",
@@ -128,6 +161,9 @@
     "GetOperator": {
       "description": "Returns the format condition operator.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetOperator/",
+      "examples": [
+        "// How do I find out which comparison a conditional formatting rule uses to evaluate cell values in a spreadsheet?\n\n// Verify the logical condition of a formatting rule to ensure it highlights the right cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet operator = condition1.GetOperator();\n\nworksheet.GetRange(\"C1\").SetValue(\"Rule operator:\");\nworksheet.GetRange(\"C2\").SetValue(operator);"
+      ],
       "params": [],
       "returns": {
         "description": "The format condition operator.",
@@ -139,6 +175,9 @@
     "GetPTCondition": {
       "description": "Returns the pivot table condition object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPTCondition/",
+      "examples": [
+        "// How do I find out if a conditional formatting rule applies within a pivot table context in a spreadsheet?\n\n// Determine the pivot table association of a formatting condition to understand its scope in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet ptCondition = condition1.GetPTCondition();\n\nworksheet.GetRange(\"C1\").SetValue(\"PT Condition:\");\nworksheet.GetRange(\"C2\").SetValue(ptCondition ? \"Found\" : \"None\");"
+      ],
       "params": [],
       "returns": {
         "description": "The pivot table condition object.",
@@ -150,6 +189,9 @@
     "GetParent": {
       "description": "Returns the parent range object of the current format condition.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetParent/",
+      "examples": [
+        "// How do I access the parent formatting collection that a specific rule belongs to in a spreadsheet?\n\n// Trace back from a formatting rule to its owning collection to manage all related conditions in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('A1').SetValue('Sales Data');\nworksheet.GetRange('A2').SetValue(100);\nworksheet.GetRange('A3').SetValue(250);\nworksheet.GetRange('A4').SetValue(150);\n\nconst dataRange = worksheet.GetRange('A2:A4');\nconst formatConditions = dataRange.GetFormatConditions();\nconst condition = formatConditions.Add('xlCellValue', 'xlGreater', '200');\ncondition.SetFillColor(Api.CreateColorFromRGB(200, 100, 100));\n\nconst parentRange = condition.GetParent();\nworksheet.GetRange('C1').SetValue('Parent range:');\nworksheet.GetRange('C2').SetValue(parentRange.GetAddress());"
+      ],
       "params": [],
       "returns": {
         "description": "The parent range object.",
@@ -161,6 +203,9 @@
     "GetPercentileValues": {
       "description": "Returns whether the thresholds for the icon set conditional format are determined by using percentiles.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetPercentileValues/",
+      "examples": [
+        "// How do I check if an icon set rule measures thresholds as percentiles in a spreadsheet?\n\n// Verify that the icon set rule distributes icons according to percentile values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(75);\nworksheet.GetRange(\"A4\").SetValue(50);\nworksheet.GetRange(\"A5\").SetValue(25);\n\nlet range = worksheet.GetRange(\"A2:A5\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\niconCondition.SetPercentileValues(true);\n\nlet usesPercentiles = iconCondition.GetPercentileValues();\nworksheet.GetRange(\"B1\").SetValue(\"Uses percentiles: \" + usesPercentiles);"
+      ],
       "params": [],
       "returns": {
         "description": "True if all thresholds are set to percentile, false otherwise.",
@@ -172,6 +217,9 @@
     "GetPriority": {
       "description": "Returns the priority value of the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPriority/",
+      "examples": [
+        "// How do I find out what priority order a formatting rule has in a spreadsheet?\n\n// Check which position a formatting rule holds among all active rules in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet priority = condition1.GetPriority();\n\nworksheet.GetRange(\"C1\").SetValue(\"Rule priority:\");\nworksheet.GetRange(\"C2\").SetValue(priority);"
+      ],
       "params": [],
       "returns": {
         "description": "The priority value of the conditional formatting rule.",
@@ -183,6 +231,9 @@
     "GetReverseOrder": {
       "description": "Returns whether the icon order in the icon set rule is reversed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetReverseOrder/",
+      "examples": [
+        "// How do I check if the icons in a formatting rule are shown in reverse order in a spreadsheet?\n\n// Confirm that an icon set rule is currently set to flip its icon sequence in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Values\");\nworksheet.GetRange(\"A2\").SetValue(10);\nworksheet.GetRange(\"A3\").SetValue(20);\nworksheet.GetRange(\"A4\").SetValue(30);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\niconCondition.SetReverseOrder(true);\n\nlet isReversed = iconCondition.GetReverseOrder();\nworksheet.GetRange(\"B1\").SetValue(\"Icons reversed: \" + isReversed);"
+      ],
       "params": [],
       "returns": {
         "description": "True if the icon order is reversed, false otherwise, or null if not applicable.",
@@ -194,6 +245,9 @@
     "GetScopeType": {
       "description": "Returns the scope type of the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetScopeType/",
+      "examples": [
+        "// How do I find out whether a formatting rule targets cells, a table, or a pivot table in a spreadsheet?\n\n// Determine the coverage area defined for a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet scopeType = condition1.GetScopeType();\n\nworksheet.GetRange(\"C1\").SetValue(\"Scope type:\");\nworksheet.GetRange(\"C2\").SetValue(scopeType);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns \"xlSelectionScope\" for normal ranges, \"xlDataFieldScope\" for entire worksheet, \"xlFieldsScope\" for pivot tables.",
@@ -205,6 +259,9 @@
     "GetShowIconOnly": {
       "description": "Returns whether only icons are displayed in the icon set rule (without cell values).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetShowIconOnly/",
+      "examples": [
+        "// How do I check if a formatting rule is set to display icons without the underlying cell values in a spreadsheet?\n\n// Confirm that the icon-only display mode is active for an icon set formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Progress\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(50);\nworksheet.GetRange(\"A4\").SetValue(25);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\niconCondition.SetShowIconOnly(true);\n\nlet showIconOnly = iconCondition.GetShowIconOnly();\nworksheet.GetRange(\"B1\").SetValue(\"Show icon only: \" + showIconOnly);"
+      ],
       "params": [],
       "returns": {
         "description": "True if only icons are shown, false if values are also shown, or null if not applicable.",
@@ -226,6 +283,9 @@
     "GetText": {
       "description": "Returns the text value used in text-based conditional formatting rules.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetText/",
+      "examples": [
+        "// How do I find out what word or phrase a text-based formatting rule is looking for in a spreadsheet?\n\n// Retrieve the search term stored inside a text-matching formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Orange\");\nworksheet.GetRange(\"A5\").SetValue(\"Grape\");\nworksheet.GetRange(\"A6\").SetValue(\"Peach\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTextString\", \"xlContains\", \"Apple\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet textValue = condition1.GetText();\n\nworksheet.GetRange(\"C1\").SetValue(\"Text value:\");\nworksheet.GetRange(\"C2\").SetValue(textValue);"
+      ],
       "params": [],
       "returns": {
         "description": "The text value used in text-based conditional formatting rules.",
@@ -237,6 +297,9 @@
     "GetTextOperator": {
       "description": "Returns the text operator for text-based conditional formatting rules.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetTextOperator/",
+      "examples": [
+        "// How do I find out whether a text formatting rule checks for contains, begins with, or ends with in a spreadsheet?\n\n// Identify the matching method a text-based formatting rule relies on in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Orange\");\nworksheet.GetRange(\"A5\").SetValue(\"Grape\");\nworksheet.GetRange(\"A6\").SetValue(\"Peach\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTextString\", \"xlContains\", \"Apple\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet textOperator = condition1.GetTextOperator();\n\nworksheet.GetRange(\"C1\").SetValue(\"Text operator:\");\nworksheet.GetRange(\"C2\").SetValue(textOperator ? textOperator : \"None\");"
+      ],
       "params": [],
       "returns": {
         "description": "The operator defining how the text comparison is performed,\ror null if the rule is not text-based.",
@@ -248,6 +311,9 @@
     "GetType": {
       "description": "Returns the type of the icon set conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/GetType/",
+      "examples": [
+        "// How do I find out what type an icon set formatting rule is in a spreadsheet?\n\n// Distinguish an icon set rule from other formatting rule types in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('A1').SetValue('Ratings');\nworksheet.GetRange('A2').SetValue(90);\nworksheet.GetRange('A3').SetValue(60);\nworksheet.GetRange('A4').SetValue(25);\n\nconst range = worksheet.GetRange('A2:A4');\nconst formatConditions = range.GetFormatConditions();\nconst iconCondition = formatConditions.AddIconSetCondition();\n\nconst conditionType = iconCondition.GetType();\nworksheet.GetRange('B1').SetValue('Icon set condition type: ' + conditionType);"
+      ],
       "params": [],
       "returns": {
         "description": "The type of the icon set conditional formatting rule.",
@@ -259,6 +325,9 @@
     "Modify": {
       "description": "Modifies the current format condition with the specified parameters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Modify/",
+      "examples": [
+        "// How do I change what value or formula a conditional formatting rule checks for in a spreadsheet?\n\n// Replace the trigger condition of a formatting rule without removing it from a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(30);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(40);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlLess\", \"50\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original formula:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.Formula1);\n\ncondition1.Modify(\"xlCellValue\", \"xlGreater\", \"200\");\n\nworksheet.GetRange(\"C4\").SetValue(\"Modified formula:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.Formula1);"
+      ],
       "params": [
         {
           "description": "The format condition type.",
@@ -295,6 +364,9 @@
     "ModifyAppliesToRange": {
       "description": "Sets the cell range to which the current conditional formatting rule applies.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/ModifyAppliesToRange/",
+      "examples": [
+        "// How do I reassign a formatting rule to a different group of cells in a spreadsheet?\n\n// Expand or narrow the area where an existing formatting rule takes effect in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\nworksheet.GetRange(\"A7\").SetValue(180);\nworksheet.GetRange(\"A8\").SetValue(220);\n\nlet dataRange = worksheet.GetRange(\"A2:A8\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original range:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetAppliesTo().GetAddress());\n\nlet newRange = worksheet.GetRange(\"A2:A5\");\ncondition1.ModifyAppliesToRange(newRange);\n\nworksheet.GetRange(\"D1\").SetValue(\"Modified range:\");\nworksheet.GetRange(\"D2\").SetValue(condition1.GetAppliesTo().GetAddress());"
+      ],
       "params": [
         {
           "description": "The range to which the current conditional formatting rule will be applied.",
@@ -311,6 +383,9 @@
     "SetBorders": {
       "description": "Sets the border style for the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetBorders/",
+      "examples": [
+        "// How do I make matching cells show a border when a formatting condition is met in a spreadsheet?\n\n// Highlight qualifying cells with edge lines through a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 255, 0));\n\nlet borderColor = Api.CreateColorFromRGB(255, 0, 0);\ncondition1.SetBorders(\"Top\", \"Thick\", borderColor);\ncondition1.SetBorders(\"Bottom\", \"Thick\", borderColor);\n\nworksheet.GetRange(\"C1\").SetValue(\"Borders applied:\");\nworksheet.GetRange(\"C2\").SetValue(\"Red thick top/bottom borders\");"
+      ],
       "params": [
         {
           "description": "Specifies the cell border position.",
@@ -337,6 +412,9 @@
     "SetDateOperator": {
       "description": "Sets the date operator for time period conditions.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetDateOperator/",
+      "examples": [
+        "// How do I tell a date formatting rule whether to highlight cells from last week, this month, or another period in a spreadsheet?\n\n// Choose which relative date window triggers a formatting rule for date cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Dates\");\nworksheet.GetRange(\"A2\").SetValue(\"2023-01-15\");\nworksheet.GetRange(\"A3\").SetValue(\"2023-02-20\");\nworksheet.GetRange(\"A4\").SetValue(\"2023-03-10\");\nworksheet.GetRange(\"A5\").SetValue(\"2023-04-05\");\nworksheet.GetRange(\"A6\").SetValue(\"2023-05-25\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTimePeriod\", \"xlThisMonth\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original operator:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetDateOperator() || \"None\");\n\ncondition1.SetDateOperator(\"xlLastWeek\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New operator:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetDateOperator() || \"None\");"
+      ],
       "params": [
         {
           "description": "The date operator for time period conditions.",
@@ -353,6 +431,9 @@
     "SetFillColor": {
       "description": "Sets the background color to the format condition with the previously created color object.\nSets 'No Fill' when previously created color object is null.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFillColor/",
+      "examples": [
+        "// How do I fill matching cells with a specific color when a formatting condition is met in a spreadsheet?\n\n// Color-code qualifying cells automatically through a conditional formatting rule in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\n\nworksheet.GetRange(\"C1\").SetValue(\"Original color:\");\nworksheet.GetRange(\"C2\").SetValue(\"No Fill\");\n\nlet fillColor = Api.CreateColorFromRGB(255, 255, 0);\ncondition1.SetFillColor(fillColor);\n\nworksheet.GetRange(\"C4\").SetValue(\"New color:\");\nworksheet.GetRange(\"C5\").SetValue(\"Yellow background\");"
+      ],
       "params": [
         {
           "description": "The color object that specifies the background color for the format condition.",
@@ -369,6 +450,9 @@
     "SetFirstPriority": {
       "description": "Sets the priority value for the current conditional formatting rule to \"1\" so that it will be evaluated before all other rules on the worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFirstPriority/",
+      "examples": [
+        "// How do I make a formatting rule take precedence over all other formatting rules in a spreadsheet?\n\n// Promote a formatting rule so it is evaluated before any other rules in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet condition2 = formatConditions.Add(\"xlCellValue\", \"xlLess\", \"150\");\ncondition2.SetFillColor(Api.CreateColorFromRGB(0, 255, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Priority before:\");\nworksheet.GetRange(\"C2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"C3\").SetValue(\"Rule 2: \" + condition2.Priority);\n\ncondition2.SetFirstPriority();\n\nworksheet.GetRange(\"D1\").SetValue(\"Priority after:\");\nworksheet.GetRange(\"D2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"D3\").SetValue(\"Rule 2: \" + condition2.Priority);"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -379,6 +463,9 @@
     "SetIconSet": {
       "description": "Sets the icon set type for the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/SetIconSet/",
+      "examples": [
+        "// How do I choose which icon set appears in a conditional formatting rule in a spreadsheet?\n\n// Switch the icons used to visualize data ranges without changing the rule itself.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Performance\");\nworksheet.GetRange(\"A2\").SetValue(90);\nworksheet.GetRange(\"A3\").SetValue(75);\nworksheet.GetRange(\"A4\").SetValue(60);\nworksheet.GetRange(\"A5\").SetValue(40);\n\nlet range = worksheet.GetRange(\"A2:A5\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nworksheet.GetRange(\"B1\").SetValue(\"Before: Default icon set\");\niconCondition.SetIconSet(\"xl4Arrows\");\nworksheet.GetRange(\"B2\").SetValue(\"After: Changed to 4 arrows\");"
+      ],
       "params": [
         {
           "description": "The icon set type to apply.",
@@ -396,6 +483,9 @@
     "SetLastPriority": {
       "description": "Sets the evaluation order for the current conditional formatting rule so it is evaluated after all other rules on the worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetLastPriority/",
+      "examples": [
+        "// How do I make a conditional formatting rule apply after all other rules in a spreadsheet?\n\n// Push an existing highlight rule to the bottom of the priority stack in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet condition2 = formatConditions.Add(\"xlCellValue\", \"xlLess\", \"150\");\ncondition2.SetFillColor(Api.CreateColorFromRGB(0, 255, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Priority before:\");\nworksheet.GetRange(\"C2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"C3\").SetValue(\"Rule 2: \" + condition2.Priority);\n\ncondition1.SetLastPriority();\n\nworksheet.GetRange(\"D1\").SetValue(\"Priority after:\");\nworksheet.GetRange(\"D2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"D3\").SetValue(\"Rule 2: \" + condition2.Priority);"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -406,6 +496,9 @@
     "SetNumberFormat": {
       "description": "Sets the number format applied to a cell when the conditional formatting rule evaluates to true.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetNumberFormat/",
+      "examples": [
+        "// How do I apply a custom number display pattern to a conditional formatting rule in a spreadsheet?\n\n// Ensure highlighted cells show values with a specific currency or decimal style in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(1234.56);\nworksheet.GetRange(\"A3\").SetValue(2500.75);\nworksheet.GetRange(\"A4\").SetValue(150.25);\nworksheet.GetRange(\"A5\").SetValue(3000.00);\nworksheet.GetRange(\"A6\").SetValue(750.50);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"2000\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original format:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetNumberFormat());\n\ncondition1.SetNumberFormat(\"$#,##0.00\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New format:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetNumberFormat());"
+      ],
       "params": [
         {
           "description": "The number format code (e.g., \"General\", \"#,##0.00\", etc.)",
@@ -422,6 +515,9 @@
     "SetPercentileValues": {
       "description": "Specifies whether the thresholds for the icon set conditional format are determined by using percentiles.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/SetPercentileValues/",
+      "examples": [
+        "// How do I make icon set boundaries based on percentiles rather than exact values in a spreadsheet?\n\n// Compare cell values by their relative position in the data range instead of their absolute amounts.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Scores\");\nworksheet.GetRange(\"A2\").SetValue(95);\nworksheet.GetRange(\"A3\").SetValue(80);\nworksheet.GetRange(\"A4\").SetValue(65);\nworksheet.GetRange(\"A5\").SetValue(50);\nworksheet.GetRange(\"A6\").SetValue(35);\n\nlet range = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nworksheet.GetRange(\"B1\").SetValue(\"Before: Using number values\");\niconCondition.SetPercentileValues(true);\nworksheet.GetRange(\"B2\").SetValue(\"After: Using percentile values\");"
+      ],
       "params": [
         {
           "description": "True to set all thresholds to percentile, false otherwise.",
@@ -439,6 +535,9 @@
     "SetPriority": {
       "description": "Sets the priority value of the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetPriority/",
+      "examples": [
+        "// How do I control which conditional formatting rule takes precedence over others in a spreadsheet?\n\n// Reorder highlight rules so a chosen one is checked at a particular position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original priority:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetPriority());\n\ncondition1.SetPriority(5);\n\nworksheet.GetRange(\"C4\").SetValue(\"New priority:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetPriority());"
+      ],
       "params": [
         {
           "description": "The priority value (1-based).",
@@ -455,6 +554,9 @@
     "SetReverseOrder": {
       "description": "Specifies whether the icon order in the icon set rule is reversed.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/SetReverseOrder/",
+      "examples": [
+        "// How do I flip the direction of icons so the highest value gets the lowest icon in a spreadsheet?\n\n// Invert the visual meaning of an icon set to match a descending scale or reversed ranking.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Ratings\");\nworksheet.GetRange(\"A2\").SetValue(5);\nworksheet.GetRange(\"A3\").SetValue(3);\nworksheet.GetRange(\"A4\").SetValue(1);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nworksheet.GetRange(\"B1\").SetValue(\"Before: Normal icon order\");\niconCondition.SetReverseOrder(true);\nworksheet.GetRange(\"B2\").SetValue(\"After: Reversed icon order\");"
+      ],
       "params": [
         {
           "description": "True to reverse the icon order, false otherwise.",
@@ -472,6 +574,9 @@
     "SetScopeType": {
       "description": "Sets the scope type for the conditional formatting rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetScopeType/",
+      "examples": [
+        "// How do I limit a conditional formatting rule to only certain columns or data fields in a spreadsheet?\n\n// Narrow or expand the reach of a highlight rule across table sections in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original scope:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetScopeType());\n\ncondition1.SetScopeType(\"xlDataFieldScope\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New scope:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetScopeType());"
+      ],
       "params": [
         {
           "description": "The scope type: \"xlSelectionScope\", \"xlDataFieldScope\", or \"xlFieldsScope\".",
@@ -488,6 +593,9 @@
     "SetShowIconOnly": {
       "description": "Specifies whether to display only icons in the icon set rule (without cell values).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiIconSetCondition/Methods/SetShowIconOnly/",
+      "examples": [
+        "// How do I make cells display just the icon without the underlying number in a spreadsheet?\n\n// Let icons carry the full visual message by removing the numeric values from view.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Status\");\nworksheet.GetRange(\"A2\").SetValue(90);\nworksheet.GetRange(\"A3\").SetValue(60);\nworksheet.GetRange(\"A4\").SetValue(30);\n\nlet range = worksheet.GetRange(\"A2:A4\");\nlet formatConditions = range.GetFormatConditions();\nlet iconCondition = formatConditions.AddIconSetCondition();\n\nworksheet.GetRange(\"B1\").SetValue(\"Before: Shows icons and values\");\niconCondition.SetShowIconOnly(true);\nworksheet.GetRange(\"B2\").SetValue(\"After: Shows icons only\");"
+      ],
       "params": [
         {
           "description": "True to show only icons, false to show both icons and values.",
@@ -521,6 +629,9 @@
     "SetText": {
       "description": "Sets the text value used in text-based conditional formatting rules.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetText/",
+      "examples": [
+        "// How do I change which text a conditional highlight rule looks for in a spreadsheet?\n\n// Replace the search string in a rule so different cell content gets highlighted in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Orange\");\nworksheet.GetRange(\"A5\").SetValue(\"Grape\");\nworksheet.GetRange(\"A6\").SetValue(\"Peach\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTextString\", \"xlContains\", \"Apple\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original text:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetText());\n\ncondition1.SetText(\"Grape\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New text:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetText());"
+      ],
       "params": [
         {
           "description": "The text value to compare against.",
@@ -537,6 +648,9 @@
     "SetTextOperator": {
       "description": "Sets the text operator for text-based conditional formatting rules.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetTextOperator/",
+      "examples": [
+        "// How do I switch a text highlight rule from checking if a cell contains a word to checking how it starts in a spreadsheet?\n\n// Adjust the matching strategy of a text-based highlight rule to target different patterns in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Orange\");\nworksheet.GetRange(\"A5\").SetValue(\"Grape\");\nworksheet.GetRange(\"A6\").SetValue(\"Peach\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTextString\", \"xlContains\", \"Apple\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original operator:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetTextOperator() || \"None\");\n\ncondition1.SetTextOperator(\"xlBeginsWith\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New operator:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetTextOperator() || \"None\");"
+      ],
       "params": [
         {
           "description": "The text operator: \"xlContains\", \"xlDoesNotContain\", \"xlBeginsWith\", \"xlEndsWith\".",

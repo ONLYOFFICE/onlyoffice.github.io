@@ -2,7 +2,7 @@
   "description": "Returns the cumulative principal paid on a loan between two periods.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CUMPRINC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CUMPRINC(0.1/12, 2*12, 2000, 1, 24, 0));"
+    "// What is the total principal paid down during a specific loan period in a spreadsheet?\n\n// Calculate the accumulated principal reduction between payment periods in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CUMPRINC(0.1/12, 2*12, 2000, 1, 24, 0));"
   ],
   "params": [
     {

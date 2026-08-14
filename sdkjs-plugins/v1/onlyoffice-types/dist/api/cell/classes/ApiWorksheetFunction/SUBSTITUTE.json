@@ -2,7 +2,7 @@
   "description": "Replaces existing text with new text in a text string.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUBSTITUTE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SUBSTITUTE(\"Online Office is a cloud business service portal\", \"Office\", \"portal\"));"
+    "// Substitute a substring with another one using the SUBSTITUTE function.\n\n// Returns the modified text with the specified replacement applied.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SUBSTITUTE(\"Online Office is a cloud business service portal\", \"Office\", \"portal\"));"
   ],
   "params": [
     {

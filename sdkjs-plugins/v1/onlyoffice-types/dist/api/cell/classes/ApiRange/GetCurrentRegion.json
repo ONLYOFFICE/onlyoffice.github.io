@@ -1,0 +1,14 @@
+{
+  "description": "Returns a range that represents the expanded range around the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCurrentRegion/",
+  "examples": [
+    "// How do I find the contiguous block of data around a cell in a spreadsheet?\n\n// Identify the address of the data region that surrounds a given cell in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue('Name');\nworksheet.GetRange('C2').SetValue('Score');\nworksheet.GetRange('B3').SetValue('Alice');\nworksheet.GetRange('C3').SetValue(90);\nworksheet.GetRange('B4').SetValue('Bob');\nworksheet.GetRange('C4').SetValue(75);\n\nconst range = worksheet.GetRange('B3');\nconst region = range.GetCurrentRegion();\nworksheet.GetRange('A1').SetValue('Current region: ' + region.GetAddress(true, true, 'xlA1', false));"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns the expanded range or null if the range cannot be expanded.",
+    "type": "ApiRange | null"
+  },
+  "signature": "GetCurrentRegion(): ApiRange | null",
+  "since": "9.1.0"
+}

@@ -1,6 +1,9 @@
 {
   "description": "Returns the between border of the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetBetweenBorder/",
+  "examples": [
+    "// How do I read the between border from a paragraph's formatting in a document?\n\n// Useful when you need to inspect border details such as type and size set between paragraphs.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetBetweenBorder(\"single\", 24, 0, 255, 111, 61);\nlet border = paraPr.GetBetweenBorder();\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is a paragraph with a between border.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.SetStyle(myStyle);\nparagraph2.AddText(\"Between border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+  ],
   "params": [],
   "returns": {
     "description": "Returns the border properties object, or _undefined_ if the between border is not set.",

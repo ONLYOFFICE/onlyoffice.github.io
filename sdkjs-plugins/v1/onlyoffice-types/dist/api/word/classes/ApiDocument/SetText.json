@@ -1,6 +1,9 @@
 {
   "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/SetText/",
+  "examples": [
+    "// How do I overwrite everything inside a document content object in a document?\n\n// Clear a content control and fill it with a single sentence, preserving the original formatting in a document.\n\nconst doc = Api.GetDocument();\nconst blockLvlSdt = Api.CreateBlockLvlSdt();\ndoc.Push(blockLvlSdt);\n\nconst content = blockLvlSdt.GetContent();\ncontent.GetElement(0).AddText(\"Original text inside the content control.\");\ncontent.SetText(\"Replaced text inside the content control.\");\n\nconst para = Api.CreateParagraph();\npara.AddText(\"Content after SetText: \" + content.GetText());\ndoc.Push(para);"
+  ],
   "params": [
     {
       "description": "The text to set.",

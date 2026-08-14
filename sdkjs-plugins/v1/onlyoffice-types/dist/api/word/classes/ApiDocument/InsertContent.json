@@ -2,7 +2,7 @@
   "description": "Inserts an array of elements into the current position of the document.\nThe array may contain a mix of element types:\n- {@link DocumentElement} elements are inserted as-is.\n- {@link ParagraphContent} elements are automatically grouped into paragraphs: consecutive paragraph-level elements\n  share one new paragraph.\n- Plain strings and numbers are wrapped in a new run and added to the current paragraph (same grouping rules as {@link ParagraphContent}).\n- {@link ApiDrawing} elements are wrapped in a new run and added to the current paragraph.\nElements that are already in use in a document are skipped.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/InsertContent/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text. It was inserted here.\");\ndoc.InsertContent([paragraph]);"
+    "// How do I add multiple paragraphs at once to a document?\n\n// Programmatically place pre-built content blocks into the document without appending them one by one.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text. It was inserted here.\");\ndoc.InsertContent([paragraph]);"
   ],
   "params": [
     {

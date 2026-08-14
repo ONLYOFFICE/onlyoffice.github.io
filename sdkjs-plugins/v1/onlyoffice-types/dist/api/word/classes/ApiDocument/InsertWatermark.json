@@ -2,7 +2,7 @@
   "description": "Inserts a watermark on each document page.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/InsertWatermark/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A watermark was inserted into this document.\");\ndoc.InsertWatermark(\"Watermark\");"
+    "// How do I stamp a watermark string across all pages in a document?\n\n// Mark draft or confidential content by overlaying a repeating label on each printed page.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A watermark was inserted into this document.\");\ndoc.InsertWatermark(\"Watermark\");"
   ],
   "params": [
     {

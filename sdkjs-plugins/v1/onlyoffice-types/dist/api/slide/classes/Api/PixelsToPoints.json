@@ -1,0 +1,18 @@
+{
+  "description": "Converts pixels to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/PixelsToPoints/",
+  "examples": [
+    "// Use the Api object to convert measurement units.\n\n// Display the conversion result in a shape on the slide.\n\nconst pixels = 100;\nconst points = Api.PixelsToPoints(pixels);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(pixels + ' pixels are equal to ' + points + ' points.');\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of pixels to convert to points.",
+      "name": "px",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PixelsToPoints(px: number): number"
+}

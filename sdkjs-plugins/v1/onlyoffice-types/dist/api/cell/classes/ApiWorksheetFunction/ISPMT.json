@@ -2,7 +2,7 @@
   "description": "Returns the interest paid during a specific period of an investment.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISPMT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ISPMT(0.1/12, 1, 2*12, 2000));"
+    "// How do I find the interest amount for a particular payment period in a spreadsheet?\n\n// Use a function to break down loan payments into principal and interest components in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ISPMT(0.1/12, 1, 2*12, 2000));"
   ],
   "params": [
     {

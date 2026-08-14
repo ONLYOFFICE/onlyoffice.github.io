@@ -1,0 +1,18 @@
+{
+  "description": "Removes an element using the position specified.\n<note>If the element you remove is the last paragraph element (i.e. all the elements are removed from the paragraph),\na new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/RemoveElement/",
+  "examples": [
+    "// How do I remove one specific piece of text from a paragraph in a spreadsheet?\n\n// Trim unwanted content from a paragraph by targeting the run at a given index in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"This is the first paragraph element. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the second paragraph element. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the third paragraph element (it will be removed from the paragraph and we will not see it). \");\nparagraph.AddElement(run);\nparagraph.AddLineBreak();\nrun = Api.CreateRun();\nrun.AddText(\"This is the fourth paragraph element - it became the third, because we removed the previous run from the paragraph. \");\nparagraph.AddElement(run);\nparagraph.AddLineBreak();\nrun = Api.CreateRun();\nrun.AddText(\"Please note that line breaks are not counted into paragraph elements!\");\nparagraph.AddElement(run);\nparagraph.RemoveElement(3);"
+  ],
+  "params": [
+    {
+      "description": "The element position which we want to remove from the paragraph.",
+      "name": "nPos",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveElement(nPos: number): boolean"
+}

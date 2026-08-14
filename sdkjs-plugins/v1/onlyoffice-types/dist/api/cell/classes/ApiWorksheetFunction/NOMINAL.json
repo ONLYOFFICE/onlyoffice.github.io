@@ -2,7 +2,7 @@
   "description": "Returns the annual nominal interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NOMINAL/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NOMINAL(0.7, 4));"
+    "// Find the stated interest rate from effective rate and compounding periods in a spreadsheet.\n\n// Convert compounded interest into annual percentage rate in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NOMINAL(0.7, 4));"
   ],
   "params": [
     {

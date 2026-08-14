@@ -2,7 +2,7 @@
   "description": "Returns the number of coupons payable between the settlement date and maturity date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPNUM/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPNUM(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+    "// What is the count of interest payments you will receive in a spreadsheet?\n\n// Determine how many coupon periods remain from settlement to expiration in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COUPNUM(\"1/10/2018\", \"6/15/2019\", 4, 1));"
   ],
   "params": [
     {

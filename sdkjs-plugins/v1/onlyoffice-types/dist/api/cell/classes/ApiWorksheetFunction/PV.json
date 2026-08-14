@@ -2,7 +2,7 @@
   "description": "Returns the present value of an investment: the total amount that a series of future payments is worth now.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PV(0.1/12, 2*12, -500, 0));"
+    "// What is an investment worth today given future payment amounts in a spreadsheet?\n\n// Determine the lump sum needed now for a stream of future payments in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PV(0.1/12, 2*12, -500, 0));"
   ],
   "params": [
     {

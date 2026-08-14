@@ -1,0 +1,43 @@
+{
+  "description": "Converts a document to Markdown or HTML text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/ConvertDocument/",
+  "examples": [
+    "// How do I export the text of a document as Markdown in a document?\n\n// Write headings and paragraphs, then append the Markdown version of that content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Heading 1\");\nparagraph.SetStyle(doc.GetStyle(\"Heading 1\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This document will be converted to Markdown.\");\ndoc.Push(paragraph);\nparagraph.Search(\"Markdown\")[0].SetBold(true);\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nparagraph.SetStyle(doc.GetStyle(\"Heading 2\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"There is an example of two heading levels.\");\ndoc.Push(paragraph);\n\nlet md = Api.ConvertDocument(\"markdown\", false, false, true, false);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Markdown\").SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddText(md);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "Conversion type.",
+      "name": "convertType",
+      "optional": true,
+      "type": "\"markdown\" | \"html\""
+    },
+    {
+      "description": "Defines if the HTML headings and IDs will be generated when the Markdown renderer of your target platform does not handle Markdown-style IDs.",
+      "name": "htmlHeadings",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if the images will be created in the base64 format.",
+      "name": "base64img",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if all heading levels in your document will be demoted to conform with the following standard: single H1 as title, H2 as top-level heading in the text body.",
+      "name": "demoteHeadings",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if HTML tags will be preserved in your Markdown. If you just want to use an occasional HTML tag, you can avoid using the opening angle bracket\rin the following way: \\<tag>text\\</tag>. By default, the opening angle brackets will be replaced with the special characters.",
+      "name": "renderHTMLTags",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "ConvertDocument(convertType?: \"markdown\" | \"html\", htmlHeadings?: boolean, base64img?: boolean, demoteHeadings?: boolean, renderHTMLTags?: boolean): string"
+}

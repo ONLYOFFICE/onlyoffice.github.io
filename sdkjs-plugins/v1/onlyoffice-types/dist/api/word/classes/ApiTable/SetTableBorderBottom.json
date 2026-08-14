@@ -2,7 +2,7 @@
   "description": "Sets the border which will be displayed at the bottom of the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderBottom/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the bottom 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, true, true);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+    "// How do I add a border along the bottom edge of a table in a document?\n\n// Style the lower edge of a table with a visible border line in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the bottom 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, true, true);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
   ],
   "params": [
     {

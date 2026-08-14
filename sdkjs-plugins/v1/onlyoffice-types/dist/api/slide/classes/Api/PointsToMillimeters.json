@@ -1,0 +1,18 @@
+{
+  "description": "Converts points to millimeters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/PointsToMillimeters/",
+  "examples": [
+    "// Use Api.PointsToMillimeters to convert measurement units.\n\n// Display the converted value in a shape text.\n\nconst points = 100;\nconst millimeters = Api.PointsToMillimeters(points);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(points + ' points are equal to ' + millimeters + ' millimeters.');\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of points to convert to millimeters.",
+      "name": "pt",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PointsToMillimeters(pt: number): number"
+}

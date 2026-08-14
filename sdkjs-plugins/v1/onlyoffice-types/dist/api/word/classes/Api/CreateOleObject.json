@@ -1,0 +1,38 @@
+{
+  "description": "Creates an OLE object with the parameters specified.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateOleObject/",
+  "examples": [
+    "// How do I insert an embedded application object into a paragraph in a document?\n\n// Link a third-party data source to a visual placeholder and place it inside a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet oleObject = Api.CreateOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}'\n);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(oleObject);"
+  ],
+  "params": [
+    {
+      "description": "The image source where the image to be inserted should be taken from (currently, only internet URL or Base64 encoded images are supported).",
+      "name": "imageSrc",
+      "type": "string"
+    },
+    {
+      "description": "The OLE object width in English measure units.",
+      "name": "width",
+      "type": "EMU"
+    },
+    {
+      "description": "The OLE object height in English measure units.",
+      "name": "height",
+      "type": "EMU"
+    },
+    {
+      "description": "The OLE object string data.",
+      "name": "data",
+      "type": "string"
+    },
+    {
+      "description": "The application ID associated with the current OLE object.",
+      "name": "appId",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiOleObject"
+  },
+  "signature": "CreateOleObject(imageSrc: string, width: EMU, height: EMU, data: string, appId: string): ApiOleObject"
+}

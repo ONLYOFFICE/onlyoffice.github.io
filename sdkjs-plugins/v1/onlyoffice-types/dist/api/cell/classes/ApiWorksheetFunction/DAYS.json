@@ -2,7 +2,7 @@
   "description": "Returns the number of days between the two dates.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAYS/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DAYS(\"3/31/2018\", \"3/16/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// What is the day count from one date to another in a spreadsheet?\n\n// Measure the elapsed time between dates in days in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.DAYS(\"3/31/2018\", \"3/16/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

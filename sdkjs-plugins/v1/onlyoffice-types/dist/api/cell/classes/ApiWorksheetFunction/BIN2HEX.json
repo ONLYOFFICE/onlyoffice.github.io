@@ -2,7 +2,7 @@
   "description": "Converts a binary number to hexadecimal.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BIN2HEX/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BIN2HEX(1110011100, 4));"
+    "// How do I change a binary code into hex notation for programming use in a spreadsheet?\n\n// Translate base-2 values to base-16 notation for computer system operations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BIN2HEX(1110011100, 4));"
   ],
   "params": [
     {

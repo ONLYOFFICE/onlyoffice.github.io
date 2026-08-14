@@ -2,7 +2,7 @@
   "description": "Specifies the default table cell spacing (the spacing between adjacent cells and the edges of the table).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetCellSpacing/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the cell spacing to half an inch:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ntablePr.SetCellSpacing(720);\ndoc.Push(table);"
+    "// How do I control the space between individual cells in a document?\n\n// Space out table cells evenly to improve readability in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the cell spacing to half an inch:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ntablePr.SetCellSpacing(720);\ndoc.Push(table);"
   ],
   "params": [
     {

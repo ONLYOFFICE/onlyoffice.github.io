@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the normal cumulative distribution for the specified mean and standard deviation.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORMINV/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet valueArr = [0.34, 7, 3];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet probability = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\nlet func = Api.GetWorksheetFunction();\nlet inv = func.NORMINV(probability, mean, standardDeviation);\nworksheet.GetRange(\"C1\").SetValue(inv);"
+    "// Calculate the inverse of cumulative probability with custom mean and standard deviation in a spreadsheet.\n\n// Determine the threshold value corresponding to a percentile in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet valueArr = [0.34, 7, 3];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet probability = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\nlet func = Api.WorksheetFunction;\nlet inv = func.NORMINV(probability, mean, standardDeviation);\nworksheet.GetRange(\"C1\").SetValue(inv);"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the specified number of characters from the start of a text string.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LEFT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LEFT(\"Online Office\", 6));"
+    "// How do I get the first few letters or a prefix from a text string in a spreadsheet?\n\n// Retrieve a specific number of characters counting from the left side of text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LEFT(\"Online Office\", 6));"
   ],
   "params": [
     {

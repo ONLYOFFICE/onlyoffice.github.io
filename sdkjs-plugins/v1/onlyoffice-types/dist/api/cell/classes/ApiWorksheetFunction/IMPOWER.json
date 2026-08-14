@@ -2,7 +2,7 @@
   "description": "Returns a complex number raised to an integer power.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMPOWER/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMPOWER(\"-2+2.5i\", -3));"
+    "// How do I calculate a complex number raised to an integer power in a spreadsheet?\n\n// Get the exponential result of complex number calculations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMPOWER(\"-2+2.5i\", -3));"
   ],
   "params": [
     {

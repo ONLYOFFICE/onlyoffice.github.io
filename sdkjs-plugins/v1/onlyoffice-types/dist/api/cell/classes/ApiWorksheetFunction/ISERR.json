@@ -2,7 +2,7 @@
   "description": "Checks whether a value is an error other than *#N/A*, and returns **true** or **false**.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISERR/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"B3\").SetValue(\"45\")\nlet result = func.ISERROR(\"B3\");\nworksheet.GetRange(\"C3\").SetValue(result)"
+    "// How do I detect if a cell contains an error in a spreadsheet?\n\n// Identify errors in cells while excluding N/A values in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"B3\").SetValue(\"45\")\nlet result = func.ISERROR(\"B3\");\nworksheet.GetRange(\"C3\").SetValue(result)"
   ],
   "params": [
     {

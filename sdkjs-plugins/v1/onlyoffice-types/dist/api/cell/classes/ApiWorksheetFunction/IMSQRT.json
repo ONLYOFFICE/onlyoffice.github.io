@@ -2,7 +2,7 @@
   "description": "Returns the square root of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSQRT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMSQRT(\"-2+2.5i\"));"
+    "// How do I find the square root of a complex number in a spreadsheet?\n\n// Get the square root result for complex number operations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMSQRT(\"-2+2.5i\"));"
   ],
   "params": [
     {

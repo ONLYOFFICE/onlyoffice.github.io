@@ -1,6 +1,9 @@
 {
   "description": "Adds a new drop-down list content control to the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddDropDownListContentControl/",
+  "examples": [
+    "// How do I insert a drop-down list field into a document?\n\n// Give readers a fixed set of choices to pick from using an inline list control in a document.\n\nlet doc = Api.GetDocument();\ndoc.AddDropDownListContentControl();"
+  ],
   "params": [
     {
       "description": "An array of objects representing the items in the drop-down list.",

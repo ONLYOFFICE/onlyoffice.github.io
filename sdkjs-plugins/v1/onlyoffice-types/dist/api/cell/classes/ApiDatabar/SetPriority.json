@@ -1,0 +1,19 @@
+{
+  "description": "Sets the priority value of the conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetPriority/",
+  "examples": [
+    "// How do I control which conditional formatting rule takes precedence over others in a spreadsheet?\n\n// Reorder highlight rules so a chosen one is checked at a particular position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original priority:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetPriority());\n\ncondition1.SetPriority(5);\n\nworksheet.GetRange(\"C4\").SetValue(\"New priority:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetPriority());"
+  ],
+  "params": [
+    {
+      "description": "The priority value (1-based).",
+      "name": "Priority",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetPriority(Priority: number): void",
+  "since": "9.1.0"
+}

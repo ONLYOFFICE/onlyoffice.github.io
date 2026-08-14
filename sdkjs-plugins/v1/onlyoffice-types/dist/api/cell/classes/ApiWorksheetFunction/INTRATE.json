@@ -2,7 +2,7 @@
   "description": "Returns the interest rate for a fully invested security.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/INTRATE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.INTRATE(\"1/1/2018\", \"11/12/2018\", 1000, 1050, 2));"
+    "// How do I find the interest rate based on investment values in a spreadsheet?\n\n// Determine the return rate on a security investment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.INTRATE(\"1/1/2018\", \"11/12/2018\", 1000, 1050, 2));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Extracts the substring from the specified string starting from the left character and is intended for languages that use the double-byte character set (DBCS) like Japanese, Chinese, Korean etc.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LEFTB/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LEFTB(\"Online Office\", 6));"
+    "// How do I get a substring from text in languages like Chinese or Japanese in a spreadsheet?\n\n// Work with left-aligned text extraction that counts bytes instead of characters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LEFTB(\"Online Office\", 6));"
   ],
   "params": [
     {

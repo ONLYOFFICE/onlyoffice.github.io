@@ -2,7 +2,7 @@
   "description": "Returns an array of tables that represents all the tables nested within the specified table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/GetTables/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet table1 = Api.CreateTable(3, 3);\nlet table2 = Api.CreateTable(3, 3);\nlet table3 = Api.CreateTable(2, 2);\nlet cell1 = table1.GetRow(0).GetCell(0);\nlet cell2 = table1.GetRow(1).GetCell(1);\ntable1.AddElement(cell1, 0, table2);\ntable1.AddElement(cell2, 0, table3);\ntable1.SetWidth(\"percent\", 100);\ndoc.Push(table1);\nlet arrTables = table1.GetTables();\narrTables[0].SetWidth(\"percent\", 50);\narrTables[1].SetWidth(\"percent\", 30);"
+    "// How do I get a list of every table embedded inside another table in a document?\n\n// Adjust the width of each nested table retrieved from a parent table in a document.\n\nlet doc = Api.GetDocument();\nlet table1 = Api.CreateTable(3, 3);\nlet table2 = Api.CreateTable(3, 3);\nlet table3 = Api.CreateTable(2, 2);\nlet cell1 = table1.GetRow(0).GetCell(0);\nlet cell2 = table1.GetRow(1).GetCell(1);\ntable1.AddElement(cell1, 0, table2);\ntable1.AddElement(cell2, 0, table3);\ntable1.SetWidth(\"percent\", 100);\ndoc.Push(table1);\nlet arrTables = table1.GetTables();\narrTables[0].SetWidth(\"percent\", 50);\narrTables[1].SetWidth(\"percent\", 30);"
   ],
   "params": [],
   "returns": {

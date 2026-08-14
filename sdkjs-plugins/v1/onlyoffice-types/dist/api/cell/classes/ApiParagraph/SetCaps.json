@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that any lowercase characters in this paragraph are formatted for display only as their capital letter character equivalents.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/SetCaps/",
+  "examples": [
+    "// How do I make every letter in a paragraph appear uppercase in a spreadsheet?\n\n// Enforce an all-caps style on a paragraph without changing the underlying text in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(110, 130, 170));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(30),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('This text is displayed in all caps.');\nparagraph.SetCaps(true);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This text has normal capitalization.');\ncontent.Push(paragraph2);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed capitalized.",
+      "name": "isCaps",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetCaps(isCaps: boolean): ApiParagraph"
+}

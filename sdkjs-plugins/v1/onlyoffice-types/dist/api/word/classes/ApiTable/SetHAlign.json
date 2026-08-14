@@ -2,7 +2,7 @@
   "description": "Sets the horizontal alignment to the table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetHAlign/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\ntable.SetHAlign(\"center\");"
+    "// How do I align a table to the left, center, or right in a document?\n\n// Control where a table sits across the width of the page in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.GetCell(0, 0).GetContent().GetElement(0).AddText(\"This is just a sample text.\");\ntable.SetHAlign(\"center\");"
   ],
   "params": [
     {

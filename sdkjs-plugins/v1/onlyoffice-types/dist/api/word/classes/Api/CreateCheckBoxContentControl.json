@@ -1,0 +1,20 @@
+{
+  "description": "Creates a checkbox content control.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateCheckBoxContentControl/",
+  "examples": [
+    "// How do I add a checkbox that is already checked to a document?\n\n// Place a pre-checked checkbox control on a new line in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateCheckBoxContentControl({checked: true});\nlet paragraph = Api.CreateParagraph();\nparagraph.Push(cc);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The configuration object with the checkbox properties.",
+      "name": "checkBoxPr",
+      "type": "ContentControlCheckBoxPr"
+    }
+  ],
+  "returns": {
+    "description": "An inline-level content control that represents a checkbox.",
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "CreateCheckBoxContentControl(checkBoxPr: ContentControlCheckBoxPr): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

@@ -1,0 +1,12 @@
+{
+  "description": "Returns the main document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetDocument/",
+  "examples": [
+    "// How do I access the open document and add content to it in a document?\n\n// Insert a paragraph into the active document using a reference to it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDocument"
+  },
+  "signature": "GetDocument(): ApiDocument"
+}

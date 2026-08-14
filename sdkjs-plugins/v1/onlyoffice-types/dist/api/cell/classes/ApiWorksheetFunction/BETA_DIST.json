@@ -2,7 +2,7 @@
   "description": "Returns the beta probability distribution function.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETA_DIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.BETA_DIST(0.4, 4, 5, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// How do I determine what percentage of outcomes fall within a range in a spreadsheet?\n\n// Evaluate the distribution curve to understand probability across different values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BETA_DIST(0.4, 4, 5, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

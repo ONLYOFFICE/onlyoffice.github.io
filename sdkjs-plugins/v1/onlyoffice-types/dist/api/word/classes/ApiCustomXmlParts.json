@@ -5,6 +5,9 @@
     "Add": {
       "description": "Adds a new custom XML part to the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/Add/",
+      "examples": [
+        "// How do I add a custom XML part with specific content to a document?\n\n// Embed structured XML data into a document to store metadata alongside the content in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet newXml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"New XML part added: \" + newXml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XML string to be added.",
@@ -22,6 +25,9 @@
     "GetAll": {
       "description": "Returns all custom XML parts from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetAll/",
+      "examples": [
+        "// How do I retrieve all custom XML parts at once in a document?\n\n// Iterate over every embedded XML part to audit or process stored data in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText1 = '<products><item><name>Laptop</name><price>999</price></item></products>';\nlet xmlText2 = '<user><name>John Doe</name><email>john@example.com</email></user>';\n\nlet xml1 = xmlManager.Add(xmlText1);\nlet xml2 = xmlManager.Add(xmlText2);\n\nlet allXmlParts = xmlManager.GetAll();\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"All custom XML parts: \" + allXmlParts.map(xml => xml.GetXml()).join(\", \"));\ndoc.Push(infoParagraph);"
+      ],
       "params": [],
       "returns": {
         "description": "An array of all custom XML parts.",
@@ -33,6 +39,9 @@
     "GetById": {
       "description": "Returns a custom XML part by its ID from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetById/",
+      "examples": [
+        "// How do I look up custom XML parts by their namespace in a document?\n\n// Filter all embedded XML parts to those belonging to a specific schema in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = \"<content xmlns='http://example.com'><text>Example XML</text></content>\";\nlet xml = xmlManager.Add(xmlText);\nlet namespace = \"http://example.com\";\nlet xmlParts = xmlManager.GetByNamespace(namespace);\nlet infoParagraph = Api.CreateParagraph();\nxmlParts.forEach(part => {\n    infoParagraph.AddText(\"XML part: \" + part.GetXml());\n});\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XML part ID.",
@@ -50,6 +59,9 @@
     "GetByNamespace": {
       "description": "Returns custom XML parts by namespace from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetByNamespace/",
+      "examples": [
+        "// How do I filter custom XML parts by namespace in a document?\n\n// Narrow down embedded XML data to only the parts belonging to a given namespace in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = \"<content xmlns='http://example.com'><text>Example XML</text></content>\";\nlet xml = xmlManager.Add(xmlText);\nlet namespace = \"http://example.com\";\nlet xmlParts = xmlManager.GetByNamespace(namespace);\nlet infoParagraph = Api.CreateParagraph();\nxmlParts.forEach(part => {\n    infoParagraph.AddText(\"XML part: \" + part.GetXml());\n});\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The namespace of the XML parts.",
@@ -67,6 +79,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlParts class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetClassType/",
+      "examples": [
+        "// How do I get the class type of a custom XML parts object in a document?\n\n// Confirm the object kind before calling type-specific operations on the XML manager in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet classType = xmlManager.GetClassType();\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Class type: \" + classType);\ndoc.Push(infoParagraph);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customXmlParts\""
@@ -76,6 +91,9 @@
     "GetCount": {
       "description": "Returns a number of custom XML parts in the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlParts/Methods/GetCount/",
+      "examples": [
+        "// How do I find the total number of custom XML parts in a document?\n\n// Verify that all expected XML data blocks were added by checking the part count in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nxmlManager.Add(\"<products><item><name>Laptop</name><price>999</price></item></products>\");\nxmlManager.Add(\"<user><name>John Doe</name><email>john@example.com</email></user>\");\nlet count = xmlManager.GetCount();\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"There are \" + count + \" custom XML parts in the document.\");\ndoc.Push(infoParagraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The number of custom XML parts.",

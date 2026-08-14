@@ -2,7 +2,7 @@
   "description": "Returns the number of days in the coupon period that contains the settlement date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPDAYS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYS(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+    "// What is the length of the coupon interval including settlement in a spreadsheet?\n\n// Determine the coupon cycle duration relevant to your transaction in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYS(\"1/10/2018\", \"6/15/2019\", 4, 1));"
   ],
   "params": [
     {

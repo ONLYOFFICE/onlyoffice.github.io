@@ -2,7 +2,7 @@
   "description": "Rounds a number down, to the nearest integer or to the nearest multiple of significance.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FLOOR_MATH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR_MATH(-5.5, 2, 1));"
+    "// How do I round down a negative or positive number in a spreadsheet?\n\n// Decrease a number to the nearest whole number or custom increment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR_MATH(-5.5, 2, 1));"
   ],
   "params": [
     {

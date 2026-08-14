@@ -2,7 +2,7 @@
   "description": "Returns a random number between the numbers specified.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RANDBETWEEN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.RANDBETWEEN(-1, 10));"
+    "// How do I pick a random value between two numbers in a spreadsheet?\n\n// Create an unpredictable integer within a minimum and maximum in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.RANDBETWEEN(-1, 10));"
   ],
   "params": [
     {

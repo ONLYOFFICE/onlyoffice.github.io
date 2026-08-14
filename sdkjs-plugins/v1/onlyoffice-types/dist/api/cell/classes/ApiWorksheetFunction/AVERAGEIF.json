@@ -2,7 +2,7 @@
   "description": "Finds the average (arithmetic mean) for the cells specified by a given condition or criteria.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AVERAGEIF/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet numbers = [67, 87, 98, 45];\n\nfor (let i = 0; i < numbers.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbers[i]);\n}\n\nlet range = worksheet.GetRange(\"A1:A4\");\nworksheet.GetRange(\"C1\").SetValue(func.AVERAGEIF(range, \">45\"));"
+    "// Calculate the mean of values that satisfy a given criterion in a spreadsheet.\n\n// Filter a range by one rule and compute the arithmetic mean of matching entries in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet numbers = [67, 87, 98, 45];\n\nfor (let i = 0; i < numbers.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(numbers[i]);\n}\n\nlet range = worksheet.GetRange(\"A1:A4\");\nworksheet.GetRange(\"C1\").SetValue(func.AVERAGEIF(range, \">45\"));"
   ],
   "params": [
     {

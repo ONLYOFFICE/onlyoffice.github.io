@@ -2,7 +2,7 @@
   "description": "Returns the number of characters in a text string.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LEN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LEN(\"Online Office\"));"
+    "// How do I find out how many letters or characters are in a text string in a spreadsheet?\n\n// Get the total character count of any text value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LEN(\"Online Office\"));"
   ],
   "params": [
     {

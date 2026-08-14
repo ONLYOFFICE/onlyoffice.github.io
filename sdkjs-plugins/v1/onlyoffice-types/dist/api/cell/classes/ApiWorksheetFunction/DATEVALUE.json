@@ -2,7 +2,7 @@
   "description": "Converts a date in the form of text to a number that represents the date in the date-time code.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DATEVALUE/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DATEVALUE(\"2018-3-16\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// What date value does a text string represent in a spreadsheet?\n\n// Parse text into a usable date format in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.DATEVALUE(\"2018-3-16\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

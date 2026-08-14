@@ -2,7 +2,7 @@
   "description": "Returns a number that is rounded up to the nearest integer or to the nearest multiple of significance. The number is always rounded up regardless of its sing.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CEILING_PRECISE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CEILING_PRECISE(-6.7, 2));"
+    "// What is the precise ceiling for positive and negative values in a spreadsheet?\n\n// Always round toward positive infinity by a specified interval in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CEILING_PRECISE(-6.7, 2));"
   ],
   "params": [
     {

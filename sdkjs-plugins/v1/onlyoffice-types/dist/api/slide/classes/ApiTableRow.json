@@ -9,7 +9,7 @@
       "description": "Returns a cell by its position in the current row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCell/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is a sample text in the cell of the first row.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I retrieve a cell from a row by its column index in a presentation?\n\n// Select a cell from a table row to read or modify its content in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text in the cell of the first row.\");\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -27,7 +27,7 @@
       "description": "Returns a number of cells in the current row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetCellsCount/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar nCellsCount = oRow.GetCellsCount();\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"The number of cells in the row: \" + nCellsCount);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Create a table and access the first row object.\n\n// Retrieve the number of cells and display it in the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cellsCount = row.GetCellsCount();\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The number of cells in the row: \" + cellsCount);\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [],
       "returns": {
@@ -39,7 +39,7 @@
       "description": "Returns the type of the ApiTableRow class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetClassType/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\nvar sClassType = oRow.GetClassType();\noParagraph.AddText(\"Class type: \" + sClassType);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Create a table and access the first row to get its class type.\n\n// Display the class type identifier in the slide content.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nconst classType = row.GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [],
       "returns": {
@@ -50,6 +50,9 @@
     "GetHeight": {
       "description": "Returns the height of the current table row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/GetHeight/",
+      "examples": [
+        "// Create a table, set the row height, and retrieve the value.\n\n// Display the row height in EMU units in the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(Api.MillimetersToEmus(20));\n\nslide.RemoveAllObjects();\nslide.AddObject(table);\n\nconst height = row.GetHeight();\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText('Row height: ' + height + ' EMU');\ncontent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU | null"
@@ -91,7 +94,7 @@
       "description": "Sets the height to the current table row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableRow/Methods/SetHeight/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\noRow.SetHeight(30 * 36000);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Create a table and access the first row.\n\n// Apply a new height value to the row.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(30 * 36000);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {

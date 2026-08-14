@@ -2,7 +2,7 @@
   "description": "Returns a number rounded to the desired multiple.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MROUND/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MROUND(14.35, 0.4));"
+    "// What is a number rounded to a specific multiple in a spreadsheet?\n\n// Adjust a value to the closest increment in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MROUND(14.35, 0.4));"
   ],
   "params": [
     {

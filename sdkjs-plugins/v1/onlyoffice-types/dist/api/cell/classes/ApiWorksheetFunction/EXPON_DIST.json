@@ -2,7 +2,7 @@
   "description": "Returns the exponential distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/EXPON_DIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.EXPON_DIST(0.5, 3, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Calculate exponential distribution values.\n\n// Apply EXPON_DIST function to get the exponential distribution in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.EXPON_DIST(0.5, 3, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

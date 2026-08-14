@@ -1,0 +1,10 @@
+{
+  "description": "Redraws the editor screen, making the changes already made by a macro visible without waiting for it to finish. Observable from asynchronous code only. Repaints without recalculating: call {@link Api#Calculate} first if formula results must be up to date.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Redraw/",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Redraw(): boolean",
+  "since": "9.5.0"
+}

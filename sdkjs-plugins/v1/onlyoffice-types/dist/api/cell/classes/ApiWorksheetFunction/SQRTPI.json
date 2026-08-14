@@ -2,7 +2,7 @@
   "description": "Returns the square root of (number * pi).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SQRTPI/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SQRTPI(5));"
+    "// The SQRTPI function returns the square root of the product of a number and pi (3.14159...).\n\n// Get the square root of (5 * pi) and place it in cell A1.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SQRTPI(5));"
   ],
   "params": [
     {

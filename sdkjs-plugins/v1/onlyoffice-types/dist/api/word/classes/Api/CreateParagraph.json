@@ -1,0 +1,12 @@
+{
+  "description": "Creates a new paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateParagraph/",
+  "examples": [
+    "// How do I create a blank paragraph, fill it with text, and append it to a document?\n\n// Build a paragraph from scratch and place it at the bottom of a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\ndoc.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "CreateParagraph(): ApiParagraph"
+}

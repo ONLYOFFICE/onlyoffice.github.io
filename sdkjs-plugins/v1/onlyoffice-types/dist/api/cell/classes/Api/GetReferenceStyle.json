@@ -1,0 +1,14 @@
+{
+  "description": "Returns the cell reference style.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetReferenceStyle/",
+  "examples": [
+    "// How do I check whether the column-letter or column-number addressing style is active in a spreadsheet?\n\n// Record the active cell reference notation into a cell for inspection in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(Api.GetReferenceStyle());"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The cell reference style.",
+    "type": "ReferenceStyle"
+  },
+  "signature": "GetReferenceStyle(): ReferenceStyle",
+  "since": "8.1.0"
+}

@@ -2,7 +2,7 @@
   "description": "Chooses a value or action to perform from a list of values, based on an index number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHOOSE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CHOOSE(2, 3, 4, 89, 76, 0));"
+    "// Return the item at a specific index from a collection of values in a spreadsheet.\n\n// Use an index to access a particular entry in your choice options in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CHOOSE(2, 3, 4, 89, 76, 0));"
   ],
   "params": [
     {

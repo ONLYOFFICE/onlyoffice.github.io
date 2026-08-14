@@ -2,7 +2,7 @@
   "description": "Returns the starting position of one text string within another text string. This function is case-sensitive.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FIND/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FIND(\"line\", \"Online Office\"));"
+    "// How do I search for specific text inside a larger text string in a spreadsheet?\n\n// Locate where one piece of text begins within another in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FIND(\"line\", \"Online Office\"));"
   ],
   "params": [
     {

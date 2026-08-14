@@ -1,0 +1,43 @@
+{
+  "description": "Returns the paragraph text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/GetText/",
+  "examples": [
+    "// How do I retrieve the plain text from a paragraph inside a shape in a PDF?\n\n// Extract a paragraph's text and display it in a second paragraph within the same shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Sample paragraph text.\");\nconst text = paragraph.GetText();\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Paragraph text: \" + text);\ndocContent.Push(infoParagraph);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Options for formatting the returned text.",
+      "name": "options",
+      "optional": true,
+      "type": "object"
+    },
+    {
+      "description": "Defines if the resulting string will include numbering or not.",
+      "name": "options_Numbering",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines if the resulting string will include mathematical expressions or not.",
+      "name": "options_Math",
+      "optional": true,
+      "type": "boolean"
+    },
+    {
+      "description": "Defines how the line separator will be specified in the resulting string. Any string can be used. The default separator is \"\\r\".",
+      "name": "options_NewLineSeparator",
+      "optional": true,
+      "type": "string"
+    },
+    {
+      "description": "Defines how the tab will be specified in the resulting string (does not apply to numbering). Any string can be used. The default symbol is \"\\t\".",
+      "name": "options_TabSymbol",
+      "optional": true,
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetText(options?: object, options_Numbering?: boolean, options_Math?: boolean, options_NewLineSeparator?: string, options_TabSymbol?: string): string"
+}

@@ -2,7 +2,7 @@
   "description": "Sets all 4 font slots with the specified font family.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetFontFamily/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font family set to 'Consolas'.\");\nparagraph.SetFontFamily(\"Consolas\");"
+    "// How do I change the font family used for a paragraph's text in a document?\n\n// Switch a paragraph to a different typeface to match a desired visual style in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font family set to 'Consolas'.\");\nparagraph.SetFontFamily(\"Consolas\");"
   ],
   "params": [
     {

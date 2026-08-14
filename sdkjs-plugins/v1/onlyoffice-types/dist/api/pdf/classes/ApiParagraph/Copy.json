@@ -1,0 +1,12 @@
+{
+  "description": "Creates a paragraph copy. Ingnore comments, footnote references, complex fields.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Copy/",
+  "examples": [
+    "// How do I make a copy of a paragraph in a PDF?\n\n// Create a duplicate and add it to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\n\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is just a sample text that was copied.\");\ndocContent.Push(paragraph);\n\nconst copyParagraph = paragraph.Copy();\ndocContent.Push(copyParagraph);\npage.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiParagraph"
+  },
+  "signature": "Copy(): ApiParagraph"
+}

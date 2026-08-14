@@ -2,7 +2,7 @@
   "description": "Returns the inverse hyperbolic cosine of a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACOSH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ACOSH(3.25));"
+    "// Apply the ACOSH function to get the inverse hyperbolic cosine in a spreadsheet.\n\n// Store the calculated inverse hyperbolic cosine value in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACOSH(3.25));"
   ],
   "params": [
     {

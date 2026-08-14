@@ -1,0 +1,18 @@
+{
+  "description": "Returns a Range object that represents the rows in the specified range. If the specified row is outside the Range object, a new Range will be returned that represents the cells between the columns of the original range in the specified row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRows/",
+  "examples": [
+    "// How do I iterate over each row in a range and set its value in a spreadsheet?\n\n// Fill a multi-row range by writing a different value into each row one at a time in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"1:3\");\nfor (let i=1; i <= 3; i++) {\n\tlet rows = range.GetRows(i);    \n\trows.SetValue(i);\n}"
+  ],
+  "params": [
+    {
+      "description": "The row number (starts counting from 1, the 0 value returns an error).",
+      "name": "nRow",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange | null"
+  },
+  "signature": "GetRows(nRow: number): ApiRange | null"
+}

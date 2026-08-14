@@ -95,6 +95,10 @@ npm run generate         # regenerate src/generated from sdkjs + rebuild dist/ap
                          # (postgenerate also regenerates executeMethod types and dist/ambient)
 ```
 
+`generate` also needs `DOCS_PATH` - a checkout (clone or unpacked archive) of the api.onlyoffice.com
+documentation site, which supplies every runnable `@example`. sdkjs's JSDoc carries only a `@see`
+path to those files, not the code.
+
 `generate` needs a local sdkjs checkout (`SDKJS_PATH` env or `--sdkjs`), plus `sdkjs-forms` and
 `sdkjs-ext` next to it (override with `SDKJS_FORMS_PATH`/`SDKJS_EXT_PATH`). The exact expected source
 commits are pinned in `src/generated/generation-manifest.json`; regenerating from those commits must

@@ -1,0 +1,23 @@
+{
+  "description": "Creates a linear gradient fill to apply to the object using the selected linear gradient as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateLinearGradientFill/",
+  "examples": [
+    "// How do I fill a shape with colors that blend smoothly across an angle in a presentation?\n\n// Customize a shape's appearance with a gradient that transitions between colors in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\nslide.AddObject(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The array of gradient color stops measured in 1000th of percent.",
+      "name": "gradientStops",
+      "type": "number[]"
+    },
+    {
+      "description": "The angle measured in 60000th of a degree that will define the gradient direction.",
+      "name": "angle",
+      "type": "PositiveFixedAngle"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateLinearGradientFill(gradientStops: number[], angle: PositiveFixedAngle): ApiFill"
+}

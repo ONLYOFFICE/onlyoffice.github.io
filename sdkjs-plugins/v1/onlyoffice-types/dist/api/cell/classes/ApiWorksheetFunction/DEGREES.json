@@ -2,7 +2,7 @@
   "description": "Converts radians to degrees.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DEGREES/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DEGREES(1.5));"
+    "// What is a radian value expressed in degrees in a spreadsheet?\n\n// Transform radian angles into their degree equivalents in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DEGREES(1.5));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the mean of the interior portion of a set of data values.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRIMMEAN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet argumentsArr = [1, 2, 3, 4];\n\n// Place the numbers in cells\nfor (let i = 0; i < argumentsArr.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(argumentsArr[i]);\n}\n\n// Get values from the range\nlet data = worksheet.GetRange(\"A1:A4\");\n\n// Calculate the TRIMMEAN of the range A1:A6\nlet func = Api.GetWorksheetFunction();\nlet result = func.TRIMMEAN(data, 0.6);\nworksheet.GetRange(\"B1\").SetValue(result);"
+    "// How do I find the average of interior data points in a spreadsheet?\n\n// Get the trimmed mean that excludes outliers from a dataset in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet argumentsArr = [1, 2, 3, 4];\n\n// Place the numbers in cells\nfor (let i = 0; i < argumentsArr.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(argumentsArr[i]);\n}\n\n// Get values from the range\nlet data = worksheet.GetRange(\"A1:A4\");\n\n// Calculate the TRIMMEAN of the range A1:A6\nlet func = Api.WorksheetFunction;\nlet result = func.TRIMMEAN(data, 0.6);\nworksheet.GetRange(\"B1\").SetValue(result);"
   ],
   "params": [
     {

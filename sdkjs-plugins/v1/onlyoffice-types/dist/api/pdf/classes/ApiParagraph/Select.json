@@ -1,0 +1,12 @@
+{
+  "description": "Selects the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Select/",
+  "examples": [
+    "// How do I mark a paragraph as selected in a PDF?\n\n// Activate selection on a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This paragraph will be selected.');\npage.AddObject(shape);\n\nparagraph.Select();"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Select(): boolean"
+}

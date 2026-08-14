@@ -2,7 +2,7 @@
   "description": "Counts a number of cells within a range that meet the given condition.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUNTIF/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet fruits = [\"Apples\", \"ranges\", \"Bananas\"];\nlet numbers = [45, 6, 8];\n\nfor (let i = 0; i < fruits.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(fruits[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"D3\").SetValue(func.COUNTIF(range, \"*es\"));"
+    "// What is the total of entries that match your pattern in a spreadsheet?\n\n// Find how many cells contain values that meet your requirement in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet fruits = [\"Apples\", \"ranges\", \"Bananas\"];\nlet numbers = [45, 6, 8];\n\nfor (let i = 0; i < fruits.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(fruits[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"D3\").SetValue(func.COUNTIF(range, \"*es\"));"
   ],
   "params": [
     {

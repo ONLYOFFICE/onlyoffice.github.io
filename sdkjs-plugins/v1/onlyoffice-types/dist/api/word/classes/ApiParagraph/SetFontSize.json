@@ -2,7 +2,7 @@
   "description": "Sets the font size to the characters of the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetFontSize/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph with the font size set to 24 points.\");\nparagraph.SetFontSize(48);"
+    "// How do I make the text in a paragraph larger or smaller in a document?\n\n// Resize paragraph text to stand out or fit a specific layout requirement in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph with the font size set to 24 points.\");\nparagraph.SetFontSize(48);"
   ],
   "params": [
     {

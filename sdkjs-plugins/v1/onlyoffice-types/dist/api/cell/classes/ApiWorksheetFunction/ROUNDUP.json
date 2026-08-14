@@ -2,7 +2,7 @@
   "description": "Rounds a number up, away from zero.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ROUNDUP/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ROUNDUP(3.456, 0));"
+    "// How do I round numbers up in a cell in a spreadsheet?\n\n// Increase a number to its higher whole number or specified decimal place in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ROUNDUP(3.456, 0));"
   ],
   "params": [
     {

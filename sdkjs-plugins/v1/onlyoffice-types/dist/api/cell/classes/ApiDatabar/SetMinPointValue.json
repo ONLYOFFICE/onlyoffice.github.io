@@ -1,0 +1,19 @@
+{
+  "description": "Sets the value for the minimum value condition for the data bar.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/SetMinPointValue/",
+  "examples": [
+    "// How do I set the exact number that represents the minimum bar length in a spreadsheet?\n\n// Start the data bar scale at a specific value so bars below that point are not shown in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nworksheet.GetRange(\"C1\").SetValue(\"Before:\");\nworksheet.GetRange(\"C2\").SetValue(dataBar.GetMinPointValue() || \"Auto\");\n\ndataBar.SetMinPointValue(50);\n\nworksheet.GetRange(\"C3\").SetValue(\"After:\");\nworksheet.GetRange(\"C4\").SetValue(dataBar.GetMinPointValue() || \"Auto\");"
+  ],
+  "params": [
+    {
+      "description": "The value of the minimum value condition.",
+      "name": "value",
+      "type": "string | number"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetMinPointValue(value: string | number): void",
+  "since": "9.1.0"
+}

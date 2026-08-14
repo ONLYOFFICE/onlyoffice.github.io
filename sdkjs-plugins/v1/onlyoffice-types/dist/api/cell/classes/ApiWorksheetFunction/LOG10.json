@@ -2,7 +2,7 @@
   "description": "Returns the base-10 logarithm of a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOG10/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOG10(56));"
+    "// How do I find the logarithm with base 10 in a spreadsheet?\n\n// Get the common logarithm value of a number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LOG10(56));"
   ],
   "params": [
     {

@@ -6,7 +6,7 @@
       "description": "Returns a type of the ApiUnsupported class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiUnsupported/Methods/GetClassType/",
       "examples": [
-        "// todo_example"
+        "// How do I find out what kind of unsupported element I have encountered in a document?\n\n// Confirm the category of an unknown annotation by retrieving its type label in a document."
       ],
       "params": [],
       "returns": {

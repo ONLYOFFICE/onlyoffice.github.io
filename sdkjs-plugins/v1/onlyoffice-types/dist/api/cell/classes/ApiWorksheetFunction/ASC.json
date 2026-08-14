@@ -2,7 +2,7 @@
   "description": "For double-byte character set (DBCS) languages, the function changes full-width (double-byte) characters to half-width (single-byte) characters.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ASC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ASC(\"text\"));"
+    "// Apply the ASC function to change character width in a spreadsheet.\n\n// Reduce character size by converting from double-byte to single-byte in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ASC(\"text\"));"
   ],
   "params": [
     {

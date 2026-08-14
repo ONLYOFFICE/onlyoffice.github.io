@@ -1,0 +1,13 @@
+{
+  "description": "Returns an internal ID of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/GetInternalId/",
+  "examples": [
+    "// How do I read the internal ID of a paragraph in a spreadsheet?\n\n// Confirm which paragraph is being referenced by checking its identifier in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(89, 130, 190));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Sample text.');\n\nworksheet.GetRange('A1').SetValue('Paragraph ID: ' + paragraph.GetInternalId());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "string"
+  },
+  "signature": "GetInternalId(): string",
+  "since": "9.2.0"
+}

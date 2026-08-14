@@ -2,7 +2,7 @@
   "description": "Checks whether a condition is met, and returns one value if **true**, and another value if **false**.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IF/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IF(\"12<100\", 0, 1));"
+    "// How do I test a condition and display different results in a spreadsheet?\n\n// Execute conditional logic to display specific values when criteria are met in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IF(\"12<100\", 0, 1));"
   ],
   "params": [
     {

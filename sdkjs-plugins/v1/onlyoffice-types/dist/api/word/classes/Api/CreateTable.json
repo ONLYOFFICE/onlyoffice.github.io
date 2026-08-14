@@ -1,0 +1,23 @@
+{
+  "description": "Creates a new table with a specified number of rows and columns.\n\n:::danger[Breaking Change]\nStarting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)` to `Api.CreateTable(rows, cols)`.\n:::",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTable/",
+  "examples": [
+    "// How do I add a table to a document?\n\n// Build a new table and stretch it to fill the entire line width in a document.\n\nlet doc = Api.GetDocument();\nlet table = Api.CreateTable(3, 3);\ndoc.Push(table);\ntable.SetWidth(\"percent\", 100);"
+  ],
+  "params": [
+    {
+      "description": "Number of rows. Must be a positive integer.",
+      "name": "rows",
+      "type": "number"
+    },
+    {
+      "description": "Number of columns. Must be a positive integer.",
+      "name": "cols",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable"
+  },
+  "signature": "CreateTable(rows: number, cols: number): ApiTable"
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Sets the outline to the specified chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetSeriesOutLine/",
+  "examples": [
+    "// Create an outline or stroke around chart elements in a presentation.\n\n// Define the border style and color for a chart series in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(300 * 36000, 130 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nchart.SetSeriesFill(fill, 0, false);\nchart.SetSeriesOutLine(stroke, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nchart.SetSeriesOutLine(stroke, 1, false);\nslide.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The stroke used to create the series outline.",
+      "name": "oStroke",
+      "type": "ApiStroke"
+    },
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeries",
+      "type": "number"
+    },
+    {
+      "description": "Specifies if the outline will be applied to all series.",
+      "name": "bAll",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSeriesOutLine(oStroke: ApiStroke, nSeries: number, bAll?: boolean): boolean"
+}

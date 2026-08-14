@@ -5,6 +5,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiParaPr class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what type of object paragraph properties are in a PDF?\n\n// Find the class name for paragraph property objects in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nconst classType = paraPr.GetClassType();\n\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"paraPr\""
@@ -14,6 +17,9 @@
     "GetIndFirstLine": {
       "description": "Returns the paragraph first line indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndFirstLine/",
+      "examples": [
+        "// How do I get the first line indent measurement in a PDF?\n\n// Obtain the starting line offset amount in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nconst indFirstLine = paraPr.GetIndFirstLine();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First line indent: \" + indFirstLine);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -24,6 +30,9 @@
     "GetIndLeft": {
       "description": "Returns the paragraph left side indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndLeft/",
+      "examples": [
+        "// How do I get the left side indent measurement in a PDF?\n\n// Obtain the left edge offset amount in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nconst indLeft = paraPr.GetIndLeft();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Left indent: \" + indLeft);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -34,6 +43,9 @@
     "GetIndRight": {
       "description": "Returns the paragraph right side indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetIndRight/",
+      "examples": [
+        "// How do I get the right side indent measurement in a PDF?\n\n// Obtain the right edge offset amount in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndRight(2880);\nparaPr.SetJc(\"right\");\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nconst indRight = paraPr.GetIndRight();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Right indent: \" + indRight);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -44,6 +56,9 @@
     "GetJc": {
       "description": "Returns the paragraph contents justification.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetJc/",
+      "examples": [
+        "// How do I find out how text is aligned in a PDF?\n\n// Retrieve the paragraph justification type in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nconst jc = paraPr.GetJc();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Justification: \" + jc);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "\"left\" | \"right\" | \"both\" | \"center\" | undefined"
@@ -53,6 +68,9 @@
     "GetOutlineLvl": {
       "description": "Returns the outline level of the specified properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetOutlineLvl/",
+      "examples": [
+        "// How do I check the outline level for document structure in a PDF?\n\n// Get the nesting level used in document outline in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst rgb = Api.CreateRGBColor(50, 100, 150);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 200 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(10 * 36000, 10 * 36000);\npage.AddObject(shape);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\n\nconst levelBefore = paraPr.GetOutlineLvl();\nparaPr.SetOutlineLvl(8);\nconst levelAfter = paraPr.GetOutlineLvl();\n\nlet text =  'Outline level (index) for this paragraph is currently set to ' + levelAfter;\ntext += ',\\n';\ntext += 'but originally was set to ' + levelBefore;\nparagraph.AddText(text);"
+      ],
       "params": [],
       "returns": {
         "type": "number | undefined"
@@ -63,6 +81,9 @@
     "GetSpacingAfter": {
       "description": "Returns the spacing after value of the current paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingAfter/",
+      "examples": [
+        "// How do I find the bottom margin spacing for text in a PDF?\n\n// Retrieve the gap size following paragraph content in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\n\nconst spacingAfter = paraPr.GetSpacingAfter();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing after : \" + spacingAfter);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -73,6 +94,9 @@
     "GetSpacingBefore": {
       "description": "Returns the spacing before value of the current paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingBefore/",
+      "examples": [
+        "// How do I check the space above a paragraph in a PDF?\n\n// Retrieve the space measurement before a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\nconst paraPr = paragraph2.GetParaPr();\nparaPr.SetSpacingBefore(1440);\ndocContent.Push(paragraph2);\n\nconst spacingBefore = paraPr.GetSpacingBefore();\nconst paragraph3 = Api.CreateParagraph();\nparagraph3.AddText(\"Spacing before: \" + spacingBefore);\ndocContent.Push(paragraph3);"
+      ],
       "params": [],
       "returns": {
         "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -83,6 +107,9 @@
     "GetSpacingLineRule": {
       "description": "Returns the paragraph line spacing rule.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineRule/",
+      "examples": [
+        "// How do I check the line spacing rule for a paragraph in a PDF?\n\n// Identify the line spacing rule applied to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\nconst spacingLineRule = paraPr.GetSpacingLineRule();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line rule : \" + spacingLineRule);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "\"auto\" | \"atLeast\" | \"exact\" | undefined"
@@ -92,6 +119,9 @@
     "GetSpacingLineValue": {
       "description": "Returns the paragraph line spacing value.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineValue/",
+      "examples": [
+        "// How do I check the space between lines in a paragraph in a PDF?\n\n// Find the line spacing distance used in a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\nconst spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line value : \" + spacingLineValue);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
@@ -112,6 +142,9 @@
     "SetBullet": {
       "description": "Sets the bullet or numbering to the current paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetBullet/",
+      "examples": [
+        "// How do I add a bullet to a paragraph in a PDF?\n\n// Create a bulleted list item in a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nconst bullet = Api.CreateBullet(\"-\");\nparaPr.SetBullet(bullet);\nparagraph.AddText(\" This is an example of the bulleted paragraph.\");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The bullet object created with the {@link Api#CreateBullet} or {@link Api#CreateNumbering} method.",
@@ -127,6 +160,9 @@
     "SetIndFirstLine": {
       "description": "Sets the paragraph first line indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndFirstLine/",
+      "examples": [
+        "// How do I indent the first line of a paragraph in a PDF?\n\n// Apply first-line indentation to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndFirstLine(1440);\nparagraph.AddText(\"This is the first paragraph with the indent of 1 inch set to the first line. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The paragraph first line indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -142,6 +178,9 @@
     "SetIndLeft": {
       "description": "Sets the paragraph left side indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndLeft/",
+      "examples": [
+        "// How do I indent a paragraph from the left in a PDF?\n\n// Add left margin indentation to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndLeft(2880);\nparagraph.AddText(\"This is the first paragraph with the indent of 2 inches set to it. \");\nparagraph.AddText(\"This indent is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The paragraph left side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -157,6 +196,9 @@
     "SetIndRight": {
       "description": "Sets the paragraph right side indentation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetIndRight/",
+      "examples": [
+        "// How do I indent a paragraph from the right in a PDF?\n\n// Add right margin indentation to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetIndRight(2880);\nparagraph.AddText(\"This is the first paragraph with the right offset of 2 inches set to it. \");\nparagraph.AddText(\"This offset is set by the paragraph style. No paragraph inline style is applied. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The paragraph right side indentation value measured in twentieths of a point (1/1440 of an inch).",
@@ -172,6 +214,9 @@
     "SetJc": {
       "description": "Sets the paragraph contents justification.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetJc/",
+      "examples": [
+        "// How do I change the text alignment in a paragraph in a PDF?\n\n// Apply text alignment to a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center. \");\nparagraph.AddText(\"The justification is specified in the paragraph style. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes.\");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The justification type that\rwill be applied to the paragraph contents.",
@@ -187,6 +232,9 @@
     "SetOutlineLvl": {
       "description": "Sets the outline level for the specified properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetOutlineLvl/",
+      "examples": [
+        "// How do I assign a heading level to a paragraph in a PDF?\n\n// Organize a paragraph as part of the document outline in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst rgb = Api.CreateRGBColor(50, 100, 150);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 200 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(10 * 36000, 10 * 36000);\npage.AddObject(shape);\n\nconst outlineLvlIndex = 8;\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetOutlineLvl(outlineLvlIndex);\nparagraph.AddText(\"This is a paragraph with outline level parameter set to \" + (outlineLvlIndex + 1));"
+      ],
       "params": [
         {
           "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
@@ -204,6 +252,9 @@
     "SetSpacingAfter": {
       "description": "Sets the spacing after the current paragraph. If the value of the isAfterAuto parameter is true, then \nany value of the nAfter is ignored. If isAfterAuto parameter is not specified, then it \nwill be interpreted as false.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingAfter/",
+      "examples": [
+        "// How do I add space after a paragraph in a PDF?\n\n// Set the space below a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingAfter(1440);\nparagraph.AddText(\"This is an example of setting a space after a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the first paragraph has this offset enabled.\");\n\nconst secondParagraph = Api.CreateParagraph();\nsecondParagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ndocContent.Push(secondParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The value of the spacing after the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -225,6 +276,9 @@
     "SetSpacingBefore": {
       "description": "Sets the spacing before the current paragraph. If the value of the isBeforeAuto parameter is true, then \nany value of the nBefore is ignored. If isBeforeAuto parameter is not specified, then \nit will be interpreted as false.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingBefore/",
+      "examples": [
+        "// How do I add space before a paragraph in a PDF?\n\n// Set the space above a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparagraph.AddText(\"This is an example of setting a space before a paragraph. \");\nparagraph.AddText(\"The second paragraph will have an offset of one inch from the top. \");\nparagraph.AddText(\"This is due to the fact that the second paragraph has this offset enabled.\");\n\nconst secondParagraph = Api.CreateParagraph();\nconst secondParaPr = secondParagraph.GetParaPr();\nsecondParaPr.SetSpacingBefore(1440);\nsecondParagraph.AddText(\"This is the second paragraph and it is one inch away from the first paragraph.\");\ndocContent.Push(secondParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The value of the spacing before the current paragraph measured in twentieths of a point (1/1440 of an inch).",
@@ -246,6 +300,9 @@
     "SetSpacingLine": {
       "description": "Sets the paragraph line spacing. If the value of the sLineRule parameter is either \n\"atLeast\" or \"exact\", then the value of nLine will be interpreted as twentieths of a point. If \nthe value of the sLineRule parameter is \"auto\", then the value of the \nnLine parameter will be interpreted as 240ths of a line.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetSpacingLine/",
+      "examples": [
+        "// How do I change the line spacing in a PDF?\n\n// Modify the distance between text lines in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The line spacing value measured either in twentieths of a point (1/1440 of an inch) or in 240ths of a line.",
@@ -266,6 +323,9 @@
     "SetTabs": {
       "description": "Specifies a sequence of custom tab stops which will be used for any tab characters in the current paragraph.\n**Warning**: The lengths of aPos array and aVal array **MUST BE** equal to each other.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/SetTabs/",
+      "examples": [
+        "// How do I set where tabs align text in a PDF?\n\n// Configure tab stop locations and alignment styles in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetTabs([1440, 4320, 7200], [\"left\", \"center\", \"right\"]);\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 1 inch left\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 3 inches center\");\nparagraph.AddLineBreak();\nparagraph.AddTabStop();\nparagraph.AddTabStop();\nparagraph.AddText(\"Custom tab - 5 inches right\");\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "An array of the positions of custom tab stops with respect to the current page margins\rmeasured in twentieths of a point (1/1440 of an inch).",

@@ -5,11 +5,25 @@ const { spawnSync } = require('child_process');
 const { mergeApiIndex } = require('./api-index.js');
 
 const PACKAGE_ROOT = path.join(__dirname, '..');
-const LEGACY_DECLARATIONS_REPO = 'ONLYOFFICE/office-js-api-declarations';
-const LEGACY_DECLARATIONS_COMMIT = '7ab23357042d8cc2510a9b4c84f3f0e5e99626a3';
 
 const OUTPUT_DIR = path.join(PACKAGE_ROOT, 'src', 'generated');
-const LEGACY_SNAPSHOT_DIR = path.join(__dirname, 'legacy-api');
+
+// Runnable examples come from a checkout of the documentation site (api.onlyoffice.com), which is
+// where they actually live: sdkjs's JSDoc carries only a `@see office-js-api/Examples/...` *path*,
+// and the code sits in the docs repository. The page for a member is addressed by the same three
+// segments as its `docsUrl`, so nothing here is guessed.
+//
+// This replaces the vendored `scripts/legacy-api/*.json` snapshots (9 MB), which were a pinned dump
+// of the same site: they aged in place, covered four editors of five (PDF had none, and therefore no
+// examples at all), and reached only 3003 members against 5831 available here.
+const DOCS_SECTION_DIR = 'office-api/usage-api';
+const DOCS_EDITOR_SECTION = {
+  word: 'document-api',
+  cell: 'spreadsheet-api',
+  slide: 'presentation-api',
+  forms: 'form-api',
+  pdf: 'pdf-api',
+};
 const EDITORS = {
   word: { code: 'CDE', sources: ['word/apiBuilder.js', 'word/plugin-events.js'] },
   cell: { code: 'CSE', sources: ['word/apiBuilder.js', 'slide/apiBuilder.js', 'cell/apiBuilder.js', 'cell/plugin-events.js'] },
@@ -56,6 +70,54 @@ function resolveSdkjsPaths() {
   if (!fs.existsSync(resolvedSdkjsForms)) throw new Error(`sdkjs-forms directory does not exist: ${resolvedSdkjsForms}`);
 
   return { sdkjs: resolvedSdkjs, sdkjsForms: resolvedSdkjsForms };
+}
+
+function resolveDocsPath() {
+  const docs = readOption('docs') || process.env.DOCS_PATH;
+  if (!docs) {
+    throw new Error('Set DOCS_PATH or pass --docs <path-to-api.onlyoffice.com> (the documentation checkout supplying runnable examples).');
+  }
+  // Accept either the repository root or the inner project directory, since the GitHub archive
+  // nests one inside the other (`api.onlyoffice.com-master/api.onlyoffice.com`).
+  for (const candidate of [path.join(path.resolve(docs), 'site', 'docs'), path.join(path.resolve(docs), 'api.onlyoffice.com', 'site', 'docs')]) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  throw new Error(`Documentation checkout has no site/docs directory: ${path.resolve(docs)}`);
+}
+
+// The `## Example` section of a member's page, as fenced blocks. The fence carries an editor
+// directive (```javascript editor-docx) that means nothing outside the docs site, so only the
+// language survives - the same treatment the old snapshots' `document-builder={...}` got.
+function docsExamples(file) {
+  if (!fs.existsSync(file)) return [];
+  const text = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
+  const section = text.split(/^## Example\s*$/m)[1];
+  if (!section) return [];
+  // Stop at the next `## ` heading so a later section's code block isn't swept in.
+  const body = section.split(/^## /m)[0];
+  return [...body.matchAll(/```[^\n]*\n([\s\S]*?)```/g)].map((m) => m[1].trim()).filter(Boolean);
+}
+
+function docsMethodFile(docsRoot, editor, className, methodName) {
+  return path.join(docsRoot, DOCS_SECTION_DIR, DOCS_EDITOR_SECTION[editor], className, 'Methods', `${methodName}.md`);
+}
+
+// Examples are appended to the description as fenced blocks rather than carried in their own field,
+// because that is what `splitDescription` already lifts into `@example` for the declarations and
+// into `examples` for dist/api - one representation, both consumers.
+function applyDocsExamples(classes, editor, docsRoot) {
+  let applied = 0;
+  for (const [className, classData] of Object.entries(classes)) {
+    for (const [methodName, method] of Object.entries(classData.methods)) {
+      const examples = docsExamples(docsMethodFile(docsRoot, editor, className, methodName));
+      if (examples.length === 0) continue;
+      method.description = [method.description, ...examples.map((code) => `\`\`\`js\n${code}\n\`\`\``)]
+        .filter(Boolean)
+        .join('\n\n');
+      applied += examples.length;
+    }
+  }
+  return applied;
 }
 
 function getSourcePaths(editor, paths) {
@@ -110,76 +172,8 @@ function fetchApiDefinitions() {
   return results;
 }
 
-function buildLegacyLookup(data, editor) {
-  const classes = {};
-  const typedefs = {};
 
-  const describedParams = (item) => Object.fromEntries(
-    (item.params || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
-  );
 
-  for (const item of data) {
-    if (item.kind === 'class' && item.name && item.description) {
-      classes[item.name] = classes[item.name] || { description: '', methods: {} };
-      classes[item.name].description = item.description;
-    }
-    if (item.kind === 'typedef' && item.name && item.description) {
-      typedefs[item.name] = {
-        description: item.description,
-        properties: Object.fromEntries(
-          (item.properties || []).filter((p) => p.name && p.description).map((p) => [p.name, p.description])
-        ),
-      };
-    }
-  }
-  for (const item of data) {
-    if ((item.kind === 'function' || item.kind === 'method') && item.name && item.memberof && item.description) {
-      const className = item.memberof.replace('#', '');
-      classes[className] = classes[className] || { description: '', methods: {} };
-      // office-js-api-declarations has the same duplicate-entry quirk sdkjs does (see the comment
-      // in extractClasses) - keep whichever description was recorded first for a given method.
-      if (!classes[className].methods[item.name]) {
-        classes[className].methods[item.name] = {
-          description: item.description,
-          params: describedParams(item),
-          returnDescription: (item.returns && item.returns[0] && item.returns[0].description) || '',
-          docsUrl: methodDocsUrl(item.see, editor),
-        };
-      }
-    }
-  }
-
-  return { classes, typedefs };
-}
-
-// office-js-api-declarations (a periodically-regenerated snapshot of ONLYOFFICE's public API docs
-// site) has richer prose than sdkjs's own JSDoc comments - notably a "## Try it" runnable example
-// in almost every description. sdkjs is still the structural source of truth (it's the one place
-// that can't drift from the actual runtime), but its descriptions are enriched from the local pinned
-// snapshots keyed by the same class/method names, wherever a match exists.
-async function fetchLegacyDescriptions(editor) {
-  // PDF has no office-js-api-declarations snapshot. Its descriptions come directly from sdkjs.
-  if (editor === 'pdf') return null;
-
-  const snapshotPath = path.join(LEGACY_SNAPSHOT_DIR, `${editor}.json`);
-  if (!fs.existsSync(snapshotPath)) {
-    throw new Error(`Missing legacy API snapshot: ${snapshotPath}`);
-  }
-
-  try {
-    return buildLegacyLookup(JSON.parse(fs.readFileSync(snapshotPath, 'utf8')), editor);
-  } catch (err) {
-    throw new Error(`Could not read legacy API snapshot ${snapshotPath}: ${err.message}`);
-  }
-}
-
-// The one thing the snapshot has and sdkjs does not: runnable examples. sdkjs's JSDoc carries only a
-// `@see office-js-api/Examples/.../<Method>.js` *path* - the code itself lives in another repository,
-// and ONLYOFFICE's own docs pipeline splices it in as a "## Try it" fenced block, which is what these
-// snapshots captured.
-function fencedExamples(description) {
-  return String(description || '').match(/```[^\n]*\n[\s\S]*?```/g) || [];
-}
 
 function withoutExamples(description) {
   return String(description || '')
@@ -188,55 +182,7 @@ function withoutExamples(description) {
     .trim();
 }
 
-// sdkjs is the structural source of truth and cannot drift from the runtime, while the snapshot is
-// pinned to one commit and ages. Measured across Word: of 845 methods documented in both, 789 have
-// byte-identical prose once the example is removed - and of the 56 that differ, sdkjs is the longer,
-// fresher text in 42, including three that carry `Breaking Change` / version notes the snapshot
-// predates (`Api.CreateTable` gained one in 9.4.0). Overwriting with the snapshot therefore threw
-// away newer prose to gain nothing. Prose now comes from sdkjs, the snapshot fills genuine gaps, and
-// its examples are appended so `splitDescription` still lifts them into `@example`.
-function preferSdkjsProse(sdkjsText, legacyText) {
-  const prose = withoutExamples(sdkjsText) || withoutExamples(legacyText);
-  return [prose, ...fencedExamples(legacyText)].filter(Boolean).join('\n\n');
-}
 
-function applyLegacyDescriptions(classes, typedefs, legacy) {
-  if (!legacy) return;
-
-  for (const [className, classData] of Object.entries(classes)) {
-    const legacyClass = legacy.classes[className];
-    if (legacyClass && legacyClass.description) {
-      classData.description = preferSdkjsProse(classData.description, legacyClass.description);
-    }
-    for (const [methodName, method] of Object.entries(classData.methods)) {
-      const legacyMethod = legacyClass && legacyClass.methods[methodName];
-      if (!legacyMethod) continue;
-      method.description = preferSdkjsProse(method.description, legacyMethod.description);
-      if (!method.returnDescription && legacyMethod.returnDescription) {
-        method.returnDescription = legacyMethod.returnDescription;
-      }
-      if (!method.docsUrl) method.docsUrl = legacyMethod.docsUrl;
-      // Param descriptions are matched by name, not position: the snapshot occasionally documents a
-      // different arity than the current sdkjs signature does, and a positional merge would then
-      // attach one parameter's prose to another.
-      for (const param of method.params) {
-        if (param.description) continue;
-        const legacyParamDescription = legacyMethod.params[param.name];
-        if (legacyParamDescription) param.description = legacyParamDescription;
-      }
-    }
-  }
-  for (const [name, typedefData] of Object.entries(typedefs)) {
-    const legacyTypedef = legacy.typedefs[name];
-    if (!legacyTypedef) continue;
-    typedefData.description = preferSdkjsProse(typedefData.description, legacyTypedef.description);
-    for (const prop of typedefData.properties) {
-      if (prop.description) continue;
-      const legacyPropDescription = legacyTypedef.properties[prop.name];
-      if (legacyPropDescription) prop.description = legacyPropDescription;
-    }
-  }
-}
 
 function splitTopLevel(str, sep) {
   const parts = [];
@@ -1045,13 +991,13 @@ function loadOverrides(typeName) {
   return parseOverrideBlocks(fs.readFileSync(overridePath, 'utf8'));
 }
 
-function generateDtsFile(data, typeName, namespaceName, legacy) {
+function generateDtsFile(data, typeName, namespaceName, docsRoot) {
   const editorName = typeName === 'forms' ? 'form' : typeName;
   let body = '';
 
   const typedefs = extractTypedefs(data);
   const classes = extractClasses(data, typeName);
-  applyLegacyDescriptions(classes, typedefs, legacy);
+  const exampleCount = applyDocsExamples(classes, typeName, docsRoot);
 
   const typedefNames = Object.keys(typedefs).sort();
   for (const name of typedefNames) {
@@ -1209,10 +1155,31 @@ function assertSourcesReleasable(repositories) {
   }
 }
 
-function buildGenerationManifest(paths) {
+// The docs site is routinely consumed as a downloaded archive rather than a clone, so git metadata
+// is often absent. Its own CHANGELOG's newest heading identifies the release just as well, and works
+// either way; the git commit is still recorded when there is one.
+function getDocsMetadata(docsRoot) {
+  const repoRoot = path.resolve(docsRoot, '..', '..');
+  const git = getGitMetadata(repoRoot);
+
+  let version = null;
+  const changelog = path.join(repoRoot, 'CHANGELOG.md');
+  if (fs.existsSync(changelog)) {
+    const match = fs.readFileSync(changelog, 'utf8').match(/^##\s*v?(\d+\.\d+(?:\.\d+)?)/m);
+    if (match) version = match[1];
+  }
+
+  return { ...git, ...(version ? { version } : {}) };
+}
+
+function buildGenerationManifest(paths, docsRoot) {
   const repositories = {
     sdkjs: getGitMetadata(paths.sdkjs),
     sdkjsForms: getGitMetadata(paths.sdkjsForms),
+    // The documentation checkout supplies every runnable example, so what produced this output
+    // includes its version - and its lag behind sdkjs is what explains both the members without
+    // examples and the ~10% of @see links that 404 today.
+    docs: getDocsMetadata(docsRoot),
   };
   assertSourcesReleasable(repositories);
 
@@ -1266,10 +1233,6 @@ function buildGenerationManifest(paths) {
     repositories: {
       ...(existing.repositories?.sdkjsExt ? { sdkjsExt: existing.repositories.sdkjsExt } : {}),
       ...repositories,
-      officeApiDescriptions: {
-        repository: `https://github.com/${LEGACY_DECLARATIONS_REPO}.git`,
-        commit: LEGACY_DECLARATIONS_COMMIT,
-      },
     },
     sourceFiles,
     ...(existing.pluginMethodSourceFiles ? { pluginMethodSourceFiles: existing.pluginMethodSourceFiles } : {}),
@@ -1292,13 +1255,12 @@ async function main() {
   }
 
   const paths = resolveSdkjsPaths();
+  const docsRoot = resolveDocsPath();
   const apiData = await fetchApiDefinitions();
   const report = {};
 
   for (const [typeName, data] of Object.entries(apiData)) {
-    console.log(`Fetching legacy descriptions for ${typeName}...`);
-    const legacy = await fetchLegacyDescriptions(typeName);
-    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], legacy);
+    const generated = generateDtsFile(data, typeName, NAMESPACE_MAP[typeName], docsRoot);
     const filename = `${typeName}.ts`;
     fs.writeFileSync(path.join(OUTPUT_DIR, filename), generated.content);
     report[typeName] = generated.stats;
@@ -1307,7 +1269,7 @@ async function main() {
   }
 
   fs.writeFileSync(path.join(OUTPUT_DIR, 'api-report.json'), `${JSON.stringify(report, null, 2)}\n`);
-  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths), null, 2)}\n`);
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'generation-manifest.json'), `${JSON.stringify(buildGenerationManifest(paths, docsRoot), null, 2)}\n`);
   console.log(`Wrote ${path.join(OUTPUT_DIR, 'api-report.json')}`);
   console.log(`Wrote ${path.join(OUTPUT_DIR, 'generation-manifest.json')}`);
   console.log('Done!');

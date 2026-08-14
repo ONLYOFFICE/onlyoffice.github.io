@@ -2,7 +2,7 @@
   "description": "Repeats text a given number of times. Use this function to fill a cell with a number of instances of a text string.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/REPT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.REPT(\"Text\", 3));"
+    "// How do I duplicate text in a cell in a spreadsheet?\n\n// Fill a cell with copies of the same text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.REPT(\"Text\", 3));"
   ],
   "params": [
     {

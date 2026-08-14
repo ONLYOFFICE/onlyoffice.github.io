@@ -1,0 +1,14 @@
+{
+  "description": "Returns the negative bar border color of the data bar.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetNegativeBorderColor/",
+  "examples": [
+    "// How do I find out what outline color is applied to negative data bars in a spreadsheet?\n\n// Confirm the border shade assigned to bars displaying below-zero values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(-50);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(-25);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nlet negativeBorderColor = dataBar.GetNegativeBorderColor();\n\nworksheet.GetRange(\"C1\").SetValue(\"Negative Border:\");\nworksheet.GetRange(\"C2\").SetValue(negativeBorderColor ? \"Set\" : \"None\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Returns the ApiColor object representing the negative bar border color, or null if not specified.",
+    "type": "ApiColor | null"
+  },
+  "signature": "GetNegativeBorderColor(): ApiColor | null",
+  "since": "9.1.0"
+}

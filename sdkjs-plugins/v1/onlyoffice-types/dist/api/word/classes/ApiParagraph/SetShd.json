@@ -2,7 +2,7 @@
   "description": "Specifies the shading applied to the contents of the paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetShd/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetShd(\"clear\", 255, 111, 61, false);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is an example of setting a shading to a paragraph.\");\nparagraph.SetStyle(myStyle);"
+    "// How do I fill the background of a paragraph with a color in a document?\n\n// Highlight a paragraph by setting its shading to make it visually distinct from surrounding text.\n\nlet doc = Api.GetDocument();\n\nlet myStyle = doc.CreateStyle('My document style');\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetShd('clear', Api.RGB(255, 111, 61));\n\nlet paragraph = doc.GetElement(0);\nparagraph.AddText('This is an example of setting a shading to a paragraph.');\nparagraph.SetStyle(myStyle);"
   ],
   "params": [
     {

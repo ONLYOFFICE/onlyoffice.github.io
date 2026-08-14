@@ -2,7 +2,7 @@
   "description": "Returns the yield of a security with an odd first period.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ODDFYIELD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ODDFYIELD(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", \"3/15/2017\", 0.06, 90, 100, 2));"
+    "// How do I find the yield of a bond with an odd first period in a spreadsheet?\n\n// Determine the annual return rate of a security when the first coupon period is irregular in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ODDFYIELD(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", \"3/15/2017\", 0.06, 90, 100, 2));"
   ],
   "params": [
     {

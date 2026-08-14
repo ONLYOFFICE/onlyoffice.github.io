@@ -1,0 +1,18 @@
+{
+  "description": "Converts the specified JSON object into the Document Builder object of the corresponding type.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/FromJSON/",
+  "examples": [
+    "// How do I restore a font scheme from JSON data in a presentation?\n\n// Load and apply a font scheme that was previously exported as JSON in a presentation.\n\nconst presentation = Api.GetPresentation();\n\nconst master = presentation.GetMaster(0);\nconst themeMaster = master.GetTheme();\nconst fontScheme = themeMaster.GetFontScheme();\nfontScheme.SetFonts(\"Arial\", \"Noto Sans Simplified Chinese\", \"Arabic\", \"Times New Roman\", \"Noto Serif Simplified Chinese\", \"Arabic\", \"New font scheme\");\nfontScheme.SetSchemeName(\"New font scheme name\");\nconst json = fontScheme.ToJSON();\nconst fontSchemeFromJSON = Api.FromJSON(json);\n\nconst slide = presentation.GetSlideByIndex(0);\nconst theme = slide.GetTheme();\ntheme.SetFontScheme(fontSchemeFromJSON);\nconst sType = fontSchemeFromJSON.GetClassType();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type = \" + sType);\n\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The JSON object to convert.",
+      "name": "sMessage",
+      "type": "object"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "FromJSON(sMessage: object): void"
+}

@@ -6,7 +6,7 @@
       "description": "Returns the bold property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetBold/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);\nlet isBold = font.GetBold();\nworksheet.GetRange(\"B3\").SetValue(\"Bold property: \" + isBold);"
+        "// How do I check if certain characters in a cell are currently displayed in bold in a spreadsheet?\n\n// Inspect the bold setting of a character range and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);\nlet isBold = font.GetBold();\nworksheet.GetRange(\"B3\").SetValue(\"Bold property: \" + isBold);"
       ],
       "params": [],
       "returns": {
@@ -19,7 +19,7 @@
       "description": "Returns the font color property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetColor/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);\ncolor = font.GetColor();\ncharacters = range.GetCharacters(16, 6);\nfont = characters.GetFont();\nfont.SetColor(color);"
+        "// How do I retrieve the exact color used to display certain characters in a cell in a spreadsheet?\n\n// Copy the color from one group of characters and apply it to another group of characters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);\ncolor = font.GetColor();\ncharacters = range.GetCharacters(16, 6);\nfont = characters.GetFont();\nfont.SetColor(color);"
       ],
       "params": [],
       "returns": {
@@ -32,7 +32,7 @@
       "description": "Returns the italic property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetItalic/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);\nlet isItalic = font.GetItalic();\nworksheet.GetRange(\"B3\").SetValue(\"Italic property: \" + isItalic);"
+        "// How do I check if certain characters in a cell are currently displayed in italic in a spreadsheet?\n\n// Inspect the italic setting of a character range and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);\nlet isItalic = font.GetItalic();\nworksheet.GetRange(\"B3\").SetValue(\"Italic property: \" + isItalic);"
       ],
       "params": [],
       "returns": {
@@ -45,7 +45,7 @@
       "description": "Returns the font name property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
+        "// How do I find out which font family is used for specific characters in a cell in a spreadsheet?\n\n// Set a typeface on a group of characters, then retrieve and display its name in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
       ],
       "params": [],
       "returns": {
@@ -58,7 +58,7 @@
       "description": "Returns the parent ApiCharacters object of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetParent/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet font = characters.GetFont();\nlet parent = font.GetParent();\nparent.SetText(\"string\");"
+        "// How do I get back to the characters object from a font so I can change its text in a spreadsheet?\n\n// Navigate from a font up to its owning characters object to update the displayed text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet font = characters.GetFont();\nlet parent = font.GetParent();\nparent.SetText(\"string\");"
       ],
       "params": [],
       "returns": {
@@ -72,7 +72,7 @@
       "description": "Returns the font size property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSize/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);\nlet size = font.GetSize();\nworksheet.GetRange(\"B3\").SetValue(\"Size property: \" + size);"
+        "// How do I find out the point size of the text used for specific characters in a cell in a spreadsheet?\n\n// Set a font size on a group of characters, then retrieve and display that size in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);\nlet size = font.GetSize();\nworksheet.GetRange(\"B3\").SetValue(\"Size property: \" + size);"
       ],
       "params": [],
       "returns": {
@@ -85,7 +85,7 @@
       "description": "Returns the strikethrough property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetStrikethrough/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);\nlet isStrikethrough = font.GetStrikethrough();\nworksheet.GetRange(\"B3\").SetValue(\"Strikethrough property: \" + isStrikethrough);"
+        "// How do I check if certain characters in a cell are displayed with a line through them in a spreadsheet?\n\n// Inspect the strikethrough setting of a character range and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);\nlet isStrikethrough = font.GetStrikethrough();\nworksheet.GetRange(\"B3\").SetValue(\"Strikethrough property: \" + isStrikethrough);"
       ],
       "params": [],
       "returns": {
@@ -98,7 +98,7 @@
       "description": "Returns the subscript property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSubscript/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSubscript(true);\nlet isSubscript = font.GetSubscript();\nworksheet.GetRange(\"B3\").SetValue(\"Subscript property: \" + isSubscript);"
+        "// How do I check if certain characters in a cell are displayed in a lowered subscript position in a spreadsheet?\n\n// Inspect the subscript setting of a character range and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSubscript(true);\nlet isSubscript = font.GetSubscript();\nworksheet.GetRange(\"B3\").SetValue(\"Subscript property: \" + isSubscript);"
       ],
       "params": [],
       "returns": {
@@ -111,7 +111,7 @@
       "description": "Returns the superscript property of the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetSuperscript/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSuperscript(true);\nlet isSuperscript = font.GetSuperscript();\nworksheet.GetRange(\"B3\").SetValue(\"Superscript property: \" + isSuperscript);"
+        "// How do I find out if a character is raised above the text baseline in a spreadsheet?\n\n// Read the superscript setting from a character's font and display the result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSuperscript(true);\nlet isSuperscript = font.GetSuperscript();\nworksheet.GetRange(\"B3\").SetValue(\"Superscript property: \" + isSuperscript);"
       ],
       "params": [],
       "returns": {
@@ -124,7 +124,7 @@
       "description": "Returns the type of underline applied to the specified font.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/GetUnderline/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetUnderline(\"xlUnderlineStyleSingle\");\nlet underlineType = font.GetUnderline();\nworksheet.GetRange(\"B3\").SetValue(\"Underline property: \" + underlineType);"
+        "// How do I find out which underline style is used on a piece of text in a spreadsheet?\n\n// Read the underline setting from a character's font and display the result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetUnderline(\"xlUnderlineStyleSingle\");\nlet underlineType = font.GetUnderline();\nworksheet.GetRange(\"B3\").SetValue(\"Underline property: \" + underlineType);"
       ],
       "params": [],
       "returns": {
@@ -137,7 +137,7 @@
       "description": "Sets the bold property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetBold/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+        "// How do I apply bold formatting to specific characters in a spreadsheet?\n\n// Turn on bold weight for a portion of cell text to make it stand out in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
       ],
       "params": [
         {
@@ -156,7 +156,7 @@
       "description": "Sets the font color property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetColor/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);"
+        "// How do I apply a custom color to part of the text inside a cell in a spreadsheet?\n\n// Paint a selected run of characters with an RGB color value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nlet color = Api.CreateColorFromRGB(255, 111, 61);\nfont.SetColor(color);"
       ],
       "params": [
         {
@@ -175,7 +175,7 @@
       "description": "Sets the italic property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetItalic/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);"
+        "// How do I make specific characters appear in italics in a spreadsheet?\n\n// Slant a portion of cell text by enabling the italic style in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetItalic(true);"
       ],
       "params": [
         {
@@ -194,7 +194,7 @@
       "description": "Sets the font name property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
+        "// How do I assign a different font family to part of the text in a spreadsheet?\n\n// Switch selected characters to a named typeface and confirm the change in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetName(\"Font 1\");\nlet fontName = font.GetName();\nworksheet.GetRange(\"B3\").SetValue(\"Font name: \" + fontName);"
       ],
       "params": [
         {
@@ -213,7 +213,7 @@
       "description": "Sets the font size property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSize/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);"
+        "// How do I make part of the text in a cell larger or smaller in a spreadsheet?\n\n// Resize a selected run of characters to a chosen point size in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetSize(18);"
       ],
       "params": [
         {
@@ -232,7 +232,7 @@
       "description": "Sets the strikethrough property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetStrikethrough/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);"
+        "// How do I add a strikethrough effect to part of the text in a spreadsheet?\n\n// Mark a run of characters as crossed out to indicate deleted content in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetStrikethrough(true);"
       ],
       "params": [
         {
@@ -251,7 +251,7 @@
       "description": "Sets the subscript property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSubscript/",
       "examples": [
-        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetSubscript(true);"
+        "// How do I format part of the text as subscript in a spreadsheet?\n\n// Shift a run of characters downward to create subscript notation in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nconst characters = range.GetCharacters(9, 4);\nconst font = characters.GetFont();\nfont.SetSubscript(true);"
       ],
       "params": [
         {
@@ -270,7 +270,7 @@
       "description": "Sets the superscript property to the specified font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetSuperscript/",
       "examples": [
-        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetSuperscript(true);"
+        "// How do I format part of the text as superscript in a spreadsheet?\n\n// Lift a run of characters upward to create superscript notation in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nconst characters = range.GetCharacters(9, 4);\nconst font = characters.GetFont();\nfont.SetSuperscript(true);"
       ],
       "params": [
         {
@@ -289,7 +289,7 @@
       "description": "Sets an underline of the type specified in the request to the current font.\n<note>This method will work only with the text format of the cell.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFont/Methods/SetUnderline/",
       "examples": [
-        "var oWorksheet = Api.GetActiveSheet();\nvar oRange = oWorksheet.GetRange(\"B1\");\noRange.SetValue(\"This is just a sample text.\");\nvar oCharacters = oRange.GetCharacters(9, 4);\nvar oFont = oCharacters.GetFont();\noFont.SetUnderline(\"xlUnderlineStyleSingle\");"
+        "// How do I add underlining to part of the text in a spreadsheet?\n\n// Decorate a run of characters with a chosen underline style in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nconst characters = range.GetCharacters(9, 4);\nconst font = characters.GetFont();\nfont.SetUnderline(\"xlUnderlineStyleSingle\");"
       ],
       "params": [
         {

@@ -2,7 +2,7 @@
   "description": "Returns the accrued interest for a security that pays periodic interest.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACCRINT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ACCRINT(\"1/1/2018\", \"6/25/2018\", \"10/15/2018\", \"3.50%\", 1000, 2));"
+    "// How do I calculate accumulated interest on a bond that pays periodic amounts in a spreadsheet?\n\n// Figure out how much interest income a periodic-pay bond has earned by a specific date in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACCRINT(\"1/1/2018\", \"6/25/2018\", \"10/15/2018\", \"3.50%\", 1000, 2));"
   ],
   "params": [
     {

@@ -1,0 +1,12 @@
+{
+  "description": "Creates a new smaller text block to be inserted to the current paragraph or table.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateRun/",
+  "examples": [
+    "// How do I create a standalone piece of text and append it to an existing paragraph in a document?\n\n// Insert new text into a paragraph as a separate block that can carry its own formatting in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is a text run\");\nparagraph.AddElement(run);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "CreateRun(): ApiRun"
+}

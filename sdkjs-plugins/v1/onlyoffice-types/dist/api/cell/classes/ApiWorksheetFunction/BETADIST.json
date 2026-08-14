@@ -2,7 +2,7 @@
   "description": "Returns the cumulative beta probability density function.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETADIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.BETADIST(0.4, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// How do I calculate what percentage of outcomes fall below a specific value in a spreadsheet?\n\n// Assess the probability that a random result occurs up to a given threshold in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BETADIST(0.4, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

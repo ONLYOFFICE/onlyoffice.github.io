@@ -1,0 +1,18 @@
+{
+  "description": "Returns the series with a specific index.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetSeries/",
+  "examples": [
+    "// How do I select one series from a chart in a PDF?\n\n// Retrieve a chart series at a specific index in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\n\nconst allSeries = chart.GetAllSeries();\nconst series = allSeries[0];\nconst seriesType = series.GetChartType();\nconst title = \"Series Type = \" + seriesType + \"\\n\";\nchart.SetTitle(title, 20);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "Series index.",
+      "name": "nIdx",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiChartSeries"
+  },
+  "signature": "GetSeries(nIdx: number): ApiChartSeries"
+}

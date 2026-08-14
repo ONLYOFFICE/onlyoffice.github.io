@@ -2,7 +2,7 @@
   "description": "Inserts a number of pages in the current document into the paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddPagesCount/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"First page\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Second page\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page \");\nparagraph.AddPageNumber();\nparagraph.AddText(\" of \");\nparagraph.AddPagesCount();"
+    "// How do I show the total number of pages inside a header or footer paragraph in a document?\n\n// Combine a page-number field with a page-count field to produce a \"Page X of Y\" indicator in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"First page\");\nparagraph.AddPageBreak();\nparagraph.AddText(\"Second page\");\nlet section = doc.GetFinalSection();\nlet header = section.GetHeader(\"default\", true);\nparagraph = header.GetElement(0);\nparagraph.AddText(\"Page \");\nparagraph.AddPageNumber();\nparagraph.AddText(\" of \");\nparagraph.AddPagesCount();"
   ],
   "params": [],
   "returns": {

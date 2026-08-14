@@ -1,0 +1,13 @@
+{
+  "description": "Sets the priority value for the current conditional formatting rule to \"1\" so that it will be evaluated before all other rules on the worksheet.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetFirstPriority/",
+  "examples": [
+    "// How do I make a formatting rule take precedence over all other formatting rules in a spreadsheet?\n\n// Promote a formatting rule so it is evaluated before any other rules in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet condition2 = formatConditions.Add(\"xlCellValue\", \"xlLess\", \"150\");\ncondition2.SetFillColor(Api.CreateColorFromRGB(0, 255, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Priority before:\");\nworksheet.GetRange(\"C2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"C3\").SetValue(\"Rule 2: \" + condition2.Priority);\n\ncondition2.SetFirstPriority();\n\nworksheet.GetRange(\"D1\").SetValue(\"Priority after:\");\nworksheet.GetRange(\"D2\").SetValue(\"Rule 1: \" + condition1.Priority);\nworksheet.GetRange(\"D3\").SetValue(\"Rule 2: \" + condition2.Priority);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetFirstPriority(): void",
+  "since": "9.1.0"
+}

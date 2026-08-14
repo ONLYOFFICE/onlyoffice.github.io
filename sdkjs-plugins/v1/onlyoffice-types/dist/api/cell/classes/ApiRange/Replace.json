@@ -1,0 +1,19 @@
+{
+  "description": "Replaces specific information to another one in a range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/Replace/",
+  "examples": [
+    "// How do I find and replace a specific value throughout a range in a spreadsheet?\n\n// Update multiple cells at once by substituting a target value wherever it appears in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"A4\").SetValue(\"Cost price\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"B4\").SetValue(50);\nworksheet.GetRange(\"C2\").SetValue(200);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"C4\").SetValue(120);\nworksheet.GetRange(\"D2\").SetValue(200);\nworksheet.GetRange(\"D3\").SetValue(200);\nworksheet.GetRange(\"D4\").SetValue(160);\nlet range = worksheet.GetRange(\"A2:D4\");\nlet replaceData = {\n    What: \"200\", \n    Replacement: \"0\",\n    LookAt: \"xlWhole\",\n    SearchOrder: \"xlByColumns\",\n    SearchDirection: \"xlNext\",\n    MatchCase: true,\n    ReplaceAll: true\n};\nrange.Replace(replaceData);"
+  ],
+  "params": [
+    {
+      "description": "The data used to make search and replace.",
+      "name": "oReplaceData",
+      "type": "ReplaceData"
+    }
+  ],
+  "returns": {
+    "description": "Returns true if at least one match was found and replacement was initiated, false otherwise.",
+    "type": "boolean"
+  },
+  "signature": "Replace(oReplaceData: ReplaceData): boolean"
+}

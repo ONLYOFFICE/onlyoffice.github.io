@@ -1,6 +1,9 @@
 {
   "description": "Returns an internal ID of the current document content.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetInternalId/",
+  "examples": [
+    "// How do I get the internal identifier assigned to a document content in a document?\n\n// Display the internal ID inside a shape to track or reference that content container later.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(70, 130, 180));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rect', Api.MillimetersToEmus(100), Api.MillimetersToEmus(60), fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst docContent = drawing.GetContent();\nconst internalId = docContent.GetInternalId();\n\nconst shapeParagraph = docContent.GetElement(0);\nshapeParagraph.AddText('Document content internal ID: ' + internalId);"
+  ],
   "params": [],
   "returns": {
     "type": "string"

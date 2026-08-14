@@ -2,7 +2,7 @@
   "description": "Converts a number into a text representation with the given radix (base).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BASE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BASE(5, 2, 5));"
+    "// Express a number in a different numeral base in a spreadsheet.\n\n// Rewrite a decimal value as a string in any radix with a minimum digit width in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BASE(5, 2, 5));"
   ],
   "params": [
     {

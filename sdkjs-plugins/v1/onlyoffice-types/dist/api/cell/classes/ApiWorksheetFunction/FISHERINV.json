@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the Fisher transformation: if y = FISHER(x), then FISHERINV(y) = x.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FISHERINV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.FISHERINV(0.56);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// How do I convert a Fisher transformation back to a correlation in a spreadsheet?\n\n// Extract the original correlation value from its Fisher transformation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.FISHERINV(0.56);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

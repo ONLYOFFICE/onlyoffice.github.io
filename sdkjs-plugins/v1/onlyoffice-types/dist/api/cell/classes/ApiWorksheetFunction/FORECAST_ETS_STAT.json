@@ -2,7 +2,7 @@
   "description": "Returns the requested statistic for the forecast.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FORECAST_ETS_STAT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS_STAT(range1, range2, 4));"
+    "// Retrieve forecast statistics from time series data using dates and values arrays.\n\n// Calculate the forecast statistic using FORECAST_ETS_STAT.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS_STAT(range1, range2, 4));"
   ],
   "params": [
     {

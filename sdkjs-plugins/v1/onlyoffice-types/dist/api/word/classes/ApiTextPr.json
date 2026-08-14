@@ -6,7 +6,7 @@
       "description": "Gets the bold property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetBold/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetBold(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet bold = textPr.GetBold();\nparagraph.AddText(\"Bold property: \" + bold);\ndoc.Push(paragraph);"
+        "// How do I find out if a piece of text has bold formatting turned on in a document?\n\n// Read the bold state of text to verify its current formatting in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetBold(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet bold = textPr.GetBold();\nparagraph.AddText(\"Bold property: \" + bold);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -19,7 +19,7 @@
       "description": "Returns whether the text with the current text properties are capitalized.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetCaps/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet caps = textPr.GetCaps();\nparagraph.AddText(\"Property of the capitalized letters: \" + caps);\ndoc.Push(paragraph);"
+        "// How do I determine if text is set to display in uppercase letters in a document?\n\n// Confirm whether text has its capitalization forced to all capitals in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet caps = textPr.GetCaps();\nparagraph.AddText(\"Property of the capitalized letters: \" + caps);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -32,7 +32,7 @@
       "description": "Returns a type of the ApiTextPr class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text with the font size set to 30 and the font weight set to bold.\");\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(32);\ntextPr.SetBold(true);\nparagraph.SetTextPr(textPr);\ntextPr = paragraph.GetTextPr();\nlet classType = textPr.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+        "// How do I find out what kind of object holds the text formatting settings in a document?\n\n// Identify the category of a text properties object to confirm its type in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text with the font size set to 30 and the font weight set to bold.\");\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(32);\ntextPr.SetBold(true);\nparagraph.SetTextPr(textPr);\ntextPr = paragraph.GetTextPr();\nlet classType = textPr.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -44,7 +44,7 @@
       "description": "Gets the RGB color from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetColor/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetColor(255, 111, 61, false);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet color = textPr.GetColor();\nlet type = color.GetClassType();\nparagraph.AddText(\"Color type: \" + type);\nparagraph.SetColor(color);\ndoc.Push(paragraph);"
+        "// How do I find out what color a piece of text is set to in a document?\n\n// Check the exact color value assigned to styled text in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetColor(Api.HexColor('#FF6F3D'));\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet color = textPr.GetColor();\nlet type = color.GetClassType();\nparagraph.AddText(\"Color type: \" + type);\nparagraph.SetColor(color);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -57,7 +57,7 @@
       "description": "Gets the double strikeout property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetDoubleStrikeout/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetDoubleStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet doubleStrikeout = textPr.GetDoubleStrikeout();\nparagraph.AddText(\"Double strikeout property: \" + doubleStrikeout);\ndoc.Push(paragraph);"
+        "// How do I check if a piece of text has two strikethrough lines applied in a document?\n\n// Inspect a text run to confirm whether double strikethrough formatting is active in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetDoubleStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet doubleStrikeout = textPr.GetDoubleStrikeout();\nparagraph.AddText(\"Double strikeout property: \" + doubleStrikeout);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -70,7 +70,7 @@
       "description": "Returns the font family from the current text properties.\nThe method automatically calculates the font from the theme if the font was set via the theme.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontFamily/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontFamily(\"Arial\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontFamily = textPr.GetFontFamily();\nparagraph.AddText(\"Font family: \" + fontFamily);\ndoc.Push(paragraph);"
+        "// How do I find out which font family is applied to a piece of text in a document?\n\n// Inspect a text run to discover what font is currently set for it in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontFamily(\"Arial\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontFamily = textPr.GetFontFamily();\nparagraph.AddText(\"Font family: \" + fontFamily);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -83,7 +83,7 @@
       "description": "Gets the font size from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetFontSize/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontSize(30);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontSize = textPr.GetFontSize();\nparagraph.AddText(\"Font size: \" + fontSize);\ndoc.Push(paragraph);"
+        "// How do I find out what font size is set on a piece of text in a document?\n\n// Inspect a text run to confirm the current character size used in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetFontSize(30);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet fontSize = textPr.GetFontSize();\nparagraph.AddText(\"Font size: \" + fontSize);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -96,7 +96,7 @@
       "description": "Gets the highlight property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetHighlight/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetHighlight(\"lightGray\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet highlight = textPr.GetHighlight();\nparagraph.AddText(\"Highlight property: \" + highlight);\ndoc.Push(paragraph);"
+        "// How do I find out what highlight color is set on a piece of text in a document?\n\n// Inspect a text run to confirm which background highlight is active in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetHighlight(\"lightGray\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet highlight = textPr.GetHighlight();\nparagraph.AddText(\"Highlight property: \" + highlight);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -109,7 +109,7 @@
       "description": "Gets the italic property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetItalic/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetItalic(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet italic = textPr.GetItalic();\nparagraph.AddText(\"Italic property: \" + italic);\ndoc.Push(paragraph);"
+        "// How do I check if a piece of text has italic formatting applied in a document?\n\n// Verify whether slanted text style is currently enabled for a text run in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetItalic(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet italic = textPr.GetItalic();\nparagraph.AddText(\"Italic property: \" + italic);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -122,7 +122,7 @@
       "description": "Gets the language from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetLanguage/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetLanguage(\"en-CA\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet language = textPr.GetLanguage();\nparagraph.AddText(\"Language: \" + language);\ndoc.Push(paragraph);"
+        "// How do I find out which language is set on a piece of text in a document?\n\n// Inspect a text run to confirm the locale currently applied to it in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetLanguage(\"en-CA\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet language = textPr.GetLanguage();\nparagraph.AddText(\"Language: \" + language);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -134,6 +134,9 @@
     "GetOutLine": {
       "description": "Gets the text outline from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetOutLine/",
+      "examples": [
+        "// How do I find out what outline border is set on styled text in a document?\n\n// Reuse the border style from one text element and apply it to a shape in a document.\n\nconst doc = Api.GetDocument();\n\nconst textPr = Api.CreateTextPr();\ntextPr.SetFontSize(100);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 175, 204))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 221)));\ntextPr.SetFontFamily('Comic Sans MS');\n\nconst textArt = Api.CreateWordArt(textPr, 'ONLYOFFICE', 'textArchUp', null, null, 0, 200 * 36000, 100 * 36000);\nconst paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);\n\nconst fill = textPr.GetTextFill();\nconst stroke = textPr.GetOutLine();\nconst drawing = Api.CreateShape('rect', 100 * 36000, 20 * 36000, fill, stroke);\ndrawing.GetDocContent().GetElement(0).AddText('This is a rectangle with the same fill and outline as the WordArt text.');\nparagraph.AddDrawing(drawing);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiStroke"
@@ -145,7 +148,7 @@
       "description": "Gets the text position from the current text properties measured in half-points (1/144 of an inch).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetPosition/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetPosition(10);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet position = textPr.GetPosition();\nparagraph.AddText(\"Text position: \" + position);\ndoc.Push(paragraph);"
+        "// How do I find out by how much a piece of text is raised or lowered in a document?\n\n// Inspect a text run to confirm its vertical shift relative to the baseline in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetPosition(10);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet position = textPr.GetPosition();\nparagraph.AddText(\"Text position: \" + position);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -158,7 +161,7 @@
       "description": "Gets the text shading from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetShd/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetShd(\"clear\", 255, 111, 61);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet color = textPr.GetShd();\nlet type = color.GetClassType();\nparagraph.AddText(\"Shading type: \" + type);\ndoc.Push(paragraph);"
+        "// How do I find out what shading color and pattern are set on a piece of text in a document?\n\n// Copy the shading from one text run and apply it to another run in a document.\n\nlet doc = Api.GetDocument();\nlet firstParagraph = doc.GetElement(0);\n\nlet myNewRunStyle = doc.CreateStyle('My New Run Style', 'run');\nlet styleTextPr = myNewRunStyle.GetTextPr();\nstyleTextPr.SetCaps(true);\nstyleTextPr.SetFontFamily('Calibri Light');\n\nlet firstRun = Api.CreateRun();\nfirstRun.AddText('This is just a sample text. ');\nfirstParagraph.AddElement(firstRun);\n\nlet secondRun = Api.CreateRun();\nsecondRun.SetStyle(myNewRunStyle);\nsecondRun.AddText('A text run with shd applied to it.');\n\nlet secondRunTextPr = secondRun.GetTextPr();\nsecondRunTextPr.SetShd('clear', Api.RGBA(255, 111, 61));\nfirstParagraph.AddElement(secondRun);\n\nlet shd = secondRunTextPr.GetShd();\n\nlet secondParagraph = Api.CreateParagraph();\nlet thirdRun = Api.CreateRun();\nthirdRun.AddText('This run has the shading from the last run in the first paragraph.');\nlet thirdRunTextPr = thirdRun.GetTextPr();\nthirdRunTextPr.SetShd(shd.Type, shd.Color);\nsecondParagraph.AddElement(thirdRun);\ndoc.Push(secondParagraph);"
       ],
       "params": [],
       "returns": {
@@ -171,7 +174,7 @@
       "description": "Returns whether the text with the current text properties are displayed capitalized two points smaller than the actual font size.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSmallCaps/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSmallCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet smallCaps = textPr.GetSmallCaps();\nparagraph.AddText(\"Property of the small capitalized letters: \" + smallCaps);\ndoc.Push(paragraph);"
+        "// How do I check if a piece of text uses small caps formatting in a document?\n\n// Verify whether lowercase letters are displayed as reduced capitals in a text run in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSmallCaps(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet smallCaps = textPr.GetSmallCaps();\nparagraph.AddText(\"Property of the small capitalized letters: \" + smallCaps);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -184,7 +187,7 @@
       "description": "Gets the text spacing from the current text properties measured in twentieths of a point.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetSpacing/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSpacing(80);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet spacing = textPr.GetSpacing();\nparagraph.AddText(\"Text spacing: \" + spacing);\ndoc.Push(paragraph);"
+        "// How do I check how much space is added between characters in a document?\n\n// Inspect the spacing value set on a text run to verify its letter-spacing in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetSpacing(80);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet spacing = textPr.GetSpacing();\nparagraph.AddText(\"Text spacing: \" + spacing);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -197,7 +200,7 @@
       "description": "Gets the strikeout property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStrikeout/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet strikeout = textPr.GetStrikeout();\nparagraph.AddText(\"Strikeout property: \" + strikeout);\ndoc.Push(paragraph);"
+        "// How do I tell if text has a line drawn through it in a document?\n\n// Confirm the strikeout state of a text run before deciding whether to toggle it in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetStrikeout(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet strikeout = textPr.GetStrikeout();\nparagraph.AddText(\"Strikeout property: \" + strikeout);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -210,7 +213,7 @@
       "description": "Gets the style of the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetStyle/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet style = textPr.GetStyle();\nparagraph.AddText(\"Style: \" + style.GetName());\ndoc.Push(paragraph);"
+        "// How do I find out which style is applied to a piece of text in a document?\n\n// Retrieve the style name from a text run to verify its formatting origin in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet style = textPr.GetStyle();\nparagraph.AddText(\"Style: \" + style.GetName());\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -223,6 +226,9 @@
     "GetTextFill": {
       "description": "Gets the text fill from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetTextFill/",
+      "examples": [
+        "// How do I find out what color fills the inside of styled text in a document?\n\n// Reuse the fill from one text shape to paint another shape with the same color in a document.\n\nconst doc = Api.GetDocument();\n\nconst textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0, Api.CreateNoFill()));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ntextPr.SetFontFamily('Comic Sans MS');\n\nconst textArt = Api.CreateWordArt(textPr, 'ONLYOFFICE', 'textArchUp', null, null, 0, 200 * 36000, 100 * 36000);\nconst paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);\n\nconst textArtFill = textPr.GetTextFill();\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"rect\", 130 * 36000, 30 * 36000, textArtFill, stroke);\ndrawing.GetDocContent().GetElement(0).AddText('This is a rectangle with the same fill as the WordArt text.');\nparagraph.AddDrawing(drawing);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiFill"
@@ -234,7 +240,7 @@
       "description": "Gets the underline property from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetUnderline/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetUnderline(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet underline = textPr.GetUnderline();\nparagraph.AddText(\"Underline property: \" + underline);\ndoc.Push(paragraph);"
+        "// How do I find out if a piece of text has an underline beneath it in a document?\n\n// Confirm the underline state of a text run to decide whether further formatting is needed in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetUnderline(true);\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet underline = textPr.GetUnderline();\nparagraph.AddText(\"Underline property: \" + underline);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -247,7 +253,7 @@
       "description": "Gets the vertical alignment type from the current text properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/GetVertAlign/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetVertAlign(\"subscript\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet vertAlign = textPr.GetVertAlign();\nparagraph.AddText(\"Vertical alignment type: \" + vertAlign);\ndoc.Push(paragraph);"
+        "// How do I check whether text is raised, lowered, or sitting on the baseline in a document?\n\n// Inspect the vertical alignment of a text run to confirm whether it is subscript, superscript, or normal in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\ntextPr = run.GetTextPr();\ntextPr.SetVertAlign(\"subscript\");\nparagraph.AddElement(run);\nparagraph = Api.CreateParagraph();\nlet vertAlign = textPr.GetVertAlign();\nparagraph.AddText(\"Vertical alignment type: \" + vertAlign);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -260,7 +266,7 @@
       "description": "Sets the bold property to the text character.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetBold/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetBold(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font weight set to bold using the text properties.\");"
+        "// How do I make text appear heavier and bolder throughout a document?\n\n// Change the weight of the default font so that all text renders with a bold appearance in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetBold(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font weight set to bold using the text properties.\");"
       ],
       "params": [
         {
@@ -279,7 +285,7 @@
       "description": "Specifies that any lowercase characters in the text run are formatted for display only as their capital letter character equivalents.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetCaps/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetCaps(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text set to capital letters using the text properties.\");"
+        "// How do I make text appear in all capital letters without retyping it in a document?\n\n// Apply a visual-only capitals effect to the default text so readers see uppercase letters in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetCaps(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text set to capital letters using the text properties.\");"
       ],
       "params": [
         {
@@ -298,7 +304,7 @@
       "description": "Sets the text color to the current text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetColor/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetColor(255, 111, 61, false);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the color set to orange using the text properties.\");"
+        "// How do I change the color of text across a whole document?\n\n// Paint the default font with a chosen color so every paragraph inherits that tint in a document.\n\nconst doc = Api.GetDocument();\nconst textPr = doc.GetDefaultTextPr();\ntextPr.SetColor(Api.HexColor('#FF6F3D'));\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('A sample text with the color set to orange using the text properties.');\n\nconst secondParagraph = Api.CreateParagraph();\nsecondParagraph.AddText('This text is in the same orange color set to the paragraph directly.');\nconst color = Api.RGB(255, 111, 61);\nsecondParagraph.GetTextPr().SetColor(color);\ndoc.Push(secondParagraph);"
       ],
       "params": [
         {
@@ -318,7 +324,7 @@
       "description": "Specifies that the contents of the run are displayed with two horizontal lines through each character displayed on the line.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetDoubleStrikeout/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetDoubleStrikeout(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text struck out with two lines using the text properties.\");"
+        "// How do I cross out text with a double strikethrough in a document?\n\n// Mark the default font with a double strikeout to visually indicate deleted or superseded content in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetDoubleStrikeout(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text struck out with two lines using the text properties.\");"
       ],
       "params": [
         {
@@ -337,7 +343,7 @@
       "description": "Sets all 4 font slots with the specified font family.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontFamily/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font family set to 'Comic Sans MS' using the text properties.\");"
+        "// How do I apply a different typeface to text in a document?\n\n// Switch all text to a specific font by updating the default text properties in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font family set to 'Comic Sans MS' using the text properties.\");"
       ],
       "params": [
         {
@@ -356,7 +362,7 @@
       "description": "Sets the font size to the characters of the current text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetFontSize/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontSize(30);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font size set to 15 points using the text properties.\");"
+        "// How do I make text larger or smaller in a document?\n\n// Control how big characters appear by setting a custom font size in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontSize(30);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font size set to 15 points using the text properties.\");"
       ],
       "params": [
         {
@@ -375,7 +381,7 @@
       "description": "Specifies a highlighting color which is added to the text properties and applied as a background to the contents of the current run/range/paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetHighlight/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetHighlight(\"lightGray\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text highlighted with light gray color using the text properties.\");"
+        "// How do I mark text with a colored background in a document?\n\n// Draw attention to specific words by painting a highlight behind them in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetHighlight(\"lightGray\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text highlighted with light gray color using the text properties.\");"
       ],
       "params": [
         {
@@ -393,7 +399,7 @@
       "description": "Sets the italic property to the text character.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetItalic/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetItalic(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font set to italicized letters using the text properties.\");"
+        "// How do I format text to display in italics in a document?\n\n// Emphasize words by switching the default text style to italicized letters in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetItalic(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font set to italicized letters using the text properties.\");"
       ],
       "params": [
         {
@@ -412,7 +418,7 @@
       "description": "Specifies the languages which will be used to check spelling and grammar (if requested) when processing\nthe contents of the text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetLanguage/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetLanguage(\"en-CA\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is a text run with the text language set to English (Canada).\");\nrun.SetTextPr(textPr);\nparagraph.AddElement(run);"
+        "// How do I tell the editor which language to use when checking text in a document?\n\n// Ensure correct spelling and grammar rules by setting the text language in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetLanguage(\"en-CA\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is a text run with the text language set to English (Canada).\");\nrun.SetTextPr(textPr);\nparagraph.AddElement(run);"
       ],
       "params": [
         {
@@ -431,7 +437,7 @@
       "description": "Sets the text outline to the current text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetOutLine/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+        "// How do I put a visible border around large styled text in a document?\n\n// Give artistic text a distinct edge by applying a stroke outline in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.RGB(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
       ],
       "params": [
         {
@@ -450,7 +456,7 @@
       "description": "Specifies an amount by which text is raised or lowered for this run in relation to the default\nbaseline of the surrounding non-positioned text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetPosition/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle1 = doc.CreateStyle(\"My New Run Style 1\", \"run\");\nlet textPr1 = myNewRunStyle1.GetTextPr();\ntextPr1.SetPosition(10);\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle1);\nrun.AddText(\"This is a text run with the text raised 5 points (10 half-points). \");\nparagraph.AddElement(run);\nlet myNewRunStyle2 = doc.CreateStyle(\"My New Run Style 2\", \"run\");\nlet textPr2 = myNewRunStyle2.GetTextPr();\ntextPr2.SetPosition(-16);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle2);\nrun.AddText(\"This is a text run with the text lowered 8 points (16 half-points).\");\nparagraph.AddElement(run);"
+        "// How do I shift text up or down without changing the line height in a document?\n\n// Fine-tune vertical placement of words by moving them above or below the baseline in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle1 = doc.CreateStyle(\"My New Run Style 1\", \"run\");\nlet textPr1 = myNewRunStyle1.GetTextPr();\ntextPr1.SetPosition(10);\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle1);\nrun.AddText(\"This is a text run with the text raised 5 points (10 half-points). \");\nparagraph.AddElement(run);\nlet myNewRunStyle2 = doc.CreateStyle(\"My New Run Style 2\", \"run\");\nlet textPr2 = myNewRunStyle2.GetTextPr();\ntextPr2.SetPosition(-16);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle2);\nrun.AddText(\"This is a text run with the text lowered 8 points (16 half-points).\");\nparagraph.AddElement(run);"
       ],
       "params": [
         {
@@ -469,7 +475,7 @@
       "description": "Specifies the shading applied to the contents of the current text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetShd/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetShd(\"clear\", 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the shading set to orange.\");"
+        "// How do I fill the background of a word or phrase with a color in a document?\n\n// Highlight content by coloring the area directly behind the characters in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetShd('clear', Api.HexColor('#ff6f3d'));\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the shading set to orange.\");"
       ],
       "params": [
         {
@@ -494,7 +500,7 @@
       "description": "Specifies that all the small letter characters in the text run are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSmallCaps/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetSmallCaps(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font set to small capitalized letters.\");"
+        "// How do I make text appear in small capitals without retyping it in a document?\n\n// Give text a refined look by rendering all letters as reduced-size capitals in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetSmallCaps(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font set to small capitalized letters.\");"
       ],
       "params": [
         {
@@ -513,7 +519,7 @@
       "description": "Sets the text spacing measured in twentieths of a point.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetSpacing/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetSpacing(80);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the spacing set to 4 points (80 twentieths of a point).\");"
+        "// How do I increase or decrease the gap between letters in a document?\n\n// Control how tightly or loosely characters are spaced along a line in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetSpacing(80);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the spacing set to 4 points (80 twentieths of a point).\");"
       ],
       "params": [
         {
@@ -532,7 +538,7 @@
       "description": "Specifies that the contents of the run are displayed with a single horizontal line through the center of the line.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStrikeout/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetStrikeout(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text struck out with a single line.\");"
+        "// How do I draw a horizontal line through the middle of text in a document?\n\n// Mark text as deleted or deprecated by crossing it out in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetStrikeout(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text struck out with a single line.\");"
       ],
       "params": [
         {
@@ -551,7 +557,7 @@
       "description": "The text style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiRun#SetStyle} method which sets\nthe selected or created style to the text.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetStyle/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\nparagraph.AddElement(run);"
+        "// How do I assign a predefined style to a portion of text in a document?\n\n// Reuse saved formatting by attaching a custom run style to specific text in a document.\n\nlet doc = Api.GetDocument();\nlet myNewRunStyle = doc.CreateStyle(\"My New Run Style\", \"run\");\nlet textPr = myNewRunStyle.GetTextPr();\ntextPr.SetCaps(true);\ntextPr.SetFontFamily(\"Calibri Light\");\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nrun.AddText(\"The text properties are changed and the style is added to the paragraph. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle);\nrun.AddText(\"This is a text run with its own style.\");\nparagraph.AddElement(run);"
       ],
       "params": [
         {
@@ -570,7 +576,7 @@
       "description": "Sets the text fill to the current text run.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetTextFill/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
+        "// How do I change the fill color of decorative text in a document?\n\n// Give artistic text a distinct appearance by applying a colored fill in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextPr.SetCaps(true);\ntextPr.SetOutLine(Api.CreateStroke(0.2 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51))));\ntextPr.SetTextFill(Api.CreateSolidFill(Api.RGB(255, 111, 61)));\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet textArt = Api.CreateWordArt(textPr, \"onlyoffice\", \"textArchUp\", null, null, 0, 150 * 36000, 50 * 36000);\nlet paragraph = doc.GetElement(0);\nparagraph.AddDrawing(textArt);"
       ],
       "params": [
         {
@@ -589,7 +595,7 @@
       "description": "Specifies that the contents of the run are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetUnderline/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetUnderline(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text underlined with a single line.\");"
+        "// How do I add an underline beneath the default paragraph text in a document?\n\n// Emphasize body text by switching on the underline formatting option in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetUnderline(true);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text underlined with a single line.\");"
       ],
       "params": [
         {
@@ -608,7 +614,7 @@
       "description": "Specifies the alignment which will be applied to the contents of the run in relation to the default appearance of the run text:\n**\"baseline\"** - the characters in the current text run will be aligned by the default text baseline.\n**\"subscript\"** - the characters in the current text run will be aligned below the default text baseline.\n**\"superscript\"** - the characters in the current text run will be aligned above the default text baseline.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/SetVertAlign/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nlet myNewRunStyle1 = doc.CreateStyle(\"My New Run Style 1\", \"run\");\nlet textPr1 = myNewRunStyle1.GetTextPr();\ntextPr1.SetVertAlign(\"subscript\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle1);\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\nlet myNewRunStyle2 = doc.CreateStyle(\"My New Run Style 2\", \"run\");\nlet textPr2 = myNewRunStyle2.GetTextPr();\ntextPr2.SetVertAlign(\"baseline\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle2);\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\nlet myNewRunStyle3 = doc.CreateStyle(\"My New Run Style 3\", \"run\");\nlet textPr3 = myNewRunStyle3.GetTextPr();\ntextPr3.SetVertAlign(\"superscript\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle3);\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);"
+        "// How do I raise or lower a portion of text relative to the surrounding line in a document?\n\n// Distinguish chemical formulas or footnote markers by adjusting vertical text placement in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is just a sample text. \");\nparagraph.AddElement(run);\nlet myNewRunStyle1 = doc.CreateStyle(\"My New Run Style 1\", \"run\");\nlet textPr1 = myNewRunStyle1.GetTextPr();\ntextPr1.SetVertAlign(\"subscript\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle1);\nrun.AddText(\"This is a text run with the text aligned below the baseline vertically. \");\nparagraph.AddElement(run);\nlet myNewRunStyle2 = doc.CreateStyle(\"My New Run Style 2\", \"run\");\nlet textPr2 = myNewRunStyle2.GetTextPr();\ntextPr2.SetVertAlign(\"baseline\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle2);\nrun.AddText(\"This is a text run with the text aligned by the baseline vertically. \");\nparagraph.AddElement(run);\nlet myNewRunStyle3 = doc.CreateStyle(\"My New Run Style 3\", \"run\");\nlet textPr3 = myNewRunStyle3.GetTextPr();\ntextPr3.SetVertAlign(\"superscript\");\nrun = Api.CreateRun();\nrun.SetStyle(myNewRunStyle3);\nrun.AddText(\"This is a text run with the text aligned above the baseline vertically.\");\nparagraph.AddElement(run);"
       ],
       "params": [
         {
@@ -627,7 +633,7 @@
       "description": "Converts the ApiTextPr object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTextPr/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet json = textPr.ToJSON(true);\nlet textPrFromJSON = Api.FromJSON(json);\ntextPrFromJSON.SetFontSize(30);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font size set to 15 points using the text properties.\");\nparagraph.SetTextPr(textPrFromJSON);"
+        "// How do I serialize text formatting so it can be restored and reused in a document?\n\n// Save and reload a set of text properties through a JSON snapshot in a document.\n\nlet doc = Api.GetDocument();\nlet textPr = doc.GetDefaultTextPr();\ntextPr.SetFontFamily(\"Comic Sans MS\");\nlet json = textPr.ToJSON(true);\nlet textPrFromJSON = Api.FromJSON(json);\ntextPrFromJSON.SetFontSize(30);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"A sample text with the font size set to 15 points using the text properties.\");\nparagraph.SetTextPr(textPrFromJSON);"
       ],
       "params": [
         {

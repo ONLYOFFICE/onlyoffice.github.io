@@ -6,7 +6,7 @@
       "description": "Deletes the DefName object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/Delete/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\ndefName.Delete();\nworksheet.GetRange(\"A3\").SetValue(\"The name 'numbers' of the range A1:B1 was deleted.\");"
+        "// How do I delete a named range I no longer need in a spreadsheet?\n\n// Erase a saved range name to clean up the workbook in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\ndefName.Delete();\nworksheet.GetRange(\"A3\").SetValue(\"The name 'numbers' of the range A1:B1 was deleted.\");"
       ],
       "params": [],
       "returns": {
@@ -19,7 +19,7 @@
       "description": "Returns a type of the ApiName class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nworksheet.GetRange(\"A3\").SetValue(\"Name: \" + defName.GetName());"
+        "// How do I find out what a named range is called in a spreadsheet?\n\n// Retrieve the text name of a range to display or compare it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nworksheet.GetRange(\"A3\").SetValue(\"Name: \" + defName.GetName());"
       ],
       "params": [],
       "returns": {
@@ -31,7 +31,7 @@
       "description": "Returns a formula that the name is defined to refer to.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetRefersTo/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");\nworksheet.GetRange(\"A4\").SetValue(\"Formula: \" + defName.GetRefersTo());"
+        "// How do I find out which formula a named range refers to in a spreadsheet?\n\n// Check what expression is stored behind a range name to verify its target in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");\nworksheet.GetRange(\"A4\").SetValue(\"Formula: \" + defName.GetRefersTo());"
       ],
       "params": [],
       "returns": {
@@ -43,7 +43,7 @@
       "description": "Returns the ApiRange object by its name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/GetRefersToRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nlet range = defName.GetRefersToRange();\nrange.SetBold(true);"
+        "// How do I work with the actual cells behind a named range in a spreadsheet?\n\n// Look up a range by its label and apply formatting to those cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"numbers\", \"$A$1:$B$1\");\nlet defName = Api.GetDefName(\"numbers\");\nlet range = defName.GetRefersToRange();\nrange.SetBold(true);"
       ],
       "params": [],
       "returns": {
@@ -55,7 +55,7 @@
       "description": "Sets a string value representing the object name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/SetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"name\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"name\");\ndefName.SetName(\"new_name\");\nlet newDefName = Api.GetDefName(\"new_name\");\nworksheet.GetRange(\"A3\").SetValue(\"The new name of the range: \" + newDefName.GetName());"
+        "// How do I change the name of an existing named range in a spreadsheet?\n\n// Update a range label so formulas and references use the new name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nApi.AddDefName(\"name\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"name\");\ndefName.SetName(\"new_name\");\nlet newDefName = Api.GetDefName(\"new_name\");\nworksheet.GetRange(\"A3\").SetValue(\"The new name of the range: \" + newDefName.GetName());"
       ],
       "params": [
         {
@@ -74,7 +74,7 @@
       "description": "Sets a formula that the name is defined to refer to.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiName/Methods/SetRefersTo/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");"
+        "// How do I make a named range refer to a formula instead of plain cells in a spreadsheet?\n\n// Reassign a range name so it targets a calculated expression in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"=SUM(A1:B1)\");\nApi.AddDefName(\"summa\", \"Sheet1!$A$1:$B$1\");\nlet defName = Api.GetDefName(\"summa\");\ndefName.SetRefersTo(\"=SUM(A1:B1)\");\nworksheet.GetRange(\"A3\").SetValue(\"The name 'summa' refers to the formula from the cell C1.\");"
       ],
       "params": [
         {

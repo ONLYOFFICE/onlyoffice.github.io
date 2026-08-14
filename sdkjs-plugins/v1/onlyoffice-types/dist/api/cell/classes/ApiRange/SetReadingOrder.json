@@ -1,0 +1,18 @@
+{
+  "description": "Sets the direction (reading order) of the text in the current cell range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetReadingOrder/",
+  "examples": [
+    "// How do I switch text to read right-to-left in a spreadsheet?\n\n// Support languages like Arabic or Hebrew by adjusting the text flow direction in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B2\").SetValue(\"Hello, أهلاً, 你好\");\nconst range = worksheet.GetRange(\"A1:C3\");\nrange.SetReadingOrder('rtl');"
+  ],
+  "params": [
+    {
+      "description": "The direction (reading order) that will be applied to the cell contents.",
+      "name": "direction",
+      "type": "'context' | 'ltr' | 'rtl'"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetReadingOrder(direction: 'context' | 'ltr' | 'rtl'): void"
+}

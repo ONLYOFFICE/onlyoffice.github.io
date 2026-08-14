@@ -2,7 +2,7 @@
   "description": "Sets the watermark settings in the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetWatermarkSettings/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet watermarkSettings = doc.GetWatermarkSettings();\nwatermarkSettings.SetType(\"text\");\nwatermarkSettings.SetText(\"Example\");\nlet textPr = watermarkSettings.GetTextPr();\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(-1);\ntextPr.SetDoubleStrikeout(true);\ntextPr.SetItalic(true);\ntextPr.SetBold(true);\ntextPr.SetUnderline(true);\ntextPr.SetColor(0, 255, 0);\ntextPr.SetHighlight(\"blue\");\nwatermarkSettings.SetTextPr(textPr);\ndoc.SetWatermarkSettings(watermarkSettings);"
+    "// How do I add a watermark with specific text and formatting to a document?\n\n// Brand or protect pages by stamping them with a formatted watermark that uses bold, italic, and underline styles.\n\nlet doc = Api.GetDocument();\nlet watermarkSettings = doc.GetWatermarkSettings();\nwatermarkSettings.SetType(\"text\");\nwatermarkSettings.SetText(\"Example\");\nlet textPr = watermarkSettings.GetTextPr();\ntextPr.SetFontFamily(\"Calibri\");\ntextPr.SetFontSize(-1);\ntextPr.SetDoubleStrikeout(true);\ntextPr.SetItalic(true);\ntextPr.SetBold(true);\ntextPr.SetUnderline(true);\ntextPr.SetColor(Api.RGB(0, 255, 0));\ntextPr.SetHighlight(\"blue\");\nwatermarkSettings.SetTextPr(textPr);\ndoc.SetWatermarkSettings(watermarkSettings);"
   ],
   "params": [
     {

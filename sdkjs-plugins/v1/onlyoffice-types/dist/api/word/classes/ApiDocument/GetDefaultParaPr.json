@@ -2,7 +2,7 @@
   "description": "Returns a set of default paragraph properties in the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetDefaultParaPr/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = doc.GetDefaultParaPr();\nparaPr.SetSpacingLine(276, \"auto\");\nparaPr.SetSpacingAfter(200);\nlet normalStyle = doc.GetDefaultStyle(\"paragraph\");\nparaPr = normalStyle.GetParaPr();\nparaPr.SetSpacingLine(240, \"auto\");\nparaPr.SetJc(\"both\");\nparagraph.AddText(\"This is just a text.\");"
+    "// How do I change the default line spacing and paragraph spacing for all paragraphs in a document?\n\n// Adjust justification and spacing at the style level so every new paragraph inherits the settings in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = doc.GetDefaultParaPr();\nparaPr.SetSpacingLine(276, \"auto\");\nparaPr.SetSpacingAfter(200);\nlet normalStyle = doc.GetDefaultStyle(\"paragraph\");\nparaPr = normalStyle.GetParaPr();\nparaPr.SetSpacingLine(240, \"auto\");\nparaPr.SetJc(\"both\");\nparagraph.AddText(\"This is just a text.\");"
   ],
   "params": [],
   "returns": {

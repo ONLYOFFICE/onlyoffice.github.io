@@ -1,0 +1,25 @@
+{
+  "description": "Starts the mail merge process.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MailMerge/",
+  "examples": [
+    "// How do I fill a letter template with names and greetings from a data list in a document?\n\n// Automate the creation of multiple personalized copies from a single template in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fields = [\"Greeting line\", \"First name\", \"Last name\"];\nfor (let i = 0; i < fields.length; ++i) \n{\n\tlet run = Api.CreateRun();\n\trun.AddText(fields[i]);\n\tparagraph.AddElement(run);\n\trun.WrapInMailMergeField();\n\tparagraph.AddText(\" \");\n}\nparagraph.AddText(\"!\");\nApi.LoadMailMergeData([fields, [\"Dear\", \"John\", \"Smith\"], [\"Hello\", \"Lara\", \"Davis\"]]);\nApi.MailMerge(1);"
+  ],
+  "params": [
+    {
+      "description": "The start index of the document for mail merge process.",
+      "name": "startIndex",
+      "optional": true,
+      "type": "number"
+    },
+    {
+      "description": "The end index of the document for mail merge process.",
+      "name": "endIndex",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "MailMerge(startIndex?: number, endIndex?: number): boolean"
+}

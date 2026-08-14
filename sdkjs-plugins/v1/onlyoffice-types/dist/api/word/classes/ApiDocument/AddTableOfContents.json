@@ -2,7 +2,7 @@
   "description": "Adds a table of content to the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddTableOfContents/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet newDocumentStyle = doc.GetStyle(\"Heading 1\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 1\");\nnewDocumentStyle = doc.GetStyle(\"Heading 2\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
+    "// How do I build a table of contents based on heading styles in a document?\n\n// Configure page numbers, leader dots, and outline depth when inserting a table of contents in a document.\n\nlet doc = Api.GetDocument();\nlet newDocumentStyle = doc.GetStyle(\"Heading 1\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 1\");\nnewDocumentStyle = doc.GetStyle(\"Heading 2\");\nparagraph = Api.CreateParagraph();\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
   ],
   "params": [
     {

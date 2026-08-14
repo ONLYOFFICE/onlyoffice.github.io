@@ -1,6 +1,9 @@
 {
   "description": "Specifies a border which will be displayed on all table cell borders.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderAll/",
+  "examples": [
+    "// How do I add borders to all sides of every cell in a table in a document?\n\n// Draw consistent lines along all internal and external table edges in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and add 4 point black border for the entrire table:\");\nconst tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nconst tablePr = tableStyle.GetTablePr();\nconst table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderAll(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
   "params": [
     {
       "description": "The border style.",

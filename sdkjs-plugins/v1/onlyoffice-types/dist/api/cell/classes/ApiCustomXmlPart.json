@@ -5,6 +5,9 @@
     "Delete": {
       "description": "Deletes the XML from the custom XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/Delete/",
+      "examples": [
+        "// How do I permanently remove a custom XML block I no longer need in a spreadsheet?\n\n// Clean up unused XML storage to keep the workbook tidy in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml1 = xmlManager.Add(\"<user xmlns='http://example'>John</user>\");\nlet xml2 = xmlManager.Add(\"<customer xmlns='http://example'>Alex</customer>\");\nxml1.Delete();\nlet count = xmlManager.GetCount();\nlet xmlParts = xmlManager.GetAll();\nworksheet.GetRange(\"A1\").SetValue(\"Remaining XML parts: \" + count);\nxmlParts.forEach((part, index) => {\n    worksheet.GetRange(\"A\" + (index + 2)).SetValue(\"XML part: \" + part.GetXml());\n});"
+      ],
       "params": [],
       "returns": {
         "description": "True if the XML was successfully deleted.",
@@ -16,6 +19,9 @@
     "DeleteAttribute": {
       "description": "Deletes an attribute from the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/DeleteAttribute/",
+      "examples": [
+        "// How do I remove a named property from an XML element in a spreadsheet?\n\n// Trim unwanted metadata from an XML node and confirm the result in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = \"<config version='1.0' namespace='http://example' />\";\nconst xml = xmlManager.Add(xmlString);\n\nxml.DeleteAttribute('/config', 'namespace');\nworksheet.GetRange('A1').SetValue('XML after deletion: ' + xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the node from which to delete the attribute.",
@@ -38,6 +44,9 @@
     "DeleteElement": {
       "description": "Deletes an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/DeleteElement/",
+      "examples": [
+        "// How do I cut out an unwanted XML node from custom data saved in a spreadsheet?\n\n// Prune a specific branch of an XML structure to keep only the relevant content in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = `\n<content>\n\t<text>example_text</text>\n\t<extra>remove me</extra>\n</content>`;\nconst xml = xmlManager.Add(xmlString);\n\nxml.DeleteElement('/content/extra');\nworksheet.GetRange('A1').SetValue('XML after deletion: ' + xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the node to delete.",
@@ -55,6 +64,9 @@
     "GetAttribute": {
       "description": "Returns an attribute from the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/GetAttribute/",
+      "examples": [
+        "// How do I look up what a specific attribute on an XML node is set to in a spreadsheet?\n\n// Extract configuration data stored as an XML attribute for use in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<config version='1.0' xmlns='http://example'><setting>value</setting></config>\");\nlet rootNodes = xml.GetNodes('/config');\nif (rootNodes.length > 0) {\n    let version = rootNodes[0].GetAttribute('version');\n    worksheet.GetRange(\"A1\").SetValue(\"Config version: \" + version);\n} else {\n    worksheet.GetRange(\"A1\").SetValue(\"No root node found\");\n}"
+      ],
       "params": [
         {
           "description": "The XPath of the node from which to get the attribute.",
@@ -77,6 +89,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlPart class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out the object type of a custom XML block stored in a spreadsheet?\n\n// Confirm the category of a stored XML object before working with it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<data><value>Sample</value></data>\");\nlet classType = xml.GetClassType();\nworksheet.GetRange(\"A1\").SetValue(\"Class type: \" + classType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customXmlPart\""
@@ -86,6 +101,9 @@
     "GetId": {
       "description": "Returns the ID of the custom XML part.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/GetId/",
+      "examples": [
+        "// How do I find the ID that distinguishes one XML block from another in a spreadsheet?\n\n// Look up a stored XML block by its identifier to reference it later in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<settings><theme>dark</theme></settings>\");\nlet id = xml.GetId();\nworksheet.GetRange(\"A1\").SetValue(\"XML part ID: \" + id);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -95,6 +113,9 @@
     "GetNodes": {
       "description": "Retrieves nodes from custom XML based on the provided XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/GetNodes/",
+      "examples": [
+        "// How do I pull out specific nodes from a custom XML block saved in a spreadsheet?\n\n// Navigate an XML structure to collect all elements at a given location in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<products><item>Laptop</item><item>Mouse</item><item>Keyboard</item></products>\");\nlet itemNodes = xml.GetNodes('/products/item');\nworksheet.GetRange(\"A1\").SetValue(\"Found \" + itemNodes.length + \" products:\");\nfor (let i = 0; i < itemNodes.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 2)).SetValue((i + 1) + \". \" + itemNodes[i].GetText());\n}"
+      ],
       "params": [
         {
           "description": "The XPath expression to search for nodes.",
@@ -112,6 +133,9 @@
     "GetXml": {
       "description": "Retrieves the XML string from the custom XML part.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/GetXml/",
+      "examples": [
+        "// How do I retrieve the complete XML string from a stored block of data in a spreadsheet?\n\n// Export the current XML content of a stored block so it can be inspected or reused in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<report><title>Monthly Report</title><date>2024-01-01</date></report>\");\nlet xmlContent = xml.GetXml();\nworksheet.GetRange(\"A1\").SetValue(\"XML content:\");\nworksheet.GetRange(\"A2\").SetValue(xmlContent);"
+      ],
       "params": [],
       "returns": {
         "description": "The XML string.",
@@ -123,6 +147,9 @@
     "InsertAttribute": {
       "description": "Inserts an attribute into the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/InsertAttribute/",
+      "examples": [
+        "// How do I attach extra metadata to an existing XML node in a spreadsheet?\n\n// Enrich an XML element with an additional attribute to carry more structured data in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = '<config />';\nconst xml = xmlManager.Add(xmlString);\n\nxml.InsertAttribute('/config', 'version', '9.4');\nworksheet.GetRange('A1').SetValue('XML after insertion:');\nworksheet.GetRange('A2').SetValue(xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the node to insert the attribute into.",
@@ -150,6 +177,9 @@
     "InsertElement": {
       "description": "Inserts an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/InsertElement/",
+      "examples": [
+        "// How do I nest a new node inside an XML block already saved in a spreadsheet?\n\n// Expand stored XML data by appending a new element at a chosen location in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = \"<content version='9.4' />\";\nconst xml = xmlManager.Add(xmlString);\n\nxml.InsertElement('/content', '<text>lorem</text>');\nworksheet.GetRange('A1').SetValue('XML after insertion:');\nworksheet.GetRange('A2').SetValue(xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the parent node where the new element will be inserted.",
@@ -178,6 +208,9 @@
     "UpdateAttribute": {
       "description": "Updates an attribute of the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/UpdateAttribute/",
+      "examples": [
+        "// How do I overwrite the current value of a named property on an XML node in a spreadsheet?\n\n// Revise stored XML metadata by updating a specific attribute to a new value in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = \"<config version='1.0' namespace='http://api.onlyoffice.com' />\";\nconst xml = xmlManager.Add(xmlString);\n\nxml.UpdateAttribute('/config', 'version', '9.4');\nworksheet.GetRange('A1').SetValue('XML after update: ' + xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the node whose attribute should be updated.",
@@ -205,6 +238,9 @@
     "UpdateElement": {
       "description": "Updates an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlPart/Methods/UpdateElement/",
+      "examples": [
+        "// How do I change the value inside a saved XML structure in a spreadsheet?\n\n// Overwrite an existing XML node to keep embedded data current in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst xmlManager = worksheet.GetCustomXmlParts();\nconst xmlString = '<content><text>Old value</text></content>';\nconst xml = xmlManager.Add(xmlString);\n\nxml.UpdateElement('/content/text', '<text>New value</text>');\nworksheet.GetRange('A1').SetValue('XML after update: ' + xml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XPath of the node to update.",

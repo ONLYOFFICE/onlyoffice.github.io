@@ -2,7 +2,7 @@
   "description": "Searches for a scope of a document object. The search results are a collection of ApiRange objects.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/Search/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is paragraph №1.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is paragraph №2.\");\ndoc.Push(paragraph);\nlet searchResults = doc.Search(\"paragraph\");\nsearchResults[1].SetBold(true);"
+    "// How do I find every match of a string and format a specific result in a document?\n\n// Collect search results by keyword and style the second match to highlight it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is paragraph №1.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is paragraph №2.\");\ndoc.Push(paragraph);\nlet searchResults = doc.Search(\"paragraph\");\nsearchResults[1].SetBold(true);"
   ],
   "params": [
     {

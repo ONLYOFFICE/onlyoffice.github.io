@@ -1,0 +1,18 @@
+{
+  "description": "Converts lines to points (1 line = 12 points).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/LinesToPoints/",
+  "examples": [
+    "// How do I convert line measurements to points in a PDF?\n\n// Translate line values to point measurements and display the result in a PDF.\n\nconst lines = 100;\nconst points = Api.LinesToPoints(lines);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(lines + ' lines are equal to ' + points + ' points.');\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of lines to convert to points.",
+      "name": "lines",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "LinesToPoints(lines: number): number"
+}

@@ -5,6 +5,9 @@
     "AddElement": {
       "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/AddElement/",
+      "examples": [
+        "// How do I add content inside a drawn shape in a PDF?\n\n// Create a shape, fill it with text, and place it on a page in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The position where the current element will be added.",
@@ -25,6 +28,9 @@
     "AddText": {
       "description": "Appends the specified text to the end of the document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/AddText/",
+      "examples": [
+        "// How do I add text to the last paragraph of a shape's document content in a PDF?\n\n// Add a sentence to a shape without replacing its existing text in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\ndocContent.GetElement(0).AddText('First sentence.');\ndocContent.AddText(' Appended sentence.');\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + docContent.GetText());\ndocContent.Push(infoParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The text to add.",
@@ -41,6 +47,9 @@
     "GetAllParagraphs": {
       "description": "Returns an array of all paragraphs from the current document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetAllParagraphs/",
+      "examples": [
+        "// How do I list every paragraph inside a shape in a PDF?\n\n// Retrieve all text sections and modify one of them in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(189, 215, 175));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph1 = docContent.GetElement(0);\nparagraph1.AddText('Paragraph 1');\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('Paragraph 2');\ndocContent.Push(paragraph2);\n\nconst allParagraphs = docContent.GetAllParagraphs();\n\nallParagraphs[0].SetBold(true);\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Total paragraphs: ' + allParagraphs.length);\ndocContent.Push(infoParagraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiParagraph[]"
@@ -50,6 +59,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiDocumentContent class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetClassType/",
+      "examples": [
+        "// How can I determine the type of a content element in a PDF?\n\n// Find what category or class an object belongs to in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst classType = docContent.GetClassType();\nparagraph.AddText(\"Class Type: \" + classType);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"documentContent\""
@@ -59,6 +71,9 @@
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
+      "examples": [
+        "// How do I find the paragraph being edited in a PDF?\n\n// Retrieve the most recent paragraph that was added to a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(200, 191, 231));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('First paragraph inside the shape.');\n\nconst newParagraph = Api.CreateParagraph();\nnewParagraph.AddText('Second paragraph inside the shape.');\ndocContent.Push(newParagraph);\n\nconst currentParagraph = docContent.GetCurrentParagraph();\nif (currentParagraph) {\n  currentParagraph.AddText(' (Current paragraph detected!)');\n}\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -69,6 +84,9 @@
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetCurrentRun/",
+      "examples": [
+        "// How do I find the text segment being edited in a PDF?\n\n// Retrieve the most recent text portion that was added to a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#F5C6AA'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('This is a run inside the shape.');\nparagraph.AddElement(run);\n\nconst currentRun = docContent.GetCurrentRun();\nif (currentRun) {\n  currentRun.AddText(' (Current run detected!)');\n}\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -79,6 +97,9 @@
     "GetElement": {
       "description": "Returns an element by its position in the document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetElement/",
+      "examples": [
+        "// How do I access a specific paragraph inside a shape in a PDF?\n\n// Extract a text block from a shape using its number in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst oBullet = Api.CreateNumbering(\"ArabicParenR\", 1);\n\nconst docContent = shape.GetContent();\nlet oParagraph = docContent.GetElement(0);\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\n\noParagraph = Api.CreateParagraph();\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\ndocContent.Push(oParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The element position that will be taken from the document.",
@@ -94,6 +115,9 @@
     "GetElementsCount": {
       "description": "Returns a number of elements in the current document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetElementsCount/",
+      "examples": [
+        "// How do I find out how many text blocks are in a shape in a PDF?\n\n// Determine the total of content sections that a shape holds in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"We got the first paragraph inside the shape.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements inside the shape: \" + docContent.GetElementsCount());\nparagraph.AddLineBreak();\nparagraph.AddText(\"Line breaks are NOT counted into the number of elements.\");\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -103,6 +127,9 @@
     "GetInternalId": {
       "description": "Returns an internal ID of the current document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetInternalId/",
+      "examples": [
+        "// How can I find the ID that refers to a shape's content in a PDF?\n\n// Discover the reference code that distinguishes a content container in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#A2C4E0'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst internalId = docContent.GetInternalId();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Document content internal ID: ' + internalId);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -113,6 +140,9 @@
     "GetText": {
       "description": "Returns the inner text of the current document content object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/GetText/",
+      "examples": [
+        "// How do I read all the text that is inside a shape in a PDF?\n\n// Gather the combined text from all paragraphs within a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is the shape content text.');\nconst text = docContent.GetText();\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + text);\ndocContent.Push(infoParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -172,6 +202,9 @@
     "Push": {
       "description": "Pushes a paragraph or a table to actually add it to the document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/Push/",
+      "examples": [
+        "// How do I append a new paragraph to a shape in a PDF?\n\n// Place a text block at the bottom of the content list in a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The element type which will be pushed to the document.",
@@ -188,6 +221,9 @@
     "RemoveAllElements": {
       "description": "Removes all the elements from the current document or from the current document element.\n<note>When all elements are removed, a new empty paragraph is automatically created. If you want to add\ncontent to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/RemoveAllElements/",
+      "examples": [
+        "// How do I clear all text blocks from inside a shape in a PDF?\n\n// Erase every paragraph and line from a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -197,6 +233,9 @@
     "RemoveElement": {
       "description": "Removes an element using the position specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/RemoveElement/",
+      "examples": [
+        "// How do I remove one paragraph from inside a shape in a PDF?\n\n// Erase a specific text block by its position in a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is the first paragraph.\");\ndocContent.RemoveElement(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph. The first paragraph was removed from the document content.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The element number (position) in the document or inside other element.",
@@ -212,6 +251,9 @@
     "SetText": {
       "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocumentContent/Methods/SetText/",
+      "examples": [
+        "// How do I overwrite all the text inside a shape's document content in a PDF?\n\n// Clear existing text and write a new sentence into a shape's content area in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\ndocContent.GetElement(0).AddText('Original shape content text.');\ndocContent.SetText('Updated shape content text.');\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + docContent.GetText());\ndocContent.Push(infoParagraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The text to set.",

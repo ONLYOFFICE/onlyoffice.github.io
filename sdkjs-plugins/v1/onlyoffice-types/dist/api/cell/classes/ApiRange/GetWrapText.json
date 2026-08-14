@@ -1,0 +1,12 @@
+{
+  "description": "Returns the information about the wrapping cell style.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetWrapText/",
+  "examples": [
+    "// How do I find out if a cell is set to wrap its text in a spreadsheet?\n\n// Confirm the wrap setting of a cell by reading and displaying it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"This is the text wrapped to fit the cell size.\");\nrange.SetWrap(true);\nworksheet.GetRange(\"A3\").SetValue(\"The text in the cell A1 is wrapped: \" + range.GetWrapText());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GetWrapText(): boolean"
+}

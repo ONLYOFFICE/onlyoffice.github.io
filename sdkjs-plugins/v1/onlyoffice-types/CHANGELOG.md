@@ -58,6 +58,13 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   the authored one; guarded by `npm run check-runtime-index`, which needs no sdkjs checkout.
 - `@default` tags on generated members. sdkjs records parameter defaults as `[name=value]` and the
   generator parsed them into the doclet, then dropped them - 254 of them in Word alone.
+- Runnable examples now come from a checkout of the documentation site (`DOCS_PATH`), replacing 9 MB
+  of vendored `scripts/legacy-api/*.json` snapshots that were a pinned dump of the same site. Nearly
+  twice the coverage - 5839 examples against 3003 - and PDF has them for the first time (0 → 1178),
+  since it never had a snapshot. The page for a member is addressed by the segments its `docsUrl`
+  already carries, so the lookup is derived rather than guessed. The snapshots were verified
+  redundant before deletion: with prose and `@see` links already coming from sdkjs, generating with
+  and without them produced byte-identical output.
 
 ### Fixed
 
@@ -79,6 +86,12 @@ First published release. Generated from sdkjs `v9.5.0.150`.
   deliberately *not* filtered against a local docs checkout - doing so would suppress correct links
   to pages that are about to exist, and tie this package's output to the site's release cadence
   rather than to the API.
+- The ambient bundle failed to compile for anyone using `"lib": ["DOM"]`. Flattened to global scope,
+  sdkjs's `ImageData` typedef merged with the DOM's canvas `ImageData`, whose `width`/`height` are
+  `readonly`, giving `TS2687`. It is renamed to `AscImageData` on flatten, and the generator now
+  fails if any other declaration collides with a `lib.dom` global, so the next one is classified
+  rather than shipped. Only the bundle is affected - in the modular package each file is a module and
+  the name is local to it.
 - The compact per-editor index was keyed off methods, so a class with no methods of its own was
   absent from it entirely - 56 of the 67 classes in the Forms namespace, whose members are all
   inherited. An agent scanning the index would have concluded `Forms.ApiChart` does not exist. It

@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the standard normal cumulative distribution (has a mean of zero and a standard deviation of one).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORMSINV/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(0.25);\n\n//method params\nlet value = worksheet.GetRange(\"A1\").GetValue();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.NORMSINV(value);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I find the inverse of a standard normal distribution in a spreadsheet?\n\n// Get the quantile value for a given probability in a standard normal distribution in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(0.25);\n\n//method params\nlet value = worksheet.GetRange(\"A1\").GetValue();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.NORMSINV(value);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

@@ -1,0 +1,13 @@
+{
+  "description": "Returns the selection from the current presentation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/GetSelection/",
+  "examples": [
+    "// How do I access the selected content in a presentation in a presentation?\n\n// Read the properties of selected elements in a presentation.\n\nconst presentation = Api.GetPresentation();\n\nconst rgb = Api.CreateRGBColor(50, 100, 150);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 200 * 36000, 10 * 36000, fill, stroke);\n\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);\nshape.Select();\n\nconst selection = Api.GetSelection();\nconst content = shape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Type: ' + selection.GetType());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiSelection"
+  },
+  "signature": "GetSelection(): ApiSelection",
+  "since": "8.3.0"
+}

@@ -5,6 +5,9 @@
     "AddAdj": {
       "description": "Adds a new adjustment parameter to the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddAdj/",
+      "examples": [
+        "// How do I define a movable adjustment point for a custom shape in a spreadsheet?\n\n// Register a named adjustment control to fine-tune the proportions of a custom shape in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The adjustment name.",
@@ -26,6 +29,9 @@
     "AddConnectionPoint": {
       "description": "Adds a connection point to the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddConnectionPoint/",
+      "examples": [
+        "// How do I place a fixed connection spot on a custom shape in a spreadsheet?\n\n// Mark a specific position on a custom shape so lines can snap to it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The angle of the connection point.",
@@ -52,6 +58,9 @@
     "AddGuide": {
       "description": "Adds a guide (formula) to the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddGuide/",
+      "examples": [
+        "// How do I set up a reusable reference line for positioning parts of a custom shape in a spreadsheet?\n\n// Store a calculated reference value under a name so other shape properties can depend on it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The guide name.",
@@ -88,6 +97,9 @@
     "AddPath": {
       "description": "Adds a new path to the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/AddPath/",
+      "examples": [
+        "// How do I add another outline segment to a custom shape in a spreadsheet?\n\n// Extend a custom shape by attaching an additional path that defines part of its boundary in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPath | null"
@@ -98,6 +110,9 @@
     "GetAdjValue": {
       "description": "Returns the adjustment value by its name from the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetAdjValue/",
+      "examples": [
+        "// How do I retrieve the numeric value stored in a shape adjustment control in a spreadsheet?\n\n// Inspect how far a particular adjustment handle has been moved on a custom shape in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The adjustment name.",
@@ -123,6 +138,9 @@
     "GetPath": {
       "description": "Returns a geometry path by its index.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPath/",
+      "examples": [
+        "// How do I access one particular drawing path from a shape's geometry in a spreadsheet?\n\n// Pull out a single path by position so its dimensions and style can be examined in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"cloud\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 2);\nlet geometry = shape.GetGeometry();\nworksheet.GetRange(\"A3\").SetValue(\"Path count: \" + geometry.GetPathCount());\nlet path = geometry.GetPath(0);\nworksheet.GetRange(\"A4\").SetValue(\"Width: \" + path.GetWidth() + \", Height: \" + path.GetHeight());\nworksheet.GetRange(\"A5\").SetValue(\"Stroke: \" + path.GetStroke() + \", Fill: \" + path.GetFill());\nlet paths = geometry.GetPaths();\nworksheet.GetRange(\"A6\").SetValue(\"Total paths: \" + paths.length);"
+      ],
       "params": [
         {
           "description": "The path index.",
@@ -139,6 +157,9 @@
     "GetPathCount": {
       "description": "Returns the number of paths in the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPathCount/",
+      "examples": [
+        "// How do I find out how many separate path segments a shape contains in a spreadsheet?\n\n// Determine the total number of outline segments that together form a shape in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"cloud\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 2);\nlet geometry = shape.GetGeometry();\nworksheet.GetRange(\"A3\").SetValue(\"Path count: \" + geometry.GetPathCount());\nlet path = geometry.GetPath(0);\nworksheet.GetRange(\"A4\").SetValue(\"Width: \" + path.GetWidth() + \", Height: \" + path.GetHeight());\nworksheet.GetRange(\"A5\").SetValue(\"Stroke: \" + path.GetStroke() + \", Fill: \" + path.GetFill());\nlet paths = geometry.GetPaths();\nworksheet.GetRange(\"A6\").SetValue(\"Total paths: \" + paths.length);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -149,6 +170,9 @@
     "GetPaths": {
       "description": "Returns all paths of the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPaths/",
+      "examples": [
+        "// How do I retrieve every outline segment belonging to a shape at once in a spreadsheet?\n\n// Gather the full list of paths from a shape so each one can be inspected in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"cloud\", 60 * 36000, 60 * 36000, fill, stroke, 3, 0, 2, 2);\nlet geometry = shape.GetGeometry();\nworksheet.GetRange(\"A3\").SetValue(\"Path count: \" + geometry.GetPathCount());\nlet path = geometry.GetPath(0);\nworksheet.GetRange(\"A4\").SetValue(\"Width: \" + path.GetWidth() + \", Height: \" + path.GetHeight());\nworksheet.GetRange(\"A5\").SetValue(\"Stroke: \" + path.GetStroke() + \", Fill: \" + path.GetFill());\nlet paths = geometry.GetPaths();\nworksheet.GetRange(\"A6\").SetValue(\"Total paths: \" + paths.length);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPath[]"
@@ -159,6 +183,9 @@
     "GetPreset": {
       "description": "Returns the name of the preset shape if the current geometry is based on a preset.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/GetPreset/",
+      "examples": [
+        "// How do I find out which standard shape template a shape is based on in a spreadsheet?\n\n// Identify the predefined outline category that describes a shape's form in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"star5\", 60 * 36000, 60 * 36000, fill, stroke, 0, 0, 2, 2);\nlet geometry = shape.GetGeometry();\nworksheet.GetRange(\"A1\").SetValue(\"Preset: \" + geometry.GetPreset());\nworksheet.GetRange(\"A2\").SetValue(\"IsCustom: \" + geometry.IsCustom());"
+      ],
       "params": [],
       "returns": {
         "type": "ShapeType"
@@ -169,6 +196,9 @@
     "IsCustom": {
       "description": "Checks whether the current geometry is custom.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/IsCustom/",
+      "examples": [
+        "// How do I tell if a shape's geometry was defined manually instead of chosen from a preset list in a spreadsheet?\n\n// Verify that a shape carries a fully custom outline rather than one of the standard shapes in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = worksheet.AddShape(\"star5\", 60 * 36000, 60 * 36000, fill, stroke, 0, 0, 2, 2);\nlet geometry = shape.GetGeometry();\nworksheet.GetRange(\"A1\").SetValue(\"Preset: \" + geometry.GetPreset());\nworksheet.GetRange(\"A2\").SetValue(\"IsCustom: \" + geometry.IsCustom());"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -179,6 +209,9 @@
     "SetAdjValue": {
       "description": "Sets the specified adjustment parameter for the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/SetAdjValue/",
+      "examples": [
+        "// How do I change the position of a shape adjustment control to a new value in a spreadsheet?\n\n// Override an existing adjustment handle's value to reshape a custom outline in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The adjustment name.",
@@ -200,6 +233,9 @@
     "SetTextRect": {
       "description": "Sets the text rectangle for the current geometry.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiGeometry/Methods/SetTextRect/",
+      "examples": [
+        "// How do I control where text appears inside a shape in a spreadsheet?\n\n// Restrict the writable region of a shape so text fits within a specific zone in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet customGeometry = Api.CreateCustomGeometry();\ncustomGeometry.AddAdj(\"adj1\", 25000);\ncustomGeometry.SetAdjValue(\"adj1\", 30000);\nworksheet.GetRange(\"A7\").SetValue(\"Adjustment: \" + customGeometry.GetAdjValue(\"adj1\"));\ncustomGeometry.AddGuide(\"x1\", \"*/\", \"adj1\", \"w\", \"100000\");\ncustomGeometry.SetTextRect(\"x1\", \"0\", \"w\", \"h\");\ncustomGeometry.AddConnectionPoint(\"0\", \"hc\", \"0\");\nlet path = customGeometry.AddPath();\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(\"l\", \"t\");\npath.LineTo(\"r\", \"t\");\npath.LineTo(\"r\", \"b\");\npath.LineTo(\"l\", \"b\");\npath.LineTo(\"x1\", \"hd2\");\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(18000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = worksheet.AddShape(\"rect\", 60 * 36000, 60 * 36000, fill, stroke, 9, 0, 2, 2);\nshape.SetGeometry(customGeometry);"
+      ],
       "params": [
         {
           "description": "The left guide name or value.",

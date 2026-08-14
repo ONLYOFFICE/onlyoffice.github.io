@@ -1,6 +1,9 @@
 {
   "description": "Returns the footnote or endnote content if the cursor is currently inside one, otherwise returns null.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentFootEndnote/",
+  "examples": [
+    "// How do I get the footnote the cursor is currently inside in a document?\n\n// Read the text of the active footnote to display or process it elsewhere in a document.\n\nlet doc = Api.GetDocument();\nlet footnote = doc.AddFootnote();\nlet paragraph = footnote.GetElement(0);\nparagraph.AddText(\"Footnote text\");\n\nlet curFootnote = doc.GetCurrentFootEndnote();\nparagraph = doc.GetElement(0);\nlet footnoteText = curFootnote.GetText();\nparagraph.AddText(footnoteText);"
+  ],
   "params": [],
   "returns": {
     "type": "ApiDocumentContent"

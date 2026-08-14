@@ -2,7 +2,7 @@
   "description": "Returns the price per $100 face value for a security that pays interest at maturity.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PRICEMAT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PRICEMAT(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", 0.05, 0.09, 1));"
+    "// What is the price of a security that pays interest only at maturity in a spreadsheet?\n\n// Calculate the cost of a maturity-interest security based on settlement and yield in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PRICEMAT(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", 0.05, 0.09, 1));"
   ],
   "params": [
     {

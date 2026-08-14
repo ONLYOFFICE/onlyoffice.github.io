@@ -2,7 +2,7 @@
   "description": "Sets the border which will be displayed on the right of the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderRight/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the right 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderRight(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+    "// How do I add a border along the right edge of a table in a document?\n\n// Outline the right side of a table with a visible border line in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the right 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderRight(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
   ],
   "params": [
     {

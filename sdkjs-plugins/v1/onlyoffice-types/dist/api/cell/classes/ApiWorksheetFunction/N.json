@@ -2,7 +2,7 @@
   "description": "Converts a value to a number, dates to serial numbers, **true** to 1, error to {@link global#ErrorValue ErrorValue}, anything else to 0 (zero).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/N/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.N(false));"
+    "// Transform values into numeric form for calculations in a spreadsheet.\n\n// Change boolean values and dates into numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.N(false));"
   ],
   "params": [
     {

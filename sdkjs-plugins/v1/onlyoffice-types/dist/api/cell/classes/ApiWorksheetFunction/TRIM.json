@@ -2,7 +2,7 @@
   "description": "Removes all spaces from a text string except for single spaces between words.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRIM/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TRIM(\"  Online Office\"));"
+    "// How do I clean up spacing in text within a spreadsheet?\n\n// Delete unnecessary spaces from a text string in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TRIM(\"  Online Office\"));"
   ],
   "params": [
     {

@@ -6,7 +6,7 @@
       "description": "Clears the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Clear/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"John Smith\");\ntextForm.Clear();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document was cleared.\");\ndoc.Push(paragraph);"
+        "// How do I clear the content of a form in a document?\n\n// Reset a filled-in form field to blank so it is ready for new input in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"John Smith\");\ntextForm.Clear();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document was cleared.\");\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Copies the current form (copies with the shape if it exists).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Copy/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet copyTextForm = textForm.Copy();\nparagraph.AddLineBreak();\nparagraph.AddElement(copyTextForm);"
+        "// How do I copy a form field in a document?\n\n// Reuse an existing form by placing an identical copy elsewhere on the same paragraph.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet copyTextForm = textForm.Copy();\nparagraph.AddLineBreak();\nparagraph.AddElement(copyTextForm);"
       ],
       "params": [],
       "returns": {
@@ -29,6 +29,9 @@
     "Delete": {
       "description": "Removes a form and its content. If keepContent is true, the content is not deleted.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/Delete/",
+      "examples": [
+        "// How do I delete a form field in a document?\n\n// Clean up a document by removing one of several inserted checkbox forms.\n\nconst doc = Api.GetDocument();\nconst checkBoxForm = Api.CreateCheckBoxForm({\n\t'key': 'Marital status',\n\t'tip': 'Specify your marital status',\n\t'placeholder': 'Marital status',\n\t'radio': true\n});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(' Married');\nlet copyCheckBoxForm = checkBoxForm.Copy();\nparagraph.AddLineBreak();\nparagraph.AddElement(copyCheckBoxForm);\nparagraph.AddText(' Single');\ncheckBoxForm.Delete();"
+      ],
       "params": [
         {
           "description": "Specifies if the content will be deleted or not.",
@@ -56,6 +59,9 @@
     "GetBorderColor": {
       "description": "Returns the border color of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetBorderColor/",
+      "examples": [
+        "// How do I get the border color of a form field in a document?\n\n// Verify a custom border color by reading its RGB values back after applying it.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBorderColor(Api.RGB(255, 111, 61));\nlet borderColor = textForm.GetBorderColor();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Border color (RGB): (\" + borderColor.r + \", \" + borderColor.g + \", \" + borderColor.b + \")\");\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -67,7 +73,7 @@
       "description": "Returns a type of the ApiFormBase class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet classType = textForm.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+        "// How do I get the class type of a form object in a document?\n\n// Confirm what kind of object a form belongs to by printing its class type label.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet classType = textForm.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -79,7 +85,7 @@
       "description": "Returns the current form key.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormKey/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet key = comboBoxForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
+        "// How do I get the key of a form field in a document?\n\n// Confirm the grouping key of a combo box by reading it back and displaying it.\n\nlet doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet key = comboBoxForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -91,7 +97,7 @@
       "description": "Returns a type of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetFormType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet formType = textForm.GetFormType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form type: \" + formType);\ndoc.Push(paragraph);"
+        "// How do I get the type of a form field in a document?\n\n// Distinguish one form from another by printing its type identifier next to it.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet formType = textForm.GetFormType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form type: \" + formType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -102,6 +108,9 @@
     "GetInternalId": {
       "description": "Returns an internal id of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetInternalId/",
+      "examples": [
+        "// How do I get the internal ID of a form field in a document?\n\n// Uniquely track a form by reading its auto-assigned internal identifier.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet internalId = textForm.GetInternalId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Internal id: \" + internalId);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -112,6 +121,9 @@
     "GetLock": {
       "description": "Returns the lock state of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetLock/",
+      "examples": [
+        "// How do I find out whether a form field is locked in a document?\n\n// Protect a form, then confirm the lock is active by reading the lock state.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetLock(true);\nlet locked = textForm.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is locked: \" + locked);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -133,6 +145,9 @@
     "GetPlaceholderText": {
       "description": "Returns the placeholder text from the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetPlaceholderText/",
+      "examples": [
+        "// How do I get the placeholder text of a form field in a document?\n\n// Confirm a hint label by retrieving the placeholder text after setting it on a form.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetPlaceholderText(\"First name\");\nlet placeholderText = textForm.GetPlaceholderText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Placeholder text: \" + placeholderText);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -154,6 +169,9 @@
     "GetRole": {
       "description": "Returns the role of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetRole/",
+      "examples": [
+        "// How do I get the role of a form field in a document?\n\n// Assign a custom role to a form, then read it back to verify the assignment.\n\nconst doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\n\nconst roles = doc.GetFormRoles();\nconst rolePr = { \"color\": \"#ffefbf\" };\nroles.Add(\"MY_ROLE\", rolePr);\n\nconst textForm = Api.CreateTextForm({\n\t\"tip\": \"Enter your first name\",\n\t\"required\": true,\n\t\"placeholder\": \"First name\",\n\t\"comb\": true,\n\t\"maxCharacters\": 10,\n\t\"cellWidth\": 3,\n\t\"multiLine\": false,\n\t\"autoFit\": false\n});\nparagraph.AddElement(textForm);\n\ntextForm.SetRole(\"MY_ROLE\");\nconst role = textForm.GetRole();\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form role: \" + role);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -164,6 +182,9 @@
     "GetTag": {
       "description": "Returns the tag attribute for the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTag/",
+      "examples": [
+        "// How do I get the tag of a form field in a document?\n\n// Label a form with a custom tag, then retrieve it to confirm it was stored correctly.\n\nconst doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\n\nconst textForm = Api.CreateTextForm({\n\t\"key\": \"Personal information\",\n\t\"tip\": \"Enter your first name\",\n\t\"required\": true,\n\t\"placeholder\": \"First name\",\n\t\"comb\": true,\n\t\"maxCharacters\": 10,\n\t\"cellWidth\": 3,\n\t\"multiLine\": false,\n\t\"autoFit\": false\n});\ntextForm.SetTag('MY_TAG');\nparagraph.AddElement(textForm);\n\nconst formTag = textForm.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form tag: \" + formTag);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -175,7 +196,7 @@
       "description": "Returns the text from the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet text = textForm.GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form text: \" + text);\ndoc.Push(paragraph);"
+        "// How do I read the current value typed into a form in a document?\n\n// Extract the raw content of a filled-in text field to use or display elsewhere in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet text = textForm.GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form text: \" + text);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -187,7 +208,7 @@
       "description": "Returns the text properties from the current form.\n*Used if possible for this type of form*",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTextPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);\nlet formTextPr = textForm.GetTextPr();\nformTextPr.SetItalic(true);\ntextForm.SetTextPr(formTextPr);"
+        "// How do I access the font and style settings of a form field in a document?\n\n// Retrieve the current text properties of a form so they can be adjusted and reapplied in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);\nlet formTextPr = textForm.GetTextPr();\nformTextPr.SetItalic(true);\ntextForm.SetTextPr(formTextPr);"
       ],
       "params": [],
       "returns": {
@@ -199,7 +220,7 @@
       "description": "Returns the tip text of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetTipText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet tipText = comboBoxForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form tip text: \" + tipText);\ndoc.Push(paragraph);"
+        "// How do I read the instructional hint shown when a user hovers over a form field in a document?\n\n// Display the tooltip message of a drop-down form to verify what guidance is shown to the user in a document.\n\nlet doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);\nlet tipText = comboBoxForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form tip text: \" + tipText);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -210,6 +231,9 @@
     "GetValue": {
       "description": "Returns the current value of the form field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetValue/",
+      "examples": [
+        "// The GetValue method returns the form's current value regardless of its specific type.\n\n// Read the form value after setting it and display the result in a new paragraph.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Name\", \"tip\": \"Enter your name\", \"required\": true, \"placeholder\": \"Your name\"});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetValue(\"Jane Doe\");\nlet value = textForm.GetValue();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form value: \" + value);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string | boolean"
@@ -221,7 +245,7 @@
       "description": "Returns a shape in which the form is placed to control the position and size of the fixed size form frame.\nThe null value will be returned for the inline forms.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/GetWrapperShape/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet shape = textForm.GetWrapperShape();\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\nshape.SetOutLine(stroke);"
+        "// How do I get the surrounding shape of a form field so I can adjust its border or position in a document?\n\n// Apply a custom outline to the wrapper shape of a form field to make it stand out visually in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet shape = textForm.GetWrapperShape();\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nshape.SetOutLine(stroke);"
       ],
       "params": [],
       "returns": {
@@ -233,6 +257,9 @@
     "IsFilled": {
       "description": "Checks if the current form is filled.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFilled/",
+      "examples": [
+        "// How do I tell if a form field has been filled out in a document?\n\n// Verify the fill status of multiple form fields to determine which ones still need input in a document.\n\nlet doc = Api.GetDocument();\nlet textForm1 = Api.CreateTextForm({\"key\": \"Name1\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": false, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm1);\nlet textForm2 = Api.CreateTextForm({\"key\": \"Name2\", \"tip\": \"Enter your last name\", \"required\": true, \"placeholder\": \"Last name\", \"comb\": false, \"multiLine\": false, \"autoFit\": false});\nparagraph.AddElement(textForm2);\ntextForm2.SetText(\"Smith\");\nlet filled1 = textForm1.IsFilled();\nlet filled2 = textForm2.IsFilled();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first text form is filled: \" + filled1);\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The second text form is filled: \" + filled2);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -244,7 +271,7 @@
       "description": "Checks if the current form is fixed size.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsFixed/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is fixed: \" + fixed);\ndoc.Push(paragraph);"
+        "// How do I find out if a form field is locked to a specific size in a document?\n\n// Confirm the fixed-size status of a form field before deciding whether layout adjustments are needed in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is fixed: \" + fixed);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -256,7 +283,7 @@
       "description": "Checks if the current form is required.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/IsRequired/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
+        "// How do I check if a form field must be filled out before the document is submitted in a document?\n\n// Confirm whether a form field is required so the result can be shown to the reader in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -268,7 +295,7 @@
       "description": "Places a cursor before/after the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/MoveCursorOutside/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"The cursor will be placed after the current form.\");\ntextForm.MoveCursorOutside(true);"
+        "// How do I place the cursor right after a form field to continue typing in a document?\n\n// Shift focus out of a completed form field so the next input lands in the surrounding text in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetText(\"The cursor will be placed after the current form.\");\ntextForm.MoveCursorOutside(true);"
       ],
       "params": [
         {
@@ -288,7 +315,7 @@
       "description": "Sets the background color to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBackgroundColor/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBackgroundColor(255, 111, 61);"
+        "// How do I fill a form field with a specific background color in a document?\n\n// Color the background of a form field to make it visually distinct from surrounding text in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBackgroundColor(Api.HexColor('#FF6F3D'));"
       ],
       "params": [
         {
@@ -308,7 +335,7 @@
       "description": "Sets the border color to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetBorderColor/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBorderColor(255, 111, 61);"
+        "// How do I change the border color of a form field in a document?\n\n// Style the outline of a form field with a specific color to draw attention to it in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetBorderColor(Api.HexColor('#FF6F3D'));"
       ],
       "params": [
         {
@@ -328,7 +355,7 @@
       "description": "Sets a key to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetFormKey/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetFormKey(\"Personal information\");\nlet key = textForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
+        "// How do I set the key that identifies a form field in a document?\n\n// Label a form field with a custom key so it can be referenced or grouped with related fields in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetFormKey(\"Personal information\");\nlet key = textForm.GetFormKey();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form key: \" + key);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -345,6 +372,9 @@
     "SetLock": {
       "description": "Sets the lock state of the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetLock/",
+      "examples": [
+        "// How do I lock a form field so it cannot be changed in a document?\n\n// Protect specific fields from modification while keeping others editable.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetLock(true);\nlet locked = textForm.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is locked: \" + locked);\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "Specifies whether to lock the form (true) or unlock it (false).",
@@ -363,7 +393,7 @@
       "description": "Sets the placeholder text to the current form.\n*Can't be set to checkbox or radio button.*",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetPlaceholderText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetPlaceholderText(\"First name\");"
+        "// How do I add hint text inside an empty form field in a document?\n\n// Display a prompt inside a field before the user fills it in.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetPlaceholderText(\"First name\");"
       ],
       "params": [
         {
@@ -381,7 +411,7 @@
       "description": "Specifies if the current form should be required.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRequired/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetRequired(true);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
+        "// How do I make a form field mandatory in a document?\n\n// Ensure a field must be filled before the document form is submitted.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetRequired(true);\nlet required = textForm.IsRequired();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document is required: \" + required);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -398,6 +428,9 @@
     "SetRole": {
       "description": "Sets the role to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetRole/",
+      "examples": [
+        "// How do I associate a form field with a specific role in a document?\n\n// Restrict which signers or participants are responsible for a given field.\n\nconst doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\n\nconst roles = doc.GetFormRoles();\nconst rolePr = { \"color\": \"#ffefbf\" };\nroles.Add(\"MY_ROLE\", rolePr);\n\nconst textForm = Api.CreateTextForm({\n\t\"tip\": \"Enter your first name\",\n\t\"required\": true,\n\t\"placeholder\": \"First name\",\n\t\"comb\": true,\n\t\"maxCharacters\": 10,\n\t\"cellWidth\": 3,\n\t\"multiLine\": false,\n\t\"autoFit\": false\n});\nparagraph.AddElement(textForm);\n\ntextForm.SetRole(\"MY_ROLE\");\nconst role = textForm.GetRole();\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form role: \" + role);\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The role which will be attached to the current form.",
@@ -414,6 +447,9 @@
     "SetTag": {
       "description": "Sets the tag attribute to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTag/",
+      "examples": [
+        "// How do I attach a label or identifier to a form field in a document?\n\n// Organize or reference form fields programmatically using custom tags.\n\nconst doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\n\nconst textForm = Api.CreateTextForm({\n\t\"key\": \"Personal information\",\n\t\"tip\": \"Enter your first name\",\n\t\"required\": true,\n\t\"placeholder\": \"First name\",\n\t\"comb\": true,\n\t\"maxCharacters\": 10,\n\t\"cellWidth\": 3,\n\t\"multiLine\": false,\n\t\"autoFit\": false\n});\ntextForm.SetTag('MY_TAG');\nparagraph.AddElement(textForm);\n\nconst formTag = textForm.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Form tag: \" + formTag);\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The tag which will be added to the current container.",
@@ -431,7 +467,7 @@
       "description": "Sets the text properties to the current form.\n*Used if possible for this type of form*",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTextPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);"
+        "// How do I change the font size and style of text inside a form field in a document?\n\n// Make form field text bold and larger to improve readability.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ntextForm.SetTextPr(textPr);"
       ],
       "params": [
         {
@@ -449,7 +485,7 @@
       "description": "Sets the tip text to the current form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetTipText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetTipText(\"Enter your first name\");\nlet tipText = textForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tip text: \" + tipText);\ndoc.Push(paragraph);"
+        "// How do I add a tooltip that appears when hovering over a form field in a document?\n\n// Give users helpful instructions that appear when they hover over a field.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetTipText(\"Enter your first name\");\nlet tipText = textForm.GetTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tip text: \" + tipText);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -466,6 +502,9 @@
     "SetValue": {
       "description": "Sets the value of the form field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/SetValue/",
+      "examples": [
+        "// The SetValue method provides a type-agnostic way to set form values across all form types.\n\n// Set the form value and add the form to a document paragraph.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Name\", \"tip\": \"Enter your name\", \"required\": true, \"placeholder\": \"Your name\"});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.SetValue(\"Jane Doe\");"
+      ],
       "params": [
         {
           "description": "The value to set.",
@@ -483,7 +522,7 @@
       "description": "Converts the current form to a fixed size form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToFixed/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\ndoc.Push(paragraph);"
+        "// How do I set a specific width and height for a form field in a document?\n\n// Lock a form's dimensions so layout does not shift when content changes.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet fixed = textForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -511,7 +550,7 @@
       "description": "Converts the current form to an inline form.\n*Picture form can't be converted to an inline form, it's always a fixed size object.*",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/ApiFormBase/Methods/ToInline/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet copyForm = textForm.Copy();\nparagraph = Api.CreateParagraph();\nparagraph.AddElement(copyForm);\ndoc.Push(paragraph);\ncopyForm.ToInline();\nlet fixed = textForm.IsFixed();\nlet fixedCopy = copyForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\nparagraph.AddLineBreak();\nparagraph.AddText(\"The second form from this document has a fixed size: \" + fixedCopy);\ndoc.Push(paragraph);"
+        "// How do I switch a form field from fixed size to inline positioning in a document?\n\n// Allow a form field to flow with surrounding text instead of occupying a fixed block.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\ntextForm.ToFixed(10 * 240, 2 * 240);\nlet copyForm = textForm.Copy();\nparagraph = Api.CreateParagraph();\nparagraph.AddElement(copyForm);\ndoc.Push(paragraph);\ncopyForm.ToInline();\nlet fixed = textForm.IsFixed();\nlet fixedCopy = copyForm.IsFixed();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first form from this document has a fixed size: \" + fixed);\nparagraph.AddLineBreak();\nparagraph.AddText(\"The second form from this document has a fixed size: \" + fixedCopy);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {

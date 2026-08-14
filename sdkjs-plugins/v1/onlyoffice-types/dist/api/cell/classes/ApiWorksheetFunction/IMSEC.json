@@ -2,7 +2,7 @@
   "description": "Returns the secant of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMSEC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMSEC(\"-2+2.5i\"));"
+    "// How do I find the secant value of a complex number in a spreadsheet?\n\n// Get the secant result for complex number trigonometric operations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMSEC(\"-2+2.5i\"));"
   ],
   "params": [
     {

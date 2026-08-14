@@ -1,0 +1,27 @@
+{
+  "description": "Creates a new drop-down list container with the given list of options.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateDropDownListContentControl/",
+  "examples": [
+    "// How do I insert a drop-down list field into a document?\n\n// Give readers a fixed set of choices by embedding a drop-down list control in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateDropDownListContentControl([{display: 'one', value: '1'}, {display: 'two', value: '2'}], 1);\nlet paragraph = Api.CreateParagraph();\nparagraph.Push(cc);\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "An array of objects representing the items in the drop-down list.",
+      "name": "list",
+      "optional": true,
+      "type": "ContentControlListItem[]"
+    },
+    {
+      "description": "The selected item index.",
+      "name": "selected",
+      "optional": true,
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "description": "An inline-level content control that represents a drop-down list.",
+    "type": "ApiInlineLvlSdt"
+  },
+  "signature": "CreateDropDownListContentControl(list?: ContentControlListItem[], selected?: number): ApiInlineLvlSdt",
+  "since": "9.0.0"
+}

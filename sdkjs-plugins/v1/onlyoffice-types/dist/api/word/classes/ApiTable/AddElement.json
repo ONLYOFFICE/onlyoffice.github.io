@@ -2,7 +2,7 @@
   "description": "Adds a paragraph or a table or a blockLvl content control using its position in the cell.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddElement/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text in the first cell.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);"
+    "// How do I insert content into a particular cell of a table in a document?\n\n// Populate a table cell with a text block at a given position in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text in the first cell.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Rounds a number to a specified number of digits.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ROUND/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ROUND(3.456, 2));"
+    "// How do I round numbers to a certain number of digits in a spreadsheet?\n\n// Adjust a number's precision by rounding it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ROUND(3.456, 2));"
   ],
   "params": [
     {

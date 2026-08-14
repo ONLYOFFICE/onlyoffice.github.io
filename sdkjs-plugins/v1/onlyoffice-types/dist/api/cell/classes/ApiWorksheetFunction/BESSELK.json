@@ -2,7 +2,7 @@
   "description": "Returns the modified Bessel function Kn(x).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BESSELK/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BESSELK(1.5, 1));"
+    "// How do I find the Bessel K function result for engineering calculations in a spreadsheet?\n\n// Apply mathematical modeling for wave propagation and oscillatory behavior in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BESSELK(1.5, 1));"
   ],
   "params": [
     {

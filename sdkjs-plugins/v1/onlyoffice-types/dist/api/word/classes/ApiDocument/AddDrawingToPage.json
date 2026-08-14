@@ -2,7 +2,7 @@
   "description": "Adds a drawing to the specified page.\n<note>This method can be a little bit slow, because it runs the document calculation\nprocess to arrange tables on the specified page.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddDrawingToPage/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddPageBreak();\ndoc.Push(paragraph);\ndoc.AddDrawingToPage(drawing, 1, 50 * 36000, 50 * 36000);"
+    "// How do I add a drawing to a specific page in a document?\n\n// Anchor a logo or illustration at exact coordinates without disrupting text flow in a document.\n\nlet doc = Api.GetDocument();\nlet drawing = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t60 * 36000, 60 * 36000\n);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddPageBreak();\ndoc.Push(paragraph);\ndoc.AddDrawingToPage(drawing, 1, 50 * 36000, 50 * 36000);"
   ],
   "params": [
     {

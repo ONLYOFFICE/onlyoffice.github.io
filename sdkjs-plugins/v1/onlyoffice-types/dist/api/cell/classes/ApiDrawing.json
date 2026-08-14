@@ -6,7 +6,7 @@
       "description": "Returns a type of the ApiDrawing class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetClassType/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet classType = drawing.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \" + classType);"
+        "// How do I find out the object type of a shape placed on a sheet in a spreadsheet?\n\n// Read the object category of a shape and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet classType = drawing.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \" + classType);"
       ],
       "params": [],
       "returns": {
@@ -38,6 +38,9 @@
     "GetFlipH": {
       "description": "Get horizontal flip of current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetFlipH/",
+      "examples": [
+        "// How do I find out whether a drawing is mirrored left to right in a spreadsheet?\n\n// Confirm whether a shape has been reversed along its vertical axis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"cube\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet flip = drawing.GetFlipH();\nworksheet.SetColumnWidth(0, 25);\nworksheet.GetRange(\"A1\").SetValue(\"Drawing is flipped horizontally: \" + flip);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
@@ -49,6 +52,9 @@
     "GetFlipV": {
       "description": "Get vertical flip of current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetFlipV/",
+      "examples": [
+        "// How do I find out whether a drawing is mirrored top to bottom in a spreadsheet?\n\n// Confirm whether a shape has been reversed along its horizontal axis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"cube\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetFlipV(true);\nlet flip = drawing.GetFlipV();\nworksheet.SetColumnWidth(0, 25);\nworksheet.GetRange(\"A1\").SetValue(\"Drawing is flipped vertically: \" + flip);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
@@ -61,7 +67,7 @@
       "description": "Returns the height of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetHeight/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet height = drawing.GetHeight();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing height = \" + height);"
+        "// How do I find out how tall a drawing is in a spreadsheet?\n\n// Measure the vertical size of a shape and display the result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet height = drawing.GetHeight();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing height = \" + height);"
       ],
       "params": [],
       "returns": {
@@ -93,7 +99,7 @@
       "description": "Returns the lock value for the specified lock type of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetLockValue/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
+        "// How do I check whether a specific restriction is enabled on a drawing in a spreadsheet?\n\n// Verify that a drawing is locked against a particular action in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
       ],
       "params": [
         {
@@ -110,6 +116,9 @@
     "GetName": {
       "description": "Returns the name of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetName/",
+      "examples": [
+        "// How do I read the label that identifies a drawing in a spreadsheet?\n\n// Look up the title given to a shape so it can be referenced later in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#5B9BD5'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = worksheet.AddShape(\n\t'rect',\n\tApi.MillimetersToEmus(80), Api.MillimetersToEmus(40),\n\tfill, stroke,\n\t0, 0, 1, 0\n);\n\ndrawing.SetName('MyRectangle');\nconst drawingName = drawing.GetName();\nworksheet.GetRange('A1').SetValue('Drawing name: ' + drawingName);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -121,7 +130,7 @@
       "description": "Returns the parent sheet of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetParentSheet/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet parentSheet = shape.GetParentSheet();\nlet content = shape.GetDocContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Parent sheet name is \" + parentSheet.GetName());"
+        "// How do I find out which worksheet a drawing belongs to in a spreadsheet?\n\n// Identify the parent sheet of a shape and use its name in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet parentSheet = shape.GetParentSheet();\nlet content = shape.GetDocContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Parent sheet name is \" + parentSheet.GetName());"
       ],
       "params": [],
       "returns": {
@@ -133,6 +142,9 @@
     "GetRotation": {
       "description": "Returns the rotation angle of the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetRotation/",
+      "examples": [
+        "// How do I find out by how many degrees a drawing has been turned in a spreadsheet?\n\n// Confirm the angle at which a shape is oriented after it has been rotated in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(130 * 36000, 10 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 5 * 36000);\ndrawing.SetRotation(90);\nlet rotAngle = drawing.GetRotation();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing rotation angle is: \" + rotAngle + \" degrees\");"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -165,7 +177,7 @@
       "description": "Returns the width of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/GetWidth/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet width = drawing.GetWidth();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing width = \" + width);"
+        "// How do I find out how wide a drawing is in a spreadsheet?\n\n// Measure the horizontal size of a shape and display the result in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\nlet width = drawing.GetWidth();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing width = \" + width);"
       ],
       "params": [],
       "returns": {
@@ -176,6 +188,9 @@
     "Select": {
       "description": "Selects the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/Select/",
+      "examples": [
+        "// How do I programmatically choose which drawings are selected in a spreadsheet?\n\n// Build a multi-shape selection by adding shapes one at a time or replacing the current selection in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill1, stroke1, 0, 2 * 36000, 0, 3 * 36000);\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nlet stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill2, stroke2, 10, 2 * 36000, 2, 3 * 36000);\nlet fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nlet stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing3 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill3, stroke3, 20, 2 * 36000, 4, 3 * 36000);\ndrawing1.Select(true);\ndrawing2.Select(true);\ndrawing3.Select();"
+      ],
       "params": [
         {
           "description": "Specifies whether the selection should replace the current selection (true) or be added to it (false).",
@@ -227,6 +242,9 @@
     "SetFlipH": {
       "description": "Sets the horizontal flip of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetFlipH/",
+      "examples": [
+        "// How do I flip a drawing so it faces the opposite horizontal direction in a spreadsheet?\n\n// Reverse a shape along its vertical axis to produce a horizontal mirror image in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"cube\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetFlipH(true);\nlet flip = drawing.GetFlipH();\nworksheet.SetColumnWidth(0, 30);\nworksheet.GetRange(\"A1\").SetValue(\"Drawing is flipped horizontally: \" + flip);"
+      ],
       "params": [
         {
           "description": "Specifies if the figure will be flipped horizontally or not.",
@@ -244,6 +262,9 @@
     "SetFlipV": {
       "description": "Sets the vertical flip of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetFlipV/",
+      "examples": [
+        "// How do I flip a drawing so it faces the opposite vertical direction in a spreadsheet?\n\n// Reverse a shape along its horizontal axis to produce a vertical mirror image in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"cube\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetFlipV(true);\nlet flip = drawing.GetFlipV();\nworksheet.SetColumnWidth(0, 28);\nworksheet.GetRange(\"A1\").SetValue(\"Drawing is flipped vertically: \" + flip);"
+      ],
       "params": [
         {
           "description": "Specifies if the figure will be flipped vertically or not.",
@@ -279,7 +300,7 @@
       "description": "Sets the lock value to the specified lock type of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetLockValue/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
+        "// How do I restrict what a user can do with a drawing in a spreadsheet?\n\n// Protect a shape from user interaction by applying a specific lock type to it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetLockValue(\"noSelect\", true);\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nworksheet.GetRange(\"A1\").SetValue(\"This drawing cannot be selected: \" + lockValue);"
       ],
       "params": [
         {
@@ -301,6 +322,9 @@
     "SetName": {
       "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetName/",
+      "examples": [
+        "// How do I give a drawing a recognizable label in a spreadsheet?\n\n// Label a shape with a specific name to make it easier to reference later in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst fill = Api.CreateSolidFill(Api.RGB(80, 120, 160));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = worksheet.AddShape(\n\t'ellipse',\n\tApi.MillimetersToEmus(60), Api.MillimetersToEmus(40),\n\tfill, stroke,\n\t0, Api.MillimetersToEmus(20),\n\t0, Api.MillimetersToEmus(30)\n);\n\ndrawing.SetName('BlueEllipse');\nconst content = drawing.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Name: ' + drawing.GetName());\n\nworksheet.GetRange('A1').SetValue('Drawing name was set to: ' + drawing.GetName());"
+      ],
       "params": [
         {
           "description": "The name which will be set to the current drawing.",
@@ -318,6 +342,9 @@
     "SetOutLine": {
       "description": "Sets the outline properties to the specified graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetOutLine/",
+      "examples": [
+        "// How do I add a colored outline to a shape in a spreadsheet?\n\n// Style a drawing by giving it a solid border with a chosen color and thickness in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = worksheet.AddShape(\"cube\", 90 * 36000, 27 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nstroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\ndrawing1.SetOutLine(stroke);"
+      ],
       "params": [
         {
           "description": "The stroke used to create the graphic object outline.",
@@ -336,7 +363,7 @@
       "description": "Changes the position for the drawing object.\n<note>Please note that the horizontal and vertical offsets are calculated within the limits of\nthe specified column and row cells only. If this value exceeds the cell width or height, another vertical/horizontal position will be set.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetPosition/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
+        "// How do I control exactly where a drawing appears in a spreadsheet?\n\n// Reposition a shape by anchoring it to a chosen cell column and row in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
       ],
       "params": [
         {
@@ -368,6 +395,9 @@
     "SetRotation": {
       "description": "Sets the rotation angle to the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetRotation/",
+      "examples": [
+        "// How do I tilt or rotate a shape to a specific angle in a spreadsheet?\n\n// Turn a drawing to a desired degree to adjust how it appears visually in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 1, 3 * 36000);\ndrawing.SetRotation(90);\nlet rotAngle = drawing.GetRotation();\nworksheet.GetRange(\"A1\").SetValue(\"Drawing rotation angle is set to: \" + rotAngle + \" degrees\");"
+      ],
       "params": [
         {
           "description": "New drawing rotation angle.",
@@ -402,7 +432,7 @@
       "description": "Sets a size of the object (image, shape, chart) bounding box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/SetSize/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
+        "// How do I make a drawing larger or smaller in a spreadsheet?\n\n// Scale a shape to fit a particular area by defining its bounding box dimensions in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ndrawing.SetSize(120 * 36000, 70 * 36000);\ndrawing.SetPosition(0, 2 * 36000, 2, 3 * 36000);"
       ],
       "params": [
         {
@@ -441,6 +471,9 @@
     "Unselect": {
       "description": "Removes the current drawing from the selection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDrawing/Methods/Unselect/",
+      "examples": [
+        "// How do I remove a single drawing from the current selection in a spreadsheet?\n\n// Drop one shape from a multi-object selection without affecting the rest in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill1, stroke1, 0, 2 * 36000, 0, 3 * 36000);\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nlet stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill2, stroke2, 10, 2 * 36000, 2, 3 * 36000);\nlet fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nlet stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing3 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill3, stroke3, 20, 2 * 36000, 4, 3 * 36000);\ndrawing1.Select(true);\ndrawing2.Select();\ndrawing3.Select();\ndrawing2.Unselect();"
+      ],
       "params": [],
       "returns": {
         "description": "Returns false if the drawing or controller is not available, otherwise returns true.",

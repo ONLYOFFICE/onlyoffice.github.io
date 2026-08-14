@@ -72,8 +72,8 @@ npm run generate
 
 `sdkjs-forms` is expected next to `sdkjs` by default (`SDKJS_PATH/../sdkjs-forms`); override with
 `SDKJS_FORMS_PATH` or `--sdkjs-forms <path>` if it lives elsewhere. `--sdkjs <path>` works instead of
-the env var too. The generator records source commits and file hashes in
-`src/generated/generation-manifest.json`.
+the env var too. `DOCS_PATH` is required as well - see below. The generator records every source's
+commit, tag and file hashes in `src/generated/generation-manifest.json`.
 
 `npm run generate` only regenerates the Api object model (`src/generated/{word,cell,slide,pdf,forms}.ts`).
 The `Asc.plugin.executeMethod` surface (`src/generated/*-methods.ts` - `<Editor>MethodArgs`/
@@ -103,27 +103,40 @@ pattern DefinitelyTyped uses for undocumented corners of a real-world API; the g
 override in wherever it would otherwise emit a blind `export type X = unknown;` stub, and warns if an
 override is no longer needed (a later sdkjs checkout resolved the same name from a real source too).
 
-The legacy documentation snapshots are stored in `scripts/legacy-api/` and pinned to the commit
-recorded in `src/generated/generation-manifest.json`. Generation is fully offline and fails if a
-snapshot is missing or invalid. To update the snapshots, download the four JSON files from the new
-pinned commit, review the diff, regenerate the types, and commit the snapshots together with the
-updated manifest.
+Runnable examples come from a checkout of the documentation site, `DOCS_PATH` (or `--docs`),
+pointing at either an `api.onlyoffice.com` clone or an unpacked archive of it:
 
-sdkjs is the source of truth for both structure (classes, methods, params - it can't drift from the
-actual runtime) **and prose**. The pinned `office-js-api-declarations` snapshots contribute the
-runnable examples, and fill in a description only where sdkjs has none.
+```bash
+SDKJS_PATH=/path/to/sdkjs DOCS_PATH=/path/to/api.onlyoffice.com npm run generate
+```
 
-That precedence is deliberate and was measured, not assumed. The snapshots are pinned to one commit
-and age; sdkjs does not. Across Word, 789 of the 845 methods documented in both have byte-identical
-prose once the example is removed - and of the 56 that differ, sdkjs is the longer, fresher text in
-42, including three carrying `Breaking Change` / version notes the snapshot predates. Preferring the
-snapshot, as this used to, therefore lost real information (`Api.CreateTable`'s 9.4.0
-parameter-order warning) to gain nothing measurable.
+The page for a member is addressed by exactly the segments its `docsUrl` already carries -
+`site/docs/office-api/usage-api/<section>/<Class>/Methods/<Method>.md` - so the lookup is derived,
+not guessed (99.9% of existing `docsUrl`s resolve to a file). The generator takes the `## Example`
+section's fenced blocks and drops the site-only fence directive (```javascript editor-docx), the
+same way it used to drop `document-builder={...}`.
 
-The examples are the one thing that genuinely cannot be regenerated from sdkjs: its JSDoc carries
-only a `@see office-js-api/Examples/<Editor>/<Class>/Methods/<Method>.js` *path*, and the code lives
-in a separate repository which ONLYOFFICE's own docs pipeline splices in as a "## Try it" block.
-PDF is the visible control case - it has no snapshot, and therefore no `@example` blocks at all.
+This replaced 9 MB of vendored `scripts/legacy-api/*.json` snapshots, which were a pinned dump of
+the same site. They aged in place, covered four editors of five - PDF had no snapshot and therefore
+no examples at all - and reached 3003 members where the site covers 5839. Verified before deletion:
+with prose and `docsUrl` already coming from sdkjs, generating with and without the snapshots
+produced byte-identical output, so examples were the only thing left in them.
+
+The docs site trails sdkjs by several minor versions (its own CHANGELOG version is recorded in
+`generation-manifest.json`), which is why some members still have no example and ~10% of `@see`
+links 404 today. Both improve on their own as it catches up; neither is a defect to work around.
+
+sdkjs is the source of truth for structure (classes, methods, params - it can't drift from the
+actual runtime), for prose, and for the `@see` links. The documentation checkout contributes exactly
+one thing: the runnable examples, which genuinely cannot be regenerated from sdkjs - its JSDoc
+carries only a `@see office-js-api/Examples/{Editor}/<Class>/Methods/<Method>.js` *path*, and the
+code itself lives in the docs repository.
+
+That prose precedence was measured, not assumed. Across Word, 789 of the 845 methods documented in
+both sources have byte-identical prose once the example is removed - and of the 56 that differ,
+sdkjs is the longer, fresher text in 42, including three carrying `Breaking Change` / version notes
+the docs predate. Preferring the docs, as this once did, lost real information (`Api.CreateTable`'s
+9.4.0 parameter-order warning) to gain nothing measurable.
 
 ### Documentation carried by the types
 
@@ -292,6 +305,20 @@ A file with no top-level `import`/`export` is a TypeScript "script": every `inte
 `namespace` in it is automatically global, so this is what a `declare global {}` block would need
 to look like if it weren't wrapped in a module - unlike the modular npm package, it doesn't need
 installing, only loading as text.
+
+That global scope is shared with the DOM lib, so a name we happen to share with it stops being a
+separate type and becomes a declaration *merge* - harmless when the shapes agree, fatal when they
+don't. sdkjs's `ImageData` typedef (a base64 image: `src`, `width`, `height`) merged with the
+canvas `ImageData`, whose `width`/`height` are `readonly`, and every consumer compiling with
+`"lib": ["DOM"]` got `TS2687`. The bundle therefore renames such names on flatten -
+`AMBIENT_RENAMES` in the generator, currently just `ImageData` → `AscImageData` - and
+`assertNoDomCollisions` fails the build if a new shared name appears, so the next one has to be
+classified rather than silently shipped. `Window` is in `INTENTIONAL_DOM_MERGES`: merging with it
+is exactly how `declare global` adds `Asc` to the real `Window`.
+
+The rename lives in the ambient generator, not in the type generator: in the modular package each
+file is a module, so `ImageData` is local to it and collides with nothing. Renaming it there would
+be a breaking change for consumers importing the type, to fix a problem they don't have.
 
 ## Machine-readable index (AI agents, search, RAG)
 

@@ -2,7 +2,7 @@
   "description": "Returns an integer representing the data type of a value: number = 1; text = 2; logical value = 4; error value = 16; array = 64; compound data = 128.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TYPE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TYPE(255));\nworksheet.GetRange(\"A2\").SetValue(func.TYPE(true));\nworksheet.GetRange(\"A3\").SetValue(func.TYPE(\"Online Office\"));"
+    "// How do I determine what type of data is stored in a cell in a spreadsheet?\n\n// Get a numeric identifier that indicates whether a value is text, a number, or a boolean in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TYPE(255));\nworksheet.GetRange(\"A2\").SetValue(func.TYPE(true));\nworksheet.GetRange(\"A3\").SetValue(func.TYPE(\"Online Office\"));"
   ],
   "params": [
     {

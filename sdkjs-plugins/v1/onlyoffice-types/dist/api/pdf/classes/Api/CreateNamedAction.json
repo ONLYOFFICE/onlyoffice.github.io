@@ -1,0 +1,14 @@
+{
+  "description": "Creates a named action.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateNamedAction/",
+  "params": [
+    {
+      "name": "name",
+      "type": "NamedActionType"
+    }
+  ],
+  "returns": {
+    "type": "ApiNamedAction"
+  },
+  "signature": "CreateNamedAction(name: NamedActionType): ApiNamedAction"
+}

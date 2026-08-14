@@ -2,7 +2,7 @@
   "description": "Returns the straight-line depreciation of an asset for one period.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SLN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SLN(3500, 500, 5));"
+    "// The SLN function returns depreciation based on initial cost, salvage value, and asset life.\n\n// Get the depreciation amount and place it in cell A1.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SLN(3500, 500, 5));"
   ],
   "params": [
     {

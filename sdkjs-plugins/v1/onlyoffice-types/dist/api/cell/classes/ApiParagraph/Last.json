@@ -1,0 +1,12 @@
+{
+  "description": "Returns the last element of the paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/Last/",
+  "examples": [
+    "// How do I read the content of the final element in a paragraph in a spreadsheet?\n\n// Identify which run appears at the end of a paragraph to inspect its text in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(140, 100, 120));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(20),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\n\nconst run1 = Api.CreateRun();\nrun1.AddText('First. ');\nparagraph.AddElement(run1);\n\nconst run2 = Api.CreateRun();\nrun2.AddText('Last.');\nparagraph.AddElement(run2);\n\nconst last = paragraph.Last();\nworksheet.GetRange('A1').SetValue('Last element text: ' + last.GetText());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ParagraphContent"
+  },
+  "signature": "Last(): ParagraphContent"
+}

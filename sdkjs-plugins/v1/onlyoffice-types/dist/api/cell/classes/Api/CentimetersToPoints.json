@@ -1,0 +1,18 @@
+{
+  "description": "Converts centimeters to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CentimetersToPoints/",
+  "examples": [
+    "// How do I translate centimeter values into points in a spreadsheet?\n\n// Use a unit conversion to express a length in typographic points in a spreadsheet.\n\nconst centimeters = 1000;\nconst points = Api.CentimetersToPoints(centimeters);\nconst text = centimeters + ' centimeters are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of centimeters to convert to points.",
+      "name": "cm",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "CentimetersToPoints(cm: number): number"
+}

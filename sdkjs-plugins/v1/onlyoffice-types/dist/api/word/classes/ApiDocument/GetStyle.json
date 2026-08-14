@@ -2,7 +2,7 @@
   "description": "Returns a style by its name.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetStyle/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet noSpacingStyle = doc.GetStyle(\"Heading 6\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(noSpacingStyle);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
+    "// How do I retrieve and apply a built-in heading style in a document?\n\n// Reuse an existing style from the style gallery to format text without defining custom properties.\n\nlet doc = Api.GetDocument();\nlet noSpacingStyle = doc.GetStyle(\"Heading 6\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(noSpacingStyle);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
   ],
   "params": [
     {

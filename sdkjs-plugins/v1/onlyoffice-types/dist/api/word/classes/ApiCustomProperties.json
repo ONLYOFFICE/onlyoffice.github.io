@@ -5,6 +5,9 @@
     "Add": {
       "description": "Adds a custom property to the document with automatic type detection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/Add/",
+      "examples": [
+        "// How do I store custom metadata fields in a document?\n\n// Attach named values of string, boolean, number, and date types as custom properties in a document.\n\nconst doc = Api.GetDocument();\nconst customProps = doc.GetCustomProperties();\n\ncustomProps.Add(\"CompanyName\", \"ONLYOFFICE\");\nconst companyName = customProps.Get(\"CompanyName\");\n\ncustomProps.Add(\"TrueBool\", true);\nconst trueBool = customProps.Get(\"TrueBool\");\n\ncustomProps.Add(\"NumberInt\", 3.0);\ncustomProps.Add(\"NumberReal\", 3.14);\nconst numberInt = customProps.Get(\"NumberInt\");\nconst numberReal = customProps.Get(\"NumberReal\");\n\ncustomProps.Add(\"BirthDate\", new Date(\"20 January 2000\"));\nconst birthDate = new Date(customProps.Get(\"BirthDate\"));\nconst isOfLegalAge = (new Date().getFullYear() - birthDate.getFullYear()) >= 18;\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"CompanyName: \" + companyName);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nTrueBool: \" + trueBool);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nNumberInt: \" + numberInt);\nparagraph.AddText(\"\\nNumberReal: \" + numberReal);\nparagraph.AddLineBreak();\n\nparagraph.AddText(\"\\nBirthDate: \" + birthDate.toDateString());\nparagraph.AddText(\"\\nIs of legal age: \" + isOfLegalAge);"
+      ],
       "params": [
         {
           "description": "The custom property name.",
@@ -27,6 +30,9 @@
     "Get": {
       "description": "Returns the value of a custom property by its name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/Get/",
+      "examples": [
+        "// How do I read a custom metadata field stored in a document?\n\n// Access existing custom properties and confirm that missing ones return null in a document.\n\nconst doc = Api.GetDocument();\nconst customProps = doc.GetCustomProperties();\n\ncustomProps.Add(\"ExistingProp\", \"#123456\");\n\nconst existingProp = customProps.Get(\"ExistingProp\");\nconst nonExistentProp = customProps.Get(\"NonExistentProp\");\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText(\"Existing Property Value: \" + existingProp);\nparagraph.AddText(\"\\nNon-Existent Property Value: \" + nonExistentProp);"
+      ],
       "params": [
         {
           "description": "The custom property name.",
@@ -44,6 +50,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomProperties class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomProperties/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the type of a custom properties object at runtime in a document?\n\n// Confirm the object type before calling type-specific methods on custom properties in a document.\n\nconst doc = Api.GetDocument();\nconst customProps = doc.GetCustomProperties();\n\nconst classType = customProps.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ApiCustomProperties class type: \" + classType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customProperties\""

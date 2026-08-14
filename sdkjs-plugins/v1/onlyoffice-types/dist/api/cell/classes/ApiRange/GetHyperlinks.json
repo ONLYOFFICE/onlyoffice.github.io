@@ -1,0 +1,9 @@
+{
+  "description": "Returns a collection of all the hyperlinks in the range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetHyperlinks/",
+  "params": [],
+  "returns": {
+    "type": "ApiHyperlinks"
+  },
+  "signature": "GetHyperlinks(): ApiHyperlinks"
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Returns whether the editor will stop evaluating additional formatting rules if this rule evaluates to true.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetStopIfTrue/",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "GetStopIfTrue(): boolean",
+  "since": "9.5.0"
+}

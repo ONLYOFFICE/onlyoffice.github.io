@@ -2,7 +2,7 @@
   "description": "Returns the location of the specified substring in a string and is intended for languages that use the double-byte character set (DBCS) like Japanese, Chinese, Korean etc.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SEARCHB/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SEARCHB(\"line\", \"Online Office\"));"
+    "// How do I search for text in Asian language content in a spreadsheet?\n\n// Locate a word in cells that use multi-byte characters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SEARCHB(\"line\", \"Online Office\"));"
   ],
   "params": [
     {

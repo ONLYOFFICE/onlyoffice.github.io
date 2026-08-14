@@ -2,7 +2,7 @@
   "description": "Returns the depreciation of an asset for a specified period using the fixed-declining balance method.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DB/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DB(3500, 500, 5, 1, 10));"
+    "// What is the depreciation amount for a particular period in a spreadsheet?\n\n// Find the fixed-declining balance depreciation for your assets in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DB(3500, 500, 5, 1, 10));"
   ],
   "params": [
     {

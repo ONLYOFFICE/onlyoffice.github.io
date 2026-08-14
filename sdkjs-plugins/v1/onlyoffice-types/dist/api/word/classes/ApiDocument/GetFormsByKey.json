@@ -1,6 +1,9 @@
 {
   "description": "Returns a list of all forms in the document with the specified key.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetFormsByKey/",
+  "examples": [
+    "// How do I find every form field that uses a given key in a document?\n\n// Locate duplicate-keyed form fields across multiple paragraphs in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"FirstName\", \"tip\": \"Enter your first name\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Country\", \"tip\": \"Choose your country\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nparagraph.AddLineBreak();\nparagraph.AddElement(comboBoxForm);\n\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\ntextForm = Api.CreateTextForm({\"key\": \"FirstName\", \"tip\": \"Enter your first name\", \"tag\": \"form_1\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nparagraph.AddElement(textForm);\n\nlet forms = doc.GetFormsByKey(\"FirstName\");\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddText(\"Number of forms with key 'FirstName': \" + forms.length);"
+  ],
   "params": [
     {
       "description": "The form key.",

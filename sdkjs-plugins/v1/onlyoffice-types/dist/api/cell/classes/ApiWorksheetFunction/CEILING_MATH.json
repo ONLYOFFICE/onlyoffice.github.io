@@ -2,7 +2,7 @@
   "description": "Rounds a number up, to the nearest integer or to the nearest multiple of significance.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CEILING_MATH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CEILING_MATH(-5.5, 2, 1));"
+    "// What is the ceiling of a negative or positive number in a spreadsheet?\n\n// Enforce upward rounding regardless of sign in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CEILING_MATH(-5.5, 2, 1));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the complementary error function integrated between the specified lower limit and infinity.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ERFC_PRECISE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ERFC_PRECISE(0.745));"
+    "// How do I compute the complementary error function precisely in a spreadsheet?\n\n// Evaluate the precise complement of the error function from 0 to a limit in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ERFC_PRECISE(0.745));"
   ],
   "params": [
     {

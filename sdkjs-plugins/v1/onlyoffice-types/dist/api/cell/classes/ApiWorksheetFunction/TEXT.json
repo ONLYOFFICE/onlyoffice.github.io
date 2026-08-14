@@ -2,7 +2,7 @@
   "description": "Converts a value to text in a specific number format.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TEXT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TEXT(45.5, \"$0.00\"));"
+    "// Format the number as a currency string with two decimal places.\n\n// Apply the TEXT function with value and format code parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TEXT(45.5, \"$0.00\"));"
   ],
   "params": [
     {

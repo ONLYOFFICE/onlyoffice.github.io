@@ -2,7 +2,7 @@
   "description": "Returns the greatest common divisor.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GCD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.GCD(28, 16, 878, 800, 1650, 2000));"
+    "// How do I determine the largest number that divides all my values evenly in a spreadsheet?\n\n// Get the highest common factor for a set of integers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.GCD(28, 16, 878, 800, 1650, 2000));"
   ],
   "params": [
     {

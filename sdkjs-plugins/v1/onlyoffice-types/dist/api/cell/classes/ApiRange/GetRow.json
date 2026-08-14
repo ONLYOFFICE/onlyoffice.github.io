@@ -1,0 +1,12 @@
+{
+  "description": "Returns a row number for the selected cell.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRow/",
+  "examples": [
+    "// How do I find out which row a specific cell belongs to in a spreadsheet?\n\n// Identify the position of a cell within the sheet by reading its row index in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A9\").GetRow();\nworksheet.GetRange(\"A2\").SetValue(range.toString());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetRow(): number"
+}

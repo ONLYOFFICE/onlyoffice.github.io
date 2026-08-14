@@ -5,6 +5,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiHyperlink class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetClassType/",
+      "examples": [
+        "// What is the class type of a hyperlink in a PDF?\n\n// Identify the object classification of a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nconst hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nconst classType = hyperlink.GetClassType();\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText('Class Type of ApiHyperlink instance is \\\"' + classType + '\\\".');\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "\"hyperlink\""
@@ -14,6 +17,9 @@
     "GetElement": {
       "description": "Returns the hyperlink element using the position specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetElement/",
+      "examples": [
+        "// How do I access individual elements within a hyperlink in a PDF?\n\n// Extract a hyperlink component by its position in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet element = hyperlink.GetElement(1);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Element text: \" + element.GetText());\ndocContent.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The position where the element which content we want to get must be located.",
@@ -29,6 +35,9 @@
     "GetElementsCount": {
       "description": "Returns a number of elements in the current hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetElementsCount/",
+      "examples": [
+        "// How many parts make up a hyperlink in a PDF?\n\n// Display the total element count for a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet elementsCount = hyperlink.GetElementsCount();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements in hyperlink: \" + elementsCount);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Elements: paragraph, run1, run2, hyperlink\");\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -38,6 +47,9 @@
     "GetLinkedText": {
       "description": "Returns the hyperlink address.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetLinkedText/",
+      "examples": [
+        "// What text is associated with a hyperlink in a PDF?\n\n// Display the actual text of a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");\nlet linkedText = hyperlink.GetLinkedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Linked text: \" + linkedText);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -47,6 +59,9 @@
     "GetScreenTipText": {
       "description": "Returns the screen tip text of the hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/GetScreenTipText/",
+      "examples": [
+        "// How can I get the screen tip shown for a hyperlink in a PDF?\n\n// Extract the hover message displayed with a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndocContent.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -56,6 +71,9 @@
     "SetLink": {
       "description": "Sets the hyperlink address.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/SetLink/",
+      "examples": [
+        "// How do I update where a hyperlink points to in a PDF?\n\n// Assign a new web address to a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");"
+      ],
       "params": [
         {
           "description": "The hyperlink address.",
@@ -71,6 +89,9 @@
     "SetScreenTipText": {
       "description": "Sets the screen tip text of the hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiHyperlink/Methods/SetScreenTipText/",
+      "examples": [
+        "// How do I set the message displayed for a link in a PDF?\n\n// Specify a tooltip for a hyperlink in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#456789'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 150 * 36000, 150 * 36000, fill, stroke);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\n\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndocContent.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The screen tip text of the hyperlink.",

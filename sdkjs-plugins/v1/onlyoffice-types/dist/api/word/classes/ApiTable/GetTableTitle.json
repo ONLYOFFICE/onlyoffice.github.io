@@ -2,7 +2,7 @@
   "description": "Returns the table title (caption).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/GetTableTitle/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableTitle(\"Table 1\");\ntable.SetStyle(tableStyle);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table title: \" + tablePr.GetTableTitle());\ndoc.Push(table);"
+    "// How do I retrieve the title stored with a table in a document?\n\n// Output the named heading attached to a table in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableTitle(\"Table 1\");\ntable.SetStyle(tableStyle);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table title: \" + tablePr.GetTableTitle());\ndoc.Push(table);"
   ],
   "params": [],
   "returns": {

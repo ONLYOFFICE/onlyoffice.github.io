@@ -1,0 +1,20 @@
+{
+  "description": "Creates a theme color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/ThemeColor/",
+  "examples": [
+    "// How do I use a theme color instead of a custom color in a PDF?\n\n// Fill a shape with an accent color from the theme in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst color = Api.ThemeColor('accent6');\nconst fill = Api.CreateSolidFill(color);\nconst stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(0, 0, 0)));\nconst shape = Api.CreateShape(\"rect\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The theme color name. If the provided name is not supported, the 'tx1' color will be used.",
+      "name": "name",
+      "optional": true,
+      "type": "SchemeColorId"
+    }
+  ],
+  "returns": {
+    "description": "Instance of ApiColor with 'theme' type.",
+    "type": "ApiColor"
+  },
+  "signature": "ThemeColor(name?: SchemeColorId): ApiColor"
+}

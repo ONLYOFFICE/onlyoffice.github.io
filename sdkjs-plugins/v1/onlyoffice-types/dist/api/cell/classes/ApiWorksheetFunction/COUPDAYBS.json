@@ -2,7 +2,7 @@
   "description": "Returns the number of days from the beginning of the coupon period to the settlement date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPDAYBS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYBS(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+    "// What is the interval from the start of coupon to settlement in a spreadsheet?\n\n// Determine the duration between coupon inception and transaction date in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COUPDAYBS(\"1/10/2018\", \"6/15/2019\", 4, 1));"
   ],
   "params": [
     {

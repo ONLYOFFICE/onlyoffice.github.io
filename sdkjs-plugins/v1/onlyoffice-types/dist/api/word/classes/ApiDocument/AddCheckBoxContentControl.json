@@ -1,6 +1,9 @@
 {
   "description": "Adds a new checkbox content control to the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddCheckBoxContentControl/",
+  "examples": [
+    "// How do I insert a checkbox content control in a document?\n\n// Embed a pre-checked checkbox field to capture boolean input in a document.\n\nlet doc = Api.GetDocument();\ndoc.AddCheckBoxContentControl({checked : true});"
+  ],
   "params": [
     {
       "description": "The configuration object for the checkbox.",

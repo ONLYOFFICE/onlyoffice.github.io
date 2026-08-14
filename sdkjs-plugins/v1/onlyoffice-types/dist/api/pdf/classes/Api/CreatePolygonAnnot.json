@@ -1,0 +1,23 @@
+{
+  "description": "Creates polygon annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePolygonAnnot/",
+  "examples": [
+    "// How do I draw a closed shape with multiple vertices in a PDF?\n\n// Create an annotation with a filled or outlined polygon in a PDF.\n\nlet doc = Api.GetDocument();\nlet polygonAnnot = Api.CreatePolygonAnnot([40, 40, 200, 200], [{x: 100, y: 100}, {x: 150, y: 150}, {x: 100, y: 150}]);\nlet page = doc.GetPage(0);\npage.AddObject(polygonAnnot);"
+  ],
+  "params": [
+    {
+      "description": "annotation rect.",
+      "name": "rect",
+      "type": "Rect"
+    },
+    {
+      "description": "polygon path",
+      "name": "path",
+      "type": "Path"
+    }
+  ],
+  "returns": {
+    "type": "ApiPolygonAnnotation"
+  },
+  "signature": "CreatePolygonAnnot(rect: Rect, path: Path): ApiPolygonAnnotation"
+}

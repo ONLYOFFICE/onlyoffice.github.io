@@ -1,0 +1,12 @@
+{
+  "description": "Saves changes to the specified document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/Save/",
+  "examples": [
+    "// Use Api.Save to persist modifications to the document.\n\n// Add elements to a shape and save them to the presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This shape with paragraph in it is saved to the document.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);\nApi.Save();"
+  ],
+  "params": [],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "Save(): void"
+}

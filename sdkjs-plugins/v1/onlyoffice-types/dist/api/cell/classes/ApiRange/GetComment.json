@@ -1,0 +1,13 @@
+{
+  "description": "Returns the ApiComment object of the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetComment/",
+  "examples": [
+    "// How do I retrieve the text of a comment on a cell in a spreadsheet?\n\n// Display a cell's comment text in another cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1\");\nrange.SetValue(\"1\");\nrange.AddComment(\"This is just a number.\");\nworksheet.GetRange(\"A3\").SetValue(\"Comment: \" + range.GetComment().GetText());"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if range does not consist of one cell.",
+    "type": "ApiComment | null"
+  },
+  "signature": "GetComment(): ApiComment | null"
+}

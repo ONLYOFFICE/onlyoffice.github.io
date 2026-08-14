@@ -1,0 +1,33 @@
+{
+  "description": "Creates an RGBA color from red, green, blue and alpha components.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/RGBA/",
+  "examples": [
+    "// How do I set a translucent background color on an inline text control in a document?\n\n// Use a color with opacity to highlight an inline text area inside a paragraph in a document.\n\nconst doc = Api.GetDocument();\n\nconst run = Api.CreateRun();\nrun.AddText('This is an inline text content control with a translucent blue fill.');\n\nconst inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetBackgroundColor(Api.RGBA(110, 160, 180, 127));\n\nconst fill = Api.CreateSolidFill(Api.ThemeColor('accent2'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rect', 3212465, 963295, fill, stroke);\ndrawing.SetWrappingStyle('behind');\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddDrawing(drawing);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+  ],
+  "params": [
+    {
+      "description": "Red component (0-255).",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green component (0-255).",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue component (0-255).",
+      "name": "b",
+      "type": "number"
+    },
+    {
+      "description": "Alpha component (0-255).",
+      "name": "a",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "RGBA(r: number, g: number, b: number, a: number): ApiColor"
+}

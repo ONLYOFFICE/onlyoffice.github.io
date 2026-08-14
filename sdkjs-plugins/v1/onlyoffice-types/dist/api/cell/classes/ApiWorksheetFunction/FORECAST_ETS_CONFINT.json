@@ -2,7 +2,7 @@
   "description": "Returns a confidence interval for the forecast value at the specified target date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FORECAST_ETS_CONFINT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\", \"3/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS_CONFINT(\"3/1/2018\", range1, range2, 0.95, 1, 1, 1));"
+    "// How do I measure uncertainty around a predicted value in a spreadsheet?\n\n// Get the upper and lower bounds of a forecast estimate in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet dates = [\"10/1/2017\", \"11/1/2017\", \"12/1/2017\", \"1/1/2018\", \"2/1/2018\", \"3/1/2018\"];\nlet numbers = [12558, 14356, 16345, 18678, 14227];\n\nfor (let i = 0; i < dates.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(dates[i]);\n}\nfor (let j = 0; j < numbers.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(numbers[j]);\n}\n\nlet range1 = worksheet.GetRange(\"B1:B5\");\nlet range2 = worksheet.GetRange(\"A1:A5\");\nworksheet.GetRange(\"B6\").SetValue(func.FORECAST_ETS_CONFINT(\"3/1/2018\", range1, range2, 0.95, 1, 1, 1));"
   ],
   "params": [
     {

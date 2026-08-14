@@ -2,7 +2,7 @@
   "description": "Replaces the current image with an image specified.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentImage/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\ndrawing.Select();\ndoc.ReplaceCurrentImage(\"https://helpcenter.onlyoffice.com/images/Help/GettingStarted/Documents/big/EditDocument.png\", 60 * 36000, 35 * 36000);"
+    "// How do I swap out an image for another one in a document?\n\n// Insert an image, select it, then substitute it with a new source to update visuals in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png',\n\t60 * 36000, 60 * 36000\n);\nparagraph.AddDrawing(drawing);\ndrawing.Select();\ndoc.ReplaceCurrentImage('https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png');"
   ],
   "params": [
     {

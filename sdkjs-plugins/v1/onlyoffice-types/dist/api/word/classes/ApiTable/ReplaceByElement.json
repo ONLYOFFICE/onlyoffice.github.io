@@ -2,7 +2,7 @@
   "description": "Replaces the current table with a new element.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/ReplaceByElement/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet table = Api.CreateTable(3, 3);\ndoc.AddElement(0, table);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\ntable.SetStyle(tableStyle);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The table was replaced with the current paragraph.\");\ntable.ReplaceByElement(paragraph);"
+    "// How do I replace a table with a paragraph in a document?\n\n// Substitute a table with a block of text to simplify content in a document.\n\nlet doc = Api.GetDocument();\nlet table = Api.CreateTable(3, 3);\ndoc.AddElement(0, table);\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\ntable.SetStyle(tableStyle);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The table was replaced with the current paragraph.\");\ntable.ReplaceByElement(paragraph);"
   ],
   "params": [
     {

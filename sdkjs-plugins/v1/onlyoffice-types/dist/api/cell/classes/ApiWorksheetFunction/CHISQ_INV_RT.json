@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the right-tailed probability of the chi-squared distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHISQ_INV_RT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.CHISQ_INV_RT(0.4, 10);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Determine the boundary value for statistical significance at a given right-tail probability in a spreadsheet.\n\n// Find the threshold point used to evaluate extreme results in hypothesis testing in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.CHISQ_INV_RT(0.4, 10);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

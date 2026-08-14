@@ -2,7 +2,7 @@
   "description": "Rounds a number up, to the nearest multiple of significance.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CEILING/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CEILING(1.23, 0.1));"
+    "// What is the next whole value above a decimal in a spreadsheet?\n\n// Force rounding upward to meet a specific interval in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CEILING(1.23, 0.1));"
   ],
   "params": [
     {

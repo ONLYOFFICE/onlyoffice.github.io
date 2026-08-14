@@ -1,0 +1,10 @@
+{
+  "description": "Creates a text body for the drawing if it does not already exist and returns its full text range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/CreateTextRange/",
+  "params": [],
+  "returns": {
+    "type": "ApiTextRange | null"
+  },
+  "signature": "CreateTextRange(): ApiTextRange | null",
+  "since": "9.5.0"
+}

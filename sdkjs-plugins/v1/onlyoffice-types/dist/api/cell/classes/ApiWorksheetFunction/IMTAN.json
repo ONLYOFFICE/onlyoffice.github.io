@@ -2,7 +2,7 @@
   "description": "Returns the tangent of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMTAN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMTAN(\"-2+2.5i\"));"
+    "// How do I calculate the tangent of a complex number in a spreadsheet?\n\n// Find the tangent value for a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMTAN(\"-2+2.5i\"));"
   ],
   "params": [
     {

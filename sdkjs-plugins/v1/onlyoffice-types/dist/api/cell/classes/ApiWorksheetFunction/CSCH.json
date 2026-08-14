@@ -2,7 +2,7 @@
   "description": "Returns the hyperbolic cosecant of an angle.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CSCH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CSCH(0.785398));"
+    "// What is the hyperbolic cosecant value in a spreadsheet?\n\n// Determine the inverse hyperbolic sine ratio in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CSCH(0.785398));"
   ],
   "params": [
     {

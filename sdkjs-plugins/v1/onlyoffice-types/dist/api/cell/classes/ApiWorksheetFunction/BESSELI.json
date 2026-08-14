@@ -2,7 +2,7 @@
   "description": "Returns the modified Bessel function In(x).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BESSELI/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BESSELI(3.5, 1));"
+    "// Evaluate the modified Bessel function I at a specific order in a spreadsheet.\n\n// Calculate an engineering Bessel value used in wave and heat-diffusion problems in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BESSELI(3.5, 1));"
   ],
   "params": [
     {

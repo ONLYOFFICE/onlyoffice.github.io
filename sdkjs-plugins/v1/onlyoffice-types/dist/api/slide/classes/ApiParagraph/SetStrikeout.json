@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of this paragraph are displayed with a single horizontal line through the center of the line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetStrikeout/",
+  "examples": [
+    "// How do I add a line through text in a presentation?\n\n// Strike through text by applying strikeout formatting in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the text struck out with a single line.');\nparagraph.SetStrikeout(true);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed struck through.",
+      "name": "isStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetStrikeout(isStrikeout: boolean): ApiParagraph"
+}

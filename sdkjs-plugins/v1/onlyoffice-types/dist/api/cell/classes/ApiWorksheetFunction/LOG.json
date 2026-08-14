@@ -2,7 +2,7 @@
   "description": "Returns the logarithm of a number to the specified base.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOG/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOG(56, 5));"
+    "// How do I find the logarithm with a base other than 10 or e in a spreadsheet?\n\n// Get the logarithmic value of a number to any specified base in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LOG(56, 5));"
   ],
   "params": [
     {

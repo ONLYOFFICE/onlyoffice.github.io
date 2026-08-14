@@ -2,7 +2,7 @@
   "description": "Returns a number of elements in the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetElementsCount/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements inside the shape: \" + docContent.GetElementsCount());\ndoc.Push(paragraph);"
+    "// How do I get the total number of elements in a document content in a document?\n\n// Check how many elements a shape holds after modifying its content programmatically.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = docContent.GetElement(0);\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements inside the shape: \" + docContent.GetElementsCount());\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

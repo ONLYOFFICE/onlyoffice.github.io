@@ -1,0 +1,12 @@
+{
+  "description": "Returns the shape inner contents where a paragraph or text runs can be inserted.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetDocContent/",
+  "examples": [
+    "// How do I obtain the document-level content block held inside a shape in a document?\n\n// Write into a shape by gaining access to its document content region in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\nlet classType = drawing.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndocContent.AddElement(0, paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiDocumentContent"
+  },
+  "signature": "GetDocContent(): ApiDocumentContent"
+}

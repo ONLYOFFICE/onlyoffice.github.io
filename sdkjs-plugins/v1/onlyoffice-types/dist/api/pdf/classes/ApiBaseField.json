@@ -5,6 +5,9 @@
     "AddWidget": {
       "description": "Adds new widget - visual representation for field",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/AddWidget/",
+      "examples": [
+        "// How do I create a visual instance of a form field in a PDF?\n\n// Display a form field's widget at a specific location in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);"
+      ],
       "params": [
         {
           "description": "page index to add widget",
@@ -25,6 +28,9 @@
     "Delete": {
       "description": "Removes field from document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/Delete/",
+      "examples": [
+        "// How do I delete a form field from a PDF?\n\n// Remove a field and all its associated widgets from a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);\ntextField.Delete();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -34,6 +40,9 @@
     "GetAllWidgets": {
       "description": "Gets array with widgets of the current field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetAllWidgets/",
+      "examples": [
+        "// How can I retrieve every visual representation of a form field in a PDF?\n\n// Modify the appearance of all form field widgets in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Example text');\ntextField.AddWidget(0, [10, 40, 160, 60]);\nlet widgets = textField.GetAllWidgets();\nlet rgbColor = Api.RGB(255, 100, 0);\nwidgets.forEach(function(widget) {\n    widget.SetBorderColor(rgbColor);\n});"
+      ],
       "params": [],
       "returns": {
         "description": "returns emptry array if the field is not added to the document.",
@@ -44,6 +53,9 @@
     "GetFullName": {
       "description": "Gets field full name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetFullName/",
+      "examples": [
+        "// How do I retrieve the full name assigned to a form field in a PDF?\n\n// Display the unique full name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Field full name is: ' + textField.GetFullName());"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -53,6 +65,9 @@
     "GetPartialName": {
       "description": "Gets field partial name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetPartialName/",
+      "examples": [
+        "// How can I find the partial name of a form field in a PDF?\n\n// Access the short name identifier assigned to a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetPartialName('EXAMPLE');\ntextField.SetValue('Field partial name is: ' + textField.GetFullName());"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -62,6 +77,9 @@
     "GetValue": {
       "description": "Gets field value",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/GetValue/",
+      "examples": [
+        "// How do I read the value entered in a form field in a PDF?\n\n// Transfer text content between form fields in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet textField1 = Api.CreateTextField([10, 10, 160, 30]);\nlet textField2 = Api.CreateTextField([10, 40, 160, 60]);\n\npage.AddObject(textField1);\npage.AddObject(textField2);\n\ntextField1.SetValue('Name Surname');\ntextField2.SetValue(textField1.GetValue());"
+      ],
       "params": [],
       "returns": {
         "type": "string | string[]"
@@ -71,6 +89,9 @@
     "IsReadOnly": {
       "description": "Checks if field is read only",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsReadOnly/",
+      "examples": [
+        "// How can I determine if a form field is read-only in a PDF?\n\n// Verify the read-only status of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Read only is: ' + textField.IsReadOnly());"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -80,6 +101,9 @@
     "IsRequired": {
       "description": "Checks if field is required",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/IsRequired/",
+      "examples": [
+        "// How can I determine if a form field is required in a PDF?\n\n// Verify whether a form field must have a value in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Required: ' + textField.IsRequired());"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -89,6 +113,9 @@
     "SetFullName": {
       "description": "Sets new field name if possible.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetFullName/",
+      "examples": [
+        "// How do I name a form field in a PDF?\n\n// Set the unique full name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetFullName('EXAMPLE');\ntextField.SetValue('Field full name is: ' + textField.GetFullName());"
+      ],
       "params": [
         {
           "description": "The new full name for the field.",
@@ -104,6 +131,9 @@
     "SetPartialName": {
       "description": "Sets new field partial name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetPartialName/",
+      "examples": [
+        "// How do I set the local name for a form field in a PDF?\n\n// Define the partial name property of a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetPartialName('EXAMPLE');\ntextField.SetValue('Field partial name is: ' + textField.GetFullName());"
+      ],
       "params": [
         {
           "description": "The new partial name for the field.",
@@ -119,6 +149,9 @@
     "SetReadOnly": {
       "description": "Sets field read only",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetReadOnly/",
+      "examples": [
+        "// How do I make a form field read-only in a PDF?\n\n// Disable editing on a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetReadOnly(true);\ntextField.SetValue('Read only is: ' + textField.IsReadOnly());"
+      ],
       "params": [
         {
           "description": "Specifies whether the field is read-only.",
@@ -134,6 +167,9 @@
     "SetRequired": {
       "description": "Sets field required",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetRequired/",
+      "examples": [
+        "// How do I make a form field required in a PDF?\n\n// Check whether a field is marked as required in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetRequired(true);\ntextField.SetValue('Required: ' + textField.IsRequired());"
+      ],
       "params": [
         {
           "description": "Specifies whether the field is required.",
@@ -149,6 +185,9 @@
     "SetValue": {
       "description": "Sets field value",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseField/Methods/SetValue/",
+      "examples": [
+        "// How do I fill in a form field in a PDF?\n\n// Set a text value for a form field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetValue('Name Surname');"
+      ],
       "params": [
         {
           "description": "The new value for the field.",

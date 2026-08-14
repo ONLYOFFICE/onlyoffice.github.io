@@ -2,7 +2,7 @@
   "description": "Returns the number (code point) corresponding to the first character of the text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/UNICODE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.UNICODE(\"example\"));"
+    "// The UNICODE function converts characters to their numeric Unicode values.\n\n// Apply the function to obtain a character's code point from text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.UNICODE(\"example\"));"
   ],
   "params": [
     {

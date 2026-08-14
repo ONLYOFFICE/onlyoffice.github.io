@@ -5,6 +5,9 @@
     "AddText": {
       "description": "Appends text to the end of the cell content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/AddText/",
+      "examples": [
+        "// How do I add text to a table cell in a presentation?\n\n// Insert a sentence into the last paragraph of a cell to populate a table in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Cell content.\");\n\nslide.AddObject(table);"
+      ],
       "params": [
         {
           "description": "The text to append.",
@@ -32,7 +35,7 @@
       "description": "Returns the type of the ApiTableCell class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetClassType/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\nvar sClassType = oCell.GetClassType();\noParagraph.AddText(\"Class type: \" + sClassType);\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Retrieve the class type to identify the cell object's type.\n\n// Create a table cell and obtain its class type identifier.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nconst classType = cell.GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [],
       "returns": {
@@ -44,7 +47,7 @@
       "description": "Returns the current cell content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetContent/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is a sample text in the cell.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Access the document content that the cell contains.\n\n// Retrieve the content object and add text to a table cell.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text in the cell.\");\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [],
       "returns": {
@@ -129,6 +132,9 @@
     "GetText": {
       "description": "Returns the inner text of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/GetText/",
+      "examples": [
+        "// How do I retrieve the plain text from a table cell in a presentation?\n\n// Extract text from a cell and display it in a separate text box on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Cell content.\");\nconst text = cell.GetText({TableCellSeparator : \"\"});\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(200), Api.MillimetersToEmus(30), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(120));\nshape.GetContent().GetElement(0).AddText(\"Cell text: \" + text);\n\nslide.AddObject(table);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -226,7 +232,7 @@
       "description": "Sets the border which shall be displayed at the bottom of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderBottom/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderBottom(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// Set the bottom border style and fill for the cell.\n\n// Create a table cell and apply a bottom border with color.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ncell.SetCellBorderBottom(2, fill);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -255,7 +261,7 @@
       "description": "Sets the border which shall be displayed at the left of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderLeft/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderLeft(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add a colored border to the left side of a table cell in a presentation?\n\n// Create a table and apply a left border with a solid color fill in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ncell.SetCellBorderLeft(2, fill);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -284,7 +290,7 @@
       "description": "Sets the border which shall be displayed at the right of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderRight/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderRight(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add a colored border to the right side of a table cell in a presentation?\n\n// Create a table and apply a right border with a solid color fill in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ncell.SetCellBorderRight(2, fill);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -313,7 +319,7 @@
       "description": "Sets the border which shall be displayed at the top of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellBorderTop/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetCellBorderTop(2, oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add a colored border to the top of a table cell in a presentation?\n\n// Create a table and apply a top border with a solid color fill in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ncell.SetCellBorderTop(2, fill);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -342,7 +348,7 @@
       "description": "Specifies an amount of space which shall be left between the bottom extent of the cell contents and the border\nof a specific individual table cell within a table.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginBottom/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginBottom(600);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add space below text in a table cell in a presentation?\n\n// Adjust the bottom margin to control padding in a table cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginBottom(600);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -360,7 +366,7 @@
       "description": "Specifies an amount of space which shall be left between the left extent of the current cell contents and the\nleft edge border of a specific individual table cell within a table.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginLeft/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginLeft(720);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add space to the left of text in a table cell in a presentation?\n\n// Adjust the left margin to control padding in a table cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginLeft(720);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -378,7 +384,7 @@
       "description": "Specifies an amount of space which shall be left between the right extent of the current cell contents and the\nright edge border of a specific individual table cell within a table.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginRight/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginRight(600);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add space to the right of text in a table cell in a presentation?\n\n// Adjust the right margin to control padding in a table cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginRight(600);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -396,7 +402,7 @@
       "description": "Specifies an amount of space which shall be left between the top extent of the current cell contents and the\ntop edge border of a specific individual table cell within a table.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetCellMarginTop/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetCellMarginTop(720);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I add space above text in a table cell in a presentation?\n\n// Adjust the top margin to control padding in a table cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetCellMarginTop(720);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -431,7 +437,7 @@
       "description": "Specifies the shading which shall be applied to the extents of the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetShd/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\nvar oCell = oRow.GetCell(0);\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\noCell.SetShd(oFill);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I fill a table cell with a color in a presentation?\n\n// Create a table and set a solid color background for a cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ncell.SetShd(fill);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -463,6 +469,9 @@
     "SetText": {
       "description": "Replaces all content of the current table cell with the specified text,\npreserving the formatting of the first paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetText/",
+      "examples": [
+        "// How do I overwrite the text of a table cell in a presentation?\n\n// Clear an existing cell and write a new sentence into it, preserving formatting in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst table = Api.CreateTable(2, 2);\nconst cell = table.GetRow(0).GetCell(0);\ncell.AddText(\"Original cell content.\");\ncell.SetText(\"Updated cell content.\");\n\nslide.AddObject(table);"
+      ],
       "params": [
         {
           "description": "The text to set.",
@@ -480,7 +489,7 @@
       "description": "Specifies the direction of the text flow for the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetTextDirection/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(0);\noRow.SetHeight(30 * 36000);\nvar oCell = oRow.GetCell(0);\noCell.SetTextDirection(\"tbrl\");\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I rotate text vertically in a table cell in a presentation?\n\n// Set the text orientation to flow from top to bottom in a table cell in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(30 * 36000);\nconst cell = row.GetCell(0);\ncell.SetTextDirection(\"tbrl\");\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {
@@ -498,7 +507,7 @@
       "description": "Specifies the vertical alignment for text within the current table cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTableCell/Methods/SetVerticalAlign/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oTable = Api.CreateTable(2, 4);\nvar oRow = oTable.GetRow(1);\noRow.SetHeight(30 * 36000);\nvar oCell = oRow.GetCell(0);\nvar oContent = oCell.GetContent();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is just a sample text.\");\noContent.Push(oParagraph);\noCell.SetVerticalAlign(\"bottom\");\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\noSlide.AddObject(oTable);"
+        "// How do I position text vertically in a table cell in a presentation?\n\n// Adjust the vertical alignment of text within a cell in a table in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(1);\nrow.SetHeight(30 * 36000);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\ncontent.Push(paragraph);\ncell.SetVerticalAlign(\"bottom\");\n\nslide.RemoveAllObjects();\nslide.AddObject(table);"
       ],
       "params": [
         {

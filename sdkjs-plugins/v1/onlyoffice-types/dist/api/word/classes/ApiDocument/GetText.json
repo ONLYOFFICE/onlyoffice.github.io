@@ -2,7 +2,7 @@
   "description": "Returns the inner text of the current document content object.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetText/",
   "examples": [
-    "let oDocument = Api.GetDocument();\nlet oBlockLvlSdt = Api.CreateBlockLvlSdt();\noDocument.Push(oBlockLvlSdt);\nlet oContent = oBlockLvlSdt.GetContent();\noContent.GetElement(0).AddText(\"This is a block text content control.\");\nlet oPara = Api.CreateParagraph();\noPara.AddText(\"This text from DocContent element: \" + oContent.GetText());\noDocument.Push(oPara);"
+    "// How do I read the full text stored inside a document content object in a document?\n\n// Verify the text inside a content control by reading it back as a single string.\n\nconst doc = Api.GetDocument();\n\nconst blockLvlSdt = Api.CreateBlockLvlSdt();\ndoc.Push(blockLvlSdt);\n\nconst content = blockLvlSdt.GetContent();\ncontent.GetElement(0).AddText(\"This is a block text content control.\");\n\nconst para = Api.CreateParagraph();\npara.AddText(\"This text from DocContent element: \" + content.GetText());\ndoc.Push(para);"
   ],
   "params": [
     {

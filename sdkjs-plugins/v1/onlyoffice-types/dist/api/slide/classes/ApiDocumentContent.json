@@ -6,7 +6,7 @@
       "description": "Adds a paragraph or a table or a blockLvl content control using its position in the document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/AddElement/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\noDocContent.AddElement(oParagraph);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+        "// How do I insert a new paragraph into a shape in a presentation?\n\n// Create a shape, add a paragraph with text to it, and display the shape on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.AddElement(0, paragraph);\nslide.AddObject(shape);"
       ],
       "params": [
         {
@@ -28,6 +28,9 @@
     "AddText": {
       "description": "Appends the specified text to the end of the document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/AddText/",
+      "examples": [
+        "// How do I add text to the last paragraph of a shape's document content in a presentation?\n\n// Add a sentence to a shape without replacing its existing text in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\ndocContent.GetElement(0).AddText('First sentence.');\ndocContent.AddText(' Appended sentence.');\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + docContent.GetText());\ndocContent.Push(infoParagraph);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The text to add.",
@@ -44,6 +47,9 @@
     "GetAllParagraphs": {
       "description": "Returns an array of all paragraphs from the current document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetAllParagraphs/",
+      "examples": [
+        "// How do I access every paragraph inside a shape in a presentation?\n\n// Retrieve the complete list of paragraphs from a shape and format the first one.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(189, 215, 175));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph1 = docContent.GetElement(0);\nparagraph1.AddText('Paragraph 1');\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('Paragraph 2');\ndocContent.Push(paragraph2);\n\nconst allParagraphs = docContent.GetAllParagraphs();\n\nallParagraphs[0].SetBold(true);\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Total paragraphs: ' + allParagraphs.length);\ndocContent.Push(infoParagraph);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiParagraph[]"
@@ -54,7 +60,7 @@
       "description": "Returns a type of the ApiDocumentContent class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetClassType/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar sClassType = oDocContent.GetClassType();\noParagraph.AddText(\"Class Type: \" + sClassType);\noSlide.AddObject(oShape);"
+        "// How do I find out what type of text content a shape has in a presentation?\n\n// Retrieve the class type of a shape's content and display it on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nconst classType = docContent.GetClassType();\nparagraph.AddText(\"Class Type: \" + classType);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -65,6 +71,9 @@
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetCurrentParagraph/",
+      "examples": [
+        "// How do I get the paragraph where the cursor is positioned in a shape in a presentation?\n\n// Retrieve the active paragraph from a shape and append additional text to it.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(200, 191, 231));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('First paragraph inside the shape.');\n\nconst newParagraph = Api.CreateParagraph();\nnewParagraph.AddText('Second paragraph inside the shape.');\ndocContent.Push(newParagraph);\n\nconst currentParagraph = docContent.GetCurrentParagraph();\nif (currentParagraph) {\n  currentParagraph.AddText(' (Current paragraph detected!)');\n}\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiParagraph"
@@ -75,6 +84,9 @@
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetCurrentRun/",
+      "examples": [
+        "// How do I get the text run where the cursor is positioned in a shape in a presentation?\n\n// Retrieve the active text run from a shape and add text to it.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#F5C6AA'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\n\nconst paragraph = docContent.GetElement(0);\nconst run = Api.CreateRun();\nrun.AddText('This is a run inside the shape.');\nparagraph.AddElement(run);\n\nconst currentRun = docContent.GetCurrentRun();\nif (currentRun) {\n  currentRun.AddText(' (Current run detected!)');\n}\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRun"
@@ -86,7 +98,7 @@
       "description": "Returns an element by its position in the document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElement/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\nvar oBullet = Api.CreateNumbering(\"ArabicParenR\", 1);\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\noParagraph = Api.CreateParagraph();\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+        "// How do I retrieve a paragraph from a shape using its index number in a presentation?\n\n// Get the first paragraph from a shape and format it with numbering in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst oBullet = Api.CreateNumbering(\"ArabicParenR\", 1);\n\nconst docContent = shape.GetDocContent();\nlet oParagraph = docContent.GetElement(0);\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\n\noParagraph = Api.CreateParagraph();\noParagraph.SetBullet(oBullet);\noParagraph.AddText(\" This is an example of the numbered paragraph.\");\ndocContent.Push(oParagraph);\nslide.AddObject(shape);"
       ],
       "params": [
         {
@@ -104,7 +116,7 @@
       "description": "Returns a number of elements in the current document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetElementsCount/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"We got the first paragraph inside the shape.\");\noParagraph.AddLineBreak();\noParagraph.AddText(\"Number of elements inside the shape: \" + oDocContent.GetElementsCount());\noParagraph.AddLineBreak();\noParagraph.AddText(\"Line breaks are NOT counted into the number of elements.\");\noSlide.AddObject(oShape);"
+        "// How do I find out how many paragraphs a shape contains in a presentation?\n\n// Get the paragraph count from a shape and display it as text on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"We got the first paragraph inside the shape.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements inside the shape: \" + docContent.GetElementsCount());\nparagraph.AddLineBreak();\nparagraph.AddText(\"Line breaks are NOT counted into the number of elements.\");\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -115,6 +127,9 @@
     "GetInternalId": {
       "description": "Returns an internal ID of the current document content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetInternalId/",
+      "examples": [
+        "// How do I find the internal ID assigned to a shape's text content in a presentation?\n\n// Retrieve the internal ID from a shape and display it as text on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#A2C4E0'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst internalId = docContent.GetInternalId();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('Document content internal ID: ' + internalId);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -125,6 +140,9 @@
     "GetText": {
       "description": "Returns the inner text of the current document content object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/GetText/",
+      "examples": [
+        "// How do I get all the text inside a shape in a presentation?\n\n// Retrieve the combined text content from a shape and display it on the slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is the shape content text.');\nconst text = docContent.GetText();\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + text);\ndocContent.Push(infoParagraph);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -185,7 +203,7 @@
       "description": "Pushes a paragraph or a table to actually add it to the document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/Push/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\noDocContent.RemoveAllElements();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\noDocContent.AddElement(oParagraph);\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+        "// How do I append a new paragraph to a shape's existing content in a presentation?\n\n// Get a shape, clear its existing text, and add a new paragraph with text to it.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
       ],
       "params": [
         {
@@ -204,7 +222,7 @@
       "description": "Removes all the elements from the current document or from the current document element.\n<note>When all elements are removed, a new empty paragraph is automatically created. If you want to add\ncontent to this paragraph, use the {@link ApiDocumentContent#GetElement} method.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveAllElements/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"This is just a sample paragraph.\");\noDocContent.RemoveAllElements();\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+        "// How do I clear the text and objects inside a shape in a presentation?\n\n// Access the shape's content area and delete all text and elements in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
       ],
       "params": [],
       "returns": {
@@ -216,7 +234,7 @@
       "description": "Removes an element using the position specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/RemoveElement/",
       "examples": [
-        "var oPresentation = Api.GetPresentation();\nvar oSlide = oPresentation.GetSlideByIndex(0);\noSlide.RemoveAllObjects();\nvar oFill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nvar oStroke = Api.CreateStroke(0, Api.CreateNoFill());\nvar oShape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, oFill, oStroke);\noShape.SetPosition(608400, 1267200);\nvar oDocContent = oShape.GetDocContent();\nvar oParagraph = oDocContent.GetElement(0);\noParagraph.AddText(\"This is the first paragraph.\");\noDocContent.RemoveElement(0);\noParagraph = Api.CreateParagraph();\noParagraph.AddText(\"This is the second paragraph. The first paragraph was removed from the document content.\");\noDocContent.Push(oParagraph);\noSlide.AddObject(oShape);"
+        "// How do I delete an element by its position in a shape in a presentation?\n\n// Access the shape's content and remove a single text or object element in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetDocContent();\nlet paragraph = docContent.GetElement(0);\nparagraph.AddText(\"This is the first paragraph.\");\ndocContent.RemoveElement(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is the second paragraph. The first paragraph was removed from the document content.\");\ndocContent.Push(paragraph);\nslide.AddObject(shape);"
       ],
       "params": [
         {
@@ -233,6 +251,9 @@
     "SetText": {
       "description": "Replaces all content of the current document content object with the specified text,\npreserving the formatting of the first paragraph.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDocumentContent/Methods/SetText/",
+      "examples": [
+        "// How do I overwrite all the text inside a shape's document content in a presentation?\n\n// Clear existing text and write a new sentence into a shape's content area in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#E8D5B7'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\ndocContent.GetElement(0).AddText('Original shape content text.');\ndocContent.SetText('Updated shape content text.');\nconst infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText('Text from document content: ' + docContent.GetText());\ndocContent.Push(infoParagraph);\nslide.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The text to set.",

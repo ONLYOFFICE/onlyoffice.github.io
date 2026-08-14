@@ -1,0 +1,18 @@
+{
+  "description": "Creates a bullet for a paragraph with the character or symbol specified with the sSymbol parameter.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateBullet/",
+  "examples": [
+    "// How do I add a custom bullet symbol to a paragraph in a spreadsheet?\n\n// Mark a paragraph with a bullet character to create a list item in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nlet bullet = Api.CreateBullet(\"-\");\nparagraph.SetBullet(bullet);\nparagraph.AddText(\" This is an example of the bulleted paragraph.\");"
+  ],
+  "params": [
+    {
+      "description": "The character or symbol which will be used to create the bullet for the paragraph.",
+      "name": "sSymbol",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiBullet"
+  },
+  "signature": "CreateBullet(sSymbol: string): ApiBullet"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the integer portion of a division.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/QUOTIENT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.QUOTIENT(1698, 30));"
+    "// How do I find the integer portion of a division in a spreadsheet?\n\n// Extract the quotient without the remainder from two numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.QUOTIENT(1698, 30));"
   ],
   "params": [
     {

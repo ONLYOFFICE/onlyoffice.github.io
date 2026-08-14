@@ -1,0 +1,12 @@
+{
+  "description": "Returns the current range angle.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetOrientation/",
+  "examples": [
+    "// How do I find out the current text orientation of a range in a spreadsheet?\n\n// Confirm the direction cells are tilted after applying a rotation style in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:B1\");\nrange.SetOrientation(\"xlUpward\");\nlet orientation = range.GetOrientation();\nworksheet.GetRange(\"A3\").SetValue(\"Orientation: \" + orientation);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "Angle"
+  },
+  "signature": "GetOrientation(): Angle"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the number of periods for an investment based on periodic, constant payments and a constant interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NPER/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NPER(0.1/12, -500, 10000, 0));"
+    "// How do I find the number of periods needed for an investment in a spreadsheet?\n\n// Determine the time required to pay off a loan or reach an investment target in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NPER(0.1/12, -500, 10000, 0));"
   ],
   "params": [
     {

@@ -1,0 +1,14 @@
+{
+  "description": "Returns the background color for the format condition. Returns 'No Fill' when the background color of the format condition is null.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetFillColor/",
+  "examples": [
+    "// How do I find out what background color a conditional formatting rule applies to matching cells in a spreadsheet?\n\n// Confirm the highlight color of an existing rule before updating it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\nlet fillColor = Api.CreateColorFromRGB(255, 255, 0);\ncondition1.SetFillColor(fillColor);\n\nlet currentColor = condition1.GetFillColor();\n\nworksheet.GetRange(\"C1\").SetValue(\"Background color:\");\nworksheet.GetRange(\"C2\").SetValue(currentColor === \"No Fill\" ? \"No Fill\" : \"Color applied\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The background color applied by the format condition, or 'No Fill' if none is set.",
+    "type": "ApiColor | 'No Fill'"
+  },
+  "signature": "GetFillColor(): ApiColor | 'No Fill'",
+  "since": "9.1.0"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the tangent of an angle.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TAN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TAN(0.5));"
+    "// Calculate the tangent of an angle using the TAN function.\n\n// Returns the tangent value of the specified angle in radians.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TAN(0.5));"
   ],
   "params": [
     {

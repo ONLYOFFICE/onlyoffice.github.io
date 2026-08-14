@@ -1,0 +1,12 @@
+{
+  "description": "Creates no fill and removes the fill from the element.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateNoFill/",
+  "examples": [
+    "// How do I make an object transparent in a presentation?\n\n// Apply a transparent fill to a shape's outline in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"The stroke of this shape is transparent.\");\nslide.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateNoFill(): ApiFill"
+}

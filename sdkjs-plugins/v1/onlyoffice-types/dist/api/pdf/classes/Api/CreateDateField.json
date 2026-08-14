@@ -1,0 +1,18 @@
+{
+  "description": "Creates a text date field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateDateField/",
+  "examples": [
+    "// How do I add a date picker to a form in a PDF?\n\n// Set a default date value in a date field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet dateField = Api.CreateDateField([10, 10, 160, 32]);\npage.AddObject(dateField);\ndateField.SetValue('01.01.2025');"
+  ],
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiTextField"
+  },
+  "signature": "CreateDateField(rect: Rect): ApiTextField"
+}

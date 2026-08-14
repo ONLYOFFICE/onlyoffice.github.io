@@ -8,6 +8,9 @@
     "AddOption": {
       "description": "Adds new option to list options.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/AddOption/",
+      "examples": [
+        "// How can I add options to a dropdown list in a PDF?\n\n// Populate a form field with multiple selectable items in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);"
+      ],
       "params": [
         {
           "description": "list option to add",
@@ -29,6 +32,9 @@
     "ClearFormat": {
       "description": "Clears format of field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/ClearFormat/",
+      "examples": [
+        "// How do I clear the formatting applied to a combobox field in a PDF?\n\n// Set a number format on a field, then remove the formatting completely.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ncomboboxField.SetValue('-1000');\ncomboboxField.ClearFormat();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -38,6 +44,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiComboboxField class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/GetClassType/",
+      "examples": [
+        "// What is the class type of a combobox field object in a PDF?\n\n// Retrieve the class type and show it as the field value in the PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetValue('Field type is: ' + comboboxField.GetClassType());"
+      ],
       "params": [],
       "returns": {
         "type": "\"comboboxField\""
@@ -56,6 +65,9 @@
     "GetOption": {
       "description": "Gets option from list options.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOption/",
+      "examples": [
+        "// How do I access an individual option from a dropdown in a PDF?\n\n// Display a selected choice from a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\nlet option = comboboxField.GetOption(0);\ncomboboxField.SetValue('First options is: ' + option);"
+      ],
       "params": [
         {
           "description": "The option index.",
@@ -71,6 +83,9 @@
     "GetOptions": {
       "description": "Gets all options from list options.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetOptions/",
+      "examples": [
+        "// How do I get all options from a list field in a PDF?\n\n// List all items in a dropdown or list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\nlet options = comboboxField.GetOptions();\nconsole.log('Combobox options is: ' + options);"
+      ],
       "params": [],
       "returns": {
         "type": "ListOption[]"
@@ -98,6 +113,9 @@
     "GetValueIndexes": {
       "description": "Gets selected value indexes.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/GetValueIndexes/",
+      "examples": [
+        "// How do I find which items are selected in a dropdown field in a PDF?\n\n// Get the numeric positions of chosen options in a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);\nconsole.log('Selected indexes is: ' + comboboxField.GetValueIndexes());"
+      ],
       "params": [],
       "returns": {
         "type": "number[]"
@@ -107,6 +125,9 @@
     "IsCommitOnSelChange": {
       "description": "Checks if field can commit on selection change.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/IsCommitOnSelChange/",
+      "examples": [
+        "// How do I determine if a field triggers submission on selection change in a PDF?\n\n// Verify the auto-commit setting for a dropdown list in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetCommitOnSelChange(true);\ncomboboxField.SetValue('Commit on sel change is: ' + comboboxField.IsCommitOnSelChange());"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -116,6 +137,9 @@
     "IsEditable": {
       "description": "Checks if field is editable.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/IsEditable/",
+      "examples": [
+        "// How do I enable or check if a combobox field is editable in a PDF?\n\n// Set a field to editable and display its editable state in the PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetEditable(true);\ncomboboxField.SetValue('Editable is: ' + comboboxField.IsEditable());"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -125,6 +149,9 @@
     "MoveOption": {
       "description": "Moves option to specified position in list options.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/MoveOption/",
+      "examples": [
+        "// How do I rearrange the order of options in a dropdown in a PDF?\n\n// Change the position of an item in a list field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.MoveOption(2, 0);"
+      ],
       "params": [
         {
           "description": "The current index of the option to move.",
@@ -145,6 +172,9 @@
     "RemoveOption": {
       "description": "Removes option from list options.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/RemoveOption/",
+      "examples": [
+        "// How do I remove an option from a list field in a PDF?\n\n// Take out an item from a dropdown's available choices in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);\ncomboboxField.RemoveOption(2);"
+      ],
       "params": [
         {
           "description": "The option index.",
@@ -160,6 +190,9 @@
     "SetCommitOnSelChange": {
       "description": "Sets whether the field commits changes immediately after selection changes.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetCommitOnSelChange/",
+      "examples": [
+        "// How do I make a field auto-submit when the selection changes in a PDF?\n\n// Configure a dropdown to trigger form submission on selection in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetCommitOnSelChange(true);\ncomboboxField.SetValue('Commit on sel change is: ' + comboboxField.IsCommitOnSelChange());"
+      ],
       "params": [
         {
           "description": "Specifies whether selection changes are committed immediately.",
@@ -175,6 +208,9 @@
     "SetDateFormat": {
       "description": "Sets date format for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetDateFormat/",
+      "examples": [
+        "// Can I control how dates appear in a PDF?\n\n// Display dates with a specific format in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetDateFormat(\"dd.mm.yyyy\");\ncomboboxField.SetValue(\"10 january 2015\");"
+      ],
       "params": [
         {
           "description": "date format (e.g. \"dd.mm.yyyy\")",
@@ -190,6 +226,9 @@
     "SetEditable": {
       "description": "Sets whether custom text can be entered.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetEditable/",
+      "examples": [
+        "// Can I control whether users can type in a field in a PDF?\n\n// Make a field accept or reject text entries in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetEditable(true);\ncomboboxField.SetValue('Editable is: ' + comboboxField.IsEditable());"
+      ],
       "params": [
         {
           "description": "Specifies whether custom text can be entered.",
@@ -205,6 +244,9 @@
     "SetMask": {
       "description": "Sets mask for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetMask/",
+      "examples": [
+        "// What format should user input follow in a PDF?\n\n// Enforce a specific input structure in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetMask(\"(999)999-9999\");\ncomboboxField.SetValue(\"(123)456-7890\");"
+      ],
       "params": [
         {
           "description": "The input mask (e.g. \"(999)999-9999\").",
@@ -220,6 +262,9 @@
     "SetNumberFormat": {
       "description": "Sets number format for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetNumberFormat/",
+      "examples": [
+        "// Can I show dollar signs and commas with numbers in a PDF?\n\n// Control the appearance of numerical values in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ncomboboxField.SetValue('-1000.50');"
+      ],
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -255,6 +300,9 @@
     "SetPercentageFormat": {
       "description": "Sets percentage format for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetPercentageFormat/",
+      "examples": [
+        "// Can I show numbers as percentages in a PDF?\n\n// Convert numerical input to percentage display in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetPercentageFormat(0, \"us\");\ncomboboxField.SetValue(10);"
+      ],
       "params": [
         {
           "description": "The number of digits after the decimal point.",
@@ -290,6 +338,9 @@
     "SetRegularExp": {
       "description": "Sets regular expression validate string for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetRegularExp/",
+      "examples": [
+        "// Can I check that data matches a pattern in a PDF?\n\n// Ensure text follows a specific format in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetRegularExp(\"\\\\S+@\\\\S+\\\\.\\\\S+\");\ncomboboxField.SetValue(\"example@gmail.com\");"
+      ],
       "params": [
         {
           "description": "The validation regular expression (e.g. \"\\\\S+@\\\\S+\\\\.\\\\S+\")",
@@ -305,6 +356,9 @@
     "SetSpecialFormat": {
       "description": "Sets special format for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetSpecialFormat/",
+      "examples": [
+        "// Can I make phone numbers display correctly in a PDF?\n\n// Apply phone number formatting to a field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetSpecialFormat(\"phone\");\ncomboboxField.SetValue(\"1234567890\");"
+      ],
       "params": [
         {
           "description": "the formatting style to apply to the value",
@@ -320,6 +374,9 @@
     "SetTimeFormat": {
       "description": "Sets time format for field.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetTimeFormat/",
+      "examples": [
+        "// Can I control the time display format in a PDF?\n\n// Show times using a 12-hour or 24-hour format in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetTimeFormat(\"h:MM:ss tt\");\ncomboboxField.SetValue(\"8:45:30\");"
+      ],
       "params": [
         {
           "description": "available time format",
@@ -335,6 +392,9 @@
     "SetValidateRange": {
       "description": "Sets validate range for field.\n<note> Can only be applied to fields with a percentage or number format. </note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiComboboxField/Methods/SetValidateRange/",
+      "examples": [
+        "// Can I restrict numbers to a minimum and maximum in a PDF?\n\n// Accept only numbers within specified bounds in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.SetNumberFormat(0, \"us\", \"black-minus\", \"$\", true);\ncomboboxField.SetValidateRange(true, 0, true, 5);\ncomboboxField.SetValue('10');"
+      ],
       "params": [
         {
           "description": "If true, enables minimum value validation using `greaterThanValue`.",
@@ -369,6 +429,9 @@
     "SetValueIndexes": {
       "description": "Sets selected value indexes.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBaseListField/Methods/SetValueIndexes/",
+      "examples": [
+        "// How do I select options by index in a dropdown field in a PDF?\n\n// Choose items from a list using their numeric positions in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 30]);\npage.AddObject(comboboxField);\n\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');\ncomboboxField.SetValueIndexes([0]);"
+      ],
       "params": [
         {
           "description": "The indexes of the selected values.",

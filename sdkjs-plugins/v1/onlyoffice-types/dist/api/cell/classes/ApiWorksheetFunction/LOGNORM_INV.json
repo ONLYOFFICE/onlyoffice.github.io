@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the lognormal cumulative distribution function of x, where ln(x) is normally distributed with the specified parameters.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/LOGNORM_INV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.LOGNORM_INV(0.3, 2, 0.2));"
+    "// How do I determine the percentile value for a lognormal distribution in a spreadsheet?\n\n// Look up the inverse of cumulative lognormal probability in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.LOGNORM_INV(0.3, 2, 0.2));"
   ],
   "params": [
     {

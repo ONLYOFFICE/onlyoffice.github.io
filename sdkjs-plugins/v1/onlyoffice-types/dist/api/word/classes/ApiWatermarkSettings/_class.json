@@ -1,6 +1,0 @@
-{
-  "description": "Class representing the settings which are used to create a watermark.",
-  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiWatermarkSettings/",
-  "methodCount": 16,
-  "sharded": true
-}

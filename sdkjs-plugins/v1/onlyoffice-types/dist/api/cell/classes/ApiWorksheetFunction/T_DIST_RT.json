@@ -2,7 +2,7 @@
   "description": "Returns the right-tailed Student's t-distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T_DIST_RT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T_DIST_RT(1.5, 10));"
+    "// How do I find the right-tail probability for a given t-value in a spreadsheet?\n\n// Get the probability for the right side of the t-distribution curve in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.T_DIST_RT(1.5, 10));"
   ],
   "params": [
     {

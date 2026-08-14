@@ -2,7 +2,7 @@
   "description": "Converts a hexadecimal number to binary.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/HEX2BIN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.HEX2BIN(\"FFFFFFFF9C\"));"
+    "// How do I convert hexadecimal values to binary format in a spreadsheet?\n\n// Transform a hex value into its binary representation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.HEX2BIN(\"FFFFFFFF9C\"));"
   ],
   "params": [
     {

@@ -1,6 +1,9 @@
 {
   "description": "Retrieves the custom properties from the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCustomProperties/",
+  "examples": [
+    "// How do I store and retrieve custom string, number, date, and boolean properties in a document?\n\n// Attach structured metadata to a document so it can be read back programmatically in a document.\n\nconst doc = Api.GetDocument();\nconst customProps = doc.GetCustomProperties();\n\ncustomProps.Add(\"MyStringProperty\", \"Hello, World!\");\ncustomProps.Add(\"MyNumberProperty\", 42);\ncustomProps.Add(\"MyDateProperty\", new Date(\"23 November 2023\"));\ncustomProps.Add(\"MyBoolProperty\", true);\n\nconst stringValue = customProps.Get(\"MyStringProperty\");\nconst numberValue = customProps.Get(\"MyNumberProperty\");\nconst dateValue = customProps.Get(\"MyDateProperty\");\nconst boolValue = customProps.Get(\"MyBoolProperty\");\n\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Custom String Property: \" + stringValue);\nparagraph.AddText(\"\\nCustom Number Property: \" + numberValue);\nparagraph.AddText(\"\\nCustom Date Property: \" + dateValue.toDateString());\nparagraph.AddText(\"\\nCustom Boolean Property: \" + boolValue);"
+  ],
   "params": [],
   "returns": {
     "type": "ApiCustomProperties"

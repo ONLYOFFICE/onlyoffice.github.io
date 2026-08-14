@@ -2,7 +2,7 @@
   "description": "Returns the annual duration of a security with periodic interest payments.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DURATION/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DURATION(\"1/10/2018\", \"6/15/2019\", 0.08, 0.09, 4, 1));"
+    "// How do I find the duration of a bond or security investment in a spreadsheet?\n\n// Measure how long a security will take to repay its cost in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DURATION(\"1/10/2018\", \"6/15/2019\", 0.08, 0.09, 4, 1));"
   ],
   "params": [
     {

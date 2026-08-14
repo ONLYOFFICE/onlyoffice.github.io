@@ -1,0 +1,13 @@
+{
+  "description": "Clears all hyperlinks from the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/ClearHyperlinks/",
+  "examples": [
+    "// How do I detach links from cells without deleting their text in a spreadsheet?\n\n// Turn linked cells back into plain text by stripping away their URLs in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1:B1\").SetValue(\"http://example.com\");\nlet range = worksheet.GetRange(\"A1\");\nrange.ClearHyperlinks();\nworksheet.GetRange(\"A2\").SetValue(\"Result is hyperlinks cleared for A1 cell.\");"
+  ],
+  "params": [],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "ClearHyperlinks(): void",
+  "since": "9.1.0"
+}

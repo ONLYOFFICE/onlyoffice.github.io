@@ -2,7 +2,7 @@
   "description": "Returns the hyperbolic cosine of a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COSH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COSH(3));"
+    "// What is the hyperbolic cosine result of a number in a spreadsheet?\n\n// Calculate the exponential curve ratio for a given value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COSH(3));"
   ],
   "params": [
     {

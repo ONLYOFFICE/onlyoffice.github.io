@@ -20,9 +20,11 @@
       "describe": "v10.0.0.1",
       "dirty": false
     },
-    "officeApiDescriptions": {
-      "repository": "https://github.com/ONLYOFFICE/office-js-api-declarations.git",
-      "commit": "7ab23357042d8cc2510a9b4c84f3f0e5e99626a3"
+    "docs": {
+      "commit": null,
+      "describe": null,
+      "dirty": null,
+      "version": "9.1.0"
     }
   },
   "sourceFiles": [

@@ -1,0 +1,14 @@
+{
+  "description": "Returns the axis position of the data bar conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetAxisPosition/",
+  "examples": [
+    "// How do I find out the axis position setting of a data bar rule in a spreadsheet?\n\n// Inspect the axis placement to understand how bars are oriented in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nlet axisPosition = dataBar.GetAxisPosition();\n\nworksheet.GetRange(\"C1\").SetValue(\"Axis Position:\");\nworksheet.GetRange(\"C2\").SetValue(axisPosition);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The axis position setting for the data bar.",
+    "type": "XlDataBarAxisPosition"
+  },
+  "signature": "GetAxisPosition(): XlDataBarAxisPosition",
+  "since": "9.1.0"
+}

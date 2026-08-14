@@ -1,0 +1,12 @@
+{
+  "description": "Creates a new block level container.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateBlockLvlSdt/",
+  "examples": [
+    "// How do I add a structured text container to a document?\n\n// Place a labeled block of editable content at the beginning of a document.\n\nlet doc = Api.GetDocument();\nvar blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"This is a block text content control.\");\ndoc.AddElement(0, blockLvlSdt);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiBlockLvlSdt"
+  },
+  "signature": "CreateBlockLvlSdt(): ApiBlockLvlSdt"
+}

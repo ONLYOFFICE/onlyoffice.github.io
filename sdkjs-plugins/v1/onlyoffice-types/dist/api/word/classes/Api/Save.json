@@ -1,0 +1,12 @@
+{
+  "description": "Saves changes to the specified document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/Save/",
+  "examples": [
+    "// How do I save changes after editing a paragraph in a document?\n\n// Write text into the first paragraph and persist the result to the file in a document.\n\nlet paragraph = Api.GetDocument().GetElement(0);\nparagraph.AddText(\"This sample text is saved to the document.\");\nApi.Save();"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Save(): boolean"
+}

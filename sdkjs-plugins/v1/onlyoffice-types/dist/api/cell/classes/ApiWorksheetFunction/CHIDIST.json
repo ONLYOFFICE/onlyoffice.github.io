@@ -2,7 +2,7 @@
   "description": "Returns the right-tailed probability of the chi-squared distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHIDIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet avg = func.CHIDIST(12, 10);\nworksheet.GetRange(\"B2\").SetValue(avg);"
+    "// Determine the upper tail probability for a chi-squared value and degrees of freedom in a spreadsheet.\n\n// Use statistical testing to assess whether observed values are extreme or typical in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet avg = func.CHIDIST(12, 10);\nworksheet.GetRange(\"B2\").SetValue(avg);"
   ],
   "params": [
     {

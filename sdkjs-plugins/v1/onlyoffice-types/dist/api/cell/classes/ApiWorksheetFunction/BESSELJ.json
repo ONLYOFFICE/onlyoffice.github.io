@@ -2,7 +2,7 @@
   "description": "Returns the Bessel function Jn(x).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BESSELJ/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BESSELJ(1.9, 2));"
+    "// Evaluate the Bessel function J at a specific order in a spreadsheet.\n\n// Calculate an oscillatory Bessel value commonly used in signal and vibration analysis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BESSELJ(1.9, 2));"
   ],
   "params": [
     {

@@ -1,0 +1,13 @@
+{
+  "description": "Creates a new history point.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateNewHistoryPoint/",
+  "examples": [
+    "// How do I mark the current state so I can undo back to it later in a spreadsheet?\n\n// Preserve a recoverable snapshot of the document at a specific moment in a spreadsheet.\n\nvar worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"This is just a sample text.\");\nApi.CreateNewHistoryPoint();\nworksheet.GetRange(\"A3\").SetValue(\"New history point was just created.\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns true if the history point was created successfully.",
+    "type": "boolean"
+  },
+  "signature": "CreateNewHistoryPoint(): boolean"
+}

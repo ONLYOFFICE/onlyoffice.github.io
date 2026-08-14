@@ -1,0 +1,18 @@
+{
+  "description": "Sets the x position of the drawing on the page.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
+  "examples": [
+    "// How do I adjust the horizontal position of a shape in a PDF?\n\n// Change the X coordinate of an object in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosX(608400);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
+      "name": "posX",
+      "type": "EMU"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetPosX(posX: EMU): boolean"
+}

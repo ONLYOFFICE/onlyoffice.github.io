@@ -2,7 +2,7 @@
   "description": "Returns the number of combinations with repetitions for a given number of items.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COMBINA/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COMBINA(7, 2));"
+    "// How many selections can you make if you can reuse items in a spreadsheet?\n\n// Find all possible selections including repeated items in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COMBINA(7, 2));"
   ],
   "params": [
     {

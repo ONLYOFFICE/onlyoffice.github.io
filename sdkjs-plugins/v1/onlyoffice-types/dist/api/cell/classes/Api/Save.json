@@ -1,0 +1,12 @@
+{
+  "description": "Saves changes to the specified document.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Save/",
+  "examples": [
+    "// How do I make sure all recent changes are written and not lost in a spreadsheet?\n\n// Commit the current state of the document so no work is discarded in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"This sample text is saved to the worksheet.\");\nApi.Save();"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "Save(): boolean"
+}

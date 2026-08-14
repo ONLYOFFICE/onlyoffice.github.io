@@ -1,0 +1,16 @@
+{
+  "description": "Adds an element to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/Push/",
+  "params": [
+    {
+      "description": "The document element which will be added at the current position. Returns false if the\roElement type is not supported by a paragraph.",
+      "name": "oElement",
+      "type": "ParagraphContent"
+    }
+  ],
+  "returns": {
+    "description": "Returns `false` if the type of `oElement` is not supported by paragraph\rcontent.",
+    "type": "boolean"
+  },
+  "signature": "Push(oElement: ParagraphContent): boolean"
+}

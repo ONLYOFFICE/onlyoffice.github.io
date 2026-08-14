@@ -1,0 +1,14 @@
+{
+  "description": "Returns the number format applied to a cell when the conditional formatting rule evaluates to true.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetNumberFormat/",
+  "examples": [
+    "// How do I find out what number format a conditional formatting rule uses for highlighted cells in a spreadsheet?\n\n// Inspect the numeric display style of a formatting condition to confirm it presents values correctly in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(1234.56);\nworksheet.GetRange(\"A3\").SetValue(2500.75);\nworksheet.GetRange(\"A4\").SetValue(150.25);\nworksheet.GetRange(\"A5\").SetValue(3000.00);\nworksheet.GetRange(\"A6\").SetValue(750.50);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"2000\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\ncondition1.SetNumberFormat(\"$#,##0.00\");\n\nlet numberFormat = condition1.GetNumberFormat();\n\nworksheet.GetRange(\"C1\").SetValue(\"Number format:\");\nworksheet.GetRange(\"C2\").SetValue(numberFormat);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The number format.",
+    "type": "string"
+  },
+  "signature": "GetNumberFormat(): string",
+  "since": "9.1.0"
+}

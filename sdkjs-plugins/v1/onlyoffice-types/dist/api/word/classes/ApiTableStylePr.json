@@ -6,7 +6,7 @@
       "description": "Returns a type of the ApiTableStylePr class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle();\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet classType = tableStylePr.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
+        "// How do I find out what kind of object represents conditional table style settings in a document?\n\n// Identify the type label of a table style properties object in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle();\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet classType = tableStylePr.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class Type = \" + classType);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Returns a set of the paragraph properties which will be applied to all the paragraphs within a table which match the conditional formatting type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetParaPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the text alignment to center for row #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"firstRow\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet paraPr = tableStylePr.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center.\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+        "// How do I read and adjust paragraph settings inside a conditional table style in a document?\n\n// Modify text alignment for paragraphs matched by a table style condition in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the text alignment to center for row #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"firstRow\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet paraPr = tableStylePr.GetParaPr();\nparaPr.SetJc(\"center\");\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center.\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
       ],
       "params": [],
       "returns": {
@@ -30,7 +30,7 @@
       "description": "Returns a set of the table cell properties which will be applied to all the cells within a table which match the conditional formatting type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetTableCellPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the gray shading for cell #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTableCellPr().SetShd(\"clear\", 0xEE, 0xEE, 0xEE);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+        "// How do I read and change cell appearance settings for a specific area of a table in a document?\n\n// Apply background shading to cells matched by a table style condition in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the gray shading for cell #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTableCellPr().SetShd(\"clear\", 0xEE, 0xEE, 0xEE);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
       ],
       "params": [],
       "returns": {
@@ -42,7 +42,7 @@
       "description": "Returns a set of the table properties which will be applied to all the regions within a table which match the conditional formatting type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetTablePr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bottom 4 point black border to it:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTablePr().SetTableBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+        "// How do I read and update the overall table settings for a conditional style region in a document?\n\n// Set a border on a table region by modifying its conditional style properties in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bottom 4 point black border to it:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTablePr().SetTableBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
       ],
       "params": [],
       "returns": {
@@ -54,7 +54,7 @@
       "description": "Returns a set of the table row properties which will be applied to all the rows within a table which match the conditional formatting type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetTableRowPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the height of half an inch to all the rows:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTableRowPr().SetHeight(\"atLeast\", 720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+        "// How do I read and adjust row settings for a conditional style region in a document?\n\n// Set the height of rows matched by a table style condition in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the height of half an inch to all the rows:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTableRowPr().SetHeight(\"atLeast\", 720);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
       ],
       "params": [],
       "returns": {
@@ -66,7 +66,7 @@
       "description": "Returns a set of the text run properties which will be applied to all the text runs within the table which match the conditional formatting type.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetTextPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bold font weight to the text in cell #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTextPr().SetBold(true);\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"Bold text\");\nparagraph = table.GetRow(0).GetCell(1).GetContent().GetElement(0);\nparagraph.AddText(\"Normal text\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+        "// How do I read the text styling assigned to a specific part of a table style in a document?\n\n// Access the text appearance settings for a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bold font weight to the text in cell #1:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\ntableStylePr.GetTextPr().SetBold(true);\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"Bold text\");\nparagraph = table.GetRow(0).GetCell(1).GetContent().GetElement(0);\nparagraph.AddText(\"Normal text\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
       ],
       "params": [],
       "returns": {
@@ -78,7 +78,7 @@
       "description": "Returns a type of the current table conditional style.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/GetType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tableStylePrType = tableStylePr.GetType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Style type = \" + tableStylePrType);"
+        "// How do I find out which part of a table a style condition targets in a document?\n\n// Identify the area of the table that a conditional formatting rule applies to in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntableStyle.SetName(\"My Custom Style\");\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet tableStylePrType = tableStylePr.GetType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Style type = \" + tableStylePrType);"
       ],
       "params": [],
       "returns": {
@@ -89,6 +89,9 @@
     "SetParaPr": {
       "description": "Sets the paragraph properties to the current table style properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/SetParaPr/",
+      "examples": [
+        "// How do I control paragraph alignment for a specific part of a table style in a document?\n\n// Assign paragraph layout settings to a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the text alignment to center for row #1:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"firstRow\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet paraPr = Api.CreateParaPr();\nparaPr.SetJc(\"center\");\ntableStylePr.SetParaPr(paraPr);\n\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text in it aligned by the center.\");\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
       "params": [
         {
           "description": "The paragraph properties that will be set.",
@@ -105,6 +108,9 @@
     "SetTableCellPr": {
       "description": "Sets the table cell properties to the current table style properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/SetTableCellPr/",
+      "examples": [
+        "// How do I set the background shading for cells in a specific part of a table style in a document?\n\n// Assign visual cell appearance to a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the gray shading for cell #1:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet tableCellPr = Api.CreateTableCellPr();\ntableCellPr.SetShd(\"clear\", 0xEE, 0xEE, 0xEE);\ntableStylePr.SetTableCellPr(tableCellPr);\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
       "params": [
         {
           "description": "The table cell properties that will be set.",
@@ -121,6 +127,9 @@
     "SetTablePr": {
       "description": "Sets the table properties to the current table style properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/SetTablePr/",
+      "examples": [
+        "// How do I define the border settings for a specific part of a table style in a document?\n\n// Attach table-level layout properties to a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bottom 4 point black border to it:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet tablePr = tableStylePr.GetTablePr();\ntablePr.SetTableBorderBottom(\"single\", 32, 0, 51, 51, 51);\ntableStylePr.SetTablePr(tablePr);\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
       "params": [
         {
           "description": "The table properties that will be set.",
@@ -137,6 +146,9 @@
     "SetTableRowPr": {
       "description": "Sets the table row properties to the current table style properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/SetTableRowPr/",
+      "examples": [
+        "// How do I set the row height for a specific part of a table style in a document?\n\n// Assign row layout settings to a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the height of half an inch to all the rows:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet tableRowPr = Api.CreateTableRowPr();\ntableRowPr.SetHeight(\"atLeast\", 720);\ntableStylePr.SetTableRowPr(tableRowPr);\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
       "params": [
         {
           "description": "The table row properties that will be set.",
@@ -153,6 +165,9 @@
     "SetTextPr": {
       "description": "Sets the text properties to the current table style properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/SetTextPr/",
+      "examples": [
+        "// How do I make the text bold in a specific part of a table style in a document?\n\n// Define the text appearance for a targeted section of a styled table in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the bold font weight to the text in cell #1:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"topLeftCell\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet textPr = Api.CreateTextPr();\ntextPr.SetBold(true);\ntableStylePr.SetTextPr(textPr);\n\nparagraph = table.GetRow(0).GetCell(0).GetContent().GetElement(0);\nparagraph.AddText(\"Bold text\");\nparagraph = table.GetRow(0).GetCell(1).GetContent().GetElement(0);\nparagraph.AddText(\"Normal text\");\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+      ],
       "params": [
         {
           "description": "The text properties that will be set.",
@@ -170,7 +185,7 @@
       "description": "Converts the ApiTableStylePr object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTableStylePr/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle();\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet json = tableStylePr.ToJSON();\nlet tableStylePrFromJSON = Api.FromJSON(json);\nlet type = tableStylePrFromJSON.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class type = \" + type);"
+        "// How do I save the table style properties in a transferable format in a document?\n\n// Serialize the table style configuration for later reuse or inspection in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet tableStylePr = tableStyle.GetConditionalTableStyle();\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet json = tableStylePr.ToJSON();\nlet tableStylePrFromJSON = Api.FromJSON(json);\nlet type = tableStylePrFromJSON.GetClassType();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Class type = \" + type);"
       ],
       "params": [],
       "returns": {

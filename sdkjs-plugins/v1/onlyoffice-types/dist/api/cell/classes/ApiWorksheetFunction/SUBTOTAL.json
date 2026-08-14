@@ -2,7 +2,7 @@
   "description": "Returns a subtotal in a list or database.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SUBTOTAL/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SUBTOTAL(9, 10, 30, 50, 5));"
+    "// Calculate a subtotal using the SUBTOTAL function on numeric values.\n\n// Returns the calculated subtotal based on the specified function number.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SUBTOTAL(9, 10, 30, 50, 5));"
   ],
   "params": [
     {

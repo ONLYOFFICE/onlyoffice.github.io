@@ -1,6 +1,9 @@
 {
   "description": "Returns the contextual spacing value of the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetContextualSpacing/",
+  "examples": [
+    "// How do I check whether contextual spacing is enabled for a paragraph in a document?\n\n// Confirm the spacing behavior between same-styled paragraphs before adjusting layout.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetContextualSpacing(true);\nparagraph.AddText(\"This is a paragraph with contextual spacing enabled.\");\nlet contextualSpacing = paraPr.GetContextualSpacing();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Contextual spacing: \" + contextualSpacing);\ndoc.Push(paragraph2);"
+  ],
   "params": [],
   "returns": {
     "description": "Returns _true_ if the contextual spacing is enabled, _false_ if it is disabled,\ror _undefined_ if the value is not set.",

@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that all the small letter characters in this paragraph are formatted for display only as their capital\nletter character equivalents which are two points smaller than the actual font size specified for this text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/SetSmallCaps/",
+  "examples": [
+    "// How do I make lowercase letters appear as small capitals in a paragraph in a spreadsheet?\n\n// Transform the capitalization style of a paragraph so every letter renders as a small cap in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(110, 120, 160));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(30),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('This text is displayed in small caps.');\nparagraph.SetSmallCaps(true);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This text has normal capitalization.');\ncontent.Push(paragraph2);"
+  ],
+  "params": [
+    {
+      "description": "Specifies if the contents of the current paragraph are displayed capitalized two points smaller or not.",
+      "name": "isSmallCaps",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetSmallCaps(isSmallCaps: boolean): ApiParagraph"
+}

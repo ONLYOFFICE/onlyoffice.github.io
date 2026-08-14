@@ -2,7 +2,7 @@
   "description": "Returns the **e** constant raised to the power of a given number. The **e** constant is equal to **2.71828182845904**, the base of the natural logarithm.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/EXP/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.EXP(5));"
+    "// Raise the e constant to a specified power.\n\n// Calculate exponential values using EXP function in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.EXP(5));"
   ],
   "params": [
     {

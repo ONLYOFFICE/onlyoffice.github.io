@@ -2,7 +2,7 @@
   "description": "Tests whether a number is greater than a threshold value. The function returns 1 if the number is greater than or equal to the threshold value and 0 otherwise.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/GESTEP/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.GESTEP(-2, 2));"
+    "// How do I test whether a value meets a minimum requirement in a spreadsheet?\n\n// Get a binary result showing if one number exceeds another in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.GESTEP(-2, 2));"
   ],
   "params": [
     {

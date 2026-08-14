@@ -1,0 +1,23 @@
+{
+  "description": "Sets values to the specified chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/SetSeriaValues/",
+  "examples": [
+    "// How do I change the values displayed in a chart series in a PDF?\n\n// Update the numeric data that makes up a data series in a chart in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\nchart.SetSeriaValues([260, 270, 300], 1);\nchart.SetShowPointDataLabel(1, 0, false, false, true, false);\nchart.SetShowPointDataLabel(1, 1, false, false, true, false);\nchart.SetShowPointDataLabel(1, 2, false, false, true, false);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\npage.AddObject(chart);"
+  ],
+  "params": [
+    {
+      "description": "The array of the data which will be set to the specified chart series.",
+      "name": "aValues",
+      "type": "number[]"
+    },
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeria",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetSeriaValues(aValues: number[], nSeria: number): boolean"
+}

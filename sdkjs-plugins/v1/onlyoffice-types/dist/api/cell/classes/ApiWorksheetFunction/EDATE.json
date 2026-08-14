@@ -2,7 +2,7 @@
   "description": "Returns the serial number of the date which comes the indicated number of months before or after the start date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/EDATE/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.EDATE(\"3/16/2018\", 7); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I find a date by adding or subtracting months from a starting date in a spreadsheet?\n\n// Shift a date forward or backward by a number of months in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.EDATE(\"3/16/2018\", 7); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

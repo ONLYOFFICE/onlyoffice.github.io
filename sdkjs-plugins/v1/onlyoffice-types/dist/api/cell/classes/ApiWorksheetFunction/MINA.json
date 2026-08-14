@@ -2,7 +2,7 @@
   "description": "Returns the smallest value in a set of values. Does not ignore logical values and text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MINA/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet minA = func.MINA(23, 45, true, \"text\", 0.89);\nworksheet.GetRange(\"C1\").SetValue(minA);"
+    "// What is the minimum value across mixed data types in a spreadsheet?\n\n// Compare different value types to find the lowest one in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet minA = func.MINA(23, 45, true, \"text\", 0.89);\nworksheet.GetRange(\"C1\").SetValue(minA);"
   ],
   "params": [
     {

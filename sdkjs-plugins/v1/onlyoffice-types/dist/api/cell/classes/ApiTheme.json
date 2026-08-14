@@ -5,6 +5,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiTheme class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTheme/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what type of object a theme is in a spreadsheet?\n\n// Confirm the category of a theme object and write the result to a cell in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst theme = workbook.GetTheme();\nconst classType = theme.GetClassType();\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Theme class type: ' + classType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"theme\""
@@ -15,6 +18,9 @@
     "GetName": {
       "description": "Returns the name of the theme.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiTheme/Methods/GetName/",
+      "examples": [
+        "// How do I find out what the current theme is called in a spreadsheet?\n\n// Read the theme name and write it to a cell in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst theme = workbook.GetTheme();\nconst themeName = theme.GetName();\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('Theme name: ' + themeName);"
+      ],
       "params": [],
       "returns": {
         "description": "The theme name.",

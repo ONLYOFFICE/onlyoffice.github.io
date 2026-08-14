@@ -2,7 +2,7 @@
   "description": "Returns the complex conjugate of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMCONJUGATE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMCONJUGATE(\"-2+2.5i\"));"
+    "// How do I find the conjugate of a complex number in a spreadsheet?\n\n// Reflect a complex number across the real axis in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMCONJUGATE(\"-2+2.5i\"));"
   ],
   "params": [
     {

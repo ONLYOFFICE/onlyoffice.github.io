@@ -2,7 +2,7 @@
   "description": "Returns the specified number of characters from the end of a text string.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RIGHT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.RIGHT(\"Online Office\", 2));"
+    "// How do I get the last characters from a text string in a spreadsheet?\n\n// Retrieve a specific number of characters from the right side of a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.RIGHT(\"Online Office\", 2));"
   ],
   "params": [
     {

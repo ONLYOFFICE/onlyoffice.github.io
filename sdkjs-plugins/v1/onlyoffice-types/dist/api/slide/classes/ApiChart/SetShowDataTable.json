@@ -1,0 +1,22 @@
+{
+  "description": "Specifies whether the data table is displayed below the chart, optionally with the legend keys.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiChart/Methods/SetShowDataTable/",
+  "params": [
+    {
+      "description": "Whether to show or hide the data table below the chart.",
+      "name": "bShow",
+      "type": "boolean"
+    },
+    {
+      "description": "Whether to show the legend keys in the data table.",
+      "name": "bShowKeys",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetShowDataTable(bShow: boolean, bShowKeys?: boolean): boolean",
+  "since": "9.5.0"
+}

@@ -2,7 +2,7 @@
   "description": "Converts a text string that represents a number to a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VALUE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.VALUE(\"$3.50\"));"
+    "// The VALUE function parses numeric text and returns actual numeric values.\n\n// Apply the function to convert numeric text strings to numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.VALUE(\"$3.50\"));"
   ],
   "params": [
     {

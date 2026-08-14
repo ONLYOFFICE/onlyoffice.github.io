@@ -1,0 +1,26 @@
+{
+  "description": "Returns a Range object that represents a cell or a range of cells.\nWhen applied to a Range object, the property is relative to that Range object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetRange/",
+  "examples": [
+    "// How do I pick out a subset of cells from an existing range in a spreadsheet?\n\n// Highlight distinct sections of a range by filling each sub-selection with a different color in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet parentRange = worksheet.GetRange(\"B2:F6\");\nparentRange.SetValue(\"Parent Range\");\nparentRange.SetBorders(\"xlEdgeTop\", \"xlThick\", Api.CreateColorFromRGB(255, 111, 61));\n\nlet subRange1 = parentRange.GetRange(\"A1:B2\");\nsubRange1.SetValue(\"Sub 1\");\nsubRange1.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));\n\nlet subRange2 = parentRange.GetRange(\"C3:D4\");\nsubRange2.SetValue(\"Sub 2\");\nsubRange2.SetFillColor(Api.CreateColorFromRGB(173, 216, 230));\n\n// Test two-parameter syntax: define range by specifying two corners\nlet subRange3 = parentRange.GetRange(\"B1\", \"D2\");\nsubRange3.SetValue(\"Sub 3\");\nsubRange3.SetFillColor(Api.CreateColorFromRGB(255, 255, 0));"
+  ],
+  "params": [
+    {
+      "description": "The first cell address (e.g., \"A1\" or \"A1:B2\").",
+      "name": "cell1",
+      "type": "string | ApiRange"
+    },
+    {
+      "description": "The second cell address (optional, defines the corner with \"cell1\").",
+      "name": "cell2",
+      "optional": true,
+      "type": "string | ApiRange"
+    }
+  ],
+  "returns": {
+    "description": "Returns the range relative to this range, or null if invalid.",
+    "type": "ApiRange | null"
+  },
+  "signature": "GetRange(cell1: string | ApiRange, cell2?: string | ApiRange): ApiRange | null",
+  "since": "9.1.0"
+}

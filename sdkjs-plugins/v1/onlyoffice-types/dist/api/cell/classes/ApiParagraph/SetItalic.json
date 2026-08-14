@@ -1,0 +1,19 @@
+{
+  "description": "Sets the italic property to the text character.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/SetItalic/",
+  "examples": [
+    "// How do I switch a paragraph's text to italic in a spreadsheet?\n\n// Slant the characters in a paragraph to visually emphasize the text in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(170, 110, 130));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(30),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('This text is italic.');\nparagraph.SetItalic(true);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This text is not italic.');\ncontent.Push(paragraph2);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed italicized.",
+      "name": "isItalic",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetItalic(isItalic: boolean): ApiParagraph"
+}

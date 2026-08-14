@@ -2,7 +2,7 @@
   "description": "Returns the last element of the paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/Last/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is an Run with text. \");\nparagraph.Push(run1);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"And this is the last Run in the paragraph.\");\nparagraph.Push(run2);\nlet lastRun = paragraph.Last();\nlastRun.SetBold(true);"
+    "// How do I access the final run element of a paragraph in a document?\n\n// Bold the last run of a paragraph to highlight the closing text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is an Run with text. \");\nparagraph.Push(run1);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"And this is the last Run in the paragraph.\");\nparagraph.Push(run2);\nlet lastRun = paragraph.Last();\nlastRun.SetBold(true);"
   ],
   "params": [],
   "returns": {

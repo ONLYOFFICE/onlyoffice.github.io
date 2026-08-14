@@ -2,7 +2,7 @@
   "description": "Returns the normal cumulative distribution for the specified mean and standard deviation.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORMDIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NORMDIST(36, 6, 7, false));"
+    "// Find the cumulative probability in a distribution with specified mean and standard deviation in a spreadsheet.\n\n// Determine statistical likelihood using the normal distribution curve in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NORMDIST(36, 6, 7, false));"
   ],
   "params": [
     {

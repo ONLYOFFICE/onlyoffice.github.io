@@ -1,16 +1,10 @@
 {
   "ApiForm": {
     "description": "Types of all supported forms.",
-    "examples": [
-      "let copyTextForm = textForm.Copy();"
-    ],
     "type": "ApiTextForm | ApiComboBoxForm | ApiCheckBoxForm | ApiPictureForm | ApiDateForm | ApiComplexForm | ApiSignatureForm"
   },
   "AxisPos": {
     "description": "Axis position in the chart.",
-    "examples": [
-      "chart.SetAxieNumFormat(\"top\", \"0.00\");"
-    ],
     "type": "\"top\" | \"bottom\" | \"right\" | \"left\""
   },
   "Base64Img": {
@@ -19,9 +13,6 @@
   },
   "BlipFillType": {
     "description": "The type of a fill which uses an image as a background.\n**\"tile\"** - if the image is smaller than the shape which is filled, the image will be tiled all over the created shape surface.\n**\"stretch\"** - if the image is smaller than the shape which is filled, the image will be stretched to fit the created shape surface.",
-    "examples": [
-      "let blipFill = Api.CreateBlipFill(\"https://example.com/myimage.png\", \"tile\");"
-    ],
     "type": "\"tile\" | \"stretch\""
   },
   "Border": {
@@ -47,37 +38,22 @@
   },
   "BorderType": {
     "description": "A border type which will be added to the document element.\n**\"none\"** - no border will be added to the created element or the selected element side.\n**\"single\"** - a single border will be added to the created element or the selected element side.",
-    "examples": [
-      "paraPr.SetBottomBorder(\"single\", 24, 0, 0, 255, 0);"
-    ],
     "type": "\"none\" | \"single\""
   },
   "CaptionLabel": {
     "description": "Possible values for the caption label.",
-    "examples": [
-      "paragraph.AddCaptionCrossRef(\"Table\", \"pageNum\", caption);"
-    ],
     "type": "\"Table\" | \"Equation\" | \"Figure\""
   },
   "CaptionNumberingFormat": {
     "description": "Possible values for the caption numbering format.\n**\"ALPHABETIC\"** - upper letter.\n**\"alphabetic\"** - lower letter.\n**\"Roman\"** - upper Roman.\n**\"roman\"** - lower Roman.\n**\"Arabic\"** - arabic.",
-    "examples": [
-      "paragraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");"
-    ],
     "type": "\"ALPHABETIC\" | \"alphabetic\" | \"Roman\" | \"roman\" | \"Arabic\""
   },
   "CaptionSep": {
     "description": "Possible values for the caption separator.\n**\"hyphen\"** - the \"-\" punctuation mark.\n**\"period\"** - the \".\" punctuation mark.\n**\"colon\"** - the \":\" punctuation mark.\n**\"longDash\"** - the \"—\" punctuation mark.\n**\"dash\"** - the \"-\" punctuation mark.",
-    "examples": [
-      "paragraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");"
-    ],
     "type": "\"hyphen\" | \"period\" | \"colon\" | \"longDash\" | \"dash\""
   },
   "ChartType": {
     "description": "This type specifies the available chart types which can be used to create a new chart.",
-    "examples": [
-      "// ChartType used in text documents\n// The resulting chart will have a 'bar3D' type:\nvar chart = Api.CreateChart(\"bar3D\", [[200, 240, 280],[250, 260, 280]], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\n\n// ChartType used in spreadsheets\n// The resulting chart will have a 'bar3D' type:\nvar chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);"
-    ],
     "type": "\"ColumnClustered\" | \"ColumnStacked\" | \"ColumnStacked100\" | \"3DColumnClustered\" | \"3DColumnStacked\" | \"3DColumnStacked100\" | \"3DColumn\" | \"BarClustered\" | \"BarStacked\" | \"BarStacked100\" | \"3DBarClustered\" | \"3DBarStacked\" | \"3DBarStacked100\" | \"Line\" | \"LineStacked\" | \"LineStacked100\" | \"LineMarkers\" | \"LineMarkersStacked\" | \"LineMarkersStacked100\" | \"3DLine\" | \"Pie\" | \"3DPie\" | \"Doughnut\" | \"XYScatter\" | \"XYScatterLines\" | \"XYScatterLinesNoMarkers\" | \"XYScatterSmooth\" | \"XYScatterSmoothNoMarkers\" | \"StockHLC\" | \"StockOHLC\" | \"StockVHLC\" | \"StockVOHLC\" | \"Area\" | \"AreaStacked\" | \"AreaStacked100\" | \"Combo\" | \"ComboColumnClusteredLine\" | \"ComboColumnClusteredLineSecondaryAxis\" | \"Radar\" | \"RadarMarkers\" | \"RadarFilled\" | \"unknown\""
   },
   "ChartTypeLegacy": {
@@ -86,16 +62,10 @@
   },
   "CheckBoxFormPr": {
     "description": "Checkbox / radio button properties.",
-    "examples": [
-      "let checkBoxFormPr = {\"key\": \"Marital status\", \"tip\": \"Specify your marital status\", \"required\": true, \"placeholder\": \"Marital status\", \"radio\": true};\nlet checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPr);"
-    ],
     "type": "FormPrBase | CheckBoxFormPrBase"
   },
   "CheckBoxFormPrBase": {
     "description": "Specific checkbox / radio button properties.",
-    "examples": [
-      "let checkBoxFormPrBase = {\"radio\": true};\nlet checkBoxForm = Api.CreateCheckBoxForm(checkBoxFormPrBase)"
-    ],
     "properties": {
       "radio": {
         "description": "Specifies if the current checkbox is a radio button. In this case, the key parameter is considered as an identifier for the group of radio buttons.",
@@ -122,16 +92,10 @@
   },
   "ComboBoxFormPr": {
     "description": "Combo box / dropdown list properties.",
-    "examples": [
-      "let comboBoxFormPr = {\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]};\nlet comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);"
-    ],
     "type": "FormPrBase | ComboBoxFormPrBase"
   },
   "ComboBoxFormPrBase": {
     "description": "Specific combo box / dropdown list properties.",
-    "examples": [
-      "let comboBoxFormPrBase = {\"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]};\nlet comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPrBase);"
-    ],
     "properties": {
       "autoFit": {
         "description": "Specifies if the combo box form content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.",
@@ -149,9 +113,6 @@
   },
   "CommentReport": {
     "description": "A dictionary of users and their comments.",
-    "examples": [
-      "let commentsReport = oDocument.GetCommentsReport();"
-    ],
     "properties": {
       "username": {
         "description": "The comments grouped by username.",
@@ -162,9 +123,6 @@
   },
   "CommentReportRecord": {
     "description": "Represents a single comment record.",
-    "examples": [
-      "let commentsReport = oDocument.GetCommentsReport();"
-    ],
     "properties": {
       "CommentMessage": {
         "description": "The comment text.",
@@ -254,16 +212,10 @@
   },
   "DateFormPr": {
     "description": "The date form properties.",
-    "examples": [
-      "let dateFormPr = {\"key\": \"Nowadays\", \"tip\": \"Enter current date\", \"required\": true, \"placeholder\": \"Your date here\", \"format\": \"mm.dd.yyyy\", \"lang\": \"en-US\"};\nlet dateForm = Api.CreateDateForm(dateFormPr);"
-    ],
     "type": "FormPrBase | DateFormPrBase"
   },
   "DateFormPrBase": {
     "description": "Specific date form properties.",
-    "examples": [
-      "let dateFormPrBase = {\"format\": \"mm.dd.yyyy\", \"lang\": \"en-US\"};\nlet dateForm = Api.CreateDateForm(dateFormPrBase);"
-    ],
     "properties": {
       "format": {
         "description": "The date format, ex: mm.dd.yyyy",
@@ -277,9 +229,6 @@
   },
   "DocumentElement": {
     "description": "Any valid element which can be added to the document structure.",
-    "examples": [
-      "doc.AddElement(paragraph);"
-    ],
     "type": "ApiParagraph | ApiTable | ApiBlockLvlSdt"
   },
   "Drawing": {
@@ -292,9 +241,6 @@
   },
   "DrawingLockType": {
     "description": "This type specifies the type of drawing lock.",
-    "examples": [
-      "let lockValue = drawing.GetLockValue(\"noSelect\");"
-    ],
     "type": "\"noGrp\" | \"noUngrp\" | \"noSelect\" | \"noRot\" | \"noChangeAspect\" | \"noMove\" | \"noResize\" | \"noEditPoints\" | \"noAdjustHandles\" | \"noChangeArrowheads\" | \"noChangeShapeType\" | \"noDrilldown\" | \"noTextEdit\" | \"noCrop\" | \"txBox\""
   },
   "EMU": {
@@ -307,9 +253,6 @@
   },
   "FormData": {
     "description": "Form data.",
-    "examples": [
-      "let formData = {key: \"CompanyName\", value: \"OnlyOffice\", type: \"text\"};"
-    ],
     "properties": {
       "format": {
         "description": "The date format string (e.g. **MM/DD/YYYY**). Present only for date picker fields.",
@@ -361,9 +304,6 @@
   },
   "FormInsertPr": {
     "description": "Form insertion specific properties.",
-    "examples": [
-      "let textFormInsertPr = {\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"Name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false, \"placeholderFromSelection\": true, \"keepSelectedTextInForm\": false};\ndoc.InsertTextForm(textFormInsertPr);"
-    ],
     "properties": {
       "keepSelectedTextInForm": {
         "description": "Specifies if the currently selected text should be saved as the content of the inserted form.",
@@ -379,9 +319,6 @@
   },
   "FormPrBase": {
     "description": "Common form properties.",
-    "examples": [
-      "let formPrBase = {\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\"};\nlet textForm = Api.CreateTextForm(formPrBase);"
-    ],
     "properties": {
       "key": {
         "description": "The form key.",
@@ -411,16 +348,10 @@
   },
   "FormSpecificType": {
     "description": "The specific form type.",
-    "examples": [
-      "let formsData = doc.GetFormsData();"
-    ],
     "type": "\"text\" | \"checkBox\" | \"picture\" | \"comboBox\" | \"dropDownList\" | \"dateTime\" | \"radio\" | \"complex\" | \"signature\""
   },
   "FormType": {
     "description": "Form type.\nThe available form types.",
-    "examples": [
-      "let formType = textForm.GetFormType();"
-    ],
     "type": "\"textForm\" | \"comboBoxForm\" | \"dropDownForm\" | \"checkBoxForm\" | \"radioButtonForm\" | \"pictureForm\" | \"complexForm\" | \"dateForm\" | \"signatureForm\""
   },
   "GeometryCoordinate": {
@@ -433,9 +364,6 @@
   },
   "HdrFtrType": {
     "description": "Header and footer types which can be applied to the document sections.\n**\"default\"** - a header or footer which can be applied to any default page.\n**\"title\"** - a header or footer which is applied to the title page.\n**\"even\"** - a header or footer which can be applied to even pages to distinguish them from the odd ones (which will be considered default).",
-    "examples": [
-      "let docContent = finalSection.RemoveHeader(\"title\");"
-    ],
     "type": "\"default\" | \"title\" | \"even\""
   },
   "LineEndSize": {
@@ -448,16 +376,10 @@
   },
   "NumFormat": {
     "description": "Standard numeric format.",
-    "examples": [
-      "worksheet.GetRange(\"A1\").SetOrientation(\"xlUpward\");"
-    ],
     "type": "\"General\" | \"0\" | \"0.00\" | \"#,##0\" | \"#,##0.00\" | \"0%\" | \"0.00%\" | \"0.00E+00\" | \"# ?/?\" | \"# ??/??\" | \"m/d/yyyy\" | \"d-mmm-yy\" | \"d-mmm\" | \"mmm-yy\" | \"h:mm AM/PM\" | \"h:mm:ss AM/PM\" | \"h:mm\" | \"h:mm:ss\" | \"m/d/yyyy h:mm\" | \"#,##0_);(#,##0)\" | \"#,##0_);[Red](#,##0)\" | \"#,##0.00_);(#,##0.00)\" | \"#,##0.00_);[Red](#,##0.00)\" | \"mm:ss\" | \"[h]:mm:ss\" | \"mm:ss.0\" | \"##0.0E+0\" | \"@\""
   },
   "ParagraphContent": {
     "description": "The types of elements that can be added to the paragraph structure.",
-    "examples": [
-      "paragraph.AddElement(run, 0);"
-    ],
     "type": "ApiUnsupported | ApiRun | ApiInlineLvlSdt | ApiHyperlink | ApiFormBase | ApiMath"
   },
   "ParagraphLikeContainer": {
@@ -474,23 +396,14 @@
   },
   "PatternType": {
     "description": "The available preset patterns which can be used for the fill.",
-    "examples": [
-      "let fill = Api.CreatePatternFill(\"dashDnDiag\", Api.CreateRGBColor(0, 225, 0), Api.CreateRGBColor(255, 0, 0));"
-    ],
     "type": "\"cross\" | \"dashDnDiag\" | \"dashHorz\" | \"dashUpDiag\" | \"dashVert\" | \"diagBrick\" | \"diagCross\" | \"divot\" | \"dkDnDiag\" | \"dkHorz\" | \"dkUpDiag\" | \"dkVert\" | \"dnDiag\" | \"dotDmnd\" | \"dotGrid\" | \"horz\" | \"horzBrick\" | \"lgCheck\" | \"lgConfetti\" | \"lgGrid\" | \"ltDnDiag\" | \"ltHorz\" | \"ltUpDiag\" | \"ltVert\" | \"narHorz\" | \"narVert\" | \"openDmnd\" | \"pct10\" | \"pct20\" | \"pct25\" | \"pct30\" | \"pct40\" | \"pct5\" | \"pct50\" | \"pct60\" | \"pct70\" | \"pct75\" | \"pct80\" | \"pct90\" | \"plaid\" | \"shingle\" | \"smCheck\" | \"smConfetti\" | \"smGrid\" | \"solidDmnd\" | \"sphere\" | \"trellis\" | \"upDiag\" | \"vert\" | \"wave\" | \"wdDnDiag\" | \"wdUpDiag\" | \"weave\" | \"zigZag\""
   },
   "PictureFormPr": {
     "description": "Picture form properties.",
-    "examples": [
-      "let pictureFormPr = {\"key\": \"Personal information\", \"tip\": \"Upload your photo\", \"required\": true, \"placeholder\": \"Photo\", \"scaleFlag\": \"tooBig\", \"lockAspectRatio\": true, \"respectBorders\": false, \"shiftX\": 50, \"shiftY\": 50};\nlet pictureForm = Api.CreatePictureForm(pictureFormPr);"
-    ],
     "type": "FormPrBase | PictureFormPrBase"
   },
   "PictureFormPrBase": {
     "description": "Specific picture form properties.",
-    "examples": [
-      "let comboBoxFormPr = {\"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]};\nlet comboBoxForm = Api.CreateComboBoxForm(comboBoxFormPr);"
-    ],
     "properties": {
       "lockAspectRatio": {
         "description": "Specifies if the aspect ratio of the picture form is locked or not.",
@@ -516,23 +429,14 @@
   },
   "PositiveFixedAngle": {
     "description": "60000th of a degree (5400000 = 90 degrees).",
-    "examples": [
-      "let fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);"
-    ],
     "type": "number"
   },
   "PositivePercentage": {
     "description": "The 1000th of a percent (100000 = 100%).",
-    "examples": [
-      "let gs = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);"
-    ],
     "type": "number"
   },
   "PresetColor": {
     "description": "The available preset color names.",
-    "examples": [
-      "let schemeColor = Api.CreatePresetColor(\"lightYellow\");"
-    ],
     "type": "\"aliceBlue\" | \"antiqueWhite\" | \"aqua\" | \"aquamarine\" | \"azure\" | \"beige\" | \"bisque\" | \"black\" | \"blanchedAlmond\" | \"blue\" | \"blueViolet\" | \"brown\" | \"burlyWood\" | \"cadetBlue\" | \"chartreuse\" | \"chocolate\" | \"coral\" | \"cornflowerBlue\" | \"cornsilk\" | \"crimson\" | \"cyan\" | \"darkBlue\" | \"darkCyan\" | \"darkGoldenrod\" | \"darkGray\" | \"darkGreen\" | \"darkGrey\" | \"darkKhaki\" | \"darkMagenta\" | \"darkOliveGreen\" | \"darkOrange\" | \"darkOrchid\" | \"darkRed\" | \"darkSalmon\" | \"darkSeaGreen\" | \"darkSlateBlue\" | \"darkSlateGray\" | \"darkSlateGrey\" | \"darkTurquoise\" | \"darkViolet\" | \"deepPink\" | \"deepSkyBlue\" | \"dimGray\" | \"dimGrey\" | \"dkBlue\" | \"dkCyan\" | \"dkGoldenrod\" | \"dkGray\" | \"dkGreen\" | \"dkGrey\" | \"dkKhaki\" | \"dkMagenta\" | \"dkOliveGreen\" | \"dkOrange\" | \"dkOrchid\" | \"dkRed\" | \"dkSalmon\" | \"dkSeaGreen\" | \"dkSlateBlue\" | \"dkSlateGray\" | \"dkSlateGrey\" | \"dkTurquoise\" | \"dkViolet\" | \"dodgerBlue\" | \"firebrick\" | \"floralWhite\" | \"forestGreen\" | \"fuchsia\" | \"gainsboro\" | \"ghostWhite\" | \"gold\" | \"goldenrod\" | \"gray\" | \"green\" | \"greenYellow\" | \"grey\" | \"honeydew\" | \"hotPink\" | \"indianRed\" | \"indigo\" | \"ivory\" | \"khaki\" | \"lavender\" | \"lavenderBlush\" | \"lawnGreen\" | \"lemonChiffon\" | \"lightBlue\" | \"lightCoral\" | \"lightCyan\" | \"lightGoldenrodYellow\" | \"lightGray\" | \"lightGreen\" | \"lightGrey\" | \"lightPink\" | \"lightSalmon\" | \"lightSeaGreen\" | \"lightSkyBlue\" | \"lightSlateGray\" | \"lightSlateGrey\" | \"lightSteelBlue\" | \"lightYellow\" | \"lime\" | \"limeGreen\" | \"linen\" | \"ltBlue\" | \"ltCoral\" | \"ltCyan\" | \"ltGoldenrodYellow\" | \"ltGray\" | \"ltGreen\" | \"ltGrey\" | \"ltPink\" | \"ltSalmon\" | \"ltSeaGreen\" | \"ltSkyBlue\" | \"ltSlateGray\" | \"ltSlateGrey\" | \"ltSteelBlue\" | \"ltYellow\" | \"magenta\" | \"maroon\" | \"medAquamarine\" | \"medBlue\" | \"mediumAquamarine\" | \"mediumBlue\" | \"mediumOrchid\" | \"mediumPurple\" | \"mediumSeaGreen\" | \"mediumSlateBlue\" | \"mediumSpringGreen\" | \"mediumTurquoise\" | \"mediumVioletRed\" | \"medOrchid\" | \"medPurple\" | \"medSeaGreen\" | \"medSlateBlue\" | \"medSpringGreen\" | \"medTurquoise\" | \"medVioletRed\" | \"midnightBlue\" | \"mintCream\" | \"mistyRose\" | \"moccasin\" | \"navajoWhite\" | \"navy\" | \"oldLace\" | \"olive\" | \"oliveDrab\" | \"orange\" | \"orangeRed\" | \"orchid\" | \"paleGoldenrod\" | \"paleGreen\" | \"paleTurquoise\" | \"paleVioletRed\" | \"papayaWhip\" | \"peachPuff\" | \"peru\" | \"pink\" | \"plum\" | \"powderBlue\" | \"purple\" | \"red\" | \"rosyBrown\" | \"royalBlue\" | \"saddleBrown\" | \"salmon\" | \"sandyBrown\" | \"seaGreen\" | \"seaShell\" | \"sienna\" | \"silver\" | \"skyBlue\" | \"slateBlue\" | \"slateGray\" | \"slateGrey\" | \"snow\" | \"springGreen\" | \"steelBlue\" | \"tan\" | \"teal\" | \"thistle\" | \"tomato\" | \"turquoise\" | \"violet\" | \"wheat\" | \"white\" | \"whiteSmoke\" | \"yellow\" | \"yellowGreen\""
   },
   "ReadingOrder": {
@@ -541,23 +445,14 @@
   },
   "RelFromH": {
     "description": "The possible values for the base which the relative horizontal positioning of an object will be calculated from.",
-    "examples": [
-      "drawing.SetHorAlign(\"page\", \"center\");"
-    ],
     "type": "\"character\" | \"column\" | \"insideMargin\" | \"leftMargin\" | \"rightMargin\" | \"margin\" | \"outsideMargin\" | \"page\""
   },
   "RelFromV": {
     "description": "The possible values for the base which the relative vertical positioning of an object will be calculated from.",
-    "examples": [
-      "drawing.SetVerAlign(\"page\", \"center\");"
-    ],
     "type": "\"bottomMargin\" | \"insideMargin\" | \"topMargin\" | \"margin\" | \"outsideMargin\" | \"page\" | \"line\" | \"paragraph\""
   },
   "ReviewReport": {
     "description": "A dictionary of users and their review changes.",
-    "examples": [
-      "let reviewRecord = {\n\t\"John Smith\" : [{Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161},\n\t\t\t\t\t{Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189}],\n\t\"Mark Pottato\" : [{Type: \"ParaRem\", Date: 1679941755942},\n\t\t\t\t\t{Type: \"TextPr\", Date: 1679941757832}]\n}"
-    ],
     "properties": {
       "username": {
         "description": "The review changes grouped by username.",
@@ -568,9 +463,6 @@
   },
   "ReviewReportRecord": {
     "description": "Represents a single review change record.",
-    "examples": [
-      "let reviewReportRecord1 = {Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161};\nlet reviewReportRecord2 = {Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189};\nlet reviewReportRecord3 = {Type: \"ParaRem\", Date: 1679941755942};\nlet reviewReportRecord4 = {Type: \"TextPr\", Date: 1679941757832};\nlet reviewRecord = {\n\t\"John Smith\" : [reviewReportRecord1, reviewReportRecord2],\n\t\"Mark Pottato\" : [reviewReportRecord3, reviewReportRecord4]\n};"
-    ],
     "properties": {
       "Date": {
         "description": "The timestamp of the change.",
@@ -593,9 +485,6 @@
   },
   "ReviewReportRecordType": {
     "description": "Review record type.",
-    "examples": [
-      "let reviewReportRecord1 = {Type: \"TextRem\", Value: \"Hello, Mark!\", Date: 1679941734161};\nlet reviewReportRecord2 = {Type: \"TextAdd\", Value: \"Dear Mr. Pottato.\", Date: 1679941736189};\nlet reviewReportRecord3 = {Type: \"ParaRem\", Date: 1679941755942};\nlet reviewReportRecord4 = {Type: \"TextPr\", Date: 1679941757832};\nlet reviewRecord = {\n\t\"John Smith\" : [reviewReportRecord1, reviewReportRecord2],\n\t\"Mark Pottato\" : [reviewReportRecord3, reviewReportRecord4]\n};"
-    ],
     "type": "\"TextAdd\" | \"TextRem\" | \"ParaAdd\" | \"ParaRem\" | \"TextPr\" | \"ParaPr\" | \"Unknown\""
   },
   "RoleProperties": {
@@ -609,23 +498,14 @@
   },
   "ScaleFlag": {
     "description": "The condition to scale an image in the picture form.",
-    "examples": [
-      "pictureForm.SetScaleFlag(\"tooBig\");"
-    ],
     "type": "\"always\" | \"never\" | \"tooBig\" | \"tooSmall\""
   },
   "SchemeColorId": {
     "description": "The available color scheme identifiers.",
-    "examples": [
-      "let schemeColor = Api.CreateSchemeColor(\"accent2\");"
-    ],
     "type": "\"accent1\" | \"accent2\" | \"accent3\" | \"accent4\" | \"accent5\" | \"accent6\" | \"bg1\" | \"bg2\" | \"dk1\" | \"dk2\" | \"lt1\" | \"lt2\" | \"tx1\" | \"tx2\""
   },
   "SdtLock": {
     "description": "The lock type of the content control.",
-    "examples": [
-      "inlineLvlSdt.SetLock(\"sdtContentLocked\");"
-    ],
     "type": "\"unlocked\" | \"contentLocked\" | \"sdtContentLocked\" | \"sdtLocked\""
   },
   "SectionBreakType": {
@@ -669,9 +549,6 @@
   },
   "ShapeType": {
     "description": "This type specifies the preset shape geometry that will be used for a shape.",
-    "examples": [
-      "let drawing = Api.CreateShape(\"diamond\", 100 * 36000, 100 * 36000, fill, stroke);"
-    ],
     "type": "\"accentBorderCallout1\" | \"accentBorderCallout2\" | \"accentBorderCallout3\" | \"accentCallout1\" | \"accentCallout2\" | \"accentCallout3\" | \"actionButtonBackPrevious\" | \"actionButtonBeginning\" | \"actionButtonBlank\" | \"actionButtonDocument\" | \"actionButtonEnd\" | \"actionButtonForwardNext\" | \"actionButtonHelp\" | \"actionButtonHome\" | \"actionButtonInformation\" | \"actionButtonMovie\" | \"actionButtonReturn\" | \"actionButtonSound\" | \"arc\" | \"bentArrow\" | \"bentConnector2\" | \"bentConnector3\" | \"bentConnector4\" | \"bentConnector5\" | \"bentUpArrow\" | \"bevel\" | \"blockArc\" | \"borderCallout1\" | \"borderCallout2\" | \"borderCallout3\" | \"bracePair\" | \"bracketPair\" | \"callout1\" | \"callout2\" | \"callout3\" | \"can\" | \"chartPlus\" | \"chartStar\" | \"chartX\" | \"chevron\" | \"chord\" | \"circularArrow\" | \"cloud\" | \"cloudCallout\" | \"corner\" | \"cornerTabs\" | \"cube\" | \"curvedConnector2\" | \"curvedConnector3\" | \"curvedConnector4\" | \"curvedConnector5\" | \"curvedDownArrow\" | \"curvedLeftArrow\" | \"curvedRightArrow\" | \"curvedUpArrow\" | \"decagon\" | \"diagStripe\" | \"diamond\" | \"dodecagon\" | \"donut\" | \"doubleWave\" | \"downArrow\" | \"downArrowCallout\" | \"ellipse\" | \"ellipseRibbon\" | \"ellipseRibbon2\" | \"flowChartAlternateProcess\" | \"flowChartCollate\" | \"flowChartConnector\" | \"flowChartDecision\" | \"flowChartDelay\" | \"flowChartDisplay\" | \"flowChartDocument\" | \"flowChartExtract\" | \"flowChartInputOutput\" | \"flowChartInternalStorage\" | \"flowChartMagneticDisk\" | \"flowChartMagneticDrum\" | \"flowChartMagneticTape\" | \"flowChartManualInput\" | \"flowChartManualOperation\" | \"flowChartMerge\" | \"flowChartMultidocument\" | \"flowChartOfflineStorage\" | \"flowChartOffpageConnector\" | \"flowChartOnlineStorage\" | \"flowChartOr\" | \"flowChartPredefinedProcess\" | \"flowChartPreparation\" | \"flowChartProcess\" | \"flowChartPunchedCard\" | \"flowChartPunchedTape\" | \"flowChartSort\" | \"flowChartSummingJunction\" | \"flowChartTerminator\" | \"foldedCorner\" | \"frame\" | \"funnel\" | \"gear6\" | \"gear9\" | \"halfFrame\" | \"heart\" | \"heptagon\" | \"hexagon\" | \"homePlate\" | \"horizontalScroll\" | \"irregularSeal1\" | \"irregularSeal2\" | \"leftArrow\" | \"leftArrowCallout\" | \"leftBrace\" | \"leftBracket\" | \"leftCircularArrow\" | \"leftRightArrow\" | \"leftRightArrowCallout\" | \"leftRightCircularArrow\" | \"leftRightRibbon\" | \"leftRightUpArrow\" | \"leftUpArrow\" | \"lightningBolt\" | \"line\" | \"lineInv\" | \"mathDivide\" | \"mathEqual\" | \"mathMinus\" | \"mathMultiply\" | \"mathNotEqual\" | \"mathPlus\" | \"moon\" | \"nonIsoscelesTrapezoid\" | \"noSmoking\" | \"notchedRightArrow\" | \"octagon\" | \"parallelogram\" | \"pentagon\" | \"pie\" | \"pieWedge\" | \"plaque\" | \"plaqueTabs\" | \"plus\" | \"quadArrow\" | \"quadArrowCallout\" | \"rect\" | \"ribbon\" | \"ribbon2\" | \"rightArrow\" | \"rightArrowCallout\" | \"rightBrace\" | \"rightBracket\" | \"round1Rect\" | \"round2DiagRect\" | \"round2SameRect\" | \"roundRect\" | \"rtTriangle\" | \"smileyFace\" | \"snip1Rect\" | \"snip2DiagRect\" | \"snip2SameRect\" | \"snipRoundRect\" | \"squareTabs\" | \"star10\" | \"star12\" | \"star16\" | \"star24\" | \"star32\" | \"star4\" | \"star5\" | \"star6\" | \"star7\" | \"star8\" | \"straightConnector1\" | \"stripedRightArrow\" | \"sun\" | \"swooshArrow\" | \"teardrop\" | \"trapezoid\" | \"triangle\" | \"upArrowCallout\" | \"upDownArrow\" | \"upDownArrow\" | \"upDownArrowCallout\" | \"uturnArrow\" | \"verticalScroll\" | \"wave\" | \"wedgeEllipseCallout\" | \"wedgeRectCallout\" | \"wedgeRoundRectCallout\""
   },
   "Shd": {
@@ -689,9 +566,6 @@
   },
   "ShdType": {
     "description": "A shade type which can be added to the document element.",
-    "examples": [
-      "tablePr.SetShd(\"clear\", 0, 255, 0, false);"
-    ],
     "type": "\"nil\" | \"clear\""
   },
   "SizeRelFromH": {
@@ -704,16 +578,10 @@
   },
   "StyleType": {
     "description": "The style type used for the document element.",
-    "examples": [
-      "let normalStyle = doc.GetDefaultStyle(\"paragraph\");"
-    ],
     "type": "\"paragraph\" | \"table\" | \"run\" | \"numbering\""
   },
   "TabJc": {
     "description": "Custom tab types.",
-    "examples": [
-      "paraPr.SetTabs([1000, 1500, 3000], [\"center\", \"left\", \"right\"]);"
-    ],
     "type": "\"clear\" | \"left\" | \"right\" | \"center\""
   },
   "TabStop": {
@@ -763,16 +631,10 @@
   },
   "TableStyleOverrideType": {
     "description": "This simple type specifies possible values for the table sections to which the current conditional formatting properties will be applied when this selected table style is used.\n**\"topLeftCell\"** - specifies that the table formatting is applied to the top left cell.\n**\"topRightCell\"** - specifies that the table formatting is applied to the top right cell.\n**\"bottomLeftCell\"** - specifies that the table formatting is applied to the bottom left cell.\n**\"bottomRightCell\"** - specifies that the table formatting is applied to the bottom right cell.\n**\"firstRow\"** - specifies that the table formatting is applied to the first row.\n**\"lastRow\"** - specifies that the table formatting is applied to the last row.\n**\"firstColumn\"** - specifies that the table formatting is applied to the first column. Any subsequent row which is in *table header* ({@link ApiTableRowPr#SetTableHeader}) will also use this conditional format.\n**\"lastColumn\"** - specifies that the table formatting is applied to the last column.\n**\"bandedColumn\"** - specifies that the table formatting is applied to odd numbered groupings of rows.\n**\"bandedColumnEven\"** - specifies that the table formatting is applied to even numbered groupings of rows.\n**\"bandedRow\"** - specifies that the table formatting is applied to odd numbered groupings of columns.\n**\"bandedRowEven\"** - specifies that the table formatting is applied to even numbered groupings of columns.\n**\"wholeTable\"** - specifies that the conditional formatting is applied to the whole table.",
-    "examples": [
-      "tableStyle.GetConditionalTableStyle(\"topLeftCell\").GetTableCellPr().SetShd(\"clear\", 255, 0, 0);"
-    ],
     "type": "\"topLeftCell\" | \"topRightCell\" | \"bottomLeftCell\" | \"bottomRightCell\" | \"firstRow\" | \"lastRow\" | \"firstColumn\" | \"lastColumn\" | \"bandedColumn\" | \"bandedColumnEven\" | \"bandedRow\" | \"bandedRowEven\" | \"wholeTable\""
   },
   "TableWidth": {
     "description": "The possible values for the units of the width property are defined by a specific table or table cell width property.\n**\"auto\"** - sets the table or table cell width to auto width.\n**\"twips\"** - sets the table or table cell width to be measured in twentieths of a point.\n**\"nul\"** - sets the table or table cell width to be of a zero value.\n**\"percent\"** - sets the table or table cell width to be measured in percent to the parent container.",
-    "examples": [
-      "tableCell.SetWidth(\"twips\", 2000);"
-    ],
     "type": "\"auto\" | \"twips\" | \"nul\" | \"percent\""
   },
   "TextFlowDirection": {
@@ -795,23 +657,14 @@
   },
   "TextFormInsertPr": {
     "description": "Properties for inserting a text field.",
-    "examples": [
-      "let textFormInsertPr = {\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"Name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false, \"placeholderFromSelection\": true, \"keepSelectedTextInForm\": false};\ndoc.InsertTextForm(textFormInsertPr);"
-    ],
     "type": "FormPrBase | TextFormPrBase | FormInsertPr"
   },
   "TextFormPr": {
     "description": "Text field properties.",
-    "examples": [
-      "let textFormPr = {\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false};\nlet textForm = Api.CreateTextForm(textFormPr);"
-    ],
     "type": "FormPrBase | TextFormPrBase"
   },
   "TextFormPrBase": {
     "description": "Specific text field properties.",
-    "examples": [
-      "let textFormPrBase = {\"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false};\nlet textForm = Api.CreateTextForm(textFormPrBase);"
-    ],
     "properties": {
       "autoFit": {
         "description": "Specifies if the text field content should be autofit, i.e. whether the font size adjusts to the size of the fixed size form.",
@@ -837,23 +690,14 @@
   },
   "TextTransform": {
     "description": "Text transform type.",
-    "examples": [
-      "let textArt = Api.CreateWordArt(oTextPr, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 150 * 36000, 50 * 36000);"
-    ],
     "type": "\"textArchDown\" | \"textArchDownPour\" | \"textArchUp\" | \"textArchUpPour\" | \"textButton\" | \"textButtonPour\" | \"textCanDown\" | \"textCanUp\" | \"textCascadeDown\" | \"textCascadeUp\" | \"textChevron\" | \"textChevronInverted\" | \"textCircle\" | \"textCirclePour\" | \"textCurveDown\" | \"textCurveUp\" | \"textDeflate\" | \"textDeflateBottom\" | \"textDeflateInflate\" | \"textDeflateInflateDeflate\" | \"textDeflateTop\" | \"textDoubleWave1\" | \"textFadeDown\" | \"textFadeLeft\" | \"textFadeRight\" | \"textFadeUp\" | \"textInflate\" | \"textInflateBottom\" | \"textInflateTop\" | \"textPlain\" | \"textRingInside\" | \"textRingOutside\" | \"textSlantDown\" | \"textSlantUp\" | \"textStop\" | \"textTriangle\" | \"textTriangleInverted\" | \"textWave1\" | \"textWave2\" | \"textWave4\" | \"textNoShape\""
   },
   "TickLabelPosition": {
     "description": "Possible values for the position of chart tick labels (either horizontal or vertical).\n**\"none\"** - not display the selected tick labels.\n**\"nextTo\"** - sets the position of the selected tick labels next to the main label.\n**\"low\"** - sets the position of the selected tick labels in the part of the chart with lower values.\n**\"high\"** - sets the position of the selected tick labels in the part of the chart with higher values.",
-    "examples": [
-      "chart.SetVertAxisTickLabelPosition(\"nextTo\");"
-    ],
     "type": "\"none\" | \"nextTo\" | \"low\" | \"high\""
   },
   "TickMark": {
     "description": "The type of tick mark appearance.",
-    "examples": [
-      "chart.SetVertAxisMajorTickMark(\"cross\");"
-    ],
     "type": "\"cross\" | \"in\" | \"none\" | \"out\""
   },
   "ToHtmlOptions": {
@@ -883,9 +727,6 @@
   },
   "TocBuildFromPr": {
     "description": "Table of contents properties which specify whether to generate the table of contents from the outline levels or the specified styles.",
-    "examples": [
-      "let tocBuildFromPr = {\"OutlineLvls\": 9};\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": tocBuildFromPr, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
-    ],
     "properties": {
       "OutlineLvlStart": {
         "description": "The highest heading level included in the table of contents (the start of the outline range).",
@@ -905,16 +746,10 @@
   },
   "TocLeader": {
     "description": "Possible values for the table of contents leader:\n**\"dot\"** - \".......\"\n**\"dash\"** - \"-------\"\n**\"underline\"** - \"_______\"",
-    "examples": [
-      "let tocLeader = \"dot\";\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": tocLeader, \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
-    ],
     "type": "\"dot\" | \"dash\" | \"underline\" | \"none\""
   },
   "TocPr": {
     "description": "Table of contents properties.",
-    "examples": [
-      "let tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
-    ],
     "properties": {
       "BuildFrom": {
         "description": "Specifies whether to generate the table of contents from the outline levels or the specified styles.",
@@ -950,16 +785,10 @@
   },
   "TocStyle": {
     "description": "Possible values for the table of contents style.",
-    "examples": [
-      "let tocStyle = \"standard\";\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"OutlineLvls\": 9}, \"TocStyle\": tocStyle};\ndoc.AddTableOfContents(tocPr);"
-    ],
     "type": "\"simple\" | \"online\" | \"standard\" | \"modern\" | \"classic\""
   },
   "TocStyleLvl": {
     "description": "Table of contents style levels.",
-    "examples": [
-      "let tocStyleLvl = [{Name: \"Heading 1\", Lvl: 2}, {Name: \"Heading 2\", Lvl: 3}];\nlet tocPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": {\"StylesLvls\": tocStyleLvl}, \"TocStyle\": \"standard\"};\ndoc.AddTableOfContents(tocPr);"
-    ],
     "properties": {
       "Lvl": {
         "description": "Level which will be applied to the specified style in the table of contents.",
@@ -973,9 +802,6 @@
   },
   "TofPr": {
     "description": "Table of figures properties.",
-    "examples": [
-      "let tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": \"distinctive\"};\ndoc.AddTableOfFigures(tofPr);"
-    ],
     "properties": {
       "BuildFrom": {
         "description": "Specifies whether to generate the table of figures based on the specified caption label or the paragraph style name used (for example, \"Heading 1\").",
@@ -1016,9 +842,6 @@
   },
   "TofStyle": {
     "description": "Possible values for the table of figures style.",
-    "examples": [
-      "let tofStyle = \"distinctive\";\nlet tofPr = {\"ShowPageNums\": true, \"RightAlgn\": true, \"LeaderType\": \"dot\", \"FormatAsLinks\": true, \"BuildFrom\": \"Figure\", \"LabelNumber\": true, \"TofStyle\": tofStyle};\ndoc.AddTableOfFigures(tofPr);"
-    ],
     "type": "\"simple\" | \"online\" | \"classic\" | \"distinctive\" | \"centered\" | \"formal\""
   },
   "UserComments": {
@@ -1041,23 +864,14 @@
   },
   "VerticalTextAlign": {
     "description": "The available text vertical alignment (used to align text in a shape with a placement for text inside it).",
-    "examples": [
-      "drawing.SetVerticalTextAlign(\"top\");"
-    ],
     "type": "\"top\" | \"center\" | \"bottom\""
   },
   "WatermarkDirection": {
     "description": "The watermark direction.",
-    "examples": [
-      "watermarkSettings.SetDirection(\"clockwise45\");"
-    ],
     "type": "\"horizontal\" | \"clockwise45\" | \"counterclockwise45\" | \"clockwise90\" | \"counterclockwise90\""
   },
   "WatermarkType": {
     "description": "The watermark type.",
-    "examples": [
-      "watermarkSettings.SetType(\"text\");"
-    ],
     "type": "\"none\" | \"text\" | \"image\""
   },
   "XmlMapping": {
@@ -1079,107 +893,62 @@
   },
   "bookmarkRefTo": {
     "description": "Available values of the \"bookmark\" reference type:\n**\"text\"** - the entire bookmark text;\n**\"pageNum\"** - the bookmark page number;\n**\"paraNum\"** - the bookmark paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum** - the full paragraph number, e.g. \"4.1.1\";\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
-    "examples": [
-      "paragraph.AddBookmarkCrossRef(\"pageNum\", bookmark);"
-    ],
     "type": "\"text\" | \"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"aboveBelow\""
   },
   "byte": {
     "description": "A numeric value from 0 to 255.",
-    "examples": [
-      "// The resulting color is green, the bytes are measured in decimal numbers:\nlet rgbColorGreen = Api.CreateRGBColor(0, 255, 0);\n// The resulting color is red, the bytes are measured in hexadecimal numbers:\nlet rgbColorRed = Api.CreateRGBColor(0xff, 0, 0);"
-    ],
     "type": "number"
   },
   "captionRefTo": {
     "description": "Available values of the \"equation\"/\"figure\"/\"table\" reference type:\n**\"entireCaption\"**- the entire caption text;\n**\"labelNumber\"** - the label and object number only, e.g. \"Table 1.1\";\n**\"captionText\"** - the caption text only;\n**\"pageNum\"** - the page number containing the referenced object;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
-    "examples": [
-      "paragraph.AddCaptionCrossRef(\"table\", \"pageNum\", caption);"
-    ],
     "type": "\"entireCaption\" | \"labelNumber\" | \"captionText\" | \"pageNum\" | \"aboveBelow\""
   },
   "endnoteRefTo": {
     "description": "Available values of the \"endnote\" reference type:\n**\"endnoteNum\"** - the endnote number;\n**\"pageNum\"** - the endnote page number;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position;\n**\"formEndnoteNum\"** - the form number formatted as an endnote. The numbering of the actual endnotes is not affected.",
-    "examples": [
-      "paragraph.AddEndnoteCrossRef(\"pageNum\", endnoteParagraph);"
-    ],
     "type": "\"endnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formEndnoteNum\""
   },
   "footnoteRefTo": {
     "description": "Available values of the \"footnote\" reference type:\n**\"footnoteNum\"** - the footnote number;\n**\"pageNum\"** - the page number of the footnote;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the position of the item;\n**\"formFootnoteNum\"** - the form number formatted as a footnote. The numbering of the actual footnotes is not affected.",
-    "examples": [
-      "paragraph.AddFootnoteCrossRef(\"pageNum\", footnoteParagraph);"
-    ],
     "type": "\"footnoteNum\" | \"pageNum\" | \"aboveBelow\" | \"formFootnoteNum\""
   },
   "headingRefTo": {
     "description": "Available values of the \"heading\" reference type:\n**\"text\"** - the entire heading text;\n**\"pageNum\"** - the heading page number;\n**\"headingNum\"** - the heading sequence number;\n**\"noCtxHeadingNum\"** - the abbreviated heading number. Make sure the cursor pointer is in the section you are referencing to, e.g. you are in section 4 and you wish to refer to heading 4.B, so instead of \"4.B\" you receive \"B\" only;\n**\"fullCtxHeadingNum\"** - the full heading number even if the cursor pointer is in the same section;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
-    "examples": [
-      "paragraph.AddHeadingCrossRef(\"pageNum\", headingParagraph);"
-    ],
     "type": "\"text\" | \"pageNum\" | \"headingNum\" | \"noCtxHeadingNum\" | \"fullCtxHeadingNum\" | \"aboveBelow\""
   },
   "highlightColor": {
     "description": "Available highlight colors.",
-    "examples": [
-      "paragraph.SetHighlight(\"green\");"
-    ],
     "type": "\"black\" | \"blue\" | \"cyan\" | \"green\" | \"magenta\" | \"red\" | \"yellow\" | \"white\" | \"darkBlue\" | \"darkCyan\" | \"darkGreen\" | \"darkMagenta\" | \"darkRed\" | \"darkYellow\" | \"darkGray\" | \"lightGray\" | \"none\""
   },
   "hps": {
     "description": "Half-points (2 half-points = 1 point).",
-    "examples": [
-      "textPr.SetFontSize(22);"
-    ],
     "type": "number"
   },
   "line240": {
     "description": "240ths of a line.",
-    "examples": [
-      "paraPr.SetSpacingLine(240, \"auto\");"
-    ],
     "type": "number"
   },
   "mm": {
     "description": "1 millimetre equals 1/10th of a centimetre.",
-    "examples": [
-      "textForm.SetCellWidth(7);"
-    ],
     "type": "number"
   },
   "numberedRefTo": {
     "description": "Available values of the \"numbered\" reference type:\n**\"pageNum\"** - the numbered item page number;\n**\"paraNum\"** - the numbered item paragraph number;\n**\"noCtxParaNum\"** - the abbreviated paragraph number (the specific item only, e.g. instead of \"4.1.1\" you refer to \"1\" only);\n**\"fullCtxParaNum\"** - the full paragraph number, e.g. \"4.1.1\";\n**\"text\"** - the paragraph text value, e.g. if you have \"4.1.1. Terms and Conditions\", you refer to \"Terms and Conditions\" only;\n**\"aboveBelow\"** - the words \"above\" or \"below\" depending on the item position.",
-    "examples": [
-      "paragraph.AddNumberedCrossRef(\"pageNum\", numberedParagraph, true, true);"
-    ],
     "type": "\"pageNum\" | \"paraNum\" | \"noCtxParaNum\" | \"fullCtxParaNum\" | \"text\" | \"aboveBelow\""
   },
   "percentage": {
     "description": "Value from 0 to 100.",
-    "examples": [
-      "pictureForm.SetPicturePosition(70, 70);"
-    ],
     "type": "number"
   },
   "pt": {
     "description": "A point.",
-    "examples": [
-      "paraPr.SetBottomBorder(\"single\", 24, 1, 0, 255, 0);"
-    ],
     "type": "number"
   },
   "pt_8": {
     "description": "Eighths of a point (24 eighths of a point = 3 points).",
-    "examples": [
-      "paraPr.SetBottomBorder(\"single\", 48, 0, 0, 255, 0);"
-    ],
     "type": "number"
   },
   "twips": {
     "description": "Twentieths of a point (equivalent to 1/1440th of an inch).",
-    "examples": [
-      "paragraph.SetEqualColumns(2, 720);"
-    ],
     "type": "number"
   }
 }

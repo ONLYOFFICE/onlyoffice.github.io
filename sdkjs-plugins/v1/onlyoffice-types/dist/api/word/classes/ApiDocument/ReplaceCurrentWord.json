@@ -2,7 +2,7 @@
   "description": "Replaces the current word or part of the current word with the specified text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/ReplaceCurrentWord/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\npara1.AddText(\"The quick brown \");\nlet run = para1.AddText(\"cat\");\npara1.AddText(\" jumps over the lazy dog\");\nrun.MoveCursorToPos(1);\n\ndoc.ReplaceCurrentWord(\"fox\");"
+    "// How do I overwrite a single word based on where the cursor sits in a document?\n\n// Move the cursor into a word and swap it out without retyping surrounding text in a document.\n\nlet doc = Api.GetDocument();\nlet para1 = doc.GetElement(0);\npara1.AddText(\"The quick brown \");\nlet run = para1.AddText(\"cat\");\npara1.AddText(\" jumps over the lazy dog\");\nrun.MoveCursorToPos(1);\n\ndoc.ReplaceCurrentWord(\"fox\");"
   ],
   "params": [
     {

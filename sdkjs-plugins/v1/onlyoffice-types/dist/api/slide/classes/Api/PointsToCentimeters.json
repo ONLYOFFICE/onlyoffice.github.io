@@ -1,0 +1,18 @@
+{
+  "description": "Converts points to centimeters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/PointsToCentimeters/",
+  "examples": [
+    "// Use the Api object to convert measurement units.\n\n// Display the conversion result in a shape on the slide.\n\nconst points = 1000;\nconst centimeters = Api.PointsToCentimeters(points);\n\nconst rgb = Api.RGB(50, 150, 250);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('rect', 300 * 36000, 150 * 36000, fill, stroke);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(points + ' points are equal to ' + centimeters + ' centimeters.');\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The number of points to convert to centimeters.",
+      "name": "pt",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PointsToCentimeters(pt: number): number"
+}

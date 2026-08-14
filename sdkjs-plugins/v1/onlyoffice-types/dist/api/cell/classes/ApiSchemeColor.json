@@ -9,7 +9,7 @@
       "description": "Returns a type of the ApiSchemeColor class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiSchemeColor/Methods/GetClassType/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet schemeColor = Api.CreateSchemeColor(\"dk1\");\nlet fill = Api.CreateSolidFill(schemeColor);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"curvedUpArrow\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = schemeColor.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
+        "// How do I find out what type a scheme color object is in a spreadsheet?\n\n// Confirm the category of a color object by printing its type to the sheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet schemeColor = Api.CreateSchemeColor(\"dk1\");\nlet fill = Api.CreateSolidFill(schemeColor);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"curvedUpArrow\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);\nlet classType = schemeColor.GetClassType();\nworksheet.SetColumnWidth(0, 15);\nworksheet.SetColumnWidth(1, 10);\nworksheet.GetRange(\"A1\").SetValue(\"Class Type = \");\nworksheet.GetRange(\"B1\").SetValue(classType);"
       ],
       "params": [],
       "returns": {

@@ -2,7 +2,7 @@
   "description": "Returns a number shifted left by the specified number of bits.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITLSHIFT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITLSHIFT(4, 2));"
+    "// What happens when you move the binary representation leftward in a spreadsheet?\n\n// Multiply a value by moving its bits toward higher positions in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BITLSHIFT(4, 2));"
   ],
   "params": [
     {

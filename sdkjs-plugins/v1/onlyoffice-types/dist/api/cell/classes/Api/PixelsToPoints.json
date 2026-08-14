@@ -1,0 +1,18 @@
+{
+  "description": "Converts pixels to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/PixelsToPoints/",
+  "examples": [
+    "// How do I turn a number of pixels into an equivalent number of points in a spreadsheet?\n\n// Record the point equivalent of a pixel measurement in a spreadsheet.\n\nconst pixels = 100;\nconst points = Api.PixelsToPoints(pixels);\nconst text = pixels + ' pixels are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of pixels to convert to points.",
+      "name": "px",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "PixelsToPoints(px: number): number"
+}

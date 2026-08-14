@@ -2,7 +2,7 @@
   "description": "Deletes the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/Delete/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.Delete();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The table was removed from the document.\");\ndoc.Push(paragraph);"
+    "// How do I delete a table from a document?\n\n// Eliminate an unwanted table so it no longer appears in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\ntable.Delete();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The table was removed from the document.\");\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

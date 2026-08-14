@@ -5,6 +5,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiUniColor class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiUniColor/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the type of color being used in a PDF?\n\n// Determine what color system defines a color in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst presetColor = Api.CreatePresetColor(\"lightYellow\");\nconst gs1 = Api.CreateGradientStop(presetColor, 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nconst docContent = shape.GetContent();\nconst classType = presetColor.GetClassType();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + classType);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"uniColor\""

@@ -1,6 +1,9 @@
 {
   "description": "Select the reference to this footnote/endnote. If this document content is not a footnote/endnote, do nothing.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/SelectNoteReference/",
+  "examples": [
+    "// How do I select the inline reference mark of a footnote in a document?\n\n// Target a footnote's reference mark to resize it independently from the surrounding body text.\n\nlet doc = Api.GetDocument();\nlet footnote = doc.AddFootnote();\nlet paragraph = footnote.GetElement(0);\nparagraph.AddText(\"Footnote text\");\n\nfootnote.SelectNoteReference();\n\ndoc.GetRangeBySelect().SetFontSize(48);"
+  ],
   "params": [],
   "returns": {
     "description": "Returns true if the reference was selected successfully.",

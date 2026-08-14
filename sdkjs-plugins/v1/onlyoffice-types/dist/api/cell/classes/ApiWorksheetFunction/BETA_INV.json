@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the cumulative beta probability density function (BETA_DIST).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETA_INV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.BETA_INV(0.2, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// How do I convert a probability percentage back into the original data range in a spreadsheet?\n\n// Retrieve the input value that corresponds to a specific cumulative probability in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BETA_INV(0.2, 4, 5);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

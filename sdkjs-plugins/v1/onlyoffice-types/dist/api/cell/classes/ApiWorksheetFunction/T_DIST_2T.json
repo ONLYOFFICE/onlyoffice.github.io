@@ -2,7 +2,7 @@
   "description": "Returns the two-tailed Student's t-distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T_DIST_2T/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T_DIST_2T(1.5, 10));"
+    "// How do I find the two-tailed probability for a given t-value in a spreadsheet?\n\n// Get the probability for both tails of the t-distribution in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.T_DIST_2T(1.5, 10));"
   ],
   "params": [
     {

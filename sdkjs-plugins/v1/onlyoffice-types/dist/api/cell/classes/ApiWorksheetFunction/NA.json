@@ -2,7 +2,7 @@
   "description": "Returns the *#N/A* error value which means \"no value is available\".",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NA/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet(); \nlet func = Api.GetWorksheetFunction();\nlet result = func.NA();\nworksheet.GetRange(\"C3\").SetValue(result);"
+    "// Display \"no value available\" in a spreadsheet using a function.\n\n// Add an error indicator when data is not available in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet(); \nlet func = Api.WorksheetFunction;\nlet result = func.NA();\nworksheet.GetRange(\"C3\").SetValue(result);"
   ],
   "params": [],
   "returns": {

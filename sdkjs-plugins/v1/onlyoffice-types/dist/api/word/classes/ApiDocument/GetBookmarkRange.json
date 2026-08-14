@@ -2,7 +2,7 @@
   "description": "Returns a bookmark range.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetBookmarkRange/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 9);\nrange.AddBookmark(\"Bookmark\");\nrange = doc.GetBookmarkRange(\"Bookmark\");\nrange.SetBold(true);"
+    "// How do I get the range that a bookmark spans in a document?\n\n// Apply bold formatting to a bookmarked range by looking it up by name in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 9);\nrange.AddBookmark(\"Bookmark\");\nrange = doc.GetBookmarkRange(\"Bookmark\");\nrange.SetBold(true);"
   ],
   "params": [
     {

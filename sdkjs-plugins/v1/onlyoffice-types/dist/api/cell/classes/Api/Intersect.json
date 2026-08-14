@@ -1,0 +1,23 @@
+{
+  "description": "Returns the ApiRange object that represents the rectangular intersection of two or more ranges. If one or more ranges from a different worksheet are specified, an error will be returned.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/Intersect/",
+  "examples": [
+    "// How do I get only the cells that belong to both of two selected ranges in a spreadsheet?\n\n// Highlight the area where two ranges meet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range1 = worksheet.GetRange(\"A1:C5\");\nlet range2 = worksheet.GetRange(\"B2:B4\");\nlet range = Api.Intersect(range1, range2);\nrange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+  ],
+  "params": [
+    {
+      "description": "One of the intersecting ranges. At least two Range objects must be specified.",
+      "name": "Range1",
+      "type": "ApiRange"
+    },
+    {
+      "description": "One of the intersecting ranges. At least two Range objects must be specified.",
+      "name": "Range2",
+      "type": "ApiRange"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange | null"
+  },
+  "signature": "Intersect(Range1: ApiRange, Range2: ApiRange): ApiRange | null"
+}

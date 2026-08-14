@@ -1,0 +1,13 @@
+{
+  "description": "Returns the geometry object from the current shape.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/GetGeometry/",
+  "examples": [
+    "// How do I find out the exact outline definition used by a shape in a document?\n\n// Inspect whether a shape uses a built-in or custom outline path in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(200, 100, 0)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nparagraph.AddText(\"Preset: \" + geometry.GetPreset() + \", IsCustom: \" + geometry.IsCustom());\nparagraph.AddDrawing(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiGeometry"
+  },
+  "signature": "GetGeometry(): ApiGeometry",
+  "since": "9.1.0"
+}

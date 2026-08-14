@@ -1,0 +1,12 @@
+{
+  "description": "Returns all series from the chart space.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiChart/Methods/GetAllSeries/",
+  "examples": [
+    "// How do I access the individual data series in a chart in a PDF?\n\n// Iterate through each series to get its type in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst chart = Api.CreateChart(\"comboBarLine\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nchart.SetVerAxisTitle(\"USD In Hundred Thousands\", 10);\nchart.SetHorAxisTitle(\"Year\", 11);\nchart.SetLegendPos(\"bottom\");\nchart.SetShowDataLabels(false, false, true, false);\n\nlet series, seriesType, title = \"\";\nconst allSeries = chart.GetAllSeries();\nfor (let seriesIndex = 0; seriesIndex < allSeries.length; ++seriesIndex) {\n\tseries = allSeries[seriesIndex];\n\tseriesType = series.GetChartType();\n\ttitle += ((seriesIndex + 1) + \" Series Type = \" + seriesType + \"\\n\");\n}\nchart.SetTitle(title, 20);\nchart.SetSize(150 * 36000, 65 * 36000);\nchart.SetPosition(608400, 1267200);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\npage.AddObject(chart);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiChartSeries[]"
+  },
+  "signature": "GetAllSeries(): ApiChartSeries[]"
+}

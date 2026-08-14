@@ -2,7 +2,7 @@
   "description": "Returns a bitwise \"OR\" of two numbers.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITOR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITOR(23, 10));"
+    "// Which bits are set in either number in a spreadsheet?\n\n// Merge binary values to include all active bits in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BITOR(23, 10));"
   ],
   "params": [
     {

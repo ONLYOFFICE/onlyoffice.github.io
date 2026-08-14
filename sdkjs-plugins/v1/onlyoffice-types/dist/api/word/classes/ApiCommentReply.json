@@ -6,7 +6,7 @@
       "description": "Returns the comment reply author's name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/GetAuthorName/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First comment reply's author: \" + commentReply.GetAuthorName());\ndoc.Push(paragraph);"
+        "// How do I read the name of the person who wrote a comment reply in a document?\n\n// Identify who contributed a specific reply when auditing comment threads.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"First comment reply's author: \" + commentReply.GetAuthorName());\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Returns a type of the ApiCommentReply class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nlet type = commentReply.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + type);\ndoc.Push(paragraph);"
+        "// How do I confirm the object type of a comment reply in a document?\n\n// Verify that a retrieved object is a comment reply before performing type-specific operations.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nlet type = commentReply.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + type);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -30,7 +30,7 @@
       "description": "Returns the comment reply text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/GetText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nlet text = commentReply.GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply text: \" + text);\ndoc.Push(paragraph);"
+        "// How do I extract the written text from a comment reply in a document?\n\n// Retrieve a reply's message to display or process the reviewer's feedback programmatically.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\nlet text = commentReply.GetText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply text: \" + text);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -42,7 +42,7 @@
       "description": "Returns the user ID of the comment reply author.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/GetUserId/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetUserId(\"uid-2\");\nlet userId = commentReply.GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply user ID: \" + userId);\ndoc.Push(paragraph);"
+        "// How do I get the user ID linked to the author of a comment reply in a document?\n\n// Look up the unique identifier of a reply's author to match it against user account records.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetUserId(\"uid-2\");\nlet userId = commentReply.GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply user ID: \" + userId);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -54,7 +54,7 @@
       "description": "Sets the comment reply author's name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/SetAuthorName/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"John Smith\", \"uid-1\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetAuthorName(\"Mark Potato\");\nlet authorName = commentReply.GetAuthorName();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply author name: \" + authorName);\ndoc.Push(paragraph);"
+        "// How do I change the author name of a comment reply in a document?\n\n// Update who is shown as the reply author to reflect the correct contributor.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"John Smith\", \"uid-1\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetAuthorName(\"Mark Potato\");\nlet authorName = commentReply.GetAuthorName();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply author name: \" + authorName);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -73,7 +73,7 @@
       "description": "Sets the comment reply text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/SetText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetText(\"new reply\");"
+        "// How do I update the text of a comment reply in a document?\n\n// Overwrite an existing reply message with new content to correct or revise feedback.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetText(\"new reply\");"
       ],
       "params": [
         {
@@ -92,7 +92,7 @@
       "description": "Sets the user ID to the comment reply author.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCommentReply/Methods/SetUserId/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetUserId(\"uid-1\");\nlet userId = commentReply.GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply user ID: \" + userId);\ndoc.Push(paragraph);"
+        "// How do I set the user ID for a comment reply in a document?\n\n// Link a reply to a specific user account by updating the identifier attached to it.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text\");\nApi.AddComment(paragraph, \"comment\", \"John Smith\");\nlet comments = doc.GetAllComments();\ncomments[0].AddReply(\"reply1\", \"Mark Potato\", \"uid-2\", 0);\nlet commentReply = comments[0].GetReply(0);\ncommentReply.SetUserId(\"uid-1\");\nlet userId = commentReply.GetUserId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Comment reply user ID: \" + userId);\ndoc.Push(paragraph);"
       ],
       "params": [
         {

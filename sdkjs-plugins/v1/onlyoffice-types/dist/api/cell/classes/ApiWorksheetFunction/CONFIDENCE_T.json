@@ -2,7 +2,7 @@
   "description": "Returns the confidence interval for a population mean, using a Student's t distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CONFIDENCE_T/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.CONFIDENCE_T(0.5, 57, 8);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// What is the reliable range around your estimate in a spreadsheet?\n\n// Assess the accuracy of your average with statistical confidence in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.CONFIDENCE_T(0.5, 57, 8);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

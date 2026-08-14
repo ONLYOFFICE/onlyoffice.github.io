@@ -2,7 +2,7 @@
   "description": "Returns the smallest value for which the cumulative binomial distribution is greater than or equal to a criterion value.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BINOM_INV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.BINOM_INV(678, 0.1, 0.007);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// What is the smallest count of wins needed to hit a certain probability level in a spreadsheet?\n\n// Determine how many successful outcomes satisfy a probability target in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.BINOM_INV(678, 0.1, 0.007);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

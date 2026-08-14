@@ -1,0 +1,13 @@
+{
+  "description": "Returns the chart title text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/GetTitle/",
+  "examples": [
+    "// How do I retrieve the current title of a chart in a spreadsheet?\n\n// Access the label displayed at the top of a chart in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B1').SetValue(2014);\nworksheet.GetRange('C1').SetValue(2015);\nworksheet.GetRange('A2').SetValue('Revenue');\nworksheet.GetRange('B2').SetValue(200);\nworksheet.GetRange('C2').SetValue(240);\n\nconst chart = worksheet.AddChart(\n\t'Sheet1!A1:C2',\n\ttrue, 'bar3D', 2,\n\t100 * 36000, 70 * 36000, 0, 0, 4, 0\n);\nchart.SetTitle('Financial Overview', 13);\n\nconst chartTitle = chart.GetTitle();\nworksheet.GetRange('E1').SetValue('Chart Title: ' + chartTitle);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The chart title text or null if the chart has no title.",
+    "type": "string | null"
+  },
+  "signature": "GetTitle(): string | null"
+}

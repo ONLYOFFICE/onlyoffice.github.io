@@ -1,0 +1,18 @@
+{
+  "description": "Creates a text field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateTextField/",
+  "examples": [
+    "// How do I add a text field to a PDF?\n\n// Create a text field, insert it into a page, and set its value in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet textField = Api.CreateTextField([10, 10, 160, 32]);\npage.AddObject(textField);\ntextField.SetValue('This is the text field');"
+  ],
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiTextField"
+  },
+  "signature": "CreateTextField(rect: Rect): ApiTextField"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the number of whole workdays between two dates with custom weekend parameters.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NETWORKDAYS_INTL/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NETWORKDAYS_INTL(\"8/1/2017\", \"9/1/2017\", \"0000011\", \"8/16/2017\"));"
+    "// Calculate business days using a specific weekend pattern in a spreadsheet.\n\n// Exclude custom holidays and weekends from workday calculations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NETWORKDAYS_INTL(\"8/1/2017\", \"9/1/2017\", \"0000011\", \"8/16/2017\"));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the modified Macauley duration of a security with an assumed par value of $100.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MDURATION/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MDURATION(\"1/10/2018\", \"6/15/2019\", 0.08, 0.09, 4, 1));"
+    "// How do I assess how a bond's price will change with interest rate shifts in a spreadsheet?\n\n// Compute the weighted average time to receive a bond's cash flows in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MDURATION(\"1/10/2018\", \"6/15/2019\", 0.08, 0.09, 4, 1));"
   ],
   "params": [
     {

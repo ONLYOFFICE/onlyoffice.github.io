@@ -5,6 +5,9 @@
     "AddInteractiveSequence": {
       "description": "Creates an interactive animation sequence triggered by clicking on a specified object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/AddInteractiveSequence/",
+      "examples": [
+        "// How do I create an animation that responds to user clicks in a presentation?\n\n// Define an animation sequence that starts when a specific shape is clicked in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\n// Create trigger button\nconst button = Api.CreateShape(\n\t'roundRect',\n\t100 * 36000, 40 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(0, 150, 0)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nbutton.SetPosition(50 * 36000, 50 * 36000);\nconst buttonContent = button.GetDocContent();\nconst buttonPara = buttonContent.GetElement(0);\nbuttonPara.AddText('Click me!');\nslide.AddObject(button);\n\n// Create shape to animate\nconst animatedShape = Api.CreateShape(\n\t'star5',\n\t100 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(255, 200, 0)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nanimatedShape.SetPosition(200 * 36000, 100 * 36000);\nslide.AddObject(animatedShape);\n\n// Create interactive sequence\nconst timeLine = slide.GetTimeLine();\nconst interactiveSeq = timeLine.AddInteractiveSequence(button);\ninteractiveSeq.AddEffect(animatedShape, 'emphasisSpin', 'onclick');\n\nconst infoShape = Api.CreateShape(\n\t'rect',\n\t200 * 36000, 30 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(200, 200, 200)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ninfoShape.SetPosition(20 * 36000, 10 * 36000);\nconst content = infoShape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Click the green button to spin the star!');\nslide.AddObject(infoShape);"
+      ],
       "params": [
         {
           "description": "The drawing object that triggers the sequence when clicked.",
@@ -22,6 +25,9 @@
     "GetAllEffects": {
       "description": "Returns all animation effects for the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetAllEffects/",
+      "examples": [
+        "// How do I access the list of all animations on a slide in a presentation?\n\n// Collect every animation effect that has been added to a presentation slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\n// Create shapes\nconst shape1 = Api.CreateShape(\n\t'rect',\n\t100 * 36000, 80 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(61, 74, 107)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nshape1.SetPosition(50 * 36000, 80 * 36000);\nslide.AddObject(shape1);\n\nconst shape2 = Api.CreateShape(\n\t'ellipse',\n\t100 * 36000, 80 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(107, 61, 74)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nshape2.SetPosition(180 * 36000, 80 * 36000);\nslide.AddObject(shape2);\n\n// Add animations\nconst timeLine = slide.GetTimeLine();\nconst mainSequence = timeLine.GetMainSequence();\nmainSequence.AddEffect(shape1, 'entranceFade', 'onclick');\nmainSequence.AddEffect(shape2, 'entranceFlyIn', 'afterprevious');\n\n// Get all effects\nconst allEffects = timeLine.GetAllEffects();\n\nconst infoShape = Api.CreateShape(\n\t'rect',\n\t150 * 36000, 40 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(200, 200, 200)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ninfoShape.SetPosition(20 * 36000, 10 * 36000);\nconst content = infoShape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Total effects on slide: ' + allEffects.length);\nslide.AddObject(infoShape);"
+      ],
       "params": [],
       "returns": {
         "description": "Array of all animation effects.",
@@ -33,6 +39,9 @@
     "GetClassType": {
       "description": "Returns the type of the ApiTimeLine class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what type of object a timeline is in a presentation?\n\n// Get the class name identifier for a timeline in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst timeLine = slide.GetTimeLine();\nconst classType = timeLine.GetClassType();\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t200 * 36000, 50 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(61, 74, 107)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nshape.SetPosition(100 * 36000, 100 * 36000);\nconst content = shape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Class type: ' + classType);\nslide.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"timeLine\""
@@ -43,6 +52,9 @@
     "GetInteractiveSequences": {
       "description": "Returns all interactive animation sequences for the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetInteractiveSequences/",
+      "examples": [
+        "// How do I access the interactive animations that respond to clicks in a presentation?\n\n// Collect all animation sequences that are activated by user interactions in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\n// Create a trigger shape\nconst triggerShape = Api.CreateShape(\n\t'ellipse',\n\t80 * 36000, 80 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(255, 100, 100)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ntriggerShape.SetPosition(50 * 36000, 100 * 36000);\nslide.AddObject(triggerShape);\n\n// Create animated shape\nconst animatedShape = Api.CreateShape(\n\t'rect',\n\t150 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(61, 74, 107)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nanimatedShape.SetPosition(180 * 36000, 100 * 36000);\nslide.AddObject(animatedShape);\n\nconst timeLine = slide.GetTimeLine();\n\n// Create interactive sequence triggered by clicking the red circle\nconst interactiveSeq = timeLine.AddInteractiveSequence(triggerShape);\ninteractiveSeq.AddEffect(animatedShape, 'entranceFlyIn', 'onclick');\n\nconst sequences = timeLine.GetInteractiveSequences();\n\nconst infoShape = Api.CreateShape(\n\t'rect',\n\t200 * 36000, 40 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(200, 200, 200)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ninfoShape.SetPosition(20 * 36000, 10 * 36000);\nconst content = infoShape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Interactive sequences count: ' + sequences.length);\nslide.AddObject(infoShape);"
+      ],
       "params": [],
       "returns": {
         "description": "Array of interactive animation sequences.",
@@ -54,6 +66,9 @@
     "GetMainSequence": {
       "description": "Returns the main animation sequence for the slide.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiTimeLine/Methods/GetMainSequence/",
+      "examples": [
+        "// How do I get the default animation list for a slide in a presentation?\n\n// Retrieve the main timeline sequence where automatic animations are placed in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst shape = Api.CreateShape(\n\t'rect',\n\t150 * 36000, 100 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(61, 74, 107)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\nshape.SetPosition(100 * 36000, 100 * 36000);\nslide.AddObject(shape);\n\nconst timeLine = slide.GetTimeLine();\nconst mainSequence = timeLine.GetMainSequence();\n\n// Add a fade effect\nmainSequence.AddEffect(shape, 'entranceFade', 'onclick');\n\nconst infoShape = Api.CreateShape(\n\t'rect',\n\t150 * 36000, 40 * 36000,\n\tApi.CreateSolidFill(Api.CreateRGBColor(200, 200, 200)),\n\tApi.CreateStroke(0, Api.CreateNoFill())\n);\ninfoShape.SetPosition(20 * 36000, 10 * 36000);\nconst content = infoShape.GetDocContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('Effects in sequence: ' + mainSequence.GetCount());\nslide.AddObject(infoShape);"
+      ],
       "params": [],
       "returns": {
         "description": "The main animation sequence.",

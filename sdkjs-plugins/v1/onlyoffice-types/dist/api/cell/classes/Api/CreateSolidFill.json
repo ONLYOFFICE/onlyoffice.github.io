@@ -1,0 +1,19 @@
+{
+  "description": "Creates a solid fill to apply to the object using a selected solid color as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateSolidFill/",
+  "examples": [
+    "// How do I fill a shape with one uniform color in a spreadsheet?\n\n// Cover a shape's surface with a plain, unblended color to make it stand out in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet rgbColor = Api.RGB(255, 111, 61);\nlet fill = Api.CreateSolidFill(rgbColor);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 1, 3 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "The color used for the element fill.",
+      "name": "color",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreateSolidFill(color: ApiColor): ApiFill",
+  "since": "9.1.0"
+}

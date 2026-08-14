@@ -2,7 +2,7 @@
   "description": "Returns the sign of a number: **1** if the number is positive, **0** if the number is zero, or **-1** if the number is negative.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SIGN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SIGN(12));"
+    "// Determine the sign of a number using the SIGN function.\n\n// Apply the function to display the sign value in a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SIGN(12));"
   ],
   "params": [
     {

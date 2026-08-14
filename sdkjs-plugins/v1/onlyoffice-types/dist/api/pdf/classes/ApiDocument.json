@@ -25,6 +25,9 @@
     "AddPage": {
       "description": "Adds a new page to document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/AddPage/",
+      "examples": [
+        "// Can I add pages to a PDF document?\n\n// Place additional pages at specific positions in a PDF.\n\nlet doc = Api.GetDocument();\ndoc.AddPage(1);"
+      ],
       "params": [
         {
           "description": "The index where the page will be added.",
@@ -69,6 +72,9 @@
     "ApplyRedact": {
       "description": "Applies added redact.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/ApplyRedact/",
+      "examples": [
+        "// Can I remove information so it cannot be recovered in a PDF?\n\n// Cover and protect confidential areas in a PDF.\n\nlet doc = Api.GetDocument();\nlet redactAnnot = Api.CreateRedactAnnot([84, 60, 231, 70]);\nlet page = doc.GetPage(0);\npage.AddObject(redactAnnot);\ndoc.ApplyRedact();\nconsole.log('We added a redact annot to first page and applied it');"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -78,6 +84,9 @@
     "GetAllFields": {
       "description": "Gets list of all fields in document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/GetAllFields/",
+      "examples": [
+        "// How do I retrieve all the form fields from a PDF?\n\n// Locate and list each field's type in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\nlet comboboxField = Api.CreateComboboxField([10, 40, 160, 60]);\nlet listboxField = Api.CreateListboxField([10, 70, 100, 130]);\n\npage.AddObject(textField);\npage.AddObject(comboboxField);\npage.AddObject(listboxField);\n\nlet allFields = doc.GetAllFields();\nallFields.forEach(function(field) {\n    console.log(field.GetClassType());\n});"
+      ],
       "params": [],
       "returns": {
         "type": "ApiField[]"
@@ -106,6 +115,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiDocument class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/GetClassType/",
+      "examples": [
+        "// What kind of object am I working with in a PDF?\n\n// Display the classification of a PDF document in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 32]);\npage.AddObject(textField);\ntextField.SetValue(doc.GetClassType());"
+      ],
       "params": [],
       "returns": {
         "type": "\"document\""
@@ -159,6 +171,9 @@
     "GetFieldByName": {
       "description": "Gets field by it's name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/GetFieldByName/",
+      "examples": [
+        "// How do I search for a field using its assigned name in a PDF?\n\n// Retrieve a field and set its value by name in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 30]);\npage.AddObject(textField);\n\ntextField.SetFullName('Text field 1');\ntextField = doc.GetFieldByName('Text field 1');\ntextField.SetValue('Example value');"
+      ],
       "params": [
         {
           "description": "the full name parameter.",
@@ -184,6 +199,9 @@
     "GetPage": {
       "description": "Gets page by index from document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/GetPage/",
+      "examples": [
+        "// How do I work with a specific page in a PDF?\n\n// Retrieve a page and rotate it in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\npage.SetRotation(90);"
+      ],
       "params": [
         {
           "description": "page index.",
@@ -199,6 +217,9 @@
     "GetPagesCount": {
       "description": "Gets document pages count",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/GetPagesCount/",
+      "examples": [
+        "// How do I find out how many pages my PDF has?\n\n// Show the page count in a text field in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\nlet textField = Api.CreateTextField([10, 10, 160, 32]);\npage.AddObject(textField);\ntextField.SetValue(doc.GetPagesCount());"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -350,6 +371,9 @@
     "RemovePage": {
       "description": "Removes page by index from document\n<note> You can't delete last page </note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/RemovePage/",
+      "examples": [
+        "// How do I remove an unwanted page from a PDF?\n\n// Delete a specific page number from a PDF.\n\nlet doc = Api.GetDocument();\ndoc.AddPage(1);\ndoc.RemovePage(0);"
+      ],
       "params": [
         {
           "description": "page index",
@@ -365,6 +389,9 @@
     "SearchAndRedact": {
       "description": "Searchs words and adds redact to it.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDocument/Methods/SearchAndRedact/",
+      "examples": [
+        "// How do I black out certain words throughout a PDF?\n\n// Search for a word and apply redaction to all matches in a PDF.\n\nlet doc = Api.GetDocument();\ndoc.SearchAndRedact({text: \"Lorem\", matchCase: false, wholeWords: false});\ndoc.ApplyRedact();\nconsole.log(`We searched for the word lorem in the document and applied redact annotation to all matches.`);"
+      ],
       "params": [
         {
           "description": "The search options.",

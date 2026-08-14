@@ -2,7 +2,7 @@
   "description": "Converts an octal number to decimal.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/OCT2DEC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.OCT2DEC(7777777634));"
+    "// How do I convert an octal value to decimal in a spreadsheet?\n\n// Change an octal number into its decimal equivalent in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.OCT2DEC(7777777634));"
   ],
   "params": [
     {

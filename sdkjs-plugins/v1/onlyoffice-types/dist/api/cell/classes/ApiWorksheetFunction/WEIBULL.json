@@ -2,7 +2,7 @@
   "description": "Returns the Weibull distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WEIBULL/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet result = func.WEIBULL(12, 2, 5, true);\nworksheet.GetRange(\"B2\").SetValue(result);"
+    "// How do I compute the Weibull distribution for probability calculations in a spreadsheet?\n\n// Evaluate the Weibull probability distribution with specific parameters in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet result = func.WEIBULL(12, 2, 5, true);\nworksheet.GetRange(\"B2\").SetValue(result);"
   ],
   "params": [
     {

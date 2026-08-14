@@ -2,7 +2,7 @@
   "description": "Returns the sheet number of the reference sheet.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SHEET/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet(); \nlet func = Api.GetWorksheetFunction();\nlet result = func.SHEET(\"Sheet1\");\nworksheet.GetRange(\"C3\").SetValue(result);"
+    "// Retrieve the sheet number for a given sheet reference using the SHEET function.\n\n// Apply the function to display the sheet index in a cell.\n\nconst worksheet = Api.GetActiveSheet(); \nlet func = Api.WorksheetFunction;\nlet result = func.SHEET(\"Sheet1\");\nworksheet.GetRange(\"C3\").SetValue(result);"
   ],
   "params": [
     {

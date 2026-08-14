@@ -2,7 +2,7 @@
   "description": "Returns a number that is rounded down to the nearest integer or to the nearest multiple of significance. The number is always rounded down regardless of its sign.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FLOOR_PRECISE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR_PRECISE(-6.7, 2));"
+    "// How do I round down negative numbers consistently in a spreadsheet?\n\n// Always decrease a number to the nearest integer or increment, preserving its direction in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR_PRECISE(-6.7, 2));"
   ],
   "params": [
     {

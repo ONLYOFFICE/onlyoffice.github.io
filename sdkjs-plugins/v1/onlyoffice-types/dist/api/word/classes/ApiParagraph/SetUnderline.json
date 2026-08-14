@@ -2,7 +2,7 @@
   "description": "Specifies that the contents of this paragraph are displayed along with a line appearing directly below the character\n(less than all the spacing above and below the characters on the line).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetUnderline/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text underlined with a single line.\");\nparagraph.SetUnderline(true);"
+    "// How do I display a line beneath every word in a paragraph in a document?\n\n// Emphasize paragraph content by enabling underlining for the entire block of text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the text underlined with a single line.\");\nparagraph.SetUnderline(true);"
   ],
   "params": [
     {

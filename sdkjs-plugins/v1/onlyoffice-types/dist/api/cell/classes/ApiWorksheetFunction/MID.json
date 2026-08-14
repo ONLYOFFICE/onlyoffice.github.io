@@ -2,7 +2,7 @@
   "description": "Returns the characters from the middle of a text string, given a starting position and length.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MID/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MID(\"Online Office\", 3, 4));"
+    "// What characters can I pull from a text string in a spreadsheet?\n\n// Get a substring from a specific position and length in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MID(\"Online Office\", 3, 4));"
   ],
   "params": [
     {

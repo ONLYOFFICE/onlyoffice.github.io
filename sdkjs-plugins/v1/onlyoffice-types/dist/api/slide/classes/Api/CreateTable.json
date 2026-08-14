@@ -1,0 +1,23 @@
+{
+  "description": "Creates a table.\n:::danger[Breaking Change]\nStarting from version 9.4.0, the parameter order has been changed from `Api.CreateTable(cols, rows)` to `Api.CreateTable(rows, cols)`.\n:::",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateTable/",
+  "examples": [
+    "// How do I insert a table with specific dimensions in a presentation?\n\n// Create a table with 2 rows and 4 columns and place it on a slide in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nconst table = Api.CreateTable(2, 4);\nslide.RemoveAllObjects();\nslide.AddObject(table);"
+  ],
+  "params": [
+    {
+      "description": "Number of rows.",
+      "name": "rows",
+      "type": "unknown"
+    },
+    {
+      "description": "Number of columns.",
+      "name": "cols",
+      "type": "unknown"
+    }
+  ],
+  "returns": {
+    "type": "ApiTable"
+  },
+  "signature": "CreateTable(rows: unknown, cols: unknown): ApiTable"
+}

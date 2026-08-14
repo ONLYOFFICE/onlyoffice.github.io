@@ -2,7 +2,7 @@
   "description": "Converts text to a number, in a locale-independent way.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NUMBERVALUE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NUMBERVALUE(\"2.500,27\", \",\", \".\"));"
+    "// How do I parse a text value as a number in a spreadsheet?\n\n// Transform text with different regional number formats into numeric values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NUMBERVALUE(\"2.500,27\", \",\", \".\"));"
   ],
   "params": [
     {

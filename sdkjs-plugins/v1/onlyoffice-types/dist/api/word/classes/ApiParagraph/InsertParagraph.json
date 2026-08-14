@@ -2,7 +2,7 @@
   "description": "Inserts a paragraph at the specified position.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/InsertParagraph/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nparagraph1.AddText(\"This is just a sample text.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This paragraph was inserted here.\");\nparagraph1.InsertParagraph(paragraph2, \"after\", true);"
+    "// How do I add a paragraph after another paragraph in a document?\n\n// Place a second paragraph immediately after the first without pushing to the end in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph1 = doc.GetElement(0);\nparagraph1.AddText(\"This is just a sample text.\");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This paragraph was inserted here.\");\nparagraph1.InsertParagraph(paragraph2, \"after\", true);"
   ],
   "params": [
     {

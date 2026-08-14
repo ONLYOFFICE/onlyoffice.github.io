@@ -1,0 +1,19 @@
+{
+  "description": "Sets the paragraph text properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/SetTextPr/",
+  "examples": [
+    "// How do I style paragraph text with font settings in a PDF?\n\n// Modify appearance of text through property settings in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a sample text with the font size set to 15pt (30 half-points) and the font weight set to bold.');\n\nconst textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\nparagraph.SetTextPr(textPr);\npage.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The paragraph text properties.",
+      "name": "oTextPr",
+      "type": "ApiTextPr"
+    }
+  ],
+  "returns": {
+    "description": "returns false if param is invalid.",
+    "type": "boolean"
+  },
+  "signature": "SetTextPr(oTextPr: ApiTextPr): boolean"
+}

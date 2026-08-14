@@ -2,7 +2,7 @@
   "description": "Returns the two-tailed inverse of the Student's t-distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T_INV_2T/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T_INV_2T(0.5, 10));"
+    "// How do I find the critical t-value for a two-tailed test in a spreadsheet?\n\n// Get the inverse of the two-tailed t-distribution for hypothesis testing in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.T_INV_2T(0.5, 10));"
   ],
   "params": [
     {

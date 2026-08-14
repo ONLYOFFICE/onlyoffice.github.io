@@ -2,7 +2,7 @@
   "description": "Returns the yield on a security that pays periodic interest.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/YIELD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.YIELD(\"1/10/2018\", \"11/20/2019\", \"3.75%\", 90, 100, 4));"
+    "// How do I find the yield rate for a bond with regular interest payments in a spreadsheet?\n\n// Determine the annual return rate of a periodic-paying security in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.YIELD(\"1/10/2018\", \"11/20/2019\", \"3.75%\", 90, 100, 4));"
   ],
   "params": [
     {

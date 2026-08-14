@@ -2,7 +2,7 @@
   "description": "Returns the remainder after a number is divided by a divisor.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/MOD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.MOD(65, 7));"
+    "// What is the remainder from division in a spreadsheet?\n\n// Calculate what is left over after dividing two numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.MOD(65, 7));"
   ],
   "params": [
     {

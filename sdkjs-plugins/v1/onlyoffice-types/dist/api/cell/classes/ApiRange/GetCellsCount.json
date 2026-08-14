@@ -1,0 +1,13 @@
+{
+  "description": "Returns a number of cells in the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetCellsCount/",
+  "examples": [
+    "// How do I find out how many cells are in a range in a spreadsheet?\n\n// Confirm the expected cell count by writing the total next to the filled range.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:D10\");\nrange.SetValue(\"I was selected\");\nworksheet.GetRange(\"A11\").SetValue(\"Cells count in the selected range should be 40: \" + range.GetCellsCount());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetCellsCount(): number",
+  "since": "9.1.0"
+}

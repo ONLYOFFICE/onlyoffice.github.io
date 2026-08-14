@@ -1,0 +1,18 @@
+{
+  "description": "Creates a combobox field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateComboboxField/",
+  "examples": [
+    "// How do I add a combobox to a form in a PDF?\n\n// Populate a dropdown list with selectable choices in a PDF.\n\nlet doc = Api.GetDocument();\nlet page = doc.GetPage(0);\n\nlet comboboxField = Api.CreateComboboxField([10, 10, 160, 32]);\npage.AddObject(comboboxField);\ncomboboxField.AddOption('Option 1');\ncomboboxField.AddOption('Option 2');\ncomboboxField.AddOption('Option 3');"
+  ],
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiComboboxField"
+  },
+  "signature": "CreateComboboxField(rect: Rect): ApiComboboxField"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the normal distribution for the specified mean and standard deviation.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORM_DIST/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet valueArr = [36, 6, 7, false];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet x = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\nlet cumulative = worksheet.GetRange(\"A4\").GetValue();\nlet func = Api.GetWorksheetFunction();\nlet normalDist = func.NORM_DIST(x, mean, standardDeviation, cumulative);\nworksheet.GetRange(\"C1\").SetValue(normalDist);"
+    "// How do I compute the normal distribution in a spreadsheet?\n\n// Find the probability of a value in a normal distribution with specific mean and standard deviation in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet valueArr = [36, 6, 7, false];\n\n// Place the numbers in cells\nfor (let i = 0; i < valueArr.length; i++) {\n  worksheet.GetRange(\"A\" + (i + 1)).SetValue(valueArr[i]);\n}\n\n//method params\nlet x = worksheet.GetRange(\"A1\").GetValue();\nlet mean = worksheet.GetRange(\"A2\").GetValue();\nlet standardDeviation = worksheet.GetRange(\"A3\").GetValue();\nlet cumulative = worksheet.GetRange(\"A4\").GetValue();\nlet func = Api.WorksheetFunction;\nlet normalDist = func.NORM_DIST(x, mean, standardDeviation, cumulative);\nworksheet.GetRange(\"C1\").SetValue(normalDist);"
   ],
   "params": [
     {

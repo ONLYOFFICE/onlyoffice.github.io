@@ -1,0 +1,13 @@
+{
+  "description": "Creates an auto-color.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/AutoColor/",
+  "examples": [
+    "// How do I set text to use the automatic color in a document?\n\n// Let the editor choose the appropriate text color automatically in a document.\n\nconst doc = Api.GetDocument();\nconst color = Api.AutoColor();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('This text is in auto color.');\nparagraph.SetColor(color);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Instance of ApiColor with 'auto' type.",
+    "type": "ApiColor"
+  },
+  "signature": "AutoColor(): ApiColor"
+}

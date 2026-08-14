@@ -5,6 +5,9 @@
     "AddElement": {
       "description": "Adds a rich paragraph using its position in rich content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/AddElement/",
+      "examples": [
+        "// How do I add text blocks to rich content in a PDF?\n\n// Place new elements within text formatting containers in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = Api.CreateRichParagraph();\npara.AddText(\"Example text\");\nrichContent.AddElement(0, para);\n\nconsole.log(`We added new paragraph to content`);"
+      ],
       "params": [
         {
           "description": "The position where the rich paragraph will be added.",
@@ -25,6 +28,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiRichContent class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetClassType/",
+      "examples": [
+        "// How do I check the category of a rich content container in a PDF?\n\n// Determine the classification of formatted text content in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nconsole.log(`Object class type is: ${richContent.GetClassType()}`);"
+      ],
       "params": [],
       "returns": {
         "type": "\"richContent\""
@@ -34,6 +40,9 @@
     "GetContent": {
       "description": "Returns an array of rich paragraphs from the current rich content object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetContent/",
+      "examples": [
+        "// How do I access all text elements in rich content in a PDF?\n\n// Read the complete list of paragraphs from formatted text in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = Api.CreateRichParagraph();\npara.AddText(\"Example text\");\nrichContent.Push(para);\n\nlet allParas = richContent.GetContent();\n\nconsole.log(`Rich content has ${allParas.length} paragraphs`);"
+      ],
       "params": [
         {
           "description": "Specifies if the copies of the document elements will be returned or not.",
@@ -49,6 +58,9 @@
     "GetCurrentParagraph": {
       "description": "Returns the current paragraph where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetCurrentParagraph/",
+      "examples": [
+        "// How do I get the paragraph I am working on in rich content in a PDF?\n\n// Retrieve the paragraph being modified in formatted text in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetCurrentParagraph();\npara.AddText(\"Example text\");\n\nconsole.log(`We added some text to current paragraph`);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRichParagraph"
@@ -58,6 +70,9 @@
     "GetCurrentRun": {
       "description": "Returns the current run where the cursor is located.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetCurrentRun/",
+      "examples": [
+        "// How do I get the text run I am working on in rich content in a PDF?\n\n// Retrieve the text segment being modified in formatted content in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet run = richContent.GetCurrentRun();\nrun.AddText(\"Example text\");\n\nconsole.log(`We added some text to current run`);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRichRun"
@@ -67,6 +82,9 @@
     "GetElement": {
       "description": "Returns an rich paragraph by its position in the content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/GetElement/",
+      "examples": [
+        "// How do I get a particular text element from rich content in a PDF?\n\n// Retrieve a single paragraph from a list of formatted text in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = richContent.GetElement(0);\nconsole.log(`First element is: ${para.GetClassType()}`);"
+      ],
       "params": [
         {
           "description": "The element position that will be taken from the content.",
@@ -82,6 +100,9 @@
     "Push": {
       "description": "Pushes a rich paragraph to a rich content.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiRichContent/Methods/Push/",
+      "examples": [
+        "// How do I insert elements into rich content in a PDF?\n\n// Push a new paragraph into the content area in a PDF.\n\nlet doc = Api.GetDocument();\nlet freeTextAnnot = Api.CreateFreeTextAnnot([160, 50, 360, 135]);\nlet page = doc.GetPage(0);\npage.AddObject(freeTextAnnot);\nfreeTextAnnot.SetIntent(\"freeTextCallout\");\nfreeTextAnnot.SetCallout([{x: 161, y: 51}, {x: 249, y: 125}, {x: 261, y: 125}]);\nfreeTextAnnot.SetRectDiff([100, 64, 0.5, 0.5]);\n\nlet richContent = freeTextAnnot.GetContent();\nlet para = Api.CreateRichParagraph();\npara.AddText(\"Example text\");\nrichContent.Push(para);\n\nconsole.log(`We pushed new paragraph to content`);"
+      ],
       "params": [
         {
           "description": "The rich paragraph which will be pushed to the rich content.",

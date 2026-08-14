@@ -2,7 +2,7 @@
   "description": "Returns the sum-of-years' digits depreciation of an asset for a specified period.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SYD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SYD(3500, 500, 5, 3));"
+    "// Calculate sum-of-years' digits depreciation using the SYD function.\n\n// Returns the depreciation amount for the specified period.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SYD(3500, 500, 5, 3));"
   ],
   "params": [
     {

@@ -1,6 +1,9 @@
 {
   "description": "Moves a cursor to the start of the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorToStart/",
+  "examples": [
+    "// How do I place the cursor at the first position in a document?\n\n// Prepend text before all existing content by jumping the cursor to the start in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('This is the first paragraph.');\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This is the second paragraph.');\ndoc.Push(paragraph2);\n\ndoc.MoveCursorToStart();\ndoc.EnterText('Cursor was moved to the beginning. ');"
+  ],
   "params": [],
   "returns": {
     "type": "boolean"

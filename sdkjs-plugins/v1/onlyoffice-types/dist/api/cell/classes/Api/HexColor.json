@@ -1,0 +1,18 @@
+{
+  "description": "Creates a color from a HEX string.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/HexColor/",
+  "examples": [
+    "// How do I use a hex color code to fill a shape in a spreadsheet?\n\n// Paint a shape with a custom hex color in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst color = Api.HexColor('#DECADE');\nconst fill = Api.CreateSolidFill(color);\nconst stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(0, 0, 0)));\nworksheet.AddShape(\"rect\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);"
+  ],
+  "params": [
+    {
+      "description": "The HEX string representing a color.",
+      "name": "hexString",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "HexColor(hexString: string): ApiColor"
+}

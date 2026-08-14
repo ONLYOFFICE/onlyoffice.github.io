@@ -2,7 +2,7 @@
   "description": "Returns the depreciation of an asset for a specified period using the double-declining balance method or some other method you specify.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DDB/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DDB(3500, 500, 5, 1, 2));"
+    "// What is the depreciation amount for an asset in a specific period in a spreadsheet?\n\n// Determine how much value your asset loses with accelerated depreciation in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DDB(3500, 500, 5, 1, 2));"
   ],
   "params": [
     {

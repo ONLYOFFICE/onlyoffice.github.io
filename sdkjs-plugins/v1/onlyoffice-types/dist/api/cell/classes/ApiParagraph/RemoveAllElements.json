@@ -1,0 +1,12 @@
+{
+  "description": "Removes all the elements from the current paragraph.\n<note>When all the elements are removed from the paragraph, a new empty run is automatically created. If you want to add\ncontent to this run, use the {@link ApiParagraph#GetElement} method.</note>",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/RemoveAllElements/",
+  "examples": [
+    "// How do I wipe all content out of a paragraph in a spreadsheet?\n\n// Reset a paragraph to empty before refilling it with fresh text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"This is the first text run in the current paragraph.\");\nparagraph.AddElement(run);\nparagraph.RemoveAllElements();\nrun = Api.CreateRun();\nrun.AddText(\"We removed all the paragraph elements and added a new text run inside it.\");\nparagraph.AddElement(run);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "RemoveAllElements(): boolean"
+}

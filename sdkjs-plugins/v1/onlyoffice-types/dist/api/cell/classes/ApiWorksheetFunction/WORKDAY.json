@@ -2,7 +2,7 @@
   "description": "Returns the serial number of the date before or after a specified number of workdays.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WORKDAY/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.WORKDAY(\"12/7/1981\", 56); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I calculate a new date by adding or subtracting workdays in a spreadsheet?\n\n// Determine a future or past workday date based on a number of working days in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.WORKDAY(\"12/7/1981\", 56); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

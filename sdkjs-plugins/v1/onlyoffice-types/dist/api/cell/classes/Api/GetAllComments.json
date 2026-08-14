@@ -1,0 +1,12 @@
+{
+  "description": "Returns all comments from the current workbook including comments from all worksheets.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/GetAllComments/",
+  "examples": [
+    "// How do I retrieve all comments that exist anywhere in a spreadsheet?\n\n// Gather every annotation added by any author in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();Api.AddComment(\"Comment 1\", \"John Smith\");\nworksheet.GetRange(\"A4\").AddComment(\"Comment 2\", \"Mark Potato\");\nlet arrComments = Api.GetAllComments();\nworksheet.GetRange(\"A1\").SetValue(\"Comment text: \" + arrComments[1].GetText());\nworksheet.GetRange(\"A2\").SetValue(\"Comment author: \" + arrComments[1].GetAuthorName());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiComment[]"
+  },
+  "signature": "GetAllComments(): ApiComment[]"
+}

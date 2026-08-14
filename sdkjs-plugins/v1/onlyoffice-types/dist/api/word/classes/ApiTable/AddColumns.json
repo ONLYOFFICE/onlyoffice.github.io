@@ -2,7 +2,7 @@
   "description": "Adds the new columns to the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddColumns/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet cell = table.GetCell(0, 0).GetContent().GetElement(0).AddText(\"Two new columns were added after this cell.\");\ntable.AddColumns(cell, 2, false);"
+    "// How do I insert additional columns into a table in a document?\n\n// Expand a table sideways by placing new columns at a chosen position in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet cell = table.GetCell(0, 0).GetContent().GetElement(0).AddText(\"Two new columns were added after this cell.\");\ntable.AddColumns(cell, 2, false);"
   ],
   "params": [
     {

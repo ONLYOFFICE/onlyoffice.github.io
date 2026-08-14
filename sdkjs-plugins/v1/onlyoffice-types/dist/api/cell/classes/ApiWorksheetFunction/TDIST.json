@@ -2,7 +2,7 @@
   "description": "Returns the Student's t-distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TDIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.TDIST(1.5, 10, 1);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Calculate the probability for the t-distribution with given degrees of freedom.\n\n// Apply the TDIST function with t-value and degrees of freedom parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.TDIST(1.5, 10, 1);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

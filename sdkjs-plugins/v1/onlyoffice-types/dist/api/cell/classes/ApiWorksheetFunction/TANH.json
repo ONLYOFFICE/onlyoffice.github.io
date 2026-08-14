@@ -2,7 +2,7 @@
   "description": "Returns the hyperbolic tangent of a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TANH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TANH(6));"
+    "// Calculate the hyperbolic tangent of a number using the TANH function.\n\n// Returns the hyperbolic tangent value of the specified number.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TANH(6));"
   ],
   "params": [
     {

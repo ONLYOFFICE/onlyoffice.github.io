@@ -5,6 +5,9 @@
     "ArcTo": {
       "description": "Draws an arc from the current point using the specified width and height radii, start angle, and sweep angle.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/ArcTo/",
+      "examples": [
+        "// How do I add an arc to a custom shape in a PDF?\n\n// Connect two points with a curved arc segment in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(120 * 36000);\npath.SetHeight(120 * 36000);\npath.MoveTo(0, 60 * 36000);\npath.CubicBezTo(0, 0, 60 * 36000, 0, 60 * 36000, 60 * 36000);\npath.QuadBezTo(120 * 36000, 60 * 36000, 120 * 36000, 120 * 36000);\npath.ArcTo(60 * 36000, 60 * 36000, 0, 10800000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 120 * 36000, 120 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The width radius.",
@@ -36,6 +39,9 @@
     "Close": {
       "description": "Closes the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/Close/",
+      "examples": [
+        "// How do I finish drawing a closed shape in a PDF?\n\n// Seal the outline of a custom shape by closing its path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "void"
@@ -46,6 +52,9 @@
     "CubicBezTo": {
       "description": "Draws a cubic Bezier curve from the current point to the specified end point using two control points.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/CubicBezTo/",
+      "examples": [
+        "// How do I create a curved path segment in a PDF?\n\n// Add a cubic curve that bends toward control points in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(120 * 36000);\npath.SetHeight(120 * 36000);\npath.MoveTo(0, 60 * 36000);\npath.CubicBezTo(0, 0, 60 * 36000, 0, 60 * 36000, 60 * 36000);\npath.QuadBezTo(120 * 36000, 60 * 36000, 120 * 36000, 120 * 36000);\npath.ArcTo(60 * 36000, 60 * 36000, 0, 10800000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 120 * 36000, 120 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The X coordinate of the first control point.",
@@ -87,6 +96,9 @@
     "GetCommand": {
       "description": "Returns a specific path command by its index.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetCommand/",
+      "examples": [
+        "// How do I access one step of a shape's outline in a PDF?\n\n// Find and inspect an individual command that builds a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The path command index.",
@@ -103,6 +115,9 @@
     "GetCommandCount": {
       "description": "Returns the number of commands for the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetCommandCount/",
+      "examples": [
+        "// How many drawing steps does a shape have in a PDF?\n\n// Find out how many commands are used to create a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -113,6 +128,9 @@
     "GetCommands": {
       "description": "Returns all commands of the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetCommands/",
+      "examples": [
+        "// How do I access all steps of a shape's outline in a PDF?\n\n// Get the complete list of commands that build a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet commands = path.GetCommands();\nlet cmd = path.GetCommand(0);\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Commands: \" + path.GetCommandCount());\nparagraph.AddText(\", First: \" + cmd.GetType() + \" at (\" + cmd.GetX() + \", \" + cmd.GetY() + \")\");\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPathCommand[]"
@@ -123,6 +141,9 @@
     "GetFill": {
       "description": "Returns the fill type of the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetFill/",
+      "examples": [
+        "// What fill does a custom shape have in a PDF?\n\n// Find out if and how the inside of a shape is filled in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"cloud\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet paths = geometry.GetPaths();\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Paths: \" + geometry.GetPathCount() + \", Width: \" + path.GetWidth());\nparagraph.AddText(\", Height: \" + path.GetHeight() + \", Stroke: \" + path.GetStroke());\nparagraph.AddText(\", Fill: \" + path.GetFill() + \", Array: \" + paths.length);\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "PathFillType"
@@ -133,6 +154,9 @@
     "GetHeight": {
       "description": "Returns the height of the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetHeight/",
+      "examples": [
+        "// How do I find the height of a custom shape in a PDF?\n\n// Read the vertical measurement of a shape's outline bounds in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"cloud\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet paths = geometry.GetPaths();\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Paths: \" + geometry.GetPathCount() + \", Width: \" + path.GetWidth());\nparagraph.AddText(\", Height: \" + path.GetHeight() + \", Stroke: \" + path.GetStroke());\nparagraph.AddText(\", Fill: \" + path.GetFill() + \", Array: \" + paths.length);\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -143,6 +167,9 @@
     "GetStroke": {
       "description": "Returns true if the current path is stroked, otherwise false.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetStroke/",
+      "examples": [
+        "// Does a custom shape have a visible border in a PDF?\n\n// Read the outline settings of a shape to see its stroke properties in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"cloud\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet paths = geometry.GetPaths();\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Paths: \" + geometry.GetPathCount() + \", Width: \" + path.GetWidth());\nparagraph.AddText(\", Height: \" + path.GetHeight() + \", Stroke: \" + path.GetStroke());\nparagraph.AddText(\", Fill: \" + path.GetFill() + \", Array: \" + paths.length);\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -153,6 +180,9 @@
     "GetWidth": {
       "description": "Returns the width of the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/GetWidth/",
+      "examples": [
+        "// What dimensions do my drawn shapes have in a PDF?\n\n// Retrieve all measurements of a shape path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"cloud\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nlet path = geometry.GetPath(0);\nlet paths = geometry.GetPaths();\nlet paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText(\"Paths: \" + geometry.GetPathCount() + \", Width: \" + path.GetWidth());\nparagraph.AddText(\", Height: \" + path.GetHeight() + \", Stroke: \" + path.GetStroke());\nparagraph.AddText(\", Fill: \" + path.GetFill() + \", Array: \" + paths.length);\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -163,6 +193,9 @@
     "LineTo": {
       "description": "Draws a line from the current point to the specified coordinates.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/LineTo/",
+      "examples": [
+        "// How do I connect points with lines in a PDF?\n\n// Add line segments to create custom shapes in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The X coordinate.",
@@ -184,6 +217,9 @@
     "MoveTo": {
       "description": "Moves the current path to the specified coordinates.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/MoveTo/",
+      "examples": [
+        "// Where do I begin drawing a custom shape in a PDF?\n\n// Position the cursor before adding lines to a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The X coordinate.",
@@ -205,6 +241,9 @@
     "QuadBezTo": {
       "description": "Draws a quadratic Bezier curve from the current point to the specified end point using a control point.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/QuadBezTo/",
+      "examples": [
+        "// How do I create curved shapes in a PDF?\n\n// Add a curved segment to a path using control points in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(120 * 36000);\npath.SetHeight(120 * 36000);\npath.MoveTo(0, 60 * 36000);\npath.CubicBezTo(0, 0, 60 * 36000, 0, 60 * 36000, 60 * 36000);\npath.QuadBezTo(120 * 36000, 60 * 36000, 120 * 36000, 120 * 36000);\npath.ArcTo(60 * 36000, 60 * 36000, 0, 10800000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 120 * 36000, 120 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The X coordinate of the control point.",
@@ -236,6 +275,9 @@
     "SetFill": {
       "description": "Sets the fill type to the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/SetFill/",
+      "examples": [
+        "// How do I color the interior of a shape in a PDF?\n\n// Enable shading for a custom drawn shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The path fill type.",
@@ -252,6 +294,9 @@
     "SetHeight": {
       "description": "Sets the height to the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/SetHeight/",
+      "examples": [
+        "// What is the height of my custom shape in a PDF?\n\n// Define the tall dimension of a drawn path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The path height in EMU.",
@@ -268,6 +313,9 @@
     "SetStroke": {
       "description": "Sets whether the current path is stroked.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/SetStroke/",
+      "examples": [
+        "// How do I add a border to a shape in a PDF?\n\n// Enable or disable the outline of a custom shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "Specifies if the path is stroked (true) or not (false).",
@@ -284,6 +332,9 @@
     "SetWidth": {
       "description": "Sets the width to the current path.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiPath/Methods/SetWidth/",
+      "examples": [
+        "// How wide should my custom shape be in a PDF?\n\n// Specify the left-to-right dimension of a drawn path in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.RGB(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The path width in EMU.",

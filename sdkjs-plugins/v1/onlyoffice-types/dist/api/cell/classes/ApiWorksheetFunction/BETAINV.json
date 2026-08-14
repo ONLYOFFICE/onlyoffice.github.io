@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the cumulative beta probability density function for a specified beta distribution (BETADIST).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BETAINV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BETAINV(0.2, 4, 5));"
+    "// How do I locate the data point that matches a given probability level in a spreadsheet?\n\n// Reverse-calculate from probability to the original data value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BETAINV(0.2, 4, 5));"
   ],
   "params": [
     {

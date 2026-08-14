@@ -6,7 +6,7 @@
       "description": "Deletes the specified item in the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/Delete/",
       "examples": [
-        "// todo_example"
+        "// How do I remove a single item from a dropdown list content control in a document?\n\n// Reduce the available choices in a list control by permanently removing one option in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Count of items inside drop-down before delete: \" + contentControlList.GetElementsCount());\nparagraph.AddLineBreak();\nlistItem.Delete();\nparagraph.AddText(\"Count of items inside drop-down after delete: \" + contentControlList.GetElementsCount());\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Returns a type of the ApiContentControlListEntry class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetClassType/",
       "examples": [
-        "// todo_example"
+        "// How do I find out the class type of a content control list entry in a document?\n\n// Confirm the object kind of an individual list option by checking its type identifier in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nlet classType = listItem.GetClassType();\nparagraph.AddText(\"Class type of the content control list entry:\" + classType);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -30,7 +30,7 @@
       "description": "Returns an index of the content control list item in the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetIndex/",
       "examples": [
-        "// todo_example"
+        "// How do I find the index of a specific item in a dropdown list in a document?\n\n// Check where a list entry sits when you need to track or compare item order in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet paragraph = Api.CreateParagraph();\nlet contentControlItem = contentControlList.GetItem(1);\nlet index = contentControlItem.GetIndex();\nparagraph.AddText(\"Index of the content control list entry:\" + index);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -42,7 +42,7 @@
       "description": "Returns a parent of the content control list item in the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetParent/",
       "examples": [
-        "// todo_example"
+        "// How do I get the parent control of a list entry in a document?\n\n// Trace ownership from a list item back to its containing control when you need to work with the control directly in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet item = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nlet contentControl = item.GetParent();\nparagraph.AddText(\"Class of item list item parent: \" + contentControlList.GetClassType());\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -54,7 +54,7 @@
       "description": "Returns a String that represents the display text of a list item for the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetText/",
       "examples": [
-        "// todo_example"
+        "// How do I get the visible text of a list item in a document?\n\n// Retrieve the label shown to the user when you need to verify or compare entry names in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(2);\nlet paragraph = Api.CreateParagraph();\nlet text = listItem.GetText();\nparagraph.AddText(\"Text of the content control list entry: \" + text);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -66,7 +66,7 @@
       "description": "Returns a String that represents the value of a list item for the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/GetValue/",
       "examples": [
-        "// todo_example"
+        "// How do I get the value assigned to a list item in a document?\n\n// Extract the programmatic value of an entry when the display label alone is not enough in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(1);\nlet paragraph = Api.CreateParagraph();\nlet value = listItem.GetValue();\nparagraph.AddText(\"Value of the content control list entry: \" + value);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -78,7 +78,7 @@
       "description": "Moves the current item in the parent combo box / drop-down list content control down one element, so that it is after the item that originally followed it.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/MoveDown/",
       "examples": [
-        "// todo_example"
+        "// How do I move a list item down in a dropdown control in a document?\n\n// Reorder entries by pushing an item toward the end of the list when adjusting option priority in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlistItem.MoveDown();\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);"
       ],
       "params": [],
       "returns": {
@@ -90,7 +90,7 @@
       "description": "Moves the current item in the parent combo box / drop-down list content control up one element.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/MoveUp/",
       "examples": [
-        "// todo_example"
+        "// How do I move a list item up in a dropdown control in a document?\n\n// Reorder entries by promoting an item toward the top of the list when adjusting option priority in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(3);\nlistItem.MoveUp();\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);"
       ],
       "params": [],
       "returns": {
@@ -102,7 +102,7 @@
       "description": "Selects the list entry in the combo box / drop-down list content control and sets the text of the content control to the selected item value.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/Select/",
       "examples": [
-        "// todo_example"
+        "// How do I programmatically select a specific list item in a dropdown control in a document?\n\n// Set the current choice in a combo box or dropdown when you need a default or computed selection in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(3);\nlistItem.Select();"
       ],
       "params": [],
       "returns": {
@@ -114,7 +114,7 @@
       "description": "Sets an index to the content control list item in the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetIndex/",
       "examples": [
-        "// todo_example"
+        "// How do I change the order of a list item by setting its index in a document?\n\n// Reposition an entry to a specific slot when you need to reorganize a list programmatically in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet paragraph = doc.GetElement(0);\nlet contentControlList = cc.GetDropdownList();\nparagraph.Push(cc);\nparagraph = Api.CreateParagraph();\nlet firstItem = contentControlList.GetItem(0);\nlet secondItem = contentControlList.GetItem(1);\nlet text = firstItem.GetText();\nparagraph.AddText(\"Text of the first item: \" + text);\nsecondItem.SetIndex(0);\nfirstItem = contentControlList.GetItem(0);\ntext = firstItem.GetText();\nparagraph.AddText(\"\\nText of the first item after change index: \" + text);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [
         {
@@ -132,7 +132,7 @@
       "description": "Sets a String that represents the display text of a list item for the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetText/",
       "examples": [
-        "// todo_example"
+        "// How do I change the visible text of a list item in a document?\n\n// Rename an option in a list when the label needs to reflect updated content or terminology in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet paragraph = doc.GetElement(0);\nlet contentControlList = cc.GetDropdownList();\nparagraph.Push(cc);\nlet listItem = contentControlList.GetItem(1);\nlistItem.SetText(\"Saturn\");\nlistItem.Select();"
       ],
       "params": [
         {
@@ -150,7 +150,7 @@
       "description": "Sets a String that represents the value of a list item for the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlListEntry/Methods/SetValue/",
       "examples": [
-        "// todo_example"
+        "// How do I change the stored value of a list item in a document?\n\n// Update the programmatic value of an entry independently of its display label in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}]);\nlet paragraph = doc.GetElement(0);\nlet contentControlList = cc.GetDropdownList();\nparagraph.Push(cc);\nlet listItem = contentControlList.GetItem(2);\nlistItem.SetValue(\"Home\");\nlistItem.Select();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Value of third item in list: \" + listItem.GetValue());\ndoc.AddElement(0, paragraph);"
       ],
       "params": [
         {

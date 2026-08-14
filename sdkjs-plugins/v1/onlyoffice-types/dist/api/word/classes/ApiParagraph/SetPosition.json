@@ -2,7 +2,7 @@
   "description": "Specifies an amount by which text is raised or lowered for this paragraph in relation to the default\nbaseline of the surrounding non-positioned text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetPosition/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. \");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is a paragraph with the text lowered 15 points (30 half-points).\");\ndoc.Push(paragraph2);\nparagraph2.SetPosition(-30);"
+    "// How do I shift a paragraph's text up or down from its normal vertical position in a document?\n\n// Offset a paragraph vertically to achieve a superscript or subscript-like effect in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. \");\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"This is a paragraph with the text lowered 15 points (30 half-points).\");\ndoc.Push(paragraph2);\nparagraph2.SetPosition(-30);"
   ],
   "params": [
     {

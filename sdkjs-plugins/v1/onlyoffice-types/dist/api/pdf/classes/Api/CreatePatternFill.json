@@ -1,0 +1,29 @@
+{
+  "description": "Creates a pattern fill to apply to the object using the selected pattern as the object background.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreatePatternFill/",
+  "examples": [
+    "// How do I add a pattern background to a drawing in a PDF?\n\n// Fill a shape with a repeating pattern using custom colors in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreatePatternFill(\"dashDnDiag\", Api.RGB(255, 111, 61), Api.RGB(51, 51, 51));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\npage.AddObject(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The pattern type used for the fill selected from one of the available pattern types.",
+      "name": "patternType",
+      "type": "PatternType"
+    },
+    {
+      "description": "The background color used for the pattern creation.",
+      "name": "bgColor",
+      "type": "ApiColor"
+    },
+    {
+      "description": "The foreground color used for the pattern creation.",
+      "name": "fgColor",
+      "type": "ApiColor"
+    }
+  ],
+  "returns": {
+    "type": "ApiFill"
+  },
+  "signature": "CreatePatternFill(patternType: PatternType, bgColor: ApiColor, fgColor: ApiColor): ApiFill",
+  "since": "9.1.0"
+}

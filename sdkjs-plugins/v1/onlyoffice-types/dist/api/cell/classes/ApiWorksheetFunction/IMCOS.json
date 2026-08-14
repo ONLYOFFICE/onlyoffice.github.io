@@ -2,7 +2,7 @@
   "description": "Returns the cosine of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMCOS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMCOS(\"-2+2.5i\"));"
+    "// How do I calculate the cosine of a complex number in a spreadsheet?\n\n// Apply the cosine function to a complex number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMCOS(\"-2+2.5i\"));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the current date in the *MM/dd/yy* format.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TODAY/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TODAY());"
+    "// Retrieve the system date and display it with the built-in time format.\n\n// Apply the TODAY function to insert the current date into a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TODAY());"
   ],
   "params": [],
   "returns": {

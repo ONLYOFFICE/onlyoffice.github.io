@@ -1,0 +1,15 @@
+{
+  "description": "Creates a button field.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateButtonField/",
+  "params": [
+    {
+      "description": "widget rect",
+      "name": "rect",
+      "type": "Rect"
+    }
+  ],
+  "returns": {
+    "type": "ApiButtonField"
+  },
+  "signature": "CreateButtonField(rect: Rect): ApiButtonField"
+}

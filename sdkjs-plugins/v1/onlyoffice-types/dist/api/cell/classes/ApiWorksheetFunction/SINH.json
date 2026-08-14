@@ -2,7 +2,7 @@
   "description": "Returns the hyperbolic sine of a number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SINH/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SINH(4));"
+    "// Calculate the hyperbolic sine value using the SINH function.\n\n// Apply the function to compute and display the result in a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SINH(4));"
   ],
   "params": [
     {

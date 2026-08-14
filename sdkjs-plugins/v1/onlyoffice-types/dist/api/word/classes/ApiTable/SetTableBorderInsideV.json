@@ -2,7 +2,7 @@
   "description": "Specifies the border which will be displayed on all vertical table cell borders which are not on the outmost edge\nof the parent table (all vertical borders which are not the leftmost or rightmost borders).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideV/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the inside vertical 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderInsideV(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+    "// How do I draw vertical dividing lines between the inner columns of a table in a document?\n\n// Separate table columns from each other with interior vertical borders in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the inside vertical 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderInsideV(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
   ],
   "params": [
     {

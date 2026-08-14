@@ -2,7 +2,7 @@
   "description": "Returns a number matching an error value.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ERROR_TYPE/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet nonPositiveNum = 0;\nlet logResult = func.LOG(nonPositiveNum);\nworksheet.GetRange(\"B3\").SetValue(logResult);\nworksheet.GetRange(\"C3\").SetValue(func.ERROR_TYPE(logResult));"
+    "// Get the error type code from the value.\n\n// Identify error types using ERROR_TYPE function in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet nonPositiveNum = 0;\nlet logResult = func.LOG(nonPositiveNum);\nworksheet.GetRange(\"B3\").SetValue(logResult);\nworksheet.GetRange(\"C3\").SetValue(func.ERROR_TYPE(logResult));"
   ],
   "params": [
     {

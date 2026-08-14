@@ -2,7 +2,7 @@
   "description": "Returns the quotient of two complex numbers.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMDIV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMDIV(\"-2+2.5i\", \"0.1+1.5j\"));"
+    "// How do I divide two complex numbers in a spreadsheet?\n\n// Get the quotient of complex numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMDIV(\"-2+2.5i\", \"0.1+1.5j\"));"
   ],
   "params": [
     {

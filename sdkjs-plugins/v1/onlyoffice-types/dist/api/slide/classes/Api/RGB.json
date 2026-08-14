@@ -1,0 +1,28 @@
+{
+  "description": "Creates an RGB color from red, green and blue components.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/RGB/",
+  "examples": [
+    "// Use Api.RGB to define colors for shape styling.\n\n// Display the shape with the specified color on a slide.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst color = Api.RGB(186, 218, 85);\nconst fill = Api.CreateSolidFill(color);\nconst stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(0, 0, 0)));\nconst shape = Api.CreateShape(\"rect\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "Red component (0-255).",
+      "name": "r",
+      "type": "number"
+    },
+    {
+      "description": "Green component (0-255).",
+      "name": "g",
+      "type": "number"
+    },
+    {
+      "description": "Blue component (0-255).",
+      "name": "b",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "ApiColor"
+  },
+  "signature": "RGB(r: number, g: number, b: number): ApiColor"
+}

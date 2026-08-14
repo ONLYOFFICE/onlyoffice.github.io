@@ -1,0 +1,13 @@
+{
+  "description": "Returns a placeholder from the current drawing object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiDrawing/Methods/GetPlaceholder/",
+  "examples": [
+    "// How do I find the placeholder for an object in a presentation?\n\n// Retrieve and check a shape's placeholder in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(300 * 36000, 130 * 36000);\n\nlet placeholder = Api.CreatePlaceholder(\"chart\");\nshape.SetPlaceholder(placeholder);\nslide.AddObject(shape);\nplaceholder = shape.GetPlaceholder();\nconst type = placeholder.GetClassType();\nconst docContent = shape.GetDocContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class type of the element from the shape = \" + type);\nslide.AddObject(shape);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns null if placeholder doesn't exist.",
+    "type": "ApiPlaceholder | null"
+  },
+  "signature": "GetPlaceholder(): ApiPlaceholder | null"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the absolute value of a number, a number without its sign.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ABS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ABS(-123.14));"
+    "// How do I convert a negative number to positive in a spreadsheet?\n\n// Discard the sign and use only the magnitude of any value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ABS(-123.14));"
   ],
   "params": [
     {

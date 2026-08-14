@@ -2,7 +2,7 @@
   "description": "Returns the day of the date given in the numerical format, a number from 1 to 31.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAY/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DAY(\"2018/3/16\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// What day of the month does a date represent in a spreadsheet?\n\n// Pull the day component from a date value in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.DAY(\"2018/3/16\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

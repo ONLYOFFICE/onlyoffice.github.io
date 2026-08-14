@@ -2,7 +2,7 @@
   "description": "Converts a vertical range of cells to a horizontal range, or vice versa.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TRANSPOSE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(\"Ann\");\nworksheet.GetRange(\"A2\").SetValue(\"Bob\");\nworksheet.GetRange(\"B1\").SetValue(\"Apples\");\nworksheet.GetRange(\"B2\").SetValue(\"ranges\");\nlet range = worksheet.GetRange(\"A1:B2\");\nworksheet.GetRange(\"A4:B5\").SetValue(func.TRANSPOSE(range));"
+    "// Flip the orientation of a 2x2 range from rows to columns.\n\n// Apply the TRANSPOSE function to rearrange the cell range layout.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(\"Ann\");\nworksheet.GetRange(\"A2\").SetValue(\"Bob\");\nworksheet.GetRange(\"B1\").SetValue(\"Apples\");\nworksheet.GetRange(\"B2\").SetValue(\"ranges\");\nlet range = worksheet.GetRange(\"A1:B2\");\nworksheet.GetRange(\"A4:B5\").SetValue(func.TRANSPOSE(range));"
   ],
   "params": [
     {

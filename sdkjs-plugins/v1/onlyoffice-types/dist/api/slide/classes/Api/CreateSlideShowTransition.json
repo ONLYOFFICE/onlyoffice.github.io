@@ -1,0 +1,14 @@
+{
+  "description": "Creates a new slide show transition object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/Api/Methods/CreateSlideShowTransition/",
+  "examples": [
+    "// How do I make a slide advance automatically in a presentation?\n\n// Configure a slide to transition after a set delay with a specific animation effect in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(250, 180, 100));\nslide.SetBackground(fill);\n\nconst transition = Api.CreateSlideShowTransition();\ntransition.SetEntryEffect('effectSplitVerticalIn');\ntransition.SetSpeed('medium');\ntransition.SetAdvanceOnTime(true);\ntransition.SetAdvanceTime(3000);\n\nslide.SetSlideShowTransition(transition);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "Name of the transition effect.",
+    "type": "ApiSlideShowTransition"
+  },
+  "signature": "CreateSlideShowTransition(): ApiSlideShowTransition",
+  "since": "9.3.0"
+}

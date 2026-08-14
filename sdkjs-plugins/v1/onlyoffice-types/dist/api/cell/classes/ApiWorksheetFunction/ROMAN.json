@@ -2,7 +2,7 @@
   "description": "Converts an arabic numeral to a roman numeral in the string format.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ROMAN/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ROMAN(1250, 4));"
+    "// How do I display a number as Roman numerals in a spreadsheet?\n\n// Change standard numbers into Roman numeral format in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ROMAN(1250, 4));"
   ],
   "params": [
     {

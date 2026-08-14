@@ -1,6 +1,9 @@
 {
   "description": "Returns the current run where the cursor is located.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/GetCurrentRun/",
+  "examples": [
+    "// How do I get the active text run inside a document content container in a document?\n\n// Insert text into the focused run without needing to locate it by paragraph index.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst rgb = Api.CreateRGBColor(100, 150, 200);\nconst fill = Api.CreateSolidFill(rgb);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst docContent = drawing.GetDocContent();\nconst currentParagraph = docContent.GetCurrentParagraph();\n\nconst newRun = Api.CreateRun();\nnewRun.AddText(\"<NEW_RUN />\");\ncurrentParagraph.AddElement(newRun);\n\nconst currentRun = docContent.GetCurrentRun();\ncurrentRun.AddText(\"<CURRENT_RUN />\");"
+  ],
   "params": [],
   "returns": {
     "type": "ApiRun"

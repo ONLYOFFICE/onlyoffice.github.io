@@ -2,7 +2,7 @@
   "description": "Sets the text spacing measured in twentieths of a point.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetSpacing/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nparagraph.SetSpacing(2);"
+    "// How do I control the amount of space between characters in a paragraph in a document?\n\n// Expand or compress the gaps between letters within a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample paragraph.\");\nparagraph.SetSpacing(2);"
   ],
   "params": [
     {

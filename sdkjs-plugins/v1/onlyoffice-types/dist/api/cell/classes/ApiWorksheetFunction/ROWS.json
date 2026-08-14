@@ -2,7 +2,7 @@
   "description": "Returns the number of rows in a range.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ROWS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet column1 = [13, 14, 15];\nlet column2 = [23, 24, 25];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"C3\").SetValue(func.ROWS(range));"
+    "// How do I find out how many rows are in a cell range in a spreadsheet?\n\n// Get the total number of rows within a specific area in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet column1 = [13, 14, 15];\nlet column2 = [23, 24, 25];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"C3\").SetValue(func.ROWS(range));"
   ],
   "params": [
     {

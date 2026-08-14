@@ -5,6 +5,9 @@
     "Delete": {
       "description": "Deletes the XML from the custom XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/Delete/",
+      "examples": [
+        "// How do I delete one of the XML data blocks stored inside a document?\n\n// Clean up stale or unwanted structured data by removing it from the document entirely.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml1 = xmlManager.Add(\"<user xmlns='http://example'>John</user>\");\nlet xml2 = xmlManager.Add(\"<customer xmlns='http://example'>Alex</customer>\");\nxml1.Delete();\nlet count = xmlManager.GetCount();\nlet xmlParts = xmlManager.GetAll();\nlet infoParagraph = Api.CreateParagraph();\nxmlParts.forEach(part => {\n    infoParagraph.AddText(\"XML part: \" + part.GetXml());\n});\ndoc.Push(infoParagraph);"
+      ],
       "params": [],
       "returns": {
         "description": "True if the XML was successfully deleted.",
@@ -16,6 +19,9 @@
     "DeleteAttribute": {
       "description": "Deletes an attribute from the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/DeleteAttribute/",
+      "examples": [
+        "// How do I strip an unwanted attribute from an XML element stored in a document?\n\n// Clean up obsolete metadata on an element without altering the rest of the XML in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nlet deletionSuccess = xml.DeleteAttribute('/content', 'version');\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Xml string representation: \" + xml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node from which to delete the attribute.",
@@ -38,6 +44,9 @@
     "DeleteElement": {
       "description": "Deletes an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/DeleteElement/",
+      "examples": [
+        "// How do I delete a specific element from the XML data stored in a document?\n\n// Trim unnecessary child nodes from structured content to keep the stored data lean in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'><text>example_text</text><firstNode>text inside first node</firstNode></content>\");\nxml.DeleteElement(\"/content/firstNode\");\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Xml string representation after deletion: \" + xml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node to delete.",
@@ -55,6 +64,9 @@
     "GetAttribute": {
       "description": "Returns an attribute from the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetAttribute/",
+      "examples": [
+        "// How do I get the value of a specific attribute from an XML element stored in a document?\n\n// Extract a metadata value from structured XML so it can be displayed or validated in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nlet version = xml.GetAttribute(\"/content\", \"version\");\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"The version attribute is: \" + version);\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node from which to get the attribute.",
@@ -77,6 +89,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlPart class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what kind of object a custom XML part is in a document?\n\n// Verify the object type before performing type-specific operations in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nlet classType = xml.GetClassType();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customXmlPart\""
@@ -86,6 +101,9 @@
     "GetId": {
       "description": "Returns the ID of the custom XML part.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetId/",
+      "examples": [
+        "// How do I get the ID assigned to a custom XML part in a document?\n\n// Store or reference a custom XML part by its ID for later lookup in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'></content>\");\nlet xmlId = xml.GetId();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Custom XML ID: \" + xmlId);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -95,6 +113,9 @@
     "GetNodes": {
       "description": "Retrieves nodes from custom XML based on the provided XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetNodes/",
+      "examples": [
+        "// How do I retrieve specific nodes from a custom XML part in a document?\n\n// Extract node text and attributes to read structured data stored in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<documentData xmlns=\"http://example.com/example\">\n    <text val=\"123\">node text</text>\n    <label name=\"Title\">label text</label>\n</documentData>`;\nlet xml = xmlManager.Add(xmlText);\nlet nodes = xml.GetNodes(\"/documentData/*\");\nlet label = xml.GetNodes(\"/documentData/label\")[0];\nlet paragraph = Api.CreateParagraph();\nnodes.forEach(node => {\n    paragraph.AddText(\"Node text: \" + node.GetText() + \"\\r\\n\");\n});\nparagraph.AddText(\"Label attribute: \" + label.GetAttribute(\"name\"));\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The XPath expression to search for nodes.",
@@ -112,6 +133,9 @@
     "GetXml": {
       "description": "Retrieves the XML string from the custom XML part.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/GetXml/",
+      "examples": [
+        "// How do I export or inspect the raw XML of a custom XML part in a document?\n\n// Serialize the entire XML structure to display or process its contents in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<documentData xmlns=\"http://example.com/example\">\n    <text attribute1=\"attribute1 value\">node text</text>\n</documentData>`;\nlet xml = xmlManager.Add(xmlText);\nlet xmlString = xml.GetXml();\n\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"XML string representation: \" + xmlString);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The XML string.",
@@ -123,6 +147,9 @@
     "InsertAttribute": {
       "description": "Inserts an attribute into the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/InsertAttribute/",
+      "examples": [
+        "// How do I attach an attribute to an existing XML element in a document?\n\n// Extend an XML node with extra metadata by inserting a named attribute in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'></content>\");\nlet insertionSuccess = xml.InsertAttribute(\"/content\", \"version\", \"1.0\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"XML string representation: \" + xml.GetXml());\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node to insert the attribute into.",
@@ -150,6 +177,9 @@
     "InsertElement": {
       "description": "Inserts an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/InsertElement/",
+      "examples": [
+        "// How do I insert an XML element at a specific position within a custom XML part in a document?\n\n// Build up an XML structure incrementally by appending or prepending elements in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'></content>\");\nxml.InsertElement(\"/content\", \"<text>example_text</text>\");\nxml.InsertElement(\"/content\", \"<firstNode>text inside first node</firstNode>\", 0);\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Xml string representaion: \" + xml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the parent node where the new element will be inserted.",
@@ -178,6 +208,9 @@
     "UpdateAttribute": {
       "description": "Updates an attribute of the XML node at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/UpdateAttribute/",
+      "examples": [
+        "// How do I update an attribute on an XML node within a custom XML part in a document?\n\n// Modify stored metadata by overwriting an attribute value in place in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nxml.UpdateAttribute(\"/content\", \"version\", \"2.0\");\nlet version = xml.GetAttribute(\"/content\", \"version\");\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Xml string representaion: \" + xml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node whose attribute should be updated.",
@@ -205,6 +238,9 @@
     "UpdateElement": {
       "description": "Updates an XML element at the specified XPath.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiCustomXmlPart/Methods/UpdateElement/",
+      "examples": [
+        "// How do I update an existing XML element within a custom XML part in a document?\n\n// Overwrite a child element with new markup to reflect changed data in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<content xmlns='http://example'><text>Example</text></content>\");\nxml.UpdateElement(\"/content/\", \"<user>John</user>\");\nlet infoParagraph = Api.CreateParagraph();\ninfoParagraph.AddText(\"Xml string representaion: \" + xml.GetXml());\ndoc.Push(infoParagraph);"
+      ],
       "params": [
         {
           "description": "The XPath of the node to update.",

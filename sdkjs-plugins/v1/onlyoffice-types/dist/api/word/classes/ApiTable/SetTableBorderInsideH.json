@@ -2,7 +2,7 @@
   "description": "Specifies the border which will be displayed on all horizontal table cell borders which are not on the outmost edge\nof the parent table (all horizontal borders which are not the topmost or bottommost borders).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableBorderInsideH/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the inside horizontal 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderInsideH(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+    "// How do I draw horizontal dividing lines between the inner rows of a table in a document?\n\n// Separate table rows from each other with interior horizontal borders in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We add the inside horizontal 4 point black border:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableBorderInsideH(\"single\", 32, 0, 51, 51, 51);\ntable.SetTableLook(true, true, true, true, false, false);\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the standard normal distribution (has a mean of zero and a standard deviation of one).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NORM_S_DIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NORM_S_DIST(1.33, true));"
+    "// How do I compute the standard normal distribution in a spreadsheet?\n\n// Find the probability of a value in a standard normal distribution in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NORM_S_DIST(1.33, true));"
   ],
   "params": [
     {

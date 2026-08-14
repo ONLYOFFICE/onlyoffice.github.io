@@ -2,7 +2,7 @@
   "description": "Returns the average of the absolute deviations of data points from their mean.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/AVEDEV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.AVEDEV(78, 98, 123, 45, 70, 67, 3, 9, 289));"
+    "// Find the average distance of values from their mean in a spreadsheet.\n\n// Summarize data variability by averaging all absolute deviations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.AVEDEV(78, 98, 123, 45, 70, 67, 3, 9, 289));"
   ],
   "params": [
     {

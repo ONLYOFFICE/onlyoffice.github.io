@@ -1,0 +1,18 @@
+{
+  "description": "Converts millimeters to pixels.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/MillimetersToPixels/",
+  "examples": [
+    "// How do I convert millimeters to pixel units in a spreadsheet?\n\n// Show the pixel equivalent of a given millimeter value in a spreadsheet.\n\nconst millimeters = 100;\nconst pixels = Api.MillimetersToPixels(millimeters);\nconst text = millimeters + ' millimeters are equal to ' + pixels + ' pixels.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of millimeters to convert to pixels.",
+      "name": "mm",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "MillimetersToPixels(mm: number): number"
+}

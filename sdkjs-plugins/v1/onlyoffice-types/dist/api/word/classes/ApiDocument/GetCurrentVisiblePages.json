@@ -2,7 +2,7 @@
   "description": "Returns the indexes of the currently visible pages.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetCurrentVisiblePages/",
   "examples": [
-    "var oDocument = Api.GetDocument();\nvar oParagraph = Api.CreateParagraph();\noParagraph.AddText(\"The current visibles pages indexes is: \" + oDocument.GetCurrentVisiblePages());\noDocument.Push(oParagraph);"
+    "// How do I get a list of page numbers visible to the user in a document?\n\n// Useful when synchronizing a thumbnail panel or sidebar with the pages the reader can see in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The current visibles pages indexes is: \" + doc.GetCurrentVisiblePages());\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

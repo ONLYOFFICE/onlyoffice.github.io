@@ -2,7 +2,7 @@
   "description": "Returns the inverse of the (right-tailed) F probability distribution: if p = FDIST(x,...), then FINV(p,...) = x.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FINV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.FINV(0.01, 6, 4);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// How do I work backwards from a probability to find a value in a spreadsheet?\n\n// Get the value that corresponds to a given F probability level in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.FINV(0.01, 6, 4);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

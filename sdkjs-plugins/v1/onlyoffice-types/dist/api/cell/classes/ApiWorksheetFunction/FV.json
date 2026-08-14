@@ -2,7 +2,7 @@
   "description": "Returns the future value of an investment based on periodic, constant payments and a constant interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FV/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FV(0.1/12, 2*12, -500, 10000));"
+    "// Calculate investment growth with monthly payments over a fixed period.\n\n// Determine total investment value using FV function with interest rate and principal.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FV(0.1/12, 2*12, -500, 10000));"
   ],
   "params": [
     {

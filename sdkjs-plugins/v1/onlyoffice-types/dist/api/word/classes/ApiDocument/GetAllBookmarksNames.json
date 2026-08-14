@@ -2,7 +2,7 @@
   "description": "Returns an array with names of all bookmarks in the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetAllBookmarksNames/",
   "examples": [
-    "let doc = Api.GetDocument(); \nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"ONLYOFFICE Document Builder\"); \nlet range1 = doc.GetRange(0, 9); \nrange1.AddBookmark(\"Bookmark 1\");\nlet range2 = doc.GetRange(11, 18); \nrange2.AddBookmark(\"Bookmark 2\");\nlet bookmarks = doc.GetAllBookmarksNames();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark names: \");\nfor (let i = 0; i < 2; i++ ){\n\tparagraph.AddText(bookmarks[i] + \",\" + \" \");\n}"
+    "// How do I get a list of all bookmark names to display or process them in a document?\n\n// Collect bookmark names programmatically so they can be shown inline as reference labels in a document.\n\nlet doc = Api.GetDocument(); \nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"ONLYOFFICE Document Builder\"); \nlet range1 = doc.GetRange(0, 9); \nrange1.AddBookmark(\"Bookmark 1\");\nlet range2 = doc.GetRange(11, 18); \nrange2.AddBookmark(\"Bookmark 2\");\nlet bookmarks = doc.GetAllBookmarksNames();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark names: \");\nfor (let i = 0; i < 2; i++ ){\n\tparagraph.AddText(bookmarks[i] + \",\" + \" \");\n}"
   ],
   "params": [],
   "returns": {

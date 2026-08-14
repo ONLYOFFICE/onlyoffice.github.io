@@ -2,7 +2,7 @@
   "description": "Adds a math equation to the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddMathEquation/",
   "examples": [
-    "let doc = Api.GetDocument();\ndoc.AddMathEquation(\"e^x = 1 + x + \\\\frac{x^2}{2} + \\\\frac{x^3}{6} + \\\\cdots = \\\\sum_{n\\\\geq 0} \\\\frac{x^n}{n!}\", \"latex\");"
+    "// How do I insert a mathematical formula into a document?\n\n// Represent the same or different expressions using three standard equation formats in a document.\n\nlet doc = Api.GetDocument();\ndoc.AddMathEquation(\"e^x = 1 + x + \\\\frac{x^2}{2} + \\\\frac{x^3}{6} + \\\\cdots = \\\\sum_{n\\\\geq 0} \\\\frac{x^n}{n!}\", \"latex\");\n\nlet paragraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.Select();\ndoc.AddMathEquation(\"e^(iπ) + 1 = 0\", \"unicode\");\n\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.Select();\nlet xml = `<math>\n\t\t<mrow>\n\t\t\t<msup>\n\t\t\t\t<mi>a</mi>\n\t\t\t\t<mn>2</mn>\n\t\t\t</msup>\n\t\t\t<mo>+</mo>\n\t\t\t<msup>\n\t\t\t\t<mi>b</mi>\n\t\t\t\t<mn>2</mn>\n\t\t\t</msup>\n\t\t\t<mo>=</mo>\n\t\t\t<msup>\n\t\t\t\t<mi>c</mi>\n\t\t\t\t<mn>2</mn>\n\t\t\t</msup>\n\t\t</mrow>\n</math>`;\ndoc.AddMathEquation(xml, \"mathml\");"
   ],
   "params": [
     {

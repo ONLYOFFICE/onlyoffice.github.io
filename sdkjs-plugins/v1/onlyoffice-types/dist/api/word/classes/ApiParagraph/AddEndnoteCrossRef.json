@@ -2,7 +2,7 @@
   "description": "Adds an endnote cross-reference to the current paragraph.\n<note>Please note that this paragraph must be in the document.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddEndnoteCrossRef/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddEndnote();\nlet endNotesFirstParagraphs = doc.GetEndNotesFirstParagraphs();\nendNotesFirstParagraphs[0].AddText(\"Endnote 1\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"For more information on previous sentences see endnote on page \");\ndoc.Push(paragraph);\nparagraph.AddEndnoteCrossRef(\"pageNum\", endNotesFirstParagraphs[0]);"
+    "// How do I reference an endnote from within paragraph text in a document?\n\n// Link a paragraph to a specific endnote so readers can locate supplementary notes by page number in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0); \nparagraph.AddText(\"This is just a sample text.\");\ndoc.AddEndnote();\nlet endNotesFirstParagraphs = doc.GetEndNotesFirstParagraphs();\nendNotesFirstParagraphs[0].AddText(\"Endnote 1\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"For more information on previous sentences see endnote on page \");\ndoc.Push(paragraph);\nparagraph.AddEndnoteCrossRef(\"pageNum\", endNotesFirstParagraphs[0]);"
   ],
   "params": [
     {

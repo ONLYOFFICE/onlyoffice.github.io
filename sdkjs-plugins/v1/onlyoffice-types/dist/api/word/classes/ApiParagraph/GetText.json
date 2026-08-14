@@ -2,7 +2,7 @@
   "description": "Returns the paragraph text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetText/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"\\tThis is just a sample text.\");\nlet text = paragraph.GetText({\"Numbering\": true, \"Math\": true, \"NewLineSeparator\": \"\\r\", \"TabSymbol\": \"\\t\"});\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The text of the first paragraph: \" + text);\ndoc.Push(paragraph);"
+    "// How do I read the text string from a paragraph in a document?\n\n// Retrieve paragraph text with custom separators and print it in a second paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"\\tThis is just a sample text.\");\nlet text = paragraph.GetText({\"Numbering\": true, \"Math\": true, \"NewLineSeparator\": \"\\r\", \"TabSymbol\": \"\\t\"});\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The text of the first paragraph: \" + text);\ndoc.Push(paragraph);"
   ],
   "params": [
     {

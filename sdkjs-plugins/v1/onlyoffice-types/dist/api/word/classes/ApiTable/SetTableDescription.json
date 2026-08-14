@@ -2,7 +2,7 @@
   "description": "Sets the table description.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTablePr/Methods/SetTableDescription/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableDescription(\"Empty table\");\ntable.SetStyle(tableStyle);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table description: \" + tablePr.GetTableDescription());\ndoc.Push(table);"
+    "// How do I attach a written description to a table in a document?\n\n// Give a table a readable summary that can be retrieved later in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet tablePr = tableStyle.GetTablePr();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntablePr.SetTableDescription(\"Empty table\");\ntable.SetStyle(tableStyle);\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Table description: \" + tablePr.GetTableDescription());\ndoc.Push(table);"
   ],
   "params": [
     {

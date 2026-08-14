@@ -2,7 +2,7 @@
   "description": "Returns the number of sheets in a reference.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SHEETS/",
   "examples": [
-    "// Add more sheets\nApi.AddSheet(\"Sheet2\")\nApi.AddSheet(\"Sheet3\")\n\n// Get the number of sheets\nlet func = Api.GetWorksheetFunction();\nlet result = func.SHEETS();\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"C3\").SetValue(result);"
+    "// Count all sheets in the current workbook using the SHEETS function.\n\n// Add additional sheets and retrieve their total count in a cell.\n\nApi.AddSheet(\"Sheet2\")\nApi.AddSheet(\"Sheet3\")\n\n// Get the number of sheets\nlet func = Api.WorksheetFunction;\nlet result = func.SHEETS();\nconst worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"C3\").SetValue(result);"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the payment on the principal for a given investment based on periodic, constant payments and a constant interest rate.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PPMT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PPMT(0.1/12, 1, 2*12, 2000, 0));"
+    "// What portion of a regular payment goes toward the principal in a spreadsheet?\n\n// Determine the principal portion of a payment for a specific period in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PPMT(0.1/12, 1, 2*12, 2000, 0));"
   ],
   "params": [
     {

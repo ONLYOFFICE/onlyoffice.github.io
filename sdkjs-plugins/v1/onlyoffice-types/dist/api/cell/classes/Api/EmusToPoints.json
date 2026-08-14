@@ -1,0 +1,18 @@
+{
+  "description": "Converts EMUs (English Metric Units) to points.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/EmusToPoints/",
+  "examples": [
+    "// How do I change a size value from EMUs into points in a spreadsheet?\n\n// Express a dimension in points rather than EMUs in a spreadsheet.\n\nconst emus = 100;\nconst points = Api.EmusToPoints(emus);\nconst text = emus + ' emus are equal to ' + points + ' points.';\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B2').SetValue(text);"
+  ],
+  "params": [
+    {
+      "description": "The number of EMUs to convert to points.",
+      "name": "emu",
+      "type": "number"
+    }
+  ],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "EmusToPoints(emu: number): number"
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Sets an angle to the current cell range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetOrientation/",
+  "examples": [
+    "// How do I tilt or angle the text in a group of cells in a spreadsheet?\n\n// Change the direction text flows within cells to improve layout in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:B1\");\nrange.SetOrientation(\"xlUpward\");"
+  ],
+  "params": [
+    {
+      "description": "Specifies the range angle.",
+      "name": "angle",
+      "type": "Angle"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetOrientation(angle: Angle): void"
+}

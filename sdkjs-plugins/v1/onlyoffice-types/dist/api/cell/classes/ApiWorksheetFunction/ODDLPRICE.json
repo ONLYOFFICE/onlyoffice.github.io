@@ -2,7 +2,7 @@
   "description": "Returns the price per $100 face value of a security with an odd last period.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ODDLPRICE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ODDLPRICE(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", 0.05, 0.09, 100, 2));"
+    "// How do I find the price of a bond with an odd last period in a spreadsheet?\n\n// Determine the per-$100 value of a security when the final coupon period is irregular in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ODDLPRICE(\"1/1/2017\", \"6/1/2019\", \"12/1/2016\", 0.05, 0.09, 100, 2));"
   ],
   "params": [
     {

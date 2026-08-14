@@ -2,7 +2,7 @@
   "description": "Returns the number of days between two dates based on a 360-day year (twelve 30-day months).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DAYS360/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.DAYS360(\"3/31/2018\", \"4/30/2019\", false); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// What is the total days between two specific dates using 360-day year in a spreadsheet?\n\n// Count the number of days from one date to another with 360-day months in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.DAYS360(\"3/31/2018\", \"4/30/2019\", false); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

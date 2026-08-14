@@ -6,7 +6,7 @@
       "description": "Adds a new value to the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/Add/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\ncontentControlList.Add(\"Item3_D\", \"Item3_V\", 2);\ndoc.AddElement(0, contentControlList);"
+        "// How do I insert an item at a specific position in a dropdown list in a document?\n\n// Expand the available choices in a combo box by inserting a new option at a chosen index in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\ncontentControlList.Add(\"Venus\", \"planet2\", 1);\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);"
       ],
       "params": [
         {
@@ -35,7 +35,7 @@
       "description": "Clears a list of values of the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/Clear/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\ncontentControlList.Clear();\ndoc.AddElement(0, Api.CreateParagraph().AddText(\"All items cleared from the list.\"));"
+        "// How do I clear every option from a dropdown list content control in a document?\n\n// Reset a combo box to an empty state by wiping its list of selectable values in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);\nlet contentControlList = cc.GetDropdownList();\ncontentControlList.Clear();"
       ],
       "params": [],
       "returns": {
@@ -47,7 +47,7 @@
       "description": "Returns a collection of items (the ApiContentControlListEntry objects) of the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetAllItems/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet allItems = contentControlList.GetAllItems();\nlet paragraph = Api.CreateParagraph();\nfor (let i = 0; i < allItems.length; i++) {\n    paragraph.AddText(\"Item \" + (i + 1) + \": \" + allItems[i].GetValue() + \"\\n\");\n}\ndoc.Push(paragraph);"
+        "// How do I get every item stored in a combo box dropdown list in a document?\n\n// Collect the full set of selectable options from a list control to display or process them in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet paragraph = doc.GetElement(0);\nparagraph.Push(cc);\nlet contentControlList = cc.GetDropdownList();\nlet listItems = contentControlList.GetAllItems();\nparagraph = Api.CreateParagraph();\nfor (let i = 0; i < listItems.length; i++) {\n    paragraph.AddText(\"Item \" + (i + 1) + \": \" + listItems[i].GetValue() + \" - \" + listItems[i].GetText() + \"\\n\");\n}\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -59,7 +59,7 @@
       "description": "Returns a type of the ApiContentControlList class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet dropDownList = contentControls[0].GetDropdownList();\nlet classType = dropDownList.GetClassType();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type of the content control list: \" + classType);\ndoc.Push(paragraph);"
+        "// How do I find out the class type of a content control list in a document?\n\n// Confirm the object kind of a dropdown list by checking its type identifier in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet dropDownList = cc.GetDropdownList();\nlet classType = dropDownList.GetClassType();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type of the content control list: \" + classType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -71,7 +71,7 @@
       "description": "Returns a number of items of the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetElementsCount/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet count = contentControlList.GetElementsCount();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of items in the list: \" + count);\ndoc.AddElement(0, paragraph);"
+        "// How do I find out how many items are in a combo box list in a document?\n\n// Check the total number of selectable options available in a list control in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet count = contentControlList.GetElementsCount();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of items in the list: \" + count);\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -83,7 +83,7 @@
       "description": "Returns an item of the combo box / drop-down list content control by the position specified in the request.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetItem/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"First item value: \" + listItem.GetValue());\ndoc.AddElement(0, paragraph);"
+        "// How do I access a single item from a dropdown list content control in a document?\n\n// Read the value of a particular option in a list control by referencing its position in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet listItem = contentControlList.GetItem(0);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"First item value: \" + listItem.GetValue());\ndoc.AddElement(0, paragraph);"
       ],
       "params": [
         {
@@ -101,7 +101,7 @@
       "description": "Returns a parent of the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiContentControlList/Methods/GetParent/",
       "examples": [
-        "let doc = Api.GetDocument();\nApi.pluginMethod_AddContentControlList(1, [{Display: \"Item1_D\", Value: \"Item1_V\"}, {Display: \"Item2_D\", Value: \"Item2_V\"}], {\"Id\": 100, \"Tag\": \"CC_Tag\", \"Lock\": 3});\nlet contentControls = doc.GetAllContentControls();\nlet contentControlList = contentControls[0].GetDropdownList();\nlet parentControl = contentControlList.GetParent();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Parent content control tag: \" + parentControl.GetTag());\ndoc.AddElement(0, paragraph);"
+        "// How do I get the content control that contains a given dropdown list in a document?\n\n// Navigate from a list object up to its enclosing combo box control to inspect its properties in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateComboBoxContentControl([{display: \"Mercury\", value: \"planet1\"}, {display: \"Venus\", value: \"planet2\"}, {display: \"Earth\", value: \"planet3\"}, {display: \"Mars\", value: \"planet4\"}], 2);\nlet contentControlList = cc.GetDropdownList();\nlet parentControl = contentControlList.GetParent();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Parent class type is: \" + parentControl.GetClassType());\ndoc.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {

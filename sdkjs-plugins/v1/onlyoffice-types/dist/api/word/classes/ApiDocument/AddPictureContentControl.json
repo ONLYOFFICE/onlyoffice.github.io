@@ -1,6 +1,9 @@
 {
   "description": "Adds a new picture content control to the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/AddPictureContentControl/",
+  "examples": [
+    "// How do I insert a picture placeholder field into a document?\n\n// Reserve a spot where a reader can later replace the placeholder with their own image in a document.\n\nlet doc = Api.GetDocument();\ndoc.AddPictureContentControl();"
+  ],
   "params": [
     {
       "description": "The optional width of the image.",

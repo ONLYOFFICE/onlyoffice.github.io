@@ -2,7 +2,7 @@
   "description": "Returns the base-10 logarithm of a complex number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/IMLOG10/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.IMLOG10(\"-2+2.5i\"));"
+    "// How do I find the logarithm with base 10 of a complex number in a spreadsheet?\n\n// Get the base-10 logarithmic result for complex number calculations in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.IMLOG10(\"-2+2.5i\"));"
   ],
   "params": [
     {

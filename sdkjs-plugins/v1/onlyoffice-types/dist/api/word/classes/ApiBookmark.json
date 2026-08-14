@@ -5,6 +5,9 @@
     "Delete": {
       "description": "Deletes the current bookmark from the document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/Delete/",
+      "examples": [
+        "// How do I delete a specific bookmark by name in a document?\n\n// Add two bookmarks to different text ranges and then remove one of them in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range1 = doc.GetRange(0, 11);\nrange1.AddBookmark(\"Bookmark 1\");\nlet range2 = doc.GetRange(14, 22);\nrange2.AddBookmark(\"Bookmark 2\");\nlet bookmark1 = doc.GetBookmark(\"Bookmark 1\");\nbookmark1.Delete();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -15,6 +18,9 @@
     "GetName": {
       "description": "Returns the bookmark name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetName/",
+      "examples": [
+        "// How do I retrieve the name of a bookmark added to a text range in a document?\n\n// Insert a bookmark and display its name as text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 11);\nrange.AddBookmark(\"BookmarkName\");\nlet bookmark = doc.GetBookmark(\"BookmarkName\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark with name: \" + bookmark.GetName());"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -25,6 +31,9 @@
     "GetRange": {
       "description": "Returns the bookmark range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetRange/",
+      "examples": [
+        "// How do I access the range of a bookmark to apply bold formatting in a document?\n\n// Use a bookmark's range to change text appearance without selecting it manually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(0, 11);\nrange.AddBookmark(\"BookmarkName\");\nlet bookmark = doc.GetBookmark(\"BookmarkName\");\nlet bookmarkRange = bookmark.GetRange();\nbookmarkRange.SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark range is shown in bold\");"
+      ],
       "params": [],
       "returns": {
         "type": "ApiRange"
@@ -35,6 +44,9 @@
     "GetText": {
       "description": "Returns the bookmark text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GetText/",
+      "examples": [
+        "// How do I extract the text from a named bookmark in a document?\n\n// Confirm what words are covered by a bookmark by printing its content in a document.\n\nlet doc = Api.GetDocument()\nlet paragraph = doc.GetElement(0)\nparagraph.AddText(\"ONLYOFFICE Document Builder\")\nlet range1 = doc.GetRange(0, 11)\nrange1.AddBookmark(\"BookmarkName\")\nlet bookmark = doc.GetBookmark(\"BookmarkName\")\nparagraph.AddLineBreak()\nparagraph.AddText(\"Bookmark text is: \" + bookmark.GetText())"
+      ],
       "params": [
         {
           "description": "Options for formatting the returned text.",
@@ -94,6 +106,9 @@
     "GoTo": {
       "description": "Moves a cursor to the current bookmark.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/GoTo/",
+      "examples": [
+        "// How do I navigate directly to a bookmark by name in a document?\n\n// Move focus to a specific marked position so the reader lands at the right spot in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(21, 28);\nrange.AddBookmark(\"BookmarkName\");\nlet bookmark = doc.GetBookmark(\"BookmarkName\");\nbookmark.GoTo();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -104,6 +119,9 @@
     "Select": {
       "description": "Selects the current bookmark.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/Select/",
+      "examples": [
+        "// How do I highlight a bookmark's content as a selection in a document?\n\n// Bring a bookmark's text into focus so it is ready for editing or formatting in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range = doc.GetRange(21, 28);\nrange.AddBookmark(\"BookmarkName\");\nlet bookmark = doc.GetBookmark(\"BookmarkName\");\nbookmark.Select();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -114,6 +132,9 @@
     "SetName": {
       "description": "Changes the bookmark name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/SetName/",
+      "examples": [
+        "// How do I change the name of a bookmark already placed in a document?\n\n// Update a bookmark's label so it can be referenced under a different name in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range1 = doc.GetRange(0, 11);\nrange1.AddBookmark(\"Bookmark_A\");\nlet bookmark = doc.GetBookmark(\"Bookmark_A\");\nlet oldName = bookmark.GetName();\nbookmark.SetName(\"Bookmark_B\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark name changed from: '\" + oldName + \"' to: '\" + bookmark.GetName() + \"'\");"
+      ],
       "params": [
         {
           "description": "A new bookmark name.",
@@ -130,6 +151,9 @@
     "SetText": {
       "description": "Sets the bookmark text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiBookmark/Methods/SetText/",
+      "examples": [
+        "// How do I update the words covered by a bookmark in a document?\n\n// Swap out a bookmark's original text for a revised value without removing the bookmark in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet range1 = doc.GetRange(0, 11);\nrange1.AddBookmark(\"BookmarkName\");\nlet bookmark = doc.GetBookmark(\"BookmarkName\");\nlet oldText = bookmark.GetText();\nbookmark.SetText(\"New bookmark text\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"Bookmark text changed from: '\" + oldText + \"' to: '\" + bookmark.GetText() + \"'\");"
+      ],
       "params": [
         {
           "description": "The bookmark text.",

@@ -2,7 +2,7 @@
   "description": "Returns the previous coupon date before the settlement date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COUPPCD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.COUPPCD(\"1/10/2018\", \"6/15/2019\", 4, 1));"
+    "// What was the previous coupon date in a spreadsheet?\n\n// Calculate the coupon period date that comes before settlement in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.COUPPCD(\"1/10/2018\", \"6/15/2019\", 4, 1));"
   ],
   "params": [
     {

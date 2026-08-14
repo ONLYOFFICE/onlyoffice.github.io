@@ -1,6 +1,9 @@
 {
   "description": "Returns the right border of the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/GetRightBorder/",
+  "examples": [
+    "// How do I read the right border settings of a paragraph in a document?\n\n// Inspect a paragraph's right border to display its type and size values in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet paraPr = paragraph.GetParaPr();\nparaPr.SetRightBorder(\"single\", 24, 0, 255, 111, 61);\nparagraph.AddText(\"This is a paragraph with a right border.\");\nlet border = paraPr.GetRightBorder();\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(\"Right border type: \" + border.Type + \", size: \" + border.Size);\ndoc.Push(paragraph2);"
+  ],
   "params": [],
   "returns": {
     "description": "Returns the border properties object, or _undefined_ if the right border is not set.",

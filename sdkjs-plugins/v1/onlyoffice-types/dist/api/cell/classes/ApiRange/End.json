@@ -1,0 +1,18 @@
+{
+  "description": "Returns a Range object that represents the end in the specified direction in the specified range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/End/",
+  "examples": [
+    "// How do I find the boundary cell of a data block by moving in a specific direction in a spreadsheet?\n\n// Locate the edge of filled cells going left, right, up, or down and highlight it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"C4:D5\");\nrange.End(\"xlToLeft\").SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+  ],
+  "params": [
+    {
+      "description": "The direction of end in the specified range. *",
+      "name": "direction",
+      "type": "Direction"
+    }
+  ],
+  "returns": {
+    "type": "ApiRange"
+  },
+  "signature": "End(direction: Direction): ApiRange"
+}

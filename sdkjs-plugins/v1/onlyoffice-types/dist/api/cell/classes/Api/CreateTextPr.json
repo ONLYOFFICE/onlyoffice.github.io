@@ -1,0 +1,12 @@
+{
+  "description": "Creates the empty text properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/Api/Methods/CreateTextPr/",
+  "examples": [
+    "// How do I configure text styling such as size and bold before adding it to a shape in a spreadsheet?\n\n// Prepare a reusable set of text style rules and attach them to a paragraph in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 80 * 36000, 50 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\nlet paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is a sample text with the font size set to 30 and the font weight set to bold.\");\nparagraph.SetTextPr(textPr);\ndocContent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTextPr"
+  },
+  "signature": "CreateTextPr(): ApiTextPr"
+}

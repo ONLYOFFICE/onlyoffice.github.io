@@ -2,7 +2,7 @@
   "description": "Converts the ApiParagraph object into the JSON object.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/ToJSON/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\nlet json = paragraph.ToJSON(false, true);\nlet paragraphFromJSON = Api.FromJSON(json);\nparagraphFromJSON.SetBold(true);\ndoc.AddElement(0, paragraphFromJSON);"
+    "// How do I export a paragraph's structure and content as a JSON object in a document?\n\n// Save a paragraph's formatting and text as structured data so it can be reconstructed later in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph\");\nlet json = paragraph.ToJSON(false, true);\nlet paragraphFromJSON = Api.FromJSON(json);\nparagraphFromJSON.SetBold(true);\ndoc.AddElement(0, paragraphFromJSON);"
   ],
   "params": [
     {

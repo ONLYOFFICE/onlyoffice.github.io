@@ -2,7 +2,7 @@
   "description": "Checks if the specified logical value is **true** or **false**. The function returns **true** if the argument is **false** and **false** if the argument is **true**.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NOT/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet condition = 12 < 100;\nlet func = Api.GetWorksheetFunction();\nlet ans = func.NOT(condition);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I negate a true or false value in a spreadsheet?\n\n// Get the opposite result of a logical condition in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet condition = 12 < 100;\nlet func = Api.WorksheetFunction;\nlet ans = func.NOT(condition);\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

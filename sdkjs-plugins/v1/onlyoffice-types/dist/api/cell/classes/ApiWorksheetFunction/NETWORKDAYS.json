@@ -2,7 +2,7 @@
   "description": "Returns the number of whole workdays between two dates.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NETWORKDAYS/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.NETWORKDAYS(\"3/16/2018\", \"12/31/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// Calculate business days, excluding weekends in a spreadsheet.\n\n// Determine workdays for project scheduling in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.NETWORKDAYS(\"3/16/2018\", \"12/31/2018\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

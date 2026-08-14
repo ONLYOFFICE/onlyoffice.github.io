@@ -2,7 +2,7 @@
   "description": "Returns a table that contains the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetParentTable/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTable = paragraph.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+    "// How do I get the table that a paragraph belongs to in a document?\n\n// Remove a row from the parent table by navigating up from a paragraph inside one of its cells in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is just a sample text.\");\nlet cell = table.GetCell(0, 0);\ntable.AddElement(cell, 0, paragraph);\nlet parentTable = paragraph.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
   ],
   "params": [],
   "returns": {

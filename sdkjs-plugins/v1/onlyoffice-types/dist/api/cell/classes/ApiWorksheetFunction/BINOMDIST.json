@@ -2,7 +2,7 @@
   "description": "Returns the individual term binomial distribution probability.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BINOMDIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BINOMDIST(50, 67, 0.45, false));"
+    "// How do I find the chance of a specific number of successes occurring in a spreadsheet?\n\n// Evaluate the likelihood of an outcome appearing a fixed number of times in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BINOMDIST(50, 67, 0.45, false));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns a number that represents the date in the date-time code.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DATE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DATE(2018, 3, 16));"
+    "// What date do these numbers represent in a spreadsheet?\n\n// Combine date parts into a single date value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DATE(2018, 3, 16));"
   ],
   "params": [
     {

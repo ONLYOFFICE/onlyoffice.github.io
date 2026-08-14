@@ -2,7 +2,7 @@
   "description": "Returns the accrued interest for a security that pays interest at maturity.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACCRINTM/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ACCRINTM(\"1/1/2018\", \"10/15/2018\", \"3.50%\", 1000, 1));"
+    "// How do I calculate accumulated interest on a bond paid at final maturity date in a spreadsheet?\n\n// Figure out the total interest earned on a bond from issuance through settlement day in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACCRINTM(\"1/1/2018\", \"10/15/2018\", \"3.50%\", 1000, 1));"
   ],
   "params": [
     {

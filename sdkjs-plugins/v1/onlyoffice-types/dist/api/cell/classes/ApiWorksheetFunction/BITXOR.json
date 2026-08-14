@@ -2,7 +2,7 @@
   "description": "Returns a bitwise \"XOR\" (Exclusive Or) of two numbers.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITXOR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITXOR(5, 3));"
+    "// Which bits are active in one number but not the other in a spreadsheet?\n\n// Highlight the unique bits when comparing two values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BITXOR(5, 3));"
   ],
   "params": [
     {

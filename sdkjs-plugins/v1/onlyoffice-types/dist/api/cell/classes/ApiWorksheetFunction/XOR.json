@@ -2,7 +2,7 @@
   "description": "Returns the logical **Exclusive Or** value of all arguments. The function returns **true** when the number of **true** inputs is odd and **false** when the number of **true** inputs is even.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/XOR/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.TRUE(); //returns TRUE, doesnt require arguments\n\nworksheet.GetRange(\"A1\").SetValue(ans);"
+    "// How do I test whether an odd number of conditions are true in a spreadsheet?\n\n// Determine if exactly one or an odd number of values are true in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.TRUE(); //returns TRUE, doesnt require arguments\n\nworksheet.GetRange(\"A1\").SetValue(ans);"
   ],
   "params": [
     {

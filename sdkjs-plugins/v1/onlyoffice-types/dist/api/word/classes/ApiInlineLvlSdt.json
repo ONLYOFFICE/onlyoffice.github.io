@@ -6,7 +6,7 @@
       "description": "Adds a comment to the current inline content control.\n<note>Please note that this inline content control must be in the document.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddComment/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddComment(\"comment\", \"John Smith\");"
+        "// How do I attach a comment to an inline text control in a document?\n\n// Annotate an inline control with a reviewer name and note in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddComment(\"comment\", \"John Smith\");"
       ],
       "params": [
         {
@@ -37,7 +37,7 @@
       "description": "Adds an element to the inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddElement/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a text run in it.\");\ninlineLvlSdt.AddElement(run, 0);"
+        "// How do I add a run element to an inline content control in a document?\n\n// Populate an inline content control by placing a run at a chosen index in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a text run in it.\");\ninlineLvlSdt.AddElement(run, 0);"
       ],
       "params": [
         {
@@ -61,6 +61,9 @@
     "AddListItem": {
       "description": "Adds an item to a combo box list or drop-down list.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddListItem/",
+      "examples": [
+        "// How do I populate a combobox content control with list items in a document?\n\n// Build a dropdown list inside a content control and set its active value in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = doc.AddComboBoxContentControl();\nlet paragraph1 = Api.CreateParagraph();\ncontentControl.AddListItem('one', '1');\ncontentControl.AddListItem('two', '2');\ncontentControl.SelectListItem('2');"
+      ],
       "params": [
         {
           "description": "The name of the item to add to the list.",
@@ -90,7 +93,7 @@
       "description": "Adds text to the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/AddText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+        "// How do I insert text into an inline text content control in a document?\n\n// Fill an inline content control with a plain-text string in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
       ],
       "params": [
         {
@@ -109,7 +112,7 @@
       "description": "Creates a copy of an inline content control. Ignores comments, footnote references, complex fields.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Copy/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet copyInlineLvlSdt = inlineLvlSdt.Copy();\nparagraph.AddLineBreak();\nparagraph.AddInlineLvlSdt(copyInlineLvlSdt);"
+        "// How do I copy an inline content control in a document?\n\n// Place the original and its copy side by side in a paragraph to reuse formatted input fields in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet copyInlineLvlSdt = inlineLvlSdt.Copy();\nparagraph.AddLineBreak();\nparagraph.AddInlineLvlSdt(copyInlineLvlSdt);"
       ],
       "params": [],
       "returns": {
@@ -121,7 +124,7 @@
       "description": "Removes a content control and its content. If keepContent is true, the content is not deleted.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Delete/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.Delete(false);\nparagraph.AddText(\"The inline text content control was removed.\");"
+        "// How do I delete an inline content control in a document?\n\n// Replace a content control with plain text to clean up unwanted input fields in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.Delete(false);\nparagraph.AddText(\"The inline text content control was removed.\");"
       ],
       "params": [
         {
@@ -140,7 +143,7 @@
       "description": "Returns the alias attribute for the current container.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetAlias/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
+        "// How do I get the alias assigned to an inline content control in a document?\n\n// Display the alias label of a named content control to verify its identity in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -151,6 +154,9 @@
     "GetAppearance": {
       "description": "Returns the visualization type of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetAppearance/",
+      "examples": [
+        "// How do I get the appearance style of an inline content control in a document?\n\n// Check whether a content control is displayed as a bounding box, tags, or hidden in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = Api.CreateInlineLvlSdt();\nlet appearance = contentControl.GetAppearance();\ncontentControl.AddText(\"The appearance of this content control: \" + appearance);\nparagraph.Push(contentControl);"
+      ],
       "params": [],
       "returns": {
         "description": "type - The visualization type of the content control.",
@@ -162,6 +168,9 @@
     "GetBackgroundColor": {
       "description": "Returns the background color of the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetBackgroundColor/",
+      "examples": [
+        "// How do I get the background color of an inline content control in a document?\n\n// Compare the fill color of multiple content controls to audit their visual styling in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\ninlineLvlSdt.SetBackgroundColor(Api.RGBA(0, 0, 255, 40));\nlet color = inlineLvlSdt.GetBackgroundColor();\nrun.AddText(\"BackgroundColor: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\n\ninlineLvlSdt = Api.CreateInlineLvlSdt();\nrun = Api.CreateRun();\ncolor = inlineLvlSdt.GetBackgroundColor();\nrun.AddText(\"BackgroundColor: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -172,6 +181,9 @@
     "GetBorderColor": {
       "description": "Returns the border color of the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetBorderColor/",
+      "examples": [
+        "// How do I get the border color of an inline content control in a document?\n\n// Compare the outline color of multiple content controls to audit their visual styling in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\ninlineLvlSdt.SetBorderColor(Api.HexColor('#0000FF'));\nlet color = inlineLvlSdt.GetBorderColor();\nrun.AddText(\"BorderColor: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\n\ninlineLvlSdt = Api.CreateInlineLvlSdt();\nrun = Api.CreateRun();\ncolor = inlineLvlSdt.GetBorderColor();\nrun.AddText(\"BorderColor: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiColor"
@@ -183,7 +195,7 @@
       "description": "Returns a type of the ApiInlineLvlSdt class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nlet classType = inlineLvlSdt.GetClassType();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class Type = \" + classType);"
+        "// How do I get the class type of an inline content control in a document?\n\n// Verify the object type at runtime to distinguish content controls from other elements in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.AddElement(run, 0);\nlet classType = inlineLvlSdt.GetClassType();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Class Type = \" + classType);"
       ],
       "params": [],
       "returns": {
@@ -194,6 +206,9 @@
     "GetColor": {
       "description": "Returns the tag color of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetColor/",
+      "examples": [
+        "// How do I get the color assigned to an inline content control in a document?\n\n// Compare the tag colors of multiple content controls to audit their visual coding in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\ninlineLvlSdt.SetColor(Api.RGB(0, 0, 255));\nlet color = inlineLvlSdt.GetColor();\nrun.AddText(\"Color: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\n\ninlineLvlSdt = Api.CreateInlineLvlSdt();\nrun = Api.CreateRun();\ncolor = inlineLvlSdt.GetColor();\nrun.AddText(\"Color: \" + (color ? color.GetHex() : \"none\"));\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns the tag color, or _null_ if no color is set.",
@@ -205,6 +220,9 @@
     "GetDataBinding": {
       "description": "Retrieves the data binding of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDataBinding/",
+      "examples": [
+        "// How do I get the data binding of an inline content control in a document?\n\n// Inspect the XML store reference linked to a content control to confirm its data source in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<pic:documentData xmlns:pic=\"http://example.com/picture\">\n  <pic:text>123</pic:text>\n</pic:documentData>`;\nlet partId = xmlManager.Add(xmlText).GetId();\nlet contentControl = Api.CreateInlineLvlSdt();\ncontentControl.SetDataBinding({\n  prefixMapping : \"xmlns:pic='http://example.com/picture'\",\n  storeItemID : partId,\n  xpath : \"/pic:documentData/pic:text\"\n});\nlet paragraph = doc.GetElement(0);\nparagraph.Push(contentControl);\n\nlet dataBinding = contentControl.GetDataBinding();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(dataBinding.storeItemID);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns the data binding of the content control if it exists, otherwise `null`.",
@@ -216,6 +234,9 @@
     "GetDataForXmlMapping": {
       "description": "Returns the content control data for the XML mapping.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDataForXmlMapping/",
+      "examples": [
+        "// How do I retrieve the XML-mapped data from an inline content control in a document?\n\n// Output the raw control value to verify what would be written to a bound XML store in a document.\n\nlet doc = Api.GetDocument();\nlet contentControl = Api.CreateInlineLvlSdt();\ncontentControl.AddText(\"This is an inline content control.\");\nlet paragraph = doc.GetElement(0);\nparagraph.Push(contentControl);\n\nlet data = contentControl.GetDataForXmlMapping();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(data);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "The string data representing the contents of the current content control.",
@@ -227,6 +248,9 @@
     "GetDate": {
       "description": "Retrieves the selected date value from a date picker content control and returns it as a Date object.\n\nThrows: Error if the content control is not a date picker.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDate/",
+      "examples": [
+        "// How do I get the date value stored in a date picker content control in a document?\n\n// Display the formatted date from a date picker to confirm the value set on it in a document.\n\nlet doc = Api.GetDocument();\nlet contentControl = doc.AddDatePickerContentControl();\ncontentControl.SetDateFormat(\"yyyy-mm-dd\");\ncontentControl.SetDate(new Date(1961, 9, 3));\nlet paragraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nlet date = contentControl.GetDate();\nparagraph.AddText(date.toDateString());"
+      ],
       "params": [],
       "returns": {
         "description": "Date object representing the selected date in the date picker control, or undefined if the form is a placeholder.",
@@ -239,7 +263,7 @@
       "description": "Returns a list of values of the combo box / drop-down list content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetDropdownList/",
       "examples": [
-        "// todo_example we don't have ability to create such class in builder"
+        "// How do I access the dropdown list attached to a content control in a document?\n\n// Inspect the type of a dropdown list tied to an inline content control in a document.\n\nlet doc = Api.GetDocument();\nlet cc = Api.CreateDropDownListContentControl([{display: 'one', value: '1'}, {display: 'two', value: '2'}], 1);\nlet paragraph = Api.CreateParagraph();\nlet contentControlList = cc.GetDropdownList();\nparagraph.AddText(\"Class Type = \" + contentControlList.GetClassType());\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -251,7 +275,7 @@
       "description": "Returns an element of the current inline text content control using the position specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElement/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nfor (let i = 0; i < 10; ++i) {\n\tlet run = Api.CreateRun();\n\trun.AddText(\"This is text run \" + (i + 1) + \". \");\n\tinlineLvlSdt.AddElement(run);\n}\nlet changeRun = inlineLvlSdt.GetElement(4);\nchangeRun.SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddText(\"We added 10 text runs to the above inline text content control. Then we changed the fifth run, so it is different from the others.\");"
+        "// How do I get a single element from an inline content control in a document?\n\n// Bold a chosen run inside an inline content control to distinguish it from the rest in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nfor (let i = 0; i < 10; ++i) {\n\tlet run = Api.CreateRun();\n\trun.AddText(\"This is text run \" + (i + 1) + \". \");\n\tinlineLvlSdt.AddElement(run);\n}\nlet changeRun = inlineLvlSdt.GetElement(4);\nchangeRun.SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddLineBreak();\nparagraph.AddText(\"We added 10 text runs to the above inline text content control. Then we changed the fifth run, so it is different from the others.\");"
       ],
       "params": [
         {
@@ -286,7 +310,7 @@
       "description": "Returns a number of elements in the current inline text content control. The text content \ncontrol is created with one text run present in it by default, so even without any \nelement added this method will return the value of '1'.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetElementsCount/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nparagraph.AddLineBreak();\nlet inlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (before adding anything) = \" + inlineLvlSdtCount);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddLineBreak();\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one element) = \" + inlineLvlSdtCount);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"One more element of the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 1);\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one more element) = \" + inlineLvlSdtCount);"
+        "// How do I check how many elements an inline content control contains in a document?\n\n// Track the element count of an inline content control as runs are added to it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nparagraph.AddLineBreak();\nlet inlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (before adding anything) = \" + inlineLvlSdtCount);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nparagraph.AddLineBreak();\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one element) = \" + inlineLvlSdtCount);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"One more element of the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 1);\ninlineLvlSdtCount = inlineLvlSdt.GetElementsCount();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Number of elements in inlineLvlSdt (after adding one more element) = \" + inlineLvlSdtCount);"
       ],
       "params": [],
       "returns": {
@@ -297,6 +321,9 @@
     "GetId": {
       "description": "Returns a unique ID for the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetId/",
+      "examples": [
+        "// How do I retrieve the ID of an inline content control in a document?\n\n// Verify the custom ID set on an inline content control by printing it to the page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with an ID set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetId(\"4815162342\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet contentControlId = inlineLvlSdt.GetId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Id: \" + contentControlId);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -307,6 +334,9 @@
     "GetInternalId": {
       "description": "Returns an internal ID of the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetInternalId/",
+      "examples": [
+        "// How do I obtain the internal ID of an inline content control in a document?\n\n// Display the system-assigned internal ID of an inline content control alongside its text in a document.\n\nconst doc = Api.GetDocument();\nconst firstParagraph = doc.GetElement(0);\n\nconst run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\n\nconst inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddElement(run, 0);\nfirstParagraph.AddInlineLvlSdt(inlineLvlSdt);\n\nlet internalId = inlineLvlSdt.GetInternalId();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Internal Id: \" + internalId);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -317,7 +347,7 @@
       "description": "Returns the label attribute for the current container.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLabel/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLabel(\"2147483647\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
+        "// How do I read the label of an inline content control in a document?\n\n// Confirm the numeric label set on an inline content control by printing it to the page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLabel(2147483647);\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -329,7 +359,7 @@
       "description": "Returns the lock type of the current container.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetLock/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
+        "// How do I check the lock setting of an inline content control in a document?\n\n// Confirm a content lock by setting it on an inline control and printing the result in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -352,7 +382,7 @@
       "description": "Returns a content control that contains the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentContentControl/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt1 = Api.CreateInlineLvlSdt();\ninlineLvlSdt1.AddText(\"This is a parent inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt1);\nlet inlineLvlSdt2 = Api.CreateInlineLvlSdt();\ninlineLvlSdt2.AddText(\"This is an inline text content control added in another content control.\");\ninlineLvlSdt1.AddElement(inlineLvlSdt2, 0);\nlet parentInlineLvlSdt = inlineLvlSdt2.GetParentContentControl();\nparentInlineLvlSdt.SetAlias(\"№1\");"
+        "// How do I get the parent content control of a nested inline control in a document?\n\n// Identify and label the outer content control that wraps an inner inline control in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt1 = Api.CreateInlineLvlSdt();\ninlineLvlSdt1.AddText(\"This is a parent inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt1);\nlet inlineLvlSdt2 = Api.CreateInlineLvlSdt();\ninlineLvlSdt2.AddText(\"This is an inline text content control added in another content control.\");\ninlineLvlSdt1.AddElement(inlineLvlSdt2, 0);\nlet parentInlineLvlSdt = inlineLvlSdt2.GetParentContentControl();\nparentInlineLvlSdt.SetAlias(\"№1\");"
       ],
       "params": [],
       "returns": {
@@ -365,7 +395,7 @@
       "description": "Returns a paragraph that contains the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentParagraph/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a parent paragraph. \");\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control added to the paragraph.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet parentParagraph = inlineLvlSdt.GetParentParagraph();\nparentParagraph.SetBold(true);"
+        "// How do I get the paragraph that contains an inline content control in a document?\n\n// Apply bold formatting to the entire paragraph that wraps an inline content control in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a parent paragraph. \");\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control added to the paragraph.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet parentParagraph = inlineLvlSdt.GetParentParagraph();\nparentParagraph.SetBold(true);"
       ],
       "params": [],
       "returns": {
@@ -378,7 +408,7 @@
       "description": "Returns a table that contains the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentTable/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTable = inlineLvlSdt.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
+        "// How do I get the parent table of an inline content control in a document?\n\n// Modify the parent table structure after locating it through an inline content control in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTable = inlineLvlSdt.GetParentTable();\ncell = parentTable.GetRow(2).GetCell(0);\nparentTable.RemoveRow(cell);"
       ],
       "params": [],
       "returns": {
@@ -391,7 +421,7 @@
       "description": "Returns a table cell that contains the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetParentTableCell/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTableCell = inlineLvlSdt.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", 255, 111, 61, false);"
+        "// How do I get the parent table cell of an inline content control in a document?\n\n// Apply a background color to the cell that holds an inline content control in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ndoc.Push(table);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nlet paragraph = Api.CreateParagraph();\nparagraph.AddElement(inlineLvlSdt, 0);\nlet cell = table.GetRow(0).GetCell(0);\ncell.AddElement(0, paragraph);\nlet parentTableCell = inlineLvlSdt.GetParentTableCell();\nparentTableCell.SetShd(\"clear\", Api.HexColor('#FF6F3D'));"
       ],
       "params": [],
       "returns": {
@@ -404,7 +434,7 @@
       "description": "Returns the placeholder text from the current inline content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetPlaceholderText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetPlaceholderText(\"Enter your text here\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet placeholderText = inlineLvlSdt.GetPlaceholderText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Placeholder text: \" + placeholderText);\ndoc.Push(paragraph);"
+        "// How do I read the placeholder text of an inline content control in a document?\n\n// Confirm the placeholder message is stored correctly before displaying it to users in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetPlaceholderText(\"Enter your text here\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet placeholderText = inlineLvlSdt.GetPlaceholderText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Placeholder text: \" + placeholderText);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -427,7 +457,7 @@
       "description": "Returns a Range object that represents the part of the document contained in the specified content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetRange/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet range = inlineLvlSdt.GetRange(11, 16);\nrange.SetBold(true);"
+        "// How do I select a specific portion of text inside an inline content control in a document?\n\n// Apply bold formatting to a substring inside a content control by targeting its range in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet range = inlineLvlSdt.GetRange(11, 16);\nrange.SetBold(true);"
       ],
       "params": [
         {
@@ -450,7 +480,7 @@
       "description": "Returns the tag attribute for the current container.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/GetTag/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetTag(\"This is a tag\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
+        "// How do I retrieve the tag value of an inline content control in a document?\n\n// Verify that a previously assigned tag is stored and accessible on a content control in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetTag(\"This is a tag\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -461,6 +491,9 @@
     "IsCheckBox": {
       "description": "Checks if the content control is a checkbox.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsCheckBox/",
+      "examples": [
+        "// How do I check whether a content control acts as a checkbox in a document?\n\n// Distinguish a checkbox control from other control types before applying checkbox-specific logic in a document.\n\nlet doc = Api.GetDocument();\nlet inlineControl = doc.AddCheckBoxContentControl();\nlet isCheckBox = inlineControl.IsCheckBox();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Is the content control a checkbox? \" + isCheckBox);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a checkbox, otherwise `false`.",
@@ -472,6 +505,9 @@
     "IsCheckBoxChecked": {
       "description": "Determines whether a checkbox content control is currently checked or unchecked.\n\nThrows: Error if the content control is not a checkbox.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsCheckBoxChecked/",
+      "examples": [
+        "// How do I find out whether a checkbox content control is checked in a document?\n\n// Conditionally display text based on whether a checkbox is ticked or unticked in a document.\n\nlet doc = Api.GetDocument();\nlet checkBox = doc.AddCheckBoxContentControl();\nlet paragraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nlet isChecked = checkBox.IsCheckBoxChecked();\nparagraph.AddText(\"Checked: \" + (isChecked ? \"true\" : \"false\"));"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the checkbox is checked, `false` if the checkbox is unchecked.",
@@ -483,6 +519,9 @@
     "IsComboBox": {
       "description": "Checks whether the content control is a combo box list.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsComboBox/",
+      "examples": [
+        "// How do I verify that a content control is a combo box in a document?\n\n// Distinguish a combo box from other list-type controls before processing its selected value in a document.\n\nlet doc = Api.GetDocument();\nlet comboboxControl = doc.AddComboBoxContentControl();\nlet isComboBox = comboboxControl.IsComboBox();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Is this content control a combobox list? \" + isComboBox);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a combo box list, otherwise `false`.",
@@ -494,6 +533,9 @@
     "IsDatePicker": {
       "description": "Checks whether the content control is a datepicker.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsDatePicker/",
+      "examples": [
+        "// How do I verify that a content control is a date picker in a document?\n\n// Identify date picker controls to handle date input fields separately from other control types in a document.\n\nlet doc = Api.GetDocument();\nlet contentControl = doc.AddDatePickerContentControl();\nlet paragraph1 = Api.CreateParagraph();\nparagraph1.AddText(contentControl.IsDatePicker() ? \"true\" : \"false\");\ndoc.AddElement(1, paragraph1);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a datepicker, otherwise `false`.",
@@ -505,6 +547,9 @@
     "IsDropDownList": {
       "description": "Checks whether the content control is a drop-down list.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsDropDownList/",
+      "examples": [
+        "// How do I check whether a content control is a dropdown list in a document?\n\n// Distinguish a dropdown list from combo boxes or text controls before reading its selected option in a document.\n\nlet doc = Api.GetDocument();\nlet inlineControl = doc.AddDropDownListContentControl();\nlet isDropDown = inlineControl.IsDropDownList();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Is this content control a dropdown list? \" + isDropDown);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a drop-down list, otherwise `false`.",
@@ -517,7 +562,7 @@
       "description": "Checks if the content control is a form.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet isForm = inlineLvlSdt.IsForm();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first content control from this document is a form: \" + isForm);\ndoc.Push(paragraph);"
+        "// How do I find out whether an inline content control is part of a form in a document?\n\n// Separate form-bound controls from standalone controls to apply different processing rules in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet isForm = inlineLvlSdt.IsForm();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The first content control from this document is a form: \" + isForm);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -528,6 +573,9 @@
     "IsPicture": {
       "description": "Checks whether the content control is a picture control.\nThis method verifies if the content control is specifically a picture control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/IsPicture/",
+      "examples": [
+        "// How do I verify that a content control is intended to hold a picture in a document?\n\n// Identify picture controls to apply image-specific handling separately from text controls in a document.\n\nlet doc = Api.GetDocument();\nlet inlineControl = doc.AddPictureContentControl();\nlet isPicture = inlineControl.IsPicture();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"Is this content control a picture? \" + isPicture);\ndoc.Push(paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the content control is a picture, otherwise `false`.",
@@ -540,7 +588,7 @@
       "description": "Places a cursor before/after the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/MoveCursorOutside/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"The cursor will be placed after the current content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.MoveCursorOutside(true);"
+        "// How do I move the cursor beyond the boundaries of an inline content control in a document?\n\n// Programmatically exit a content control so subsequent input lands outside it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"The cursor will be placed after the current content control.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.MoveCursorOutside(true);"
       ],
       "params": [
         {
@@ -560,7 +608,7 @@
       "description": "Adds an element to the end of inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Push/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nrun = Api.CreateRun();\nrun.AddText(\"This sentence was pushed here.\");\ninlineLvlSdt.Push(run);"
+        "// How do I add more text to an existing inline content control in a document?\n\n// Extend a content control with a new run when building up inline text step by step in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control. \");\ninlineLvlSdt.AddElement(run, 0);\nrun = Api.CreateRun();\nrun.AddText(\"This sentence was pushed here.\");\ninlineLvlSdt.Push(run);"
       ],
       "params": [
         {
@@ -579,7 +627,7 @@
       "description": "Removes all the elements from the current inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveAllElements/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.RemoveAllElements();\ninlineLvlSdt.AddText(\"We removed all the inline content control elements.\");"
+        "// How do I clear all content from an inline text control in a document?\n\n// Reset a content control to empty when replacing its contents with fresh text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.AddText(\"This is an inline text content control.\");\ninlineLvlSdt.RemoveAllElements();\ninlineLvlSdt.AddText(\"We removed all the inline content control elements.\");"
       ],
       "params": [],
       "returns": {
@@ -592,7 +640,7 @@
       "description": "Removes an element using the position specified from the current inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveElement/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is the first text run in the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"This is the second text run in the inline text content control. The first text run was removed.\");\ninlineLvlSdt.AddElement(run2, 1);\ninlineLvlSdt.RemoveElement(0);"
+        "// How do I delete one run from an inline content control at a given position in a document?\n\n// Drop an unwanted run from a content control by its position when editing inline text in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"This is the first text run in the inline text content control.\");\ninlineLvlSdt.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\"This is the second text run in the inline text content control. The first text run was removed.\");\ninlineLvlSdt.AddElement(run2, 1);\ninlineLvlSdt.RemoveElement(0);"
       ],
       "params": [
         {
@@ -609,6 +657,9 @@
     "RemoveListItem": {
       "description": "Removes an item from a combo box list or drop-down list.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/RemoveListItem/",
+      "examples": [
+        "// How do I remove an entry from a dropdown or combo box control in a document?\n\n// Trim the available choices in a combo box by removing an item that is no longer needed in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = doc.AddComboBoxContentControl();\nlet paragraph1 = Api.CreateParagraph();\ncontentControl.AddListItem('one', '1');\ncontentControl.AddListItem('two', '2');\ncontentControl.SelectListItem('2');\ncontentControl.RemoveListItem('1');"
+      ],
       "params": [
         {
           "description": "The value of the item to remove from the list.",
@@ -626,6 +677,9 @@
     "Select": {
       "description": "Selects the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/Select/",
+      "examples": [
+        "// How do I programmatically select an inline content control in a document?\n\n// Highlight a content control so the cursor lands on it when navigating in a document.\n\nlet doc = Api.GetDocument();\nlet checkbox = doc.AddCheckBoxContentControl();\ncheckbox.Select();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"
@@ -636,6 +690,9 @@
     "SelectListItem": {
       "description": "Sets the selected item for a combo box list or drop-down list.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SelectListItem/",
+      "examples": [
+        "// How do I set the selected value of a combo box or dropdown control in a document?\n\n// Pick a specific entry by value to pre-fill a combo box for the user in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = doc.AddComboBoxContentControl();\nlet paragraph1 = Api.CreateParagraph();\ncontentControl.AddListItem('one', '1');\ncontentControl.AddListItem('two', '2');\ncontentControl.SelectListItem('2');"
+      ],
       "params": [
         {
           "description": "The name of the item to be selected in the list.",
@@ -654,7 +711,7 @@
       "description": "Sets the alias attribute to the current container.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetAlias/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
+        "// How do I label an inline content control with an alias in a document?\n\n// Give a content control a friendly name so it can be identified easily by alias in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with alias '№1'.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetAlias(\"№1\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet alias = inlineLvlSdt.GetAlias();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Alias: \" + alias);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -671,6 +728,9 @@
     "SetAppearance": {
       "description": "Sets the visualization type of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetAppearance/",
+      "examples": [
+        "// How do I hide or show the border of an inline content control in a document?\n\n// Make a content control invisible to the reader by setting its appearance to hidden in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = Api.CreateInlineLvlSdt();\ncontentControl.SetAppearance(\"hidden\");\ncontentControl.AddText(\"This is a content control with a hidden appearance\");\nparagraph.Push(contentControl);"
+      ],
       "params": [
         {
           "description": "The desired visualization type.",
@@ -687,6 +747,9 @@
     "SetBackgroundColor": {
       "description": "Sets the background color to the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetBackgroundColor/",
+      "examples": [
+        "// How do I highlight an inline content control with a custom background color in a document?\n\n// Shade a content control with a semi-transparent fill to make it stand out visually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a transparent blue background.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetBackgroundColor(Api.RGBA(0, 0, 255, 40));\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [
         {
           "description": "The background color.",
@@ -704,6 +767,9 @@
     "SetBorderColor": {
       "description": "Sets the border color to the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetBorderColor/",
+      "examples": [
+        "// How do I change the border color of an inline content control in a document?\n\n// Distinguish a content control from surrounding text by giving its border a distinct color in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with blue border.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetBorderColor(Api.HexColor('#0000FF'));\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [
         {
           "description": "The border color.",
@@ -721,6 +787,9 @@
     "SetCheckBoxChecked": {
       "description": "Sets the checkbox value for the content control.\nThis method updates the checkbox state of the content control to either checked or unchecked.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetCheckBoxChecked/",
+      "examples": [
+        "// How do I programmatically check or uncheck a checkbox control in a document?\n\n// Pre-fill a form by setting a checkbox to its checked state before the user opens it in a document.\n\nlet doc = Api.GetDocument();\nlet inlineControl = doc.AddCheckBoxContentControl();\ninlineControl.SetCheckBoxChecked(true);"
+      ],
       "params": [
         {
           "description": "The state to set for the checkbox. `true` for checked, `false` for unchecked.",
@@ -738,6 +807,9 @@
     "SetColor": {
       "description": "Sets the tag color of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetColor/",
+      "examples": [
+        "// How do I change the color of an inline content control in a document?\n\n// Apply a specific RGB color to visually distinguish a content control in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a blue tag color.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetColor(Api.RGB(0, 0, 255));\nparagraph.AddInlineLvlSdt(inlineLvlSdt);"
+      ],
       "params": [
         {
           "description": "The tag color. Pass _null_ to remove the color.",
@@ -754,6 +826,9 @@
     "SetDataBinding": {
       "description": "Sets the data binding for the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDataBinding/",
+      "examples": [
+        "// How do I link an inline content control to an XML data source in a document?\n\n// Populate a content control automatically from structured XML stored inside the document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<pic:documentData xmlns:pic=\"http://example.com/picture\">\n  <pic:text>123</pic:text>\n</pic:documentData>`;\nlet partId = xmlManager.Add(xmlText).GetId();\nlet contentControl = Api.CreateInlineLvlSdt();\ncontentControl.SetDataBinding({\n  prefixMapping : \"xmlns:pic='http://example.com/picture'\",\n  storeItemID : partId,\n  xpath : \"/pic:documentData/pic:text\"\n});\nlet paragraph = doc.GetElement(0);\nparagraph.Push(contentControl);"
+      ],
       "params": [
         {
           "description": "The data binding to associate with the content control.",
@@ -770,6 +845,9 @@
     "SetDate": {
       "description": "Sets the value for the datepicker content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDate/",
+      "examples": [
+        "// How do I set the selected date on a date picker content control in a document?\n\n// Pre-fill a date picker with a fixed date so users see a ready-made value in a document.\n\nlet doc = Api.GetDocument();\nlet contentControl = doc.AddDatePickerContentControl();\ncontentControl.SetDate(new Date(1998, 4, 10));"
+      ],
       "params": [
         {
           "description": "The date value to set for the datepicker.",
@@ -787,6 +865,9 @@
     "SetDateFormat": {
       "description": "Sets the date format for the datepicker content control.\nThis method allows setting the format in which the date should be displayed in the datepicker content control.\nThe format string should be specified using common date format patterns (e.g., \"mm.dd.yyyy\").",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetDateFormat/",
+      "examples": [
+        "// How do I control how a date is displayed in a date picker content control in a document?\n\n// Enforce a consistent date style across forms by setting a format pattern in a document.\n\nlet doc = Api.GetDocument();\nlet contentControl = doc.AddDatePickerContentControl();\nlet paragraph1 = Api.CreateParagraph();\ncontentControl.SetDateFormat('dd.mm.yyyy');\ncontentControl.SetDate(new Date(1998, 2, 1));"
+      ],
       "params": [
         {
           "description": "The desired date format (e.g., \"mm.dd.yyyy\").",
@@ -804,6 +885,9 @@
     "SetId": {
       "description": "Specifies a unique ID for the current content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetId/",
+      "examples": [
+        "// How do I give an inline content control a specific ID in a document?\n\n// Tag a content control with a known ID so it can be retrieved by reference later in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with an ID set to it.\");\ninlineLvlSdt.AddElement(run, 0);\ninlineLvlSdt.SetId(\"4815162342\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet contentControlId = inlineLvlSdt.GetId();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Id: \" + contentControlId);\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The numerical ID which will be specified for the current content control.",
@@ -821,7 +905,7 @@
       "description": "Adds a string label to the current inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetLabel/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.SetLabel(\"2147483647\");\ninlineLvlSdt.AddElement(run, 0);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
+        "// How do I assign a label value to an inline content control in a document?\n\n// Read back a label after setting it to confirm the value was stored correctly in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a label set to it.\");\ninlineLvlSdt.SetLabel(2147483647);\ninlineLvlSdt.AddElement(run, 0);\nlet label = inlineLvlSdt.GetLabel();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Label: \" + label);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -839,7 +923,7 @@
       "description": "Sets the lock to the current inline text content control:\n**\"unlocked\"** - content can be edited and the container can be deleted.\n**\"contentLocked\"** - content cannot be edited.\n**\"sdtContentLocked\"** - content cannot be edited and the container cannot be deleted.\n**\"sdtLocked\"** - the container cannot be deleted.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetLock/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\ninlineLvlSdt.AddElement(run, 0);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
+        "// How do I prevent users from editing the content of an inline content control in a document?\n\n// Verify the active lock type on a content control by reading it back in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with the content lock set to it.\");\ninlineLvlSdt.SetLock(\"sdtContentLocked\");\ninlineLvlSdt.AddElement(run, 0);\nlet lock = inlineLvlSdt.GetLock();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Lock type: \" + lock);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -856,6 +940,9 @@
     "SetPicture": {
       "description": "Sets the content (image) for the picture content control.\nThis method updates the picture inside a content control by setting an image from a provided URL.\nThe URL should be an internet link to the image.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPicture/",
+      "examples": [
+        "// How do I load an image from a URL into a picture content control in a document?\n\n// Replace the default placeholder of a picture control with an actual image in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet contentControl = doc.AddPictureContentControl();\ncontentControl.SetPicture('https://upload.wikimedia.org/wikipedia/commons/e/eb/Ash_Tree_-_geograph.org.uk_-_590710.jpg');"
+      ],
       "params": [
         {
           "description": "The URL of the image to be used for the content control.\rCurrently, only internet URLs are supported.",
@@ -873,6 +960,9 @@
     "SetPictureSize": {
       "description": "Sets the size for the picture in a content control.\nThis method adjusts the width and height of the image if the content control is a picture.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPictureSize/",
+      "examples": [
+        "// How do I set the exact width and height of a picture content control in a document?\n\n// Control the display dimensions of an embedded image to fit a fixed layout in a document.\n\nlet doc = Api.GetDocument();\nlet inlineControl = doc.AddPictureContentControl();\ninlineControl.SetPictureSize(50 * 36000, 70 * 36000);"
+      ],
       "params": [
         {
           "description": "The desired image width .",
@@ -896,7 +986,7 @@
       "description": "Sets the placeholder text to the current inline content control.\n*Can't be set to checkbox or radio button*",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetPlaceholderText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.SetPlaceholderText(\"Custom placeholder\");"
+        "// How do I set a custom placeholder message for an inline content control in a document?\n\n// Guide users with descriptive hint text shown inside an empty content control in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\ninlineLvlSdt.SetPlaceholderText(\"Custom placeholder\");"
       ],
       "params": [
         {
@@ -914,7 +1004,7 @@
       "description": "Adds a string tag to the current inline text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetTag/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.SetTag(\"This is a tag\");\ninlineLvlSdt.AddElement(run, 0);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
+        "// How do I add a searchable tag to an inline content control in a document?\n\n// Read back the tag after setting it to confirm the stored value in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control with a tag set to it.\");\ninlineLvlSdt.SetTag(\"This is a tag\");\ninlineLvlSdt.AddElement(run, 0);\nlet tag = inlineLvlSdt.GetTag();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Tag: \" + tag);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -932,7 +1022,7 @@
       "description": "Applies text settings to the content of the content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/SetTextPr/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control with the font size set to 30 and the font weight set to bold.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ninlineLvlSdt.SetTextPr(textPr);"
+        "// How do I set font size and bold style on an inline content control in a document?\n\n// Style an inline text field with custom typography to highlight it visually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.AddText(\"This is an inline text content control with the font size set to 30 and the font weight set to bold.\");\nparagraph.AddInlineLvlSdt(inlineLvlSdt);\nlet textPr = Api.CreateTextPr();\ntextPr.SetFontSize(30);\ntextPr.SetBold(true);\ninlineLvlSdt.SetTextPr(textPr);"
       ],
       "params": [
         {
@@ -951,7 +1041,7 @@
       "description": "Converts the ApiInlineLvlSdt object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetAlias(\"№1\");\nlet json = inlineLvlSdt.ToJSON(true);\nlet inlineLvlSdtFromJSON = Api.FromJSON(json);\nparagraph.AddInlineLvlSdt(inlineLvlSdtFromJSON);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdtFromJSON.AddElement(run, 0);"
+        "// How do I convert an inline content control to JSON format in a document?\n\n// Preserve and reuse a configured inline content control by round-tripping it through JSON in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet inlineLvlSdt = Api.CreateInlineLvlSdt();\ninlineLvlSdt.SetAlias(\"№1\");\nlet json = inlineLvlSdt.ToJSON(true);\nlet inlineLvlSdtFromJSON = Api.FromJSON(json);\nparagraph.AddInlineLvlSdt(inlineLvlSdtFromJSON);\nlet run = Api.CreateRun();\nrun.AddText(\"This is an inline text content control.\");\ninlineLvlSdtFromJSON.AddElement(run, 0);"
       ],
       "params": [
         {
@@ -968,6 +1058,9 @@
     "UpdateFromXmlMapping": {
       "description": "Updates the content control using the value from the XML mapping.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiInlineLvlSdt/Methods/UpdateFromXmlMapping/",
+      "examples": [
+        "// How do I sync an inline content control with changed XML data in a document?\n\n// Bind a content control to an XML node so that edits to the XML are reflected automatically in a document.\n\nlet doc = Api.GetDocument();\nlet xmlManager = doc.GetCustomXmlParts();\nlet xmlText = `\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<pic:documentData xmlns:pic=\"http://example.com/picture\">\n  <pic:text>123</pic:text>\n</pic:documentData>`;\nlet xmlPart = xmlManager.Add(xmlText);\nlet contentControl = Api.CreateInlineLvlSdt();\nlet paragraph = doc.GetElement(0);\nparagraph.Push(contentControl);\n\ncontentControl.SetDataBinding({\n  prefixMapping : \"xmlns:pic='http://example.com/picture'\",\n  storeItemID : xmlPart.GetId(),\n  xpath : \"/pic:documentData/pic:text\"\n});\n\nlet nodes = xmlPart.GetNodes('/pic:documentData/pic:text');\nlet node = nodes[0];\nnode.SetText('987');\n\ncontentControl.UpdateFromXmlMapping();\n\nlet paragraph2 = Api.CreateParagraph();\nparagraph2.AddText(paragraph.GetText());\ndoc.Push(paragraph2);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns `true` if the update was successful, otherwise `false`.",

@@ -2,7 +2,7 @@
   "description": "Returns a paragraph element using the position specified.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/GetElement/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first text run. Do not forget a space at its end to separate from the second one. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the second run. We will set it bold afterwards. It also needs space at its end. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the third run. It ends the paragraph.\");\nparagraph.AddElement(run);\nrun = paragraph.GetElement(1);\nrun.SetBold(true);\ndoc.Push(paragraph);"
+    "// How do I retrieve a single run from a paragraph by position in a document?\n\n// Target one text run out of many to apply selective formatting in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.RemoveAllElements();\nlet run = Api.CreateRun();\nrun.AddText(\"This is the text for the first text run. Do not forget a space at its end to separate from the second one. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the second run. We will set it bold afterwards. It also needs space at its end. \");\nparagraph.AddElement(run);\nrun = Api.CreateRun();\nrun.AddText(\"This is the text for the third run. It ends the paragraph.\");\nparagraph.AddElement(run);\nrun = paragraph.GetElement(1);\nrun.SetBold(true);\ndoc.Push(paragraph);"
   ],
   "params": [
     {

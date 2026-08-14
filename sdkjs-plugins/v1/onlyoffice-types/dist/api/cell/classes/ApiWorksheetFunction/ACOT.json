@@ -2,7 +2,7 @@
   "description": "Returns the arccotangent of a number, in radians in the range from 0 to Pi.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ACOT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ACOT(0));"
+    "// Get the inverse cotangent value using a trigonometric function in a spreadsheet.\n\n// Place the arccotangent result into a cell for reference in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ACOT(0));"
   ],
   "params": [
     {

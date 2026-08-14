@@ -2,7 +2,7 @@
   "description": "Checks whether a value is an error, and returns **true** or **false**.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ISERROR/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"B3\").SetValue(\"#N/A\")\nlet result = func.ISERR(\"B3\");\nworksheet.GetRange(\"C3\").SetValue(result)"
+    "// How do I determine if a cell contains an error in a spreadsheet?\n\n// Test whether a value is an error result in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"B3\").SetValue(\"#N/A\")\nlet result = func.ISERR(\"B3\");\nworksheet.GetRange(\"C3\").SetValue(result)"
   ],
   "params": [
     {

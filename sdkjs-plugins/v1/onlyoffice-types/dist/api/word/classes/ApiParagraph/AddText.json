@@ -2,7 +2,7 @@
   "description": "Adds some text to the current paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddText/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. Nothing special.\");"
+    "// How do I insert a text string into a paragraph in a document?\n\n// Place custom text inside a paragraph to build document content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is just a sample text. Nothing special.\");"
   ],
   "params": [
     {

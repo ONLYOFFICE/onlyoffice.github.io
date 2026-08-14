@@ -1,0 +1,39 @@
+{
+  "description": "Modifies the current format condition with the specified parameters.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/Modify/",
+  "examples": [
+    "// How do I change what value or formula a conditional formatting rule checks for in a spreadsheet?\n\n// Replace the trigger condition of a formatting rule without removing it from a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(30);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(40);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlLess\", \"50\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original formula:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.Formula1);\n\ncondition1.Modify(\"xlCellValue\", \"xlGreater\", \"200\");\n\nworksheet.GetRange(\"C4\").SetValue(\"Modified formula:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.Formula1);"
+  ],
+  "params": [
+    {
+      "description": "The format condition type.",
+      "name": "Type",
+      "optional": true,
+      "type": "XlFormatConditionType"
+    },
+    {
+      "description": "The format condition operator.",
+      "name": "Operator",
+      "optional": true,
+      "type": "XlFormatConditionOperator"
+    },
+    {
+      "description": "The first formula.",
+      "name": "Formula1",
+      "optional": true,
+      "type": "string | number | ApiRange"
+    },
+    {
+      "description": "The second formula.",
+      "name": "Formula2",
+      "optional": true,
+      "type": "string | number | ApiRange"
+    }
+  ],
+  "returns": {
+    "description": "The modified format condition, or null if the rule does not exist.",
+    "type": "ApiFormatCondition | null"
+  },
+  "signature": "Modify(Type?: XlFormatConditionType, Operator?: XlFormatConditionOperator, Formula1?: string | number | ApiRange, Formula2?: string | number | ApiRange): ApiFormatCondition | null",
+  "since": "9.1.0"
+}

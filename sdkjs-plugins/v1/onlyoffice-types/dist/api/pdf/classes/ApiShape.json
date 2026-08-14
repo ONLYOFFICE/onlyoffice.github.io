@@ -8,6 +8,9 @@
     "GetClassType": {
       "description": "Returns the type of the ApiShape class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetClassType/",
+      "examples": [
+        "// What kind of object is a shape in a PDF?\n\n// Determine the class name of a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst classType = shape.GetClassType();\nparagraph.AddText(\"Class Type = \" + classType);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"shape\""
@@ -17,6 +20,9 @@
     "GetContent": {
       "description": "Returns the shape inner contents where a paragraph or text runs can be inserted.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetContent/",
+      "examples": [
+        "// How do I get what is inside a shape in a PDF?\n\n// Extract and work with a shape's content in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nshape.SetVerticalTextAlign(\"bottom\");\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\nparagraph.AddText(\"aligning it vertically by the bottom.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiDocumentContent"
@@ -35,6 +41,9 @@
     "GetFill": {
       "description": "Gets the fill properties from the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetFill/",
+      "examples": [
+        "// What fill settings does a shape have in a PDF?\n\n// Get the color or gradient applied to a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet retrievedFill = shape.GetFill();\nif (retrievedFill) {\n    paragraph.AddText(\"Fill type: \" + retrievedFill.GetType());\n}"
+      ],
       "params": [],
       "returns": {
         "type": "ApiFill | null"
@@ -44,6 +53,9 @@
     "GetGeometry": {
       "description": "Returns the geometry object from the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetGeometry/",
+      "examples": [
+        "// How do I check the shape's drawing pattern in a PDF?\n\n// Access the shape's built-in or custom drawing design in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(200, 100, 0)));\nlet shape = Api.CreateShape(\"star5\", 100 * 36000, 100 * 36000, fill, stroke);\nlet geometry = shape.GetGeometry();\nshape.GetContent().GetElement(0).AddText(\"Preset: \" + geometry.GetPreset() + \", IsCustom: \" + geometry.IsCustom());\nshape.SetPosition(1000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiGeometry"
@@ -53,6 +65,9 @@
     "GetLine": {
       "description": "Gets the outline properties from the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/GetLine/",
+      "examples": [
+        "// How do I read the outline details of a shape in a PDF?\n\n// View the border information including width and color in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(2.5 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(200, 100, 0)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nlet retrievedStroke = shape.GetLine();\nif (retrievedStroke) {\n    paragraph.AddText(\"Stroke type: \" + retrievedStroke.GetClassType());\n    paragraph.AddLineBreak();\n    let width = retrievedStroke.GetWidth();\n    paragraph.AddText(\"Width: \" + width + \" EMU (\" + (width / 12700).toFixed(2) + \" pt)\");\n    paragraph.AddLineBreak();\n    let strokeFill = retrievedStroke.GetFill();\n    if (strokeFill) {\n        paragraph.AddText(\"Fill type: \" + strokeFill.GetType());\n    }\n    paragraph.AddLineBreak();\n    let dashType = retrievedStroke.GetDashType();\n    paragraph.AddText(\"Dash type: \" + (dashType ? '\"' + dashType + '\"' : \"not set\"));\n}"
+      ],
       "params": [],
       "returns": {
         "type": "ApiStroke | null"
@@ -62,6 +77,9 @@
     "GetParentPage": {
       "description": "Returns the type of the ApiDrawing class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify the category of a drawing object in a PDF?\n\n// Determine the kind of object you're working with in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\ndrawing.SetSize(150 * 36000, 65 * 36000);\npage.AddObject(drawing);\n\nconst aDrawings = page.GetAllDrawings();\nconst sType = aDrawings[0].GetClassType();\nconst docContent = drawing.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"Class Type = \" + sType);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPage"
@@ -71,6 +89,9 @@
     "GetPosX": {
       "description": "Gets the x position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosX/",
+      "examples": [
+        "// How do I check the X coordinate of an object in a PDF?\n\n// Read the horizontal distance of a shape from the left edge in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(`Drawing X position is: ${shape.GetPosX()}`);\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -80,6 +101,9 @@
     "GetPosY": {
       "description": "Gets the y position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/GetPosY/",
+      "examples": [
+        "// How do I check the Y coordinate of an object in a PDF?\n\n// Read the vertical distance of a shape from the top edge in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(`Drawing Y position is: ${shape.GetPosY()}`);\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "EMU"
@@ -109,6 +133,9 @@
     "SetFill": {
       "description": "Sets the fill properties to the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetFill/",
+      "examples": [
+        "// How do I apply a background color to a shape in a PDF?\n\n// Modify a shape's background to use a specific color in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, Api.CreateNoFill(), stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Original shape with no fill\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 0, 0));\nshape.SetFill(fill);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Fill changed to red\");"
+      ],
       "params": [
         {
           "description": "The fill type used to fill the shape.",
@@ -125,6 +152,9 @@
     "SetGeometry": {
       "description": "Sets a custom geometry for the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetGeometry/",
+      "examples": [
+        "// How do I apply a custom shape design in a PDF?\n\n// Replace a shape's default pattern with a personalized drawing outline in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nlet customGeometry = Api.CreateCustomGeometry();\nlet path = customGeometry.AddPath();\npath.SetWidth(100 * 36000);\npath.SetHeight(100 * 36000);\npath.SetStroke(true);\npath.SetFill(\"norm\");\npath.MoveTo(50 * 36000, 0);\npath.LineTo(70 * 36000, 45 * 36000);\npath.LineTo(55 * 36000, 70 * 36000);\npath.LineTo(100 * 36000, 100 * 36000);\npath.LineTo(0, 100 * 36000);\npath.Close();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 200));\nlet stroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(50, 75, 100)));\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 100 * 36000, fill, stroke);\nshape.SetGeometry(customGeometry);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The geometry to set.",
@@ -140,6 +170,9 @@
     "SetLine": {
       "description": "Sets the outline properties to the current shape.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetLine/",
+      "examples": [
+        "// How do I customize the outline of a shape in a PDF?\n\n// Give a shape a colored border with specific thickness in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 200, 100));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = Api.CreateShape(\"rect\", 100 * 36000, 50 * 36000, fill, stroke);\nshape.SetPosition(2000000, 1000000);\npage.AddObject(shape);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.AddText(\"Original shape with no border\");\nlet newStroke = Api.CreateStroke(3 * 12700, Api.CreateSolidFill(Api.CreateRGBColor(0, 0, 255)));\nshape.SetLine(newStroke);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Border changed to 3pt blue line\");"
+      ],
       "params": [
         {
           "description": "The stroke used to create the shape outline.",
@@ -187,6 +220,9 @@
     "SetPosX": {
       "description": "Sets the x position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosX/",
+      "examples": [
+        "// How do I adjust the horizontal position of a shape in a PDF?\n\n// Change the X coordinate of an object in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosX(608400);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -202,6 +238,9 @@
     "SetPosY": {
       "description": "Sets the y position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosY/",
+      "examples": [
+        "// How do I move a shape to a different vertical location in a PDF?\n\n// Adjust the Y coordinate of a drawing element in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosY(808400);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the top side of the page to the upper side of the drawing measured in English measure units.",
@@ -217,6 +256,9 @@
     "SetPosition": {
       "description": "Sets the position of the drawing on the page.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiDrawing/Methods/SetPosition/",
+      "examples": [
+        "// How do I reposition an object on the page in a PDF?\n\n// Place a shape at new coordinates in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nshape.SetSize(150 * 36000, 65 * 36000);\n\nconst docContent = shape.GetContent();\ndocContent.RemoveAllElements();\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is an example of a paragraph inside a shape. Nothing special.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The distance from the left side of the page to the left side of the drawing measured in English measure units.",
@@ -254,6 +296,9 @@
     "SetVerticalTextAlign": {
       "description": "Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiShape/Methods/SetVerticalTextAlign/",
+      "examples": [
+        "// How do I align text to the top, middle, or bottom of a shape in a PDF?\n\n// Control where text appears vertically inside a shape in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartOnlineStorage\", 200 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nshape.SetVerticalTextAlign(\"bottom\");\nconst paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\nparagraph.AddText(\"aligning it vertically by the bottom.\");\ndocContent.Push(paragraph);\npage.AddObject(shape);"
+      ],
       "params": [
         {
           "description": "The type of the vertical alignment for the shape inner contents.",

@@ -15,6 +15,9 @@
     "GetActiveChart": {
       "description": "Returns the active chart of the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetActiveChart/",
+      "examples": [
+        "// How do I find out which chart is active right now in a spreadsheet?\n\n// Confirm the selected chart by retrieving its title and writing it to a cell in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\nworksheet.GetRange('A1').SetValue('John Smith');\nworksheet.GetRange('B1').SetValue('Mark Pottato');\nworksheet.GetRange('A2').SetValue(10);\nworksheet.GetRange('B2').SetValue(12);\n\nconst chart = worksheet.AddChart(\n\t'Sheet1!A1:B2',\n\ttrue,\n\t'bar3D', 42,\n\tApi.MillimetersToEmus(100), Api.MillimetersToEmus(70),\n\t0, 0, 3, Api.MillimetersToEmus(1)\n);\nchart.SetTitle('Full Names Length', 15);\nchart.Select();\n\nconst activeChart = workbook.GetActiveChart();\nif (activeChart) {\n\tconst chartTitle = activeChart.GetTitle();\n\tworksheet.GetRange('D1').SetValue('Active Chart Title: ' + chartTitle);\n} else {\n\tworksheet.GetRange('D1').SetValue('No active chart found');\n}"
+      ],
       "params": [],
       "returns": {
         "type": "ApiChart | null"
@@ -25,6 +28,9 @@
     "GetActiveSheet": {
       "description": "Returns the active sheet of the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetActiveSheet/",
+      "examples": [
+        "// How do I find out which sheet the user is looking at right now in a spreadsheet?\n\n// Capture the active sheet's name and write it into a shape on the same sheet in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\n\nworksheet.SetName('not-an-easter-egg');\nconst worksheetName = worksheet.GetName();\n\nconst lightGreen = Api.RGB(16, 121, 63);\nconst darkGreen = Api.RGB(24, 92, 55);\nconst fill = Api.CreateSolidFill(lightGreen);\nconst stroke = Api.CreateStroke(2, Api.CreateSolidFill(darkGreen));\nlet shape = worksheet.AddShape(\n\t'rect',\n\t100 * 36000, 70 * 36000,\n\tfill, stroke,\n\t0, 2 * 36000,\n\t0, 3 * 36000\n);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('Active Sheet Name: ' + worksheetName);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiWorksheet"
@@ -35,6 +41,9 @@
     "GetAllPivotTables": {
       "description": "Returns all pivot tables in the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetAllPivotTables/",
+      "examples": [
+        "// How do I loop through all pivot tables at once in a spreadsheet?\n\n// Populate each pivot table with a data field by iterating the full list in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange('Sheet1!B1:C3');\nApi.InsertPivotNewWorksheet(dataRef);\nApi.InsertPivotNewWorksheet(dataRef);\nApi.InsertPivotNewWorksheet(dataRef);\n\nworkbook.GetAllPivotTables().forEach(function (pivot) {\n\tpivot.AddDataField('Price');\n});"
+      ],
       "params": [],
       "returns": {
         "type": "ApiPivotTable[]"
@@ -45,6 +54,9 @@
     "GetCustomProperties": {
       "description": "Returns the custom properties of the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetCustomProperties/",
+      "examples": [
+        "// How do I store and retrieve my own metadata on a workbook in a spreadsheet?\n\n// Add a named string property to the workbook and display its value in a cell in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst customProps = workbook.GetCustomProperties();\ncustomProps.Add(\"MyStringProperty\", \"Hello, Spreadsheet!\");\nlet stringValue = customProps.Get(\"MyStringProperty\");\n\nconst worksheet = workbook.GetActiveSheet();\nworksheet.GetRange('A1').SetValue(stringValue);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiCustomProperties"
@@ -55,6 +67,9 @@
     "GetDrawingsByName": {
       "description": "Returns drawings with the specified names from the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetDrawingsByName/",
+      "examples": [
+        "// How do I find shapes by their names and modify them all at once in a spreadsheet?\n\n// Rotate only the named shapes while leaving other drawings untouched in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\nconst fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape1 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill1, stroke1, 0, 2 * 36000, 0, 3 * 36000);\nshape1.SetName(\"MyShape1\");\nconst fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nconst stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape2 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill2, stroke2, 10, 2 * 36000, 2, 3 * 36000);\nshape2.SetName(\"MyShape2\");\nconst fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nconst stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape3 = worksheet.AddShape(\"rect\", 60 * 36000, 35 * 36000, fill3, stroke3, 20, 2 * 36000, 4, 3 * 36000);\nshape3.SetName(\"DifferentShape\");\nconst drawings = workbook.GetDrawingsByName([\"MyShape1\", \"MyShape2\"]);\nfor (let i = 0; i < drawings.length; i++) {\n\tdrawings[i].SetRotation(45);\n}"
+      ],
       "params": [
         {
           "description": "An array of drawing names.",
@@ -72,6 +87,9 @@
     "GetName": {
       "description": "Returns the name of the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetName/",
+      "examples": [
+        "// How do I find out what the current file is called in a spreadsheet?\n\n// Embed the workbook's filename inside a shape on the active sheet in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst workbookName = workbook.GetName();\nconst worksheet = workbook.GetActiveSheet();\n\nconst lightGreen = Api.RGB(16, 121, 63);\nconst darkGreen = Api.RGB(24, 92, 55);\nconst fill = Api.CreateSolidFill(lightGreen);\nconst stroke = Api.CreateStroke(2, Api.CreateSolidFill(darkGreen));\nlet shape = worksheet.AddShape(\n\t'rect',\n\t100 * 36000, 70 * 36000,\n\tfill, stroke,\n\t0, 2 * 36000,\n\t0, 3 * 36000\n);\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('Filename: ' + workbookName);"
+      ],
       "params": [],
       "returns": {
         "type": "string"
@@ -82,6 +100,9 @@
     "GetSheets": {
       "description": "Returns a sheet collection that represents all the sheets in the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetSheets/",
+      "examples": [
+        "// How do I get the full list of sheets that exist in a workbook in a spreadsheet?\n\n// Enumerate all tabs by index and record each sheet's name in a spreadsheet.\n\nApi.AddSheet('new_sheet_name');\n\nconst workbook = Api.GetActiveWorkbook();\nconst sheets = workbook.GetSheets();\nlet sheetName1 = sheets[0].GetName();\nlet sheetName2 = sheets[1].GetName();\nsheets[1].GetRange(\"A1\").SetValue(sheetName1);\nsheets[1].GetRange(\"A2\").SetValue(sheetName2);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiWorksheet[]"
@@ -92,6 +113,9 @@
     "GetTheme": {
       "description": "Returns the theme of the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/GetTheme/",
+      "examples": [
+        "// How do I find out which visual theme is applied to my workbook in a spreadsheet?\n\n// Display the theme name inside a shape that is filled with one of the theme's accent colors in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\n\nconst theme = workbook.GetTheme();\nconst themeName = theme.GetName();\n\nconst fill = Api.CreateSolidFill(Api.ThemeColor('accent3'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'rect',\n\tApi.MillimetersToEmus(100), Api.MillimetersToEmus(40),\n\tfill, stroke,\n\t0, Api.MillimetersToEmus(2), 0, Api.MillimetersToEmus(3)\n);\n\nconst paragraph = shape.GetContent().GetElement(0);\nparagraph.AddText('This shape is filled with the theme color \"Accent 3\".');\nparagraph.AddText('Change the theme to see the fill color of the shape changed accordingly.\\n\\n');\nparagraph.AddText('Workbook theme: ' + themeName);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiTheme"
@@ -112,6 +136,9 @@
     "Save": {
       "description": "Saves changes to the specified document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorkbook/Methods/Save/",
+      "examples": [
+        "// How do I make sure my changes are written to the file in a spreadsheet?\n\n// Write a value to a cell and immediately commit the workbook to storage in a spreadsheet.\n\nconst workbook = Api.GetActiveWorkbook();\nconst worksheet = workbook.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"This sample text is saved to the worksheet.\");\nworkbook.Save();"
+      ],
       "params": [],
       "returns": {
         "type": "void"

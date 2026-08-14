@@ -2,7 +2,7 @@
   "description": "Returns the year fraction representing the number of whole days between the start date and end date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/YEARFRAC/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.YEARFRAC(\"12/7/1981\", \"11/5/2018\");\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I express the time period between two dates as a fraction of a year in a spreadsheet?\n\n// Find the percentage of a year that spans between a start and end date in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.YEARFRAC(\"12/7/1981\", \"11/5/2018\");\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

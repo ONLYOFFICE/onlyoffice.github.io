@@ -2,7 +2,7 @@
   "description": "The paragraph style base method.\n<note>This method is not used by itself, as it only forms the basis for the {@link ApiParagraph#SetStyle} method which sets the selected or created style for the paragraph.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetStyle/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet heading6Style = doc.GetStyle(\"Heading 6\");\nlet paraPr = heading6Style.GetParaPr();\nparaPr.SetJc(\"center\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(heading6Style);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
+    "// How do I assign a built-in style such as a heading to a paragraph in a document?\n\n// Reuse a predefined heading style on a paragraph instead of applying formatting manually.\n\nlet doc = Api.GetDocument();\nlet heading6Style = doc.GetStyle(\"Heading 6\");\nlet paraPr = heading6Style.GetParaPr();\nparaPr.SetJc(\"center\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(heading6Style);\nparagraph.AddText(\"This is a text in a paragraph styled with the 'Heading 6' style.\");"
   ],
   "params": [
     {

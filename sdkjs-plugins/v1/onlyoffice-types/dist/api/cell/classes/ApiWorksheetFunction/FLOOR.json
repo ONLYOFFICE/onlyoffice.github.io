@@ -2,7 +2,7 @@
   "description": "Rounds a number down to the nearest multiple of significance.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FLOOR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR(5.786, 0.7));"
+    "// How do I round a number down to a specific increment in a spreadsheet?\n\n// Decrease a number to the nearest multiple of a given significance in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FLOOR(5.786, 0.7));"
   ],
   "params": [
     {

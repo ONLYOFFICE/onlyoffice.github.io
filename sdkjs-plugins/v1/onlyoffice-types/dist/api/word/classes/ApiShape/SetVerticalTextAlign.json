@@ -1,0 +1,18 @@
+{
+  "description": "Sets the vertical alignment to the shape content where a paragraph or text runs can be inserted.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiShape/Methods/SetVerticalTextAlign/",
+  "examples": [
+    "// How do I align text to the top, middle, or bottom inside a shape in a document?\n\n// Control where text sits vertically inside a shape container in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet classType = drawing.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndocContent.AddElement(0, paragraph);\ndrawing.SetVerticalTextAlign(\"top\");"
+  ],
+  "params": [
+    {
+      "description": "The type of the vertical alignment for the shape inner contents.",
+      "name": "verticalAlign",
+      "type": "VerticalTextAlign"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetVerticalTextAlign(verticalAlign: VerticalTextAlign): boolean"
+}

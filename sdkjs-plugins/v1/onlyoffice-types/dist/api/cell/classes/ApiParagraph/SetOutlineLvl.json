@@ -1,0 +1,20 @@
+{
+  "description": "Sets the outline level for the specified properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParaPr/Methods/SetOutlineLvl/",
+  "examples": [
+    "// How do I mark a paragraph as a heading tier for document structure in a spreadsheet?\n\n// Read the current outline depth, change it, then confirm the new value in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nconst shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\n\nconst levelBefore = paraPr.GetOutlineLvl();\nparaPr.SetOutlineLvl(8);\nconst levelAfter = paraPr.GetOutlineLvl();\nlet text =  'Outline level (index) for this paragraph is currently set to ' + levelAfter;\ntext += ',\\nbut originally was set to ' + levelBefore;\nparagraph.AddText(text);"
+  ],
+  "params": [
+    {
+      "description": "The outline level. Possible values: 1-9. The 1The desired functionality is as follows: When inserting document A into document B using the merge document API during editing, the source of document A should be visible within document B. By clicking or hovering over the inserted content of document A in document B, information about the insertion of document A should be displayed in a pop-up/floating window, preserving the boundaries of document A. Document A should be able to be inserted between any two characters in document B.\rTo set no outline level, use this method without a parameter.",
+      "name": "lvl",
+      "optional": true,
+      "type": "number | null"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetOutlineLvl(lvl?: number | null): boolean",
+  "since": "8.2.0"
+}

@@ -2,7 +2,7 @@
   "description": "Returns the yield for a Treasury bill.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/TBILLYIELD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.TBILLYIELD(\"2/15/2018\", \"6/1/2018\", 99.5));"
+    "// Calculate the yield based on settlement date, maturity date, and price.\n\n// Apply the TBILLYIELD function with Treasury bill parameters.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.TBILLYIELD(\"2/15/2018\", \"6/1/2018\", 99.5));"
   ],
   "params": [
     {

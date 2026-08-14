@@ -1,0 +1,14 @@
+{
+  "description": "Returns the type of the data bar conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiDatabar/Methods/GetType/",
+  "examples": [
+    "// How do I tell what category of formatting rule is used on a data bar in a spreadsheet?\n\n// Distinguish a data bar rule from other conditional formatting types in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet dataBar = formatConditions.AddDatabar();\n\nlet conditionType = dataBar.GetType();\n\nworksheet.GetRange(\"C1\").SetValue(\"Type:\");\nworksheet.GetRange(\"C2\").SetValue(conditionType);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The type of the data bar conditional formatting rule.",
+    "type": "XlFormatConditionType"
+  },
+  "signature": "GetType(): XlFormatConditionType",
+  "since": "9.1.0"
+}

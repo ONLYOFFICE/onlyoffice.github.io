@@ -2,7 +2,7 @@
   "description": "Checks whether a value is text, and returns the text if it is, or returns double quotes (empty text) if it is not.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/T/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.T(\"date and time\"));"
+    "// Test if a value is text using the T function and return accordingly.\n\n// Returns the text value if the input is text, otherwise returns empty string.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.T(\"date and time\"));"
   ],
   "params": [
     {

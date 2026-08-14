@@ -6,7 +6,7 @@
       "description": "Inserts a break at the specified location in the main document.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/AddBreak/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.InsertParagraph(\"Added a line break after this paragraph.\", \"before\", false);\ndrawing.AddBreak(1, \"before\");"
+        "// How do I place a break at a specific position relative to a drawing in a document?\n\n// Force content to start on a new page by adding a break before an existing shape.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.InsertParagraph(\"Added a line break after this paragraph.\", \"before\", false);\ndrawing.AddBreak(1, \"before\");"
       ],
       "params": [
         {
@@ -30,7 +30,7 @@
       "description": "Copies the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Copy/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\ncopyDrawing.Fill(fill);\nparagraph.AddDrawing(copyDrawing);"
+        "// How do I create a copy of a shape and give it a different fill in a document?\n\n// Reuse an existing shape's geometry by cloning it and styling the clone independently.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\ncopyDrawing.Fill(fill);\nparagraph.AddDrawing(copyDrawing);"
       ],
       "params": [],
       "returns": {
@@ -42,7 +42,7 @@
       "description": "Deletes the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Delete/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.Delete();\nparagraph.AddLineBreak();\nparagraph.AddText(\"In this paragraph, the Drawing object has been deleted.\");"
+        "// How do I delete a drawing object that has been inserted into a paragraph in a document?\n\n// Clean up unwanted graphics by programmatically deleting a shape after it has been placed.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.Delete();\nparagraph.AddLineBreak();\nparagraph.AddText(\"In this paragraph, the Drawing object has been deleted.\");"
       ],
       "params": [],
       "returns": {
@@ -55,7 +55,7 @@
       "description": "Sets the fill formatting properties to the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Fill/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\ncopyDrawing.Fill(fill);\nparagraph.AddDrawing(copyDrawing);"
+        "// How do I set a gradient fill on a drawing object in a document?\n\n// Differentiate two identical shapes by filling the duplicate with a radial gradient while leaving the original solid.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nfill = Api.CreateRadialGradientFill([gs1, gs2]);\ncopyDrawing.Fill(fill);\nparagraph.AddDrawing(copyDrawing);"
       ],
       "params": [
         {
@@ -84,7 +84,7 @@
       "description": "Returns a type of the ApiDrawing class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet classType = drawing.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
+        "// How do I identify what class type a drawing object belongs to in a document?\n\n// Verify the kind of object a shape is before applying type-specific logic in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet classType = drawing.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class Type = \" + classType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -95,6 +95,9 @@
     "GetContent": {
       "description": "Returns the drawing inner contents where a paragraph or text runs can be inserted if it exists.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetContent/",
+      "examples": [
+        "// How do I access the editable content area inside a drawing shape in a document?\n\n// Insert a paragraph with custom text directly into a shape's content container in a document.\n\nconst doc = Api.GetDocument();\nlet firstParagraph = doc.GetElement(0);\n\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst fill = Api.CreateSolidFill(Api.CreateRGBColor(100, 150, 200));\nconst drawing = Api.CreateShape(\"rect\", 100 * 36000, 20 * 36000, fill, stroke);\nfirstParagraph.AddDrawing(drawing);\n\nconst docContent = drawing.GetContent();\n\nconst shapeParagraph = Api.CreateParagraph();\nshapeParagraph.AddText('This is the text added to the paragraph inside the drawing using the GetContent method.');\ndocContent.AddElement(0, shapeParagraph);"
+      ],
       "params": [],
       "returns": {
         "type": "ApiDocumentContent"
@@ -125,6 +128,9 @@
     "GetFlipH": {
       "description": "Get horizontal flip of current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipH/",
+      "examples": [
+        "// How do I read the horizontal flip state of a shape in a document?\n\n// Display the horizontal flip flag of a drawing as a text label in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet flip = drawing.GetFlipH();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing is flipped horizontally: \" + flip);\ndoc.AddElement(0, paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped horizontally, false if not, or null if the drawing properties are not available.",
@@ -136,6 +142,9 @@
     "GetFlipV": {
       "description": "Get vertical flip of current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetFlipV/",
+      "examples": [
+        "// How do I read the vertical flip state of a shape in a document?\n\n// Display the vertical flip flag of a drawing as a text label in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetVertFlip(true);\nlet flip = drawing.GetFlipV();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing is flipped vertically: \" + flip);\ndoc.AddElement(0, paragraph);"
+      ],
       "params": [],
       "returns": {
         "description": "Returns true if the figure is flipped vertically, false if not, or null if the drawing properties are not available.",
@@ -148,7 +157,7 @@
       "description": "Returns the height of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetHeight/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 100 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet height = drawing.GetHeight();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing height: \" + height / 36000 + \" mm\");\ndocContent.AddElement(0, paragraph);"
+        "// How do I get the height of a shape and display it in millimeters in a document?\n\n// Print the measured height of a rectangle inside the shape's own content area in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 100 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet height = drawing.GetHeight();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing height: \" + height / 36000 + \" mm\");\ndocContent.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -180,7 +189,7 @@
       "description": "Returns the lock value for the specified lock type of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetLockValue/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\ndrawing.SetLockValue(\"noSelect\", true);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This drawing cannot be selected: \" + lockValue);\ndocContent.AddElement(0, paragraph);"
+        "// How do I find out if a drawing is locked against selection in a document?\n\n// Apply a no-select lock to a shape and confirm the setting is active in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\ndrawing.SetLockValue(\"noSelect\", true);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This drawing cannot be selected: \" + lockValue);\ndocContent.AddElement(0, paragraph);"
       ],
       "params": [
         {
@@ -197,6 +206,9 @@
     "GetName": {
       "description": "Returns the name of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetName/",
+      "examples": [
+        "// How do I get the name of a drawing shape in a document?\n\n// Assign a custom name to a shape and then read it back as text in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#5B9BD5'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rect', Api.MillimetersToEmus(80), Api.MillimetersToEmus(40), fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetName('MyRectangle');\n\nconst shapeName = drawing.GetName();\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('Drawing name: ' + shapeName);\ndoc.Push(paragraph2);"
+      ],
       "params": [],
       "returns": {
         "description": "Name of drawing.",
@@ -209,7 +221,7 @@
       "description": "Returns the next inline drawing object if exists.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetNextDrawing/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nparagraph.AddDrawing(copyDrawing);\nlet nextDrawing = drawing.GetNextDrawing();\nnextDrawing.SetHorFlip(true);"
+        "// How do I access the drawing that comes after a given shape in a document?\n\n// Traverse sibling drawings and modify the properties of the following shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nparagraph.AddDrawing(copyDrawing);\nlet nextDrawing = drawing.GetNextDrawing();\nnextDrawing.SetHorFlip(true);"
       ],
       "params": [],
       "returns": {
@@ -222,7 +234,7 @@
       "description": "Returns a parent content control that contains the graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentContentControl/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nblockLvlSdt.AddElement(paragraph, 0);\ndoc.AddElement(0, blockLvlSdt);\nlet parentContentControl = drawing.GetParentContentControl();\nparentContentControl.AddText(\"This is a parent content control.\");"
+        "// How do I find the content control that wraps a drawing in a document?\n\n// Access the enclosing block-level content control to add text alongside a shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nblockLvlSdt.AddElement(paragraph, 0);\ndoc.AddElement(0, blockLvlSdt);\nlet parentContentControl = drawing.GetParentContentControl();\nparentContentControl.AddText(\"This is a parent content control.\");"
       ],
       "params": [],
       "returns": {
@@ -235,7 +247,7 @@
       "description": "Returns a parent paragraph that contains the graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentParagraph/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet parentParagraph = drawing.GetParentParagraph();\nparentParagraph.AddLineBreak();\nparentParagraph.AddText(\"This is a parent paragraph\");"
+        "// How do I find the paragraph that holds a drawing in a document?\n\n// Access the enclosing paragraph to append a line break and label text after a shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet parentParagraph = drawing.GetParentParagraph();\nparentParagraph.AddLineBreak();\nparentParagraph.AddText(\"This is a parent paragraph\");"
       ],
       "params": [],
       "returns": {
@@ -248,7 +260,7 @@
       "description": "Returns a parent table that contains the graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentTable/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet cell = table.GetCell(1, 1);\ncell.AddElement(0, paragraph);\ndoc.Push(table);\nlet parentTable = drawing.GetParentTable();\nlet tableStyle = doc.GetStyle(\"Bordered\");\nparentTable.SetStyle(tableStyle);"
+        "// How do I find the table that holds a drawing in a document?\n\n// Access the enclosing table to apply a style after placing a shape inside one of its cells in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet cell = table.GetCell(1, 1);\ncell.AddElement(0, paragraph);\ndoc.Push(table);\nlet parentTable = drawing.GetParentTable();\nlet tableStyle = doc.GetStyle(\"Bordered\");\nparentTable.SetStyle(tableStyle);"
       ],
       "params": [],
       "returns": {
@@ -261,7 +273,7 @@
       "description": "Returns a parent table cell that contains the graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetParentTableCell/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet table = Api.CreateTable(3, 3);\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntable.SetStyle(tableStyle);\ntable.SetWidth(\"percent\", 100);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nlet cell = table.GetCell(1, 1);\ncell.GetContent().GetElement(0).AddDrawing(drawing);\ndoc.Push(table);\nlet parentCell = drawing.GetParentTableCell();\nlet cellContent = parentCell.GetContent().GetElement(0);\ncellContent.AddLineBreak();\ncellContent.AddText(\"This is a parent cell\");"
+        "// How do I find which table cell holds a drawing in a document?\n\n// Useful when you need to add text alongside a shape placed inside a table cell in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nlet table = Api.CreateTable(3, 3);\nlet tableStyle = doc.GetStyle(\"Bordered\");\ntable.SetStyle(tableStyle);\ntable.SetWidth(\"percent\", 100);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nlet cell = table.GetCell(1, 1);\ncell.GetContent().GetElement(0).AddDrawing(drawing);\ndoc.Push(table);\nlet parentCell = drawing.GetParentTableCell();\nlet cellContent = parentCell.GetContent().GetElement(0);\ncellContent.AddLineBreak();\ncellContent.AddText(\"This is a parent cell\");"
       ],
       "params": [],
       "returns": {
@@ -274,7 +286,7 @@
       "description": "Returns the previous inline drawing object if exists.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetPrevDrawing/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nparagraph.AddDrawing(copyDrawing);\nlet nextDrawing = copyDrawing.GetPrevDrawing();\nnextDrawing.SetHorFlip(true);"
+        "// How do I get the preceding drawing object in a document?\n\n// Apply a horizontal flip to the earlier shape in a sequence of drawings in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet copyDrawing = drawing.Copy();\nparagraph.AddDrawing(copyDrawing);\nlet nextDrawing = copyDrawing.GetPrevDrawing();\nnextDrawing.SetHorFlip(true);"
       ],
       "params": [],
       "returns": {
@@ -286,6 +298,9 @@
     "GetRotation": {
       "description": "Returns the rotation angle of the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetRotation/",
+      "examples": [
+        "// How do I get the rotation angle of a shape in a document?\n\n// Display the current tilt of a drawing as text inside the shape itself in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 110 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetRotation(90);\nlet rotAngle = drawing.GetRotation();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing rotation angle is: \" + rotAngle + \" degrees\");\ndocContent.AddElement(0, paragraph);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -318,7 +333,7 @@
       "description": "Returns the width of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/GetWidth/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 100 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet width = drawing.GetWidth();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing width: \" + width / 36000 + \" mm\");\ndocContent.AddElement(0, paragraph);"
+        "// How do I get the width of a shape in a document?\n\n// Display the measured width of a drawing as text inside the shape itself in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 100 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet width = drawing.GetWidth();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing width: \" + width / 36000 + \" mm\");\ndocContent.AddElement(0, paragraph);"
       ],
       "params": [],
       "returns": {
@@ -330,7 +345,7 @@
       "description": "Wraps the graphic object with a rich text content control.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/InsertInContentControl/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This graphic object was wrapped in content control\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.InsertInContentControl(1);"
+        "// How do I place a shape inside a content control in a document?\n\n// Protect or label a drawing by enclosing it in a content control container in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This graphic object was wrapped in content control\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.InsertInContentControl(1);"
       ],
       "params": [
         {
@@ -348,7 +363,7 @@
       "description": "Inserts a paragraph at the specified position.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/InsertParagraph/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This graphic object with paragraph.\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph.\");\ndrawing.InsertParagraph(paragraph);"
+        "// How do I add text inside a shape in a document?\n\n// Place a labeled paragraph inside a rectangle to annotate the shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This graphic object with paragraph.\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a new paragraph.\");\ndrawing.InsertParagraph(paragraph);"
       ],
       "params": [
         {
@@ -377,7 +392,7 @@
       "description": "Scales the height of the figure using the specified coefficient.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ScaleHeight/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nfor (let i = 3; i > 0; i--) {\n    let fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\n    let stroke = Api.CreateStroke(0, Api.CreateNoFill());\n    let drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\n    paragraph.AddDrawing(drawing);\n    drawing.ScaleHeight(i);\n}"
+        "// How do I resize the height of a shape proportionally in a document?\n\n// Create several shapes at different height scales to compare sizes visually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nfor (let i = 3; i > 0; i--) {\n    let fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\n    let stroke = Api.CreateStroke(0, Api.CreateNoFill());\n    let drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\n    paragraph.AddDrawing(drawing);\n    drawing.ScaleHeight(i);\n}"
       ],
       "params": [
         {
@@ -396,7 +411,7 @@
       "description": "Scales the width of the figure using the specified coefficient.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ScaleWidth/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nfor (let i = 1; i < 4; i++ ){\n\tlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\n\tlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\n\tlet drawing = Api.CreateShape(\"cube\", 963295, 963295, fill, stroke);\n\tparagraph.AddDrawing(drawing);\n\tdrawing.ScaleWidth( i );\n}"
+        "// How do I resize the width of a shape proportionally in a document?\n\n// Create several shapes at increasing width scales to compare sizes side by side in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nfor (let i = 1; i < 4; i++ ){\n\tlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\n\tlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\n\tlet drawing = Api.CreateShape(\"cube\", 963295, 963295, fill, stroke);\n\tparagraph.AddDrawing(drawing);\n\tdrawing.ScaleWidth( i );\n}"
       ],
       "params": [
         {
@@ -415,7 +430,7 @@
       "description": "Selects the current graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Select/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.InsertParagraph(\"The Select property is applied to the drawing object\", \"before\", false);\ndrawing.Select();"
+        "// How do I select a shape or group of shapes in a document?\n\n// Control which shapes are highlighted by combining replace and additive selection modes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 3212465, 963295*4, fill1, stroke1);\nparagraph.AddDrawing(drawing1);\ndrawing1.SetWrappingStyle(\"inFront\");\ndrawing1.SetHorPosition(\"page\", 0);\ndrawing1.SetVerPosition(\"page\", 0);\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nlet stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = Api.CreateShape(\"rect\", 3212465, 963295*2, fill2, stroke2);\nparagraph.AddDrawing(drawing2);\ndrawing2.SetWrappingStyle(\"inFront\");\ndrawing2.SetHorPosition(\"page\", 4000000);\ndrawing2.SetVerPosition(\"page\", 0);\nlet fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nlet stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing3 = Api.CreateShape(\"rect\", 3212465, 963295, fill3, stroke3);\nparagraph.AddDrawing(drawing3);\ndrawing3.SetWrappingStyle(\"inFront\");\ndrawing3.SetHorPosition(\"page\", 0);\ndrawing3.SetVerPosition(\"page\", 4500000);\ndrawing1.Select(true);\ndrawing2.Select(true);\ndrawing3.Select();"
       ],
       "params": [
         {
@@ -468,7 +483,7 @@
       "description": "Specifies the minimum distance which will be maintained between the edges of the current drawing object and any\nsubsequent text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDistances/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is 1 inch (914400 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(914400, 0, 914400, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);"
+        "// How do I control the gap between a shape and nearby text in a document?\n\n// Keep text away from a floating shape by defining margins on each side of the drawing in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is 1 inch (914400 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(914400, 0, 914400, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -501,7 +516,7 @@
       "description": "Sets the properties from another drawing to the current drawing.\nThe following properties will be copied: horizontal and vertical alignment, distance between the edges of the current drawing object and any subsequent text, wrapping style, drawing name, title and description.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetDrawingPrFromDrawing/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 50 * 36000, 30 * 36000, fill, stroke);\ndrawing1.SetDistances(457200, 457200, 457200, 0);\ndrawing1.SetWrappingStyle(\"square\");\ndrawing1.SetHorAlign(\"page\", \"center\");\nparagraph.AddDrawing(drawing1);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned at the center of the page horizontally.\");\ndoc.Push(paragraph);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = Api.CreateShape(\"roundRect\", 50 * 36000, 30 * 36000, fill, stroke);\ndrawing2.SetDrawingPrFromDrawing(drawing1);\nparagraph.AddDrawing(drawing2);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another shape.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"It has the same properties (alignment type, distances and wrapping type) as the shape above.\");\ndoc.Push(paragraph);"
+        "// How do I make two shapes share the same wrapping and alignment settings in a document?\n\n// Reuse the position, wrapping, and spacing configuration of an existing shape on a new shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 50 * 36000, 30 * 36000, fill, stroke);\ndrawing1.SetDistances(457200, 457200, 457200, 0);\ndrawing1.SetWrappingStyle(\"square\");\ndrawing1.SetHorAlign(\"page\", \"center\");\nparagraph.AddDrawing(drawing1);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned at the center of the page horizontally.\");\ndoc.Push(paragraph);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = Api.CreateShape(\"roundRect\", 50 * 36000, 30 * 36000, fill, stroke);\ndrawing2.SetDrawingPrFromDrawing(drawing1);\nparagraph.AddDrawing(drawing2);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another shape.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"It has the same properties (alignment type, distances and wrapping type) as the shape above.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -518,6 +533,9 @@
     "SetFlipH": {
       "description": "Sets the horizontal flip of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetFlipH/",
+      "examples": [
+        "// How do I mirror a shape along its vertical axis in a document?\n\n// Produce a mirrored copy of an arrow to compare original and flipped orientations in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(100, 130, 170));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('rightArrow', Api.MillimetersToEmus(40), Api.MillimetersToEmus(20), fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst flippedDrawing = drawing.Copy();\nflippedDrawing.SetFlipH(true);\nparagraph.AddDrawing(flippedDrawing);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('The right arrow shape above is flipped horizontally.');\ndoc.Push(paragraph2);"
+      ],
       "params": [
         {
           "description": "Specifies if the figure will be flipped horizontally or not.",
@@ -535,6 +553,9 @@
     "SetFlipV": {
       "description": "Sets the vertical flip of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetFlipV/",
+      "examples": [
+        "// How do I invert a shape upside down in a document?\n\n// Place an original arrow and its vertically mirrored copy side by side in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(90, 140, 120));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('upArrow', Api.MillimetersToEmus(40), Api.MillimetersToEmus(80), fill, stroke);\nparagraph.AddDrawing(drawing);\n\nconst flippedDrawing = drawing.Copy();\nflippedDrawing.SetFlipV(true);\nparagraph.AddDrawing(flippedDrawing);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('The right arrow shape above is flipped vertically.');\ndoc.Push(paragraph2);"
+      ],
       "params": [
         {
           "description": "Specifies if the figure will be flipped vertically or not.",
@@ -553,7 +574,7 @@
       "description": "Specifies how the floating object will be horizontally aligned.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetHorAlign/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetHorAlign(\"page\", \"center\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned at the center of the page horizontally.\");\ndoc.Push(paragraph);"
+        "// How do I center a shape across the full page width in a document?\n\n// Anchor a shape to the page and have surrounding text wrap around it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetHorAlign(\"page\", \"center\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned at the center of the page horizontally.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -578,7 +599,7 @@
       "description": "Flips the current drawing horizontally.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetHorFlip/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetHorFlip(true);"
+        "// How do I flip a shape horizontally after adding it to a document?\n\n// Reverse the orientation of a cube shape so it faces the opposite direction in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetHorFlip(true);"
       ],
       "params": [
         {
@@ -596,7 +617,7 @@
       "description": "Sets the absolute measurement for the horizontal positioning of the floating object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetHorPosition/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetHorPosition(\"rightMargin\", 0);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned next to the right margin horizontally.\");\ndoc.Push(paragraph);"
+        "// How do I place a shape next to a page margin in a document?\n\n// Place two shapes at different horizontal offsets relative to page and margin anchors in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetHorPosition(\"rightMargin\", 0);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This is another paragraph.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned next to the right margin horizontally.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The next blue shape is aligned next to the left margin horizontally by 10% percent.\");\nfill = Api.CreateSolidFill(Api.CreateRGBColor(91, 155, 213));\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\ndrawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetHorPosition(\"page\", 5, true);\nparagraph.AddDrawing(drawing);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -643,7 +664,7 @@
       "description": "Sets the lock value to the specified lock type of the current drawing.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetLockValue/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\ndrawing.SetLockValue(\"noSelect\", true);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This drawing cannot be selected: \" + lockValue);\ndocContent.AddElement(0, paragraph);"
+        "// How do I lock a shape so users cannot click or select it in a document?\n\n// Apply a selection lock to a shape and confirm the restriction is active in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\ndrawing.SetLockValue(\"noSelect\", true);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetContent();\nlet lockValue = drawing.GetLockValue(\"noSelect\");\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This drawing cannot be selected: \" + lockValue);\ndocContent.AddElement(0, paragraph);"
       ],
       "params": [
         {
@@ -665,6 +686,9 @@
     "SetName": {
       "description": "Sets the name of the current drawing.\nIf another drawing with the same name already exists, that drawing's name will be reset to a default auto-generated name.\nOLE objects do not support a custom name, so for them this method always returns false.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetName/",
+      "examples": [
+        "// How do I label a shape so it can be identified by name in a document?\n\n// Retrieve and display the assigned name inside the shape itself in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = doc.GetElement(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(80, 120, 160));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape('ellipse', Api.MillimetersToEmus(60), Api.MillimetersToEmus(50), fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetName('BlueEllipse');\n\nconst content = drawing.GetContent();\nconst shapeParagraph = content.GetElement(0);\nshapeParagraph.AddText('The name of this drawing:');\nshapeParagraph.AddLineBreak();\nconst nameRun = Api.CreateRun();\nnameRun.AddText(drawing.GetName());\nnameRun.SetBold(true);\nshapeParagraph.AddElement(nameRun);"
+      ],
       "params": [
         {
           "description": "The name which will be set to the current drawing.",
@@ -683,7 +707,7 @@
       "description": "Sets the outline properties to the specified graphic object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetOutLine/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing); \nlet copyDrawing = drawing.Copy();\nstroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\ncopyDrawing.SetOutLine(stroke);\nparagraph.AddDrawing(copyDrawing);"
+        "// How do I apply a stroke to the edge of a shape in a document?\n\n// Copy a shape and give the duplicate a dark solid outline to contrast with the original in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing); \nlet copyDrawing = drawing.Copy();\nstroke = Api.CreateStroke(36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\ncopyDrawing.SetOutLine(stroke);\nparagraph.AddDrawing(copyDrawing);"
       ],
       "params": [
         {
@@ -701,6 +725,9 @@
     "SetRelativeHeight": {
       "description": "Sets the relative height of the object (image, shape, chart) bounding box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeHeight/",
+      "examples": [
+        "// How do I make a shape's height scale proportionally with the page in a document?\n\n// Stretch a rectangle to fill a quarter of the page height so it adapts to different page sizes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(91, 155, 213));\nlet stroke = Api.CreateStroke(0.4 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(65, 113, 156)));\nlet drawing = Api.CreateShape(\"rect\", 1 * 36000, 1 * 36000, fill, stroke);\ndrawing.SetWrappingStyle(\"inFront\");\ndrawing.SetVerPosition(\"page\", 50 * 36000);\ndrawing.SetHorPosition(\"page\", 0);\ndrawing.SetRelativeWidth(\"page\", 100);\ndrawing.SetRelativeHeight(\"page\", 25);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a width 100% of page width and 25% of height page\");\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The document element which will be taken as a countdown point for the object height.",
@@ -724,6 +751,9 @@
     "SetRelativeWidth": {
       "description": "Sets the relative width of the object (image, shape, chart) bounding box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRelativeWidth/",
+      "examples": [
+        "// How do I make a shape's width span a fixed fraction of the page in a document?\n\n// Stretch a rectangle to half the page width so its layout stays consistent across page sizes in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 250, 0));\nlet stroke = Api.CreateStroke(0.4 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(65, 113, 156)));\nlet drawing = Api.CreateShape(\"rect\", 1 * 36000, 1 * 36000, fill, stroke);\ndrawing.SetWrappingStyle(\"inFront\");\ndrawing.SetVerPosition(\"page\", 50 * 36000);\ndrawing.SetHorPosition(\"page\", 0 * 3600);\ndrawing.SetRelativeWidth(\"page\", 50);\ndrawing.SetRelativeHeight(\"page\", 25);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a width 50% of page width and 25% of height page\");\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "The document element which will be taken as a countdown point for the object width.",
@@ -747,6 +777,9 @@
     "SetRotation": {
       "description": "Sets the rotation angle to the current drawing object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetRotation/",
+      "examples": [
+        "// How do I tilt a shape to a particular degree in a document?\n\n// Turn a wide rectangle ninety degrees and display the resulting angle inside it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 110 * 36000, 10 * 36000, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetRotation(90);\nlet rotAngle = drawing.GetRotation();\nlet docContent = drawing.GetContent();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Drawing rotation angle is set to: \" + rotAngle + \" degrees\");\ndocContent.AddElement(0, paragraph);"
+      ],
       "params": [
         {
           "description": "New drawing rotation angle.",
@@ -781,7 +814,7 @@
       "description": "Sets the size of the object (image, shape, chart) bounding box.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetSize/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetSize(2 * 914400, 2 * 914400);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a size of 53x39 millimeters, then resized to the size of 2x2 inches.\");\ndoc.Push(paragraph);"
+        "// How do I change the size of a drawing in a document?\n\n// Adjust a shape's bounding box after it has already been placed on the page in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetSize(2 * 914400, 2 * 914400);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape was created with a size of 53x39 millimeters, then resized to the size of 2x2 inches.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -821,7 +854,7 @@
       "description": "Specifies how the floating object will be vertically aligned.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVerAlign/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerAlign(\"page\", \"top\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned to the top of the page.\");\ndoc.Push(paragraph);"
+        "// How do I control the vertical alignment of a drawing in a document?\n\n// Pin a shape to the top of the page without manually setting its coordinates in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerAlign(\"page\", \"top\");\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned to the top of the page.\");\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -846,7 +879,7 @@
       "description": "Sets the absolute measurement for the vertical positioning of the floating object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVerPosition/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerPosition(\"page\", 914400);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned to the top of the page, and outstands from the page top 1 inch.\");\ndoc.Push(paragraph);"
+        "// How do I set the vertical position of a drawing in a document?\n\n// Offset a shape by a precise distance from the top of the page, or position it by percentage in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerPosition(\"page\", 914400);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The shape is aligned to the top of the page, and outstands from the page top 1 inch.\");\ndoc.Push(paragraph);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"The next blue shape is aligned vertically by 50% relative to the page.\");\nfill = Api.CreateSolidFill(Api.CreateRGBColor(91, 155, 213));\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\ndrawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\ndrawing.SetVerPosition(\"page\", 50, true);\nparagraph.AddDrawing(drawing);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -876,7 +909,7 @@
       "description": "Flips the current drawing vertically.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetVertFlip/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetVertFlip(true);"
+        "// How do I mirror a drawing vertically in a document?\n\n// Invert a shape's orientation to create a reflected effect in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"cube\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\ndrawing.SetVertFlip(true);"
       ],
       "params": [
         {
@@ -895,7 +928,7 @@
       "description": "Sets the wrapping type of the current object (image, shape, chart). One of the following wrapping style types can be set:\n**\"inline\"** - the object is considered to be a part of the text, like a character, so when the text moves, the object moves as well. In this case the positioning options are inaccessible.\nIf one of the following styles is selected, the object can be moved independently of the text and positioned on the page exactly:\n**\"square\"** - the text wraps the rectangular box that bounds the object.\n**\"tight\"** - the text wraps the actual object edges.\n**\"through\"** - the text wraps around the object edges and fills in the open white space within the object.\n**\"topAndBottom\"** - the text is only above and below the object.\n**\"behind\"** - the text overlaps the object.\n**\"inFront\"** - the object overlaps the text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/SetWrappingStyle/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);"
+        "// How do I control how text flows around a drawing in a document?\n\n// Keep a fixed gap between surrounding text and all sides of a floating shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with a shape. \");\nparagraph.AddText(\"The text wraps the rectangular box that bounds the object. \");\nparagraph.AddText(\"The distance between the shape and the text (horizontally) is half an inch (457200 English measure units).\");\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateRadialGradientFill([gs1, gs2]);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 1908000, 1404000, fill, stroke);\ndrawing.SetDistances(457200, 457200, 457200, 0);\ndrawing.SetWrappingStyle(\"square\");\nparagraph.AddDrawing(drawing);"
       ],
       "params": [
         {
@@ -913,7 +946,7 @@
       "description": "Converts the ApiDrawing object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 224, 204), 0);\nlet gs2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 164, 101), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nlet json = drawing.ToJSON(false, true);\nlet drawingFromJSON = Api.FromJSON(json);\nparagraph.AddDrawing(drawingFromJSON);"
+        "// How do I convert a drawing object to JSON in a document?\n\n// Duplicate a shape by exporting it to JSON and rebuilding it from that data in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet gs1 = Api.CreateGradientStop(Api.RGB(255, 224, 204), 0);\nlet gs2 = Api.CreateGradientStop(Api.RGB(255, 164, 101), 100000);\nlet fill = Api.CreateLinearGradientFill([gs1, gs2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 5930900, 395605, fill, stroke);\nlet json = drawing.ToJSON(false, true);\nlet drawingFromJSON = Api.FromJSON(json);\nparagraph.AddDrawing(drawingFromJSON);"
       ],
       "params": [
         {
@@ -935,6 +968,9 @@
     "Unselect": {
       "description": "Removes the current graphic object from the selection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDrawing/Methods/Unselect/",
+      "examples": [
+        "// How do I deselect a single drawing without clearing the whole selection in a document?\n\n// Fine-tune a multi-shape selection by excluding one specific shape in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill1 = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke1 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing1 = Api.CreateShape(\"rect\", 3212465, 963295*4, fill1, stroke1);\nparagraph.AddDrawing(drawing1);\ndrawing1.SetWrappingStyle(\"inFront\");\ndrawing1.SetHorPosition(\"page\", 0);\ndrawing1.SetVerPosition(\"page\", 0);\nlet fill2 = Api.CreateSolidFill(Api.RGB(51, 133, 255));\nlet stroke2 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing2 = Api.CreateShape(\"rect\", 3212465, 963295*2, fill2, stroke2);\nparagraph.AddDrawing(drawing2);\ndrawing2.SetWrappingStyle(\"inFront\");\ndrawing2.SetHorPosition(\"page\", 4000000);\ndrawing2.SetVerPosition(\"page\", 0);\nlet fill3 = Api.CreateSolidFill(Api.RGB(61, 255, 111));\nlet stroke3 = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing3 = Api.CreateShape(\"rect\", 3212465, 963295, fill3, stroke3);\nparagraph.AddDrawing(drawing3);\ndrawing3.SetWrappingStyle(\"inFront\");\ndrawing3.SetHorPosition(\"page\", 0);\ndrawing3.SetVerPosition(\"page\", 4500000);\ndrawing1.Select(true);\ndrawing2.Select();\ndrawing3.Select();\ndrawing2.Unselect();"
+      ],
       "params": [],
       "returns": {
         "type": "boolean"

@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of the current cell / cell range are displayed along with a line appearing directly below the character.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/SetUnderline/",
+  "examples": [
+    "// How do I underline the contents of a cell in a spreadsheet?\n\n// Highlight or emphasize cell text by placing a line under it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The text underlined with a single line\");\nworksheet.GetRange(\"A2\").SetUnderline(\"single\");\nworksheet.GetRange(\"A4\").SetValue(\"Normal text\");"
+  ],
+  "params": [
+    {
+      "description": "Specifies the type of the\rline displayed under the characters. The following values are available:\r**\"none\"** - for no underlining;\r**\"single\"** - for a single line underlining the cell contents;\r**\"singleAccounting\"** - for a single line underlining the cell contents but not protruding beyond the cell borders;\r**\"double\"** - for a double line underlining the cell contents;\r**\"doubleAccounting\"** - for a double line underlining the cell contents but not protruding beyond the cell borders.",
+      "name": "undelineType",
+      "type": "'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'"
+    }
+  ],
+  "returns": {
+    "description": "returns true if the underline property was set successfully.",
+    "type": "boolean"
+  },
+  "signature": "SetUnderline(undelineType: 'none' | 'single' | 'singleAccounting' | 'double' | 'doubleAccounting'): boolean"
+}

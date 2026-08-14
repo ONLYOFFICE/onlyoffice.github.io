@@ -2,7 +2,7 @@
   "description": "Finds and replaces the text.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SearchAndReplace/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first sample text. The serial number of this sample text was replaced here.\");\ndoc.SearchAndReplace({\"searchString\": \"first\", \"replaceString\": \"second\"});"
+    "// How do I perform a find-and-replace operation in a document?\n\n// Update outdated wording in bulk by substituting one string with another in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the first sample text. The serial number of this sample text was replaced here.\");\ndoc.SearchAndReplace({\"searchString\": \"first\", \"replaceString\": \"second\"});"
   ],
   "params": [
     {

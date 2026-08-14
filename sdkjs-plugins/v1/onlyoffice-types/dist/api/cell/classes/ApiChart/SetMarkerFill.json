@@ -1,0 +1,34 @@
+{
+  "description": "Sets the fill to the marker in the specified chart series.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiChart/Methods/SetMarkerFill/",
+  "examples": [
+    "// How do I fill the markers of a scatter chart with a specific color in a spreadsheet?\n\n// Give each series its own marker color to make data points easy to distinguish in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"scatter\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetMarkerFill(fill, 0, 0, true);\nlet stroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nchart.SetMarkerOutLine(stroke, 0, 0, true);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetMarkerFill(fill, 1, 0, true);\nstroke = Api.CreateStroke(0.5 * 36000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\nchart.SetMarkerOutLine(stroke, 1, 0, true);"
+  ],
+  "params": [
+    {
+      "description": "The fill type used to fill the marker.",
+      "name": "oFill",
+      "type": "ApiFill"
+    },
+    {
+      "description": "The index of the chart series.",
+      "name": "nSeries",
+      "type": "number"
+    },
+    {
+      "description": "The index of the marker in the specified chart series.",
+      "name": "nMarker",
+      "type": "number"
+    },
+    {
+      "description": "Specifies if the fill will be applied to all markers in the specified chart series.",
+      "name": "bAllMarkers",
+      "optional": true,
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "SetMarkerFill(oFill: ApiFill, nSeries: number, nMarker: number, bAllMarkers?: boolean): boolean"
+}

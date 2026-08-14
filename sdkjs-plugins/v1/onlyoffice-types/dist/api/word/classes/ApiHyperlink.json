@@ -6,7 +6,7 @@
       "description": "Returns a type of the ApiHyperlink class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetClassType/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet classType = hyperlink.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
+        "// How do I identify the type of a hyperlink element in a document?\n\n// Verify that a hyperlink returns the correct class type label when queried in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet classType = hyperlink.GetClassType();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Class type: \" + classType);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -18,7 +18,7 @@
       "description": "Returns the hyperlink display text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetDisplayedText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet displayedText = hyperlink.GetDisplayedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Displayed text: \" + displayedText);\ndoc.Push(paragraph);"
+        "// How do I get the text that is shown for a hyperlink in a document?\n\n// Confirm what words a reader sees when a hyperlink is rendered in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"ONLYOFFICE Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet displayedText = hyperlink.GetDisplayedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Displayed text: \" + displayedText);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -30,7 +30,7 @@
       "description": "Returns the hyperlink element using the position specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetElement/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet element = hyperlink.GetElement(1);\nparagraph = Api.CreateParagraph();\nparagraph.AddElement(element);\ndoc.Push(paragraph);"
+        "// How do I retrieve one element from a hyperlink using its position in a document?\n\n// Extract a run from a hyperlink to reuse its content elsewhere in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet element = hyperlink.GetElement(1);\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Element text: \" + element.GetText());\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -48,7 +48,7 @@
       "description": "Returns a number of elements in the current hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetElementsCount/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet elementsCount = hyperlink.GetElementsCount();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements in hyperlink: \" + elementsCount);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Elements: paragraph, run1, run2, hyperlink\");\ndoc.Push(paragraph);"
+        "// How do I find out how many elements a hyperlink holds in a document?\n\n// Check the total number of runs and text pieces within a hyperlink in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run1 = Api.CreateRun();\nrun1.AddText(\"Api Document Builder.\");\nparagraph.AddElement(run1, 0);\nlet run2 = Api.CreateRun();\nrun2.AddText(\" ONLYOFFICE for developers\");\nparagraph.AddElement(run2, 1);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet elementsCount = hyperlink.GetElementsCount();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Number of elements in hyperlink: \" + elementsCount);\nparagraph.AddLineBreak();\nparagraph.AddText(\"Elements: paragraph, run1, run2, hyperlink\");\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -60,7 +60,7 @@
       "description": "Returns the hyperlink address.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetLinkedText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");\nlet linkedText = hyperlink.GetLinkedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Linked text: \" + linkedText);\ndoc.Push(paragraph);"
+        "// How do I get the destination URL of a hyperlink in a document?\n\n// Retrieve the updated link target after changing the hyperlink address in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");\nlet linkedText = hyperlink.GetLinkedText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Linked text: \" + linkedText);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -94,7 +94,7 @@
       "description": "Returns a Range object that represents the document part contained in the specified hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetRange/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet range = hyperlink.GetRange(0, 2);\nrange.SetBold(true);"
+        "// How do I select a portion of a hyperlink as a range in a document?\n\n// Apply bold formatting to a subset of hyperlink characters using a range in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nlet range = hyperlink.GetRange(0, 2);\nrange.SetBold(true);"
       ],
       "params": [
         {
@@ -117,7 +117,7 @@
       "description": "Returns the screen tip text of the hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/GetScreenTipText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
+        "// How do I get the screen tip message that appears when hovering over a hyperlink in a document?\n\n// Set a custom tooltip on a hyperlink and then retrieve its value to confirm it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -129,7 +129,7 @@
       "description": "Sets the default hyperlink style.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetDefaultStyle/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nparagraph.SetColor(255, 111, 61);\nlet copyParagraph = paragraph.Copy();\ndoc.Push(copyParagraph);\nlet hyperlink = paragraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\nlet copyHyperlink = copyParagraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\ncopyHyperlink.SetDefaultStyle();"
+        "// How do I reset a hyperlink to its default style in a document?\n\n// Compare a styled hyperlink against one reset to the default appearance in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Api Document Builder\");\nparagraph.SetColor(Api.HexColor('#FF6F3D'));\nlet copyParagraph = paragraph.Copy();\ndoc.Push(copyParagraph);\nlet hyperlink = paragraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\nlet copyHyperlink = copyParagraph.AddHyperlink(\"http://api.teamlab.info/docbuilder/basic\");\ncopyHyperlink.SetDefaultStyle();"
       ],
       "params": [],
       "returns": {
@@ -141,7 +141,7 @@
       "description": "Sets the hyperlink display text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetDisplayedText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetDisplayedText(\"Api ONLYOFFICE DocBuilder\");"
+        "// How do I change the visible label of a hyperlink in a document?\n\n// Replace the default link text with a custom readable name in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetDisplayedText(\"Api ONLYOFFICE DocBuilder\");"
       ],
       "params": [
         {
@@ -159,7 +159,7 @@
       "description": "Sets the hyperlink address.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetLink/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");"
+        "// How do I update the address a hyperlink points to in a document?\n\n// Point an existing hyperlink to a different website in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetLink(\"https://api.onlyoffice.com/\");"
       ],
       "params": [
         {
@@ -177,7 +177,7 @@
       "description": "Sets the screen tip text of the hyperlink.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/SetScreenTipText/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
+        "// How do I add a screen tip to a hyperlink in a document?\n\n// Provide a descriptive hover message for a link to guide readers in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet run = Api.CreateRun();\nrun.AddText(\"ONLYOFFICE Document Builder\");\nparagraph.AddElement(run);\nlet hyperlink = paragraph.AddHyperlink(\"https://api.onlyoffice.com/docbuilder/basic\");\nhyperlink.SetScreenTipText(\"ONLYOFFICE for developers\");\nlet screenTipText = hyperlink.GetScreenTipText();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Screen tip text: \" + screenTipText);\ndoc.Push(paragraph);"
       ],
       "params": [
         {
@@ -195,7 +195,7 @@
       "description": "Converts the ApiHyperlink object into the JSON object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiHyperlink/Methods/ToJSON/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet hyperlink = Api.CreateHyperlink(\"https://api.onlyoffice.com/\", \"ONLYOFFICE Document Builder\", \"ONLYOFFICE for developers\");\nlet json = hyperlink.ToJSON(true);\nlet hyperlinkFromJSON = Api.FromJSON(json);\nhyperlinkFromJSON.SetDefaultStyle();\nparagraph.AddElement(hyperlinkFromJSON);"
+        "// How do I serialize a hyperlink to JSON and restore it in a document?\n\n// Duplicate a hyperlink by exporting it to JSON and re-importing it in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet hyperlink = Api.CreateHyperlink(\"https://api.onlyoffice.com/\", \"ONLYOFFICE Document Builder\", \"ONLYOFFICE for developers\");\nlet json = hyperlink.ToJSON(true);\nlet hyperlinkFromJSON = Api.FromJSON(json);\nhyperlinkFromJSON.SetDefaultStyle();\nparagraph.AddElement(hyperlinkFromJSON);"
       ],
       "params": [
         {

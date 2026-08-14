@@ -2,7 +2,7 @@
   "description": "Adds a new row to the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/AddRow/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 2x2 table and add a new row, so that it becomes 2x3:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.AddRow(table.GetRow(1).GetCell(0), true);\ndoc.Push(table);"
+    "// How do I add an extra row to a table in a document?\n\n// Extend a table by appending a row after a chosen position in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 2x2 table and add a new row, so that it becomes 2x3:\");\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(2, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.AddRow(table.GetRow(1).GetCell(0), true);\ndoc.Push(table);"
   ],
   "params": [
     {

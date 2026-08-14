@@ -2,7 +2,7 @@
   "description": "Returns the number of columns in the cell range.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/COLUMNS/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet column1 = [13, 14, 15];\nlet column2 = [23, 24, 25];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"B4\").SetValue(func.COLUMNS(range));"
+    "// Find the column span of a selected data range in a spreadsheet.\n\n// Determine how many columns wide your data extends in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet column1 = [13, 14, 15];\nlet column2 = [23, 24, 25];\n\nfor (let i = 0; i < column1.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 1)).SetValue(column1[i]);\n}\nfor (let j = 0; j < column2.length; j++) {\n    worksheet.GetRange(\"B\" + (j + 1)).SetValue(column2[j]);\n}\n\nlet range = worksheet.GetRange(\"A1:B3\");\nworksheet.GetRange(\"B4\").SetValue(func.COLUMNS(range));"
   ],
   "params": [
     {

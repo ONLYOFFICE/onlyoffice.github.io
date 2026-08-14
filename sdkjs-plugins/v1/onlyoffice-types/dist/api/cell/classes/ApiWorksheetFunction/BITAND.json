@@ -2,7 +2,7 @@
   "description": "Returns a bitwise \"AND\" of two numbers.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITAND/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITAND(13, 25));"
+    "// What do two numbers share at the binary level in a spreadsheet?\n\n// Get the common bits between two values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BITAND(13, 25));"
   ],
   "params": [
     {

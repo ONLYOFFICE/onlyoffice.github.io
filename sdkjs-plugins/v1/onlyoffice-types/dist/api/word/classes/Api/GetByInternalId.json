@@ -1,0 +1,19 @@
+{
+  "description": "Returns the object by it's internal ID.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/GetByInternalId/",
+  "examples": [
+    "// How do I find a specific element by its ID in a document?\n\n// Retrieve a paragraph using its identifier and show its type and text in a document.\n\nconst doc = Api.GetDocument();\n\nconst paragraph = doc.GetElement(0);\nparagraph.AddText('Original paragraph text.');\nconst internalId = paragraph.GetInternalId();\n\nconst found = Api.GetByInternalId(internalId);\n\nconst resultParagraph = Api.CreateParagraph();\nresultParagraph.AddText('Found object class type: ' + found.GetClassType());\nresultParagraph.AddLineBreak();\nresultParagraph.AddText('Found paragraph text: ' + found.GetText());\ndoc.Push(resultParagraph);"
+  ],
+  "params": [
+    {
+      "description": "The object internal ID.",
+      "name": "id",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "object"
+  },
+  "signature": "GetByInternalId(id: string): object",
+  "since": "9.0.4"
+}

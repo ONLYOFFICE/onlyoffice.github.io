@@ -1,0 +1,19 @@
+{
+  "description": "Sets the text value used in text-based conditional formatting rules.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetText/",
+  "examples": [
+    "// How do I change which text a conditional highlight rule looks for in a spreadsheet?\n\n// Replace the search string in a rule so different cell content gets highlighted in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Product Names\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Orange\");\nworksheet.GetRange(\"A5\").SetValue(\"Grape\");\nworksheet.GetRange(\"A6\").SetValue(\"Peach\");\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlTextString\", \"xlContains\", \"Apple\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original text:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetText());\n\ncondition1.SetText(\"Grape\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New text:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetText());"
+  ],
+  "params": [
+    {
+      "description": "The text value to compare against.",
+      "name": "Text",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetText(Text: string): void",
+  "since": "9.1.0"
+}

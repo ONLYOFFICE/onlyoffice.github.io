@@ -1,0 +1,19 @@
+{
+  "description": "Converts millimeters to English Metric Units (EMUs).\nThe result is an integer value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/MillimetersToEmus/",
+  "examples": [
+    "// How do I translate a measurement from millimeters to English metric units in a document?\n\n// Show the equivalent English metric unit value for a given number of millimeters in a document.\n\nconst doc = Api.GetDocument();\nconst paragraph = Api.CreateParagraph();\n\nconst millimeters = 0.2001;\nconst emus = Api.MillimetersToEmus(millimeters);\nparagraph.AddText(millimeters + ' millimeters are equal to ' + emus + ' emus (value is rounded to integer).');\ndoc.Push(paragraph);"
+  ],
+  "params": [
+    {
+      "description": "The value in millimeters.",
+      "name": "mm",
+      "type": "mm"
+    }
+  ],
+  "returns": {
+    "description": "The value in English Metric Units (EMUs), as an integer.",
+    "type": "EMU"
+  },
+  "signature": "MillimetersToEmus(mm: mm): EMU"
+}

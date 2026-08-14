@@ -5,6 +5,9 @@
     "Add": {
       "description": "Adds a new custom XML part to the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/Add/",
+      "examples": [
+        "// How do I store custom XML content inside a workbook in a spreadsheet?\n\n// Embed structured XML so it travels with the file when saved in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet newXml = xmlManager.Add(\"<content xmlns='http://example' version='1.0'></content>\");\nworksheet.GetRange(\"A1\").SetValue(\"New XML part added: \" + newXml.GetXml());"
+      ],
       "params": [
         {
           "description": "The XML string to be added.",
@@ -22,6 +25,9 @@
     "GetAll": {
       "description": "Returns all custom XML parts from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/GetAll/",
+      "examples": [
+        "// How do I retrieve all embedded XML data at once from a workbook in a spreadsheet?\n\n// Loop through each saved XML entry to inspect or process it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nxmlManager.Add(\"<employees><employee>John</employee></employees>\");\nxmlManager.Add(\"<departments><department>IT</department></departments>\");\nxmlManager.Add(\"<projects><project>Website</project></projects>\");\nlet allParts = xmlManager.GetAll();\nworksheet.GetRange(\"A1\").SetValue(\"Total XML parts: \" + allParts.length);\nfor (let i = 0; i < allParts.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 2)).SetValue(\"Part \" + (i + 1) + \": \" + allParts[i].GetXml());\n}"
+      ],
       "params": [],
       "returns": {
         "description": "An array of all custom XML parts.",
@@ -33,6 +39,9 @@
     "GetById": {
       "description": "Returns a custom XML part by its ID from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/GetById/",
+      "examples": [
+        "// How do I find a particular XML entry by its ID in a spreadsheet?\n\n// Locate a single XML block precisely when its identifier is already known in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xml = xmlManager.Add(\"<inventory><item>Book</item></inventory>\");\nlet id = xml.GetId();\nlet retrievedXml = xmlManager.GetById(id);\nif (retrievedXml) {\n    worksheet.GetRange(\"A1\").SetValue(\"Found XML part: \" + retrievedXml.GetXml());\n} else {\n    worksheet.GetRange(\"A1\").SetValue(\"XML part not found\");\n}"
+      ],
       "params": [
         {
           "description": "The XML part ID.",
@@ -50,6 +59,9 @@
     "GetByNamespace": {
       "description": "Returns custom XML parts by namespace from the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/GetByNamespace/",
+      "examples": [
+        "// How do I find all XML entries that belong to a specific namespace in a spreadsheet?\n\n// Narrow down embedded XML data to only those matching a given namespace in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nxmlManager.Add(\"<config xmlns='http://example.com/config'><setting>value1</setting></config>\");\nxmlManager.Add(\"<data xmlns='http://example.com/data'><entry>value2</entry></data>\");\nxmlManager.Add(\"<info xmlns='http://example.com/config'><detail>value3</detail></info>\");\nlet configParts = xmlManager.GetByNamespace(\"http://example.com/config\");\nworksheet.GetRange(\"A1\").SetValue(\"Found \" + configParts.length + \" XML parts with config namespace:\");\nfor (let i = 0; i < configParts.length; i++) {\n    worksheet.GetRange(\"A\" + (i + 2)).SetValue(\"Config part \" + (i + 1) + \": \" + configParts[i].GetXml());\n}"
+      ],
       "params": [
         {
           "description": "The namespace of the XML parts.",
@@ -67,6 +79,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiCustomXmlParts class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/GetClassType/",
+      "examples": [
+        "// How do I find out what type of object manages XML data in a spreadsheet?\n\n// Confirm the category of the XML manager to handle it correctly in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet classType = xmlManager.GetClassType();\nworksheet.GetRange(\"A1\").SetValue(\"XML manager class type: \" + classType);"
+      ],
       "params": [],
       "returns": {
         "type": "\"customXmlParts\""
@@ -76,6 +91,9 @@
     "GetCount": {
       "description": "Returns a number of custom XML parts in the XML manager.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCustomXmlParts/Methods/GetCount/",
+      "examples": [
+        "// How do I find out how many embedded XML entries exist in a spreadsheet?\n\n// Check the total number of saved XML blocks before iterating over them in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nxmlManager.Add(\"<products><item><name>Laptop</name><price>999</price></item></products>\");\nxmlManager.Add(\"<user><name>John Doe</name><email>john@example.com</email></user>\");\nlet count = xmlManager.GetCount();\nworksheet.GetRange(\"A1\").SetValue(\"There are \" + count + \" custom XML parts in the workbook.\");"
+      ],
       "params": [],
       "returns": {
         "description": "The number of custom XML parts.",

@@ -1,0 +1,10 @@
+{
+  "description": "Returns true if the paragraph has no content elements (only the paragraph end mark).",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParagraph/Methods/IsEmpty/",
+  "params": [],
+  "returns": {
+    "type": "boolean"
+  },
+  "signature": "IsEmpty(): boolean",
+  "since": "9.5.0"
+}

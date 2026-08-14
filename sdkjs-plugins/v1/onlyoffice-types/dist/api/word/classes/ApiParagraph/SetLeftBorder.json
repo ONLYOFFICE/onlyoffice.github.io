@@ -2,7 +2,7 @@
   "description": "Specifies the border which will be displayed at the left side of the page around the specified paragraph.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetLeftBorder/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border at its left side.\");"
+    "// How do I place a visible border on the left edge of a paragraph in a document?\n\n// Decorate a paragraph with a colored left-side border to make it stand out visually.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetLeftBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border at its left side.\");"
   ],
   "params": [
     {

@@ -6,7 +6,7 @@
       "description": "Sets the frozen cells in the active worksheet view. The range provided corresponds to the cells that will be frozen in the top- and left-most pane.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/Methods/FreezeAt/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = Api.GetRange('H2:K4');\nfreezePanes.FreezeAt(range);"
+        "// How do I pin a chosen block of rows and columns in place during scrolling in a spreadsheet?\n\n// Keep a defined region always on screen by anchoring it to the corner of the view in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = Api.GetRange('H2:K4');\nfreezePanes.FreezeAt(range);"
       ],
       "params": [
         {
@@ -25,7 +25,7 @@
       "description": "Freezes the first column or columns of the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/Methods/FreezeColumns/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.FreezeColumns(1);"
+        "// How do I stop columns from moving out of view when scrolling horizontally in a spreadsheet?\n\n// Pin the leading columns in place to keep key labels visible at all times in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.FreezeColumns(1);"
       ],
       "params": [
         {
@@ -45,7 +45,7 @@
       "description": "Freezes the top row or rows of the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/Methods/FreezeRows/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.FreezeRows(1);"
+        "// How do I keep header rows from disappearing when scrolling through data in a spreadsheet?\n\n// Pin the uppermost rows in place so column labels are always on screen in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.FreezeRows(1);"
       ],
       "params": [
         {
@@ -65,7 +65,7 @@
       "description": "Returns a range that describes the frozen cells in the active worksheet view.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/Methods/GetLocation/",
       "examples": [
-        "Api.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range.GetAddress());"
+        "// How do I find out which rows or columns are currently locked in place in a spreadsheet?\n\n// Retrieve the cell reference of the frozen region to confirm what is pinned in a spreadsheet.\n\nApi.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range.GetAddress());"
       ],
       "params": [],
       "returns": {
@@ -79,7 +79,7 @@
       "description": "Removes all frozen panes in the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFreezePanes/Methods/Unfreeze/",
       "examples": [
-        "Api.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.Unfreeze();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range + \"\");"
+        "// How do I remove frozen panes and allow the entire sheet to scroll without restrictions in a spreadsheet?\n\n// Unpin any fixed areas to restore normal scrolling behavior across the whole sheet in a spreadsheet.\n\nApi.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nfreezePanes.Unfreeze();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range + \"\");"
       ],
       "params": [],
       "returns": {

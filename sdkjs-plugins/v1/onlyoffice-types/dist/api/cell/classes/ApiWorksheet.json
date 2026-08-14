@@ -6,7 +6,7 @@
       "description": "Creates a chart of the specified type from the selected data range of the current sheet.\n<note>Please note that the horizontal and vertical offsets are calculated within the limits of the specified column and\nrow cells only. If this value exceeds the cell width or height, another vertical/horizontal position will be set.</note>\n:::note\nValues of _nStyleIndex_ outside **1 - 48** are interpreted as a chart style id from the _cs:chartStyle_ element (e.g. 201, 215, 284) and are available only for [ONLYOFFICE Docs Enterprise](https://www.onlyoffice.com/docs-enterprise-prices.aspx?from=api) and [ONLYOFFICE Docs Developer](https://www.onlyoffice.com/developer-edition-prices.aspx?from=api).\n:::",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddChart/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);"
+        "// How do I turn a range of numbers into a visual chart in a spreadsheet?\n\n// Insert a titled 3D bar chart with custom series colors on top of worksheet data in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);"
       ],
       "params": [
         {
@@ -69,7 +69,7 @@
       "description": "Adds a new name to the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddDefName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nworksheet.GetRange(\"A3\").SetValue(\"We defined a name 'numbers' for a range of cells A1:B1.\");"
+        "// How do I label a group of cells so I can refer to them by name in a spreadsheet?\n\n// Give a range a memorable label instead of using raw cell addresses.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nworksheet.GetRange(\"A3\").SetValue(\"We defined a name 'numbers' for a range of cells A1:B1.\");"
       ],
       "params": [
         {
@@ -98,7 +98,7 @@
       "description": "Adds an image to the current sheet with the parameters specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddImage/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000, 0, 2 * 36000, 0, 3 * 36000);"
+        "// How do I embed a picture from a URL into my sheet in a spreadsheet?\n\n// Decorate a worksheet by inserting an image with defined dimensions and placement.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddImage(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", 60 * 36000, 35 * 36000, 0, 2 * 36000, 0, 3 * 36000);"
       ],
       "params": [
         {
@@ -146,7 +146,7 @@
       "description": "Adds an OLE object to the current sheet with the parameters specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddOleObject/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddOleObject(\"https://api.onlyoffice.com/content/img/docbuilder/examples/ole-object-image.png\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\", 0, 2 * 36000, 4, 3 * 36000);"
+        "// How do I insert an embedded object with a preview image and a link in a spreadsheet?\n\n// Attach an interactive linked object to a worksheet at a given position and size.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t130 * 36000, 90 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}',\n\t0, 2 * 36000, 4, 3 * 36000\n);"
       ],
       "params": [
         {
@@ -204,7 +204,7 @@
       "description": "Creates a protected range of the specified type from the selected data range of the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddProtectedRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");"
+        "// How do I protect a specific group of cells from changes in a spreadsheet?\n\n// Restrict editing on a named cell range by marking it as protected.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");"
       ],
       "params": [
         {
@@ -228,7 +228,7 @@
       "description": "Adds a shape to the current sheet with the parameters specified.\n<note>Please note that the horizontal and vertical offsets are\ncalculated within the limits of the specified column and row cells\nonly. If this value exceeds the cell width or height, another vertical/horizontal position will be set.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddShape/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);"
+        "// How do I place a colored geometric shape onto a worksheet in a spreadsheet?\n\n// Decorate a sheet by adding a gradient-filled shape at defined coordinates.\n\nlet worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);"
       ],
       "params": [
         {
@@ -295,7 +295,7 @@
       "description": "Adds a Text Art object to the current sheet with the parameters specified.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/AddWordArt/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet textProps = Api.CreateTextPr();\ntextProps.SetFontSize(72);\ntextProps.SetBold(true);\ntextProps.SetCaps(true);\ntextProps.SetColor(51, 51, 51, false);\ntextProps.SetFontFamily(\"Comic Sans MS\");\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51)));\nworksheet.AddWordArt(textProps, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 100 * 36000, 20 * 36000, 0, 2, 2 * 36000, 3 * 36000);"
+        "// How do I add eye-catching artistic text with custom fonts and colors in a spreadsheet?\n\n// Render a bold curved text banner with a solid fill and outline on the worksheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet textProps = Api.CreateTextPr();\ntextProps.SetFontSize(72);\ntextProps.SetBold(true);\ntextProps.SetCaps(true);\ntextProps.SetColor(Api.HexColor('#333333'));\ntextProps.SetFontFamily(\"Comic Sans MS\");\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(1 * 36000, Api.CreateSolidFill(Api.RGB(51, 51, 51)));\nworksheet.AddWordArt(textProps, \"onlyoffice\", \"textArchUp\", fill, stroke, 0, 100 * 36000, 20 * 36000, 0, 2, 2 * 36000, 3 * 36000);"
       ],
       "params": [
         {
@@ -380,7 +380,7 @@
       "description": "Deletes the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/Delete/",
       "examples": [
-        "Api.AddSheet(\"New sheet\");\nlet sheet = Api.GetActiveSheet();\nsheet.Delete();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3\").SetValue(\"This method just deleted the second sheet from this spreadsheet.\");"
+        "// How do I delete a worksheet that is no longer needed in a spreadsheet?\n\n// Permanently discard a sheet and confirm the removal with a message.\n\nApi.AddSheet(\"New sheet\");\nlet sheet = Api.GetActiveSheet();\nsheet.Delete();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A3\").SetValue(\"This method just deleted the second sheet from this spreadsheet.\");"
       ],
       "params": [],
       "returns": {
@@ -393,7 +393,7 @@
       "description": "Formats the selected range of cells from the current sheet as a table (with the first row formatted as a header).\n<note>As the first row is always formatted as a table header, you need to select at least two rows for the table to be formed correctly.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/FormatAsTable/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.FormatAsTable(\"A1:E10\");"
+        "// How do I turn a plain data range into a structured table in a spreadsheet?\n\n// Apply table styling to a range so data is easier to read and filter.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.FormatAsTable(\"A1:E10\");"
       ],
       "params": [
         {
@@ -412,7 +412,7 @@
       "description": "Returns an object that represents an active cell.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetActiveCell/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet activeCell = worksheet.GetActiveCell();\nactiveCell.SetValue(\"This sample text was placed in an active cell.\");"
+        "// How do I find out which cell is active and put content into it in a spreadsheet?\n\n// Target the focused cell and populate it with custom text.\n\nlet worksheet = Api.GetActiveSheet();\nlet activeCell = worksheet.GetActiveCell();\nactiveCell.SetValue(\"This sample text was placed in an active cell.\");"
       ],
       "params": [],
       "returns": {
@@ -424,7 +424,7 @@
       "description": "Returns all charts from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllCharts/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nlet charts = worksheet.GetAllCharts();\nlet stroke = Api.CreateStroke(1 * 5000, Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61)));\ncharts[0].SetMinorHorizontalGridlines(stroke);"
+        "// How do I retrieve all charts at once to modify them together in a spreadsheet?\n\n// Loop through all existing charts and apply a uniform style change to each one.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet chart = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\nchart.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nlet charts = worksheet.GetAllCharts();\nlet stroke = Api.CreateStroke(1 * 5000, Api.CreateSolidFill(Api.RGB(255, 111, 61)));\ncharts[0].SetMinorHorizontalGridlines(stroke);"
       ],
       "params": [],
       "returns": {
@@ -437,7 +437,7 @@
       "description": "Returns all drawings from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllDrawings/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet drawing = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\ndrawing.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\ndrawing.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\ndrawing.SetSeriesFill(fill, 1, false);\nlet drawings = worksheet.GetAllDrawings();\ndrawings[0].SetSize(150 * 36000, 100 * 36000);"
+        "// How do I retrieve all drawings at once to resize or adjust them in a spreadsheet?\n\n// Loop through all existing drawings and apply a uniform size change to each one.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"B1\").SetValue(2014);\nworksheet.GetRange(\"C1\").SetValue(2015);\nworksheet.GetRange(\"D1\").SetValue(2016);\nworksheet.GetRange(\"A2\").SetValue(\"Projected Revenue\");\nworksheet.GetRange(\"A3\").SetValue(\"Estimated Costs\");\nworksheet.GetRange(\"B2\").SetValue(200);\nworksheet.GetRange(\"B3\").SetValue(250);\nworksheet.GetRange(\"C2\").SetValue(240);\nworksheet.GetRange(\"C3\").SetValue(260);\nworksheet.GetRange(\"D2\").SetValue(280);\nworksheet.GetRange(\"D3\").SetValue(280);\nlet drawing = worksheet.AddChart(\"'Sheet1'!$A$1:$D$3\", true, \"bar3D\", 2, 100 * 36000, 70 * 36000, 0, 2 * 36000, 7, 3 * 36000);\ndrawing.SetTitle(\"Financial Overview\", 13);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\ndrawing.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\ndrawing.SetSeriesFill(fill, 1, false);\nlet drawings = worksheet.GetAllDrawings();\ndrawings[0].SetSize(150 * 36000, 100 * 36000);"
       ],
       "params": [],
       "returns": {
@@ -450,7 +450,7 @@
       "description": "Returns all images from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllImages/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000, 0, 2 * 36000, 0, 3 * 36000);\nlet images = worksheet.GetAllImages();\nlet classType = images[0].GetClassType();\nworksheet.GetRange(\"A10\").SetValue(\"Class Type = \" + classType);"
+        "// How do I list all images placed on a sheet in a spreadsheet?\n\n// Collect the full set of images from a worksheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddImage(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", 60 * 36000, 35 * 36000, 0, 2 * 36000, 0, 3 * 36000);\nlet images = worksheet.GetAllImages();\nlet classType = images[0].GetClassType();\nworksheet.GetRange(\"A10\").SetValue(\"Class Type = \" + classType);"
       ],
       "params": [],
       "returns": {
@@ -463,7 +463,7 @@
       "description": "Returns all OLE objects from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllOleObjects/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddOleObject(\"https://i.ytimg.com/vi_webp/SKGz4pmnpgY/sddefault.webp\", 130 * 36000, 90 * 36000, \"https://youtu.be/SKGz4pmnpgY\", \"asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}\", 0, 2 * 36000, 4, 3 * 36000);\nlet oleObjects = worksheet.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nworksheet.GetRange(\"A1\").SetValue(\"The application ID for the current OLE object: \" + appId);"
+        "// How do I list all OLE objects on a sheet in a spreadsheet?\n\n// Collect the full set of embedded objects from a worksheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddOleObject(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t150 * 36000, 150 * 36000,\n\t'https://youtu.be/SKGz4pmnpgY',\n\t'asc.{38E022EA-AD92-45FC-B22B-49DF39746DB4}',\n\t0, 2 * 36000, 4, 3 * 36000\n);\nlet oleObjects = worksheet.GetAllOleObjects();\nlet appId = oleObjects[0].GetApplicationId();\nworksheet.GetRange('A1').SetValue('The application ID for the current OLE object: ' + appId);"
       ],
       "params": [],
       "returns": {
@@ -476,7 +476,7 @@
       "description": "Returns all pivot tables from the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllPivotTables/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotRef = worksheet.GetRange('A7');\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('A7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('D7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('G7'));\n\nworksheet.GetAllPivotTables().forEach(function (pivot) {\n    pivot.AddDataField('Price');\n});"
+        "// How do I list all pivot tables on a sheet in a spreadsheet?\n\n// Access each pivot table on the worksheet to apply changes in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotRef = worksheet.GetRange('A7');\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('A7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('D7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('G7'));\n\nworksheet.GetAllPivotTables().forEach(function (pivot) {\n    pivot.AddDataField('Price');\n});"
       ],
       "params": [],
       "returns": {
@@ -489,7 +489,7 @@
       "description": "Returns all protected ranges from the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllProtectedRanges/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange1\", \"Sheet1!$A$1:$B$1\");\nworksheet.AddProtectedRange(\"protectedRange2\", \"Sheet1!$A$2:$B$2\");\nlet protectedRanges = worksheet.GetAllProtectedRanges();\nprotectedRanges[0].SetTitle(\"protectedRangeNew1\");\nprotectedRanges[1].SetTitle(\"protectedRangeNew2\");"
+        "// How do I list all protected ranges on a sheet in a spreadsheet?\n\n// Loop through all locked ranges on the worksheet to update their titles in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange1\", \"Sheet1!$A$1:$B$1\");\nworksheet.AddProtectedRange(\"protectedRange2\", \"Sheet1!$A$2:$B$2\");\nlet protectedRanges = worksheet.GetAllProtectedRanges();\nprotectedRanges[0].SetTitle(\"protectedRangeNew1\");\nprotectedRanges[1].SetTitle(\"protectedRangeNew2\");"
       ],
       "params": [],
       "returns": {
@@ -502,7 +502,7 @@
       "description": "Returns all shapes from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAllShapes/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet shapes = worksheet.GetAllShapes();\nlet content = shapes[0].GetContent();\ncontent.RemoveAllElements();\nshapes[0].SetVerticalTextAlign(\"bottom\");\nlet paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\nparagraph.AddText(\"aligning it vertically by the bottom.\");\ncontent.Push(paragraph);"
+        "// How do I list all shapes on a sheet in a spreadsheet?\n\n// Collect all drawn shapes from the worksheet to modify their content in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet shapes = worksheet.GetAllShapes();\nlet content = shapes[0].GetContent();\ncontent.RemoveAllElements();\nshapes[0].SetVerticalTextAlign(\"bottom\");\nlet paragraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\nparagraph.AddText(\"aligning it vertically by the bottom.\");\ncontent.Push(paragraph);"
       ],
       "params": [],
       "returns": {
@@ -514,6 +514,9 @@
     "GetAutoFilter": {
       "description": "Returns the instante of ApiAutoFilter object that represents the worksheet AutoFilter.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetAutoFilter/",
+      "examples": [
+        "// How do I access the auto filter applied to a sheet in a spreadsheet?\n\n// Read the filtered range address by obtaining the worksheet's auto filter in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"Product\");\nworksheet.GetRange(\"A2\").SetValue(\"Apple\");\nworksheet.GetRange(\"A3\").SetValue(\"Banana\");\nworksheet.GetRange(\"A4\").SetValue(\"Cherry\");\nlet range = worksheet.GetRange(\"A1:A4\");\nrange.SetAutoFilter();\nlet autoFilter = worksheet.GetAutoFilter();\nlet filterRange = autoFilter.GetRange();\nworksheet.GetRange(\"C1\").SetValue(\"AutoFilter range:\");\nworksheet.GetRange(\"C2\").SetValue(filterRange.GetAddress());"
+      ],
       "params": [],
       "returns": {
         "type": "ApiAutoFilter"
@@ -524,7 +527,7 @@
       "description": "Returns the bottom margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetBottomMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet bottomMargin = worksheet.GetBottomMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Bottom margin: \" + bottomMargin + \" mm\");"
+        "// How do I find out the bottom margin size of a sheet in a spreadsheet?\n\n// Check how much space is reserved at the bottom of the printed page in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet bottomMargin = worksheet.GetBottomMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Bottom margin: \" + bottomMargin + \" mm\");"
       ],
       "params": [],
       "returns": {
@@ -537,7 +540,7 @@
       "description": "Returns the ApiRange that represents all the cells on the worksheet (not just the cells that are currently in use).",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetCells/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet cells = worksheet.GetCells();\ncells.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+        "// How do I target all cells on a sheet in a spreadsheet?\n\n// Apply formatting across the entire worksheet by referencing all its cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet cells = worksheet.GetCells();\ncells.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
       ],
       "params": [
         {
@@ -560,7 +563,7 @@
       "description": "Returns the ApiRange object that represents all the cells on the columns range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetCols/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet cols = worksheet.GetCols(\"A1:C1\");\ncols.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+        "// How do I target every cell in a set of columns in a spreadsheet?\n\n// Apply formatting to a group of columns by referencing all their cells in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet cols = worksheet.GetCols(\"A1:C1\");\ncols.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
       ],
       "params": [
         {
@@ -578,7 +581,7 @@
       "description": "Returns all comments from the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetComments/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comments = worksheet.GetComments();\nworksheet.GetRange(\"A4\").SetValue(\"Comment: \" + comments[0].GetText());"
+        "// How do I list all comments on a sheet in a spreadsheet?\n\n// Read comment text by collecting all annotations from the worksheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nlet range = worksheet.GetRange(\"A1\");\nrange.AddComment(\"This is just a number.\");\nlet comments = worksheet.GetComments();\nworksheet.GetRange(\"A4\").SetValue(\"Comment: \" + comments[0].GetText());"
       ],
       "params": [],
       "returns": {
@@ -589,6 +592,9 @@
     "GetCustomXmlParts": {
       "description": "Retrieves the custom XML manager associated with the current sheet.\nThis manager allows manipulation and access to custom XML parts within the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetCustomXmlParts/",
+      "examples": [
+        "// How do I store and retrieve custom XML data on a sheet in a spreadsheet?\n\n// Manage structured XML content attached to a worksheet by adding a part and fetching it by ID in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet xmlManager = worksheet.GetCustomXmlParts();\nlet xmlText = \"<content><text>Example XML</text></content>\";\nlet xmlPart = xmlManager.Add(xmlText);\nlet xmlId = xmlPart.GetId();\nlet retrievedXml = xmlManager.GetById(xmlId);\nworksheet.GetRange(\"A1\").SetValue(\"Retrieved XML: \" + retrievedXml.GetXml());"
+      ],
       "params": [],
       "returns": {
         "description": "Returns an instance of ApiCustomXmlParts if the custom XML manager exists, otherwise returns null.",
@@ -601,7 +607,7 @@
       "description": "Returns the ApiName object by the worksheet name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetDefName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = worksheet.GetDefName(\"numbers\");\nworksheet.GetRange(\"A3\").SetValue(\"DefName: \" + defName.GetName());"
+        "// How do I look up a named range on a worksheet in a spreadsheet?\n\n// Find a specific named range and read its title in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nlet defName = worksheet.GetDefName(\"numbers\");\nworksheet.GetRange(\"A3\").SetValue(\"DefName: \" + defName.GetName());"
       ],
       "params": [
         {
@@ -620,7 +626,7 @@
       "description": "Returns an array of ApiName objects.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetDefNames/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"A2\").SetValue(\"A\");\nworksheet.GetRange(\"B2\").SetValue(\"B\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nworksheet.AddDefName(\"letters\", \"Sheet1!$A$2:$B$2\");\nlet defNames = worksheet.GetDefNames();\nworksheet.GetRange(\"A4\").SetValue(\"DefNames: \" + defNames[0].GetName() + \", \" + defNames[1].GetName());"
+        "// How do I list every named range on a worksheet in a spreadsheet?\n\n// Loop through all named ranges and display their names in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"A2\").SetValue(\"A\");\nworksheet.GetRange(\"B2\").SetValue(\"B\");\nworksheet.AddDefName(\"numbers\", \"Sheet1!$A$1:$B$1\");\nworksheet.AddDefName(\"letters\", \"Sheet1!$A$2:$B$2\");\nlet defNames = worksheet.GetDefNames();\nworksheet.GetRange(\"A4\").SetValue(\"DefNames: \" + defNames[0].GetName() + \", \" + defNames[1].GetName());"
       ],
       "params": [],
       "returns": {
@@ -633,7 +639,7 @@
       "description": "Returns the freeze panes from the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetFreezePanes/",
       "examples": [
-        "Api.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range.GetAddress());"
+        "// How do I find out which rows or columns are frozen in a spreadsheet?\n\n// Check where the freeze boundary is and write its location to a cell in a spreadsheet.\n\nApi.SetFreezePanesType('column');\nlet worksheet = Api.GetActiveSheet();\nlet freezePanes = worksheet.GetFreezePanes();\nlet range = freezePanes.GetLocation();\nworksheet.GetRange(\"A1\").SetValue(\"Location: \");\nworksheet.GetRange(\"B1\").SetValue(range.GetAddress());"
       ],
       "params": [],
       "returns": {
@@ -655,7 +661,7 @@
       "description": "Returns a sheet index.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetIndex/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet index = worksheet.GetIndex();\nworksheet.GetRange(\"A1\").SetValue(\"Index: \");\nworksheet.GetRange(\"B1\").SetValue(index);"
+        "// How do I get the tab number of the active sheet in a spreadsheet?\n\n// Identify the sheet order index and display it in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet leftMargin = worksheet.GetLeftMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Left margin: \" + leftMargin + \" mm\");"
       ],
       "params": [],
       "returns": {
@@ -667,7 +673,7 @@
       "description": "Returns the left margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetLeftMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet leftMargin = worksheet.GetLeftMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Left margin: \" + leftMargin + \" mm\");"
+        "// How do I find out the left margin width of a sheet in a spreadsheet?\n\n// Retrieve the left margin value in millimeters and show it in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet leftMargin = worksheet.GetLeftMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Left margin: \" + leftMargin + \" mm\");"
       ],
       "params": [],
       "returns": {
@@ -680,7 +686,7 @@
       "description": "Returns a sheet name.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet name = worksheet.GetName();\nworksheet.GetRange(\"A1\").SetValue(\"Name: \");\nworksheet.GetRange(\"B1\").SetValue(name);"
+        "// How do I read the tab name of the current sheet in a spreadsheet?\n\n// Capture the sheet name and write it to a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet name = worksheet.GetName();\nworksheet.GetRange(\"A1\").SetValue(\"Name: \");\nworksheet.GetRange(\"B1\").SetValue(name);"
       ],
       "params": [],
       "returns": {
@@ -692,7 +698,7 @@
       "description": "Returns the page orientation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetPageOrientation/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet pageOrientation = worksheet.GetPageOrientation();\nworksheet.GetRange(\"A1\").SetValue(\"Page orientation: \");\nworksheet.GetRange(\"C1\").SetValue(pageOrientation);"
+        "// How do I check whether a sheet is set to portrait or landscape in a spreadsheet?\n\n// Retrieve the orientation setting and display it in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet pageOrientation = worksheet.GetPageOrientation();\nworksheet.GetRange(\"A1\").SetValue(\"Page orientation: \");\nworksheet.GetRange(\"C1\").SetValue(pageOrientation);"
       ],
       "params": [],
       "returns": {
@@ -714,7 +720,7 @@
       "description": "Returns a pivot table by its name from the current worksheet, or null if it does not exist.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetPivotByName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\nApi.GetActiveSheet().GetPivotByName(pivotTable.GetName()).AddFields({\n    rows: 'Region',\n});\n\nApi.GetActiveSheet().GetPivotByName(pivotTable.GetName()).AddDataField('Price');"
+        "// How do I access a pivot table by its name in a spreadsheet?\n\n// Find a pivot table, then assign row and data fields to it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotTable = Api.InsertPivotNewWorksheet(dataRef);\n\nApi.GetActiveSheet().GetPivotByName(pivotTable.GetName()).AddFields({\n    rows: 'Region',\n});\n\nApi.GetActiveSheet().GetPivotByName(pivotTable.GetName()).AddDataField('Price');"
       ],
       "params": [
         {
@@ -733,7 +739,7 @@
       "description": "Returns the page PrintGridlines property which specifies whether the current sheet gridlines must be printed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetPrintGridlines/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetPrintGridlines(true);\nworksheet.GetRange(\"A1\").SetValue(\"Gridlines of cells will be printed on this page: \" + worksheet.GetPrintGridlines());"
+        "// How do I find out if gridlines will appear on printed pages in a spreadsheet?\n\n// Verify the print-gridlines setting and display the result in a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetPrintGridlines(true);\nworksheet.GetRange(\"A1\").SetValue(\"Gridlines of cells will be printed on this page: \" + worksheet.GetPrintGridlines());"
       ],
       "params": [],
       "returns": {
@@ -746,7 +752,7 @@
       "description": "Returns the page PrintHeadings property which specifies whether the current sheet row/column headings must be printed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetPrintHeadings/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetPrintHeadings(true);\nworksheet.GetRange(\"A1\").SetValue(\"Row and column headings will be printed with this page: \" + worksheet.GetPrintHeadings());"
+        "// How do I find out if row and column labels will appear on printed pages in a spreadsheet?\n\n// Confirm the print-headings setting and write the result to a cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetPrintHeadings(true);\nworksheet.GetRange(\"A1\").SetValue(\"Row and column headings will be printed with this page: \" + worksheet.GetPrintHeadings());"
       ],
       "params": [],
       "returns": {
@@ -759,7 +765,7 @@
       "description": "Returns a protected range object by its title.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetProtectedRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetTitle(\"protectedRangeNew\");"
+        "// How do I retrieve a protected range from a worksheet in a spreadsheet?\n\n// Locate a locked cell range and rename it in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.AddProtectedRange(\"protectedRange\", \"Sheet1!$A$1:$B$1\");\nlet protectedRange = worksheet.GetProtectedRange(\"protectedRange\");\nprotectedRange.SetTitle(\"protectedRangeNew\");"
       ],
       "params": [
         {
@@ -778,7 +784,7 @@
       "description": "Returns an object that represents the selected range of the current sheet. Can be a single cell - **A1**, or cells\nfrom a single row - **A1:E1**, or cells from a single column - **A1:A10**, or cells from several rows and columns - **A1:E10**.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetAlignHorizontal(\"center\");"
+        "// Find and modify a specific block of cells using its coordinates in a spreadsheet?\n\n// Reference any rectangular group to style all cells at once in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"2\");\nlet range = worksheet.GetRange(\"A1:D5\");\nrange.SetAlignHorizontal(\"center\");"
       ],
       "params": [
         {
@@ -802,7 +808,7 @@
       "description": "Returns an object that represents the selected range of the current sheet using the **row/column** coordinates for the cell selection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetRangeByNumber/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRangeByNumber(1, 2).SetValue(\"42\");"
+        "// Pick cells by their numeric positions without using address notation in a spreadsheet?\n\n// Enter data into a cell when you know only its row and column count in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRangeByNumber(1, 2).SetValue(\"42\");"
       ],
       "params": [
         {
@@ -825,7 +831,7 @@
       "description": "Returns the right margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetRightMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet rightMargin = worksheet.GetRightMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Right margin: \" + rightMargin + \" mm\");"
+        "// Measure the empty space on the right edge of a printed page in a spreadsheet?\n\n// Show margin values in cells to understand your document boundaries in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet rightMargin = worksheet.GetRightMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Right margin: \" + rightMargin + \" mm\");"
       ],
       "params": [],
       "returns": {
@@ -838,7 +844,7 @@
       "description": "Returns the ApiRange object that represents all the cells on the rows range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetRows/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRows(\"1:4\").SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+        "// Work with a group of rows when you want to apply one change everywhere in a spreadsheet?\n\n// Color a row range uniformly by treating it as a single collection in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRows(\"1:4\").SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
       ],
       "params": [
         {
@@ -855,6 +861,9 @@
     "GetSelectedDrawings": {
       "description": "Returns selected drawings from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetSelectedDrawings/",
+      "examples": [
+        "// Access each drawing object when multiple are selected at the same time in a spreadsheet?\n\n// Modify properties of every highlighted drawing by looping through them in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ngradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 0, 0), 0);\ngradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 0, 255), 100000);\nfill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet image = worksheet.AddImage(\"https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png\", 60 * 36000, 35 * 36000, 10, 2 * 36000, 5, 3 * 36000);\nshape.Select();\nimage.Select();\nlet shapes = worksheet.GetSelectedDrawings();\nshapes.forEach(function(shape) {\n\tshape.SetRotation(45);\n});"
+      ],
       "params": [],
       "returns": {
         "description": ".",
@@ -865,6 +874,9 @@
     "GetSelectedShapes": {
       "description": "Returns selected shapes from the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetSelectedShapes/",
+      "examples": [
+        "// Work with shape objects after a user marks them in the document in a spreadsheet?\n\n// Update text and positioning for every selected shape simultaneously in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet gradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 213, 191), 0);\nlet gradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 111, 61), 100000);\nlet fill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nworksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\ngradientStop1 = Api.CreateGradientStop(Api.CreateRGBColor(255, 0, 0), 0);\ngradientStop2 = Api.CreateGradientStop(Api.CreateRGBColor(255, 0, 255), 100000);\nfill = Api.CreateLinearGradientFill([gradientStop1, gradientStop2], 5400000);\nstroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nshape.Select();\nlet shapes = worksheet.GetSelectedShapes();\nif (shapes[0]) {\n\tlet content = shapes[0].GetContent();\n\tcontent.RemoveAllElements();\n\tshapes[0].SetVerticalTextAlign(\"bottom\");\n\tlet paragraph = Api.CreateParagraph();\n\tparagraph.SetJc(\"left\");\n\tparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it \");\n\tparagraph.AddText(\"aligning it vertically by the bottom.\");\n\tcontent.Push(paragraph);\n}"
+      ],
       "params": [],
       "returns": {
         "description": ".",
@@ -876,7 +888,7 @@
       "description": "Returns an object that represents the selected range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetSelection/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetSelection().SetValue(\"selected\");"
+        "// Identify which cells are active and modify them regardless of their location in a spreadsheet?\n\n// Put text into selected cells without knowing their exact position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetSelection().SetValue(\"selected\");"
       ],
       "params": [],
       "returns": {
@@ -888,7 +900,7 @@
       "description": "Returns the top margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetTopMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet topMargin = worksheet.GetTopMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Top margin: \" + topMargin + \" mm\");"
+        "// Measure the blank space above your printed content in a spreadsheet?\n\n// Show margin dimensions in cells for layout verification in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet topMargin = worksheet.GetTopMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Top margin: \" + topMargin + \" mm\");"
       ],
       "params": [],
       "returns": {
@@ -901,7 +913,7 @@
       "description": "Returns the ApiRange object that represents the used range on the specified worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetUsedRange/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet usedRange = worksheet.GetUsedRange();\nusedRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
+        "// Detect the exact boundaries of content without empty rows or columns in a spreadsheet?\n\n// Shade all populated cells with a background color to visualize data extent in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet usedRange = worksheet.GetUsedRange();\nusedRange.SetFillColor(Api.CreateColorFromRGB(255, 213, 191));"
       ],
       "params": [],
       "returns": {
@@ -913,7 +925,7 @@
       "description": "Returns the state of sheet visibility.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GetVisible/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetVisible(true);\nlet isVisible = worksheet.GetVisible();\nworksheet.GetRange(\"A1\").SetValue(\"Visible: \");\nworksheet.GetRange(\"B1\").SetValue(isVisible);"
+        "// Determine the display status of a worksheet for visibility control in a spreadsheet?\n\n// Display the visibility state in a cell to confirm sheet access in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetVisible(true);\nlet isVisible = worksheet.GetVisible();\nworksheet.GetRange(\"A1\").SetValue(\"Visible: \");\nworksheet.GetRange(\"B1\").SetValue(isVisible);"
       ],
       "params": [],
       "returns": {
@@ -924,9 +936,6 @@
     "GroupDrawings": {
       "description": "Groups an array of drawings in the current sheet.\n<note>This method is not supported in the document builder and works only in the editor.</note>",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/GroupDrawings/",
-      "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet fill1 = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet fill2 = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape1 = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill1, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet shape2 = worksheet.AddShape(\"flowChartOnlineStorage\", 60 * 36000, 35 * 36000, fill2, stroke, 0, 15 * 36000, 0, 30 * 36000);\nworksheet.GroupDrawings([shape1, shape2]);"
-      ],
       "params": [
         {
           "description": "An array of drawings to group.",
@@ -945,7 +954,7 @@
       "description": "Moves the current sheet to another location in the workbook.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/Move/",
       "examples": [
-        "let sheet1 = Api.GetActiveSheet();\nApi.AddSheet(\"Sheet2\");\nlet sheet2 = Api.GetActiveSheet();\nsheet2.Move(sheet1);"
+        "// Change the tab position of a sheet relative to your other sheets in a spreadsheet?\n\n// Reorganize sheet sequence to group related data together in a spreadsheet.\n\nlet sheet1 = Api.GetActiveSheet();\nApi.AddSheet(\"Sheet2\");\nlet sheet2 = Api.GetActiveSheet();\nsheet2.Move(sheet1);"
       ],
       "params": [
         {
@@ -968,7 +977,7 @@
       "description": "Pastes the contents of the clipboard to the current sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/Paste/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.Paste();"
+        "// How do I paste copied or cut data from the clipboard in a spreadsheet?\n\n// Insert clipboard data into the current worksheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.Paste();"
       ],
       "params": [
         {
@@ -988,7 +997,7 @@
       "description": "Refreshes all pivot tables on the current worksheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/RefreshAllPivots/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotRef = worksheet.GetRange('A7');\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('A7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('D7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('G7'));\n\nworksheet.GetAllPivotTables().forEach(function (pivot) {\n    pivot.AddDataField('Price');\n});\n\nworksheet.RefreshAllPivots();"
+        "// How do I refresh all pivot tables at once in a spreadsheet?\n\n// Reload pivot table values so they reflect the current source data in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange('B1').SetValue('Region');\nworksheet.GetRange('C1').SetValue('Price');\nworksheet.GetRange('B2').SetValue('East');\nworksheet.GetRange('B3').SetValue('West');\nworksheet.GetRange('C2').SetValue(42.5);\nworksheet.GetRange('C3').SetValue(35.2);\n\nlet dataRef = Api.GetRange(\"'Sheet1'!$B$1:$C$3\");\nlet pivotRef = worksheet.GetRange('A7');\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('A7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('D7'));\nApi.InsertPivotExistingWorksheet(dataRef, worksheet.GetRange('G7'));\n\nworksheet.GetAllPivotTables().forEach(function (pivot) {\n    pivot.AddDataField('Price');\n});\n\nworksheet.RefreshAllPivots();"
       ],
       "params": [],
       "returns": {
@@ -1001,7 +1010,7 @@
       "description": "Replaces the current image with a new one.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/ReplaceCurrentImage/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet drawing = worksheet.AddImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/coordinate_aspects.png\", 60 * 36000, 35 * 36000, 0, 2 * 36000, 0, 3 * 36000);\n// todo_example we don't have method ApiDrawing.Select() which is necessary for this example\nworksheet.ReplaceCurrentImage(\"https://helpcenter.onlyoffice.com/images/Help/GettingStarted/Documents/big/EditDocument.png\", 60 * 36000, 35 * 36000);"
+        "// How do I replace an existing image with a new one in a spreadsheet?\n\n// Substitute the current image with another using its URL in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet drawing = worksheet.AddImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/presentation_sky.png',\n\t60 * 36000, 60 * 36000,\n\t0, 2 * 36000, 0, 3 * 36000\n); // todo_example we don't have method ApiDrawing.Select() which is necessary for this example\nworksheet.ReplaceCurrentImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t60 * 36000, 60 * 36000\n);"
       ],
       "params": [
         {
@@ -1030,7 +1039,7 @@
       "description": "Makes the current sheet active.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetActive/",
       "examples": [
-        "Api.AddSheet(\"New_sheet\");\nlet sheet = Api.GetSheet(\"New_sheet\");\nsheet.SetActive();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"The current sheet is active.\");"
+        "// How do I make a particular sheet the active one in a spreadsheet?\n\n// Bring a named sheet to the foreground so it becomes the working sheet in a spreadsheet.\n\nApi.AddSheet(\"New_sheet\");\nlet sheet = Api.GetSheet(\"New_sheet\");\nsheet.SetActive();\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A1\").SetValue(\"The current sheet is active.\");"
       ],
       "params": [],
       "returns": {
@@ -1043,7 +1052,7 @@
       "description": "Sets the bottom margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetBottomMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetBottomMargin(25.1);\nlet bottomMargin = worksheet.GetBottomMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Bottom margin: \" + bottomMargin + \" mm\");"
+        "// How do I set the bottom margin of a worksheet in a spreadsheet?\n\n// Adjust the spacing at the bottom of the printed page in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetBottomMargin(25.1);\nlet bottomMargin = worksheet.GetBottomMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Bottom margin: \" + bottomMargin + \" mm\");"
       ],
       "params": [
         {
@@ -1062,7 +1071,7 @@
       "description": "Sets the width of the specified column.\nOne unit of column width is equal to the width of one character in the Normal style.\nFor proportional fonts, the width of the character 0 (zero) is used.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetColumnWidth/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 10);\nworksheet.SetColumnWidth(1, 20);"
+        "// How do I change the width of a column in a spreadsheet?\n\n// Widen or narrow columns to control how much content fits in each cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetColumnWidth(0, 10);\nworksheet.SetColumnWidth(1, 20);"
       ],
       "params": [
         {
@@ -1092,7 +1101,7 @@
       "description": "Specifies whether the current sheet gridlines must be displayed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetDisplayGridlines/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The sheet settings make it display no gridlines\");\nworksheet.SetDisplayGridlines(false);"
+        "// How do I turn gridlines on or off in a spreadsheet?\n\n// Control whether the cell border lines are visible on the sheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The sheet settings make it display no gridlines\");\nworksheet.SetDisplayGridlines(false);"
       ],
       "params": [
         {
@@ -1111,7 +1120,7 @@
       "description": "Specifies whether the current sheet row/column headers must be displayed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetDisplayHeadings/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The sheet settings make it display no row/column headers\");\nworksheet.SetDisplayHeadings(false);"
+        "// How do I toggle the row and column headers on or off in a spreadsheet?\n\n// Control whether the letter and number labels along the edges of the sheet are visible in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.GetRange(\"A2\").SetValue(\"The sheet settings make it display no row/column headers\");\nworksheet.SetDisplayHeadings(false);"
       ],
       "params": [
         {
@@ -1130,7 +1139,7 @@
       "description": "Adds a hyperlink to the specified range.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetHyperlink/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetHyperlink(\"A1\", \"https://api.onlyoffice.com/docbuilder/basic\", \"Api ONLYOFFICE\", \"ONLYOFFICE for developers\");"
+        "// How do I add a hyperlink to a cell in a spreadsheet?\n\n// Link a cell to an external URL so users can navigate to it directly in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nconst logoUrl = 'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png';\nworksheet.SetHyperlink('A1', logoUrl, null, 'ONLYOFFICE for developers', 'Api ONLYOFFICE');"
       ],
       "params": [
         {
@@ -1172,7 +1181,7 @@
       "description": "Sets the left margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetLeftMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetLeftMargin(20.8);\nlet leftMargin = worksheet.GetLeftMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Left margin: \" + leftMargin + \" mm\");"
+        "// How do I set the left margin of a worksheet in a spreadsheet?\n\n// Adjust the spacing on the left side of the printed page in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetLeftMargin(20.8);\nlet leftMargin = worksheet.GetLeftMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Left margin: \" + leftMargin + \" mm\");"
       ],
       "params": [
         {
@@ -1191,7 +1200,7 @@
       "description": "Sets a name to the current active sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetName/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetName(\"sheet 1\");\nlet name = worksheet.GetName();\nworksheet.GetRange(\"A1\").SetValue(\"Worksheet name: \");\nworksheet.GetRange(\"A1\").AutoFit(false, true);\nworksheet.GetRange(\"B1\").SetValue(name);"
+        "// How do I give a worksheet a custom name in a spreadsheet?\n\n// Change the tab label of the current sheet to something meaningful in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetName(\"sheet 1\");\nlet name = worksheet.GetName();\nworksheet.GetRange(\"A1\").SetValue(\"Worksheet name: \");\nworksheet.GetRange(\"A1\").AutoFit(false, true);\nworksheet.GetRange(\"B1\").SetValue(name);"
       ],
       "params": [
         {
@@ -1209,7 +1218,7 @@
       "description": "Sets the page orientation.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetPageOrientation/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetPageOrientation(\"xlPortrait\");\nlet pageOrientation = worksheet.GetPageOrientation();\nworksheet.GetRange(\"A1\").SetValue(\"Page orientation: \");\nworksheet.GetRange(\"C1\").SetValue(pageOrientation);"
+        "// How do I rotate the page orientation from vertical to horizontal in a spreadsheet?\n\n// Choose whether your printed pages display in tall or wide format in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetPageOrientation(\"xlPortrait\");\nlet pageOrientation = worksheet.GetPageOrientation();\nworksheet.GetRange(\"A1\").SetValue(\"Page orientation: \");\nworksheet.GetRange(\"C1\").SetValue(pageOrientation);"
       ],
       "params": [
         {
@@ -1228,7 +1237,7 @@
       "description": "Specifies whether the current sheet gridlines must be printed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetPrintGridlines/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetPrintGridlines(true);\nworksheet.GetRange(\"A1\").SetValue(\"Gridlines of cells will be printed on this page: \" + worksheet.GetPrintGridlines());"
+        "// How do I include or exclude the grid pattern when printing my spreadsheet?\n\n// Specify whether printed output shows the cell boundary lines in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetPrintGridlines(true);\nworksheet.GetRange(\"A1\").SetValue(\"Gridlines of cells will be printed on this page: \" + worksheet.GetPrintGridlines());"
       ],
       "params": [
         {
@@ -1247,7 +1256,7 @@
       "description": "Specifies whether the current sheet row/column headers must be printed or not.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetPrintHeadings/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetPrintHeadings(true);\nworksheet.GetRange(\"A1\").SetValue(\"Row and column headings will be printed with this page: \" + worksheet.GetPrintHeadings());"
+        "// How do I include row and column identifiers on my printed pages in a spreadsheet?\n\n// Display the grid labels (A, B, C and 1, 2, 3) when printing your spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetPrintHeadings(true);\nworksheet.GetRange(\"A1\").SetValue(\"Row and column headings will be printed with this page: \" + worksheet.GetPrintHeadings());"
       ],
       "params": [
         {
@@ -1266,7 +1275,7 @@
       "description": "Sets the right margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetRightMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetRightMargin(20.8);\nlet rightMargin = worksheet.GetRightMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Right margin: \" + rightMargin + \" mm\");"
+        "// How do I control the empty space along the right edge when printing in a spreadsheet?\n\n// Determine how much blank space appears between your data and the right page boundary in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetRightMargin(20.8);\nlet rightMargin = worksheet.GetRightMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Right margin: \" + rightMargin + \" mm\");"
       ],
       "params": [
         {
@@ -1285,7 +1294,7 @@
       "description": "Sets the height of the specified row measured in points.\nA point is 1/72 inch.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetRowHeight/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetRowHeight(0, 30);"
+        "// How do I resize a row to be taller or shorter in a spreadsheet?\n\n// Set the vertical dimension of a row to match your content needs in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetRowHeight(0, 30);"
       ],
       "params": [
         {
@@ -1309,7 +1318,7 @@
       "description": "Sets the top margin of the sheet.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetTopMargin/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetTopMargin(25.1);\nlet topMargin = worksheet.GetTopMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Top margin: \" + topMargin + \" mm\");"
+        "// How do I control the empty space along the top edge when printing in a spreadsheet?\n\n// Determine how much blank space appears between the top page boundary and your data in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetTopMargin(25.1);\nlet topMargin = worksheet.GetTopMargin();\nworksheet.GetRange(\"A1\").SetValue(\"Top margin: \" + topMargin + \" mm\");"
       ],
       "params": [
         {
@@ -1328,7 +1337,7 @@
       "description": "Sets the state of sheet visibility.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheet/Methods/SetVisible/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nworksheet.SetVisible(true);\nworksheet.GetRange(\"A1\").SetValue(\"The current worksheet is visible.\");"
+        "// How do I make a sheet visible or hidden from other users in a spreadsheet?\n\n// Control whether a sheet appears in the tab list or remains inaccessible in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nworksheet.SetVisible(true);\nworksheet.GetRange(\"A1\").SetValue(\"The current worksheet is visible.\");"
       ],
       "params": [
         {

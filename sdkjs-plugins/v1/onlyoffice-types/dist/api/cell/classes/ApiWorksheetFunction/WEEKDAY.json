@@ -2,7 +2,7 @@
   "description": "Returns a number from 1 to 7 identifying the day of the week of the specified date.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WEEKDAY/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.WEEKDAY(\"11/5/2018\", 2); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I identify which day of the week a specific date falls on in a spreadsheet?\n\n// Determine the numeric weekday value for any date in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.WEEKDAY(\"11/5/2018\", 2); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

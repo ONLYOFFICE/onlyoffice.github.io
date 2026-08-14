@@ -2,7 +2,7 @@
   "description": "Adds a heading cross-reference to the current paragraph.\n<note>Please note that this paragraph must be in the document.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddHeadingCrossRef/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet newDocumentStyle = doc.GetStyle(\"Heading 1\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Cross-reference method\");\nlet headingParagraphs = doc.GetAllHeadingParagraphs();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Heading 1 style is applied to the heading \");\ndoc.Push(paragraph);\nparagraph.AddHeadingCrossRef(\"text\", headingParagraphs[0]);"
+    "// How do I link paragraph text to an existing heading in a document?\n\n// Let readers jump to a titled section by embedding a heading reference inside another paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet newDocumentStyle = doc.GetStyle(\"Heading 1\");\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(newDocumentStyle);\nparagraph.AddText(\"Cross-reference method\");\nlet headingParagraphs = doc.GetAllHeadingParagraphs();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Heading 1 style is applied to the heading \");\ndoc.Push(paragraph);\nparagraph.AddHeadingCrossRef(\"text\", headingParagraphs[0]);"
   ],
   "params": [
     {

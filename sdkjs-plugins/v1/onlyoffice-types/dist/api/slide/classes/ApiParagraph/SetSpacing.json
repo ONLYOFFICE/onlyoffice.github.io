@@ -1,0 +1,19 @@
+{
+  "description": "Sets the text spacing measured in twentieths of a point.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetSpacing/",
+  "examples": [
+    "// How do I adjust character spacing in a paragraph in a presentation?\n\n// Apply custom spacing measurements to text for readability in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst fill = Api.CreateSolidFill(Api.HexColor('#FF6F3D'));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape('roundRect', Api.MillimetersToEmus(300), Api.MillimetersToEmus(130), fill, stroke);\nshape.SetPosition(Api.MillimetersToEmus(20), Api.MillimetersToEmus(35));\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText('This is a paragraph with the text spacing set to 5 points.');\nparagraph.SetSpacing(60);\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The value of the text spacing measured in twentieths of a point (1/1440 of an inch).",
+      "name": "nSpacing",
+      "type": "twips"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetSpacing(nSpacing: twips): ApiParagraph"
+}

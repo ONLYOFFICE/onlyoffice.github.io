@@ -2,7 +2,7 @@
   "description": "Returns the (right-tailed) F probability distribution (degree of diversity) for two data sets.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FDIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.FDIST(10, 6, 4);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Get an F probability distribution of two datasets.\n\n// Calculate F probability distribution (degree of diversity) using FDIST function in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.FDIST(10, 6, 4);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

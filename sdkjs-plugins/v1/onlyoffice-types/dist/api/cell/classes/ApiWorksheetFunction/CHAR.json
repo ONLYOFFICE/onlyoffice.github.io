@@ -2,7 +2,7 @@
   "description": "Returns the character specified by the code number from your computer's character set.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/CHAR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.CHAR(234));"
+    "// What character does a number code represent in a spreadsheet?\n\n// Display the letter or symbol matching a code value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.CHAR(234));"
   ],
   "params": [
     {

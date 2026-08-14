@@ -2,7 +2,7 @@
   "description": "Returns the amount received at maturity for a fully invested security.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/RECEIVED/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.RECEIVED(\"1/1/2017\", \"6/1/2019\", \"$10,000.00\", \"3.75%\", 2));"
+    "// How do I determine what I will receive when a security matures in a spreadsheet?\n\n// Compute the value received at the end of an investment period given interest rates in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.RECEIVED(\"1/1/2017\", \"6/1/2019\", \"$10,000.00\", \"3.75%\", 2));"
   ],
   "params": [
     {

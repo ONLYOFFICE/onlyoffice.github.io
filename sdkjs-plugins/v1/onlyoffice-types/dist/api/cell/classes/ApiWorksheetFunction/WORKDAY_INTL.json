@@ -2,7 +2,7 @@
   "description": "Returns the serial number of the date before or after a specified number of workdays with custom weekend parameters.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/WORKDAY_INTL/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.WORKDAY_INTL(\"9/8/2017\", \"-20\", \"0000011\", \"8/15/2017\");\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I find a date by counting workdays with a custom weekend schedule in a spreadsheet?\n\n// Determine a target date based on workdays using custom weekend parameters in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.WORKDAY_INTL(\"9/8/2017\", \"-20\", \"0000011\", \"8/15/2017\");\n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

@@ -1,0 +1,14 @@
+{
+  "description": "Returns the pivot table condition object.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/GetPTCondition/",
+  "examples": [
+    "// How do I find out if a conditional formatting rule applies within a pivot table context in a spreadsheet?\n\n// Determine the pivot table association of a formatting condition to understand its scope in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nlet ptCondition = condition1.GetPTCondition();\n\nworksheet.GetRange(\"C1\").SetValue(\"PT Condition:\");\nworksheet.GetRange(\"C2\").SetValue(ptCondition ? \"Found\" : \"None\");"
+  ],
+  "params": [],
+  "returns": {
+    "description": "The pivot table condition object.",
+    "type": "PTCondition | null"
+  },
+  "signature": "GetPTCondition(): PTCondition | null",
+  "since": "9.1.0"
+}

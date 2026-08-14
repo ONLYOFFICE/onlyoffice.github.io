@@ -6,7 +6,7 @@
       "description": "Deletes the ApiCharacters object.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/Delete/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\ncharacters.Delete();"
+        "// How do I erase a portion of text inside a cell by position in a spreadsheet?\n\n// Trim unwanted characters out of a cell value without replacing the entire contents in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\ncharacters.Delete();"
       ],
       "params": [],
       "returns": {
@@ -19,7 +19,7 @@
       "description": "Returns a string value that represents the text of the specified range of characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetCaption/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet caption = characters.GetCaption();\nworksheet.GetRange(\"B3\").SetValue(\"Caption: \" + caption);"
+        "// How do I read the actual text that a character selection represents in a spreadsheet?\n\n// Pull out a substring from a cell by selecting characters at a given position in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet caption = characters.GetCaption();\nworksheet.GetRange(\"B3\").SetValue(\"Caption: \" + caption);"
       ],
       "params": [],
       "returns": {
@@ -33,7 +33,7 @@
       "description": "Returns a value that represents a number of objects in the collection.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetCount/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet count = characters.GetCount();\nworksheet.GetRange(\"B3\").SetValue(\"Number of characters: \" + count);"
+        "// How do I find out how many characters are in a specific portion of a cell's text in a spreadsheet?\n\n// Measure the length of a character selection taken from a cell value in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet count = characters.GetCount();\nworksheet.GetRange(\"B3\").SetValue(\"Number of characters: \" + count);"
       ],
       "params": [],
       "returns": {
@@ -46,7 +46,7 @@
       "description": "Returns the ApiFont object that represents the font of the specified characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetFont/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
+        "// How do I read or change the font properties of part of a cell's text in a spreadsheet?\n\n// Target individual characters within a cell to apply bold, size, or other formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(9, 4);\nlet font = characters.GetFont();\nfont.SetBold(true);"
       ],
       "params": [],
       "returns": {
@@ -59,7 +59,7 @@
       "description": "Returns the parent object of the specified characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetParent/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet parent = characters.GetParent();\nparent.SetBorders(\"Bottom\", \"Thick\", Api.CreateColorFromRGB(255, 111, 61));"
+        "// How do I find which cell a selected group of characters belongs to in a spreadsheet?\n\n// Trace a character selection back to its containing cell to apply further formatting in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet parent = characters.GetParent();\nparent.SetBorders(\"Bottom\", \"Thick\", Api.CreateColorFromRGB(255, 111, 61));"
       ],
       "params": [],
       "returns": {
@@ -72,7 +72,7 @@
       "description": "Returns the text of the specified range of characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/GetText/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet text = characters.GetText();\nworksheet.GetRange(\"B3\").SetValue(\"Text: \" + text);"
+        "// How do I extract just the text from a specific portion of a cell's value in a spreadsheet?\n\n// Capture a substring of cell text for comparison or display elsewhere in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\nlet text = characters.GetText();\nworksheet.GetRange(\"B3\").SetValue(\"Text: \" + text);"
       ],
       "params": [],
       "returns": {
@@ -86,7 +86,7 @@
       "description": "Inserts a string replacing the specified characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/Insert/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.Insert(\"string\");"
+        "// How do I substitute part of a cell's text with different content in a spreadsheet?\n\n// Overwrite a specific slice of characters to correct or update cell content in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.Insert(\"string\");"
       ],
       "params": [
         {
@@ -105,7 +105,7 @@
       "description": "Sets a string value that represents the text of the specified range of characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/SetCaption/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetCaption(\"string\");"
+        "// How do I update the visible text of a specific character range inside a cell in a spreadsheet?\n\n// Relabel a portion of cell content without affecting the rest of the cell's text in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetCaption(\"string\");"
       ],
       "params": [
         {
@@ -124,7 +124,7 @@
       "description": "Sets the text for the specified characters.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiCharacters/Methods/SetText/",
       "examples": [
-        "let worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetText(\"string\");"
+        "// How do I change the actual text stored in a specific character selection within a cell in a spreadsheet?\n\n// Rewrite a defined portion of cell content to reflect updated information in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"B1\");\nrange.SetValue(\"This is just a sample text.\");\nlet characters = range.GetCharacters(23, 4);\ncharacters.SetText"
       ],
       "params": [
         {

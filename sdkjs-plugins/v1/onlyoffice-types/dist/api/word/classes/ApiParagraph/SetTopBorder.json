@@ -2,7 +2,7 @@
   "description": "Specifies the border which will be displayed above a set of paragraphs which have the same set of paragraph border settings.\n<note>The paragraphs of the same style going one by one are considered as a single block, so the border is added to the whole block rather than to every paragraph in this block.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParaPr/Methods/SetTopBorder/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetTopBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border above it.\");"
+    "// How do I draw a line above a paragraph in a document?\n\n// Separate a paragraph from the content above it using a visible border line in a document.\n\nlet doc = Api.GetDocument();\nlet myStyle = doc.CreateStyle(\"My document style\");\nlet paraPr = myStyle.GetParaPr();\nparaPr.SetTopBorder(\"single\", 24, 0, 255, 111, 61);\nlet paragraph = doc.GetElement(0);\nparagraph.SetStyle(myStyle);\nparagraph.AddText(\"This is the first paragraph. \");\nparagraph.AddText(\"The paragraph properties styled above set a border above it.\");"
   ],
   "params": [
     {

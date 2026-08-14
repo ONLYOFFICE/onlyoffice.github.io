@@ -1,0 +1,24 @@
+{
+  "description": "Creates a gradient stop used for different types of gradients.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateGradientStop/",
+  "examples": [
+    "// Add a gradient stop for gradient in a PDF document.\n\n// Create a stop for a gradient in a PDF document.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst drawing = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\ndrawing.SetPosition(608400, 1267200);\npage.AddObject(drawing);"
+  ],
+  "params": [
+    {
+      "description": "The color used for the gradient stop.",
+      "name": "color",
+      "type": "ApiColor"
+    },
+    {
+      "description": "The position of the gradient stop measured in 1000th of percent.",
+      "name": "pos",
+      "type": "PositivePercentage"
+    }
+  ],
+  "returns": {
+    "type": "ApiGradientStop"
+  },
+  "signature": "CreateGradientStop(color: ApiColor, pos: PositivePercentage): ApiGradientStop",
+  "since": "9.1.0"
+}

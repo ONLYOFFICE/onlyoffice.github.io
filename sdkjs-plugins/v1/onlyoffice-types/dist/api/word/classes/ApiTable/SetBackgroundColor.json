@@ -2,7 +2,7 @@
   "description": "Sets the background color to all cells in the current table.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiTable/Methods/SetBackgroundColor/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(4, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.SetBackgroundColor(255, 111, 61, false);\ndoc.Push(table);"
+    "// How do I change the background color of a table in a document?\n\n// Give a table a distinct fill color to improve visual clarity in a document.\n\nlet doc = Api.GetDocument();\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\nlet table = Api.CreateTable(4, 2);\ntable.SetWidth(\"percent\", 100);\ntable.SetStyle(tableStyle);\ntable.SetBackgroundColor(Api.HexColor('#FF6F3D'));\ndoc.Push(table);"
   ],
   "params": [
     {

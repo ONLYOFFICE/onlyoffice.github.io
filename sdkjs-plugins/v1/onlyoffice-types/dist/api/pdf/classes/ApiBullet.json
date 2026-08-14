@@ -5,6 +5,9 @@
     "GetClassType": {
       "description": "Returns a type of the ApiBullet class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiBullet/Methods/GetClassType/",
+      "examples": [
+        "// How do I determine what type a bullet object is in a PDF?\n\n// Find the object type identifier for a bullet in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\n\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nconst bullet = Api.CreateBullet(\"-\");\nparagraph.SetBullet(bullet);\nparagraph.AddText(\" This is an example of the bulleted paragraph.\");\n\nconst classType = bullet.GetClassType();\nconst newParagraph = Api.CreateParagraph();\nnewParagraph.SetJc(\"left\");\nnewParagraph.AddText(\"Class Type = \" + classType);\ndocContent.Push(newParagraph);\npage.AddObject(shape);"
+      ],
       "params": [],
       "returns": {
         "type": "\"bullet\""

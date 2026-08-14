@@ -1,0 +1,13 @@
+{
+  "description": "Returns a number of columns in the current range.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetColumnsCount/",
+  "examples": [
+    "// How do I find out how many columns a range spans in a spreadsheet?\n\n// Display the column count of a range in a nearby cell in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRange(\"A1:E2\");\nrange.SetValue(\"I was selected\");\nworksheet.GetRange(\"A3\").SetValue(\"Columns count in the selected range should be 5: \" + range.GetColumnsCount());"
+  ],
+  "params": [],
+  "returns": {
+    "type": "number"
+  },
+  "signature": "GetColumnsCount(): number",
+  "since": "9.1.0"
+}

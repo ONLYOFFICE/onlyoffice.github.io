@@ -2,7 +2,7 @@
   "description": "Checks whether any of the arguments are **true**. Returns **false** only if all arguments are **false**.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/OR/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(12);\n\nlet logical1 = worksheet.GetRange(\"A1\") < 10;\nlet logical2 = 34 < 10;\nlet logical3 = 50 < 10;\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.OR(logical1, logical2, logical3);\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I check if any value meets a condition in a spreadsheet?\n\n// Return false only when all conditions are false in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(12);\n\nlet logical1 = worksheet.GetRange(\"A1\") < 10;\nlet logical2 = 34 < 10;\nlet logical3 = 50 < 10;\n\nlet func = Api.WorksheetFunction;\nlet ans = func.OR(logical1, logical2, logical3);\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Returns the (left-tailed) F probability distribution (degree of diversity) for two data sets.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/F_DIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet ans = func.F_DIST(10, 6, 4, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
+    "// Calculate the left-tailed probability of F-distributed values.\n\n// Determine F distribution using F_DIST with specified degrees of freedom.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet ans = func.F_DIST(10, 6, 4, false);\nworksheet.GetRange(\"B2\").SetValue(ans);"
   ],
   "params": [
     {

@@ -1,6 +1,9 @@
 {
   "description": "Moves the cursor to the left.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/MoveCursorLeft/",
+  "examples": [
+    "// How do I step the cursor backward through text in a document?\n\n// Back up the cursor after reaching the end so it lands on a target word in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the text in your document.\");\ndoc.MoveCursorToEnd();\ndoc.MoveCursorLeft(11);\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(doc.GetCurrentWord());\ndoc.Push(paragraph);"
+  ],
   "params": [
     {
       "description": "Number of movements.",

@@ -1,0 +1,24 @@
+{
+  "description": "Adds some text to the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/AddText/",
+  "examples": [
+    "// How do I put words into a paragraph that sits inside a shape in a spreadsheet?\n\n// Fill a shape with left-aligned text split across two lines using a line break in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet shape = worksheet.AddShape(\"flowChartOnlineStorage\", 120 * 36000, 70 * 36000, fill, stroke, 0, 2 * 36000, 0, 3 * 36000);\nlet content = shape.GetContent();\nlet paragraph = content.GetElement(0);\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"This is a text inside the shape aligned left.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"This is a text after the line break.\");"
+  ],
+  "params": [
+    {
+      "description": "The text that we want to insert into the current document element. It can be a string or an array of Unicode code points.",
+      "name": "text",
+      "type": "string | number[]"
+    },
+    {
+      "description": "An array of character widths (in millimeters). It should be the same length as the array of code points passed in the \"text\" parameter. When the widths are specified, the characters are added preserving these exact widths.",
+      "name": "widths",
+      "optional": true,
+      "type": "number[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "AddText(text: string | number[], widths?: number[]): ApiRun"
+}

@@ -2,7 +2,7 @@
   "description": "Sets the change tracking mode.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/SetTrackRevisions/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\ndoc.SetTrackRevisions(true);\nparagraph.AddText(\"Track revisions mode was set.\");"
+    "// How do I enable revision tracking so all edits are recorded in a document?\n\n// Activate tracked changes before editing so reviewers can accept or reject each modification later.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\ndoc.SetTrackRevisions(true);\nparagraph.AddText(\"Track revisions mode was set.\");"
   ],
   "params": [
     {

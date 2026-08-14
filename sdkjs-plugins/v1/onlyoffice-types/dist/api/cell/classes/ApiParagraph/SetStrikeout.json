@@ -1,0 +1,19 @@
+{
+  "description": "Specifies that the contents of this paragraph are displayed with a single horizontal line through the center of the line.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiParagraph/Methods/SetStrikeout/",
+  "examples": [
+    "// How do I mark paragraph text as crossed out in a spreadsheet?\n\n// Strike through the text of a paragraph to indicate removed or deprecated content in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\nconst fill = Api.CreateSolidFill(Api.RGB(130, 110, 150));\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = worksheet.AddShape(\n\t'roundRect',\n\tApi.MillimetersToEmus(70), Api.MillimetersToEmus(30),\n\tfill, stroke,\n\t0, 0, 2, 0\n);\n\nconst content = shape.GetContent();\nconst paragraph = content.GetElement(0);\nparagraph.AddText('This text has a strikeout.');\nparagraph.SetStrikeout(true);\n\nconst paragraph2 = Api.CreateParagraph();\nparagraph2.AddText('This text has no strikeout.');\ncontent.Push(paragraph2);"
+  ],
+  "params": [
+    {
+      "description": "Specifies that the contents of the current paragraph are displayed struck through.",
+      "name": "isStrikeout",
+      "type": "boolean"
+    }
+  ],
+  "returns": {
+    "description": "this",
+    "type": "ApiParagraph"
+  },
+  "signature": "SetStrikeout(isStrikeout: boolean): ApiParagraph"
+}

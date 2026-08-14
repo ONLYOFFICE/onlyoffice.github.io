@@ -2,7 +2,7 @@
   "description": "Returns the secant of an angle.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/SEC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.SEC(0.785398));"
+    "// Get the secant value of an angle using the SEC function.\n\n// Apply the function to calculate and display the result in a cell.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.SEC(0.785398));"
   ],
   "params": [
     {

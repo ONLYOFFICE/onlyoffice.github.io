@@ -1,0 +1,12 @@
+{
+  "description": "Creates the empty table row properties.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/Api/Methods/CreateTableRowPr/",
+  "examples": [
+    "// How do I control the row height of a table in a document?\n\n// Apply uniform row height to every row of a table using a custom style in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"We create a 3x3 table and set the height of half an inch to all the rows:\");\n\nlet tableStyle = doc.CreateStyle(\"CustomTableStyle\", \"table\");\ntableStyle.SetBasedOn(doc.GetStyle(\"Bordered\"));\n\nlet table = Api.CreateTable(3, 3);\ntable.SetWidth(\"percent\", 100);\n\nlet tableStylePr = tableStyle.GetConditionalTableStyle(\"wholeTable\");\ntable.SetTableLook(true, true, true, true, true, true);\nlet tableRowPr = Api.CreateTableRowPr();\ntableRowPr.SetHeight(\"atLeast\", 720);\ntableStylePr.SetTableRowPr(tableRowPr);\n\ntable.SetStyle(tableStyle);\ndoc.Push(table);"
+  ],
+  "params": [],
+  "returns": {
+    "type": "ApiTableRowPr"
+  },
+  "signature": "CreateTableRowPr(): ApiTableRowPr"
+}

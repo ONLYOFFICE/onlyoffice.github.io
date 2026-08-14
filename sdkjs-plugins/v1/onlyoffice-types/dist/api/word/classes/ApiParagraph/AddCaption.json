@@ -2,7 +2,7 @@
   "description": "Adds a caption paragraph after (or before) the current paragraph.\n<note>Please note that the current paragraph must be in the document (not in the footer/header).\nAnd if the current paragraph is placed in a shape, then a caption is added after (or before) the parent shape.</note>",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/AddCaption/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", 60 * 36000, 35 * 36000);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption(\"\", \"Figure\", false, \"Arabic\", false, undefined, \"hyphen\");"
+    "// How do I label a figure with a numbered caption in a document?\n\n// Automatically number an inserted image using a formatted figure caption in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet drawing = Api.CreateImage(\n\t'https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png',\n\t60 * 36000, 60 * 36000\n);\nparagraph.AddDrawing(drawing);\nparagraph = Api.CreateParagraph();\ndoc.Push(paragraph);\nparagraph.AddCaption('', 'Figure', false, 'Arabic', false, undefined, 'hyphen');"
   ],
   "params": [
     {

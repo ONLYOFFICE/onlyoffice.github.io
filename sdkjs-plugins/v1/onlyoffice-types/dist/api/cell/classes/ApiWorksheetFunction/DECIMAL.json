@@ -2,7 +2,7 @@
   "description": "Converts a text representation of a number in a given base into a decimal number.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DECIMAL/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DECIMAL(101, 2));"
+    "// What is a text number in a different base expressed as decimal in a spreadsheet?\n\n// Transform your base-encoded text values into regular decimal numbers in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DECIMAL(101, 2));"
   ],
   "params": [
     {

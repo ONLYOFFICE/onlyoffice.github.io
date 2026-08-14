@@ -2,7 +2,7 @@
   "description": "Returns a number shifted right by the specified number of bits.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BITRSHIFT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BITRSHIFT(13, 2));"
+    "// What happens when you move the binary representation rightward in a spreadsheet?\n\n// Divide a value by moving its bits toward lower positions in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BITRSHIFT(13, 2));"
   ],
   "params": [
     {

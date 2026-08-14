@@ -1,0 +1,13 @@
+{
+  "description": "Returns the value hiding property. The specified range must span an entire column or row.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiRange/Methods/GetHidden/",
+  "examples": [
+    "// How do I find out if a range of rows is currently hidden in a spreadsheet?\n\n// Reveal the visibility state of a row group without scrolling through the sheet in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet range = worksheet.GetRows(\"1:3\");\nrange.SetHidden(true);\nworksheet.GetRange(\"A1\").SetValue(\"1\");\nworksheet.GetRange(\"B1\").SetValue(\"2\");\nworksheet.GetRange(\"C1\").SetValue(\"3\");\nlet hidden = range.GetHidden();\nworksheet.GetRange(\"A4\").SetValue(\"The values from A1:C1 are hidden: \" + hidden);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "returns true if the values in the range specified are hidden.",
+    "type": "boolean"
+  },
+  "signature": "GetHidden(): boolean"
+}

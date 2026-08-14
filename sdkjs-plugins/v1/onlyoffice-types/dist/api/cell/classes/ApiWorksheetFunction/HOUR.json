@@ -2,7 +2,7 @@
   "description": "Returns the hour as a number from 0 (12:00 A.M.) to 23 (11:00 P.M.).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/HOUR/",
   "examples": [
-    "const worksheet = Api.GetActiveSheet();\n\nlet func = Api.GetWorksheetFunction();\nlet ans = func.HOUR(\"4:17 pm\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
+    "// How do I get the hour component from a time in a spreadsheet?\n\n// Return the hour portion of a time as a number from 0 to 23 in a spreadsheet.\n\nconst worksheet = Api.GetActiveSheet();\n\nlet func = Api.WorksheetFunction;\nlet ans = func.HOUR(\"4:17 pm\"); \n\nworksheet.GetRange(\"C1\").SetValue(ans);"
   ],
   "params": [
     {

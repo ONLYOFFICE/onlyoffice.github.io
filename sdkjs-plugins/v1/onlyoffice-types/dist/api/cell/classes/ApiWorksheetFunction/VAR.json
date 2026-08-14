@@ -2,7 +2,7 @@
   "description": "Estimates variance based on a sample (ignores logical values and text in the sample).",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VAR/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nlet result = func.VAR(1, 4, 2, 6, 0, 1, 3, 8, 0, 0, 6, 10, 0, 0, 7, 12)\nworksheet.GetRange(\"B2\").SetValue(result);"
+    "// The VAR function calculates sample variance from numeric data only.\n\n// Apply the function to estimate variance ignoring logical and text values in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nlet result = func.VAR(1, 4, 2, 6, 0, 1, 3, 8, 0, 0, 6, 10, 0, 0, 7, 12)\nworksheet.GetRange(\"B2\").SetValue(result);"
   ],
   "params": [
     {

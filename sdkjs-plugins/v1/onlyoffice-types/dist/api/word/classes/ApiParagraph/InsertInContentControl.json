@@ -2,7 +2,7 @@
   "description": "Wraps the paragraph object with a rich text content control.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/InsertInContentControl/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph inserted into the content control.\");\nlet blockLvlSdt = paragraph.InsertInContentControl(1);\ndoc.AddElement(0, blockLvlSdt);"
+    "// How do I place a paragraph into a content control in a document?\n\n// Convert a standalone paragraph into a protected content control block in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a paragraph inserted into the content control.\");\nlet blockLvlSdt = paragraph.InsertInContentControl(1);\ndoc.AddElement(0, blockLvlSdt);"
   ],
   "params": [
     {

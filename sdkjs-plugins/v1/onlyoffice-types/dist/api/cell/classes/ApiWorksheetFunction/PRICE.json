@@ -2,7 +2,7 @@
   "description": "Returns the price per $100 face value for a security that pays periodic interest.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PRICE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PRICE(\"1/1/2017\", \"6/1/2019\", 0.05, 0.09, 105, 2));"
+    "// What is the market price of a security per $100 face value in a spreadsheet?\n\n// Calculate the cost of a bond based on yield and maturity dates in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PRICE(\"1/1/2017\", \"6/1/2019\", 0.05, 0.09, 105, 2));"
   ],
   "params": [
     {

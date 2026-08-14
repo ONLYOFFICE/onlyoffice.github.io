@@ -2,7 +2,7 @@
   "description": "Returns the negative binomial distribution, the probability that there will be the specified number of failures before the last success, with the specified probability of a success.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/NEGBINOM_DIST/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.NEGBINOM_DIST(6, 32, 0.7, true));"
+    "// Analyze probability of failures in repeated trials in a spreadsheet.\n\n// Compute distribution statistics for success and failure scenarios in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.NEGBINOM_DIST(6, 32, 0.7, true));"
   ],
   "params": [
     {

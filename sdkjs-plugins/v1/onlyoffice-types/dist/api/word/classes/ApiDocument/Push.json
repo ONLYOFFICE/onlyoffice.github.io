@@ -2,7 +2,7 @@
   "description": "Pushes a paragraph or a table to actually add it to the document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocumentContent/Methods/Push/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);"
+    "// How do I add a paragraph at the end of a shape's content in a document?\n\n// Clear a shape's existing content and place a fresh paragraph inside it to replace all prior text.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet fill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nlet stroke = Api.CreateStroke(0, Api.CreateNoFill());\nlet drawing = Api.CreateShape(\"rect\", 3212465, 963295, fill, stroke);\nparagraph.AddDrawing(drawing);\nlet docContent = drawing.GetDocContent();\ndocContent.RemoveAllElements();\nparagraph = Api.CreateParagraph();\nparagraph.SetJc(\"left\");\nparagraph.AddText(\"We removed all elements from the shape and added a new paragraph inside it.\");\ndocContent.Push(paragraph);"
   ],
   "params": [
     {

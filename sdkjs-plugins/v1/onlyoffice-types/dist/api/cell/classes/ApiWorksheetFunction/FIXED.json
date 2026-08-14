@@ -2,7 +2,7 @@
   "description": "Rounds a number to the specified number of decimals and returns the result as text with or without commas.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FIXED/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.FIXED(1234.9, 1, false));"
+    "// How do I display a number with a specific number of decimals in a spreadsheet?\n\n// Round and format a number as text with optional thousand separators in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.FIXED(1234.9, 1, false));"
   ],
   "params": [
     {

@@ -8,6 +8,9 @@
     "GetCell": {
       "description": "Returns a cell by its position in the current row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetCell/",
+      "examples": [
+        "// How do I retrieve a single cell from a row in a PDF?\n\n// Get any cell you want from a table row in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"This is a sample text in the cell of the first row.\");\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
       "params": [
         {
           "description": "The zero-based cell index in the table row.",
@@ -23,6 +26,9 @@
     "GetCellsCount": {
       "description": "Returns a number of cells in the current row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetCellsCount/",
+      "examples": [
+        "// How do I find out how many cells are in a row in a PDF?\n\n// Determine the cell count in your table row in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cellsCount = row.GetCellsCount();\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The number of cells in the row: \" + cellsCount);\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
       "params": [],
       "returns": {
         "type": "number"
@@ -32,6 +38,9 @@
     "GetClassType": {
       "description": "Returns the type of the ApiTableRow class.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/GetClassType/",
+      "examples": [
+        "// How do I identify what type a table row is in a PDF?\n\n// Find out which class a table row belongs to in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nconst cell = row.GetCell(0);\nconst content = cell.GetContent();\nconst paragraph = Api.CreateParagraph();\nconst classType = row.GetClassType();\nparagraph.AddText(\"Class type: \" + classType);\ncontent.Push(paragraph);\n\npage.AddObject(table);"
+      ],
       "params": [],
       "returns": {
         "type": "\"tableRow\""
@@ -83,6 +92,9 @@
     "SetHeight": {
       "description": "Sets the height to the current table row.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiTableRow/Methods/SetHeight/",
+      "examples": [
+        "// How do I make a row taller or shorter in a PDF?\n\n// Change the row dimensions to a specific measurement in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst table = Api.CreateTable(2, 4);\nconst row = table.GetRow(0);\nrow.SetHeight(30 * 36000);\n\npage.AddObject(table);"
+      ],
       "params": [
         {
           "description": "The row height in English measure units.",

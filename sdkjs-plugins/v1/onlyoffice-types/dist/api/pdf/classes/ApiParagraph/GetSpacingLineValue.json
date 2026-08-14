@@ -1,0 +1,13 @@
+{
+  "description": "Returns the paragraph line spacing value.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/ApiParaPr/Methods/GetSpacingLineValue/",
+  "examples": [
+    "// How do I check the space between lines in a paragraph in a PDF?\n\n// Find the line spacing distance used in a paragraph in a PDF.\n\nconst doc = Api.GetDocument();\nconst page = doc.GetPage(0);\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 150 * 36000, 65 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\npage.AddObject(shape);\n\nconst docContent = shape.GetContent();\nlet paragraph = docContent.GetElement(0);\nconst paraPr = paragraph.GetParaPr();\nparaPr.SetSpacingLine(3 * 240, \"auto\");\nparagraph.AddText(\"Paragraph 1. Spacing: 3 times of a common paragraph line spacing.\");\nparagraph.AddLineBreak();\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\nparagraph.AddText(\"These sentences are used to add lines for demonstrative purposes. \");\n\nconst spacingLineValue = paraPr.GetSpacingLineValue();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Spacing line value : \" + spacingLineValue);\ndocContent.Push(paragraph);"
+  ],
+  "params": [],
+  "returns": {
+    "description": "to know is twips or line240 use ApiParaPr.prototype.GetSpacingLineRule().",
+    "type": "twips | line240 | undefined"
+  },
+  "signature": "GetSpacingLineValue(): twips | line240 | undefined"
+}

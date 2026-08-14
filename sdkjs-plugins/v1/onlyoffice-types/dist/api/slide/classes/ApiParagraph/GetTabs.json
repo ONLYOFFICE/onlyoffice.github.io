@@ -1,0 +1,10 @@
+{
+  "description": "Returns the custom tab stops of the current paragraph.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParaPr/Methods/GetTabs/",
+  "params": [],
+  "returns": {
+    "type": "TabStop[]"
+  },
+  "signature": "GetTabs(): TabStop[]",
+  "since": "9.4.0"
+}

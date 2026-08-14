@@ -2,7 +2,7 @@
   "description": "Returns the depreciation of an asset for any specified period, including partial periods, using the double-declining balance method or some other method specified.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/VDB/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.VDB(3500, 500, 5, 1, 3, 2, false));"
+    "// How do I calculate asset depreciation over a specific time period in a spreadsheet?\n\n// Determine the depreciation amount for an asset including partial periods in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.VDB(3500, 500, 5, 1, 3, 2, false));"
   ],
   "params": [
     {

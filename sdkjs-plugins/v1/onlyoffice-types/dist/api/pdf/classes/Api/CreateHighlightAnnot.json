@@ -1,0 +1,18 @@
+{
+  "description": "Creates highlight annotation.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateHighlightAnnot/",
+  "examples": [
+    "// Create the highlight annot in a PDF document.\n\n// Create the highlight annot using the PDF document API.\n\nlet doc = Api.GetDocument();\nlet highlightAnnot = Api.CreateHighlightAnnot([[85.04985826771654,56.70000000000001,229.27237795275593,56.70000000000001,85.04985826771654,70.9988031496063,229.27237795275593,70.9988031496063]]);\nlet page = doc.GetPage(0);\npage.AddObject(highlightAnnot);"
+  ],
+  "params": [
+    {
+      "description": "region to apply highlight.",
+      "name": "rect",
+      "type": "Rect | Quad[]"
+    }
+  ],
+  "returns": {
+    "type": "ApiHighlightAnnotation"
+  },
+  "signature": "CreateHighlightAnnot(rect: Rect | Quad[]): ApiHighlightAnnotation"
+}

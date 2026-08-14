@@ -1,0 +1,19 @@
+{
+  "description": "Sets the scope type for the conditional formatting rule.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiFormatCondition/Methods/SetScopeType/",
+  "examples": [
+    "// How do I limit a conditional formatting rule to only certain columns or data fields in a spreadsheet?\n\n// Narrow or expand the reach of a highlight rule across table sections in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\n\nworksheet.GetRange(\"A1\").SetValue(\"Sales Data\");\nworksheet.GetRange(\"A2\").SetValue(100);\nworksheet.GetRange(\"A3\").SetValue(250);\nworksheet.GetRange(\"A4\").SetValue(150);\nworksheet.GetRange(\"A5\").SetValue(300);\nworksheet.GetRange(\"A6\").SetValue(75);\n\nlet dataRange = worksheet.GetRange(\"A2:A6\");\n\nlet formatConditions = dataRange.GetFormatConditions();\n\nlet condition1 = formatConditions.Add(\"xlCellValue\", \"xlGreater\", \"200\");\ncondition1.SetFillColor(Api.CreateColorFromRGB(255, 0, 0));\n\nworksheet.GetRange(\"C1\").SetValue(\"Original scope:\");\nworksheet.GetRange(\"C2\").SetValue(condition1.GetScopeType());\n\ncondition1.SetScopeType(\"xlDataFieldScope\");\n\nworksheet.GetRange(\"C4\").SetValue(\"New scope:\");\nworksheet.GetRange(\"C5\").SetValue(condition1.GetScopeType());"
+  ],
+  "params": [
+    {
+      "description": "The scope type: \"xlSelectionScope\", \"xlDataFieldScope\", or \"xlFieldsScope\".",
+      "name": "ScopeType",
+      "type": "XlPivotConditionScope"
+    }
+  ],
+  "returns": {
+    "type": "void"
+  },
+  "signature": "SetScopeType(ScopeType: XlPivotConditionScope): void",
+  "since": "9.1.0"
+}

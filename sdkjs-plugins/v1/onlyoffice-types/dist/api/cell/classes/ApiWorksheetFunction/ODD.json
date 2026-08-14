@@ -2,7 +2,7 @@
   "description": "Rounds a positive number up and negative number down to the nearest odd integer.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/ODD/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.ODD(7.675));"
+    "// How do I round a value to the nearest odd number in a spreadsheet?\n\n// Find the closest odd integer above or below a given number in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.ODD(7.675));"
   ],
   "params": [
     {

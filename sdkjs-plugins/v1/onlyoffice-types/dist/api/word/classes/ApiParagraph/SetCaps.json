@@ -2,7 +2,7 @@
   "description": "Specifies that any lowercase characters in this paragraph are formatted for display only as their capital letter character equivalents.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiParagraph/Methods/SetCaps/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font set to capitalized letters.\");\nparagraph.SetCaps(true);"
+    "// How do I make all letters in a paragraph appear as uppercase in a document?\n\n// Apply all-caps formatting to turn lowercase letters into capitals throughout a paragraph in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a paragraph with the font set to capitalized letters.\");\nparagraph.SetCaps(true);"
   ],
   "params": [
     {

@@ -1,6 +1,9 @@
 {
   "description": "Returns a type of the chart object.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/GetChartType/",
+  "examples": [
+    "// How do I find out which chart type is used for a chart in a document?\n\n// Confirm a chart's category at runtime by showing its type in the chart title in a document.\n\nconst doc = Api.GetDocument();\nconst firstParagraph = doc.GetElement(0);\n\nconst chart = Api.CreateChart('bar3D', [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], ['Projected Revenue', 'Estimated Costs'], [2014, 2015, 2016], 4051300, 2347595, 24);\n\nconst solidGrey = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nconst solidOrange = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(solidGrey, 0, false);\nchart.SetSeriesFill(solidOrange, 1, false);\nconst chartType = chart.GetChartType();\nchart.SetTitle('This chart is of the ' + chartType + ' type', 14);\n\nfirstParagraph.AddDrawing(chart);"
+  ],
   "params": [],
   "returns": {
     "type": "ChartTypeLegacy"

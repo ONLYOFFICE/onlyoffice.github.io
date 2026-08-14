@@ -2,7 +2,7 @@
   "description": "Returns the discount rate for a security.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/DISC/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.DISC(\"10/15/2018\", \"1/1/2020\", 98, 100, 1));"
+    "// Calculate the annual discount rate based on settlement and maturity dates.\n\n// Use the DISC function to determine the discount rate for an investment security.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.DISC(\"10/15/2018\", \"1/1/2020\", 98, 100, 1));"
   ],
   "params": [
     {

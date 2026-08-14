@@ -2,7 +2,7 @@
   "description": "Returns the number of permutations for a given number of objects that can be selected from the total objects.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/PERMUT/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.PERMUT(32, 2));"
+    "// How do I find the number of arrangements for selected items in a spreadsheet?\n\n// Determine the count of unique permutations from a pool of distinct objects in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.PERMUT(32, 2));"
   ],
   "params": [
     {

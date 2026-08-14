@@ -1,6 +1,9 @@
 {
   "description": "Returns the highlight color of the content controls in the current document.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/GetControlsHighlight/",
+  "examples": [
+    "// How do I get the current highlight color set on content controls in a document?\n\n// Verify that a highlight was applied correctly by reading it back after setting it in a document.\n\nlet doc = Api.GetDocument();\nlet blockLvlSdt = Api.CreateBlockLvlSdt();\nblockLvlSdt.GetContent().GetElement(0).AddText(\"This is a block text content control.\");\ndoc.AddElement(0, blockLvlSdt);\ndoc.SetControlsHighlight(255, 239, 191);\nlet highlight = doc.GetControlsHighlight();\nlet paragraph = Api.CreateParagraph();\nparagraph.AddText(\"The controls highlight color is: \" + highlight.GetHex());\ndoc.Push(paragraph);"
+  ],
   "params": [],
   "returns": {
     "description": "Returns the highlight color, or _null_ if the highlight is disabled.",

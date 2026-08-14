@@ -2,7 +2,7 @@
   "description": "Returns the future value of an initial principal after applying a series of compound interest rates.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/FVSCHEDULE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(\"Principal\");\nworksheet.GetRange(\"B1\").SetValue(100);\nworksheet.GetRange(\"A2\").SetValue(\"Rate 1\");\nworksheet.GetRange(\"B2\").SetValue(0.03);\nworksheet.GetRange(\"A3\").SetValue(\"Rate 2\");\nworksheet.GetRange(\"B3\").SetValue(0.05);\nworksheet.GetRange(\"A4\").SetValue(\"Rate 3\");\nworksheet.GetRange(\"B4\").SetValue(0.1);\nlet range = worksheet.GetRange(\"B2:B4\");\nworksheet.GetRange(\"B5\").SetValue(func.FVSCHEDULE(100, range));"
+    "// Apply multiple interest rates sequentially to calculate compound growth.\n\n// Determine final principal value using FVSCHEDULE with varying rates.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(\"Principal\");\nworksheet.GetRange(\"B1\").SetValue(100);\nworksheet.GetRange(\"A2\").SetValue(\"Rate 1\");\nworksheet.GetRange(\"B2\").SetValue(0.03);\nworksheet.GetRange(\"A3\").SetValue(\"Rate 2\");\nworksheet.GetRange(\"B3\").SetValue(0.05);\nworksheet.GetRange(\"A4\").SetValue(\"Rate 3\");\nworksheet.GetRange(\"B4\").SetValue(0.1);\nlet range = worksheet.GetRange(\"B2:B4\");\nworksheet.GetRange(\"B5\").SetValue(func.FVSCHEDULE(100, range));"
   ],
   "params": [
     {

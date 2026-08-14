@@ -2,7 +2,7 @@
   "description": "Creates a new history point.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiDocument/Methods/CreateNewHistoryPoint/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text.\");\ndoc.CreateNewHistoryPoint();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"New history point was just created.\");\ndoc.Push(paragraph);"
+    "// How do I create a history point between two edits in a document?\n\n// Separate text changes into distinct undo steps so each can be reversed independently in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is a sample text.\");\ndoc.CreateNewHistoryPoint();\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"New history point was just created.\");\ndoc.Push(paragraph);"
   ],
   "params": [],
   "returns": {

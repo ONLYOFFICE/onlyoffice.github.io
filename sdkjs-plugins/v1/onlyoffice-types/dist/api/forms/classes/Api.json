@@ -5,6 +5,9 @@
     "ConvertDocument": {
       "description": "Converts a document to Markdown or HTML text.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ConvertDocument/",
+      "examples": [
+        "// How do I export the text of a document as Markdown in a document?\n\n// Write headings and paragraphs, then append the Markdown version of that content in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"Heading 1\");\nparagraph.SetStyle(doc.GetStyle(\"Heading 1\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"This document will be converted to Markdown.\");\ndoc.Push(paragraph);\nparagraph.Search(\"Markdown\")[0].SetBold(true);\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"Heading 2\");\ndoc.Push(paragraph);\nparagraph.SetStyle(doc.GetStyle(\"Heading 2\"));\n\nparagraph = Api.CreateParagraph();\nparagraph.AddText(\"There is an example of two heading levels.\");\ndoc.Push(paragraph);\n\nlet md = Api.ConvertDocument(\"markdown\", false, false, true, false);\nparagraph = Api.CreateParagraph();\nparagraph.AddLineBreak();\nparagraph.AddText(\"Markdown\").SetBold(true);\nparagraph.AddLineBreak();\nparagraph.AddText(md);\ndoc.Push(paragraph);"
+      ],
       "params": [
         {
           "description": "Conversion type.",
@@ -46,7 +49,7 @@
       "description": "Creates a checkbox / radio button with the specified checkbox / radio button properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateCheckBoxForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet checkBoxForm = Api.CreateCheckBoxForm({\"key\": \"Marital status\", \"tip\": \"Specify your marital status\", \"required\": true, \"placeholder\": \"Marital status\", \"radio\": true});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Married\");\nparagraph.AddLineBreak();\ncheckBoxForm = Api.CreateCheckBoxForm({\"key\": \"Marital status\", \"tip\": \"Specify your marital status\", \"required\": true, \"placeholder\": \"Marital status\", \"radio\": true});\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Single\");"
+        "// How do I insert checkboxes or radio buttons in a document?\n\n// Create selectable options that let users pick from predefined choices in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\n\nlet checkBoxForm = Api.CreateCheckBoxForm({\n\t\"key\": \"Marital status\",\n\t\"tip\": \"Specify your marital status\",\n\t\"required\": true,\n\t\"placeholder\": \"Marital status\",\n\t\"radio\": true\n});\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Married\");\nparagraph.AddLineBreak();\n\ncheckBoxForm = Api.CreateCheckBoxForm({\n\t\"key\": \"Marital status\",\n\t\"tip\": \"Specify your marital status\",\n\t\"required\": true,\n\t\"placeholder\": \"Marital status\",\n\t\"radio\": true\n});\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Single\");\nparagraph.AddLineBreak();\n\ncheckBoxForm = Api.CreateCheckBoxForm({\n\t\"key\": \"Children\",\n\t\"tip\": \"Indicate if you have children\",\n\t\"required\": false,\n\t\"placeholder\": \"Children\",\n\t\"radio\": false\n});\nparagraph.AddElement(checkBoxForm);\nparagraph.AddText(\" Single\");"
       ],
       "params": [
         {
@@ -64,7 +67,7 @@
       "description": "Creates a combo box / dropdown list with the specified combo box / dropdown list properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComboBoxForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\"key\": \"Personal information\", \"tip\": \"Choose your country\", \"required\": true, \"placeholder\": \"Country\", \"editable\": false, \"autoFit\": false, \"items\": [\"Latvia\", \"USA\", \"UK\"]});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);"
+        "// How do I add a dropdown field to a document?\n\n// Set up a selection menu with multiple choices that users can pick from in a document.\n\nlet doc = Api.GetDocument();\nlet comboBoxForm = Api.CreateComboBoxForm({\n\t\"key\": \"Personal information\",\n\t\"tip\": \"Choose your country\",\n\t\"required\": true,\n\t\"placeholder\": \"Country\",\n\t\"editable\": false,\n\t\"autoFit\": false,\n\t\"items\": [\"Latvia\", \"USA\", \"UK\"]\n});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(comboBoxForm);"
       ],
       "params": [
         {
@@ -81,6 +84,9 @@
     "CreateComplexForm": {
       "description": "Creates a complex form with the specified complex form properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateComplexForm/",
+      "examples": [
+        "// How do I create a form field that contains multiple parts in a document?\n\n// Build a composite field that allows users to enter different types of data together in a document.\n\nlet doc = Api.GetDocument();\nlet complexForm = Api.CreateComplexForm({\n\t\"key\": \"Email\",\n\t\"tip\": \"Email\",\n\t\"placeholder\": \"Start to fill complex form\"\n});\ncomplexForm.Add(Api.CreateTextForm());\ncomplexForm.Add(\"@onlyoffice.com\");\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(complexForm);"
+      ],
       "params": [
         {
           "description": "Complex form properties.",
@@ -97,7 +103,7 @@
       "description": "Creates a date form with the specified date form properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateDateForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet dateForm = Api.CreateDateForm({\"key\": \"Nowadays\", \"tip\": \"Enter current date\", \"required\": true, \"placeholder\": \"Your date here\", \"format\": \"mm.dd.yyyy\", \"lang\": \"en-US\"});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(dateForm);"
+        "// How do I add a date picker field to a document?\n\n// Set up a form field that accepts date values with specific formatting in a document.\n\nlet doc = Api.GetDocument();\nlet dateForm = Api.CreateDateForm({\n\t\"key\": \"Nowadays\",\n\t\"tip\": \"Enter current date\",\n\t\"required\": true,\n\t\"placeholder\": \"Your date here\",\n\t\"format\": \"mm.dd.yyyy\",\n\t\"lang\": \"en-US\"\n});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(dateForm);"
       ],
       "params": [
         {
@@ -115,7 +121,7 @@
       "description": "Creates a picture form with the specified picture form properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreatePictureForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet pictureForm = Api.CreatePictureForm({\"key\": \"Personal information\", \"tip\": \"Upload your photo\", \"required\": true, \"placeholder\": \"Photo\", \"scaleFlag\": \"tooBig\", \"lockAspectRatio\": true, \"respectBorders\": false, \"shiftX\": 50, \"shiftY\": 50});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(pictureForm);\npictureForm.SetImage(\"https://api.onlyoffice.com/content/img/docbuilder/examples/user-profile.png\");"
+        "// How do I create an image field for users to upload pictures in a document?\n\n// Enable users to fill in a form by selecting or uploading image files in a document.\n\nlet doc = Api.GetDocument();\nlet pictureForm = Api.CreatePictureForm({\n\t\"key\": \"Personal information\",\n\t\"tip\": \"Upload your photo\",\n\t\"required\": true,\n\t\"placeholder\": \"Photo\",\n\t\"scaleFlag\": \"tooBig\",\n\t\"lockAspectRatio\": true,\n\t\"respectBorders\": false,\n\t\"shiftX\": 50,\n\t\"shiftY\": 50\n});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(pictureForm);\npictureForm.SetImage(\"https://static.onlyoffice.com/assets/docs/samples/img/onlyoffice_logo.png\", Api.MillimetersToEmus(70), Api.MillimetersToEmus(80));"
       ],
       "params": [
         {
@@ -149,7 +155,7 @@
       "description": "Creates a text field with the specified text field properties.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/CreateTextForm/",
       "examples": [
-        "let doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\"key\": \"Personal information\", \"tip\": \"Enter your first name\", \"required\": true, \"placeholder\": \"First name\", \"comb\": true, \"maxCharacters\": 10, \"cellWidth\": 3, \"multiLine\": false, \"autoFit\": false});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);"
+        "// How do I create a text box field in a document?\n\n// Insert a fillable text area where users can type their responses in a document.\n\nlet doc = Api.GetDocument();\nlet textForm = Api.CreateTextForm({\n\t\"key\": \"Personal information\",\n\t\"tip\": \"Enter your first name\",\n\t\"required\": true,\n\t\"placeholder\": \"First name\",\n\t\"comb\": true,\n\t\"maxCharacters\": 10,\n\t\"cellWidth\": 3,\n\t\"multiLine\": false,\n\t\"autoFit\": false\n});\nlet paragraph = doc.GetElement(0);\nparagraph.AddElement(textForm);"
       ],
       "params": [
         {
@@ -166,6 +172,9 @@
     "ReplaceTextSmart": {
       "description": "Replaces each paragraph (or text in cell) in the select with the corresponding text from an array of strings.",
       "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/form-api/Api/Methods/ReplaceTextSmart/",
+      "examples": [
+        "// How do I replace text without losing its bold or italic styling in a document?\n\n// Swap out paragraph text for new content and retain the existing character formatting in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nparagraph.AddText(\"This is the normal text. \");\nparagraph.AddText(\"The is bold text. \").SetBold(true);\nparagraph.AddText(\"This is italic text.\").SetItalic(true);\n\nparagraph.GetRange().Select();\nApi.ReplaceTextSmart([\"This is the normal text. This bold text was smart replaced. This is italic text.\"]);"
+      ],
       "params": [
         {
           "description": "An array of replacement strings.",

@@ -2,7 +2,7 @@
   "description": "Returns the probability of a trial result using a binomial distribution.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/spreadsheet-api/ApiWorksheetFunction/Methods/BINOM_DIST_RANGE/",
   "examples": [
-    "let worksheet = Api.GetActiveSheet();\nlet func = Api.GetWorksheetFunction();\nworksheet.GetRange(\"A1\").SetValue(func.BINOM_DIST_RANGE(60, 0.75, 45, 50));"
+    "// What is the chance of getting between X and Y successes in N attempts in a spreadsheet?\n\n// Estimate outcomes when trials have consistent success rates in a spreadsheet.\n\nlet worksheet = Api.GetActiveSheet();\nlet func = Api.WorksheetFunction;\nworksheet.GetRange(\"A1\").SetValue(func.BINOM_DIST_RANGE(60, 0.75, 45, 50));"
   ],
   "params": [
     {

@@ -2,7 +2,7 @@
   "description": "Sets the fill to the chart title.",
   "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/document-api/ApiChart/Methods/SetTitleFill/",
   "examples": [
-    "let doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nparagraph.AddDrawing(chart);\nlet fill = Api.CreateSolidFill(Api.CreateRGBColor(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nfill = Api.CreateSolidFill(Api.CreateRGBColor(128, 128, 128));\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetTitleFill(fill);"
+    "// How do I change the background color behind a chart title in a document?\n\n// Highlight a chart title with a solid color to make it stand out visually in a document.\n\nlet doc = Api.GetDocument();\nlet paragraph = doc.GetElement(0);\nlet chart = Api.CreateChart(\"bar3D\", [\n\t[200, 240, 280],\n\t[250, 260, 280]\n], [\"Projected Revenue\", \"Estimated Costs\"], [2014, 2015, 2016], 4051300, 2347595, 24);\nparagraph.AddDrawing(chart);\nlet fill = Api.CreateSolidFill(Api.RGB(51, 51, 51));\nchart.SetSeriesFill(fill, 0, false);\nfill = Api.CreateSolidFill(Api.RGB(255, 111, 61));\nchart.SetSeriesFill(fill, 1, false);\nfill = Api.CreateSolidFill(Api.RGB(128, 128, 128));\nchart.SetTitle(\"Financial Overview\", 13);\nchart.SetTitleFill(fill);"
   ],
   "params": [
     {

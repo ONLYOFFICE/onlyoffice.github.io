@@ -1,0 +1,18 @@
+{
+  "description": "Replaces the paragraph content with the specified text.",
+  "docsUrl": "https://api.onlyoffice.com/docs/office-api/usage-api/presentation-api/ApiParagraph/Methods/SetText/",
+  "examples": [
+    "// How do I overwrite a paragraph's text inside a shape in a presentation?\n\n// Clear an existing sentence and write a new one into a paragraph inside a shape in a presentation.\n\nconst presentation = Api.GetPresentation();\nconst slide = presentation.GetSlideByIndex(0);\nslide.RemoveAllObjects();\n\nconst gs1 = Api.CreateGradientStop(Api.RGB(255, 213, 191), 0);\nconst gs2 = Api.CreateGradientStop(Api.RGB(255, 111, 61), 100000);\nconst fill = Api.CreateRadialGradientFill([gs1, gs2]);\nconst stroke = Api.CreateStroke(0, Api.CreateNoFill());\nconst shape = Api.CreateShape(\"flowChartMagneticTape\", 300 * 36000, 130 * 36000, fill, stroke);\nshape.SetPosition(608400, 1267200);\nconst docContent = shape.GetContent();\nconst paragraph = docContent.GetElement(0);\nparagraph.AddText(\"Original text inside the shape.\");\nparagraph.SetText(\"Updated text inside the shape.\");\nslide.AddObject(shape);"
+  ],
+  "params": [
+    {
+      "description": "The text to set.",
+      "name": "text",
+      "type": "string"
+    }
+  ],
+  "returns": {
+    "type": "ApiRun"
+  },
+  "signature": "SetText(text: string): ApiRun"
+}
