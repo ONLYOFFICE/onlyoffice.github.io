@@ -76,12 +76,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io.git",
-    "directory": "sdkjs-plugins/v1/onlyoffice-types"
+    "url": "git+https://github.com/ONLYOFFICE/plugins-types.git"
   },
   "homepage": "https://api.onlyoffice.com/docs/plugins/get-started/",
   "bugs": {
-    "url": "https://github.com/ONLYOFFICE/onlyoffice.github.io/issues?q=is%3Aissue%20onlyoffice-types",
+    "url": "https://github.com/ONLYOFFICE/plugins-types/issues",
     "email": "support@onlyoffice.com"
   },
   "license": "Apache-2.0",
@@ -116,6 +115,7 @@
     "generate-ambient": "node scripts/generate-ambient-bundle.js",
     "check-generated": "npm run generate -- --require-clean-sources && git diff --exit-code -- src/generated",
     "check-runtime-index": "npm run generate-runtime-index && git diff --exit-code -- dist/api-index.json",
+    "check-schema": "npm run generate-schema && git diff --exit-code -- schemas/config.schema.json",
     "check-runtime": "node scripts/check-runtime-contract.js",
     "check-plugin-events": "node scripts/check-plugin-events.js",
     "validate-schema": "node scripts/validate-config-schema.js",

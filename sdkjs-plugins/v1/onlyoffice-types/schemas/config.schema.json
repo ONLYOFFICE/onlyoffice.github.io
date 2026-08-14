@@ -36,7 +36,8 @@
       "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
     },
     "offered": {
-      "type": "string"
+      "type": "string",
+      "description": "The plugin author who proposed the plugin for publication."
     },
     "url": {
       "type": "string"
@@ -48,7 +49,8 @@
       }
     },
     "version": {
-      "type": "string"
+      "type": "string",
+      "description": "The plugin's own version, e.g. `\"1.0\"`. Optional per the reference, and genuinely omitted by shipped plugins - `guid`, `name` and `variations` are the only required top-level fields."
     }
   },
   "required": [
@@ -391,7 +393,7 @@
       ]
     }
   },
-  "$id": "https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/schemas/config.schema.json",
+  "$id": "https://raw.githubusercontent.com/ONLYOFFICE/plugins-types/master/schemas/config.schema.json",
   "title": "ONLYOFFICE Plugin config.json",
   "description": "Generated from PluginConfig (and the types it references) in index.d.ts - do not hand-edit, run `npm run generate-schema` instead."
 }

@@ -46,12 +46,12 @@ three channels, and confusing them is the most common source of broken plugin co
 - `import type { Api } from "@onlyoffice/plugins-types"` + `Api<"word">` resolves the entry-point
   class generically.
 - A plugin's `config.json` can be validated against `schemas/config.schema.json` (add a `$schema`
-  field pointing at the raw GitHub URL or map `sdkjs-plugins/content/*/config.json` in the editor).
+  field pointing at the raw GitHub URL, or map the project's `config.json` files in the editor).
 
 ### Looking up the API without guessing
 
 - `dist/api-index.json` (npm: `@onlyoffice/plugins-types/api-index.json`; raw:
-  `https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/dist/api-index.json`)
+  `https://raw.githubusercontent.com/ONLYOFFICE/plugins-types/master/dist/api-index.json`)
   — every class/method/typedef/event/executeMethod with signature, markdown description, parameter
   list, return type, runnable `examples`, `since` version and a verified `docsUrl`. Search this
   before inventing a method name; if a member isn't in the index, it isn't public API.

@@ -92,13 +92,13 @@ window.Asc.plugin.attachEditorEvent("onParagraphAdd", (data) => {
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/ONLYOFFICE/onlyoffice.github.io/master/sdkjs-plugins/v1/onlyoffice-types/schemas/config.schema.json",
+  "$schema": "https://raw.githubusercontent.com/ONLYOFFICE/plugins-types/master/schemas/config.schema.json",
   "name": "My Plugin"
 }
 ```
 
-or map `sdkjs-plugins/content/*/config.json` to it once in your editor's settings instead of editing
-every `config.json` (VS Code: `json.schemas`).
+or map your plugins' `config.json` files to it once in your editor's settings instead of adding the
+field to each one (VS Code: `json.schemas`).
 
 ## Modular entry points
 
