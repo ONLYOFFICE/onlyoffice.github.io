@@ -756,7 +756,7 @@ export class TextEditor extends BaseEditor {
     CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.detachEditorEvent(eventName));
   }
 
-  watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {
-    CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.attachEditorEvent(eventName, (e?: Event) => onChange(eventName, e)));
+  watchContentChanges(onChange: (eventName: string, event?: unknown) => void): void {
+    CONTENT_CHANGE_EVENTS.forEach((eventName) => window.Asc.plugin.attachEditorEvent(eventName, (e?: unknown) => onChange(eventName, e)));
   }
 }

@@ -64,7 +64,8 @@ export function showWarning(message: string): void {
   });
 
   // see Warning.tsx, the opener resizes the actual window to fit it.
-  pluginWindow.attachEvent('onUpdateHeight', (height: number) => {
+  pluginWindow.attachEvent('onUpdateHeight', (height: unknown) => {
+    if (typeof height !== 'number') return;
     window.Asc.plugin.executeMethod(
       'ResizeWindow',
       [pluginWindow.id, [WARNING_WINDOW_SIZE[0], height]],

@@ -1667,9 +1667,6 @@ export namespace Pdf {
      */
     CreateInkAnnot(rect: Rect, inkPaths: PathList): ApiInkAnnotation;
 
-    /** Creates a js action. */
-    CreateJsAction(script: string): ApiJsAction;
-
     /**
      * Creates a js action.
      *
@@ -2616,9 +2613,6 @@ export namespace Pdf {
      * @see https://api.onlyoffice.com/docs/office-api/usage-api/pdf-api/Api/Methods/CreateUnderlineAnnot/
      */
     CreateUnderlineAnnot(rect: Rect | Quad[]): ApiUnderlineAnnotation;
-
-    /** Creates an URI action. */
-    CreateUriAction(uri: string): ApiUriAction;
 
     /**
      * Creates an URI action.

@@ -86,7 +86,7 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
     super.sessionEnded();
   }
 
-  private scheduleResync = (eventName: string, event?: Event): void => {
+  private scheduleResync = (eventName: string, event?: unknown): void => {
     if (this.isApplyingCorrections) return;
     if (this.resyncTimer) clearTimeout(this.resyncTimer);
     this.resyncTimer = setTimeout(() => {
@@ -186,16 +186,15 @@ export class SelectionCorrectionAgent extends BaseCorrectionAgent {
       return;
     }
 
+    if (this.selectionStart === null || this.selectionEnd === null) return;
+
     this.text = this.text.slice(0, params.positionStartReplace)
       + params.newString
       + this.text.slice(params.positionReplaceEnd);
 
     // Keep the tracked bounds accurate as the text's length changes, since resync() re-reads
     // exactly [selectionStart, selectionEnd] — a stale end would read/select the wrong range.
-    if (this.selectionEnd !== null) {
-      const diff = params.newString.length - (params.positionReplaceEnd - params.positionStartReplace);
-      this.selectionEnd += diff;
-    }
+    this.selectionEnd += params.newString.length - (params.positionReplaceEnd - params.positionStartReplace);
 
     const paragraphs = this.text.replace(/(?:\r\n)+$/, '').split(/\r\n\r\n/);
     await this.editor.selectSourceRange(this.selectionStart, this.selectionEnd);

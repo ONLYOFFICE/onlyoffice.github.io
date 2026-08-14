@@ -44,7 +44,7 @@ export function usePluginReady(initialDelay = 10000): {
 
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    if (window.Asc?.plugin?.callCommand) {
+    if (isPluginAvailable()) {
       setReady(true);
     } else {
       const defaultInit = Asc.plugin.init;

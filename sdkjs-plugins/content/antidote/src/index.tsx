@@ -104,4 +104,5 @@ export function App() {
   );
 }
 
-render(<App />, document.getElementById('app'));
+const appRoot = document.getElementById('app');
+if (appRoot) render(<App />, appRoot);

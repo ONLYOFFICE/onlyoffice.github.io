@@ -28,6 +28,6 @@
 			"@resources/*": ["./resources/*"]
 		}
 	},
-	"include": ["node_modules/vite/client.d.ts", "**/*"],
+	"include": ["**/*"],
 	"exclude": ["dist", "node_modules", "eslint.config.mjs"]
 }

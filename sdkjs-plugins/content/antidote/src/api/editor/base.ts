@@ -248,7 +248,7 @@ export abstract class BaseEditor {
   // session (another collaborator, or the user typing directly) so cached positions can be
   // resynced instead of silently drifting. No-op outside Word's editor-event API; every other
   // editor just has no concurrent-edit detection yet.
-  watchContentChanges(onChange: (eventName: string, event?: Event) => void): void {}
+  watchContentChanges(onChange: (eventName: string, event?: unknown) => void): void {}
 
   stopWatchingContentChanges(): void {}
 }
